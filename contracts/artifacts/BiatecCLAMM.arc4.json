@@ -1,0 +1,171 @@
+{
+  "name": "BiatecCLAMM",
+  "desc": "",
+  "methods": [
+    {
+      "name": "createApplication",
+      "desc": "Initial setup",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "getCurrentPrice",
+      "readonly": true,
+      "args": [],
+      "returns": {
+        "type": "uint64"
+      }
+    },
+    {
+      "name": "getPriceDivider",
+      "readonly": true,
+      "args": [],
+      "returns": {
+        "type": "uint64"
+      }
+    },
+    {
+      "name": "getLPTokenId",
+      "readonly": true,
+      "args": [],
+      "returns": {
+        "type": "uint64"
+      }
+    },
+    {
+      "name": "bootstrap",
+      "desc": "Anybody can deploy the clamm smart contract",
+      "args": [
+        {
+          "name": "txSeed",
+          "type": "pay",
+          "desc": "Seed transaction so that smart contract can opt in to the assets"
+        },
+        {
+          "name": "assetA",
+          "type": "uint64",
+          "desc": "Asset A ID must be lower then Asset B ID"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64",
+          "desc": "Asset B"
+        },
+        {
+          "name": "feeB100000",
+          "type": "uint32",
+          "desc": "Fee in 100000 base level. value 10000 = 10000/100000 = 0,1 = 10% fee. 1000 = 1%. 100 = 0,1%. 10 = 0,01% = 1 base point"
+        },
+        {
+          "name": "priceMaxA",
+          "type": "uint64"
+        },
+        {
+          "name": "priceMaxB",
+          "type": "uint64"
+        },
+        {
+          "name": "currentPrice",
+          "type": "uint64"
+        },
+        {
+          "name": "verificationClass",
+          "type": "uint8",
+          "desc": "Asset B"
+        },
+        {
+          "name": "identityProvider",
+          "type": "uint64"
+        },
+        {
+          "name": "poolProvider",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "uint64",
+        "desc": "LP token ID"
+      }
+    },
+    {
+      "name": "addLiquidity",
+      "desc": "This method adds Asset A and Asset B to the Automated Market Maker Concentrated Liqudidity Pool and send to the liqudidty provider the liqudity token",
+      "args": [
+        {
+          "name": "txAssetADeposit",
+          "type": "txn"
+        },
+        {
+          "name": "txAssetBDeposit",
+          "type": "txn"
+        },
+        {
+          "name": "poolAsset",
+          "type": "uint64"
+        },
+        {
+          "name": "assetA",
+          "type": "uint64"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "uint64"
+      }
+    },
+    {
+      "name": "removeLiquidity",
+      "desc": "This method retrieves from the liquidity provider LP token and returns Asset A and Asset B from the Automated Market Maker Concentrated Liqudidity Pool",
+      "args": [
+        {
+          "name": "txLPXfer",
+          "type": "axfer",
+          "desc": "Transfer of the LP token"
+        },
+        {
+          "name": "poolAsset",
+          "type": "uint64",
+          "desc": "LP pool asset"
+        },
+        {
+          "name": "assetA",
+          "type": "uint64",
+          "desc": "Asset A"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64",
+          "desc": "Asset B"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "swap",
+      "args": [
+        {
+          "name": "swapXfer",
+          "type": "axfer"
+        },
+        {
+          "name": "assetA",
+          "type": "uint64"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    }
+  ]
+}

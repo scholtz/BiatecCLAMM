@@ -1,0 +1,26 @@
+{
+  "name": "BiatecPoolProvider",
+  "desc": "",
+  "methods": [
+    {
+      "name": "createApplication",
+      "desc": "Initial setup",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "registerPool",
+      "args": [
+        {
+          "name": "appPoolId",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    }
+  ]
+}

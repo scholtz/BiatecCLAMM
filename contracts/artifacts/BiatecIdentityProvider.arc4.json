@@ -1,0 +1,14 @@
+{
+  "name": "BiatecIdentityProvider",
+  "desc": "",
+  "methods": [
+    {
+      "name": "createApplication",
+      "desc": "Initial setup",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    }
+  ]
+}

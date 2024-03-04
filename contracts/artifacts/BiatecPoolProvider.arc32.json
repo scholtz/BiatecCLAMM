@@ -1,0 +1,84 @@
+{
+  "hints": {
+    "createApplication()void": {
+      "call_config": {
+        "no_op": "CREATE"
+      }
+    },
+    "registerPool(uint64)void": {
+      "call_config": {
+        "no_op": "CALL"
+      }
+    }
+  },
+  "bare_call_config": {
+    "no_op": "NEVER",
+    "opt_in": "NEVER",
+    "close_out": "NEVER",
+    "update_application": "NEVER",
+    "delete_application": "NEVER"
+  },
+  "schema": {
+    "local": {
+      "declared": {},
+      "reserved": {}
+    },
+    "global": {
+      "declared": {
+        "governor": {
+          "type": "bytes",
+          "key": "g"
+        },
+        "verificationClassSetter": {
+          "type": "bytes",
+          "key": "v"
+        },
+        "engagementClassSetter": {
+          "type": "bytes",
+          "key": "e"
+        }
+      },
+      "reserved": {}
+    }
+  },
+  "state": {
+    "global": {
+      "num_byte_slices": 3,
+      "num_uints": 0
+    },
+    "local": {
+      "num_byte_slices": 0,
+      "num_uints": 0
+    }
+  },
+  "source": {
+    "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgovLyBUaGlzIFRFQUwgd2FzIGdlbmVyYXRlZCBieSBURUFMU2NyaXB0IHYwLjg2LjAKLy8gaHR0cHM6Ly9naXRodWIuY29tL2FsZ29yYW5kZm91bmRhdGlvbi9URUFMU2NyaXB0CgovLyBUaGlzIGNvbnRyYWN0IGlzIGNvbXBsaWFudCB3aXRoIGFuZC9vciBpbXBsZW1lbnRzIHRoZSBmb2xsb3dpbmcgQVJDczogWyBBUkM0IF0KCi8vIFRoZSBmb2xsb3dpbmcgdGVuIGxpbmVzIG9mIFRFQUwgaGFuZGxlIGluaXRpYWwgcHJvZ3JhbSBmbG93Ci8vIFRoaXMgcGF0dGVybiBpcyB1c2VkIHRvIG1ha2UgaXQgZWFzeSBmb3IgYW55b25lIHRvIHBhcnNlIHRoZSBzdGFydCBvZiB0aGUgcHJvZ3JhbSBhbmQgZGV0ZXJtaW5lIGlmIGEgc3BlY2lmaWMgYWN0aW9uIGlzIGFsbG93ZWQKLy8gSGVyZSwgYWN0aW9uIHJlZmVycyB0byB0aGUgT25Db21wbGV0ZSBpbiBjb21iaW5hdGlvbiB3aXRoIHdoZXRoZXIgdGhlIGFwcCBpcyBiZWluZyBjcmVhdGVkIG9yIGNhbGxlZAovLyBFdmVyeSBwb3NzaWJsZSBhY3Rpb24gZm9yIHRoaXMgY29udHJhY3QgaXMgcmVwcmVzZW50ZWQgaW4gdGhlIHN3aXRjaCBzdGF0ZW1lbnQKLy8gSWYgdGhlIGFjdGlvbiBpcyBub3QgaW1wbGVtZW50ZWQgaW4gdGhlIGNvbnRyYWN0LCBpdHMgcmVzcGVjdGl2ZSBicmFuY2ggd2lsbCBiZSAiKk5PVF9JTVBMRU1FTlRFRCIgd2hpY2gganVzdCBjb250YWlucyAiZXJyIgp0eG4gQXBwbGljYXRpb25JRAohCmludCA2CioKdHhuIE9uQ29tcGxldGlvbgorCnN3aXRjaCAqY2FsbF9Ob09wICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqY3JlYXRlX05vT3AgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVECgoqTk9UX0lNUExFTUVOVEVEOgoJZXJyCgovLyBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoqYWJpX3JvdXRlX2NyZWF0ZUFwcGxpY2F0aW9uOgoJLy8gZXhlY3V0ZSBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoJY2FsbHN1YiBjcmVhdGVBcHBsaWNhdGlvbgoJaW50IDEKCXJldHVybgoKLy8gY3JlYXRlQXBwbGljYXRpb24oKTogdm9pZAovLwovLyBJbml0aWFsIHNldHVwCmNyZWF0ZUFwcGxpY2F0aW9uOgoJcHJvdG8gMCAwCgoJLy8gY29udHJhY3RzXEJpYXRlY1Bvb2xQcm92aWRlci5hbGdvLnRzOjQ0CgkvLyB0aGlzLmdvdmVybm9yLnZhbHVlID0gQWRkcmVzcy5mcm9tQnl0ZXMoZ292ZXJub3IpCglieXRlIDB4NjcgLy8gImciCglieXRlICJBTEdPTkFVVFNQSVVIRENYM1NMRlhPRkRVS09FNFZZMzZYVjRKWDJKSFFUV0pOS1ZCS1BFQlFBQ1JZIgoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gcmVnaXN0ZXJQb29sKHVpbnQ2NCl2b2lkCiphYmlfcm91dGVfcmVnaXN0ZXJQb29sOgoJLy8gYXBwUG9vbElkOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWJ0b2kKCgkvLyBleGVjdXRlIHJlZ2lzdGVyUG9vbCh1aW50NjQpdm9pZAoJY2FsbHN1YiByZWdpc3RlclBvb2wKCWludCAxCglyZXR1cm4KCi8vIHJlZ2lzdGVyUG9vbChhcHBQb29sSWQ6IEFwcElEKTogdm9pZApyZWdpc3RlclBvb2w6Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjUG9vbFByb3ZpZGVyLmFsZ28udHM6NTUKCS8vIGFzc2VydCh0aGlzLnBvb2xzKGFwcFBvb2xJZCkuZXhpc3RzKQoJYnl0ZSAweDcwIC8vICJwIgoJZnJhbWVfZGlnIC0xIC8vIGFwcFBvb2xJZDogQXBwSUQKCWl0b2IKCWNvbmNhdAoJYm94X2xlbgoJc3dhcAoJcG9wCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjUG9vbFByb3ZpZGVyLmFsZ28udHM6NTYKCS8vIHRoaXMucG9vbHMoYXBwUG9vbElkKS5jcmVhdGUoKQoJYnl0ZSAweDcwIC8vICJwIgoJZnJhbWVfZGlnIC0xIC8vIGFwcFBvb2xJZDogQXBwSUQKCWl0b2IKCWNvbmNhdAoJaW50IDEyMgoJYm94X2NyZWF0ZQoJcG9wCglyZXRzdWIKCipjcmVhdGVfTm9PcDoKCW1ldGhvZCAiY3JlYXRlQXBwbGljYXRpb24oKXZvaWQiCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAwCgltYXRjaCAqYWJpX3JvdXRlX2NyZWF0ZUFwcGxpY2F0aW9uCgllcnIKCipjYWxsX05vT3A6CgltZXRob2QgInJlZ2lzdGVyUG9vbCh1aW50NjQpdm9pZCIKCXR4bmEgQXBwbGljYXRpb25BcmdzIDAKCW1hdGNoICphYmlfcm91dGVfcmVnaXN0ZXJQb29sCgllcnI=",
+    "clear": "I3ByYWdtYSB2ZXJzaW9uIDEw"
+  },
+  "contract": {
+    "name": "BiatecPoolProvider",
+    "desc": "",
+    "methods": [
+      {
+        "name": "createApplication",
+        "desc": "Initial setup",
+        "args": [],
+        "returns": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "registerPool",
+        "args": [
+          {
+            "name": "appPoolId",
+            "type": "uint64"
+          }
+        ],
+        "returns": {
+          "type": "void"
+        }
+      }
+    ]
+  }
+}
