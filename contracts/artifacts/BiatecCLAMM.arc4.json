@@ -95,27 +95,33 @@
       "args": [
         {
           "name": "txAssetADeposit",
-          "type": "txn"
+          "type": "txn",
+          "desc": "Transfer of asset A to the LP pool"
         },
         {
           "name": "txAssetBDeposit",
-          "type": "txn"
+          "type": "txn",
+          "desc": "Transfer of asset B to the LP pool"
         },
         {
           "name": "poolAsset",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "LP pool asset"
         },
         {
           "name": "assetA",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "Asset A"
         },
         {
           "name": "assetB",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "Asset B"
         }
       ],
       "returns": {
-        "type": "uint64"
+        "type": "uint64",
+        "desc": "LP Token quantity distributed"
       }
     },
     {

@@ -506,8 +506,8 @@ doCreatePoolToken:
 // addLiquidity(txAssetADeposit: Txn, txAssetBDeposit: Txn, poolAsset: AssetID, assetA: AssetID, assetB: AssetID): uint64
 //
 // This method adds Asset A and Asset B to the Automated Market Maker Concentrated Liqudidity Pool and send to the liqudidty provider the liqudity token
-// @param aXfer Transfer of asset A to the LP pool
-// @param bXfer Transfer of asset B to the LP pool
+// @param txAssetADeposit Transfer of asset A to the LP pool
+// @param txAssetBDeposit Transfer of asset B to the LP pool
 // @param poolAsset LP pool asset
 // @param assetA Asset A
 // @param assetB Asset B
@@ -710,9 +710,169 @@ addLiquidity:
 tokensToMintIntial:
 	proto 2 1
 
-	// contracts\BiatecCLAMM.algo.ts:266
-	// return 1;
-	int 1
+	// Push empty bytes after the frame pointer to reserve space for local variables
+	byte 0x
+	dupn 8
+
+	// contracts\BiatecCLAMM.algo.ts:243
+	// D1: uint64 = (((((x * x) / SCALE) * this.priceMaxA.value) / SCALE) * this.priceMaxA.value) / SCALE
+	frame_dig -1 // x: uint64
+	frame_dig -1 // x: uint64
+	*
+	int 1000000000
+	/
+	byte 0x7061 // "pa"
+	app_global_get
+	*
+	int 1000000000
+	/
+	byte 0x7061 // "pa"
+	app_global_get
+	*
+	int 1000000000
+	/
+	frame_bury 0 // D1: uint64
+
+	// contracts\BiatecCLAMM.algo.ts:245
+	// D2: uint64 = (y * y) / this.priceMaxB.value
+	frame_dig -2 // y: uint64
+	frame_dig -2 // y: uint64
+	*
+	byte 0x7062 // "pb"
+	app_global_get
+	/
+	frame_bury 1 // D2: uint64
+
+	// contracts\BiatecCLAMM.algo.ts:247
+	// D3: uint64 =
+	//       (((((2 * x * y) / SCALE) * this.priceMaxA.value) / SCALE) * sqrt(SCALE)) / sqrt(this.priceMaxB.value)
+	int 2
+	frame_dig -1 // x: uint64
+	*
+	frame_dig -2 // y: uint64
+	*
+	int 1000000000
+	/
+	byte 0x7061 // "pa"
+	app_global_get
+	*
+	int 1000000000
+	/
+	int 1000000000
+	sqrt
+	*
+	byte 0x7062 // "pb"
+	app_global_get
+	sqrt
+	/
+	frame_bury 2 // D3: uint64
+
+	// contracts\BiatecCLAMM.algo.ts:251
+	// D4: uint64 = (4 * x * y) / SCALE
+	int 4
+	frame_dig -1 // x: uint64
+	*
+	frame_dig -2 // y: uint64
+	*
+	int 1000000000
+	/
+	frame_bury 3 // D4: uint64
+
+	// contracts\BiatecCLAMM.algo.ts:253
+	// D5: uint64 =
+	//       (((((4 * x * y) / SCALE) * this.priceMaxA.value) / SCALE) * sqrt(SCALE)) / sqrt(this.priceMaxB.value)
+	int 4
+	frame_dig -1 // x: uint64
+	*
+	frame_dig -2 // y: uint64
+	*
+	int 1000000000
+	/
+	byte 0x7061 // "pa"
+	app_global_get
+	*
+	int 1000000000
+	/
+	int 1000000000
+	sqrt
+	*
+	byte 0x7062 // "pb"
+	app_global_get
+	sqrt
+	/
+	frame_bury 4 // D5: uint64
+
+	// contracts\BiatecCLAMM.algo.ts:255
+	// D = D1 + D2 + D3 + D4 - D5
+	frame_dig 0 // D1: uint64
+	frame_dig 1 // D2: uint64
+	+
+	frame_dig 2 // D3: uint64
+	+
+	frame_dig 3 // D4: uint64
+	+
+	frame_dig 4 // D5: uint64
+	-
+	frame_bury 5 // D: uint64
+
+	// contracts\BiatecCLAMM.algo.ts:260
+	// L1: uint64 = (x * this.priceMaxA.value) / SCALE
+	frame_dig -1 // x: uint64
+	byte 0x7061 // "pa"
+	app_global_get
+	*
+	int 1000000000
+	/
+	frame_bury 6 // L1: uint64
+
+	// contracts\BiatecCLAMM.algo.ts:262
+	// L2: uint64 = (y * sqrt(SCALE)) / sqrt(this.priceMaxB.value)
+	frame_dig -2 // y: uint64
+	int 1000000000
+	sqrt
+	*
+	byte 0x7062 // "pb"
+	app_global_get
+	sqrt
+	/
+	frame_bury 7 // L2: uint64
+
+	// contracts\BiatecCLAMM.algo.ts:264
+	// L3: uint64 = (2 * this.priceMaxA.value * sqrt(SCALE)) / sqrt(this.priceMaxB.value)
+	int 2
+	byte 0x7061 // "pa"
+	app_global_get
+	*
+	int 1000000000
+	sqrt
+	*
+	byte 0x7062 // "pb"
+	app_global_get
+	sqrt
+	/
+	frame_bury 8 // L3: uint64
+
+	// contracts\BiatecCLAMM.algo.ts:265
+	// return L1 + L2 + sqrt(D) / sqrt(SCALE) / (2 * SCALE - L3);
+	frame_dig 6 // L1: uint64
+	frame_dig 7 // L2: uint64
+	+
+	frame_dig 5 // D: uint64
+	sqrt
+	int 1000000000
+	sqrt
+	/
+	int 2000000000
+	frame_dig 8 // L3: uint64
+	-
+	/
+	+
+
+	// set the subroutine return value
+	frame_bury 0
+
+	// pop all local variables from the stack
+	popn 8
 	retsub
 
 // removeLiquidity(axfer,uint64,uint64,uint64)void

@@ -128,22 +128,37 @@ describe('Biatecclamm', () => {
         identityProvider: identityRef.appId,
         poolProvider: poolRef.appId,
         priceMaxA: 1.0 * SCALE,
-        priceMaxB: 1.2 * SCALE,
-        currentPrice: 1.1 * SCALE,
+        priceMaxB: 1.5625 * SCALE,
+        currentPrice: 1.5625 * SCALE,
       },
       { sendParams: { ...params, fee: algokit.microAlgos(4000) } }
     );
     expect(assetId.return?.valueOf()).toBeGreaterThan(0);
 
+    // const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+    //   amount: 1 * 1_000_000_000, // price <1,1.5625> p = 1 => Max USD 0 EUR
+    //   assetIndex: assetAId,
+    //   from: deployer.addr,
+    //   suggestedParams: params,
+    //   to: ammRef.appAddress,
+    // });
+    // const addLiquidityB = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+    //   amount: 0 * 1_000_000_000, // price <1,1.5625> p = 1 => Max USD 0 EUR
+    //   assetIndex: assetBId,
+    //   from: deployer.addr,
+    //   suggestedParams: params,
+    //   to: ammRef.appAddress,
+    // });
+
     const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-      amount: 1_000_000, // 1 EUR
+      amount: 0 * 1_000_000_000, // price <1,1.5625> p = 1.5625 => Max EUR 0 USD
       assetIndex: assetAId,
       from: deployer.addr,
       suggestedParams: params,
       to: ammRef.appAddress,
     });
     const addLiquidityB = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-      amount: 1_100_000, // 1.1 USD
+      amount: 0.8 * 1_000_000_000, // price <1,1.5625> p = 1.5625 => Max EUR 0 USD
       assetIndex: assetBId,
       from: deployer.addr,
       suggestedParams: params,
@@ -161,6 +176,7 @@ describe('Biatecclamm', () => {
       },
       { sendParams: { ...params, fee: algokit.microAlgos(4000) } }
     );
+    console.log(liqudidtyResult.return?.valueOf());
     expect(liqudidtyResult.return?.valueOf()).toBeGreaterThan(0);
   });
 });

@@ -147,8 +147,8 @@ class BiatecCLAMM extends Contract {
 
   /**
    * This method adds Asset A and Asset B to the Automated Market Maker Concentrated Liqudidity Pool and send to the liqudidty provider the liqudity token
-   * @param aXfer Transfer of asset A to the LP pool
-   * @param bXfer Transfer of asset B to the LP pool
+   * @param txAssetADeposit Transfer of asset A to the LP pool
+   * @param txAssetBDeposit Transfer of asset B to the LP pool
    * @param poolAsset LP pool asset
    * @param assetA Asset A
    * @param assetB Asset B
@@ -239,31 +239,31 @@ class BiatecCLAMM extends Contract {
     // D = x^2 * P1^2 + y^2/P2 + 2*x*y*P1/sqrt(P2) + 4*x*y-4*x*y*P1/sqrt(P2)
     // D = D1         + D2     + D3                + D4   - D5
 
-    // // D1 = x^2 * P1^2
-    // const D1: uint256 = (((((x * x) / SCALE) * this.priceMaxA.value) / SCALE) * this.priceMaxA.value) / SCALE / SCALE;
-    // // D2 = y^2/P2
-    // const D2: uint256 = (y * y) / this.priceMaxB.value / SCALE;
-    // // D3 = 2*x*y*P1/sqrt(P2)
-    // const D3: uint256 =
-    //   (((2 * x * y) / SCALE) * this.priceMaxA.value) / SCALE / (sqrt(this.priceMaxB.value) * sqrt(SCALE)) / SCALE;
-    // // D4 = 4*x*y-4*x*y*P1/sqrt(P2)
-    // const D4: uint256 = (4 * x * y) / SCALE / SCALE;
-    // // D5 = -4*x*y*P1/sqrt(P2)
-    // const D5: uint256 =
-    //   (((4 * x * y) / SCALE) * this.priceMaxA.value) / SCALE / (sqrt(this.priceMaxB.value) * sqrt(SCALE)) / SCALE;
-    // const D = D1 + D2 + D3 + D4 - D5;
-    // // L = ( x * P1 + y /sqrt(P2) +- sqrt(D)) / (2  - 2 * P1 / sqrt(P2)))
-    // // L = ( L1     + L2          +- sqrt(D) ) / (2 - L3)
+    // D1 = x^2 * P1^2
+    const D1: uint64 = (((((x * x) / SCALE) * this.priceMaxA.value) / SCALE) * this.priceMaxA.value) / SCALE;
+    // D2 = y^2/P2
+    const D2: uint64 = (y * y) / this.priceMaxB.value;
+    // D3 = 2*x*y*P1/sqrt(P2)
+    const D3: uint64 =
+      (((((2 * x * y) / SCALE) * this.priceMaxA.value) / SCALE) * sqrt(SCALE)) / sqrt(this.priceMaxB.value);
+    // sqrt(10000/1000) = sqrt(10000)/sqrt(1000)
+    // D4 = 4*x*y-4*x*y*P1/sqrt(P2)
+    const D4: uint64 = (4 * x * y) / SCALE;
+    // D5 = -4*x*y*P1/sqrt(P2)
+    const D5: uint64 =
+      (((((4 * x * y) / SCALE) * this.priceMaxA.value) / SCALE) * sqrt(SCALE)) / sqrt(this.priceMaxB.value);
+    const D = D1 + D2 + D3 + D4 - D5;
+    // L = ( x * P1 + y /sqrt(P2) +- sqrt(D)) / (2  - 2 * P1 / sqrt(P2)))
+    // L = ( L1     + L2          +- sqrt(D) ) / (2 - L3)
 
-    // // L1 = x * P1
-    // const L1: uint256 = (x * this.priceMaxA.value) / SCALE / SCALE;
-    // // L2 = y /sqrt(P2)
-    // const L2: uint256 = y / (sqrt(this.priceMaxB.value) * sqrt(SCALE)) / SCALE;
-    // // L3 = 2 * P1 / sqrt(P2)
-    // const L3: uint256 = (2 * this.priceMaxA.value) / (sqrt(this.priceMaxB.value) * sqrt(SCALE)) / SCALE;
-
-    // return ((L1 + L2 + sqrt(D)) * SCALE) / (2 - L3) / SCALE;
-    return 1;
+    // L1 = x * P1
+    const L1: uint64 = (x * this.priceMaxA.value) / SCALE;
+    // L2 = y /sqrt(P2)
+    const L2: uint64 = (y * sqrt(SCALE)) / sqrt(this.priceMaxB.value);
+    // L3 = 2 * P1 / sqrt(P2)
+    const L3: uint64 = (2 * this.priceMaxA.value * sqrt(SCALE)) / sqrt(this.priceMaxB.value);
+    return L1 + L2 + sqrt(D) / sqrt(SCALE) / (2 * SCALE - L3);
+    // return (L1 + L2 + sqrt(D) / sqrt(SCALE)) / (2 * SCALE - L3) / SCALE;
   }
 
   /**
