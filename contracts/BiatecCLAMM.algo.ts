@@ -18,6 +18,10 @@ class BiatecCLAMM extends Contract {
 
   priceMaxB = GlobalStateKey<uint64>({ key: 'pb' });
 
+  priceMaxASqrt = GlobalStateKey<uint64>({ key: 'pas' });
+
+  priceMaxBSqrt = GlobalStateKey<uint64>({ key: 'pbs' });
+
   poolToken = GlobalStateKey<AssetID>({ key: 'p' });
 
   feeB100000 = GlobalStateKey<uint32>({ key: 'f' });
@@ -56,6 +60,11 @@ class BiatecCLAMM extends Contract {
   @abi.readonly
   getCurrentPrice(): uint64 {
     return this.ratio.value;
+  }
+
+  @abi.readonly
+  getHypotheticPrice(assetAQuantity: uint64, assetBQuantity: uint64): uint64 {
+    return this.getPrice(assetAQuantity, assetBQuantity);
   }
 
   @abi.readonly
@@ -101,6 +110,8 @@ class BiatecCLAMM extends Contract {
 
     this.priceMaxA.value = priceMaxA;
     this.priceMaxB.value = priceMaxB;
+    this.priceMaxASqrt.value = sqrt(priceMaxA * SCALE);
+    this.priceMaxBSqrt.value = sqrt(priceMaxB * SCALE);
     this.ratio.value = currentPrice;
 
     this.assetA.value = assetA;
@@ -212,17 +223,17 @@ class BiatecCLAMM extends Contract {
   }
 
   private tokensToMintIntial(x: uint64, y: uint64): uint64 {
-    // (x + L/sqrt(P2))*(y+L*P1)=L*L
-    // y + L*P1 = L*L / (x + L/sqrt(P2))
-    // x*y + L*P1*L/sqrt(P2) + x * L*P1 + y * L/sqrt(P2) =L*L
-    // x*y = L*L - L*P1*L/sqrt(P2) -  x * L*P1 -y * L/sqrt(P2)
-    // x*y = L^2 ( 1 - P1 / sqrt(P2) ) - L * (x * P1 + y /sqrt(P2)  )
-    // 0 = L^2 ( 1 - P1 / sqrt(P2) ) + L * (- 1 * x * P1 - y /sqrt(P2)) + (-1 * x*y)
+    // (x + L/sqrt(P2))*(y+L*sqrt(P1))=L*L
+    // y + L*sqrt(P1) = L*L / (x + L/sqrt(P2))
+    // x*y + L*sqrt(P1)*L/sqrt(P2) + x * L*sqrt(P1) + y * L/sqrt(P2) =L*L
+    // x*y = L*L - L*sqrt(P1)*L/sqrt(P2) -  x * L*sqrt(P1) -y * L/sqrt(P2)
+    // x*y = L^2 ( 1 - sqrt(P1) / sqrt(P2) ) - L * (x * sqrt(P1) + y /sqrt(P2)  )
+    // 0 = L^2 ( 1 - sqrt(P1) / sqrt(P2) ) + L * (- 1 * x * sqrt(P1) - y /sqrt(P2)) + (-1 * x*y)
 
-    // D = (- 1 * x * P1 - y /sqrt(P2)) * (- 1 * x * P1 - y /sqrt(P2)) - 4 * ( 1 - P1 / sqrt(P2) ) * (-1 * x*y)
-    // D = (- 1 * x * P1 - y /sqrt(P2)) * (- 1 * x * P1 - y /sqrt(P2)) + 4 * ( 1 - P1 / sqrt(P2) ) * ( x*y)
-    // D = ( ( x * P1) ( x * P1) + (y /sqrt(P2))*(y /sqrt(P2)) + 2 * x * P1 * y /sqrt(P2)) +  4 * x*y - 4*x*y *  P1 / sqrt(P2)
-    // D = x^2 * P1^2 + y^2/P2 + 2*x*y*P1/sqrt(P2) + 4*x*y-4*x*y*P1/sqrt(P2)
+    // D = (- 1 * x * sqrt(P1) - y /sqrt(P2)) * (- 1 * x * sqrt(P1) - y /sqrt(P2)) - 4 * ( 1 - sqrt(P1) / sqrt(P2) ) * (-1 * x*y)
+    // D = (- 1 * x * sqrt(P1) - y /sqrt(P2)) * (- 1 * x * sqrt(P1) - y /sqrt(P2)) + 4 * ( 1 - sqrt(P1) / sqrt(P2) ) * ( x*y)
+    // D = ( ( x * sqrt(P1)) ( x * sqrt(P1)) + (y /sqrt(P2))*(y /sqrt(P2)) + 2 * x * sqrt(P1) * y /sqrt(P2)) +  4 * x*y - 4*x*y * sqrt(P1) / sqrt(P2)
+    // D = x^2 * P1 + y^2/P2 + 2*x*y*sqrt(P1)/sqrt(P2) + 4*x*y-4*x*y*sqrt(P1)/sqrt(P2)
     //
     // x = 20000, y = 0, P1 = 1, P2 = 125/80
     // D = 20000^2 * P1^2 + 0^2/P2 + 2*20000*0*P1/sqrt(P2) + 4*20000*0-4*20000*0*P1/sqrt(P2)
@@ -236,34 +247,57 @@ class BiatecCLAMM extends Contract {
     // L = (20000 + 20000)  / ( 2 - 2 * 1 / sqrt(125/80))
     // L = 40000 / ( 2 - 2 / 1,25) = 40000 / 0.4 = 100000
 
-    // D = x^2 * P1^2 + y^2/P2 + 2*x*y*P1/sqrt(P2) + 4*x*y-4*x*y*P1/sqrt(P2)
-    // D = D1         + D2     + D3                + D4   - D5
+    // D = x^2 * P1 + y^2/P2 + 2*x*y*sqrt(P1)/sqrt(P2) + 4*x*y - 4*x*y*sqrt(P1)/sqrt(P2)
+    // D = D1       + D2     + D3                      + D4    - D5
 
-    // D1 = x^2 * P1^2
-    const D1: uint64 = (((((x * x) / SCALE) * this.priceMaxA.value) / SCALE) * this.priceMaxA.value) / SCALE;
+    // D1 = x^2 * P1
+    const D1: uint64 = (((x * x) / SCALE) * this.priceMaxA.value) / SCALE;
     // D2 = y^2/P2
     const D2: uint64 = (y * y) / this.priceMaxB.value;
-    // D3 = 2*x*y*P1/sqrt(P2)
-    const D3: uint64 =
-      (((((2 * x * y) / SCALE) * this.priceMaxA.value) / SCALE) * sqrt(SCALE)) / sqrt(this.priceMaxB.value);
+    // D3 = 2*x*y*sqrt(P1)/sqrt(P2)
+    const D3: uint64 = (((2 * x * y) / SCALE) * this.priceMaxASqrt.value) / SCALE / this.priceMaxBSqrt.value;
     // sqrt(10000/1000) = sqrt(10000)/sqrt(1000)
-    // D4 = 4*x*y-4*x*y*P1/sqrt(P2)
+    // D4 = 4*x*y
     const D4: uint64 = (4 * x * y) / SCALE;
-    // D5 = -4*x*y*P1/sqrt(P2)
-    const D5: uint64 =
-      (((((4 * x * y) / SCALE) * this.priceMaxA.value) / SCALE) * sqrt(SCALE)) / sqrt(this.priceMaxB.value);
+    // D5 = -4*x*y*sqrt(P1)/sqrt(P2)
+    const D5: uint64 = (((4 * x * y) / SCALE) * this.priceMaxASqrt.value) / SCALE / this.priceMaxBSqrt.value;
     const D = D1 + D2 + D3 + D4 - D5;
-    // L = ( x * P1 + y /sqrt(P2) +- sqrt(D)) / (2  - 2 * P1 / sqrt(P2)))
-    // L = ( L1     + L2          +- sqrt(D) ) / (2 - L3)
+    // L = ( x * sqrt(P1) + y /sqrt(P2) +- sqrt(D)) / (2  - 2 * P1 / sqrt(P2)))
+    // L = ( L1           + L2          +- sqrt(D) ) / (2 - L3)
 
-    // L1 = x * P1
-    const L1: uint64 = (x * this.priceMaxA.value) / SCALE;
+    // L1 = x * sqrt(P1)
+    const L1: uint64 = (x * this.priceMaxASqrt.value) / SCALE;
     // L2 = y /sqrt(P2)
-    const L2: uint64 = (y * sqrt(SCALE)) / sqrt(this.priceMaxB.value);
-    // L3 = 2 * P1 / sqrt(P2)
-    const L3: uint64 = (2 * this.priceMaxA.value * sqrt(SCALE)) / sqrt(this.priceMaxB.value);
-    return L1 + L2 + sqrt(D) / sqrt(SCALE) / (2 * SCALE - L3);
+    const L2: uint64 = (y * SCALE) / this.priceMaxBSqrt.value;
+    // L3 = 2 * sqrt(P1) / sqrt(P2)
+    const L3: uint64 = (2 * this.priceMaxASqrt.value * SCALE) / this.priceMaxBSqrt.value;
+    // L = ( x * P1 + y /sqrt(P2) +- sqrt(D)) / (2  - 2 * P1 / sqrt(P2)))
+    // const D_SQRT = (SCALE * sqrt(D)) / sqrt(SCALE);
+    const D_SQRT = sqrt(SCALE * D);
+
+    if (2 * SCALE > L3) {
+      const nom: uint64 = L1 + L2 + D_SQRT;
+      const den: uint64 = 2 * SCALE - L3;
+      const ret: uint64 = (SCALE * nom) / den;
+      return ret;
+    }
+    const nom: uint64 = L1 + L2 - D_SQRT;
+    const den: uint64 = L3 - 2 * SCALE;
+    const ret: uint64 = (SCALE * nom) / den;
+    return ret;
+
+    // const ret: uint64 = nom / den;
     // return (L1 + L2 + sqrt(D) / sqrt(SCALE)) / (2 * SCALE - L3) / SCALE;
+  }
+
+  /**
+   * Get the current price when asset a has x
+   * @param assetAQuantity x
+   * @param assetBQuantity y
+   * @returns the price with specified quantity with the price range set in the contract
+   */
+  private getPrice(assetAQuantity: uint64, assetBQuantity: uint64): uint64 {
+    return assetAQuantity;
   }
 
   /**
