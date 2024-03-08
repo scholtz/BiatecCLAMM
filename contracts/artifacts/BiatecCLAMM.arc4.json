@@ -172,22 +172,52 @@
     },
     {
       "name": "swap",
+      "desc": "Swap Asset A to Asset B or Asset B to Asst A",
       "args": [
         {
-          "name": "swapXfer",
-          "type": "axfer"
+          "name": "txSwap",
+          "type": "axfer",
+          "desc": "Transfer of the token to be deposited to the pool. To the owner the other asset will be sent."
         },
         {
           "name": "assetA",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "Asset A"
         },
         {
           "name": "assetB",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "Asset B"
+        },
+        {
+          "name": "minimumToReceive",
+          "type": "uint64",
+          "desc": "If number greater then zero, the check is performed for the output of the other asset"
         }
       ],
       "returns": {
         "type": "void"
+      }
+    },
+    {
+      "name": "calculateAssetBWithdrawOnAssetADeposit",
+      "readonly": true,
+      "args": [
+        {
+          "name": "inAmount",
+          "type": "uint64"
+        },
+        {
+          "name": "assetADecimals",
+          "type": "uint64"
+        },
+        {
+          "name": "assetBDecimals",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "uint64"
       }
     }
   ]

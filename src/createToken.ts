@@ -5,13 +5,14 @@ interface ICreateGoldTokenInput {
   account: algosdk.Account;
   name: string;
   algod: Algodv2;
+  decimals: number;
 }
 const createToken = async (input: ICreateGoldTokenInput) => {
   const params = await input.algod.getTransactionParams().do();
   const goldTokenTx = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
     from: input.account.addr,
     reserve: input.account.addr,
-    decimals: 6,
+    decimals: input.decimals,
     defaultFrozen: false,
     total: 1_000_000_000_000_000,
     assetName: input.name,

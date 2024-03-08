@@ -2,37 +2,58 @@ import { Contract } from '@algorandfoundation/tealscript';
 
 // eslint-disable-next-line no-unused-vars
 const version = 'CLAMM-01-01-01';
+const LP_TOKEN_DECIMALS = 6;
+const SCALE_DECIMALS = 9;
 const TOTAL_SUPPLY = 10_000_000_000_000_000;
 const SCALE = 1_000_000_000;
 const governor = 'ALGONAUTSPIUHDCX3SLFXOFDUKOE4VY36XV4JX2JHQTWJNKVBKPEBQACRY';
 
 // eslint-disable-next-line no-unused-vars
 class BiatecCLAMM extends Contract {
-  governor = GlobalStateKey<Address>({ key: 'g' });
-
+  // asset A id
   assetA = GlobalStateKey<AssetID>({ key: 'a' });
 
+  // asset B id
   assetB = GlobalStateKey<AssetID>({ key: 'b' });
 
+  // asset A balance - disponible for swapping. The difference between contract balance and asset A balance is the fees collected
+  assetABalance = GlobalStateKey<uint64>({ key: 'ab' });
+
+  // asset B balance - disponible for swapping. The difference between contract balance and asset B balance is the fees collected
+  assetBBalance = GlobalStateKey<uint64>({ key: 'bb' });
+
+  // min price
   priceMaxA = GlobalStateKey<uint64>({ key: 'pa' });
 
+  // max price
   priceMaxB = GlobalStateKey<uint64>({ key: 'pb' });
 
+  // min price in square root
   priceMaxASqrt = GlobalStateKey<uint64>({ key: 'pas' });
 
+  // max price in square root
   priceMaxBSqrt = GlobalStateKey<uint64>({ key: 'pbs' });
 
+  // pool LP token id
   poolToken = GlobalStateKey<AssetID>({ key: 'p' });
 
+  // fee settings 100000
   feeB100000 = GlobalStateKey<uint32>({ key: 'f' });
 
+  // current price
   ratio = GlobalStateKey<uint64>({ key: 'r' });
 
+  // scale in this contranct
   scale = GlobalStateKey<uint64>({ key: 'scale' });
 
+  // identity provider app id
   identityProvider = GlobalStateKey<AppID>({ key: 'i' });
 
+  // pool provider app id
   poolProvider = GlobalStateKey<AppID>({ key: 'pp' });
+
+  // biatec account
+  governor = GlobalStateKey<Address>({ key: 'g' });
 
   /**
    * Verification class is level of KYC verification by Biatec Identity
@@ -104,6 +125,8 @@ class BiatecCLAMM extends Contract {
     assert(feeB100000 < 1000000); // fee must be lower then 10%
     assert(verificationClass < 4); // verificationClass
     assert(!this.ratio.exists);
+    assert(assetA.decimals <= SCALE_DECIMALS);
+    assert(assetB.decimals <= SCALE_DECIMALS);
 
     this.identityProvider.value = identityProvider;
     this.poolProvider.value = poolProvider;
@@ -112,6 +135,8 @@ class BiatecCLAMM extends Contract {
     this.priceMaxB.value = priceMaxB;
     this.priceMaxASqrt.value = sqrt(priceMaxA * SCALE);
     this.priceMaxBSqrt.value = sqrt(priceMaxB * SCALE);
+    this.assetABalance.value = 0;
+    this.assetBBalance.value = 0;
     this.ratio.value = currentPrice;
 
     this.assetA.value = assetA;
@@ -130,6 +155,7 @@ class BiatecCLAMM extends Contract {
       assetReceiver: receiver,
       xferAsset: asset,
       assetAmount: amount,
+      fee: 0,
     });
   }
 
@@ -150,7 +176,7 @@ class BiatecCLAMM extends Contract {
       configAssetName: name,
       configAssetUnitName: 'BLP',
       configAssetTotal: TOTAL_SUPPLY,
-      configAssetDecimals: 6,
+      configAssetDecimals: LP_TOKEN_DECIMALS,
       configAssetManager: this.app.address,
       configAssetReserve: this.app.address,
     });
@@ -216,13 +242,22 @@ class BiatecCLAMM extends Contract {
       this.app.address.assetBalance(assetA) === txAssetADeposit.assetAmount &&
       this.app.address.assetBalance(assetB) === txAssetBDeposit.assetAmount
     ) {
-      const toMint = this.tokensToMintIntial(txAssetADeposit.assetAmount, txAssetBDeposit.assetAmount);
+      // make sure we are on the curve
+      // TODO
+
+      // calculate LP position
+      this.assetABalance.value = txAssetADeposit.assetAmount;
+      this.assetBBalance.value = txAssetBDeposit.assetAmount;
+      const toMint = this.calculateL(this.assetABalance.value, this.assetBBalance.value);
+
+      // send LP tokens to user
+      // this.doAxfer(this.txn.sender, this.poolToken.value, toMint); TODO FIX
       return toMint;
     }
-    return 1;
+    return 0;
   }
 
-  private tokensToMintIntial(x: uint64, y: uint64): uint64 {
+  private calculateL(x: uint64, y: uint64): uint64 {
     // (x + L/sqrt(P2))*(y+L*sqrt(P1))=L*L
     // y + L*sqrt(P1) = L*L / (x + L/sqrt(P2))
     // x*y + L*sqrt(P1)*L/sqrt(P2) + x * L*sqrt(P1) + y * L/sqrt(P2) =L*L
@@ -322,32 +357,76 @@ class BiatecCLAMM extends Contract {
     throw Error();
   }
 
-  swap(swapXfer: AssetTransferTxn, assetA: AssetID, assetB: AssetID): void {
+  /**
+   * Swap Asset A to Asset B or Asset B to Asst A
+   * @param txSwap Transfer of the token to be deposited to the pool. To the owner the other asset will be sent.
+   * @param assetA Asset A
+   * @param assetB Asset B
+   * @param minimumToReceive If number greater then zero, the check is performed for the output of the other asset
+   */
+  swap(txSwap: AssetTransferTxn, assetA: AssetID, assetB: AssetID, minimumToReceive: uint64): void {
     /// well formed swap
     assert(assetA === this.assetA.value);
     assert(assetB === this.assetB.value);
 
-    verifyAssetTransferTxn(swapXfer, {
+    verifyAssetTransferTxn(txSwap, {
       assetAmount: { greaterThan: 0 },
       assetReceiver: this.app.address,
       sender: this.txn.sender,
       xferAsset: { includedIn: [assetA, assetB] },
     });
 
-    // const outId = swapXfer.xferAsset === assetA ? assetA : assetB;
-
-    // const inId = swapXfer.xferAsset;
-
-    // const toSwap = this.tokensToSwap(
-    //   swapXfer.assetAmount,
-    //   this.app.address.assetBalance(inId) - swapXfer.assetAmount,
-    //   this.app.address.assetBalance(outId)
-    // );
+    if (txSwap.xferAsset === assetA) {
+      const toSwap = this.calculateAssetBWithdrawOnAssetADeposit(txSwap.assetAmount, assetA.decimals, assetB.decimals);
+      assert(minimumToReceive >= toSwap);
+      this.doAxfer(this.txn.sender, assetB, toSwap);
+    }
 
     // assert(toSwap > 0);
 
     // this.doAxfer(this.txn.sender, outId, toSwap);
 
     // this.ratio.value = this.computeRatio();
+  }
+
+  @abi.readonly
+  calculateAssetBWithdrawOnAssetADeposit(inAmount: uint64, assetADecimals: uint64, assetBDecimals: uint64): uint64 {
+    // (x + L / sqrt(P2))*(y+L*sqrt(P1))= L*L
+    // (x1 + L / sqrt(P2))*(y1 + L * sqrt(P1))= L*L
+    // (x2 + L / sqrt(P2))*(y2 + L * sqrt(P1))= L*L
+    // (x1 + deposit) = x2
+    // (y1 - withdraw ) = y2
+    // (x1 + L / sqrt(P2))*(y1 + L * sqrt(P1)) = (x2 + L / sqrt(P2))*(y2 + L * sqrt(P1))
+    // (x1 + L / sqrt(P2))*(y1 + L * sqrt(P1)) = (x1 + deposit + L / sqrt(P2))*(y1 - withdraw + L * sqrt(P1))
+    // (x1 + L / sqrt(P2))*(y1 + L * sqrt(P1)) = (x1 + deposit + L / sqrt(P2))*(y1 - withdraw + L * sqrt(P1))
+    // SP2 = B
+    // SP1 = A
+    // (X + L / B)*(Y + L * A) = (X + D + L / B)*(Y - W + L * A)
+    // https://www.mathpapa.com/equation-solver/
+    // w = (a*b*d*l + b*d*y)/(b*d+b*x+l)
+    const assetADelicmalScale: uint64 = 10 ** assetADecimals;
+    const assetBDelicmalScale: uint64 = 10 ** assetBDecimals;
+
+    const x: uint64 = this.assetABalance.value;
+    const y: uint64 = this.assetBBalance.value;
+    const a: uint64 = this.priceMaxASqrt.value;
+    const b: uint64 = this.priceMaxBSqrt.value;
+    const L: uint64 = this.calculateL(x, y);
+    // a*b*d*l
+    const P1: uint64 =
+      (((((a /* 10D */ * b) /* 10D */ / SCALE) * inAmount) /* AD */ / SCALE) * L) /* 10D */ / assetADelicmalScale;
+    // b*d*y
+    const P2: uint64 = (((b /* 10D */ * inAmount) /* AD */ / assetADelicmalScale) * y) /* BD */ / SCALE; // << CHECK B Decimals not applied?
+    // b*d
+    const P3: uint64 = (b /* 10D */ * inAmount) /* AD */ / assetADelicmalScale;
+    // b*x
+    const P4: uint64 = (b /* 10D */ * x) /* 10D */ / SCALE;
+    // (a*b*d*l + b*d*y)
+    const P12: uint64 = P1 + P2;
+    // (b*d+b*x+l)
+    const P345: uint64 = P3 + P4 + L;
+    // (a*b*d*l + b*d*y)/(b*d+b*x+l)
+    const ret: uint64 = (P12 * assetBDelicmalScale) / P345;
+    return ret;
   }
 }
