@@ -23,16 +23,19 @@ class BiatecCLAMM extends Contract {
   assetBBalance = GlobalStateKey<uint64>({ key: 'bb' });
 
   // min price
-  priceMaxA = GlobalStateKey<uint64>({ key: 'pa' });
+  priceMin = GlobalStateKey<uint64>({ key: 'pa' });
 
   // max price
-  priceMaxB = GlobalStateKey<uint64>({ key: 'pb' });
+  priceMax = GlobalStateKey<uint64>({ key: 'pb' });
 
   // min price in square root
-  priceMaxASqrt = GlobalStateKey<uint64>({ key: 'pas' });
+  priceMinSqrt = GlobalStateKey<uint64>({ key: 'pas' });
 
   // max price in square root
-  priceMaxBSqrt = GlobalStateKey<uint64>({ key: 'pbs' });
+  priceMaxSqrt = GlobalStateKey<uint64>({ key: 'pbs' });
+
+  // Current liquidity at the pool
+  Liqudity = GlobalStateKey<uint64>({ key: 'L' });
 
   // pool LP token id
   poolToken = GlobalStateKey<AssetID>({ key: 'p' });
@@ -84,11 +87,6 @@ class BiatecCLAMM extends Contract {
   }
 
   @abi.readonly
-  getHypotheticPrice(assetAQuantity: uint64, assetBQuantity: uint64): uint64 {
-    return this.getPrice(assetAQuantity, assetBQuantity);
-  }
-
-  @abi.readonly
   getPriceDivider(): uint64 {
     return this.scale.value;
   }
@@ -112,8 +110,8 @@ class BiatecCLAMM extends Contract {
     assetA: AssetID,
     assetB: AssetID,
     feeB100000: uint32,
-    priceMaxA: uint64,
-    priceMaxB: uint64,
+    priceMin: uint64,
+    priceMax: uint64,
     currentPrice: uint64,
     verificationClass: uint8,
     identityProvider: AppID,
@@ -131,10 +129,10 @@ class BiatecCLAMM extends Contract {
     this.identityProvider.value = identityProvider;
     this.poolProvider.value = poolProvider;
 
-    this.priceMaxA.value = priceMaxA;
-    this.priceMaxB.value = priceMaxB;
-    this.priceMaxASqrt.value = sqrt(priceMaxA * SCALE);
-    this.priceMaxBSqrt.value = sqrt(priceMaxB * SCALE);
+    this.priceMin.value = priceMin;
+    this.priceMax.value = priceMax;
+    this.priceMinSqrt.value = sqrt(priceMin * SCALE);
+    this.priceMaxSqrt.value = sqrt(priceMax * SCALE);
     this.assetABalance.value = 0;
     this.assetBBalance.value = 0;
     this.ratio.value = currentPrice;
@@ -248,8 +246,15 @@ class BiatecCLAMM extends Contract {
       // calculate LP position
       this.assetABalance.value = txAssetADeposit.assetAmount;
       this.assetBBalance.value = txAssetBDeposit.assetAmount;
-      const toMint = this.calculateL(this.assetABalance.value, this.assetBBalance.value);
-
+      const toMint = this.calculateLiquidity(
+        this.assetABalance.value,
+        this.assetBBalance.value,
+        this.priceMin.value,
+        this.priceMax.value,
+        this.priceMinSqrt.value,
+        this.priceMaxSqrt.value
+      );
+      this.Liqudity.value = toMint;
       // send LP tokens to user
       // this.doAxfer(this.txn.sender, this.poolToken.value, toMint); TODO FIX
       return toMint;
@@ -257,7 +262,26 @@ class BiatecCLAMM extends Contract {
     return 0;
   }
 
-  private calculateL(x: uint64, y: uint64): uint64 {
+  /**
+   * Calculates the liquidity  from the x - Asset A position and y - Asset B position
+   *
+   * @param x Asset A position balanced on the curve
+   * @param y Asset B position balanced on the curve
+   * @param priceMin Minimum price variable in base scale decimals (pa)
+   * @param priceMax Maximum price variable in base scale decimals (pb)
+   * @param priceMinSqrt sqrt(priceMin) in base scale decimals Variable pas
+   * @param priceMaxSqrt sqrt(priceMax) in base scale decimals Variable pbs
+   * @returns Liquidity is constant in swapping each direction. On deposit the diff between the liquidity is number of LP tokens received by user.
+   */
+  @abi.readonly
+  calculateLiquidity(
+    x: uint64,
+    y: uint64,
+    priceMin: uint64,
+    priceMax: uint64,
+    priceMinSqrt: uint64,
+    priceMaxSqrt: uint64
+  ): uint64 {
     // (x + L/sqrt(P2))*(y+L*sqrt(P1))=L*L
     // y + L*sqrt(P1) = L*L / (x + L/sqrt(P2))
     // x*y + L*sqrt(P1)*L/sqrt(P2) + x * L*sqrt(P1) + y * L/sqrt(P2) =L*L
@@ -286,26 +310,26 @@ class BiatecCLAMM extends Contract {
     // D = D1       + D2     + D3                      + D4    - D5
 
     // D1 = x^2 * P1
-    const D1: uint64 = (((x * x) / SCALE) * this.priceMaxA.value) / SCALE;
+    const D1: uint64 = (((x * x) / SCALE) * priceMin) / SCALE;
     // D2 = y^2/P2
-    const D2: uint64 = (y * y) / this.priceMaxB.value;
+    const D2: uint64 = (y * y) / priceMax;
     // D3 = 2*x*y*sqrt(P1)/sqrt(P2)
-    const D3: uint64 = (((2 * x * y) / SCALE) * this.priceMaxASqrt.value) / SCALE / this.priceMaxBSqrt.value;
+    const D3: uint64 = (((2 * x * y) / SCALE) * priceMinSqrt) / SCALE / priceMaxSqrt;
     // sqrt(10000/1000) = sqrt(10000)/sqrt(1000)
     // D4 = 4*x*y
     const D4: uint64 = (4 * x * y) / SCALE;
     // D5 = -4*x*y*sqrt(P1)/sqrt(P2)
-    const D5: uint64 = (((4 * x * y) / SCALE) * this.priceMaxASqrt.value) / SCALE / this.priceMaxBSqrt.value;
+    const D5: uint64 = (((4 * x * y) / SCALE) * priceMinSqrt) / SCALE / priceMaxSqrt;
     const D = D1 + D2 + D3 + D4 - D5;
     // L = ( x * sqrt(P1) + y /sqrt(P2) +- sqrt(D)) / (2  - 2 * P1 / sqrt(P2)))
     // L = ( L1           + L2          +- sqrt(D) ) / (2 - L3)
 
     // L1 = x * sqrt(P1)
-    const L1: uint64 = (x * this.priceMaxASqrt.value) / SCALE;
+    const L1: uint64 = (x * priceMinSqrt) / SCALE;
     // L2 = y /sqrt(P2)
-    const L2: uint64 = (y * SCALE) / this.priceMaxBSqrt.value;
+    const L2: uint64 = (y * SCALE) / priceMaxSqrt;
     // L3 = 2 * sqrt(P1) / sqrt(P2)
-    const L3: uint64 = (2 * this.priceMaxASqrt.value * SCALE) / this.priceMaxBSqrt.value;
+    const L3: uint64 = (2 * priceMinSqrt * SCALE) / priceMaxSqrt;
     // L = ( x * P1 + y /sqrt(P2) +- sqrt(D)) / (2  - 2 * P1 / sqrt(P2)))
     // const D_SQRT = (SCALE * sqrt(D)) / sqrt(SCALE);
     const D_SQRT = sqrt(SCALE * D);
@@ -329,10 +353,34 @@ class BiatecCLAMM extends Contract {
    * Get the current price when asset a has x
    * @param assetAQuantity x
    * @param assetBQuantity y
+   * @param priceMinSqrt sqrt(priceMin)
+   * @param priceMaxSqrt sqrt(priceMax)
+   * @param liquidity Current pool liquidity - L variable
+   * @param assetADecimals Asset A decimals
+   * @param assetBDecimals Asset B decimals
    * @returns the price with specified quantity with the price range set in the contract
    */
-  private getPrice(assetAQuantity: uint64, assetBQuantity: uint64): uint64 {
-    return assetAQuantity;
+  @abi.readonly
+  getHypotheticPrice(
+    assetAQuantity: uint64,
+    assetBQuantity: uint64,
+    priceMinSqrt: uint64,
+    priceMaxSqrt: uint64,
+    liquidity: uint64,
+    assetADecimals: uint64,
+    assetBDecimals: uint64
+  ): uint64 {
+    // P=(y+L*A)/(x+L/B)
+    const assetADelicmalScale2Scale: uint64 = 10 ** (SCALE_DECIMALS - assetADecimals);
+    const assetBDelicmalScale2Scale: uint64 = 10 ** (SCALE_DECIMALS - assetBDecimals);
+    const a: uint64 = priceMinSqrt;
+    const b: uint64 = priceMaxSqrt;
+    const P1: uint64 = (liquidity * a) / SCALE;
+    const P2: uint64 = (liquidity * SCALE) / b;
+    const Nom: uint64 = assetBQuantity * assetBDelicmalScale2Scale + P1;
+    const Denom: uint64 = assetAQuantity * assetADelicmalScale2Scale + P2;
+    const ret = (Nom * SCALE) / Denom;
+    return ret;
   }
 
   /**
@@ -378,7 +426,10 @@ class BiatecCLAMM extends Contract {
 
     if (txSwap.xferAsset === assetA) {
       const toSwap = this.calculateAssetBWithdrawOnAssetADeposit(txSwap.assetAmount, assetA.decimals, assetB.decimals);
-      assert(minimumToReceive >= toSwap);
+      if (minimumToReceive > 0) {
+        // if minimumToReceive == 0, do not restrict the price
+        assert(minimumToReceive >= toSwap);
+      }
       this.doAxfer(this.txn.sender, assetB, toSwap);
     }
 
@@ -389,6 +440,13 @@ class BiatecCLAMM extends Contract {
     // this.ratio.value = this.computeRatio();
   }
 
+  /**
+   * Calculates how much asset B will be taken from the smart contract on asset A deposit
+   * @param inAmount Asset A amount in asset A decimal representation.. If asset has 6 decimals, 1 is represented as 1000000
+   * @param assetADecimals Number of decimals of asset A
+   * @param assetBDecimals Number of decimals of asset B
+   * @returns
+   */
   @abi.readonly
   calculateAssetBWithdrawOnAssetADeposit(inAmount: uint64, assetADecimals: uint64, assetBDecimals: uint64): uint64 {
     // (x + L / sqrt(P2))*(y+L*sqrt(P1))= L*L
@@ -409,14 +467,14 @@ class BiatecCLAMM extends Contract {
 
     const x: uint64 = this.assetABalance.value;
     const y: uint64 = this.assetBBalance.value;
-    const a: uint64 = this.priceMaxASqrt.value;
-    const b: uint64 = this.priceMaxBSqrt.value;
-    const L: uint64 = this.calculateL(x, y);
+    const a: uint64 = this.priceMinSqrt.value;
+    const b: uint64 = this.priceMaxSqrt.value;
+    const L: uint64 = this.Liqudity.value; // this.calculateL(x, y);
     // a*b*d*l
     const P1: uint64 =
       (((((a /* 10D */ * b) /* 10D */ / SCALE) * inAmount) /* AD */ / SCALE) * L) /* 10D */ / assetADelicmalScale;
     // b*d*y
-    const P2: uint64 = (((b /* 10D */ * inAmount) /* AD */ / assetADelicmalScale) * y) /* BD */ / SCALE; // << CHECK B Decimals not applied?
+    const P2: uint64 = (((b /* 10D */ * inAmount) /* AD */ / assetADelicmalScale) * y) /* BD */ / SCALE; // << TODO CHECK B Decimals not applied?
     // b*d
     const P3: uint64 = (b /* 10D */ * inAmount) /* AD */ / assetADelicmalScale;
     // b*x

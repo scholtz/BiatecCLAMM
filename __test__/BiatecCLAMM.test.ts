@@ -101,10 +101,9 @@ describe('clamm', () => {
   test('getHypotheticPrice returns correct results', async () => {
     const { algod } = fixture.context;
     const testSet = [
-      { x: 0.00000001, y: 0, P1: 1, P2: 1.5625, P: BigInt(1 * SCALE) },
-      { x: 2, y: 0, P1: 1, P2: 1.5625, P: BigInt(1 * SCALE) },
-      { x: 0.2, y: 0, P1: 1, P2: 1.5625, P: BigInt(1 * SCALE) },
-      { x: 0, y: 0.25, P1: 1, P2: 1.5625, P: BigInt(1.5625 * SCALE) },
+      { x: 0.2, y: 0, P1: 1, P2: 1.5625, L: 1, P: BigInt(1 * SCALE) },
+      { x: 0, y: 0.25, P1: 1, P2: 1.5625, L: 1, P: BigInt(1.5625 * SCALE) },
+      { x: 2, y: 0, P1: 1, P2: 1.5625, L: 10, P: BigInt(1 * SCALE) },
     ];
 
     // eslint-disable-next-line no-restricted-syntax
@@ -149,39 +148,16 @@ describe('clamm', () => {
       const poolRef = await poolClient.appClient.getAppReference();
       expect(poolRef.appId).toBeGreaterThan(0);
 
-      // eslint-disable-next-line no-await-in-loop
-      const params = await algod.getTransactionParams().do();
-      const fundTx = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        amount: 400000,
-        from: deployer.addr,
-        suggestedParams: params,
-        to: ammRef.appAddress,
-      });
       console.log(`result:  expecting ${t.P}`);
-      // eslint-disable-next-line no-await-in-loop
-      const assetId = await ammClient.bootstrap(
-        {
-          txSeed: fundTx,
-          feeB100000: 100000,
-          assetA: assetAId,
-          assetB: assetBId,
-          verificationClass: 0,
-          identityProvider: identityRef.appId,
-          poolProvider: poolRef.appId,
-          priceMaxA: t.P1 * SCALE,
-          priceMaxB: t.P2 * SCALE,
-          currentPrice: t.P1 * SCALE, // wrong price on purpose
-        },
-        {
-          sendParams: { ...params, fee: algokit.microAlgos(4000) },
-          apps: [Number(identityRef.appId), Number(poolRef.appId)],
-        }
-      );
-      expect(assetId.return?.valueOf()).toBeGreaterThan(0);
       // eslint-disable-next-line no-await-in-loop
       const result = await ammClient.getHypotheticPrice({
         assetAQuantity: BigInt(t.x * SCALE_A),
         assetBQuantity: BigInt(t.y * SCALE_B),
+        assetADecimals: ASSET_A_DECIMALS,
+        assetBDecimals: ASSET_B_DECIMALS,
+        liquidity: t.L * SCALE,
+        priceMaxASqrt: Math.sqrt(t.P1) * SCALE,
+        priceMaxBSqrt: Math.sqrt(t.P2) * SCALE,
       });
       console.log(
         `sent x${BigInt(t.x * SCALE_A)} y${BigInt(t.y * SCALE_B)} result: ${result?.return?.valueOf()} expecting ${t.P}`

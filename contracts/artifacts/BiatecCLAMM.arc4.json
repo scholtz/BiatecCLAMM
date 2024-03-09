@@ -19,23 +19,6 @@
       }
     },
     {
-      "name": "getHypotheticPrice",
-      "readonly": true,
-      "args": [
-        {
-          "name": "assetAQuantity",
-          "type": "uint64"
-        },
-        {
-          "name": "assetBQuantity",
-          "type": "uint64"
-        }
-      ],
-      "returns": {
-        "type": "uint64"
-      }
-    },
-    {
       "name": "getPriceDivider",
       "readonly": true,
       "args": [],
@@ -139,6 +122,47 @@
       "returns": {
         "type": "uint64",
         "desc": "LP Token quantity distributed"
+      }
+    },
+    {
+      "name": "getHypotheticPrice",
+      "desc": "Get the current price when asset a has x",
+      "readonly": true,
+      "args": [
+        {
+          "name": "assetAQuantity",
+          "type": "uint64",
+          "desc": "x"
+        },
+        {
+          "name": "assetBQuantity",
+          "type": "uint64",
+          "desc": "y"
+        },
+        {
+          "name": "priceMaxASqrt",
+          "type": "uint64"
+        },
+        {
+          "name": "priceMaxBSqrt",
+          "type": "uint64"
+        },
+        {
+          "name": "liquidity",
+          "type": "uint64"
+        },
+        {
+          "name": "assetADecimals",
+          "type": "uint64"
+        },
+        {
+          "name": "assetBDecimals",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "uint64",
+        "desc": "the price with specified quantity with the price range set in the contract"
       }
     },
     {
