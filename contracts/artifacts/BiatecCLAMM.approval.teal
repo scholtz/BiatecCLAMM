@@ -50,6 +50,12 @@ createApplication:
 	byte 0x7363616c65 // "scale"
 	int 1000000000
 	app_global_put
+
+	// contracts\BiatecCLAMM.algo.ts:82
+	// this.feeB100000.value = <uint64>0
+	byte 0x66 // "f"
+	int 0
+	app_global_put
 	retsub
 
 // getCurrentPrice()uint64
@@ -69,7 +75,7 @@ createApplication:
 getCurrentPrice:
 	proto 0 1
 
-	// contracts\BiatecCLAMM.algo.ts:86
+	// contracts\BiatecCLAMM.algo.ts:87
 	// return this.ratio.value;
 	byte 0x72 // "r"
 	app_global_get
@@ -92,7 +98,7 @@ getCurrentPrice:
 getPriceDivider:
 	proto 0 1
 
-	// contracts\BiatecCLAMM.algo.ts:91
+	// contracts\BiatecCLAMM.algo.ts:92
 	// return this.scale.value;
 	byte 0x7363616c65 // "scale"
 	app_global_get
@@ -115,13 +121,13 @@ getPriceDivider:
 getLPTokenId:
 	proto 0 1
 
-	// contracts\BiatecCLAMM.algo.ts:96
+	// contracts\BiatecCLAMM.algo.ts:97
 	// return this.poolToken.value.id;
 	byte 0x70 // "p"
 	app_global_get
 	retsub
 
-// bootstrap(pay,uint64,uint64,uint32,uint64,uint64,uint64,uint8,uint64,uint64)uint64
+// bootstrap(pay,uint64,uint64,uint64,uint64,uint64,uint64,uint8,uint64,uint64)uint64
 *abi_route_bootstrap:
 	// The ABI return prefix
 	byte 0x151f7c75
@@ -147,21 +153,16 @@ getLPTokenId:
 	txna ApplicationArgs 6
 	btoi
 
-	// priceMaxB: uint64
+	// priceMax: uint64
 	txna ApplicationArgs 5
 	btoi
 
-	// priceMaxA: uint64
+	// priceMin: uint64
 	txna ApplicationArgs 4
 	btoi
 
-	// feeB100000: uint32
+	// feeB100000: uint64
 	txna ApplicationArgs 3
-	dup
-	len
-	int 4
-	==
-	assert
 	btoi
 
 	// assetB: uint64
@@ -182,7 +183,7 @@ getLPTokenId:
 	==
 	assert
 
-	// execute bootstrap(pay,uint64,uint64,uint32,uint64,uint64,uint64,uint8,uint64,uint64)uint64
+	// execute bootstrap(pay,uint64,uint64,uint64,uint64,uint64,uint64,uint8,uint64,uint64)uint64
 	callsub bootstrap
 	itob
 	concat
@@ -190,7 +191,7 @@ getLPTokenId:
 	int 1
 	return
 
-// bootstrap(txSeed: PayTxn, assetA: AssetID, assetB: AssetID, feeB100000: uint32, priceMaxA: uint64, priceMaxB: uint64, currentPrice: uint64, verificationClass: uint8, identityProvider: AppID, poolProvider: AppID): AssetID
+// bootstrap(txSeed: PayTxn, assetA: AssetID, assetB: AssetID, feeB100000: uint64, priceMin: uint64, priceMax: uint64, currentPrice: uint64, verificationClass: uint8, identityProvider: AppID, poolProvider: AppID): AssetID
 //
 // Anybody can deploy the clamm smart contract
 // @param txSeed Seed transaction so that smart contract can opt in to the assets
@@ -202,7 +203,10 @@ getLPTokenId:
 bootstrap:
 	proto 10 1
 
-	// contracts\BiatecCLAMM.algo.ts:120
+	// Push empty bytes after the frame pointer to reserve space for local variables
+	byte 0x
+
+	// contracts\BiatecCLAMM.algo.ts:121
 	// verifyPayTxn(txSeed, { receiver: this.app.address, amount: { greaterThanEqualTo: 300_000 } })
 	// verify receiver
 	frame_dig -1 // txSeed: PayTxn
@@ -218,7 +222,7 @@ bootstrap:
 	>=
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:121
+	// contracts\BiatecCLAMM.algo.ts:122
 	// assert(this.governor.value === Address.fromBytes(governor))
 	byte 0x67 // "g"
 	app_global_get
@@ -226,28 +230,35 @@ bootstrap:
 	==
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:122
+	// contracts\BiatecCLAMM.algo.ts:123
 	// assert(assetA < assetB)
 	frame_dig -2 // assetA: AssetID
 	frame_dig -3 // assetB: AssetID
 	<
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:123
+	// contracts\BiatecCLAMM.algo.ts:124
 	// assert(feeB100000 < 1000000)
-	frame_dig -4 // feeB100000: uint32
+	frame_dig -4 // feeB100000: uint64
 	int 1000000
 	<
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:124
+	// contracts\BiatecCLAMM.algo.ts:125
+	// assert(feeB100000 > 0)
+	frame_dig -4 // feeB100000: uint64
+	int 0
+	>
+	assert
+
+	// contracts\BiatecCLAMM.algo.ts:126
 	// assert(verificationClass < 4)
 	frame_dig -8 // verificationClass: uint8
 	int 4
 	<
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:125
+	// contracts\BiatecCLAMM.algo.ts:127
 	// assert(!this.ratio.exists)
 	txna Applications 0
 	byte 0x72 // "r"
@@ -257,7 +268,7 @@ bootstrap:
 	!
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:126
+	// contracts\BiatecCLAMM.algo.ts:128
 	// assert(assetA.decimals <= SCALE_DECIMALS)
 	frame_dig -2 // assetA: AssetID
 	asset_params_get AssetDecimals
@@ -266,7 +277,7 @@ bootstrap:
 	<=
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:127
+	// contracts\BiatecCLAMM.algo.ts:129
 	// assert(assetB.decimals <= SCALE_DECIMALS)
 	frame_dig -3 // assetB: AssetID
 	asset_params_get AssetDecimals
@@ -275,79 +286,124 @@ bootstrap:
 	<=
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:129
+	// contracts\BiatecCLAMM.algo.ts:130
+	// s = SCALE as uint256
+	byte 0x000000000000000000000000000000000000000000000000000000003b9aca00
+	frame_bury 0 // s: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:132
+	// assert(this.feeB100000.value <= 0, 'You can bootstrap contract only once')
+	byte 0x66 // "f"
+	app_global_get
+	int 0
+	<=
+
+	// You can bootstrap contract only once
+	assert
+
+	// contracts\BiatecCLAMM.algo.ts:134
 	// this.identityProvider.value = identityProvider
 	byte 0x69 // "i"
 	frame_dig -9 // identityProvider: AppID
 	app_global_put
 
-	// contracts\BiatecCLAMM.algo.ts:130
+	// contracts\BiatecCLAMM.algo.ts:135
 	// this.poolProvider.value = poolProvider
 	byte 0x7070 // "pp"
 	frame_dig -10 // poolProvider: AppID
 	app_global_put
 
-	// contracts\BiatecCLAMM.algo.ts:132
-	// this.priceMaxA.value = priceMaxA
-	byte 0x7061 // "pa"
-	frame_dig -5 // priceMaxA: uint64
-	app_global_put
-
-	// contracts\BiatecCLAMM.algo.ts:133
-	// this.priceMaxB.value = priceMaxB
-	byte 0x7062 // "pb"
-	frame_dig -6 // priceMaxB: uint64
-	app_global_put
-
-	// contracts\BiatecCLAMM.algo.ts:134
-	// this.priceMaxASqrt.value = sqrt(priceMaxA * SCALE)
-	byte 0x706173 // "pas"
-	frame_dig -5 // priceMaxA: uint64
-	int 1000000000
-	*
-	sqrt
-	app_global_put
-
-	// contracts\BiatecCLAMM.algo.ts:135
-	// this.priceMaxBSqrt.value = sqrt(priceMaxB * SCALE)
-	byte 0x706273 // "pbs"
-	frame_dig -6 // priceMaxB: uint64
-	int 1000000000
-	*
-	sqrt
-	app_global_put
-
-	// contracts\BiatecCLAMM.algo.ts:136
-	// this.assetABalance.value = 0
-	byte 0x6162 // "ab"
-	int 0
-	app_global_put
-
 	// contracts\BiatecCLAMM.algo.ts:137
-	// this.assetBBalance.value = 0
-	byte 0x6262 // "bb"
-	int 0
+	// this.priceMin.value = priceMin
+	byte 0x704d696e // "pMin"
+	frame_dig -5 // priceMin: uint64
 	app_global_put
 
 	// contracts\BiatecCLAMM.algo.ts:138
+	// this.priceMax.value = priceMax
+	byte 0x704d6178 // "pMax"
+	frame_dig -6 // priceMax: uint64
+	app_global_put
+
+	// contracts\BiatecCLAMM.algo.ts:139
+	// this.priceMinSqrt.value = sqrt((priceMin as uint256) * s)
+	byte 0x704d696e53 // "pMinS"
+	frame_dig -5 // priceMin: uint64
+	itob
+	frame_dig 0 // s: uint256
+	b*
+	bsqrt
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
+	app_global_put
+
+	// contracts\BiatecCLAMM.algo.ts:140
+	// this.priceMaxSqrt.value = sqrt((priceMax as uint256) * s)
+	byte 0x704d617853 // "pMaxS"
+	frame_dig -6 // priceMax: uint64
+	itob
+	frame_dig 0 // s: uint256
+	b*
+	bsqrt
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
+	app_global_put
+
+	// contracts\BiatecCLAMM.algo.ts:141
+	// this.assetABalance.value = <uint256>0
+	byte 0x6162 // "ab"
+	byte 0x0000000000000000000000000000000000000000000000000000000000000000
+	app_global_put
+
+	// contracts\BiatecCLAMM.algo.ts:142
+	// this.assetBBalance.value = <uint256>0
+	byte 0x6262 // "bb"
+	byte 0x0000000000000000000000000000000000000000000000000000000000000000
+	app_global_put
+
+	// contracts\BiatecCLAMM.algo.ts:143
 	// this.ratio.value = currentPrice
 	byte 0x72 // "r"
 	frame_dig -7 // currentPrice: uint64
 	app_global_put
 
-	// contracts\BiatecCLAMM.algo.ts:140
+	// contracts\BiatecCLAMM.algo.ts:145
 	// this.assetA.value = assetA
 	byte 0x61 // "a"
 	frame_dig -2 // assetA: AssetID
 	app_global_put
 
-	// contracts\BiatecCLAMM.algo.ts:141
+	// contracts\BiatecCLAMM.algo.ts:146
 	// this.assetB.value = assetB
 	byte 0x62 // "b"
 	frame_dig -3 // assetB: AssetID
 	app_global_put
 
-	// contracts\BiatecCLAMM.algo.ts:142
+	// contracts\BiatecCLAMM.algo.ts:147
 	// this.poolToken.value = this.doCreatePoolToken(assetA, assetB)
 	byte 0x70 // "p"
 	frame_dig -3 // assetB: AssetID
@@ -355,35 +411,36 @@ bootstrap:
 	callsub doCreatePoolToken
 	app_global_put
 
-	// contracts\BiatecCLAMM.algo.ts:143
+	// contracts\BiatecCLAMM.algo.ts:148
 	// this.feeB100000.value = feeB100000
 	byte 0x66 // "f"
-	frame_dig -4 // feeB100000: uint32
-	itob
-	extract 4 4
+	frame_dig -4 // feeB100000: uint64
 	app_global_put
 
-	// contracts\BiatecCLAMM.algo.ts:145
+	// contracts\BiatecCLAMM.algo.ts:150
 	// this.doOptIn(assetA)
 	frame_dig -2 // assetA: AssetID
 	callsub doOptIn
 
-	// contracts\BiatecCLAMM.algo.ts:146
+	// contracts\BiatecCLAMM.algo.ts:151
 	// this.doOptIn(assetB)
 	frame_dig -3 // assetB: AssetID
 	callsub doOptIn
 
-	// contracts\BiatecCLAMM.algo.ts:148
+	// contracts\BiatecCLAMM.algo.ts:153
 	// return this.poolToken.value;
 	byte 0x70 // "p"
 	app_global_get
+
+	// set the subroutine return value
+	frame_bury 0
 	retsub
 
 // doAxfer(receiver: Address, asset: AssetID, amount: uint64): void
 doAxfer:
 	proto 3 0
 
-	// contracts\BiatecCLAMM.algo.ts:152
+	// contracts\BiatecCLAMM.algo.ts:157
 	// sendAssetTransfer({
 	//       assetReceiver: receiver,
 	//       xferAsset: asset,
@@ -394,22 +451,22 @@ doAxfer:
 	int axfer
 	itxn_field TypeEnum
 
-	// contracts\BiatecCLAMM.algo.ts:153
+	// contracts\BiatecCLAMM.algo.ts:158
 	// assetReceiver: receiver
 	frame_dig -1 // receiver: Address
 	itxn_field AssetReceiver
 
-	// contracts\BiatecCLAMM.algo.ts:154
+	// contracts\BiatecCLAMM.algo.ts:159
 	// xferAsset: asset
 	frame_dig -2 // asset: AssetID
 	itxn_field XferAsset
 
-	// contracts\BiatecCLAMM.algo.ts:155
+	// contracts\BiatecCLAMM.algo.ts:160
 	// assetAmount: amount
 	frame_dig -3 // amount: uint64
 	itxn_field AssetAmount
 
-	// contracts\BiatecCLAMM.algo.ts:156
+	// contracts\BiatecCLAMM.algo.ts:161
 	// fee: 0
 	int 0
 	itxn_field Fee
@@ -423,7 +480,7 @@ doOptIn:
 	proto 1 0
 
 	// *if0_condition
-	// contracts\BiatecCLAMM.algo.ts:161
+	// contracts\BiatecCLAMM.algo.ts:166
 	// asset.id > 0
 	frame_dig -1 // asset: AssetID
 	int 0
@@ -431,7 +488,7 @@ doOptIn:
 	bz *if0_end
 
 	// *if0_consequent
-	// contracts\BiatecCLAMM.algo.ts:163
+	// contracts\BiatecCLAMM.algo.ts:168
 	// this.doAxfer(this.app.address, asset, 0)
 	int 0
 	frame_dig -1 // asset: AssetID
@@ -448,7 +505,7 @@ doCreatePoolToken:
 	// Push empty bytes after the frame pointer to reserve space for local variables
 	byte 0x
 
-	// contracts\BiatecCLAMM.algo.ts:171
+	// contracts\BiatecCLAMM.algo.ts:176
 	// name = 'B-' + assetA.unitName + '-' + assetB.unitName
 	byte 0x422d // "B-"
 	frame_dig -1 // assetA: AssetID
@@ -463,7 +520,7 @@ doCreatePoolToken:
 	concat
 	frame_bury 0 // name: byte[]
 
-	// contracts\BiatecCLAMM.algo.ts:173
+	// contracts\BiatecCLAMM.algo.ts:178
 	// return sendAssetCreation({
 	//       configAssetName: name,
 	//       configAssetUnitName: 'BLP',
@@ -476,32 +533,32 @@ doCreatePoolToken:
 	int acfg
 	itxn_field TypeEnum
 
-	// contracts\BiatecCLAMM.algo.ts:174
+	// contracts\BiatecCLAMM.algo.ts:179
 	// configAssetName: name
 	frame_dig 0 // name: byte[]
 	itxn_field ConfigAssetName
 
-	// contracts\BiatecCLAMM.algo.ts:175
+	// contracts\BiatecCLAMM.algo.ts:180
 	// configAssetUnitName: 'BLP'
 	byte 0x424c50 // "BLP"
 	itxn_field ConfigAssetUnitName
 
-	// contracts\BiatecCLAMM.algo.ts:176
+	// contracts\BiatecCLAMM.algo.ts:181
 	// configAssetTotal: TOTAL_SUPPLY
 	int 10000000000000000
 	itxn_field ConfigAssetTotal
 
-	// contracts\BiatecCLAMM.algo.ts:177
+	// contracts\BiatecCLAMM.algo.ts:182
 	// configAssetDecimals: LP_TOKEN_DECIMALS
 	int 6
 	itxn_field ConfigAssetDecimals
 
-	// contracts\BiatecCLAMM.algo.ts:178
+	// contracts\BiatecCLAMM.algo.ts:183
 	// configAssetManager: this.app.address
 	global CurrentApplicationAddress
 	itxn_field ConfigAssetManager
 
-	// contracts\BiatecCLAMM.algo.ts:179
+	// contracts\BiatecCLAMM.algo.ts:184
 	// configAssetReserve: this.app.address
 	global CurrentApplicationAddress
 	itxn_field ConfigAssetReserve
@@ -531,7 +588,7 @@ doCreatePoolToken:
 	txna ApplicationArgs 2
 	btoi
 
-	// poolAsset: uint64
+	// assetLP: uint64
 	txna ApplicationArgs 1
 	btoi
 
@@ -553,12 +610,12 @@ doCreatePoolToken:
 	int 1
 	return
 
-// addLiquidity(txAssetADeposit: Txn, txAssetBDeposit: Txn, poolAsset: AssetID, assetA: AssetID, assetB: AssetID): uint64
+// addLiquidity(txAssetADeposit: Txn, txAssetBDeposit: Txn, assetLP: AssetID, assetA: AssetID, assetB: AssetID): uint64
 //
 // This method adds Asset A and Asset B to the Automated Market Maker Concentrated Liqudidity Pool and send to the liqudidty provider the liqudity token
 // @param txAssetADeposit Transfer of asset A to the LP pool
 // @param txAssetBDeposit Transfer of asset B to the LP pool
-// @param poolAsset LP pool asset
+// @param assetLP Liquidity pool asset
 // @param assetA Asset A
 // @param assetB Asset B
 // @returns LP Token quantity distributed
@@ -567,10 +624,10 @@ addLiquidity:
 
 	// Push empty bytes after the frame pointer to reserve space for local variables
 	byte 0x
-	dupn 2
+	dupn 12
 
 	// well formed mint
-	// contracts\BiatecCLAMM.algo.ts:202
+	// contracts\BiatecCLAMM.algo.ts:207
 	// assert(assetA === this.assetA.value)
 	frame_dig -4 // assetA: AssetID
 	byte 0x61 // "a"
@@ -578,7 +635,7 @@ addLiquidity:
 	==
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:203
+	// contracts\BiatecCLAMM.algo.ts:208
 	// assert(assetB === this.assetB.value)
 	frame_dig -5 // assetB: AssetID
 	byte 0x62 // "b"
@@ -586,22 +643,54 @@ addLiquidity:
 	==
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:204
-	// assert(poolAsset === this.poolToken.value)
-	frame_dig -3 // poolAsset: AssetID
+	// contracts\BiatecCLAMM.algo.ts:209
+	// assert(assetLP === this.poolToken.value)
+	frame_dig -3 // assetLP: AssetID
 	byte 0x70 // "p"
 	app_global_get
 	==
 	assert
 
+	// contracts\BiatecCLAMM.algo.ts:211
+	// assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetA.decimals)) as uint256
+	int 10
+	int 9
+	frame_dig -4 // assetA: AssetID
+	asset_params_get AssetDecimals
+	pop
+	-
+	exp
+	itob
+	frame_bury 0 // assetADelicmalScale2Scale: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:213
+	// assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256
+	int 10
+	int 9
+	frame_dig -5 // assetB: AssetID
+	asset_params_get AssetDecimals
+	pop
+	-
+	exp
+	itob
+	frame_bury 1 // assetBDelicmalScale2Scale: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:215
+	// assetLPDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256
+	int 10
+	int 3
+	exp
+	itob
+	frame_bury 2 // assetLPDelicmalScale2Scale: unsafe uint256
+
 	// *if1_condition
-	// contracts\BiatecCLAMM.algo.ts:212
+	// contracts\BiatecCLAMM.algo.ts:223
 	// true
 	int 1
 	bz *if1_end
 
 	// *if1_consequent
-	// contracts\BiatecCLAMM.algo.ts:213
+	// contracts\BiatecCLAMM.algo.ts:224
 	// xfer = txAssetADeposit as AssetTransferTxn
 	frame_dig -1 // txAssetADeposit: Txn
 	dup
@@ -609,37 +698,37 @@ addLiquidity:
 	int axfer
 	==
 	assert
-	frame_bury 0 // xfer: axfer
+	frame_bury 3 // xfer: axfer
 
-	// contracts\BiatecCLAMM.algo.ts:214
+	// contracts\BiatecCLAMM.algo.ts:225
 	// verifyAssetTransferTxn(xfer, {
 	//         assetReceiver: this.app.address,
 	//         xferAsset: assetA,
 	//         assetAmount: { greaterThanEqualTo: 0 },
 	//       })
 	// verify axfer
-	frame_dig 0 // xfer: axfer
+	frame_dig 3 // xfer: axfer
 	gtxns TypeEnum
 	int axfer
 	==
 	assert
 
 	// verify assetReceiver
-	frame_dig 0 // xfer: axfer
+	frame_dig 3 // xfer: axfer
 	gtxns AssetReceiver
 	global CurrentApplicationAddress
 	==
 	assert
 
 	// verify xferAsset
-	frame_dig 0 // xfer: axfer
+	frame_dig 3 // xfer: axfer
 	gtxns XferAsset
 	frame_dig -4 // assetA: AssetID
 	==
 	assert
 
 	// verify assetAmount
-	frame_dig 0 // xfer: axfer
+	frame_dig 3 // xfer: axfer
 	gtxns AssetAmount
 	int 0
 	>=
@@ -647,13 +736,13 @@ addLiquidity:
 
 *if1_end:
 	// *if2_condition
-	// contracts\BiatecCLAMM.algo.ts:229
+	// contracts\BiatecCLAMM.algo.ts:240
 	// true
 	int 1
 	bz *if2_end
 
 	// *if2_consequent
-	// contracts\BiatecCLAMM.algo.ts:230
+	// contracts\BiatecCLAMM.algo.ts:241
 	// xfer = txAssetBDeposit as AssetTransferTxn
 	frame_dig -2 // txAssetBDeposit: Txn
 	dup
@@ -661,37 +750,37 @@ addLiquidity:
 	int axfer
 	==
 	assert
-	frame_bury 1 // xfer: axfer
+	frame_bury 4 // xfer: axfer
 
-	// contracts\BiatecCLAMM.algo.ts:231
+	// contracts\BiatecCLAMM.algo.ts:242
 	// verifyAssetTransferTxn(xfer, {
 	//         assetReceiver: this.app.address,
 	//         xferAsset: assetB,
 	//         assetAmount: { greaterThanEqualTo: 0 },
 	//       })
 	// verify axfer
-	frame_dig 1 // xfer: axfer
+	frame_dig 4 // xfer: axfer
 	gtxns TypeEnum
 	int axfer
 	==
 	assert
 
 	// verify assetReceiver
-	frame_dig 1 // xfer: axfer
+	frame_dig 4 // xfer: axfer
 	gtxns AssetReceiver
 	global CurrentApplicationAddress
 	==
 	assert
 
 	// verify xferAsset
-	frame_dig 1 // xfer: axfer
+	frame_dig 4 // xfer: axfer
 	gtxns XferAsset
 	frame_dig -5 // assetB: AssetID
 	==
 	assert
 
 	// verify assetAmount
-	frame_dig 1 // xfer: axfer
+	frame_dig 4 // xfer: axfer
 	gtxns AssetAmount
 	int 0
 	>=
@@ -699,7 +788,7 @@ addLiquidity:
 
 *if2_end:
 	// *if3_condition
-	// contracts\BiatecCLAMM.algo.ts:240
+	// contracts\BiatecCLAMM.algo.ts:251
 	// this.app.address.assetBalance(assetA) === txAssetADeposit.assetAmount &&
 	//       this.app.address.assetBalance(assetB) === txAssetBDeposit.assetAmount
 	global CurrentApplicationAddress
@@ -724,230 +813,196 @@ addLiquidity:
 	bz *if3_end
 
 	// *if3_consequent
-	// contracts\BiatecCLAMM.algo.ts:247
-	// this.assetABalance.value = txAssetADeposit.assetAmount
+	// contracts\BiatecCLAMM.algo.ts:258
+	// this.assetABalance.value = (txAssetADeposit.assetAmount as uint256) * assetADelicmalScale2Scale
 	byte 0x6162 // "ab"
 	frame_dig -1 // txAssetADeposit: Txn
 	gtxns AssetAmount
+	itob
+	frame_dig 0 // assetADelicmalScale2Scale: unsafe uint256
+	b*
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
 	app_global_put
 
-	// contracts\BiatecCLAMM.algo.ts:248
-	// this.assetBBalance.value = txAssetBDeposit.assetAmount
+	// contracts\BiatecCLAMM.algo.ts:259
+	// this.assetBBalance.value = (txAssetBDeposit.assetAmount as uint256) * assetBDelicmalScale2Scale
 	byte 0x6262 // "bb"
 	frame_dig -2 // txAssetBDeposit: Txn
 	gtxns AssetAmount
+	itob
+	frame_dig 1 // assetBDelicmalScale2Scale: unsafe uint256
+	b*
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
 	app_global_put
 
-	// contracts\BiatecCLAMM.algo.ts:249
-	// toMint = this.calculateL(this.assetABalance.value, this.assetBBalance.value)
-	byte 0x6262 // "bb"
-	app_global_get
+	// contracts\BiatecCLAMM.algo.ts:261
+	// x = this.assetABalance.value
 	byte 0x6162 // "ab"
 	app_global_get
-	callsub calculateL
-	frame_bury 2 // toMint: uint64
+	frame_bury 5 // x: uint256
 
-	// contracts\BiatecCLAMM.algo.ts:250
+	// contracts\BiatecCLAMM.algo.ts:262
+	// y = this.assetBBalance.value
+	byte 0x6262 // "bb"
+	app_global_get
+	frame_bury 6 // y: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:263
+	// priceMin = this.priceMin.value as uint256
+	byte 0x704d696e // "pMin"
+	app_global_get
+	itob
+	frame_bury 7 // priceMin: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:264
+	// priceMax = this.priceMax.value as uint256
+	byte 0x704d6178 // "pMax"
+	app_global_get
+	itob
+	frame_bury 8 // priceMax: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:265
+	// priceMinSqrt = this.priceMinSqrt.value
+	byte 0x704d696e53 // "pMinS"
+	app_global_get
+	frame_bury 9 // priceMinSqrt: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:266
+	// priceMaxSqrt = this.priceMaxSqrt.value
+	byte 0x704d617853 // "pMaxS"
+	app_global_get
+	frame_bury 10 // priceMaxSqrt: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:267
+	// assert(priceMinSqrt > <uint256>0)
+	frame_dig 9 // priceMinSqrt: uint256
+	byte 0x0000000000000000000000000000000000000000000000000000000000000000
+	b>
+	assert
+
+	// contracts\BiatecCLAMM.algo.ts:268
+	// toMint = this.calculateLiquidity(x, y, priceMin, priceMax, priceMinSqrt, priceMaxSqrt)
+	frame_dig 10 // priceMaxSqrt: uint256
+	frame_dig 9 // priceMinSqrt: uint256
+	frame_dig 8 // priceMax: unsafe uint256
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
+	frame_dig 7 // priceMin: unsafe uint256
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
+	frame_dig 6 // y: uint256
+	frame_dig 5 // x: uint256
+	callsub calculateLiquidity
+	frame_bury 11 // toMint: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:269
+	// assert(false)
+	int 0
+	assert
+
+	// contracts\BiatecCLAMM.algo.ts:270
 	// this.Liqudity.value = toMint
 	byte 0x4c // "L"
-	frame_dig 2 // toMint: uint64
+	frame_dig 11 // toMint: unsafe uint256
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
 	app_global_put
 
-	// contracts\BiatecCLAMM.algo.ts:253
-	// return toMint;
-	frame_dig 2 // toMint: uint64
-
-	// set the subroutine return value
-	frame_bury 0
-
-	// pop all local variables from the stack
-	popn 2
-	retsub
-
-*if3_end:
-	// contracts\BiatecCLAMM.algo.ts:255
-	// return 0;
-	int 0
-
-	// set the subroutine return value
-	frame_bury 0
-
-	// pop all local variables from the stack
-	popn 2
-	retsub
-
-// calculateL(x: uint64, y: uint64): uint64
-calculateL:
-	proto 2 1
-
-	// Push empty bytes after the frame pointer to reserve space for local variables
-	byte 0x
-	dupn 15
-
-	// contracts\BiatecCLAMM.algo.ts:287
-	// D1: uint64 = (((x * x) / SCALE) * this.priceMaxA.value) / SCALE
-	frame_dig -1 // x: uint64
-	frame_dig -1 // x: uint64
-	*
-	int 1000000000
-	/
-	byte 0x7061 // "pa"
-	app_global_get
-	*
-	int 1000000000
-	/
-	frame_bury 0 // D1: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:289
-	// D2: uint64 = (y * y) / this.priceMaxB.value
-	frame_dig -2 // y: uint64
-	frame_dig -2 // y: uint64
-	*
-	byte 0x7062 // "pb"
-	app_global_get
-	/
-	frame_bury 1 // D2: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:291
-	// D3: uint64 = (((2 * x * y) / SCALE) * this.priceMaxASqrt.value) / SCALE / this.priceMaxBSqrt.value
-	int 2
-	frame_dig -1 // x: uint64
-	*
-	frame_dig -2 // y: uint64
-	*
-	int 1000000000
-	/
-	byte 0x706173 // "pas"
-	app_global_get
-	*
-	int 1000000000
-	/
-	byte 0x706273 // "pbs"
-	app_global_get
-	/
-	frame_bury 2 // D3: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:294
-	// D4: uint64 = (4 * x * y) / SCALE
-	int 4
-	frame_dig -1 // x: uint64
-	*
-	frame_dig -2 // y: uint64
-	*
-	int 1000000000
-	/
-	frame_bury 3 // D4: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:296
-	// D5: uint64 = (((4 * x * y) / SCALE) * this.priceMaxASqrt.value) / SCALE / this.priceMaxBSqrt.value
-	int 4
-	frame_dig -1 // x: uint64
-	*
-	frame_dig -2 // y: uint64
-	*
-	int 1000000000
-	/
-	byte 0x706173 // "pas"
-	app_global_get
-	*
-	int 1000000000
-	/
-	byte 0x706273 // "pbs"
-	app_global_get
-	/
-	frame_bury 4 // D5: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:297
-	// D = D1 + D2 + D3 + D4 - D5
-	frame_dig 0 // D1: uint64
-	frame_dig 1 // D2: uint64
-	+
-	frame_dig 2 // D3: uint64
-	+
-	frame_dig 3 // D4: uint64
-	+
-	frame_dig 4 // D5: uint64
+	// contracts\BiatecCLAMM.algo.ts:271
+	// lpTokensToSend = (toMint / assetLPDelicmalScale2Scale) as uint64
+	frame_dig 11 // toMint: unsafe uint256
+	frame_dig 2 // assetLPDelicmalScale2Scale: unsafe uint256
+	b/
+	dup
+	bitlen
+	int 64
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 8
 	-
-	frame_bury 5 // D: uint64
+	swap
+	substring3
+	btoi
+	frame_bury 12 // lpTokensToSend: uint64
 
-	// contracts\BiatecCLAMM.algo.ts:302
-	// L1: uint64 = (x * this.priceMaxASqrt.value) / SCALE
-	frame_dig -1 // x: uint64
-	byte 0x706173 // "pas"
+	// contracts\BiatecCLAMM.algo.ts:273
+	// this.doAxfer(this.txn.sender, this.poolToken.value, lpTokensToSend)
+	frame_dig 12 // lpTokensToSend: uint64
+	byte 0x70 // "p"
 	app_global_get
-	*
-	int 1000000000
-	/
-	frame_bury 6 // L1: uint64
+	txn Sender
+	callsub doAxfer
 
-	// contracts\BiatecCLAMM.algo.ts:304
-	// L2: uint64 = (y * SCALE) / this.priceMaxBSqrt.value
-	frame_dig -2 // y: uint64
-	int 1000000000
-	*
-	byte 0x706273 // "pbs"
-	app_global_get
-	/
-	frame_bury 7 // L2: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:306
-	// L3: uint64 = (2 * this.priceMaxASqrt.value * SCALE) / this.priceMaxBSqrt.value
-	int 2
-	byte 0x706173 // "pas"
-	app_global_get
-	*
-	int 1000000000
-	*
-	byte 0x706273 // "pbs"
-	app_global_get
-	/
-	frame_bury 8 // L3: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:309
-	// D_SQRT = sqrt(SCALE * D)
-	int 1000000000
-	frame_dig 5 // D: uint64
-	*
-	sqrt
-	frame_bury 9 // D_SQRT: uint64
-
-	// *if4_condition
-	// contracts\BiatecCLAMM.algo.ts:311
-	// 2 * SCALE > L3
-	int 2000000000
-	frame_dig 8 // L3: uint64
-	>
-	bz *if4_end
-
-	// *if4_consequent
-	// contracts\BiatecCLAMM.algo.ts:312
-	// nom: uint64 = L1 + L2 + D_SQRT
-	frame_dig 6 // L1: uint64
-	frame_dig 7 // L2: uint64
-	+
-	frame_dig 9 // D_SQRT: uint64
-	+
-	frame_bury 10 // nom: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:313
-	// den: uint64 = 2 * SCALE - L3
-	int 2000000000
-	frame_dig 8 // L3: uint64
-	-
-	frame_bury 11 // den: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:314
-	// ret: uint64 = (SCALE * nom) / den
-	int 1000000000
-	frame_dig 10 // nom: uint64
-	*
-	frame_dig 11 // den: uint64
-	/
-	frame_bury 12 // ret: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:315
-	// return ret;
-	frame_dig 12 // ret: uint64
+	// contracts\BiatecCLAMM.algo.ts:274
+	// return lpTokensToSend;
+	frame_dig 12 // lpTokensToSend: uint64
 
 	// set the subroutine return value
 	frame_bury 0
@@ -956,179 +1011,16 @@ calculateL:
 	popn 12
 	retsub
 
-*if4_end:
-	// contracts\BiatecCLAMM.algo.ts:317
-	// nom: uint64 = L1 + L2 - D_SQRT
-	frame_dig 6 // L1: uint64
-	frame_dig 7 // L2: uint64
-	+
-	frame_dig 9 // D_SQRT: uint64
-	-
-	frame_bury 13 // nom: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:318
-	// den: uint64 = L3 - 2 * SCALE
-	frame_dig 8 // L3: uint64
-	int 2000000000
-	-
-	frame_bury 14 // den: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:319
-	// ret: uint64 = (SCALE * nom) / den
-	int 1000000000
-	frame_dig 13 // nom: uint64
-	*
-	frame_dig 14 // den: uint64
-	/
-	frame_bury 15 // ret: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:320
-	// return ret;
-	frame_dig 15 // ret: uint64
+*if3_end:
+	// contracts\BiatecCLAMM.algo.ts:276
+	// return 0;
+	int 0
 
 	// set the subroutine return value
 	frame_bury 0
 
 	// pop all local variables from the stack
-	popn 15
-	retsub
-
-// getHypotheticPrice(uint64,uint64,uint64,uint64,uint64,uint64,uint64)uint64
-*abi_route_getHypotheticPrice:
-	// The ABI return prefix
-	byte 0x151f7c75
-
-	// assetBDecimals: uint64
-	txna ApplicationArgs 7
-	btoi
-
-	// assetADecimals: uint64
-	txna ApplicationArgs 6
-	btoi
-
-	// liquidity: uint64
-	txna ApplicationArgs 5
-	btoi
-
-	// priceMaxBSqrt: uint64
-	txna ApplicationArgs 4
-	btoi
-
-	// priceMaxASqrt: uint64
-	txna ApplicationArgs 3
-	btoi
-
-	// assetBQuantity: uint64
-	txna ApplicationArgs 2
-	btoi
-
-	// assetAQuantity: uint64
-	txna ApplicationArgs 1
-	btoi
-
-	// execute getHypotheticPrice(uint64,uint64,uint64,uint64,uint64,uint64,uint64)uint64
-	callsub getHypotheticPrice
-	itob
-	concat
-	log
-	int 1
-	return
-
-// getHypotheticPrice(assetAQuantity: uint64, assetBQuantity: uint64, priceMaxASqrt: uint64, priceMaxBSqrt: uint64, liquidity: uint64, assetADecimals: uint64, assetBDecimals: uint64): uint64
-//
-// Get the current price when asset a has x
-// @param assetAQuantity x
-// @param assetBQuantity y
-// @returns the price with specified quantity with the price range set in the contract
-getHypotheticPrice:
-	proto 7 1
-
-	// Push empty bytes after the frame pointer to reserve space for local variables
-	byte 0x
-	dupn 8
-
-	// contracts\BiatecCLAMM.algo.ts:343
-	// assetADelicmalScale2Scale: uint64 = 10 ** (SCALE_DECIMALS - assetADecimals)
-	int 10
-	int 9
-	frame_dig -6 // assetADecimals: uint64
-	-
-	exp
-	frame_bury 0 // assetADelicmalScale2Scale: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:344
-	// assetBDelicmalScale2Scale: uint64 = 10 ** (SCALE_DECIMALS - assetBDecimals)
-	int 10
-	int 9
-	frame_dig -7 // assetBDecimals: uint64
-	-
-	exp
-	frame_bury 1 // assetBDelicmalScale2Scale: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:345
-	// a: uint64 = priceMaxASqrt
-	frame_dig -3 // priceMaxASqrt: uint64
-	frame_bury 2 // a: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:346
-	// b: uint64 = priceMaxBSqrt
-	frame_dig -4 // priceMaxBSqrt: uint64
-	frame_bury 3 // b: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:347
-	// P1: uint64 = (liquidity * a) / SCALE
-	frame_dig -5 // liquidity: uint64
-	frame_dig 2 // a: uint64
-	*
-	int 1000000000
-	/
-	frame_bury 4 // P1: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:348
-	// P2: uint64 = (liquidity * SCALE) / b
-	frame_dig -5 // liquidity: uint64
-	int 1000000000
-	*
-	frame_dig 3 // b: uint64
-	/
-	frame_bury 5 // P2: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:349
-	// Nom: uint64 = assetBQuantity * assetBDelicmalScale2Scale + P1
-	frame_dig -2 // assetBQuantity: uint64
-	frame_dig 1 // assetBDelicmalScale2Scale: uint64
-	*
-	frame_dig 4 // P1: uint64
-	+
-	frame_bury 6 // Nom: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:350
-	// Denom: uint64 = assetAQuantity * assetADelicmalScale2Scale + P2
-	frame_dig -1 // assetAQuantity: uint64
-	frame_dig 0 // assetADelicmalScale2Scale: uint64
-	*
-	frame_dig 5 // P2: uint64
-	+
-	frame_bury 7 // Denom: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:351
-	// ret = (Nom * SCALE) / Denom
-	frame_dig 6 // Nom: uint64
-	int 1000000000
-	*
-	frame_dig 7 // Denom: uint64
-	/
-	frame_bury 8 // ret: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:352
-	// return ret;
-	frame_dig 8 // ret: uint64
-
-	// set the subroutine return value
-	frame_bury 0
-
-	// pop all local variables from the stack
-	popn 8
+	popn 12
 	retsub
 
 // removeLiquidity(axfer,uint64,uint64,uint64)void
@@ -1141,7 +1033,7 @@ getHypotheticPrice:
 	txna ApplicationArgs 2
 	btoi
 
-	// poolAsset: uint64
+	// assetLP: uint64
 	txna ApplicationArgs 1
 	btoi
 
@@ -1160,18 +1052,18 @@ getHypotheticPrice:
 	int 1
 	return
 
-// removeLiquidity(txLPXfer: AssetTransferTxn, poolAsset: AssetID, assetA: AssetID, assetB: AssetID): void
+// removeLiquidity(txLPXfer: AssetTransferTxn, assetLP: AssetID, assetA: AssetID, assetB: AssetID): void
 //
 // This method retrieves from the liquidity provider LP token and returns Asset A and Asset B from the Automated Market Maker Concentrated Liqudidity Pool
 // @param txLPXfer Transfer of the LP token
-// @param poolAsset LP pool asset
+// @param assetLP LP pool asset
 // @param assetA Asset A
 // @param assetB Asset B
 removeLiquidity:
 	proto 4 0
 
 	// well formed mint
-	// contracts\BiatecCLAMM.algo.ts:364
+	// contracts\BiatecCLAMM.algo.ts:288
 	// assert(assetA === this.assetA.value)
 	frame_dig -3 // assetA: AssetID
 	byte 0x61 // "a"
@@ -1179,7 +1071,7 @@ removeLiquidity:
 	==
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:365
+	// contracts\BiatecCLAMM.algo.ts:289
 	// assert(assetB === this.assetB.value)
 	frame_dig -4 // assetB: AssetID
 	byte 0x62 // "b"
@@ -1187,18 +1079,18 @@ removeLiquidity:
 	==
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:366
-	// assert(poolAsset === this.poolToken.value)
-	frame_dig -2 // poolAsset: AssetID
+	// contracts\BiatecCLAMM.algo.ts:290
+	// assert(assetLP === this.poolToken.value)
+	frame_dig -2 // assetLP: AssetID
 	byte 0x70 // "p"
 	app_global_get
 	==
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:368
+	// contracts\BiatecCLAMM.algo.ts:292
 	// verifyAssetTransferTxn(txLPXfer, {
 	//       assetReceiver: this.app.address,
-	//       xferAsset: poolAsset,
+	//       xferAsset: assetLP,
 	//       assetAmount: { greaterThanEqualTo: 0 },
 	//     })
 	// verify assetReceiver
@@ -1211,7 +1103,7 @@ removeLiquidity:
 	// verify xferAsset
 	frame_dig -1 // txLPXfer: AssetTransferTxn
 	gtxns XferAsset
-	frame_dig -2 // poolAsset: AssetID
+	frame_dig -2 // assetLP: AssetID
 	==
 	assert
 
@@ -1223,8 +1115,11 @@ removeLiquidity:
 	assert
 	err
 
-// swap(axfer,uint64,uint64,uint64)void
+// swap(axfer,uint64,uint64,uint64)uint64
 *abi_route_swap:
+	// The ABI return prefix
+	byte 0x151f7c75
+
 	// minimumToReceive: uint64
 	txna ApplicationArgs 3
 	btoi
@@ -1247,12 +1142,15 @@ removeLiquidity:
 	==
 	assert
 
-	// execute swap(axfer,uint64,uint64,uint64)void
+	// execute swap(axfer,uint64,uint64,uint64)uint64
 	callsub swap
+	itob
+	concat
+	log
 	int 1
 	return
 
-// swap(txSwap: AssetTransferTxn, assetA: AssetID, assetB: AssetID, minimumToReceive: uint64): void
+// swap(txSwap: AssetTransferTxn, assetA: AssetID, assetB: AssetID, minimumToReceive: uint64): uint64
 //
 // Swap Asset A to Asset B or Asset B to Asst A
 // @param txSwap Transfer of the token to be deposited to the pool. To the owner the other asset will be sent.
@@ -1260,13 +1158,14 @@ removeLiquidity:
 // @param assetB Asset B
 // @param minimumToReceive If number greater then zero, the check is performed for the output of the other asset
 swap:
-	proto 4 0
+	proto 4 1
 
 	// Push empty bytes after the frame pointer to reserve space for local variables
 	byte 0x
+	dupn 6
 
 	// well formed swap
-	// contracts\BiatecCLAMM.algo.ts:386
+	// contracts\BiatecCLAMM.algo.ts:310
 	// assert(assetA === this.assetA.value)
 	frame_dig -2 // assetA: AssetID
 	byte 0x61 // "a"
@@ -1274,7 +1173,7 @@ swap:
 	==
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:387
+	// contracts\BiatecCLAMM.algo.ts:311
 	// assert(assetB === this.assetB.value)
 	frame_dig -3 // assetB: AssetID
 	byte 0x62 // "b"
@@ -1282,7 +1181,7 @@ swap:
 	==
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:389
+	// contracts\BiatecCLAMM.algo.ts:313
 	// verifyAssetTransferTxn(txSwap, {
 	//       assetAmount: { greaterThan: 0 },
 	//       assetReceiver: this.app.address,
@@ -1322,200 +1221,1190 @@ swap:
 	||
 	assert
 
-	// *if5_condition
-	// contracts\BiatecCLAMM.algo.ts:396
+	// contracts\BiatecCLAMM.algo.ts:320
+	// assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetA.decimals)) as uint256
+	int 10
+	int 9
+	frame_dig -2 // assetA: AssetID
+	asset_params_get AssetDecimals
+	pop
+	-
+	exp
+	itob
+	frame_bury 0 // assetADelicmalScale2Scale: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:322
+	// assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256
+	int 10
+	int 9
+	frame_dig -3 // assetB: AssetID
+	asset_params_get AssetDecimals
+	pop
+	-
+	exp
+	itob
+	frame_bury 1 // assetBDelicmalScale2Scale: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:323
+	// toSwap: uint256 = 0
+	byte 0x0000000000000000000000000000000000000000000000000000000000000000
+	frame_bury 2 // toSwap: uint256
+
+	// *if4_condition
+	// contracts\BiatecCLAMM.algo.ts:324
 	// txSwap.xferAsset === assetA
 	frame_dig -1 // txSwap: AssetTransferTxn
 	gtxns XferAsset
 	frame_dig -2 // assetA: AssetID
 	==
+	bz *if4_end
+
+	// *if4_consequent
+	// contracts\BiatecCLAMM.algo.ts:325
+	// assetInAssetDecimals = txSwap.assetAmount as uint256
+	frame_dig -1 // txSwap: AssetTransferTxn
+	gtxns AssetAmount
+	itob
+	frame_bury 3 // assetInAssetDecimals: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:326
+	// toSwap = this.calculateAssetBWithdrawOnAssetADeposit(
+	//         assetInAssetDecimals * assetADelicmalScale2Scale,
+	//         this.assetABalance.value,
+	//         this.assetBBalance.value,
+	//         this.priceMinSqrt.value,
+	//         this.priceMaxSqrt.value,
+	//         this.Liqudity.value
+	//       )
+	byte 0x4c // "L"
+	app_global_get
+	byte 0x704d617853 // "pMaxS"
+	app_global_get
+	byte 0x704d696e53 // "pMinS"
+	app_global_get
+	byte 0x6262 // "bb"
+	app_global_get
+	byte 0x6162 // "ab"
+	app_global_get
+	frame_dig 3 // assetInAssetDecimals: unsafe uint256
+	frame_dig 0 // assetADelicmalScale2Scale: unsafe uint256
+	b*
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
+	callsub calculateAssetBWithdrawOnAssetADeposit
+	frame_bury 2 // toSwap: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:334
+	// toSwap = toSwap / assetBDelicmalScale2Scale
+	frame_dig 2 // toSwap: uint256
+	frame_dig 1 // assetBDelicmalScale2Scale: unsafe uint256
+	b/
+	frame_bury 2 // toSwap: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:335
+	// toSwapBDecimals = toSwap as uint64
+	frame_dig 2 // toSwap: uint256
+	dup
+	bitlen
+	int 64
+	<=
+	assert
+	extract 24 8
+	btoi
+	frame_bury 4 // toSwapBDecimals: uint64
+
+	// *if5_condition
+	// contracts\BiatecCLAMM.algo.ts:336
+	// minimumToReceive > 0
+	frame_dig -4 // minimumToReceive: uint64
+	int 0
+	>
 	bz *if5_end
 
 	// *if5_consequent
-	// contracts\BiatecCLAMM.algo.ts:397
-	// toSwap = this.calculateAssetBWithdrawOnAssetADeposit(txSwap.assetAmount, assetA.decimals, assetB.decimals)
-	frame_dig -3 // assetB: AssetID
-	asset_params_get AssetDecimals
-	pop
-	frame_dig -2 // assetA: AssetID
-	asset_params_get AssetDecimals
-	pop
-	frame_dig -1 // txSwap: AssetTransferTxn
-	gtxns AssetAmount
-	callsub calculateAssetBWithdrawOnAssetADeposit
-	frame_bury 0 // toSwap: uint64
-
-	// contracts\BiatecCLAMM.algo.ts:398
-	// assert(minimumToReceive >= toSwap)
+	// contracts\BiatecCLAMM.algo.ts:338
+	// assert(minimumToReceive >= toSwapBDecimals)
 	frame_dig -4 // minimumToReceive: uint64
-	frame_dig 0 // toSwap: uint64
+	frame_dig 4 // toSwapBDecimals: uint64
 	>=
 	assert
 
-	// contracts\BiatecCLAMM.algo.ts:399
-	// this.doAxfer(this.txn.sender, assetB, toSwap)
-	frame_dig 0 // toSwap: uint64
+*if5_end:
+	// contracts\BiatecCLAMM.algo.ts:341
+	// this.doAxfer(this.txn.sender, assetB, toSwapBDecimals)
+	frame_dig 4 // toSwapBDecimals: uint64
 	frame_dig -3 // assetB: AssetID
 	txn Sender
 	callsub doAxfer
 
-*if5_end:
+	// contracts\BiatecCLAMM.algo.ts:343
+	// this.assetABalance.value =
+	//         (this.app.address.assetBalance(this.assetA.value) as uint256) * assetADelicmalScale2Scale
+	byte 0x6162 // "ab"
+	global CurrentApplicationAddress
+	byte 0x61 // "a"
+	app_global_get
+	asset_holding_get AssetBalance
+	pop
+	itob
+	frame_dig 0 // assetADelicmalScale2Scale: unsafe uint256
+	b*
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
+	app_global_put
+
+	// contracts\BiatecCLAMM.algo.ts:345
+	// this.assetBBalance.value =
+	//         (this.app.address.assetBalance(this.assetB.value) as uint256) * assetBDelicmalScale2Scale
+	byte 0x6262 // "bb"
+	global CurrentApplicationAddress
+	byte 0x62 // "b"
+	app_global_get
+	asset_holding_get AssetBalance
+	pop
+	itob
+	frame_dig 1 // assetBDelicmalScale2Scale: unsafe uint256
+	b*
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
+	app_global_put
+
+*if4_end:
+	// contracts\BiatecCLAMM.algo.ts:349
+	// newPrice = this.calculatePrice(
+	//       this.assetABalance.value, // assetAQuantity: uint256,
+	//       this.assetBBalance.value, // assetBQuantity: uint256,
+	//       this.priceMinSqrt.value, // priceMinSqrt: uint256,
+	//       this.priceMaxSqrt.value, // priceMaxSqrt: uint256,
+	//       this.Liqudity.value // liquidity: uint256
+	//     )
+	byte 0x4c // "L"
+	app_global_get
+	byte 0x704d617853 // "pMaxS"
+	app_global_get
+	byte 0x704d696e53 // "pMinS"
+	app_global_get
+	byte 0x6262 // "bb"
+	app_global_get
+	byte 0x6162 // "ab"
+	app_global_get
+	callsub calculatePrice
+	frame_bury 5 // newPrice: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:356
+	// this.ratio.value = newPrice as uint64
+	byte 0x72 // "r"
+	frame_dig 5 // newPrice: unsafe uint256
+	dup
+	bitlen
+	int 64
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 8
+	-
+	swap
+	substring3
+	btoi
+	app_global_put
+
+	// contracts\BiatecCLAMM.algo.ts:359
+	// newL = this.calculateLiquidity(
+	//       this.assetABalance.value,
+	//       this.assetBBalance.value,
+	//       this.priceMin.value as uint256, // priceMin: uint256,
+	//       this.priceMax.value as uint256, // priceMax: uint256,
+	//       this.priceMinSqrt.value, // priceMinSqrt: uint256,
+	//       this.priceMaxSqrt.value // priceMaxSqrt: uint256,
+	//     )
+	byte 0x704d617853 // "pMaxS"
+	app_global_get
+	byte 0x704d696e53 // "pMinS"
+	app_global_get
+	byte 0x704d6178 // "pMax"
+	app_global_get
+	itob
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
+	byte 0x704d696e // "pMin"
+	app_global_get
+	itob
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
+	byte 0x6262 // "bb"
+	app_global_get
+	byte 0x6162 // "ab"
+	app_global_get
+	callsub calculateLiquidity
+	frame_bury 6 // newL: unsafe uint256
+
+	// *if6_condition
+	// contracts\BiatecCLAMM.algo.ts:367
+	// newL !== this.Liqudity.value
+	frame_dig 6 // newL: unsafe uint256
+	byte 0x4c // "L"
+	app_global_get
+	b!=
+	bz *if6_end
+
+	// *if6_consequent
+	// contracts\BiatecCLAMM.algo.ts:368
+	// log('New liquidity does not match')
+	byte 0x4e6577206c697175696469747920646f6573206e6f74206d61746368 // "New liquidity does not match"
+	log
+
+	// contracts\BiatecCLAMM.algo.ts:369
+	// assert(newL === this.Liqudity.value, 'New liquidity does not match')
+	frame_dig 6 // newL: unsafe uint256
+	byte 0x4c // "L"
+	app_global_get
+	b==
+
+	// New liquidity does not match
+	assert
+
+*if6_end:
+	// contracts\BiatecCLAMM.algo.ts:371
+	// return toSwap as uint64;
+	frame_dig 2 // toSwap: uint256
+	dup
+	bitlen
+	int 64
+	<=
+	assert
+	extract 24 8
+	btoi
+
+	// set the subroutine return value
+	frame_bury 0
+
+	// pop all local variables from the stack
+	popn 6
 	retsub
 
-// calculateAssetBWithdrawOnAssetADeposit(uint64,uint64,uint64)uint64
-*abi_route_calculateAssetBWithdrawOnAssetADeposit:
+// calculateLiquidity(uint256,uint256,uint256,uint256,uint256,uint256)uint256
+*abi_route_calculateLiquidity:
 	// The ABI return prefix
 	byte 0x151f7c75
 
-	// assetBDecimals: uint64
+	// priceMaxSqrt: uint256
+	txna ApplicationArgs 6
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// priceMinSqrt: uint256
+	txna ApplicationArgs 5
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// priceMax: uint256
+	txna ApplicationArgs 4
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// priceMin: uint256
 	txna ApplicationArgs 3
-	btoi
+	dup
+	len
+	int 32
+	==
+	assert
 
-	// assetADecimals: uint64
+	// y: uint256
 	txna ApplicationArgs 2
-	btoi
+	dup
+	len
+	int 32
+	==
+	assert
 
-	// inAmount: uint64
+	// x: uint256
 	txna ApplicationArgs 1
-	btoi
+	dup
+	len
+	int 32
+	==
+	assert
 
-	// execute calculateAssetBWithdrawOnAssetADeposit(uint64,uint64,uint64)uint64
-	callsub calculateAssetBWithdrawOnAssetADeposit
-	itob
+	// execute calculateLiquidity(uint256,uint256,uint256,uint256,uint256,uint256)uint256
+	callsub calculateLiquidity
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
 	concat
 	log
 	int 1
 	return
 
-// calculateAssetBWithdrawOnAssetADeposit(inAmount: uint64, assetADecimals: uint64, assetBDecimals: uint64): uint64
+// calculateLiquidity(x: uint256, y: uint256, priceMin: uint256, priceMax: uint256, priceMinSqrt: uint256, priceMaxSqrt: uint256): uint256
+//
+// Calculates the liquidity  from the x - Asset A position and y - Asset B position
+//
+// @param x Asset A position balanced on the curve
+// @param y Asset B position balanced on the curve
+// @param priceMin Minimum price variable in base scale decimals (pa)
+// @param priceMax Maximum price variable in base scale decimals (pb)
+// @param priceMinSqrt sqrt(priceMin) in base scale decimals Variable pas
+// @param priceMaxSqrt sqrt(priceMax) in base scale decimals Variable pbs
+// @returns Liquidity is constant in swapping each direction. On deposit the diff between the liquidity is number of LP tokens received by user.
+calculateLiquidity:
+	proto 6 1
+
+	// Push empty bytes after the frame pointer to reserve space for local variables
+	byte 0x
+	dupn 16
+
+	// contracts\BiatecCLAMM.algo.ts:421
+	// s = SCALE as uint256
+	byte 0x000000000000000000000000000000000000000000000000000000003b9aca00
+	frame_bury 0 // s: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:423
+	// D1 = (((x * x) / s) * priceMin) / s
+	frame_dig -1 // x: uint256
+	frame_dig -1 // x: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_dig -3 // priceMin: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_bury 1 // D1: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:425
+	// D2 = (y * y) / priceMax
+	frame_dig -2 // y: uint256
+	frame_dig -2 // y: uint256
+	b*
+	frame_dig -4 // priceMax: uint256
+	b/
+	frame_bury 2 // D2: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:427
+	// D3 = (((<uint256>2 * x * y) / s) * priceMinSqrt) / s / priceMaxSqrt
+	byte 0x0000000000000000000000000000000000000000000000000000000000000002
+	frame_dig -1 // x: uint256
+	b*
+	frame_dig -2 // y: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_dig -5 // priceMinSqrt: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_dig -6 // priceMaxSqrt: uint256
+	b/
+	frame_bury 3 // D3: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:430
+	// D4 = (<uint256>4 * x * y) / s
+	byte 0x0000000000000000000000000000000000000000000000000000000000000004
+	frame_dig -1 // x: uint256
+	b*
+	frame_dig -2 // y: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_bury 4 // D4: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:432
+	// D5 = (((<uint256>4 * x * y) / s) * priceMinSqrt) / s / priceMaxSqrt
+	byte 0x0000000000000000000000000000000000000000000000000000000000000004
+	frame_dig -1 // x: uint256
+	b*
+	frame_dig -2 // y: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_dig -5 // priceMinSqrt: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_dig -6 // priceMaxSqrt: uint256
+	b/
+	frame_bury 5 // D5: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:433
+	// D = D1 + D2 + D3 + D4 - D5
+	frame_dig 1 // D1: unsafe uint256
+	frame_dig 2 // D2: unsafe uint256
+	b+
+	frame_dig 3 // D3: unsafe uint256
+	b+
+	frame_dig 4 // D4: unsafe uint256
+	b+
+	frame_dig 5 // D5: unsafe uint256
+	b-
+	frame_bury 6 // D: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:437
+	// L1 = (x * priceMinSqrt) / s
+	frame_dig -1 // x: uint256
+	frame_dig -5 // priceMinSqrt: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_bury 7 // L1: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:440
+	// L2 = (y * s) / priceMaxSqrt
+	frame_dig -2 // y: uint256
+	frame_dig 0 // s: uint256
+	b*
+	frame_dig -6 // priceMaxSqrt: uint256
+	b/
+	frame_bury 8 // L2: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:442
+	// L3 = (<uint256>2 * priceMinSqrt * s) / priceMaxSqrt
+	byte 0x0000000000000000000000000000000000000000000000000000000000000002
+	frame_dig -5 // priceMinSqrt: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b*
+	frame_dig -6 // priceMaxSqrt: uint256
+	b/
+	frame_bury 9 // L3: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:445
+	// D_SQRT = sqrt(s * D)
+	frame_dig 0 // s: uint256
+	frame_dig 6 // D: unsafe uint256
+	b*
+	bsqrt
+	frame_bury 10 // D_SQRT: unsafe uint256
+
+	// *if7_condition
+	// contracts\BiatecCLAMM.algo.ts:447
+	// <uint256>2 * s > L3
+	byte 0x0000000000000000000000000000000000000000000000000000000000000002
+	frame_dig 0 // s: uint256
+	b*
+	frame_dig 9 // L3: unsafe uint256
+	b>
+	bz *if7_end
+
+	// *if7_consequent
+	// contracts\BiatecCLAMM.algo.ts:448
+	// nom = L1 + L2 + D_SQRT
+	frame_dig 7 // L1: unsafe uint256
+	frame_dig 8 // L2: unsafe uint256
+	b+
+	frame_dig 10 // D_SQRT: unsafe uint256
+	b+
+	frame_bury 11 // nom: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:449
+	// den = <uint256>2 * s - L3
+	byte 0x0000000000000000000000000000000000000000000000000000000000000002
+	frame_dig 0 // s: uint256
+	b*
+	frame_dig 9 // L3: unsafe uint256
+	b-
+	frame_bury 12 // den: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:450
+	// ret = (s * nom) / den
+	frame_dig 0 // s: uint256
+	frame_dig 11 // nom: unsafe uint256
+	b*
+	frame_dig 12 // den: unsafe uint256
+	b/
+	frame_bury 13 // ret: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:451
+	// return ret;
+	frame_dig 13 // ret: unsafe uint256
+
+	// set the subroutine return value
+	frame_bury 0
+
+	// pop all local variables from the stack
+	popn 13
+	retsub
+
+*if7_end:
+	// contracts\BiatecCLAMM.algo.ts:453
+	// nom = L1 + L2 - D_SQRT
+	frame_dig 7 // L1: unsafe uint256
+	frame_dig 8 // L2: unsafe uint256
+	b+
+	frame_dig 10 // D_SQRT: unsafe uint256
+	b-
+	frame_bury 14 // nom: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:454
+	// den = L3 - <uint256>2 * s
+	frame_dig 9 // L3: unsafe uint256
+	byte 0x0000000000000000000000000000000000000000000000000000000000000002
+	frame_dig 0 // s: uint256
+	b*
+	b-
+	frame_bury 15 // den: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:455
+	// ret = (s * nom) / den
+	frame_dig 0 // s: uint256
+	frame_dig 14 // nom: unsafe uint256
+	b*
+	frame_dig 15 // den: unsafe uint256
+	b/
+	frame_bury 16 // ret: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:456
+	// return ret;
+	frame_dig 16 // ret: unsafe uint256
+
+	// set the subroutine return value
+	frame_bury 0
+
+	// pop all local variables from the stack
+	popn 16
+	retsub
+
+// calculatePrice(uint256,uint256,uint256,uint256,uint256)uint256
+*abi_route_calculatePrice:
+	// The ABI return prefix
+	byte 0x151f7c75
+
+	// liquidity: uint256
+	txna ApplicationArgs 5
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// priceMaxSqrt: uint256
+	txna ApplicationArgs 4
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// priceMinSqrt: uint256
+	txna ApplicationArgs 3
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// assetBQuantity: uint256
+	txna ApplicationArgs 2
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// assetAQuantity: uint256
+	txna ApplicationArgs 1
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// execute calculatePrice(uint256,uint256,uint256,uint256,uint256)uint256
+	callsub calculatePrice
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
+	concat
+	log
+	int 1
+	return
+
+// calculatePrice(assetAQuantity: uint256, assetBQuantity: uint256, priceMinSqrt: uint256, priceMaxSqrt: uint256, liquidity: uint256): uint256
+//
+// Get the current price when asset a has x
+// @param assetAQuantity x
+// @param assetBQuantity y
+// @param priceMinSqrt sqrt(priceMin)
+// @param priceMaxSqrt sqrt(priceMax)
+// @param liquidity Current pool liquidity - L variable
+// @returns the price with specified quantity with the price range set in the contract
+calculatePrice:
+	proto 5 1
+
+	// Push empty bytes after the frame pointer to reserve space for local variables
+	byte 0x
+	dupn 7
+
+	// contracts\BiatecCLAMM.algo.ts:480
+	// s = SCALE as uint256
+	byte 0x000000000000000000000000000000000000000000000000000000003b9aca00
+	frame_bury 0 // s: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:481
+	// a = priceMinSqrt
+	frame_dig -3 // priceMinSqrt: uint256
+	frame_bury 1 // a: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:482
+	// b = priceMaxSqrt
+	frame_dig -4 // priceMaxSqrt: uint256
+	frame_bury 2 // b: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:483
+	// P1 = (liquidity * a) / s
+	frame_dig -5 // liquidity: uint256
+	frame_dig 1 // a: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_bury 3 // P1: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:484
+	// P2 = (liquidity * s) / b
+	frame_dig -5 // liquidity: uint256
+	frame_dig 0 // s: uint256
+	b*
+	frame_dig 2 // b: uint256
+	b/
+	frame_bury 4 // P2: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:485
+	// Nom = assetBQuantity + P1
+	frame_dig -2 // assetBQuantity: uint256
+	frame_dig 3 // P1: unsafe uint256
+	b+
+	frame_bury 5 // Nom: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:486
+	// Denom = assetAQuantity + P2
+	frame_dig -1 // assetAQuantity: uint256
+	frame_dig 4 // P2: unsafe uint256
+	b+
+	frame_bury 6 // Denom: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:487
+	// ret = (Nom * s) / Denom
+	frame_dig 5 // Nom: unsafe uint256
+	frame_dig 0 // s: uint256
+	b*
+	frame_dig 6 // Denom: unsafe uint256
+	b/
+	frame_bury 7 // ret: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:488
+	// return ret;
+	frame_dig 7 // ret: unsafe uint256
+
+	// set the subroutine return value
+	frame_bury 0
+
+	// pop all local variables from the stack
+	popn 7
+	retsub
+
+// calculateAssetBWithdrawOnAssetADeposit(uint256,uint256,uint256,uint256,uint256,uint256)uint256
+*abi_route_calculateAssetBWithdrawOnAssetADeposit:
+	// The ABI return prefix
+	byte 0x151f7c75
+
+	// liqudity: uint256
+	txna ApplicationArgs 6
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// priceMaxSqrt: uint256
+	txna ApplicationArgs 5
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// priceMinSqrt: uint256
+	txna ApplicationArgs 4
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// assetBBalance: uint256
+	txna ApplicationArgs 3
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// assetABalance: uint256
+	txna ApplicationArgs 2
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// inAmount: uint256
+	txna ApplicationArgs 1
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// execute calculateAssetBWithdrawOnAssetADeposit(uint256,uint256,uint256,uint256,uint256,uint256)uint256
+	callsub calculateAssetBWithdrawOnAssetADeposit
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
+	concat
+	log
+	int 1
+	return
+
+// calculateAssetBWithdrawOnAssetADeposit(inAmount: uint256, assetABalance: uint256, assetBBalance: uint256, priceMinSqrt: uint256, priceMaxSqrt: uint256, liqudity: uint256): uint256
+//
+// Calculates how much asset B will be taken from the smart contract on asset A deposit
+// @param inAmount Asset A amount in Base decimal representation.. If asset has 6 decimals, 1 is represented as 1000000000
+// @param assetABalance Asset A balance. Variable ab, in base scale
+// @param assetBBalance Asset B balance. Variable bb, in base scale
+// @param priceMinSqrt sqrt(Min price). Variable pMinS, in base scale
+// @param priceMaxSqrt sqrt(Max price). Variable pMaxS, in base scale
+// @param liqudity sqrt(Max price). Variable L, in base scale
+// @returns Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)
 calculateAssetBWithdrawOnAssetADeposit:
-	proto 3 1
+	proto 6 1
+
+	// Push empty bytes after the frame pointer to reserve space for local variables
+	byte 0x
+	dupn 12
+
+	// contracts\BiatecCLAMM.algo.ts:526
+	// s = SCALE as uint256
+	byte 0x000000000000000000000000000000000000000000000000000000003b9aca00
+	frame_bury 0 // s: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:527
+	// x = assetABalance
+	frame_dig -2 // assetABalance: uint256
+	frame_bury 1 // x: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:528
+	// y = assetBBalance
+	frame_dig -3 // assetBBalance: uint256
+	frame_bury 2 // y: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:529
+	// a = priceMinSqrt
+	frame_dig -4 // priceMinSqrt: uint256
+	frame_bury 3 // a: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:530
+	// b = priceMaxSqrt
+	frame_dig -5 // priceMaxSqrt: uint256
+	frame_bury 4 // b: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:531
+	// L = liqudity
+	frame_dig -6 // liqudity: uint256
+	frame_bury 5 // L: uint256
+
+	// contracts\BiatecCLAMM.algo.ts:533
+	// P1 = (((((a /* 10D */ * b) /* 10D */ / s) * inAmount) /* AD */ / s) * L) /* 10D */ / s
+	frame_dig 3 // a: uint256
+	frame_dig 4 // b: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_dig -1 // inAmount: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_dig 5 // L: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_bury 6 // P1: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:535
+	// P2 = (((b /* 10D */ * inAmount) /* AD */ / s) * y) /* BD */ / s
+	frame_dig 4 // b: uint256
+	frame_dig -1 // inAmount: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_dig 2 // y: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_bury 7 // P2: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:537
+	// P3 = (b /* 10D */ * inAmount) /* AD */ / s
+	frame_dig 4 // b: uint256
+	frame_dig -1 // inAmount: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_bury 8 // P3: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:539
+	// P4 = (b /* 10D */ * x) /* 10D */ / s
+	frame_dig 4 // b: uint256
+	frame_dig 1 // x: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_bury 9 // P4: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:541
+	// P12 = P1 + P2
+	frame_dig 6 // P1: unsafe uint256
+	frame_dig 7 // P2: unsafe uint256
+	b+
+	frame_bury 10 // P12: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:543
+	// P345 = P3 + P4 + L
+	frame_dig 8 // P3: unsafe uint256
+	frame_dig 9 // P4: unsafe uint256
+	b+
+	frame_dig 5 // L: uint256
+	b+
+	frame_bury 11 // P345: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:545
+	// ret = (P12 * s) / P345
+	frame_dig 10 // P12: unsafe uint256
+	frame_dig 0 // s: uint256
+	b*
+	frame_dig 11 // P345: unsafe uint256
+	b/
+	frame_bury 12 // ret: unsafe uint256
+
+	// contracts\BiatecCLAMM.algo.ts:546
+	// return ret;
+	frame_dig 12 // ret: unsafe uint256
+
+	// set the subroutine return value
+	frame_bury 0
+
+	// pop all local variables from the stack
+	popn 12
+	retsub
+
+// calculateAssetAWithdrawOnAssetBDeposit(uint256,uint256,uint256,uint256,uint256,uint256)uint256
+*abi_route_calculateAssetAWithdrawOnAssetBDeposit:
+	// The ABI return prefix
+	byte 0x151f7c75
+
+	// liqudity: uint256
+	txna ApplicationArgs 6
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// priceMaxSqrt: uint256
+	txna ApplicationArgs 5
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// priceMinSqrt: uint256
+	txna ApplicationArgs 4
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// assetBBalance: uint256
+	txna ApplicationArgs 3
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// assetABalance: uint256
+	txna ApplicationArgs 2
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// inAmount: uint256
+	txna ApplicationArgs 1
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// execute calculateAssetAWithdrawOnAssetBDeposit(uint256,uint256,uint256,uint256,uint256,uint256)uint256
+	callsub calculateAssetAWithdrawOnAssetBDeposit
+	dup
+	bitlen
+	int 256
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 32
+	-
+	swap
+	substring3
+	concat
+	log
+	int 1
+	return
+
+// calculateAssetAWithdrawOnAssetBDeposit(inAmount: uint256, assetABalance: uint256, assetBBalance: uint256, priceMinSqrt: uint256, priceMaxSqrt: uint256, liqudity: uint256): uint256
+//
+// Calculates how much asset A will be taken from the smart contract on asset B deposit
+// @param inAmount Asset B amount in Base decimal representation.. If asset has 6 decimals, 1 is represented as 1000000000
+// @param assetABalance Asset A balance. Variable ab, in base scale
+// @param assetBBalance Asset B balance. Variable bb, in base scale
+// @param priceMinSqrt sqrt(Min price). Variable pMinS, in base scale
+// @param priceMaxSqrt sqrt(Max price). Variable pMaxS, in base scale
+// @param liqudity sqrt(Max price). Variable L, in base scale
+//
+// @returns Amount of asset A to be given to the caller before fees. The result is in Base decimals (9)
+calculateAssetAWithdrawOnAssetBDeposit:
+	proto 6 1
 
 	// Push empty bytes after the frame pointer to reserve space for local variables
 	byte 0x
 	dupn 13
 
-	// contracts\BiatecCLAMM.algo.ts:424
-	// assetADelicmalScale: uint64 = 10 ** assetADecimals
-	int 10
-	frame_dig -2 // assetADecimals: uint64
-	exp
-	frame_bury 0 // assetADelicmalScale: uint64
+	// contracts\BiatecCLAMM.algo.ts:581
+	// s = SCALE as uint256
+	byte 0x000000000000000000000000000000000000000000000000000000003b9aca00
+	frame_bury 0 // s: uint256
 
-	// contracts\BiatecCLAMM.algo.ts:425
-	// assetBDelicmalScale: uint64 = 10 ** assetBDecimals
-	int 10
-	frame_dig -3 // assetBDecimals: uint64
-	exp
-	frame_bury 1 // assetBDelicmalScale: uint64
+	// contracts\BiatecCLAMM.algo.ts:582
+	// x = assetABalance
+	frame_dig -2 // assetABalance: uint256
+	frame_bury 1 // x: uint256
 
-	// contracts\BiatecCLAMM.algo.ts:427
-	// x: uint64 = this.assetABalance.value
-	byte 0x6162 // "ab"
-	app_global_get
-	frame_bury 2 // x: uint64
+	// contracts\BiatecCLAMM.algo.ts:583
+	// y = assetBBalance
+	frame_dig -3 // assetBBalance: uint256
+	frame_bury 2 // y: uint256
 
-	// contracts\BiatecCLAMM.algo.ts:428
-	// y: uint64 = this.assetBBalance.value
-	byte 0x6262 // "bb"
-	app_global_get
-	frame_bury 3 // y: uint64
+	// contracts\BiatecCLAMM.algo.ts:584
+	// a = priceMinSqrt
+	frame_dig -4 // priceMinSqrt: uint256
+	frame_bury 3 // a: uint256
 
-	// contracts\BiatecCLAMM.algo.ts:429
-	// a: uint64 = this.priceMaxASqrt.value
-	byte 0x706173 // "pas"
-	app_global_get
-	frame_bury 4 // a: uint64
+	// contracts\BiatecCLAMM.algo.ts:585
+	// b = priceMaxSqrt
+	frame_dig -5 // priceMaxSqrt: uint256
+	frame_bury 4 // b: uint256
 
-	// contracts\BiatecCLAMM.algo.ts:430
-	// b: uint64 = this.priceMaxBSqrt.value
-	byte 0x706273 // "pbs"
-	app_global_get
-	frame_bury 5 // b: uint64
+	// contracts\BiatecCLAMM.algo.ts:586
+	// L = liqudity
+	frame_dig -6 // liqudity: uint256
+	frame_bury 5 // L: uint256
 
-	// contracts\BiatecCLAMM.algo.ts:431
-	// L: uint64 = this.Liqudity.value
-	byte 0x4c // "L"
-	app_global_get
-	frame_bury 6 // L: uint64
+	// contracts\BiatecCLAMM.algo.ts:589
+	// P1 = (inAmount * L) / s
+	frame_dig -1 // inAmount: uint256
+	frame_dig 5 // L: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_bury 6 // P1: unsafe uint256
 
-	// contracts\BiatecCLAMM.algo.ts:433
-	// P1: uint64 =
-	//       (((((a /* 10D */ * b) /* 10D */ / SCALE) * inAmount) /* AD */ / SCALE) * L) /* 10D */ / assetADelicmalScale
-	frame_dig 4 // a: uint64
-	frame_dig 5 // b: uint64
-	*
-	int 1000000000
-	/
-	frame_dig -1 // inAmount: uint64
-	*
-	int 1000000000
-	/
-	frame_dig 6 // L: uint64
-	*
-	frame_dig 0 // assetADelicmalScale: uint64
-	/
-	frame_bury 7 // P1: uint64
+	// contracts\BiatecCLAMM.algo.ts:591
+	// P2 = (((b * inAmount) / s) * x) / s
+	frame_dig 4 // b: uint256
+	frame_dig -1 // inAmount: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_dig 1 // x: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_bury 7 // P2: unsafe uint256
 
-	// contracts\BiatecCLAMM.algo.ts:436
-	// P2: uint64 = (((b /* 10D */ * inAmount) /* AD */ / assetADelicmalScale) * y) /* BD */ / SCALE
-	frame_dig 5 // b: uint64
-	frame_dig -1 // inAmount: uint64
-	*
-	frame_dig 0 // assetADelicmalScale: uint64
-	/
-	frame_dig 3 // y: uint64
-	*
-	int 1000000000
-	/
-	frame_bury 8 // P2: uint64
+	// contracts\BiatecCLAMM.algo.ts:593
+	// nom = P1 + P2
+	frame_dig 6 // P1: unsafe uint256
+	frame_dig 7 // P2: unsafe uint256
+	b+
+	frame_bury 8 // nom: unsafe uint256
 
-	// contracts\BiatecCLAMM.algo.ts:438
-	// P3: uint64 = (b /* 10D */ * inAmount) /* AD */ / assetADelicmalScale
-	frame_dig 5 // b: uint64
-	frame_dig -1 // inAmount: uint64
-	*
-	frame_dig 0 // assetADelicmalScale: uint64
-	/
-	frame_bury 9 // P3: uint64
+	// contracts\BiatecCLAMM.algo.ts:595
+	// P3 = (((a * b) / s) * L) / s
+	frame_dig 3 // a: uint256
+	frame_dig 4 // b: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_dig 5 // L: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_bury 9 // P3: unsafe uint256
 
-	// contracts\BiatecCLAMM.algo.ts:440
-	// P4: uint64 = (b /* 10D */ * x) /* 10D */ / SCALE
-	frame_dig 5 // b: uint64
-	frame_dig 2 // x: uint64
-	*
-	int 1000000000
-	/
-	frame_bury 10 // P4: uint64
+	// contracts\BiatecCLAMM.algo.ts:597
+	// P4 = (b * inAmount) / s
+	frame_dig 4 // b: uint256
+	frame_dig -1 // inAmount: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_bury 10 // P4: unsafe uint256
 
-	// contracts\BiatecCLAMM.algo.ts:442
-	// P12: uint64 = P1 + P2
-	frame_dig 7 // P1: uint64
-	frame_dig 8 // P2: uint64
-	+
-	frame_bury 11 // P12: uint64
+	// contracts\BiatecCLAMM.algo.ts:599
+	// P5 = (b * y) / s
+	frame_dig 4 // b: uint256
+	frame_dig 2 // y: uint256
+	b*
+	frame_dig 0 // s: uint256
+	b/
+	frame_bury 11 // P5: unsafe uint256
 
-	// contracts\BiatecCLAMM.algo.ts:444
-	// P345: uint64 = P3 + P4 + L
-	frame_dig 9 // P3: uint64
-	frame_dig 10 // P4: uint64
-	+
-	frame_dig 6 // L: uint64
-	+
-	frame_bury 12 // P345: uint64
+	// contracts\BiatecCLAMM.algo.ts:601
+	// denom = P3 + P4 + P5
+	frame_dig 9 // P3: unsafe uint256
+	frame_dig 10 // P4: unsafe uint256
+	b+
+	frame_dig 11 // P5: unsafe uint256
+	b+
+	frame_bury 12 // denom: unsafe uint256
 
-	// contracts\BiatecCLAMM.algo.ts:446
-	// ret: uint64 = (P12 * assetBDelicmalScale) / P345
-	frame_dig 11 // P12: uint64
-	frame_dig 1 // assetBDelicmalScale: uint64
-	*
-	frame_dig 12 // P345: uint64
-	/
-	frame_bury 13 // ret: uint64
+	// contracts\BiatecCLAMM.algo.ts:603
+	// ret = (nom * s) / denom
+	frame_dig 8 // nom: unsafe uint256
+	frame_dig 0 // s: uint256
+	b*
+	frame_dig 12 // denom: unsafe uint256
+	b/
+	frame_bury 13 // ret: unsafe uint256
 
-	// contracts\BiatecCLAMM.algo.ts:447
+	// contracts\BiatecCLAMM.algo.ts:604
 	// return ret;
-	frame_dig 13 // ret: uint64
+	frame_dig 13 // ret: unsafe uint256
 
 	// set the subroutine return value
 	frame_bury 0
@@ -1534,12 +2423,14 @@ calculateAssetBWithdrawOnAssetADeposit:
 	method "getCurrentPrice()uint64"
 	method "getPriceDivider()uint64"
 	method "getLPTokenId()uint64"
-	method "bootstrap(pay,uint64,uint64,uint32,uint64,uint64,uint64,uint8,uint64,uint64)uint64"
+	method "bootstrap(pay,uint64,uint64,uint64,uint64,uint64,uint64,uint8,uint64,uint64)uint64"
 	method "addLiquidity(txn,txn,uint64,uint64,uint64)uint64"
-	method "getHypotheticPrice(uint64,uint64,uint64,uint64,uint64,uint64,uint64)uint64"
 	method "removeLiquidity(axfer,uint64,uint64,uint64)void"
-	method "swap(axfer,uint64,uint64,uint64)void"
-	method "calculateAssetBWithdrawOnAssetADeposit(uint64,uint64,uint64)uint64"
+	method "swap(axfer,uint64,uint64,uint64)uint64"
+	method "calculateLiquidity(uint256,uint256,uint256,uint256,uint256,uint256)uint256"
+	method "calculatePrice(uint256,uint256,uint256,uint256,uint256)uint256"
+	method "calculateAssetBWithdrawOnAssetADeposit(uint256,uint256,uint256,uint256,uint256,uint256)uint256"
+	method "calculateAssetAWithdrawOnAssetBDeposit(uint256,uint256,uint256,uint256,uint256,uint256)uint256"
 	txna ApplicationArgs 0
-	match *abi_route_getCurrentPrice *abi_route_getPriceDivider *abi_route_getLPTokenId *abi_route_bootstrap *abi_route_addLiquidity *abi_route_getHypotheticPrice *abi_route_removeLiquidity *abi_route_swap *abi_route_calculateAssetBWithdrawOnAssetADeposit
+	match *abi_route_getCurrentPrice *abi_route_getPriceDivider *abi_route_getLPTokenId *abi_route_bootstrap *abi_route_addLiquidity *abi_route_removeLiquidity *abi_route_swap *abi_route_calculateLiquidity *abi_route_calculatePrice *abi_route_calculateAssetBWithdrawOnAssetADeposit *abi_route_calculateAssetAWithdrawOnAssetBDeposit
 	err

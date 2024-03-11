@@ -55,15 +55,15 @@
         },
         {
           "name": "feeB100000",
-          "type": "uint32",
+          "type": "uint64",
           "desc": "Fee in 100000 base level. value 10000 = 10000/100000 = 0,1 = 10% fee. 1000 = 1%. 100 = 0,1%. 10 = 0,01% = 1 base point"
         },
         {
-          "name": "priceMaxA",
+          "name": "priceMin",
           "type": "uint64"
         },
         {
-          "name": "priceMaxB",
+          "name": "priceMax",
           "type": "uint64"
         },
         {
@@ -104,9 +104,9 @@
           "desc": "Transfer of asset B to the LP pool"
         },
         {
-          "name": "poolAsset",
+          "name": "assetLP",
           "type": "uint64",
-          "desc": "LP pool asset"
+          "desc": "Liquidity pool asset"
         },
         {
           "name": "assetA",
@@ -125,47 +125,6 @@
       }
     },
     {
-      "name": "getHypotheticPrice",
-      "desc": "Get the current price when asset a has x",
-      "readonly": true,
-      "args": [
-        {
-          "name": "assetAQuantity",
-          "type": "uint64",
-          "desc": "x"
-        },
-        {
-          "name": "assetBQuantity",
-          "type": "uint64",
-          "desc": "y"
-        },
-        {
-          "name": "priceMaxASqrt",
-          "type": "uint64"
-        },
-        {
-          "name": "priceMaxBSqrt",
-          "type": "uint64"
-        },
-        {
-          "name": "liquidity",
-          "type": "uint64"
-        },
-        {
-          "name": "assetADecimals",
-          "type": "uint64"
-        },
-        {
-          "name": "assetBDecimals",
-          "type": "uint64"
-        }
-      ],
-      "returns": {
-        "type": "uint64",
-        "desc": "the price with specified quantity with the price range set in the contract"
-      }
-    },
-    {
       "name": "removeLiquidity",
       "desc": "This method retrieves from the liquidity provider LP token and returns Asset A and Asset B from the Automated Market Maker Concentrated Liqudidity Pool",
       "args": [
@@ -175,7 +134,7 @@
           "desc": "Transfer of the LP token"
         },
         {
-          "name": "poolAsset",
+          "name": "assetLP",
           "type": "uint64",
           "desc": "LP pool asset"
         },
@@ -220,28 +179,166 @@
         }
       ],
       "returns": {
-        "type": "void"
+        "type": "uint64"
+      }
+    },
+    {
+      "name": "calculateLiquidity",
+      "desc": "Calculates the liquidity  from the x - Asset A position and y - Asset B position",
+      "readonly": true,
+      "args": [
+        {
+          "name": "x",
+          "type": "uint256",
+          "desc": "Asset A position balanced on the curve"
+        },
+        {
+          "name": "y",
+          "type": "uint256",
+          "desc": "Asset B position balanced on the curve"
+        },
+        {
+          "name": "priceMin",
+          "type": "uint256",
+          "desc": "Minimum price variable in base scale decimals (pa)"
+        },
+        {
+          "name": "priceMax",
+          "type": "uint256",
+          "desc": "Maximum price variable in base scale decimals (pb)"
+        },
+        {
+          "name": "priceMinSqrt",
+          "type": "uint256",
+          "desc": "sqrt(priceMin) in base scale decimals Variable pas"
+        },
+        {
+          "name": "priceMaxSqrt",
+          "type": "uint256",
+          "desc": "sqrt(priceMax) in base scale decimals Variable pbs"
+        }
+      ],
+      "returns": {
+        "type": "uint256",
+        "desc": "Liquidity is constant in swapping each direction. On deposit the diff between the liquidity is number of LP tokens received by user."
+      }
+    },
+    {
+      "name": "calculatePrice",
+      "desc": "Get the current price when asset a has x",
+      "readonly": true,
+      "args": [
+        {
+          "name": "assetAQuantity",
+          "type": "uint256",
+          "desc": "x"
+        },
+        {
+          "name": "assetBQuantity",
+          "type": "uint256",
+          "desc": "y"
+        },
+        {
+          "name": "priceMinSqrt",
+          "type": "uint256",
+          "desc": "sqrt(priceMin)"
+        },
+        {
+          "name": "priceMaxSqrt",
+          "type": "uint256",
+          "desc": "sqrt(priceMax)"
+        },
+        {
+          "name": "liquidity",
+          "type": "uint256",
+          "desc": "Current pool liquidity - L variable"
+        }
+      ],
+      "returns": {
+        "type": "uint256",
+        "desc": "the price with specified quantity with the price range set in the contract"
       }
     },
     {
       "name": "calculateAssetBWithdrawOnAssetADeposit",
+      "desc": "Calculates how much asset B will be taken from the smart contract on asset A deposit",
       "readonly": true,
       "args": [
         {
           "name": "inAmount",
-          "type": "uint64"
+          "type": "uint256",
+          "desc": "Asset A amount in Base decimal representation.. If asset has 6 decimals, 1 is represented as 1000000000"
         },
         {
-          "name": "assetADecimals",
-          "type": "uint64"
+          "name": "assetABalance",
+          "type": "uint256",
+          "desc": "Asset A balance. Variable ab, in base scale"
         },
         {
-          "name": "assetBDecimals",
-          "type": "uint64"
+          "name": "assetBBalance",
+          "type": "uint256",
+          "desc": "Asset B balance. Variable bb, in base scale"
+        },
+        {
+          "name": "priceMinSqrt",
+          "type": "uint256",
+          "desc": "sqrt(Min price). Variable pMinS, in base scale"
+        },
+        {
+          "name": "priceMaxSqrt",
+          "type": "uint256",
+          "desc": "sqrt(Max price). Variable pMaxS, in base scale"
+        },
+        {
+          "name": "liqudity",
+          "type": "uint256",
+          "desc": "sqrt(Max price). Variable L, in base scale"
         }
       ],
       "returns": {
-        "type": "uint64"
+        "type": "uint256",
+        "desc": "Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)"
+      }
+    },
+    {
+      "name": "calculateAssetAWithdrawOnAssetBDeposit",
+      "desc": "Calculates how much asset A will be taken from the smart contract on asset B deposit",
+      "readonly": true,
+      "args": [
+        {
+          "name": "inAmount",
+          "type": "uint256",
+          "desc": "Asset B amount in Base decimal representation.. If asset has 6 decimals, 1 is represented as 1000000000"
+        },
+        {
+          "name": "assetABalance",
+          "type": "uint256",
+          "desc": "Asset A balance. Variable ab, in base scale"
+        },
+        {
+          "name": "assetBBalance",
+          "type": "uint256",
+          "desc": "Asset B balance. Variable bb, in base scale"
+        },
+        {
+          "name": "priceMinSqrt",
+          "type": "uint256",
+          "desc": "sqrt(Min price). Variable pMinS, in base scale"
+        },
+        {
+          "name": "priceMaxSqrt",
+          "type": "uint256",
+          "desc": "sqrt(Max price). Variable pMaxS, in base scale"
+        },
+        {
+          "name": "liqudity",
+          "type": "uint256",
+          "desc": "sqrt(Max price). Variable L, in base scale"
+        }
+      ],
+      "returns": {
+        "type": "uint256",
+        "desc": "Amount of asset A to be given to the caller before fees. The result is in Base decimals (9)"
       }
     }
   ]
