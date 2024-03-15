@@ -1,0 +1,102 @@
+{
+  "name": "BiatecConfigProvider",
+  "desc": "",
+  "methods": [
+    {
+      "name": "createApplication",
+      "desc": "Initial setup",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "bootstrap",
+      "desc": "Setup the contract",
+      "args": [
+        {
+          "name": "biatecFee",
+          "type": "uint64",
+          "desc": "Biatec fees"
+        },
+        {
+          "name": "appIdentityProvider",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "setAddressUdpater",
+      "desc": "Top secret account with which it is possible update contracts or identity provider",
+      "args": [
+        {
+          "name": "a",
+          "type": "address",
+          "desc": "Address"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "setAddressGov",
+      "desc": "Execution address with which it is possible to opt in for governance",
+      "args": [
+        {
+          "name": "a",
+          "type": "address",
+          "desc": "Address"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "setAddressExecutive",
+      "desc": "Execution address with which it is possible to change global biatec fees",
+      "args": [
+        {
+          "name": "a",
+          "type": "address",
+          "desc": "Address"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "setBiatecIdentity",
+      "desc": "App identity setter",
+      "args": [
+        {
+          "name": "a",
+          "type": "uint64",
+          "desc": "Address"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "setBiatecFee",
+      "desc": "Fees in 9 decimals. 1_000_000_000 = 100%Fees in 9 decimals. 10_000_000 = 1%Fees in 9 decimals. 100_000 = 0,01%Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee",
+      "args": [
+        {
+          "name": "biatecFee",
+          "type": "uint64",
+          "desc": "Fee"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    }
+  ]
+}

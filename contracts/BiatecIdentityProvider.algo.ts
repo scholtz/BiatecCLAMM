@@ -1,8 +1,7 @@
 import { Contract } from '@algorandfoundation/tealscript';
 
 // eslint-disable-next-line no-unused-vars
-const TOTAL_SUPPLY = 10_000_000_000_000_000;
-const governor = 'ALGONAUTSPIUHDCX3SLFXOFDUKOE4VY36XV4JX2JHQTWJNKVBKPEBQACRY';
+const version = 'BIATEC-IDENT-01-01-01';
 
 type IdentityInfo = {
   verificationClass: uint8;
@@ -29,6 +28,6 @@ class BiatecIdentityProvider extends Contract {
    * Initial setup
    */
   createApplication(): void {
-    this.governor.value = Address.fromBytes(governor);
+    log(version);
   }
 }

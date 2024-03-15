@@ -1,5 +1,5 @@
 {
-  "name": "BiatecCLAMM",
+  "name": "BiatecClammPool",
   "desc": "",
   "methods": [
     {
@@ -39,11 +39,6 @@
       "desc": "Anybody can deploy the clamm smart contract",
       "args": [
         {
-          "name": "txSeed",
-          "type": "pay",
-          "desc": "Seed transaction so that smart contract can opt in to the assets"
-        },
-        {
           "name": "assetA",
           "type": "uint64",
           "desc": "Asset A ID must be lower then Asset B ID"
@@ -54,34 +49,44 @@
           "desc": "Asset B"
         },
         {
-          "name": "feeB100000",
+          "name": "appBiatecConfigProvider",
           "type": "uint64",
-          "desc": "Fee in 100000 base level. value 10000 = 10000/100000 = 0,1 = 10% fee. 1000 = 1%. 100 = 0,1%. 10 = 0,01% = 1 base point"
+          "desc": "Biatec amm provider"
+        },
+        {
+          "name": "appBiatecPoolProvider",
+          "type": "uint64",
+          "desc": "Pool provider"
+        },
+        {
+          "name": "txSeed",
+          "type": "pay",
+          "desc": "Seed transaction so that smart contract can opt in to the assets"
+        },
+        {
+          "name": "fee",
+          "type": "uint64",
+          "desc": "Fee in base level (9 decimals). value 1_000_000_000 = 1 = 100%. 10_000_000 = 1%. 1_000_000 = 0.1%"
         },
         {
           "name": "priceMin",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "Min price range. At this point all assets are in asset A."
         },
         {
           "name": "priceMax",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "Max price range. At this point all assets are in asset B."
         },
         {
           "name": "currentPrice",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "Deployer can specify the current price for easier deployemnt."
         },
         {
           "name": "verificationClass",
           "type": "uint8",
-          "desc": "Asset B"
-        },
-        {
-          "name": "identityProvider",
-          "type": "uint64"
-        },
-        {
-          "name": "poolProvider",
-          "type": "uint64"
+          "desc": "Minimum verification level from the biatec identity. Level 0 means no kyc."
         }
       ],
       "returns": {

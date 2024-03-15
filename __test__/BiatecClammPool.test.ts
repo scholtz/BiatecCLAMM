@@ -1,11 +1,15 @@
 import { describe, test, expect, beforeAll, beforeEach } from '@jest/globals';
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing';
 import * as algokit from '@algorandfoundation/algokit-utils';
-import algosdk from 'algosdk';
-import { BiatecClammClient } from '../contracts/clients/BiatecCLAMMClient';
+import algosdk, { Transaction } from 'algosdk';
+import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
+import { BiatecClammPoolClient } from '../contracts/clients/BiatecClammPoolClient';
 import createToken from '../src/createToken';
 import { BiatecIdentityProviderClient } from '../contracts/clients/BiatecIdentityProviderClient';
 import { BiatecPoolProviderClient } from '../contracts/clients/BiatecPoolProviderClient';
+import { BiatecConfigProviderClient } from '../contracts/clients/BiatecConfigProviderClient';
+import clammBootstrapSender from '../src/biatecClamm/sender/clammBootstrapSender';
+import configBootstrapSender from '../src/biatecConfig/sender/configBootstrapSender';
 
 const fixture = algorandFixture();
 algokit.Config.configure({ populateAppCallResources: true });
@@ -18,18 +22,91 @@ const SCALE_B = 10 ** ASSET_B_DECIMALS;
 const LP_TOKEN_DECIMALS = 6; // BTC Like
 const SCALE_LP = 10 ** LP_TOKEN_DECIMALS;
 
-let ammClient: BiatecClammClient;
-let identityClient: BiatecIdentityProviderClient;
-let poolClient: BiatecPoolProviderClient;
 let assetAId: number = 0;
 let assetBId: number = 0;
 let deployer: algosdk.Account;
+let deployerSigner: TransactionSignerAccount;
 // https://github.com/GoogleChromeLabs/jsbi/issues/30
 // eslint-disable-next-line no-extend-native, @typescript-eslint/no-explicit-any
 (BigInt.prototype as any).toJSON = function () {
   return this.toString();
 };
+const setupPool = async (
+  algod: algosdk.Algodv2,
+  signer: TransactionSignerAccount,
+  p1: bigint,
+  p2: bigint,
+  p: bigint,
+  biatecFee = 100_000_000n,
+  lpFee = 100_000_000n
+) => {
+  const clientBiatecClammPool = new BiatecClammPoolClient(
+    {
+      sender: signer,
+      resolveBy: 'id',
+      id: 0,
+    },
+    algod
+  );
+  const clientBiatecIdentityProvider = new BiatecIdentityProviderClient(
+    {
+      sender: signer,
+      resolveBy: 'id',
+      id: 0,
+    },
+    algod
+  );
+  const clientBiatecPoolProvider = new BiatecPoolProviderClient(
+    {
+      sender: signer,
+      resolveBy: 'id',
+      id: 0,
+    },
+    algod
+  );
+  const clientBiatecConfigProvider = new BiatecConfigProviderClient(
+    {
+      sender: signer,
+      resolveBy: 'id',
+      id: 0,
+    },
+    algod
+  );
+  await clientBiatecConfigProvider.create.createApplication({});
+  await clientBiatecIdentityProvider.create.createApplication({});
+  await clientBiatecPoolProvider.create.createApplication({});
+  await clientBiatecClammPool.create.createApplication({});
 
+  const refBiatecConfigProvider = await clientBiatecConfigProvider.appClient.getAppReference();
+  const refBiatecIdentityProvider = await clientBiatecIdentityProvider.appClient.getAppReference();
+  const refBiatecPoolProvider = await clientBiatecPoolProvider.appClient.getAppReference();
+  const refBiatecClammPool = await clientBiatecClammPool.appClient.getAppReference();
+  expect(refBiatecClammPool.appId).toBeGreaterThan(0);
+  let txId = await configBootstrapSender({
+    algod,
+    clientBiatecConfigProvider,
+    account: signer,
+    appIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+    biatecFee,
+  });
+  expect(txId.length).toBe(52);
+  txId = await clammBootstrapSender({
+    fee: lpFee,
+    assetA: BigInt(assetAId),
+    assetB: BigInt(assetBId),
+    verificationClass: 0,
+    appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
+    priceMin: p1,
+    priceMax: p2,
+    currentPrice: p,
+    account: signer,
+    algod,
+    appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+    clientBiatecClammPool,
+  });
+  expect(txId.length).toBe(52);
+  return clientBiatecClammPool;
+};
 describe('clamm', () => {
   beforeEach(fixture.beforeEach);
 
@@ -37,32 +114,14 @@ describe('clamm', () => {
     await fixture.beforeEach();
     const { algod } = fixture.context;
     deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(100_000_000) });
-    identityClient = new BiatecIdentityProviderClient(
-      {
-        sender: deployer,
-        resolveBy: 'id',
-        id: 0,
-      },
-      algod
-    );
-    poolClient = new BiatecPoolProviderClient(
-      {
-        sender: deployer,
-        resolveBy: 'id',
-        id: 0,
-      },
-      algod
-    );
-    ammClient = new BiatecClammClient(
-      {
-        sender: deployer,
-        resolveBy: 'id',
-        id: 0,
-      },
-      algod
-    );
-    await ammClient.appClient.fundAppAccount(algokit.microAlgos(200_000));
 
+    deployerSigner = {
+      addr: deployer.addr,
+      // eslint-disable-next-line no-unused-vars
+      signer: async (txnGroup: Transaction[], indexesToSign: number[]) => {
+        return txnGroup.map((tx) => tx.signTxn(deployer.sk));
+      },
+    };
     assetAId = await createToken({ account: deployer, algod, name: 'EUR', decimals: ASSET_A_DECIMALS });
     assetBId = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_B_DECIMALS });
   });
@@ -70,59 +129,18 @@ describe('clamm', () => {
   test('I can deploy the concentrated liqudity pool', async () => {
     try {
       const { algod } = fixture.context;
-
-      ammClient = new BiatecClammClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
+      const clientBiatecClammPool = await setupPool(
+        algod,
+        deployerSigner,
+        BigInt(1 * SCALE),
+        BigInt(2 * SCALE),
+        BigInt(1.5 * SCALE),
+        BigInt(SCALE / 10),
+        BigInt(SCALE / 10)
       );
-      identityClient = new BiatecIdentityProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      poolClient = new BiatecPoolProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      await ammClient.create.createApplication({});
-      const ammRef = await ammClient.appClient.getAppReference();
-      const identityRef = await identityClient.appClient.getAppReference();
-      const poolRef = await poolClient.appClient.getAppReference();
-
-      const params = await algod.getTransactionParams().do();
-      const fundTx = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        amount: 400_000,
-        from: deployer.addr,
-        suggestedParams: params,
-        to: ammRef.appAddress,
-      });
-      const assetId = await ammClient.bootstrap(
-        {
-          txSeed: fundTx,
-          feeB100000: 100000,
-          assetA: assetAId,
-          assetB: assetBId,
-          verificationClass: 0,
-          identityProvider: identityRef.appId,
-          poolProvider: poolRef.appId,
-          priceMin: BigInt(1.0 * SCALE),
-          priceMax: 1.2 * SCALE,
-          currentPrice: 1.1 * SCALE,
-        },
-        { sendParams: { ...params, fee: algokit.microAlgos(4000) } }
-      );
-      expect(assetId.return?.valueOf()).toBeGreaterThan(0);
+      expect(!!clientBiatecClammPool).toBeTruthy();
+      const ammRef = await clientBiatecClammPool.appClient.getAppReference();
+      expect(ammRef.appId).toBeGreaterThan(0);
     } catch (e) {
       console.debug(e);
       throw e;
@@ -138,48 +156,22 @@ describe('clamm', () => {
         { x: 2, y: 0, P1: 1, P2: 1.5625, L: 10, P: 1 },
       ];
 
-      identityClient = new BiatecIdentityProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      poolClient = new BiatecPoolProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      await identityClient.create.createApplication({});
-      const identityRef = await identityClient.appClient.getAppReference();
-      expect(identityRef.appId).toBeGreaterThan(0);
-      await poolClient.create.createApplication({});
-      const poolRef = await poolClient.appClient.getAppReference();
-      expect(poolRef.appId).toBeGreaterThan(0);
-
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        ammClient = new BiatecClammClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
+        // eslint-disable-next-line no-await-in-loop
+        const clientBiatecClammPool = await setupPool(
+          algod,
+          deployerSigner,
+          BigInt(t.P1 * SCALE),
+          BigInt(t.P2 * SCALE),
+          BigInt(t.P * SCALE),
+          0n,
+          0n
         );
-        // eslint-disable-next-line no-await-in-loop
-        await ammClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const ammRef = await ammClient.appClient.getAppReference();
-        expect(ammRef.appId).toBeGreaterThan(0);
 
         console.log(`result:  expecting ${t.P}`);
         // eslint-disable-next-line no-await-in-loop
-        const result = await ammClient.calculatePrice({
+        const result = await clientBiatecClammPool.calculatePrice({
           assetAQuantity: BigInt(t.x * SCALE),
           assetBQuantity: BigInt(t.y * SCALE),
           liquidity: t.L * SCALE,
@@ -214,48 +206,18 @@ describe('clamm', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        ammClient = new BiatecClammClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
-        identityClient = new BiatecIdentityProviderClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
-        poolClient = new BiatecPoolProviderClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
+        // eslint-disable-next-line no-await-in-loop
+        const clientBiatecClammPool = await setupPool(
+          algod,
+          deployerSigner,
+          BigInt(t.P1 * SCALE),
+          BigInt(t.P2 * SCALE),
+          BigInt(t.P1 * SCALE),
+          0n,
+          0n
         );
         // eslint-disable-next-line no-await-in-loop
-        await ammClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const ammRef = await ammClient.appClient.getAppReference();
-        expect(ammRef.appId).toBeGreaterThan(0);
-        // eslint-disable-next-line no-await-in-loop
-        await identityClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const identityRef = await identityClient.appClient.getAppReference();
-        expect(identityRef.appId).toBeGreaterThan(0);
-        // eslint-disable-next-line no-await-in-loop
-        await poolClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const poolRef = await poolClient.appClient.getAppReference();
-        expect(poolRef.appId).toBeGreaterThan(0);
-
-        // eslint-disable-next-line no-await-in-loop
-        const result = await ammClient.calculateAssetBWithdrawOnAssetADeposit({
+        const result = await clientBiatecClammPool.calculateAssetBWithdrawOnAssetADeposit({
           inAmount: BigInt(t.deposit * SCALE),
           assetABalance: BigInt(t.x * SCALE),
           assetBBalance: BigInt(t.y * SCALE),
@@ -280,48 +242,19 @@ describe('clamm', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        ammClient = new BiatecClammClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
+        // eslint-disable-next-line no-await-in-loop
+        const clientBiatecClammPool = await setupPool(
+          algod,
+          deployerSigner,
+          BigInt(t.P1 * SCALE),
+          BigInt(t.P2 * SCALE),
+          BigInt(t.P1 * SCALE),
+          0n,
+          0n
         );
-        identityClient = new BiatecIdentityProviderClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
-        poolClient = new BiatecPoolProviderClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
-        // eslint-disable-next-line no-await-in-loop
-        await ammClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const ammRef = await ammClient.appClient.getAppReference();
-        expect(ammRef.appId).toBeGreaterThan(0);
-        // eslint-disable-next-line no-await-in-loop
-        await identityClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const identityRef = await identityClient.appClient.getAppReference();
-        expect(identityRef.appId).toBeGreaterThan(0);
-        // eslint-disable-next-line no-await-in-loop
-        await poolClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const poolRef = await poolClient.appClient.getAppReference();
-        expect(poolRef.appId).toBeGreaterThan(0);
 
         // eslint-disable-next-line no-await-in-loop
-        const result = await ammClient.calculateAssetAWithdrawOnAssetBDeposit({
+        const result = await clientBiatecClammPool.calculateAssetAWithdrawOnAssetBDeposit({
           inAmount: BigInt(t.deposit * SCALE),
           assetABalance: BigInt(t.x * SCALE),
           assetBBalance: BigInt(t.y * SCALE),
@@ -349,47 +282,21 @@ describe('clamm', () => {
         { x: 0.00000001, y: 0, P: 1, P1: 1, P2: 1.5625, L: 0.000000025 },
       ];
 
-      poolClient = new BiatecPoolProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      identityClient = new BiatecIdentityProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      await identityClient.create.createApplication({});
-      const identityRef = await identityClient.appClient.getAppReference();
-      expect(identityRef.appId).toBeGreaterThan(0);
-      await poolClient.create.createApplication({});
-      const poolRef = await poolClient.appClient.getAppReference();
-      expect(poolRef.appId).toBeGreaterThan(0);
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        ammClient = new BiatecClammClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
+        // eslint-disable-next-line no-await-in-loop
+        const clientBiatecClammPool = await setupPool(
+          algod,
+          deployerSigner,
+          BigInt(t.P1 * SCALE),
+          BigInt(t.P2 * SCALE),
+          BigInt(t.P1 * SCALE),
+          0n,
+          0n
         );
         // eslint-disable-next-line no-await-in-loop
-        await ammClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const ammRef = await ammClient.appClient.getAppReference();
-        expect(ammRef.appId).toBeGreaterThan(0);
-
-        // eslint-disable-next-line no-await-in-loop
-        const result = await ammClient.calculateLiquidity(
+        const result = await clientBiatecClammPool.calculateLiquidity(
           {
             x: BigInt(t.x * SCALE),
             y: BigInt(t.y * SCALE),
@@ -422,47 +329,12 @@ describe('clamm', () => {
         { x: 2.5, L: 10, lpDeposit: 10, aWithdraw: 2.5 },
       ];
 
-      poolClient = new BiatecPoolProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      identityClient = new BiatecIdentityProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      await identityClient.create.createApplication({});
-      const identityRef = await identityClient.appClient.getAppReference();
-      expect(identityRef.appId).toBeGreaterThan(0);
-      await poolClient.create.createApplication({});
-      const poolRef = await poolClient.appClient.getAppReference();
-      expect(poolRef.appId).toBeGreaterThan(0);
+      const clientBiatecClammPool = await setupPool(algod, deployerSigner, 1n, 2n, 2n, 0n, 0n);
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        ammClient = new BiatecClammClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
         // eslint-disable-next-line no-await-in-loop
-        await ammClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const ammRef = await ammClient.appClient.getAppReference();
-        expect(ammRef.appId).toBeGreaterThan(0);
-
-        // eslint-disable-next-line no-await-in-loop
-        const result = await ammClient.calculateAssetBWithdrawOnLpDeposit(
+        const result = await clientBiatecClammPool.calculateAssetBWithdrawOnLpDeposit(
           {
             inAmount: BigInt(Math.round(t.lpDeposit * SCALE)),
             assetBBalance: BigInt(Math.round(t.x * SCALE)),
@@ -489,47 +361,12 @@ describe('clamm', () => {
         { y: 2.5, L: 10, lpDeposit: 10, bWithdraw: 2.5 },
       ];
 
-      poolClient = new BiatecPoolProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      identityClient = new BiatecIdentityProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      await identityClient.create.createApplication({});
-      const identityRef = await identityClient.appClient.getAppReference();
-      expect(identityRef.appId).toBeGreaterThan(0);
-      await poolClient.create.createApplication({});
-      const poolRef = await poolClient.appClient.getAppReference();
-      expect(poolRef.appId).toBeGreaterThan(0);
+      const clientBiatecClammPool = await setupPool(algod, deployerSigner, 1n, 2n, 2n, 0n, 0n);
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        ammClient = new BiatecClammClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
         // eslint-disable-next-line no-await-in-loop
-        await ammClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const ammRef = await ammClient.appClient.getAppReference();
-        expect(ammRef.appId).toBeGreaterThan(0);
-
-        // eslint-disable-next-line no-await-in-loop
-        const result = await ammClient.calculateAssetBWithdrawOnLpDeposit(
+        const result = await clientBiatecClammPool.calculateAssetBWithdrawOnLpDeposit(
           {
             inAmount: BigInt(Math.round(t.lpDeposit * SCALE)),
             assetBBalance: BigInt(Math.round(t.y * SCALE)),
@@ -558,47 +395,12 @@ describe('clamm', () => {
         { x: 1, y: 10, aDeposit: 10, bDeposit: 100 },
       ];
 
-      poolClient = new BiatecPoolProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      identityClient = new BiatecIdentityProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      await identityClient.create.createApplication({});
-      const identityRef = await identityClient.appClient.getAppReference();
-      expect(identityRef.appId).toBeGreaterThan(0);
-      await poolClient.create.createApplication({});
-      const poolRef = await poolClient.appClient.getAppReference();
-      expect(poolRef.appId).toBeGreaterThan(0);
+      const clientBiatecClammPool = await setupPool(algod, deployerSigner, 1n, 2n, 2n, 0n, 0n);
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        ammClient = new BiatecClammClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
         // eslint-disable-next-line no-await-in-loop
-        await ammClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const ammRef = await ammClient.appClient.getAppReference();
-        expect(ammRef.appId).toBeGreaterThan(0);
-
-        // eslint-disable-next-line no-await-in-loop
-        const result = await ammClient.calculateAssetBDepositOnAssetADeposit(
+        const result = await clientBiatecClammPool.calculateAssetBDepositOnAssetADeposit(
           {
             inAmountA: BigInt(Math.round(t.aDeposit * SCALE)),
             inAmountB: BigInt(Math.round(t.bDeposit * SCALE)),
@@ -629,45 +431,11 @@ describe('clamm', () => {
         { y: 1, x: 10, bDeposit: 10, aDeposit: 100, aDepositOut: 100 },
       ];
 
-      poolClient = new BiatecPoolProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      identityClient = new BiatecIdentityProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      await identityClient.create.createApplication({});
-      const identityRef = await identityClient.appClient.getAppReference();
-      expect(identityRef.appId).toBeGreaterThan(0);
-      await poolClient.create.createApplication({});
-      const poolRef = await poolClient.appClient.getAppReference();
-      expect(poolRef.appId).toBeGreaterThan(0);
+      // eslint-disable-next-line no-await-in-loop
+      const clientBiatecClammPool = await setupPool(algod, deployerSigner, 1n, 2n, 2n, 0n, 0n);
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        ammClient = new BiatecClammClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
-        // eslint-disable-next-line no-await-in-loop
-        await ammClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const ammRef = await ammClient.appClient.getAppReference();
-        expect(ammRef.appId).toBeGreaterThan(0);
-
         const input = {
           inAmountA: BigInt(Math.round(t.aDeposit * SCALE)),
           inAmountB: BigInt(Math.round(t.bDeposit * SCALE)),
@@ -675,7 +443,7 @@ describe('clamm', () => {
           assetBBalance: BigInt(Math.round(t.y * SCALE)),
         };
         // eslint-disable-next-line no-await-in-loop
-        const result = await ammClient.calculateAssetADepositOnAssetBDeposit(input, {
+        const result = await clientBiatecClammPool.calculateAssetADepositOnAssetBDeposit(input, {
           sendParams: { ...params, fee: algokit.microAlgos(2000) },
         });
         console.log(
@@ -702,79 +470,26 @@ describe('clamm', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        ammClient = new BiatecClammClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
-        identityClient = new BiatecIdentityProviderClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
-        poolClient = new BiatecPoolProviderClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
+        // eslint-disable-next-line no-await-in-loop
+        const clientBiatecClammPool = await setupPool(
+          algod,
+          deployerSigner,
+          BigInt(t.P1 * SCALE),
+          BigInt(t.P2 * SCALE),
+          BigInt(t.P * SCALE),
+          0n,
+          0n
         );
         // eslint-disable-next-line no-await-in-loop
-        await ammClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const ammRef = await ammClient.appClient.getAppReference();
+        const ammRef = await clientBiatecClammPool.appClient.getAppReference();
         expect(ammRef.appId).toBeGreaterThan(0);
         // eslint-disable-next-line no-await-in-loop
-        await identityClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const identityRef = await identityClient.appClient.getAppReference();
-        expect(identityRef.appId).toBeGreaterThan(0);
-        // eslint-disable-next-line no-await-in-loop
-        await poolClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const poolRef = await poolClient.appClient.getAppReference();
-        expect(poolRef.appId).toBeGreaterThan(0);
-
-        // eslint-disable-next-line no-await-in-loop
         const params = await algod.getTransactionParams().do();
-        const fundTx = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-          amount: 400000,
-          from: deployer.addr,
-          suggestedParams: params,
-          to: ammRef.appAddress,
-        });
-        // eslint-disable-next-line no-await-in-loop
-        const assetId = await ammClient.bootstrap(
-          {
-            txSeed: fundTx,
-            feeB100000: 100000,
-            assetA: assetAId,
-            assetB: assetBId,
-            verificationClass: 0,
-            identityProvider: identityRef.appId,
-            poolProvider: poolRef.appId,
-            priceMin: t.P1 * SCALE,
-            priceMax: t.P2 * SCALE,
-            currentPrice: t.P * SCALE,
-          },
-          {
-            sendParams: { ...params, fee: algokit.microAlgos(4000) },
-            apps: [Number(identityRef.appId), Number(poolRef.appId)],
-          }
-        );
-        expect(assetId.return?.valueOf()).toBeGreaterThan(0);
 
         // opt in to the LP token
 
         // eslint-disable-next-line no-await-in-loop
-        const poolTokenId = (await ammClient.getLpTokenId({})).return as bigint;
+        const poolTokenId = (await clientBiatecClammPool.getLpTokenId({})).return as bigint;
         expect(poolTokenId).toBeGreaterThan(0);
         const optinToTheLPToken = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           amount: 0,
@@ -789,33 +504,36 @@ describe('clamm', () => {
         // eslint-disable-next-line no-await-in-loop
         await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
         // console.log(`deployer account ${deployer.addr} is now opted in to BLP asset ${poolTokenId}`);
-        const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-          amount: BigInt(Math.round(t.x * SCALE_A)), // price <1,1.5625> p = 1.5625 => Max EUR 0 USD
+        const depositA = {
+          amount: BigInt(Math.round(t.x * SCALE_A)),
           assetIndex: assetAId,
           from: deployer.addr,
           suggestedParams: params,
           to: ammRef.appAddress,
-        });
-        const addLiquidityB = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+        };
+        const depositB = {
           amount: BigInt(Math.round(t.y * SCALE_B)), // price <1,1.5625> p = 1.5625 => Max EUR 0 USD
           assetIndex: assetBId,
           from: deployer.addr,
           suggestedParams: params,
           to: ammRef.appAddress,
+        };
+        const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(depositA);
+        const addLiquidityB = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(depositB);
+        const liquidityInput = {
+          txAssetADeposit: addLiquidityA,
+          txAssetBDeposit: addLiquidityB,
+          assetLP: poolTokenId,
+          assetA: assetAId,
+          assetB: assetBId,
+        };
+        // eslint-disable-next-line no-await-in-loop
+        const liqudidtyResult = await clientBiatecClammPool.addLiquidity(liquidityInput, {
+          sendParams: { ...params, fee: algokit.microAlgos(6000) },
         });
         // eslint-disable-next-line no-await-in-loop
-        const liqudidtyResult = await ammClient.addLiquidity(
-          {
-            txAssetADeposit: addLiquidityA,
-            txAssetBDeposit: addLiquidityB,
-            assetLP: poolTokenId,
-            assetA: assetAId,
-            assetB: assetBId,
-          },
-          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
-        );
-        // eslint-disable-next-line no-await-in-loop
         const ret = await liqudidtyResult.return;
+        console.log(`add liquidity`, liquidityInput, depositA, depositB);
         expect(ret?.valueOf()).toEqual(BigInt(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS));
       }
     } catch (e) {
@@ -833,79 +551,26 @@ describe('clamm', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        ammClient = new BiatecClammClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
-        identityClient = new BiatecIdentityProviderClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
-        poolClient = new BiatecPoolProviderClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
+        // eslint-disable-next-line no-await-in-loop
+        const clientBiatecClammPool = await setupPool(
+          algod,
+          deployerSigner,
+          BigInt(t.P1 * SCALE),
+          BigInt(t.P2 * SCALE),
+          BigInt(t.P * SCALE),
+          0n,
+          0n
         );
         // eslint-disable-next-line no-await-in-loop
-        await ammClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const ammRef = await ammClient.appClient.getAppReference();
+        const ammRef = await clientBiatecClammPool.appClient.getAppReference();
         expect(ammRef.appId).toBeGreaterThan(0);
-        // eslint-disable-next-line no-await-in-loop
-        await identityClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const identityRef = await identityClient.appClient.getAppReference();
-        expect(identityRef.appId).toBeGreaterThan(0);
-        // eslint-disable-next-line no-await-in-loop
-        await poolClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const poolRef = await poolClient.appClient.getAppReference();
-        expect(poolRef.appId).toBeGreaterThan(0);
 
         // eslint-disable-next-line no-await-in-loop
         const params = await algod.getTransactionParams().do();
-        const fundTx = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-          amount: 400000,
-          from: deployer.addr,
-          suggestedParams: params,
-          to: ammRef.appAddress,
-        });
-        // eslint-disable-next-line no-await-in-loop
-        const assetId = await ammClient.bootstrap(
-          {
-            txSeed: fundTx,
-            feeB100000: 100000,
-            assetA: assetAId,
-            assetB: assetBId,
-            verificationClass: 0,
-            identityProvider: identityRef.appId,
-            poolProvider: poolRef.appId,
-            priceMin: t.P1 * SCALE,
-            priceMax: t.P2 * SCALE,
-            currentPrice: t.P * SCALE,
-          },
-          {
-            sendParams: { ...params, fee: algokit.microAlgos(4000) },
-            apps: [Number(identityRef.appId), Number(poolRef.appId)],
-          }
-        );
-        expect(assetId.return?.valueOf()).toBeGreaterThan(0);
-
         // opt in to the LP token
 
         // eslint-disable-next-line no-await-in-loop
-        const poolTokenId = (await ammClient.getLpTokenId({})).return as bigint;
+        const poolTokenId = (await clientBiatecClammPool.getLpTokenId({})).return as bigint;
         expect(poolTokenId).toBeGreaterThan(0);
         const optinToTheLPToken = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           amount: 0,
@@ -935,7 +600,7 @@ describe('clamm', () => {
           to: ammRef.appAddress,
         });
         // eslint-disable-next-line no-await-in-loop
-        const liqudidtyResult = await ammClient.addLiquidity(
+        const liqudidtyResult = await clientBiatecClammPool.addLiquidity(
           {
             txAssetADeposit: addLiquidityA,
             txAssetBDeposit: addLiquidityB,
@@ -966,7 +631,7 @@ describe('clamm', () => {
           to: ammRef.appAddress,
         });
         // eslint-disable-next-line no-await-in-loop
-        const liqudidtyResult2 = await ammClient.addLiquidity(
+        const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(
           {
             txAssetADeposit: addLiquidityA2,
             txAssetBDeposit: addLiquidityB2,
@@ -991,76 +656,27 @@ describe('clamm', () => {
 
       const testSet = [{ x: 0, y: 0.25, P: 1.5625, P1: 1, P2: 1.5625, L: 1, swapA: 0.2, swapB: 0.25 }];
 
-      identityClient = new BiatecIdentityProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      poolClient = new BiatecPoolProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      await identityClient.create.createApplication({});
-      const identityRef = await identityClient.appClient.getAppReference();
-      expect(identityRef.appId).toBeGreaterThan(0);
-      await poolClient.create.createApplication({});
-      const poolRef = await poolClient.appClient.getAppReference();
-      expect(poolRef.appId).toBeGreaterThan(0);
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        ammClient = new BiatecClammClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
+        // eslint-disable-next-line no-await-in-loop
+        const clientBiatecClammPool = await setupPool(
+          algod,
+          deployerSigner,
+          BigInt(t.P1 * SCALE),
+          BigInt(t.P2 * SCALE),
+          BigInt(t.P * SCALE),
+          0n,
+          0n
         );
         // eslint-disable-next-line no-await-in-loop
-        await ammClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const ammRef = await ammClient.appClient.getAppReference();
+        const ammRef = await clientBiatecClammPool.appClient.getAppReference();
         expect(ammRef.appId).toBeGreaterThan(0);
-
-        const fundTx = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-          amount: 400000,
-          from: deployer.addr,
-          suggestedParams: params,
-          to: ammRef.appAddress,
-        });
-        // eslint-disable-next-line no-await-in-loop
-        const assetId = await ammClient.bootstrap(
-          {
-            txSeed: fundTx,
-            feeB100000: 100000,
-            assetA: assetAId,
-            assetB: assetBId,
-            verificationClass: 0,
-            identityProvider: identityRef.appId,
-            poolProvider: poolRef.appId,
-            priceMin: t.P1 * SCALE,
-            priceMax: t.P2 * SCALE,
-            currentPrice: t.P * SCALE,
-          },
-          {
-            sendParams: { ...params, fee: algokit.microAlgos(4000) },
-            apps: [Number(identityRef.appId), Number(poolRef.appId)],
-          }
-        );
-        expect(assetId.return?.valueOf()).toBeGreaterThan(0);
 
         // opt in to the LP token
 
         // eslint-disable-next-line no-await-in-loop
-        const poolTokenId = (await ammClient.getLpTokenId({})).return as bigint;
+        const poolTokenId = (await clientBiatecClammPool.getLpTokenId({})).return as bigint;
         expect(poolTokenId).toBeGreaterThan(0);
         const optinToTheLPToken = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           amount: 0,
@@ -1090,7 +706,7 @@ describe('clamm', () => {
           to: ammRef.appAddress,
         });
         // eslint-disable-next-line no-await-in-loop
-        const liqudidtyResult = await ammClient.addLiquidity(
+        const liqudidtyResult = await clientBiatecClammPool.addLiquidity(
           {
             txAssetADeposit: addLiquidityA,
             txAssetBDeposit: addLiquidityB,
@@ -1113,7 +729,7 @@ describe('clamm', () => {
           to: ammRef.appAddress,
         });
         // eslint-disable-next-line no-await-in-loop
-        const swapResult = await ammClient.swap(
+        const swapResult = await clientBiatecClammPool.swap(
           {
             minimumToReceive: 0,
             txSwap: addSwapA,
@@ -1137,76 +753,27 @@ describe('clamm', () => {
 
       const testSet = [{ x: 0.2, y: 0, P: 1, P1: 1, P2: 1.5625, L: 1, swapB: 0.25, swapA: 0.2 }];
 
-      identityClient = new BiatecIdentityProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      poolClient = new BiatecPoolProviderClient(
-        {
-          sender: deployer,
-          resolveBy: 'id',
-          id: 0,
-        },
-        algod
-      );
-      await identityClient.create.createApplication({});
-      const identityRef = await identityClient.appClient.getAppReference();
-      expect(identityRef.appId).toBeGreaterThan(0);
-      await poolClient.create.createApplication({});
-      const poolRef = await poolClient.appClient.getAppReference();
-      expect(poolRef.appId).toBeGreaterThan(0);
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        ammClient = new BiatecClammClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
+        // eslint-disable-next-line no-await-in-loop
+        const clientBiatecClammPool = await setupPool(
+          algod,
+          deployerSigner,
+          BigInt(t.P1 * SCALE),
+          BigInt(t.P2 * SCALE),
+          BigInt(t.P * SCALE),
+          0n,
+          0n
         );
         // eslint-disable-next-line no-await-in-loop
-        await ammClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const ammRef = await ammClient.appClient.getAppReference();
+        const ammRef = await clientBiatecClammPool.appClient.getAppReference();
         expect(ammRef.appId).toBeGreaterThan(0);
-
-        const fundTx = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-          amount: 400000,
-          from: deployer.addr,
-          suggestedParams: params,
-          to: ammRef.appAddress,
-        });
-        // eslint-disable-next-line no-await-in-loop
-        const assetId = await ammClient.bootstrap(
-          {
-            txSeed: fundTx,
-            feeB100000: 100000,
-            assetA: assetAId,
-            assetB: assetBId,
-            verificationClass: 0,
-            identityProvider: identityRef.appId,
-            poolProvider: poolRef.appId,
-            priceMin: t.P1 * SCALE,
-            priceMax: t.P2 * SCALE,
-            currentPrice: t.P * SCALE,
-          },
-          {
-            sendParams: { ...params, fee: algokit.microAlgos(4000) },
-            apps: [Number(identityRef.appId), Number(poolRef.appId)],
-          }
-        );
-        expect(assetId.return?.valueOf()).toBeGreaterThan(0);
 
         // opt in to the LP token
 
         // eslint-disable-next-line no-await-in-loop
-        const poolTokenId = (await ammClient.getLpTokenId({})).return as bigint;
+        const poolTokenId = (await clientBiatecClammPool.getLpTokenId({})).return as bigint;
         expect(poolTokenId).toBeGreaterThan(0);
         const optinToTheLPToken = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           amount: 0,
@@ -1236,7 +803,7 @@ describe('clamm', () => {
           to: ammRef.appAddress,
         });
         // eslint-disable-next-line no-await-in-loop
-        const liqudidtyResult = await ammClient.addLiquidity(
+        const liqudidtyResult = await clientBiatecClammPool.addLiquidity(
           {
             txAssetADeposit: addLiquidityA,
             txAssetBDeposit: addLiquidityB,
@@ -1259,7 +826,7 @@ describe('clamm', () => {
           to: ammRef.appAddress,
         });
         // eslint-disable-next-line no-await-in-loop
-        const swapResult = await ammClient.swap(
+        const swapResult = await clientBiatecClammPool.swap(
           {
             minimumToReceive: 0,
             txSwap: addSwapB,
@@ -1297,80 +864,27 @@ describe('clamm', () => {
         },
       ];
 
+      const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        ammClient = new BiatecClammClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
-        identityClient = new BiatecIdentityProviderClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
-        );
-        poolClient = new BiatecPoolProviderClient(
-          {
-            sender: deployer,
-            resolveBy: 'id',
-            id: 0,
-          },
-          algod
+        // eslint-disable-next-line no-await-in-loop
+        const clientBiatecClammPool = await setupPool(
+          algod,
+          deployerSigner,
+          BigInt(t.P1 * SCALE),
+          BigInt(t.P2 * SCALE),
+          BigInt(t.P * SCALE),
+          0n,
+          0n
         );
         // eslint-disable-next-line no-await-in-loop
-        await ammClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const ammRef = await ammClient.appClient.getAppReference();
+        const ammRef = await clientBiatecClammPool.appClient.getAppReference();
         expect(ammRef.appId).toBeGreaterThan(0);
-        // eslint-disable-next-line no-await-in-loop
-        await identityClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const identityRef = await identityClient.appClient.getAppReference();
-        expect(identityRef.appId).toBeGreaterThan(0);
-        // eslint-disable-next-line no-await-in-loop
-        await poolClient.create.createApplication({});
-        // eslint-disable-next-line no-await-in-loop
-        const poolRef = await poolClient.appClient.getAppReference();
-        expect(poolRef.appId).toBeGreaterThan(0);
 
-        // eslint-disable-next-line no-await-in-loop
-        const params = await algod.getTransactionParams().do();
-        const fundTx = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-          amount: 400000,
-          from: deployer.addr,
-          suggestedParams: params,
-          to: ammRef.appAddress,
-        });
-        // eslint-disable-next-line no-await-in-loop
-        const assetId = await ammClient.bootstrap(
-          {
-            txSeed: fundTx,
-            feeB100000: 100000,
-            assetA: assetAId,
-            assetB: assetBId,
-            verificationClass: 0,
-            identityProvider: identityRef.appId,
-            poolProvider: poolRef.appId,
-            priceMin: t.P1 * SCALE,
-            priceMax: t.P2 * SCALE,
-            currentPrice: t.P * SCALE,
-          },
-          {
-            sendParams: { ...params, fee: algokit.microAlgos(4000) },
-            apps: [Number(identityRef.appId), Number(poolRef.appId)],
-          }
-        );
-        expect(assetId.return?.valueOf()).toBeGreaterThan(0);
         // opt in to the LP token
 
         // eslint-disable-next-line no-await-in-loop
-        const poolTokenId = (await ammClient.getLpTokenId({})).return as bigint;
+        const poolTokenId = (await clientBiatecClammPool.getLpTokenId({})).return as bigint;
         expect(poolTokenId).toBeGreaterThan(0);
         const optinToTheLPToken = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           amount: 0,
@@ -1400,7 +914,7 @@ describe('clamm', () => {
           to: ammRef.appAddress,
         });
         // eslint-disable-next-line no-await-in-loop
-        const liqudidtyResult = await ammClient.addLiquidity(
+        const liqudidtyResult = await clientBiatecClammPool.addLiquidity(
           {
             txAssetADeposit: addLiquidityA,
             txAssetBDeposit: addLiquidityB,
@@ -1422,7 +936,140 @@ describe('clamm', () => {
           to: ammRef.appAddress,
         });
         // eslint-disable-next-line no-await-in-loop
-        const liqudidtyRemoveResult = await ammClient.removeLiquidity(
+        const liqudidtyRemoveResult = await clientBiatecClammPool.removeLiquidity(
+          {
+            txLPXfer: removeLiquidityLP,
+            assetLP: poolTokenId,
+            assetA: assetAId,
+            assetB: assetBId,
+          },
+          { sendParams: { ...params, fee: algokit.microAlgos(7000) } }
+        );
+        // eslint-disable-next-line no-await-in-loop
+        const retLRemove = await liqudidtyRemoveResult.return;
+        expect(retLRemove?.valueOf()).toEqual(BigInt(t.retLRemove * 10 ** LP_TOKEN_DECIMALS));
+      }
+    } catch (e) {
+      console.debug(e);
+      throw e;
+    }
+  });
+  test('LP fees 10%, Biatec fee - 0% - I can add, swap and remove liquidity from the pool', async () => {
+    try {
+      const { algod } = fixture.context;
+
+      const testSet = [
+        {
+          x: 0,
+          y: 2.5,
+          P: 1.5625,
+          P1: 1,
+          P2: 1.5625,
+          lpTokensToReceive: 10,
+
+          swapA: 2, // i will swap this asset to b asset
+          swapB: 2.25, // this is how much asset b i should receive
+
+          lpTokensToWithdraw: 3,
+          retLRemove: 3,
+        },
+      ];
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const t of testSet) {
+        // eslint-disable-next-line no-await-in-loop
+        const clientBiatecClammPool = await setupPool(
+          algod,
+          deployerSigner,
+          BigInt(t.P1 * SCALE),
+          BigInt(t.P2 * SCALE),
+          BigInt(t.P * SCALE),
+          100_000_000n,
+          0n
+        );
+        // eslint-disable-next-line no-await-in-loop
+        const ammRef = await clientBiatecClammPool.appClient.getAppReference();
+        expect(ammRef.appId).toBeGreaterThan(0);
+
+        // eslint-disable-next-line no-await-in-loop
+        const params = await algod.getTransactionParams().do();
+        // opt in to the LP token
+
+        // eslint-disable-next-line no-await-in-loop
+        const poolTokenId = (await clientBiatecClammPool.getLpTokenId({})).return as bigint;
+        expect(poolTokenId).toBeGreaterThan(0);
+        const optinToTheLPToken = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: 0,
+          assetIndex: Number(poolTokenId),
+          from: deployer.addr,
+          suggestedParams: params,
+          to: deployer.addr,
+        });
+        const signedOptin = algosdk.signTransaction(optinToTheLPToken, deployer.sk);
+        // eslint-disable-next-line no-await-in-loop
+        await algod.sendRawTransaction(signedOptin.blob).do();
+        // eslint-disable-next-line no-await-in-loop
+        await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
+        // console.log(`deployer account ${deployer.addr} is now opted in to BLP asset ${poolTokenId}`);
+        const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.x * SCALE_A)),
+          assetIndex: assetAId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidityB = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.y * SCALE_B)),
+          assetIndex: assetBId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        // eslint-disable-next-line no-await-in-loop
+        const liqudidtyResult = await clientBiatecClammPool.addLiquidity(
+          {
+            txAssetADeposit: addLiquidityA,
+            txAssetBDeposit: addLiquidityB,
+            assetLP: poolTokenId,
+            assetA: assetAId,
+            assetB: assetBId,
+          },
+          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+        );
+        // eslint-disable-next-line no-await-in-loop
+        const ret = await liqudidtyResult.return;
+        expect(ret?.valueOf()).toEqual(BigInt(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS));
+
+        const addSwapA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.swapA * SCALE_A)), // price <1,1.5625> p = 1.5625 => Max EUR 0 USD
+          assetIndex: assetAId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        // eslint-disable-next-line no-await-in-loop
+        const swapResult = await clientBiatecClammPool.swap(
+          {
+            minimumToReceive: 0,
+            txSwap: addSwapA,
+            assetA: assetAId,
+            assetB: assetBId,
+          },
+          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+        );
+        // eslint-disable-next-line no-await-in-loop
+        const retSwap = await swapResult.return;
+        expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swapB * SCALE_B)));
+
+        const removeLiquidityLP = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.lpTokensToWithdraw * SCALE_LP)),
+          assetIndex: Number(poolTokenId),
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        // eslint-disable-next-line no-await-in-loop
+        const liqudidtyRemoveResult = await clientBiatecClammPool.removeLiquidity(
           {
             txLPXfer: removeLiquidityLP,
             assetLP: poolTokenId,

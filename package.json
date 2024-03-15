@@ -1,5 +1,5 @@
 {
-  "name": "BiatecCLAMM",
+  "name": "biatec-concentrated-liquidity-amm",
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
@@ -8,8 +8,9 @@
     "generate-components": "algokit-generate-component contracts/artifacts/Biatecclamm.arc32.json contracts/artifacts/components",
     "build": "npm run compile-contract && npm run generate-client",
     "test": "npm run build && jest",
-    "test:1:build": "npm run build && jest -t \"calculateAssetADepositOnAssetBDeposit\"",
-    "test:1:nobuild": "jest -t \"calculateAssetADepositOnAssetBDeposit\"",
+    "test:1:build": "npm run build && jest -t \"LP fees 10%\"",
+    "test:1:nobuild": "jest -t \"LP fees 10%\"",
+    "test:nobuild": "jest",
     "lint": "eslint . --ext .ts",
     "fix": "eslint . --ext .ts --fix"
   },

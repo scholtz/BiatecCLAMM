@@ -35,10 +35,9 @@ createApplication:
 	proto 0 0
 
 	// contracts\BiatecPoolProvider.algo.ts:44
-	// this.governor.value = Address.fromBytes(governor)
-	byte 0x67 // "g"
-	byte "ALGONAUTSPIUHDCX3SLFXOFDUKOE4VY36XV4JX2JHQTWJNKVBKPEBQACRY"
-	app_global_put
+	// log(version)
+	byte "BIATEC-PP-01-01-01"
+	log
 	retsub
 
 // registerPool(uint64)void

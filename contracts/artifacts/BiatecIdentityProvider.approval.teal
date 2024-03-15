@@ -34,11 +34,10 @@ switch *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_
 createApplication:
 	proto 0 0
 
-	// contracts\BiatecIdentityProvider.algo.ts:32
-	// this.governor.value = Address.fromBytes(governor)
-	byte 0x67 // "g"
-	byte "ALGONAUTSPIUHDCX3SLFXOFDUKOE4VY36XV4JX2JHQTWJNKVBKPEBQACRY"
-	app_global_put
+	// contracts\BiatecIdentityProvider.algo.ts:31
+	// log(version)
+	byte "BIATEC-IDENT-01-01-01"
+	log
 	retsub
 
 *create_NoOp:

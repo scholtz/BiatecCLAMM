@@ -1,15 +1,14 @@
 import { Contract } from '@algorandfoundation/tealscript';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'CLAMM-01-01-01';
+const version = 'BIATEC-CLAMM-01-01-01';
 const LP_TOKEN_DECIMALS = 6;
-const SCALE_DECIMALS = 9;
 const TOTAL_SUPPLY = 10_000_000_000_000_000;
 const SCALE = 1_000_000_000;
-const governor = 'ALGONAUTSPIUHDCX3SLFXOFDUKOE4VY36XV4JX2JHQTWJNKVBKPEBQACRY';
+const SCALE_DECIMALS = 9;
 
 // eslint-disable-next-line no-unused-vars
-class BiatecCLAMM extends Contract {
+class BiatecClammPool extends Contract {
   // asset A id
   assetA = GlobalStateKey<AssetID>({ key: 'a' });
 
@@ -40,8 +39,14 @@ class BiatecCLAMM extends Contract {
   // pool LP token id
   poolToken = GlobalStateKey<AssetID>({ key: 'p' });
 
-  // fee settings 100000
-  feeB100000 = GlobalStateKey<uint64>({ key: 'f' });
+  /**
+   * LP Fees in 9 decimals. 1_000_000_000 = 100%
+   * LP Fees in 9 decimals. 10_000_000 = 1%
+   * LP Fees in 9 decimals. 100_000 = 0,01%
+   *
+   * The Biatec fee is defined in the Biatec AMM Provider.
+   */
+  fee = GlobalStateKey<uint64>({ key: 'f' });
 
   // current price
   ratio = GlobalStateKey<uint64>({ key: 'r' });
@@ -49,14 +54,11 @@ class BiatecCLAMM extends Contract {
   // scale in this contranct
   scale = GlobalStateKey<uint64>({ key: 'scale' });
 
-  // identity provider app id
-  identityProvider = GlobalStateKey<AppID>({ key: 'i' });
+  // biatec amm provider
+  appBiatecConfigProvider = GlobalStateKey<AppID>({ key: 'B' });
 
   // pool provider app id
-  poolProvider = GlobalStateKey<AppID>({ key: 'pp' });
-
-  // biatec account
-  governor = GlobalStateKey<Address>({ key: 'g' });
+  appBiatecPoolProvider = GlobalStateKey<AppID>({ key: 'pp' });
 
   /**
    * Verification class is level of KYC verification by Biatec Identity
@@ -77,10 +79,10 @@ class BiatecCLAMM extends Contract {
    */
   createApplication(): void {
     log(version);
-    this.governor.value = Address.fromBytes(governor);
     this.scale.value = SCALE;
-    this.feeB100000.value = <uint64>0;
+    this.fee.value = <uint64>0;
     this.Liqudity.value = <uint256>0;
+    this.priceMax.value = 0;
   }
 
   @abi.readonly
@@ -100,40 +102,46 @@ class BiatecCLAMM extends Contract {
 
   /**
    * Anybody can deploy the clamm smart contract
-   * @param txSeed Seed transaction so that smart contract can opt in to the assets
    * @param assetA Asset A ID must be lower then Asset B ID
    * @param assetB Asset B
-   * @param feeB100000 Fee in 100000 base level. value 10000 = 10000/100000 = 0,1 = 10% fee. 1000 = 1%. 100 = 0,1%. 10 = 0,01% = 1 base point
-   * @param verificationClass Asset B
+   * @param appBiatecConfigProvider Biatec amm provider
+   * @param appBiatecPoolProvider Pool provider
+   * @param txSeed Seed transaction so that smart contract can opt in to the assets
+   * @param fee Fee in base level (9 decimals). value 1_000_000_000 = 1 = 100%. 10_000_000 = 1%. 1_000_000 = 0.1%
+   * @param priceMin Min price range. At this point all assets are in asset A.
+   * @param priceMax Max price range. At this point all assets are in asset B.
+   * @param currentPrice Deployer can specify the current price for easier deployemnt.
+   * @param verificationClass Minimum verification level from the biatec identity. Level 0 means no kyc.
    * @returns LP token ID
    */
   bootstrap(
-    txSeed: PayTxn,
     assetA: AssetID,
     assetB: AssetID,
-    feeB100000: uint64,
+    appBiatecConfigProvider: AppID,
+    appBiatecPoolProvider: AppID,
+    txSeed: PayTxn,
+    fee: uint64,
     priceMin: uint64,
     priceMax: uint64,
     currentPrice: uint64,
-    verificationClass: uint8,
-    identityProvider: AppID,
-    poolProvider: AppID
+    verificationClass: uint8
   ): AssetID {
     verifyPayTxn(txSeed, { receiver: this.app.address, amount: { greaterThanEqualTo: 300_000 } });
-    assert(this.governor.value === Address.fromBytes(governor));
+    assert(this.priceMax.value === 0, 'It is not possible to call bootrap twice');
+    assert(this.txn.sender === this.app.creator, 'Only creator of the app can set it up');
+    assert(priceMax > 0, 'You must set price');
     assert(assetA < assetB);
-    assert(feeB100000 < 1000000); // fee must be lower then 10%
-    assert(feeB100000 > 0); // fee must be higher then zero
+    assert(fee <= SCALE / 10); // fee must be lower then 10%
     assert(verificationClass < 4); // verificationClass
     assert(!this.ratio.exists);
     assert(assetA.decimals <= SCALE_DECIMALS);
     assert(assetB.decimals <= SCALE_DECIMALS);
     const s = SCALE as uint256;
 
-    assert(this.feeB100000.value <= 0, 'You can bootstrap contract only once'); // check that this contract deployment was not yet initialized
+    assert(this.fee.value <= 0, 'You can bootstrap contract only once'); // check that this contract deployment was not yet initialized
 
-    this.identityProvider.value = identityProvider;
-    this.poolProvider.value = poolProvider;
+    this.appBiatecConfigProvider.value = appBiatecConfigProvider;
+    this.appBiatecPoolProvider.value = appBiatecPoolProvider;
 
     this.priceMin.value = priceMin;
     this.priceMax.value = priceMax;
@@ -146,7 +154,7 @@ class BiatecCLAMM extends Contract {
     this.assetA.value = assetA;
     this.assetB.value = assetB;
     this.poolToken.value = this.doCreatePoolToken(assetA, assetB);
-    this.feeB100000.value = feeB100000;
+    this.fee.value = fee;
     this.doOptIn(assetA);
     this.doOptIn(assetB);
 
@@ -273,6 +281,7 @@ class BiatecCLAMM extends Contract {
       // // send LP tokens to user
       // this.doAxfer(this.txn.sender, this.poolToken.value, lpTokensToSend);
       // return lpTokensToSend;
+
       return this.processAddLiqudity(aDepositInBaseScale, bDepositInBaseScale, assetLPDelicmalScale2Scale);
     }
 
@@ -362,6 +371,7 @@ class BiatecCLAMM extends Contract {
     const priceMinSqrt = this.priceMinSqrt.value;
     const priceMaxSqrt = this.priceMaxSqrt.value;
     const newLiqudity = this.calculateLiquidity(x, y, priceMin, priceMax, priceMinSqrt, priceMaxSqrt);
+
     // SEND NEW LP TOKENS TO USER
     const lpTokensToSend = ((newLiqudity - this.Liqudity.value) / assetLPDelicmalScale2Scale) as uint64;
 

@@ -1,7 +1,7 @@
 import { Contract } from '@algorandfoundation/tealscript';
 
 // eslint-disable-next-line no-unused-vars
-const governor = 'ALGONAUTSPIUHDCX3SLFXOFDUKOE4VY36XV4JX2JHQTWJNKVBKPEBQACRY';
+const version = 'BIATEC-PP-01-01-01';
 
 type AppPoolInfo = {
   isVerified: boolean;
@@ -41,7 +41,7 @@ class BiatecPoolProvider extends Contract {
    * Initial setup
    */
   createApplication(): void {
-    this.governor.value = Address.fromBytes(governor);
+    log(version);
   }
 
   registerPool(
