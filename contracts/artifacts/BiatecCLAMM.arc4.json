@@ -125,6 +125,14 @@
       }
     },
     {
+      "name": "testFailVariableSet",
+      "readonly": true,
+      "args": [],
+      "returns": {
+        "type": "uint64"
+      }
+    },
+    {
       "name": "removeLiquidity",
       "desc": "This method retrieves from the liquidity provider LP token and returns Asset A and Asset B from the Automated Market Maker Concentrated Liqudidity Pool",
       "args": [
@@ -150,7 +158,8 @@
         }
       ],
       "returns": {
-        "type": "void"
+        "type": "uint256",
+        "desc": "LP position reduced"
       }
     },
     {
@@ -179,7 +188,7 @@
         }
       ],
       "returns": {
-        "type": "uint64"
+        "type": "uint256"
       }
     },
     {
@@ -339,6 +348,120 @@
       "returns": {
         "type": "uint256",
         "desc": "Amount of asset A to be given to the caller before fees. The result is in Base decimals (9)"
+      }
+    },
+    {
+      "name": "calculateAssetAWithdrawOnLpDeposit",
+      "desc": "Calculates how much asset A will be taken from the smart contract on LP asset deposit",
+      "readonly": true,
+      "args": [
+        {
+          "name": "inAmount",
+          "type": "uint256",
+          "desc": "LP Asset amount in Base decimal representation.."
+        },
+        {
+          "name": "assetABalance",
+          "type": "uint256",
+          "desc": "Asset A balance. Variable ab, in base scale"
+        },
+        {
+          "name": "liqudity",
+          "type": "uint256",
+          "desc": "Current liqudity. Variable L, in base scale"
+        }
+      ],
+      "returns": {
+        "type": "uint256",
+        "desc": "Amount of asset A to be given to the caller before fees. The result is in Base decimals (9)"
+      }
+    },
+    {
+      "name": "calculateAssetBWithdrawOnLpDeposit",
+      "desc": "Calculates how much asset B will be taken from the smart contract on LP asset deposit",
+      "readonly": true,
+      "args": [
+        {
+          "name": "inAmount",
+          "type": "uint256",
+          "desc": "LP Asset amount in Base decimal representation.."
+        },
+        {
+          "name": "assetBBalance",
+          "type": "uint256",
+          "desc": "Asset B balance. Variable ab, in base scale"
+        },
+        {
+          "name": "liqudity",
+          "type": "uint256",
+          "desc": "Current liqudity. Variable L, in base scale"
+        }
+      ],
+      "returns": {
+        "type": "uint256",
+        "desc": "Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)"
+      }
+    },
+    {
+      "name": "calculateAssetBDepositOnAssetADeposit",
+      "desc": "Calculates how much asset B should be deposited when user deposit asset a and b.On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user",
+      "readonly": true,
+      "args": [
+        {
+          "name": "inAmountA",
+          "type": "uint256",
+          "desc": "Asset A amount in Base decimal representation"
+        },
+        {
+          "name": "inAmountB",
+          "type": "uint256",
+          "desc": "Asset B amount in Base decimal representation"
+        },
+        {
+          "name": "assetABalance",
+          "type": "uint256",
+          "desc": "Asset A balance. Variable ab, in base scale"
+        },
+        {
+          "name": "assetBBalance",
+          "type": "uint256",
+          "desc": "Asset B balance. Variable bb, in base scale"
+        }
+      ],
+      "returns": {
+        "type": "uint256",
+        "desc": "Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)"
+      }
+    },
+    {
+      "name": "calculateAssetADepositOnAssetBDeposit",
+      "desc": "Calculates how much asset A should be deposited when user deposit asset a and bOn deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user",
+      "readonly": true,
+      "args": [
+        {
+          "name": "inAmountA",
+          "type": "uint256",
+          "desc": "Asset A amount in Base decimal representation"
+        },
+        {
+          "name": "inAmountB",
+          "type": "uint256",
+          "desc": "Asset B amount in Base decimal representation"
+        },
+        {
+          "name": "assetABalance",
+          "type": "uint256",
+          "desc": "Asset A balance. Variable ab, in base scale"
+        },
+        {
+          "name": "assetBBalance",
+          "type": "uint256",
+          "desc": "Asset B balance. Variable bb, in base scale"
+        }
+      ],
+      "returns": {
+        "type": "uint256",
+        "desc": "Amount of asset A to be deposited. The result is in Base decimals (9)"
       }
     }
   ]
