@@ -5,7 +5,135 @@ const version = 'BIATEC-CLAMM-01-01-01';
 const LP_TOKEN_DECIMALS = 6;
 const TOTAL_SUPPLY = 10_000_000_000_000_000;
 const SCALE = 1_000_000_000;
+// const SCALEUINT256 = <uint256>1_000_000_000;
 const SCALE_DECIMALS = 9;
+
+/**
+ * Object returned by getUser(user: Address): UserInfo
+ * Holds information about the user registered to Biatec Identity.
+ */
+type UserInfoV1 = {
+  /**
+   * Version of this structure.
+   */
+  version: uint8;
+  /**
+   * Verification class of the user. Uses bits system - 7 = 1 + 2 + 4 = Email and mobile verified
+   *
+   * 0 - No information about user
+   * 1 - Box created for address
+   * 2 - Email verified
+   * 4 - Mobile Phone verified
+   * 8 - Address verified
+   * 16 - Address verified
+   * 32 - X account verified
+   * 64 - Discord account verified
+   * 128 - Telegram account verified
+   * 256 - First government document with gov id stored in secure storage
+   * 512 - Second government document with gov id stored in secure storage
+   * 1024 - Corporation government documents stored in secure storage
+   * 2048 - First government document verified by online verification process
+   * 4096 - Second government document verified by online verification process
+   * 8192 - Corporation government documents verified by online verification process
+   * 16384 - First government document verified by in person verification process
+   * 32768 - Second government document verified by in person verification process
+   * 65536 - Corporation government documents verified by in person verification process
+   *
+   */
+  verificationStatus: uint64;
+  /**
+   * Verification class of the user.
+   *
+   * 0 - No information about user
+   * 1 - KYC filled in
+   * 2 - KYC checked by online process
+   * 3 - In person verification
+   * 4 - Professional investor verified
+   *
+   */
+  verificationClass: uint64;
+  /**
+   * Each user who interacts with Biatec services will receive engagement points
+   */
+  biatecEngagementPoints: uint64;
+  /**
+   * All accounts are sorted by points and rank expresses their percentil in the total biatec population
+   *
+   * Rank 0 means no interaction
+   * Rank 10000 means highest interaction
+   * Rank 5000 means median interaction level
+   *
+   */
+  biatecEngagementRank: uint64;
+  /**
+   * Each user who interacts with AVM services - Algorand network,Voi network,Aramid network,... will receive engagement points
+   */
+  avmEngagementPoints: uint64;
+  /**
+   * All accounts are sorted by points and rank expresses their percentil in the total avm population
+   *
+   * Rank 0 means no interaction
+   * Rank 10000 means highest interaction
+   * Rank 5000 means median interaction level
+   */
+  avmEngagementRank: uint64;
+  /**
+   * Each user who is trading through biatec services will receive point according to fees in dollar nomination paid to biatec
+   */
+  tradingEngagementPoints: uint64;
+  /**
+   * All accounts are sorted by trading points and rank expresses their percentil in the total traders population
+   *
+   * Rank 0 means no interaction
+   * Rank 10000 means highest interaction
+   * Rank 5000 means median interaction level
+   *
+   */
+  tradingEngagementRank: uint64;
+  /**
+   * Depending on verification class, biatecEngagementRank, avmEngagementRank and trading history
+   */
+  feeMultiplier: uint256;
+  /**
+   * Scale multiplier for decimal numbers. 1_000_000_000 means that number 10 is expressed as 10_000_000_000
+   */
+  base: uint256;
+  /**
+   * In case of account is suspicious of theft, malicious activity, not renewing the kyc or investor form, or other legal actions enforces us to lock the account, the account cannot perform any trade or liqudity removal
+   */
+  isLocked: boolean;
+  /**
+   * unix time in seconds when kyc form expires. If no kyc provided, equals to zero.
+   */
+  kycExpiration: uint64;
+  /**
+   * unix time in seconds when investor form expires. If no form provided, equals to zero.
+   */
+  investorForExpiration: uint64;
+  /**
+   * information weather the account belongs to professional investor or to MiFID regulated instutution like bank or securities trader
+   */
+  isProfessionalInvestor: boolean;
+};
+
+type AmmStatus = {
+  scale: uint64;
+  assetABalance: uint64;
+  assetBBalance: uint64;
+  priceMinSqrt: uint64;
+  priceMaxSqrt: uint64;
+  currentLiqudity: uint64;
+  releasedLiqudity: uint64;
+  liqudityUsersFromFees: uint64;
+  liqudityBiatecFromFees: uint64;
+  assetA: AssetID;
+  assetB: AssetID;
+  poolToken: AssetID;
+  price: uint64;
+  fee: uint64;
+  biatecFee: uint64;
+  verificationClass: uint64;
+};
 
 // eslint-disable-next-line no-unused-vars
 class BiatecClammPool extends Contract {
@@ -36,6 +164,12 @@ class BiatecClammPool extends Contract {
   // Current liquidity at the pool
   Liqudity = GlobalStateKey<uint256>({ key: 'L' });
 
+  // Liquidity held by users earned by swap fees
+  LiqudityUsersFromFees = GlobalStateKey<uint256>({ key: 'Lu' });
+
+  // Liquidity held by biatec earned by swap fees
+  LiqudityBiatecFromFees = GlobalStateKey<uint256>({ key: 'Lb' });
+
   // pool LP token id
   poolToken = GlobalStateKey<AssetID>({ key: 'p' });
 
@@ -65,14 +199,7 @@ class BiatecClammPool extends Contract {
    *
    * 0 = Unverified, 1 = Identity documents uploaded without personal id, 2= Identity documents including government id provided, 3 = Personal verification
    */
-  verificationClass = GlobalStateKey<uint8>({ key: 'c' });
-
-  /**
-   * Engagement is level of usage of the biatec services
-   *
-   * Accounts with low engagement have higher trading fees than accounts with high trading volume
-   */
-  engagementClass = GlobalStateKey<uint8>({ key: 'e' });
+  verificationClass = GlobalStateKey<uint64>({ key: 'c' });
 
   /**
    * Initial setup
@@ -82,6 +209,8 @@ class BiatecClammPool extends Contract {
     this.scale.value = SCALE;
     this.fee.value = <uint64>0;
     this.Liqudity.value = <uint256>0;
+    this.LiqudityBiatecFromFees.value = <uint256>0;
+    this.LiqudityUsersFromFees.value = <uint256>0;
     this.priceMax.value = 0;
   }
 
@@ -132,7 +261,7 @@ class BiatecClammPool extends Contract {
     assert(priceMax > 0, 'You must set price');
     assert(assetA < assetB);
     assert(fee <= SCALE / 10); // fee must be lower then 10%
-    assert(verificationClass < 4); // verificationClass
+    assert(verificationClass <= 4); // verificationClass
     assert(!this.ratio.exists);
     assert(assetA.decimals <= SCALE_DECIMALS);
     assert(assetB.decimals <= SCALE_DECIMALS);
@@ -205,6 +334,8 @@ class BiatecClammPool extends Contract {
   addLiquidity(
     //    aXfer: AssetTransferTxn | PayTxn,
     //    bXfer: AssetTransferTxn | PayTxn,
+    appBiatecConfigProvider: AppID,
+    appBiatecIdentityProvider: AppID,
     txAssetADeposit: Txn,
     txAssetBDeposit: Txn,
     assetLP: AssetID,
@@ -214,51 +345,74 @@ class BiatecClammPool extends Contract {
     increaseOpcodeBudget();
     increaseOpcodeBudget();
     /// well formed mint
-    assert(assetA === this.assetA.value);
-    assert(assetB === this.assetB.value);
-    assert(assetLP === this.poolToken.value);
+    assert(
+      appBiatecConfigProvider === this.appBiatecConfigProvider.value,
+      'appBiatecConfigProvider must match to the global variable app id'
+    );
+    assert(assetA === this.assetA.value, 'assetA must match to the global variable value');
+    assert(assetB === this.assetB.value, 'assetB must match to the global variable value');
+    assert(assetLP === this.poolToken.value, 'assetLP must match to the global variable value');
+    const identityFromConfig = appBiatecConfigProvider.globalState('i');
+    assert(
+      appBiatecIdentityProvider === identityFromConfig,
+      'appBiatecIdentityProvider must match to the config in appBiatecConfigProvider'
+    );
+
+    const user = sendMethodCall<[Address, uint8], UserInfoV1>({
+      name: 'getUser',
+      methodArgs: [this.txn.sender, <uint8>1],
+      fee: 0,
+      applicationID: appBiatecIdentityProvider,
+    });
+    assert(!user.isLocked, 'User must not be locked');
+    assert(
+      user.verificationClass >= this.verificationClass.value, // if(user.verificationClass >= this.verificationClass.value) then ok
+      'User cannot interact with this smart contract as his verification class is lower then required here'
+    );
+
     // if assetA.decimals == 8 then assetADelicmalScale2Scale = 10
     const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetA.decimals)) as uint256;
-    // if assetA.decimals == 6 then assetADelicmalScale2Scale = 1000
+    // if assetB.decimals == 6 then assetBDelicmalScale2Scale = 1000
     const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256;
-    // if assetA.decimals == 6 then assetADelicmalScale2Scale = 1000
+    // if assetLP.decimals == 6 then assetLPDelicmalScale2Scale = 1000
     const assetLPDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256;
 
     const aDepositInBaseScale = (txAssetADeposit.assetAmount as uint256) * assetADelicmalScale2Scale;
     const bDepositInBaseScale = (txAssetBDeposit.assetAmount as uint256) * assetBDelicmalScale2Scale;
-    /*
-    if ((aXfer as PayTxn) != null) {
-      const pay = aXfer as PayTxn;
-      // assert(this.assetA.value == 0);
-      verifyPayTxn(pay, { receiver: this.app.address, amount: { greaterThanEqualTo: 0 } });
-    } */
-    // if ((aXfer as AssetTransferTxn) != null) {
-    if (true) {
+
+    if (txAssetADeposit.typeEnum === TransactionType.AssetTransfer) {
       const xfer = txAssetADeposit as AssetTransferTxn;
       verifyAssetTransferTxn(xfer, {
         assetReceiver: this.app.address,
         xferAsset: assetA,
         assetAmount: { greaterThanEqualTo: 0 },
       });
+    } else if (txAssetADeposit.typeEnum === TransactionType.Payment) {
+      const payTx = txAssetADeposit as PayTxn;
+      verifyPayTxn(payTx, {
+        receiver: this.app.address,
+        amount: { greaterThanEqualTo: 0 },
+      });
+    } else {
+      assert(false, 'Unsupported tx type of the asset A');
     }
-    // }
-    /*
-    if ((bXfer as PayTxn) != null) {
-      const pay = bXfer as PayTxn;
-      // assert(this.assetA.value == 0);
-      verifyPayTxn(pay, { receiver: this.app.address, amount: { greaterThanEqualTo: 0 } });
-    }
-    */
-    //    if ((bXfer as AssetTransferTxn) != null) {
-    if (true) {
+
+    if (txAssetBDeposit.typeEnum === TransactionType.AssetTransfer) {
       const xfer = txAssetBDeposit as AssetTransferTxn;
       verifyAssetTransferTxn(xfer, {
         assetReceiver: this.app.address,
         xferAsset: assetB,
         assetAmount: { greaterThanEqualTo: 0 },
       });
+    } else if (txAssetBDeposit.typeEnum === TransactionType.Payment) {
+      const payTx = txAssetBDeposit as PayTxn;
+      verifyPayTxn(payTx, {
+        receiver: this.app.address,
+        amount: { greaterThanEqualTo: 0 },
+      });
+    } else {
+      assert(false, 'Unsupported tx type of the asset B');
     }
-    // }
 
     if (
       this.app.address.assetBalance(assetA) === txAssetADeposit.assetAmount &&
@@ -267,20 +421,6 @@ class BiatecClammPool extends Contract {
       // calculate LP position
       // this.assetABalance.value = aDepositInBaseScale;
       // this.assetBBalance.value = bDepositInBaseScale;
-
-      // const x = this.assetABalance.value;
-      // const y = this.assetBBalance.value;
-      // const priceMin = this.priceMin.value as uint256;
-      // const priceMax = this.priceMax.value as uint256;
-      // const priceMinSqrt = this.priceMinSqrt.value;
-      // const priceMaxSqrt = this.priceMaxSqrt.value;
-      // assert(priceMinSqrt > <uint256>0);
-      // const toMint = this.calculateLiquidity(x, y, priceMin, priceMax, priceMinSqrt, priceMaxSqrt);
-      // this.Liqudity.value = toMint;
-      // const lpTokensToSend = (toMint / assetLPDelicmalScale2Scale) as uint64;
-      // // send LP tokens to user
-      // this.doAxfer(this.txn.sender, this.poolToken.value, lpTokensToSend);
-      // return lpTokensToSend;
 
       return this.processAddLiqudity(aDepositInBaseScale, bDepositInBaseScale, assetLPDelicmalScale2Scale);
     }
@@ -350,8 +490,24 @@ class BiatecClammPool extends Contract {
       return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale);
     }
 
+    if (expectedADepositB64 === txAssetADeposit.assetAmount && expectedBDepositB64 === txAssetBDeposit.assetAmount) {
+      const realAssetADeposit = aDepositInBaseScale;
+      const realAssetBDeposit = bDepositInBaseScale;
+      return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale);
+    }
+
+    if (expectedADepositB64 === 0 && expectedBDepositB64 === 0) {
+      // return all assets to the user.. he deposited asset other asset then is currently being fully used in the pool
+      if (txAssetADeposit.assetAmount > 0) {
+        this.doAxfer(this.txn.sender, assetA, txAssetADeposit.assetAmount);
+      }
+      if (txAssetBDeposit.assetAmount > 0) {
+        this.doAxfer(this.txn.sender, assetB, txAssetBDeposit.assetAmount);
+      }
+      return 0;
+    }
     assert(false, 'failed to calculate exact liqudidity'); // we should not get here
-    return 0;
+    return expectedBDepositB64; //
   }
 
   private processAddLiqudity(
@@ -415,20 +571,38 @@ class BiatecClammPool extends Contract {
 
     // if assetA.decimals == 8 then assetADelicmalScale2Scale = 10
     const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetA.decimals)) as uint256;
-    // if assetA.decimals == 6 then assetADelicmalScale2Scale = 1000
+    // if assetB.decimals == 6 then assetBDelicmalScale2Scale = 1000
     const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256;
-    // if assetA.decimals == 6 then assetADelicmalScale2Scale = 1000
+    // if assetLP.decimals == 6 then assetLPDelicmalScale2Scale = 1000
     const assetLPDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256;
+
+    const s = SCALE as uint256;
 
     const lpDelta = txLPXfer.assetAmount as uint256;
     const lpDeltaBase = lpDelta * assetLPDelicmalScale2Scale;
-
-    const aToSend = this.calculateAssetAWithdrawOnLpDeposit(lpDeltaBase, this.assetABalance.value, this.Liqudity.value);
+    let lpDeltaWithFees = lpDeltaBase;
+    const lpWithOthers = this.calculateDistributedLiquidity(assetLP, lpDelta);
+    if (lpWithOthers > <uint256>0) {
+      // 10 / 1000
+      const myPortion = (lpDeltaBase * s) / lpWithOthers;
+      const myPortionOfFeesCollected = (this.LiqudityUsersFromFees.value * myPortion) / s;
+      lpDeltaWithFees = lpDeltaBase + myPortionOfFeesCollected;
+      this.LiqudityUsersFromFees.value = this.LiqudityUsersFromFees.value - myPortionOfFeesCollected;
+    }
+    const aToSend = this.calculateAssetAWithdrawOnLpDeposit(
+      lpDeltaWithFees,
+      this.assetABalance.value,
+      this.Liqudity.value
+    );
     const aToSend64 = (aToSend / assetADelicmalScale2Scale) as uint64;
     if (aToSend64 > 0) {
       this.doAxfer(this.txn.sender, assetA, aToSend64);
     }
-    const bToSend = this.calculateAssetAWithdrawOnLpDeposit(lpDeltaBase, this.assetBBalance.value, this.Liqudity.value);
+    const bToSend = this.calculateAssetAWithdrawOnLpDeposit(
+      lpDeltaWithFees,
+      this.assetBBalance.value,
+      this.Liqudity.value
+    );
     const bToSend64 = (bToSend / assetBDelicmalScale2Scale) as uint64;
     if (bToSend64 > 0) {
       this.doAxfer(this.txn.sender, assetB, bToSend64);
@@ -436,10 +610,8 @@ class BiatecClammPool extends Contract {
 
     const newAssetA = this.assetABalance.value - aToSend;
     const newAssetB = this.assetBBalance.value - bToSend;
-    const newL = this.Liqudity.value - lpDeltaBase;
     this.assetABalance.value = newAssetA;
     this.assetBBalance.value = newAssetB;
-    this.Liqudity.value = newL;
 
     // verify that L with new x and y is correctly calculated
     // this part can be removed if all tests goes through to lower cost by 1 tx
@@ -451,11 +623,8 @@ class BiatecClammPool extends Contract {
       this.priceMinSqrt.value, // priceMinSqrt: uint256,
       this.priceMaxSqrt.value // priceMaxSqrt: uint256,
     );
-    if (newL !== lAfter) {
-      assert(newL === lAfter, 'New liquidity does not match');
-    }
-
-    return txLPXfer.assetAmount as uint256;
+    this.Liqudity.value = lAfter;
+    return lpDeltaWithFees / assetLPDelicmalScale2Scale;
   }
 
   /**
@@ -465,28 +634,60 @@ class BiatecClammPool extends Contract {
    * @param assetB Asset B
    * @param minimumToReceive If number greater then zero, the check is performed for the output of the other asset
    */
-  swap(txSwap: AssetTransferTxn, assetA: AssetID, assetB: AssetID, minimumToReceive: uint64): uint256 {
+  swap(
+    appBiatecConfigProvider: AppID,
+    appBiatecIdentityProvider: AppID,
+    txSwap: AssetTransferTxn,
+    assetA: AssetID,
+    assetB: AssetID,
+    minimumToReceive: uint64
+  ): uint256 {
     increaseOpcodeBudget();
+    // increaseOpcodeBudget();
     /// well formed swap
     assert(assetA === this.assetA.value);
     assert(assetB === this.assetB.value);
-
     verifyAssetTransferTxn(txSwap, {
       assetAmount: { greaterThan: 0 },
       assetReceiver: this.app.address,
       sender: this.txn.sender,
       xferAsset: { includedIn: [assetA, assetB] },
     });
+
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+    const identityFromConfig = appBiatecConfigProvider.globalState('i');
+    assert(
+      appBiatecIdentityProvider === identityFromConfig,
+      'appBiatecIdentityProvider must match to the config in appBiatecConfigProvider'
+    );
+
+    const user = sendMethodCall<[Address, uint8], UserInfoV1>({
+      name: 'getUser',
+      methodArgs: [this.txn.sender, <uint8>1],
+      fee: 0,
+      applicationID: appBiatecIdentityProvider,
+    });
+    assert(!user.isLocked, 'User must not be locked');
+    assert(
+      user.verificationClass >= this.verificationClass.value, // if(user.verificationClass >= this.verificationClass.value) then ok
+      'User cannot interact with this smart contract as his verification class is lower then required here'
+    );
+
     // if assetA.decimals == 8 then assetADelicmalScale2Scale = 10
     const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetA.decimals)) as uint256;
     // if assetA.decimals == 6 then assetADelicmalScale2Scale = 1000
     const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256;
+
+    const s = SCALE as uint256;
+    const feesMultiplier = (s - ((this.fee.value as uint256) * user.feeMultiplier) / user.base) as uint256;
     let ret: uint64 = 0;
     if (txSwap.xferAsset === assetA) {
       const assetInAssetDecimals = txSwap.assetAmount as uint256;
-      const inAsset = assetInAssetDecimals * assetADelicmalScale2Scale;
+      const inAsset = (assetInAssetDecimals * assetADelicmalScale2Scale) as uint256;
+      const inAssetAfterFee = (inAsset * feesMultiplier) / s;
+
       const toSwap = this.calculateAssetBWithdrawOnAssetADeposit(
-        inAsset,
+        inAssetAfterFee,
         this.assetABalance.value,
         this.assetBBalance.value,
         this.priceMinSqrt.value,
@@ -503,17 +704,16 @@ class BiatecClammPool extends Contract {
 
       this.doAxfer(this.txn.sender, assetB, toSwapBDecimals);
 
-      this.assetABalance.value =
-        (this.app.address.assetBalance(this.assetA.value) as uint256) * assetADelicmalScale2Scale;
-      this.assetBBalance.value =
-        (this.app.address.assetBalance(this.assetB.value) as uint256) * assetBDelicmalScale2Scale;
+      this.assetABalance.value = this.assetABalance.value + inAsset;
+      this.assetBBalance.value = this.assetBBalance.value - toSwap;
     }
     // SWAP B to A
     if (txSwap.xferAsset === assetB) {
       const assetInAssetDecimals = txSwap.assetAmount as uint256;
-      const inAsset = assetInAssetDecimals * assetBDelicmalScale2Scale;
+      const inAsset = (assetInAssetDecimals * assetBDelicmalScale2Scale) as uint256;
+      const inAssetAfterFee = (inAsset * feesMultiplier) / s;
       const toSwap = this.calculateAssetAWithdrawOnAssetBDeposit(
-        inAsset,
+        inAssetAfterFee,
         this.assetABalance.value,
         this.assetBBalance.value,
         this.priceMinSqrt.value,
@@ -530,23 +730,10 @@ class BiatecClammPool extends Contract {
 
       this.doAxfer(this.txn.sender, assetA, toSwapADecimals);
 
-      this.assetABalance.value =
-        (this.app.address.assetBalance(this.assetA.value) as uint256) * assetADelicmalScale2Scale;
-      this.assetBBalance.value =
-        (this.app.address.assetBalance(this.assetB.value) as uint256) * assetBDelicmalScale2Scale;
+      this.assetBBalance.value = this.assetBBalance.value + inAsset;
+      this.assetABalance.value = this.assetABalance.value - toSwap;
     }
 
-    const newPrice = this.calculatePrice(
-      this.assetABalance.value, // assetAQuantity: uint256,
-      this.assetBBalance.value, // assetBQuantity: uint256,
-      this.priceMinSqrt.value, // priceMinSqrt: uint256,
-      this.priceMaxSqrt.value, // priceMaxSqrt: uint256,
-      this.Liqudity.value // liquidity: uint256
-    );
-    this.ratio.value = newPrice as uint64;
-
-    // verify that L has not been changed
-    // this part can be removed if all tests goes through to lower cost by 1 tx
     const newL = this.calculateLiquidity(
       this.assetABalance.value,
       this.assetBBalance.value,
@@ -555,10 +742,47 @@ class BiatecClammPool extends Contract {
       this.priceMinSqrt.value, // priceMinSqrt: uint256,
       this.priceMaxSqrt.value // priceMaxSqrt: uint256,
     );
+
     if (newL !== this.Liqudity.value) {
-      assert(newL === this.Liqudity.value, 'New liquidity does not match');
+      // liquidity increase is the result of the fees
+
+      const diff = (newL - this.Liqudity.value) as uint256; // difference is the lp increment by fees .. ready to be split between users and biatec
+      this.Liqudity.value = newL; // new liquidity is liquidity increase by users fees and biatec fees
+
+      const biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256;
+      if (biatecFee === <uint256>0) {
+        const usersLiquidityFromFeeIncrement = diff;
+        this.LiqudityUsersFromFees.value = this.LiqudityUsersFromFees.value + usersLiquidityFromFeeIncrement;
+      } else {
+        const usersLiquidityFromFeeIncrement = (diff * (s - biatecFee)) / s;
+        const biatecLiquidityFromFeeIncrement = diff - usersLiquidityFromFeeIncrement;
+        this.LiqudityUsersFromFees.value = this.LiqudityUsersFromFees.value + usersLiquidityFromFeeIncrement;
+        this.LiqudityBiatecFromFees.value = this.LiqudityBiatecFromFees.value + biatecLiquidityFromFeeIncrement;
+      }
     }
+    const newPrice = this.calculatePrice(
+      this.assetABalance.value, // assetAQuantity: uint256,
+      this.assetBBalance.value, // assetBQuantity: uint256,
+      this.priceMinSqrt.value, // priceMinSqrt: uint256,
+      this.priceMaxSqrt.value, // priceMaxSqrt: uint256,
+      this.Liqudity.value // liquidity: uint256
+    );
+    this.ratio.value = newPrice as uint64;
     return ret as uint256;
+  }
+
+  /**
+   * Calculates the number of LP tokens issued to users
+   */
+  @abi.readonly
+  calculateDistributedLiquidity(assetLP: AssetID, currentDeposit: uint256): uint256 {
+    const current = (this.app.address.assetBalance(assetLP) as uint256) - currentDeposit;
+    const minted = TOTAL_SUPPLY as uint256;
+    const distributedLPTokens = minted - current;
+    // if assetLP.decimals == 6 then assetADelicmalScale2Scale = 1000
+    const assetLPDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256;
+    const ret = distributedLPTokens * assetLPDelicmalScale2Scale;
+    return ret;
   }
 
   /**
@@ -883,5 +1107,34 @@ class BiatecClammPool extends Contract {
     }
     // if there is no asset b in the pool, the expected asset b is zero and asset a the max
     return inAmountA;
+  }
+
+  @abi.readonly
+  status(appBiatecConfigProvider: AppID, assetLP: AssetID): AmmStatus {
+    assert(
+      appBiatecConfigProvider === this.appBiatecConfigProvider.value,
+      'appBiatecConfigProvider must match to the global variable app id'
+    );
+    assert(this.poolToken.value === assetLP, 'LP asset does not match');
+    const biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256;
+
+    return {
+      assetA: this.assetA.value,
+      assetB: this.assetB.value,
+      poolToken: this.poolToken.value,
+      assetABalance: this.assetABalance.value as uint64,
+      assetBBalance: this.assetBBalance.value as uint64,
+      fee: this.fee.value,
+      biatecFee: biatecFee as uint64,
+      currentLiqudity: this.Liqudity.value as uint64,
+      liqudityBiatecFromFees: this.LiqudityBiatecFromFees.value as uint64,
+      liqudityUsersFromFees: this.LiqudityUsersFromFees.value as uint64,
+      price: this.ratio.value as uint64,
+      priceMaxSqrt: this.priceMaxSqrt.value as uint64,
+      priceMinSqrt: this.priceMinSqrt.value as uint64,
+      releasedLiqudity: this.calculateDistributedLiquidity(assetLP, <uint256>0) as uint64,
+      scale: SCALE,
+      verificationClass: this.verificationClass.value,
+    };
   }
 }

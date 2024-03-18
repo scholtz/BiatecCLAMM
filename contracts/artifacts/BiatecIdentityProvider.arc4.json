@@ -9,6 +9,58 @@
       "returns": {
         "type": "void"
       }
+    },
+    {
+      "name": "selfRegistration",
+      "args": [
+        {
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "name": "info",
+          "type": "(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "setInfo",
+      "args": [
+        {
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "name": "info",
+          "type": "(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "getUser",
+      "desc": "Returns user information - fee multiplier, verification class, engagement class ..",
+      "readonly": true,
+      "args": [
+        {
+          "name": "user",
+          "type": "address",
+          "desc": "Get info for specific user address"
+        },
+        {
+          "name": "v",
+          "type": "uint8",
+          "desc": "Version of the data structure to return"
+        }
+      ],
+      "returns": {
+        "type": "(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)"
+      }
     }
   ]
 }

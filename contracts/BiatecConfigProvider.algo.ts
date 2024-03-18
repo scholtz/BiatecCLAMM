@@ -1,6 +1,7 @@
 import { Contract } from '@algorandfoundation/tealscript';
 
 const version = 'BIATEC-CONFIG-01-01-01';
+const SCALE = 1_000_000_000;
 // eslint-disable-next-line no-unused-vars
 class BiatecConfigProvider extends Contract {
   /**
@@ -30,7 +31,7 @@ class BiatecConfigProvider extends Contract {
    *
    * Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
    */
-  biatecFee = GlobalStateKey<uint64>({ key: 'f' });
+  biatecFee = GlobalStateKey<uint256>({ key: 'f' });
 
   /**
    * Initial setup
@@ -46,8 +47,9 @@ class BiatecConfigProvider extends Contract {
    * Setup the contract
    * @param biatecFee Biatec fees
    */
-  bootstrap(biatecFee: uint64, appIdentityProvider: AppID): void {
+  bootstrap(biatecFee: uint256, appIdentityProvider: AppID): void {
     assert(this.txn.sender === this.addressUdpater.value, 'Only updater can call bootstrap method');
+    assert(biatecFee <= (SCALE as uint256) / 2, 'Biatec cannot set fees higher then 50% of lp fees');
     this.biatecFee.value = biatecFee;
     this.appIdentityProvider.value = appIdentityProvider;
   }
@@ -101,8 +103,9 @@ class BiatecConfigProvider extends Contract {
 
    * @param biatecFee Fee
    */
-  setBiatecFee(biatecFee: uint64) {
+  setBiatecFee(biatecFee: uint256) {
     assert(this.txn.sender === this.addressExecutive.value, 'Only executive address can change fees');
+    assert(biatecFee <= (SCALE as uint256) / 2, 'Biatec cannot set fees higher then 50% of lp fees');
     this.biatecFee.value = biatecFee;
   }
 }

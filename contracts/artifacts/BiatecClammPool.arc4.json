@@ -99,6 +99,14 @@
       "desc": "This method adds Asset A and Asset B to the Automated Market Maker Concentrated Liqudidity Pool and send to the liqudidty provider the liqudity token",
       "args": [
         {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64"
+        },
+        {
+          "name": "appBiatecIdentityProvider",
+          "type": "uint64"
+        },
+        {
           "name": "txAssetADeposit",
           "type": "txn",
           "desc": "Transfer of asset A to the LP pool"
@@ -172,6 +180,14 @@
       "desc": "Swap Asset A to Asset B or Asset B to Asst A",
       "args": [
         {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64"
+        },
+        {
+          "name": "appBiatecIdentityProvider",
+          "type": "uint64"
+        },
+        {
           "name": "txSwap",
           "type": "axfer",
           "desc": "Transfer of the token to be deposited to the pool. To the owner the other asset will be sent."
@@ -190,6 +206,24 @@
           "name": "minimumToReceive",
           "type": "uint64",
           "desc": "If number greater then zero, the check is performed for the output of the other asset"
+        }
+      ],
+      "returns": {
+        "type": "uint256"
+      }
+    },
+    {
+      "name": "calculateDistributedLiquidity",
+      "desc": "Calculates the number of LP tokens issued to users",
+      "readonly": true,
+      "args": [
+        {
+          "name": "assetLP",
+          "type": "uint64"
+        },
+        {
+          "name": "currentDeposit",
+          "type": "uint256"
         }
       ],
       "returns": {
@@ -467,6 +501,23 @@
       "returns": {
         "type": "uint256",
         "desc": "Amount of asset A to be deposited. The result is in Base decimals (9)"
+      }
+    },
+    {
+      "name": "status",
+      "readonly": true,
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64"
+        },
+        {
+          "name": "assetLP",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)"
       }
     }
   ]

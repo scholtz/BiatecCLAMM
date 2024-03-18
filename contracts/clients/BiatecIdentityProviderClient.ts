@@ -33,6 +33,21 @@ export const APP_SPEC: AppSpec = {
       "call_config": {
         "no_op": "CREATE"
       }
+    },
+    "selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void": {
+      "call_config": {
+        "no_op": "CALL"
+      }
+    },
+    "setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void": {
+      "call_config": {
+        "no_op": "CALL"
+      }
+    },
+    "getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)": {
+      "call_config": {
+        "no_op": "CALL"
+      }
     }
   },
   "bare_call_config": {
@@ -53,11 +68,11 @@ export const APP_SPEC: AppSpec = {
           "type": "bytes",
           "key": "g"
         },
-        "verificationClassSetter": {
+        "verificationSetter": {
           "type": "bytes",
           "key": "v"
         },
-        "engagementClassSetter": {
+        "engagementSetter": {
           "type": "bytes",
           "key": "e"
         }
@@ -76,7 +91,7 @@ export const APP_SPEC: AppSpec = {
     }
   },
   "source": {
-    "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgovLyBUaGlzIFRFQUwgd2FzIGdlbmVyYXRlZCBieSBURUFMU2NyaXB0IHYwLjg2LjAKLy8gaHR0cHM6Ly9naXRodWIuY29tL2FsZ29yYW5kZm91bmRhdGlvbi9URUFMU2NyaXB0CgovLyBUaGlzIGNvbnRyYWN0IGlzIGNvbXBsaWFudCB3aXRoIGFuZC9vciBpbXBsZW1lbnRzIHRoZSBmb2xsb3dpbmcgQVJDczogWyBBUkM0IF0KCi8vIFRoZSBmb2xsb3dpbmcgdGVuIGxpbmVzIG9mIFRFQUwgaGFuZGxlIGluaXRpYWwgcHJvZ3JhbSBmbG93Ci8vIFRoaXMgcGF0dGVybiBpcyB1c2VkIHRvIG1ha2UgaXQgZWFzeSBmb3IgYW55b25lIHRvIHBhcnNlIHRoZSBzdGFydCBvZiB0aGUgcHJvZ3JhbSBhbmQgZGV0ZXJtaW5lIGlmIGEgc3BlY2lmaWMgYWN0aW9uIGlzIGFsbG93ZWQKLy8gSGVyZSwgYWN0aW9uIHJlZmVycyB0byB0aGUgT25Db21wbGV0ZSBpbiBjb21iaW5hdGlvbiB3aXRoIHdoZXRoZXIgdGhlIGFwcCBpcyBiZWluZyBjcmVhdGVkIG9yIGNhbGxlZAovLyBFdmVyeSBwb3NzaWJsZSBhY3Rpb24gZm9yIHRoaXMgY29udHJhY3QgaXMgcmVwcmVzZW50ZWQgaW4gdGhlIHN3aXRjaCBzdGF0ZW1lbnQKLy8gSWYgdGhlIGFjdGlvbiBpcyBub3QgaW1wbGVtZW50ZWQgaW4gdGhlIGNvbnRyYWN0LCBpdHMgcmVzcGVjdGl2ZSBicmFuY2ggd2lsbCBiZSAiKk5PVF9JTVBMRU1FTlRFRCIgd2hpY2gganVzdCBjb250YWlucyAiZXJyIgp0eG4gQXBwbGljYXRpb25JRAohCmludCA2CioKdHhuIE9uQ29tcGxldGlvbgorCnN3aXRjaCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqY3JlYXRlX05vT3AgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVECgoqTk9UX0lNUExFTUVOVEVEOgoJZXJyCgovLyBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoqYWJpX3JvdXRlX2NyZWF0ZUFwcGxpY2F0aW9uOgoJLy8gZXhlY3V0ZSBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoJY2FsbHN1YiBjcmVhdGVBcHBsaWNhdGlvbgoJaW50IDEKCXJldHVybgoKLy8gY3JlYXRlQXBwbGljYXRpb24oKTogdm9pZAovLwovLyBJbml0aWFsIHNldHVwCmNyZWF0ZUFwcGxpY2F0aW9uOgoJcHJvdG8gMCAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozMQoJLy8gbG9nKHZlcnNpb24pCglieXRlICJCSUFURUMtSURFTlQtMDEtMDEtMDEiCglsb2cKCXJldHN1YgoKKmNyZWF0ZV9Ob09wOgoJbWV0aG9kICJjcmVhdGVBcHBsaWNhdGlvbigpdm9pZCIKCXR4bmEgQXBwbGljYXRpb25BcmdzIDAKCW1hdGNoICphYmlfcm91dGVfY3JlYXRlQXBwbGljYXRpb24KCWVycg==",
+    "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgovLyBUaGlzIFRFQUwgd2FzIGdlbmVyYXRlZCBieSBURUFMU2NyaXB0IHYwLjg4LjAKLy8gaHR0cHM6Ly9naXRodWIuY29tL2FsZ29yYW5kZm91bmRhdGlvbi9URUFMU2NyaXB0CgovLyBUaGlzIGNvbnRyYWN0IGlzIGNvbXBsaWFudCB3aXRoIGFuZC9vciBpbXBsZW1lbnRzIHRoZSBmb2xsb3dpbmcgQVJDczogWyBBUkM0IF0KCi8vIFRoZSBmb2xsb3dpbmcgdGVuIGxpbmVzIG9mIFRFQUwgaGFuZGxlIGluaXRpYWwgcHJvZ3JhbSBmbG93Ci8vIFRoaXMgcGF0dGVybiBpcyB1c2VkIHRvIG1ha2UgaXQgZWFzeSBmb3IgYW55b25lIHRvIHBhcnNlIHRoZSBzdGFydCBvZiB0aGUgcHJvZ3JhbSBhbmQgZGV0ZXJtaW5lIGlmIGEgc3BlY2lmaWMgYWN0aW9uIGlzIGFsbG93ZWQKLy8gSGVyZSwgYWN0aW9uIHJlZmVycyB0byB0aGUgT25Db21wbGV0ZSBpbiBjb21iaW5hdGlvbiB3aXRoIHdoZXRoZXIgdGhlIGFwcCBpcyBiZWluZyBjcmVhdGVkIG9yIGNhbGxlZAovLyBFdmVyeSBwb3NzaWJsZSBhY3Rpb24gZm9yIHRoaXMgY29udHJhY3QgaXMgcmVwcmVzZW50ZWQgaW4gdGhlIHN3aXRjaCBzdGF0ZW1lbnQKLy8gSWYgdGhlIGFjdGlvbiBpcyBub3QgaW1wbGVtZW50ZWQgaW4gdGhlIGNvbnRyYWN0LCBpdHMgcmVzcGVjdGl2ZSBicmFuY2ggd2lsbCBiZSAiKk5PVF9JTVBMRU1FTlRFRCIgd2hpY2gganVzdCBjb250YWlucyAiZXJyIgp0eG4gQXBwbGljYXRpb25JRAohCmludCA2CioKdHhuIE9uQ29tcGxldGlvbgorCnN3aXRjaCAqY2FsbF9Ob09wICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqY3JlYXRlX05vT3AgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVECgoqTk9UX0lNUExFTUVOVEVEOgoJZXJyCgovLyBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoqYWJpX3JvdXRlX2NyZWF0ZUFwcGxpY2F0aW9uOgoJLy8gZXhlY3V0ZSBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoJY2FsbHN1YiBjcmVhdGVBcHBsaWNhdGlvbgoJaW50IDEKCXJldHVybgoKLy8gY3JlYXRlQXBwbGljYXRpb24oKTogdm9pZAovLwovLyBJbml0aWFsIHNldHVwCmNyZWF0ZUFwcGxpY2F0aW9uOgoJcHJvdG8gMCAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoxNDkKCS8vIGxvZyh2ZXJzaW9uKQoJYnl0ZSAiQklBVEVDLUlERU5ULTAxLTAxLTAxIgoJbG9nCglyZXRzdWIKCi8vIHNlbGZSZWdpc3RyYXRpb24oYWRkcmVzcywodWludDY0LHVpbnQ2NCxib29sLHN0cmluZyxzdHJpbmcsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsYm9vbCx1aW50NjQsdWludDY0LGJvb2wpKXZvaWQKKmFiaV9yb3V0ZV9zZWxmUmVnaXN0cmF0aW9uOgoJLy8gaW5mbzogKHVpbnQ2NCx1aW50NjQsYm9vbCxzdHJpbmcsc3RyaW5nLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LGJvb2wsdWludDY0LHVpbnQ2NCxib29sKQoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgoKCS8vIHVzZXI6IGFkZHJlc3MKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWR1cAoJbGVuCglpbnQgMzIKCT09Cglhc3NlcnQKCgkvLyBleGVjdXRlIHNlbGZSZWdpc3RyYXRpb24oYWRkcmVzcywodWludDY0LHVpbnQ2NCxib29sLHN0cmluZyxzdHJpbmcsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsYm9vbCx1aW50NjQsdWludDY0LGJvb2wpKXZvaWQKCWNhbGxzdWIgc2VsZlJlZ2lzdHJhdGlvbgoJaW50IDEKCXJldHVybgoKLy8gc2VsZlJlZ2lzdHJhdGlvbih1c2VyOiBBZGRyZXNzLCBpbmZvOiBJZGVudGl0eUluZm8pOiB2b2lkCnNlbGZSZWdpc3RyYXRpb246Cglwcm90byAyIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE1MwoJLy8gYXNzZXJ0KCF0aGlzLmlkZW50aXRpZXModXNlcikuZXhpc3RzLCAnU2VsZiByZWdpc3RyYXRpb24gY2Fubm90IGJlIGV4ZWN1dGVkIGlmIGFkZHJlc3MgaXMgYWxyZWFkeSByZWdpc3RlcmVkJykKCWJ5dGUgMHg2OSAvLyAiaSIKCWZyYW1lX2RpZyAtMSAvLyB1c2VyOiBBZGRyZXNzCgljb25jYXQKCWJveF9sZW4KCXN3YXAKCXBvcAoJIQoKCS8vIFNlbGYgcmVnaXN0cmF0aW9uIGNhbm5vdCBiZSBleGVjdXRlZCBpZiBhZGRyZXNzIGlzIGFscmVhZHkgcmVnaXN0ZXJlZAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoxNTYKCS8vIGFzc2VydChpbmZvLnZlcmlmaWNhdGlvblN0YXR1cyA9PT0gMSwgJ1ZlcmlmaWNhdGlvbiBzdGF0dXMgbXVzdCBiZSBlbXB0eScpCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCAwIDgKCWJ0b2kKCWludCAxCgk9PQoKCS8vIFZlcmlmaWNhdGlvbiBzdGF0dXMgbXVzdCBiZSBlbXB0eQoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoxNTgKCS8vIGFzc2VydChpbmZvLnZlcmlmaWNhdGlvbkNsYXNzID09PSAwLCAndmVyaWZpY2F0aW9uQ2xhc3MgbXVzdCBlcXVhbCB0byAwJykKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDggOAoJYnRvaQoJaW50IDAKCT09CgoJLy8gdmVyaWZpY2F0aW9uQ2xhc3MgbXVzdCBlcXVhbCB0byAwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE2MQoJLy8gYXNzZXJ0KAoJLy8gICAgICAgaW5mby5wZXJzb25VVUlEID09PSAnMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwJywKCS8vICAgICAgICdwZXJzb25VVUlEIG11c3QgZXF1YWwgdG8gMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwJwoJLy8gICAgICkKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5CglpbnQgMTcKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCXVuY292ZXIgMgoJZXh0cmFjdF91aW50MTYKCWR1cCAvLyBkdXBsaWNhdGUgc3RhcnQgb2YgZWxlbWVudAoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJc3dhcAoJZXh0cmFjdF91aW50MTYgLy8gZ2V0IG51bWJlciBvZiBlbGVtZW50cwoJaW50IDEgLy8gZ2V0IHR5cGUgbGVuZ3RoCgkqIC8vIG11bHRpcGx5IGJ5IHR5cGUgbGVuZ3RoCglpbnQgMgoJKyAvLyBhZGQgdHdvIGZvciBsZW5ndGgKCWV4dHJhY3QzCglleHRyYWN0IDIgMAoJYnl0ZSAweDMwMzAzMDMwMzAzMDMwMzAyZDMwMzAzMDMwMmQzMDMwMzAzMDJkMzAzMDMwMzAyZDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMCAvLyAiMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwIgoJPT0KCgkvLyBwZXJzb25VVUlEIG11c3QgZXF1YWwgdG8gMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE2NgoJLy8gYXNzZXJ0KAoJLy8gICAgICAgaW5mby5sZWdhbEVudGl0eVVVSUQgPT09ICcwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAnLAoJLy8gICAgICAgJ2xlZ2FsRW50aXR5VVVJRCBtdXN0IGVxdWFsIHRvIDAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCcKCS8vICAgICApCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJaW50IDIwCglsb2FkIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5Cgl1bmNvdmVyIDIKCWV4dHJhY3RfdWludDE2CglkdXAgLy8gZHVwbGljYXRlIHN0YXJ0IG9mIGVsZW1lbnQKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCXN3YXAKCWV4dHJhY3RfdWludDE2IC8vIGdldCBudW1iZXIgb2YgZWxlbWVudHMKCWludCAxIC8vIGdldCB0eXBlIGxlbmd0aAoJKiAvLyBtdWx0aXBseSBieSB0eXBlIGxlbmd0aAoJaW50IDIKCSsgLy8gYWRkIHR3byBmb3IgbGVuZ3RoCglleHRyYWN0MwoJZXh0cmFjdCAyIDAKCWJ5dGUgMHgzMDMwMzAzMDMwMzAzMDMwMmQzMDMwMzAzMDJkMzAzMDMwMzAyZDMwMzAzMDMwMmQzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAgLy8gIjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIKCT09CgoJLy8gbGVnYWxFbnRpdHlVVUlEIG11c3QgZXF1YWwgdG8gMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE3MQoJLy8gYXNzZXJ0KGluZm8uYmlhdGVjRW5nYWdlbWVudFBvaW50cyA9PT0gMCwgJ2JpYXRlY0VuZ2FnZW1lbnRQb2ludHMgbXVzdCBlcXVhbCB0byAwJykKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDIzIDgKCWJ0b2kKCWludCAwCgk9PQoKCS8vIGJpYXRlY0VuZ2FnZW1lbnRQb2ludHMgbXVzdCBlcXVhbCB0byAwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE3MwoJLy8gYXNzZXJ0KGluZm8uYmlhdGVjRW5nYWdlbWVudFJhbmsgPT09IDAsICdiaWF0ZWNFbmdhZ2VtZW50UmFuayBtdXN0IGVxdWFsIHRvIDAnKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgMzIgOAoJYnRvaQoJaW50IDAKCT09CgoJLy8gYmlhdGVjRW5nYWdlbWVudFJhbmsgbXVzdCBlcXVhbCB0byAwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE3NQoJLy8gYXNzZXJ0KGluZm8uYXZtRW5nYWdlbWVudFBvaW50cyA9PT0gMCwgJ2F2bUVuZ2FnZW1lbnRQb2ludHMgbXVzdCBlcXVhbCB0byAwJykKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDQxIDgKCWJ0b2kKCWludCAwCgk9PQoKCS8vIGF2bUVuZ2FnZW1lbnRQb2ludHMgbXVzdCBlcXVhbCB0byAwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE3NwoJLy8gYXNzZXJ0KGluZm8uYXZtRW5nYWdlbWVudFJhbmsgPT09IDAsICdhdm1FbmdhZ2VtZW50UmFuayBtdXN0IGVxdWFsIHRvIDAnKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgNTAgOAoJYnRvaQoJaW50IDAKCT09CgoJLy8gYXZtRW5nYWdlbWVudFJhbmsgbXVzdCBlcXVhbCB0byAwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE3OQoJLy8gYXNzZXJ0KGluZm8udHJhZGluZ0VuZ2FnZW1lbnRQb2ludHMgPT09IDAsICd0cmFkaW5nRW5nYWdlbWVudFBvaW50cyBtdXN0IGVxdWFsIHRvIDAnKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgNTkgOAoJYnRvaQoJaW50IDAKCT09CgoJLy8gdHJhZGluZ0VuZ2FnZW1lbnRQb2ludHMgbXVzdCBlcXVhbCB0byAwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE4MQoJLy8gYXNzZXJ0KGluZm8udHJhZGluZ0VuZ2FnZW1lbnRSYW5rID09PSAwLCAndHJhZGluZ0VuZ2FnZW1lbnRSYW5rIG11c3QgZXF1YWwgdG8gMCcpCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA2OCA4CglidG9pCglpbnQgMAoJPT0KCgkvLyB0cmFkaW5nRW5nYWdlbWVudFJhbmsgbXVzdCBlcXVhbCB0byAwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE4MwoJLy8gYXNzZXJ0KGluZm8uaXNMb2NrZWQgPT09IGZhbHNlLCAnaXNMb2NrZWQgbXVzdCBlcXVhbCB0byBmYWxzZScpCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJaW50IDYwOAoJZ2V0Yml0CglpbnQgMAoJPT0KCgkvLyBpc0xvY2tlZCBtdXN0IGVxdWFsIHRvIGZhbHNlCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE4NQoJLy8gYXNzZXJ0KGluZm8ua3ljRXhwaXJhdGlvbiA9PT0gMCwgJ2t5Y0V4cGlyYXRpb24gbXVzdCBlcXVhbCB0byAwJykKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDc3IDgKCWJ0b2kKCWludCAwCgk9PQoKCS8vIGt5Y0V4cGlyYXRpb24gbXVzdCBlcXVhbCB0byAwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE4NwoJLy8gYXNzZXJ0KGluZm8uaW52ZXN0b3JGb3JFeHBpcmF0aW9uID09PSAwLCAnaW52ZXN0b3JGb3JFeHBpcmF0aW9uIG11c3QgZXF1YWwgdG8gMCcpCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA4NiA4CglidG9pCglpbnQgMAoJPT0KCgkvLyBpbnZlc3RvckZvckV4cGlyYXRpb24gbXVzdCBlcXVhbCB0byAwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE4OQoJLy8gYXNzZXJ0KGluZm8uaXNQcm9mZXNzaW9uYWxJbnZlc3RvciA9PT0gZmFsc2UsICdpc1Byb2Zlc3Npb25hbEludmVzdG9yIG11c3QgZXF1YWwgdG8gZmFsc2UnKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWludCA3NTIKCWdldGJpdAoJaW50IDAKCT09CgoJLy8gaXNQcm9mZXNzaW9uYWxJbnZlc3RvciBtdXN0IGVxdWFsIHRvIGZhbHNlCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE5MQoJLy8gdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlID0gaW5mbwoJYnl0ZSAweDY5IC8vICJpIgoJZnJhbWVfZGlnIC0xIC8vIHVzZXI6IEFkZHJlc3MKCWNvbmNhdAoJZHVwCglib3hfZGVsCglwb3AKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCWJveF9wdXQKCXJldHN1YgoKLy8gc2V0SW5mbyhhZGRyZXNzLCh1aW50NjQsdWludDY0LGJvb2wsc3RyaW5nLHN0cmluZyx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCxib29sLHVpbnQ2NCx1aW50NjQsYm9vbCkpdm9pZAoqYWJpX3JvdXRlX3NldEluZm86CgkvLyBpbmZvOiAodWludDY0LHVpbnQ2NCxib29sLHN0cmluZyxzdHJpbmcsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsYm9vbCx1aW50NjQsdWludDY0LGJvb2wpCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAyCgoJLy8gdXNlcjogYWRkcmVzcwoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZHVwCglsZW4KCWludCAzMgoJPT0KCWFzc2VydAoKCS8vIGV4ZWN1dGUgc2V0SW5mbyhhZGRyZXNzLCh1aW50NjQsdWludDY0LGJvb2wsc3RyaW5nLHN0cmluZyx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCxib29sLHVpbnQ2NCx1aW50NjQsYm9vbCkpdm9pZAoJY2FsbHN1YiBzZXRJbmZvCglpbnQgMQoJcmV0dXJuCgovLyBzZXRJbmZvKHVzZXI6IEFkZHJlc3MsIGluZm86IElkZW50aXR5SW5mbyk6IHZvaWQKc2V0SW5mbzoKCXByb3RvIDIgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MTk1CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmVuZ2FnZW1lbnRTZXR0ZXIudmFsdWUpCgl0eG4gU2VuZGVyCglieXRlIDB4NjUgLy8gImUiCglhcHBfZ2xvYmFsX2dldAoJPT0KCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MTk2CgkvLyB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUgPSBpbmZvCglieXRlIDB4NjkgLy8gImkiCglmcmFtZV9kaWcgLTEgLy8gdXNlcjogQWRkcmVzcwoJY29uY2F0CglkdXAKCWJveF9kZWwKCXBvcAoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJYm94X3B1dAoJcmV0c3ViCgovLyBnZXRVc2VyKGFkZHJlc3MsdWludDgpKHVpbnQ4LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDI1Nix1aW50MjU2LGJvb2wsdWludDY0LHVpbnQ2NCxib29sKQoqYWJpX3JvdXRlX2dldFVzZXI6CgkvLyBUaGUgQUJJIHJldHVybiBwcmVmaXgKCWJ5dGUgMHgxNTFmN2M3NQoKCS8vIHY6IHVpbnQ4Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAyCglkdXAKCWxlbgoJaW50IDEKCT09Cglhc3NlcnQKCWJ0b2kKCgkvLyB1c2VyOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50IDMyCgk9PQoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBnZXRVc2VyKGFkZHJlc3MsdWludDgpKHVpbnQ4LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDI1Nix1aW50MjU2LGJvb2wsdWludDY0LHVpbnQ2NCxib29sKQoJY2FsbHN1YiBnZXRVc2VyCgljb25jYXQKCWxvZwoJaW50IDEKCXJldHVybgoKLy8gZ2V0VXNlcih1c2VyOiBBZGRyZXNzLCB2OiB1aW50OCk6IFVzZXJJbmZvVjEKLy8KLy8gUmV0dXJucyB1c2VyIGluZm9ybWF0aW9uIC0gZmVlIG11bHRpcGxpZXIsIHZlcmlmaWNhdGlvbiBjbGFzcywgZW5nYWdlbWVudCBjbGFzcyAuLgovLwovLyBAcGFyYW0gdXNlciBHZXQgaW5mbyBmb3Igc3BlY2lmaWMgdXNlciBhZGRyZXNzCi8vIEBwYXJhbSB2IFZlcnNpb24gb2YgdGhlIGRhdGEgc3RydWN0dXJlIHRvIHJldHVybgpnZXRVc2VyOgoJcHJvdG8gMiAxCgoJLy8gUHVzaCBlbXB0eSBieXRlcyBhZnRlciB0aGUgZnJhbWUgcG9pbnRlciB0byByZXNlcnZlIHNwYWNlIGZvciBsb2NhbCB2YXJpYWJsZXMKCWJ5dGUgMHgKCWR1cG4gMgoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjA3CgkvLyBhc3NlcnQodiA9PT0gMSwgIkN1cnJlbnRseSBzdXBwb3J0ZWQgdmVyc2lvbiBvZiB0aGUgZGF0YSBzdHJ1Y3R1cmUgaXMgJzEnIikKCWZyYW1lX2RpZyAtMiAvLyB2OiB1aW50OAoJaW50IDEKCT09CgoJLy8gQ3VycmVudGx5IHN1cHBvcnRlZCB2ZXJzaW9uIG9mIHRoZSBkYXRhIHN0cnVjdHVyZSBpcyAnMScKCWFzc2VydAoKCS8vICppZjBfY29uZGl0aW9uCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjIwOAoJLy8gIXRoaXMuaWRlbnRpdGllcyh1c2VyKS5leGlzdHMKCWJ5dGUgMHg2OSAvLyAiaSIKCWZyYW1lX2RpZyAtMSAvLyB1c2VyOiBBZGRyZXNzCgljb25jYXQKCWJveF9sZW4KCXN3YXAKCXBvcAoJIQoJYnogKmlmMF9lbmQKCgkvLyAqaWYwX2NvbnNlcXVlbnQKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjA5CgkvLyByZXROb0lkZW50aXR5OiBVc2VySW5mb1YxID0gewoJLy8gICAgICAgICB2ZXJzaW9uOiB2LAoJLy8gICAgICAgICBiYXNlOiBTQ0FMRSBhcyB1aW50MjU2LAoJLy8gICAgICAgICBmZWVNdWx0aXBsaWVyOiAoMiAqIFNDQUxFKSBhcyB1aW50MjU2LAoJLy8gICAgICAgICBpc0xvY2tlZDogZmFsc2UsCgkvLyAgICAgICAgIHZlcmlmaWNhdGlvbkNsYXNzOiAwLAoJLy8gICAgICAgICB2ZXJpZmljYXRpb25TdGF0dXM6IDAsCgkvLyAgICAgICAgIGJpYXRlY0VuZ2FnZW1lbnRQb2ludHM6IDAsCgkvLyAgICAgICAgIGJpYXRlY0VuZ2FnZW1lbnRSYW5rOiAwLAoJLy8gICAgICAgICBhdm1FbmdhZ2VtZW50UG9pbnRzOiAwLAoJLy8gICAgICAgICBhdm1FbmdhZ2VtZW50UmFuazogMCwKCS8vICAgICAgICAgdHJhZGluZ0VuZ2FnZW1lbnRQb2ludHM6IDAsCgkvLyAgICAgICAgIHRyYWRpbmdFbmdhZ2VtZW50UmFuazogMCwKCS8vICAgICAgICAga3ljRXhwaXJhdGlvbjogMCwKCS8vICAgICAgICAgaW52ZXN0b3JGb3JFeHBpcmF0aW9uOiAwLAoJLy8gICAgICAgICBpc1Byb2Zlc3Npb25hbEludmVzdG9yOiBmYWxzZSwKCS8vICAgICAgIH0KCWZyYW1lX2RpZyAtMiAvLyB2OiB1aW50OAoJaXRvYgoJZXh0cmFjdCA3IDEKCWJ5dGUgMHgwMDAwMDAwMDAwMDAwMDAwCgljb25jYXQKCWJ5dGUgMHgwMDAwMDAwMDAwMDAwMDAwCgljb25jYXQKCWJ5dGUgMHgwMDAwMDAwMDAwMDAwMDAwCgljb25jYXQKCWJ5dGUgMHgwMDAwMDAwMDAwMDAwMDAwCgljb25jYXQKCWJ5dGUgMHgwMDAwMDAwMDAwMDAwMDAwCgljb25jYXQKCWJ5dGUgMHgwMDAwMDAwMDAwMDAwMDAwCgljb25jYXQKCWJ5dGUgMHgwMDAwMDAwMDAwMDAwMDAwCgljb25jYXQKCWJ5dGUgMHgwMDAwMDAwMDAwMDAwMDAwCgljb25jYXQKCWJ5dGUgMHgwMDAwMDAwMDc3MzU5NDAwCglkdXAKCWJpdGxlbgoJaW50IDI1NgoJPD0KCWFzc2VydAoJYnl0ZSAweEZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkYKCWImCglkdXAKCWxlbgoJZHVwCglpbnQgMzIKCS0KCXN3YXAKCXN1YnN0cmluZzMKCWNvbmNhdAoJYnl0ZSAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwM2I5YWNhMDAKCWNvbmNhdAoJYnl0ZSAweDAwCglpbnQgMAoJZHVwCglzZXRiaXQKCWNvbmNhdAoJYnl0ZSAweDAwMDAwMDAwMDAwMDAwMDAKCWNvbmNhdAoJYnl0ZSAweDAwMDAwMDAwMDAwMDAwMDAKCWNvbmNhdAoJYnl0ZSAweDAwCglpbnQgMAoJZHVwCglzZXRiaXQKCWNvbmNhdAoJZnJhbWVfYnVyeSAwIC8vIHJldE5vSWRlbnRpdHk6IFVzZXJJbmZvVjEKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjIyNgoJLy8gcmV0dXJuIHJldE5vSWRlbnRpdHk7CglmcmFtZV9kaWcgMCAvLyByZXROb0lkZW50aXR5OiBVc2VySW5mb1YxCgoJLy8gc2V0IHRoZSBzdWJyb3V0aW5lIHJldHVybiB2YWx1ZQoJZnJhbWVfYnVyeSAwCglyZXRzdWIKCippZjBfZW5kOgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyMjgKCS8vIGlkZW50aXR5ID0gdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglieXRlIDB4NjkgLy8gImkiCglmcmFtZV9kaWcgLTEgLy8gdXNlcjogQWRkcmVzcwoJY29uY2F0CglmcmFtZV9idXJ5IDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyMzAKCS8vIHJldDogVXNlckluZm9WMSA9IHsKCS8vICAgICAgIHZlcnNpb246IHYsCgkvLyAgICAgICBiYXNlOiBTQ0FMRSBhcyB1aW50MjU2LAoJLy8gICAgICAgZmVlTXVsdGlwbGllcjogKDEgKiBTQ0FMRSkgYXMgdWludDI1NiwKCS8vICAgICAgIGlzTG9ja2VkOiBpZGVudGl0eS5pc0xvY2tlZCwKCS8vICAgICAgIHZlcmlmaWNhdGlvbkNsYXNzOiBpZGVudGl0eS52ZXJpZmljYXRpb25DbGFzcywKCS8vICAgICAgIHZlcmlmaWNhdGlvblN0YXR1czogaWRlbnRpdHkudmVyaWZpY2F0aW9uU3RhdHVzLAoJLy8gICAgICAgYmlhdGVjRW5nYWdlbWVudFBvaW50czogaWRlbnRpdHkuYmlhdGVjRW5nYWdlbWVudFBvaW50cywKCS8vICAgICAgIGJpYXRlY0VuZ2FnZW1lbnRSYW5rOiBpZGVudGl0eS5iaWF0ZWNFbmdhZ2VtZW50UmFuaywKCS8vICAgICAgIGF2bUVuZ2FnZW1lbnRQb2ludHM6IGlkZW50aXR5LmF2bUVuZ2FnZW1lbnRQb2ludHMsCgkvLyAgICAgICBhdm1FbmdhZ2VtZW50UmFuazogaWRlbnRpdHkuYXZtRW5nYWdlbWVudFJhbmssCgkvLyAgICAgICB0cmFkaW5nRW5nYWdlbWVudFBvaW50czogaWRlbnRpdHkudHJhZGluZ0VuZ2FnZW1lbnRQb2ludHMsCgkvLyAgICAgICB0cmFkaW5nRW5nYWdlbWVudFJhbms6IGlkZW50aXR5LnRyYWRpbmdFbmdhZ2VtZW50UmFuaywKCS8vICAgICAgIGt5Y0V4cGlyYXRpb246IGlkZW50aXR5Lmt5Y0V4cGlyYXRpb24sCgkvLyAgICAgICBpbnZlc3RvckZvckV4cGlyYXRpb246IGlkZW50aXR5LmludmVzdG9yRm9yRXhwaXJhdGlvbiwKCS8vICAgICAgIGlzUHJvZmVzc2lvbmFsSW52ZXN0b3I6IGlkZW50aXR5LmlzUHJvZmVzc2lvbmFsSW52ZXN0b3IsCgkvLyAgICAgfQoJZnJhbWVfZGlnIC0yIC8vIHY6IHVpbnQ4CglpdG9iCglleHRyYWN0IDcgMQoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0Cglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDAgOAoJYnRvaQoJaXRvYgoJY29uY2F0CglmcmFtZV9kaWcgMSAvLyBzdG9yYWdlIGtleS8vaWRlbnRpdHkKCWJveF9nZXQKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgOCA4CglidG9pCglpdG9iCgljb25jYXQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoJYXNzZXJ0CglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCAyMyA4CglidG9pCglpdG9iCgljb25jYXQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoJYXNzZXJ0CglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCAzMiA4CglidG9pCglpdG9iCgljb25jYXQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoJYXNzZXJ0CglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA0MSA4CglidG9pCglpdG9iCgljb25jYXQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoJYXNzZXJ0CglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA1MCA4CglidG9pCglpdG9iCgljb25jYXQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoJYXNzZXJ0CglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA1OSA4CglidG9pCglpdG9iCgljb25jYXQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoJYXNzZXJ0CglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA2OCA4CglidG9pCglpdG9iCgljb25jYXQKCWJ5dGUgMHgwMDAwMDAwMDNiOWFjYTAwCglkdXAKCWJpdGxlbgoJaW50IDI1NgoJPD0KCWFzc2VydAoJYnl0ZSAweEZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkYKCWImCglkdXAKCWxlbgoJZHVwCglpbnQgMzIKCS0KCXN3YXAKCXN1YnN0cmluZzMKCWNvbmNhdAoJYnl0ZSAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwM2I5YWNhMDAKCWNvbmNhdAoJYnl0ZSAweDAwCglpbnQgMAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0Cglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglpbnQgNjA4CglnZXRiaXQKCXNldGJpdAoJY29uY2F0CglmcmFtZV9kaWcgMSAvLyBzdG9yYWdlIGtleS8vaWRlbnRpdHkKCWJveF9nZXQKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgNzcgOAoJYnRvaQoJaXRvYgoJY29uY2F0CglmcmFtZV9kaWcgMSAvLyBzdG9yYWdlIGtleS8vaWRlbnRpdHkKCWJveF9nZXQKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgODYgOAoJYnRvaQoJaXRvYgoJY29uY2F0CglieXRlIDB4MDAKCWludCAwCglmcmFtZV9kaWcgMSAvLyBzdG9yYWdlIGtleS8vaWRlbnRpdHkKCWJveF9nZXQKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWludCA3NTIKCWdldGJpdAoJc2V0Yml0Cgljb25jYXQKCWZyYW1lX2J1cnkgMiAvLyByZXQ6IFVzZXJJbmZvVjEKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjI0NwoJLy8gcmV0dXJuIHJldDsKCWZyYW1lX2RpZyAyIC8vIHJldDogVXNlckluZm9WMQoKCS8vIHNldCB0aGUgc3Vicm91dGluZSByZXR1cm4gdmFsdWUKCWZyYW1lX2J1cnkgMAoKCS8vIHBvcCBhbGwgbG9jYWwgdmFyaWFibGVzIGZyb20gdGhlIHN0YWNrCglwb3BuIDIKCXJldHN1YgoKKmNyZWF0ZV9Ob09wOgoJbWV0aG9kICJjcmVhdGVBcHBsaWNhdGlvbigpdm9pZCIKCXR4bmEgQXBwbGljYXRpb25BcmdzIDAKCW1hdGNoICphYmlfcm91dGVfY3JlYXRlQXBwbGljYXRpb24KCWVycgoKKmNhbGxfTm9PcDoKCW1ldGhvZCAic2VsZlJlZ2lzdHJhdGlvbihhZGRyZXNzLCh1aW50NjQsdWludDY0LGJvb2wsc3RyaW5nLHN0cmluZyx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCxib29sLHVpbnQ2NCx1aW50NjQsYm9vbCkpdm9pZCIKCW1ldGhvZCAic2V0SW5mbyhhZGRyZXNzLCh1aW50NjQsdWludDY0LGJvb2wsc3RyaW5nLHN0cmluZyx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCxib29sLHVpbnQ2NCx1aW50NjQsYm9vbCkpdm9pZCIKCW1ldGhvZCAiZ2V0VXNlcihhZGRyZXNzLHVpbnQ4KSh1aW50OCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQyNTYsdWludDI1Nixib29sLHVpbnQ2NCx1aW50NjQsYm9vbCkiCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAwCgltYXRjaCAqYWJpX3JvdXRlX3NlbGZSZWdpc3RyYXRpb24gKmFiaV9yb3V0ZV9zZXRJbmZvICphYmlfcm91dGVfZ2V0VXNlcgoJZXJy",
     "clear": "I3ByYWdtYSB2ZXJzaW9uIDEw"
   },
   "contract": {
@@ -89,6 +104,58 @@ export const APP_SPEC: AppSpec = {
         "args": [],
         "returns": {
           "type": "void"
+        }
+      },
+      {
+        "name": "selfRegistration",
+        "args": [
+          {
+            "name": "user",
+            "type": "address"
+          },
+          {
+            "name": "info",
+            "type": "(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)"
+          }
+        ],
+        "returns": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "setInfo",
+        "args": [
+          {
+            "name": "user",
+            "type": "address"
+          },
+          {
+            "name": "info",
+            "type": "(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)"
+          }
+        ],
+        "returns": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "getUser",
+        "desc": "Returns user information - fee multiplier, verification class, engagement class ..",
+        "readonly": true,
+        "args": [
+          {
+            "name": "user",
+            "type": "address",
+            "desc": "Get info for specific user address"
+          },
+          {
+            "name": "v",
+            "type": "uint8",
+            "desc": "Version of the data structure to return"
+          }
+        ],
+        "returns": {
+          "type": "(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)"
         }
       }
     ]
@@ -158,6 +225,36 @@ export type BiatecIdentityProvider = {
       }
       argsTuple: []
       returns: void
+    }>
+    & Record<'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void' | 'selfRegistration', {
+      argsObj: {
+        user: string
+        info: [bigint | number, bigint | number, boolean, string, string, bigint | number, bigint | number, bigint | number, bigint | number, bigint | number, bigint | number, boolean, bigint | number, bigint | number, boolean]
+      }
+      argsTuple: [user: string, info: [bigint | number, bigint | number, boolean, string, string, bigint | number, bigint | number, bigint | number, bigint | number, bigint | number, bigint | number, boolean, bigint | number, bigint | number, boolean]]
+      returns: void
+    }>
+    & Record<'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void' | 'setInfo', {
+      argsObj: {
+        user: string
+        info: [bigint | number, bigint | number, boolean, string, string, bigint | number, bigint | number, bigint | number, bigint | number, bigint | number, bigint | number, boolean, bigint | number, bigint | number, boolean]
+      }
+      argsTuple: [user: string, info: [bigint | number, bigint | number, boolean, string, string, bigint | number, bigint | number, bigint | number, bigint | number, bigint | number, bigint | number, boolean, bigint | number, bigint | number, boolean]]
+      returns: void
+    }>
+    & Record<'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)' | 'getUser', {
+      argsObj: {
+        /**
+         * Get info for specific user address
+         */
+        user: string
+        /**
+         * Version of the data structure to return
+         */
+        v: number
+      }
+      argsTuple: [user: string, v: number]
+      returns: [number, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, boolean, bigint, bigint, boolean]
     }>
   /**
    * Defines the shape of the global and local state of the application.
@@ -241,6 +338,50 @@ export abstract class BiatecIdentityProviderCallFactory {
     }
   }
 
+  /**
+   * Constructs a no op call for the selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void ABI method
+   *
+   * @param args Any args for the contract call
+   * @param params Any additional parameters for the call
+   * @returns A TypedCallParams object for the call
+   */
+  static selfRegistration(args: MethodArgs<'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
+    return {
+      method: 'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void' as const,
+      methodArgs: Array.isArray(args) ? args : [args.user, args.info],
+      ...params,
+    }
+  }
+  /**
+   * Constructs a no op call for the setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void ABI method
+   *
+   * @param args Any args for the contract call
+   * @param params Any additional parameters for the call
+   * @returns A TypedCallParams object for the call
+   */
+  static setInfo(args: MethodArgs<'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
+    return {
+      method: 'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void' as const,
+      methodArgs: Array.isArray(args) ? args : [args.user, args.info],
+      ...params,
+    }
+  }
+  /**
+   * Constructs a no op call for the getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool) ABI method
+   *
+   * Returns user information - fee multiplier, verification class, engagement class ..
+   *
+   * @param args Any args for the contract call
+   * @param params Any additional parameters for the call
+   * @returns A TypedCallParams object for the call
+   */
+  static getUser(args: MethodArgs<'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
+    return {
+      method: 'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)' as const,
+      methodArgs: Array.isArray(args) ? args : [args.user, args.v],
+      ...params,
+    }
+  }
 }
 
 /**
@@ -341,6 +482,41 @@ export class BiatecIdentityProviderClient {
   }
 
   /**
+   * Calls the selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The result of the call
+   */
+  public selfRegistration(args: MethodArgs<'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
+    return this.call(BiatecIdentityProviderCallFactory.selfRegistration(args, params))
+  }
+
+  /**
+   * Calls the setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The result of the call
+   */
+  public setInfo(args: MethodArgs<'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
+    return this.call(BiatecIdentityProviderCallFactory.setInfo(args, params))
+  }
+
+  /**
+   * Calls the getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool) ABI method.
+   *
+   * Returns user information - fee multiplier, verification class, engagement class ..
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The result of the call
+   */
+  public getUser(args: MethodArgs<'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
+    return this.call(BiatecIdentityProviderCallFactory.getUser(args, params))
+  }
+
+  /**
    * Extracts a binary state value out of an AppState dictionary
    *
    * @param state The state dictionary containing the state value
@@ -408,6 +584,21 @@ export class BiatecIdentityProviderClient {
     let promiseChain:Promise<unknown> = Promise.resolve()
     const resultMappers: Array<undefined | ((x: any) => any)> = []
     return {
+      selfRegistration(args: MethodArgs<'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+        promiseChain = promiseChain.then(() => client.selfRegistration(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
+        resultMappers.push(undefined)
+        return this
+      },
+      setInfo(args: MethodArgs<'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+        promiseChain = promiseChain.then(() => client.setInfo(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
+        resultMappers.push(undefined)
+        return this
+      },
+      getUser(args: MethodArgs<'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+        promiseChain = promiseChain.then(() => client.getUser(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
+        resultMappers.push(undefined)
+        return this
+      },
       clearState(args?: BareCallArgs & AppClientCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.clearState({...args, sendParams: {...args?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
@@ -441,6 +632,35 @@ export class BiatecIdentityProviderClient {
   }
 }
 export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
+  /**
+   * Calls the selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
+   */
+  selfRegistration(args: MethodArgs<'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>]>
+
+  /**
+   * Calls the setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
+   */
+  setInfo(args: MethodArgs<'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>]>
+
+  /**
+   * Calls the getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool) ABI method.
+   *
+   * Returns user information - fee multiplier, verification class, engagement class ..
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
+   */
+  getUser(args: MethodArgs<'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'>]>
+
   /**
    * Makes a clear_state call to an existing instance of the BiatecIdentityProvider smart contract.
    *

@@ -16,7 +16,7 @@
       "args": [
         {
           "name": "biatecFee",
-          "type": "uint64",
+          "type": "uint256",
           "desc": "Biatec fees"
         },
         {
@@ -90,7 +90,7 @@
       "args": [
         {
           "name": "biatecFee",
-          "type": "uint64",
+          "type": "uint256",
           "desc": "Fee"
         }
       ],

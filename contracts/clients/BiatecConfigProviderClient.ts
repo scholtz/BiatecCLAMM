@@ -34,7 +34,7 @@ export const APP_SPEC: AppSpec = {
         "no_op": "CREATE"
       }
     },
-    "bootstrap(uint64,uint64)void": {
+    "bootstrap(uint256,uint64)void": {
       "call_config": {
         "no_op": "CALL"
       }
@@ -59,7 +59,7 @@ export const APP_SPEC: AppSpec = {
         "no_op": "CALL"
       }
     },
-    "setBiatecFee(uint64)void": {
+    "setBiatecFee(uint256)void": {
       "call_config": {
         "no_op": "CALL"
       }
@@ -96,7 +96,7 @@ export const APP_SPEC: AppSpec = {
           "key": "i"
         },
         "biatecFee": {
-          "type": "uint64",
+          "type": "bytes",
           "key": "f"
         }
       },
@@ -105,8 +105,8 @@ export const APP_SPEC: AppSpec = {
   },
   "state": {
     "global": {
-      "num_byte_slices": 3,
-      "num_uints": 2
+      "num_byte_slices": 4,
+      "num_uints": 1
     },
     "local": {
       "num_byte_slices": 0,
@@ -114,7 +114,7 @@ export const APP_SPEC: AppSpec = {
     }
   },
   "source": {
-    "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgovLyBUaGlzIFRFQUwgd2FzIGdlbmVyYXRlZCBieSBURUFMU2NyaXB0IHYwLjg2LjAKLy8gaHR0cHM6Ly9naXRodWIuY29tL2FsZ29yYW5kZm91bmRhdGlvbi9URUFMU2NyaXB0CgovLyBUaGlzIGNvbnRyYWN0IGlzIGNvbXBsaWFudCB3aXRoIGFuZC9vciBpbXBsZW1lbnRzIHRoZSBmb2xsb3dpbmcgQVJDczogWyBBUkM0IF0KCi8vIFRoZSBmb2xsb3dpbmcgdGVuIGxpbmVzIG9mIFRFQUwgaGFuZGxlIGluaXRpYWwgcHJvZ3JhbSBmbG93Ci8vIFRoaXMgcGF0dGVybiBpcyB1c2VkIHRvIG1ha2UgaXQgZWFzeSBmb3IgYW55b25lIHRvIHBhcnNlIHRoZSBzdGFydCBvZiB0aGUgcHJvZ3JhbSBhbmQgZGV0ZXJtaW5lIGlmIGEgc3BlY2lmaWMgYWN0aW9uIGlzIGFsbG93ZWQKLy8gSGVyZSwgYWN0aW9uIHJlZmVycyB0byB0aGUgT25Db21wbGV0ZSBpbiBjb21iaW5hdGlvbiB3aXRoIHdoZXRoZXIgdGhlIGFwcCBpcyBiZWluZyBjcmVhdGVkIG9yIGNhbGxlZAovLyBFdmVyeSBwb3NzaWJsZSBhY3Rpb24gZm9yIHRoaXMgY29udHJhY3QgaXMgcmVwcmVzZW50ZWQgaW4gdGhlIHN3aXRjaCBzdGF0ZW1lbnQKLy8gSWYgdGhlIGFjdGlvbiBpcyBub3QgaW1wbGVtZW50ZWQgaW4gdGhlIGNvbnRyYWN0LCBpdHMgcmVzcGVjdGl2ZSBicmFuY2ggd2lsbCBiZSAiKk5PVF9JTVBMRU1FTlRFRCIgd2hpY2gganVzdCBjb250YWlucyAiZXJyIgp0eG4gQXBwbGljYXRpb25JRAohCmludCA2CioKdHhuIE9uQ29tcGxldGlvbgorCnN3aXRjaCAqY2FsbF9Ob09wICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqY3JlYXRlX05vT3AgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVECgoqTk9UX0lNUExFTUVOVEVEOgoJZXJyCgovLyBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoqYWJpX3JvdXRlX2NyZWF0ZUFwcGxpY2F0aW9uOgoJLy8gZXhlY3V0ZSBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoJY2FsbHN1YiBjcmVhdGVBcHBsaWNhdGlvbgoJaW50IDEKCXJldHVybgoKLy8gY3JlYXRlQXBwbGljYXRpb24oKTogdm9pZAovLwovLyBJbml0aWFsIHNldHVwCmNyZWF0ZUFwcGxpY2F0aW9uOgoJcHJvdG8gMCAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MzkKCS8vIGxvZyh2ZXJzaW9uKQoJYnl0ZSAiQklBVEVDLUNPTkZJRy0wMS0wMS0wMSIKCWxvZwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjQwCgkvLyB0aGlzLmFkZHJlc3NFeGVjdXRpdmUudmFsdWUgPSB0aGlzLnR4bi5zZW5kZXIKCWJ5dGUgMHg2NSAvLyAiZSIKCXR4biBTZW5kZXIKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NDEKCS8vIHRoaXMuYWRkcmVzc0dvdi52YWx1ZSA9IHRoaXMudHhuLnNlbmRlcgoJYnl0ZSAweDY3IC8vICJnIgoJdHhuIFNlbmRlcgoJYXBwX2dsb2JhbF9wdXQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo0MgoJLy8gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSA9IHRoaXMudHhuLnNlbmRlcgoJYnl0ZSAweDc1IC8vICJ1IgoJdHhuIFNlbmRlcgoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gYm9vdHN0cmFwKHVpbnQ2NCx1aW50NjQpdm9pZAoqYWJpX3JvdXRlX2Jvb3RzdHJhcDoKCS8vIGFwcElkZW50aXR5UHJvdmlkZXI6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgoJYnRvaQoKCS8vIGJpYXRlY0ZlZTogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglidG9pCgoJLy8gZXhlY3V0ZSBib290c3RyYXAodWludDY0LHVpbnQ2NCl2b2lkCgljYWxsc3ViIGJvb3RzdHJhcAoJaW50IDEKCXJldHVybgoKLy8gYm9vdHN0cmFwKGJpYXRlY0ZlZTogdWludDY0LCBhcHBJZGVudGl0eVByb3ZpZGVyOiBBcHBJRCk6IHZvaWQKLy8KLy8gU2V0dXAgdGhlIGNvbnRyYWN0Ci8vIEBwYXJhbSBiaWF0ZWNGZWUgQmlhdGVjIGZlZXMKYm9vdHN0cmFwOgoJcHJvdG8gMiAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NTAKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc1VkcGF0ZXIudmFsdWUsICdPbmx5IHVwZGF0ZXIgY2FuIGNhbGwgYm9vdHN0cmFwIG1ldGhvZCcpCgl0eG4gU2VuZGVyCglieXRlIDB4NzUgLy8gInUiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBPbmx5IHVwZGF0ZXIgY2FuIGNhbGwgYm9vdHN0cmFwIG1ldGhvZAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NTEKCS8vIHRoaXMuYmlhdGVjRmVlLnZhbHVlID0gYmlhdGVjRmVlCglieXRlIDB4NjYgLy8gImYiCglmcmFtZV9kaWcgLTEgLy8gYmlhdGVjRmVlOiB1aW50NjQKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NTIKCS8vIHRoaXMuYXBwSWRlbnRpdHlQcm92aWRlci52YWx1ZSA9IGFwcElkZW50aXR5UHJvdmlkZXIKCWJ5dGUgMHg2OSAvLyAiaSIKCWZyYW1lX2RpZyAtMiAvLyBhcHBJZGVudGl0eVByb3ZpZGVyOiBBcHBJRAoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QWRkcmVzc1VkcGF0ZXIoYWRkcmVzcyl2b2lkCiphYmlfcm91dGVfc2V0QWRkcmVzc1VkcGF0ZXI6CgkvLyBhOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50IDMyCgk9PQoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRBZGRyZXNzVWRwYXRlcihhZGRyZXNzKXZvaWQKCWNhbGxzdWIgc2V0QWRkcmVzc1VkcGF0ZXIKCWludCAxCglyZXR1cm4KCi8vIHNldEFkZHJlc3NVZHBhdGVyKGE6IEFkZHJlc3MpOiB2b2lkCi8vCi8vIFRvcCBzZWNyZXQgYWNjb3VudCB3aXRoIHdoaWNoIGl0IGlzIHBvc3NpYmxlIHVwZGF0ZSBjb250cmFjdHMgb3IgaWRlbnRpdHkgcHJvdmlkZXIKLy8KLy8gQHBhcmFtIGEgQWRkcmVzcwpzZXRBZGRyZXNzVWRwYXRlcjoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjYxCgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgdXBkYXRlciBhZGRyZXNzJykKCXR4biBTZW5kZXIKCWJ5dGUgMHg3NSAvLyAidSIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgdXBkYXRlciBjYW4gY2hhbmdlIHVwZGF0ZXIgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NjIKCS8vIHRoaXMuYWRkcmVzc1VkcGF0ZXIudmFsdWUgPSBhCglieXRlIDB4NzUgLy8gInUiCglmcmFtZV9kaWcgLTEgLy8gYTogQWRkcmVzcwoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QWRkcmVzc0dvdihhZGRyZXNzKXZvaWQKKmFiaV9yb3V0ZV9zZXRBZGRyZXNzR292OgoJLy8gYTogYWRkcmVzcwoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZHVwCglsZW4KCWludCAzMgoJPT0KCWFzc2VydAoKCS8vIGV4ZWN1dGUgc2V0QWRkcmVzc0dvdihhZGRyZXNzKXZvaWQKCWNhbGxzdWIgc2V0QWRkcmVzc0dvdgoJaW50IDEKCXJldHVybgoKLy8gc2V0QWRkcmVzc0dvdihhOiBBZGRyZXNzKTogdm9pZAovLwovLyBFeGVjdXRpb24gYWRkcmVzcyB3aXRoIHdoaWNoIGl0IGlzIHBvc3NpYmxlIHRvIG9wdCBpbiBmb3IgZ292ZXJuYW5jZQovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldEFkZHJlc3NHb3Y6Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo3MQoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSwgJ09ubHkgdXBkYXRlciBjYW4gY2hhbmdlIGdvdiBhZGRyZXNzJykKCXR4biBTZW5kZXIKCWJ5dGUgMHg3NSAvLyAidSIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgdXBkYXRlciBjYW4gY2hhbmdlIGdvdiBhZGRyZXNzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo3MgoJLy8gdGhpcy5hZGRyZXNzR292LnZhbHVlID0gYQoJYnl0ZSAweDY3IC8vICJnIgoJZnJhbWVfZGlnIC0xIC8vIGE6IEFkZHJlc3MKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNldEFkZHJlc3NFeGVjdXRpdmUoYWRkcmVzcyl2b2lkCiphYmlfcm91dGVfc2V0QWRkcmVzc0V4ZWN1dGl2ZToKCS8vIGE6IGFkZHJlc3MKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWR1cAoJbGVuCglpbnQgMzIKCT09Cglhc3NlcnQKCgkvLyBleGVjdXRlIHNldEFkZHJlc3NFeGVjdXRpdmUoYWRkcmVzcyl2b2lkCgljYWxsc3ViIHNldEFkZHJlc3NFeGVjdXRpdmUKCWludCAxCglyZXR1cm4KCi8vIHNldEFkZHJlc3NFeGVjdXRpdmUoYTogQWRkcmVzcyk6IHZvaWQKLy8KLy8gRXhlY3V0aW9uIGFkZHJlc3Mgd2l0aCB3aGljaCBpdCBpcyBwb3NzaWJsZSB0byBjaGFuZ2UgZ2xvYmFsIGJpYXRlYyBmZWVzCi8vCi8vIEBwYXJhbSBhIEFkZHJlc3MKc2V0QWRkcmVzc0V4ZWN1dGl2ZToKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjgxCgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgZ292IGFkZHJlc3MnKQoJdHhuIFNlbmRlcgoJYnl0ZSAweDc1IC8vICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgZ292IGFkZHJlc3MKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjgyCgkvLyB0aGlzLmFkZHJlc3NFeGVjdXRpdmUudmFsdWUgPSBhCglieXRlIDB4NjUgLy8gImUiCglmcmFtZV9kaWcgLTEgLy8gYTogQWRkcmVzcwoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QmlhdGVjSWRlbnRpdHkodWludDY0KXZvaWQKKmFiaV9yb3V0ZV9zZXRCaWF0ZWNJZGVudGl0eToKCS8vIGE6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJYnRvaQoKCS8vIGV4ZWN1dGUgc2V0QmlhdGVjSWRlbnRpdHkodWludDY0KXZvaWQKCWNhbGxzdWIgc2V0QmlhdGVjSWRlbnRpdHkKCWludCAxCglyZXR1cm4KCi8vIHNldEJpYXRlY0lkZW50aXR5KGE6IEFwcElEKTogdm9pZAovLwovLyBBcHAgaWRlbnRpdHkgc2V0dGVyCi8vCi8vIEBwYXJhbSBhIEFkZHJlc3MKc2V0QmlhdGVjSWRlbnRpdHk6Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo5MQoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSwgJ09ubHkgdXBkYXRlciBjYW4gY2hhbmdlIGdvdiBhZGRyZXNzJykKCXR4biBTZW5kZXIKCWJ5dGUgMHg3NSAvLyAidSIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgdXBkYXRlciBjYW4gY2hhbmdlIGdvdiBhZGRyZXNzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo5MgoJLy8gdGhpcy5hcHBJZGVudGl0eVByb3ZpZGVyLnZhbHVlID0gYQoJYnl0ZSAweDY5IC8vICJpIgoJZnJhbWVfZGlnIC0xIC8vIGE6IEFwcElECglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRCaWF0ZWNGZWUodWludDY0KXZvaWQKKmFiaV9yb3V0ZV9zZXRCaWF0ZWNGZWU6CgkvLyBiaWF0ZWNGZWU6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJYnRvaQoKCS8vIGV4ZWN1dGUgc2V0QmlhdGVjRmVlKHVpbnQ2NCl2b2lkCgljYWxsc3ViIHNldEJpYXRlY0ZlZQoJaW50IDEKCXJldHVybgoKLy8gc2V0QmlhdGVjRmVlKGJpYXRlY0ZlZTogdWludDY0KTogdm9pZAovLwovLyBGZWVzIGluIDkgZGVjaW1hbHMuIDFfMDAwXzAwMF8wMDAgPSAxMDAlCi8vIEZlZXMgaW4gOSBkZWNpbWFscy4gMTBfMDAwXzAwMCA9IDElCi8vIEZlZXMgaW4gOSBkZWNpbWFscy4gMTAwXzAwMCA9IDAsMDElCi8vCi8vIEZlZXMgYXJlIHJlc3BlY3RmdWwgZnJvbSB0aGUgYWxsIGZlZXMgdGFrZW4gdG8gdGhlIExQIHByb3ZpZGVycy4gSWYgTFBzIGNoYXJnZSAxJSBmZWUsIGFuZCBiaWF0ZWMgY2hhcmdlcyAxMCUgZmVlLCBMUCB3aWxsIHJlY2VpdmUgMC4wOSUgZmVlIGFuZCBiaWF0ZWMgMC4wMSUgZmVlCi8vCi8vIEBwYXJhbSBiaWF0ZWNGZWUgRmVlCnNldEJpYXRlY0ZlZToKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjEwNQoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzRXhlY3V0aXZlLnZhbHVlLCAnT25seSBleGVjdXRpdmUgYWRkcmVzcyBjYW4gY2hhbmdlIGZlZXMnKQoJdHhuIFNlbmRlcgoJYnl0ZSAweDY1IC8vICJlIgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSBleGVjdXRpdmUgYWRkcmVzcyBjYW4gY2hhbmdlIGZlZXMKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjEwNgoJLy8gdGhpcy5iaWF0ZWNGZWUudmFsdWUgPSBiaWF0ZWNGZWUKCWJ5dGUgMHg2NiAvLyAiZiIKCWZyYW1lX2RpZyAtMSAvLyBiaWF0ZWNGZWU6IHVpbnQ2NAoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKKmNyZWF0ZV9Ob09wOgoJbWV0aG9kICJjcmVhdGVBcHBsaWNhdGlvbigpdm9pZCIKCXR4bmEgQXBwbGljYXRpb25BcmdzIDAKCW1hdGNoICphYmlfcm91dGVfY3JlYXRlQXBwbGljYXRpb24KCWVycgoKKmNhbGxfTm9PcDoKCW1ldGhvZCAiYm9vdHN0cmFwKHVpbnQ2NCx1aW50NjQpdm9pZCIKCW1ldGhvZCAic2V0QWRkcmVzc1VkcGF0ZXIoYWRkcmVzcyl2b2lkIgoJbWV0aG9kICJzZXRBZGRyZXNzR292KGFkZHJlc3Mpdm9pZCIKCW1ldGhvZCAic2V0QWRkcmVzc0V4ZWN1dGl2ZShhZGRyZXNzKXZvaWQiCgltZXRob2QgInNldEJpYXRlY0lkZW50aXR5KHVpbnQ2NCl2b2lkIgoJbWV0aG9kICJzZXRCaWF0ZWNGZWUodWludDY0KXZvaWQiCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAwCgltYXRjaCAqYWJpX3JvdXRlX2Jvb3RzdHJhcCAqYWJpX3JvdXRlX3NldEFkZHJlc3NVZHBhdGVyICphYmlfcm91dGVfc2V0QWRkcmVzc0dvdiAqYWJpX3JvdXRlX3NldEFkZHJlc3NFeGVjdXRpdmUgKmFiaV9yb3V0ZV9zZXRCaWF0ZWNJZGVudGl0eSAqYWJpX3JvdXRlX3NldEJpYXRlY0ZlZQoJZXJy",
+    "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgovLyBUaGlzIFRFQUwgd2FzIGdlbmVyYXRlZCBieSBURUFMU2NyaXB0IHYwLjg4LjAKLy8gaHR0cHM6Ly9naXRodWIuY29tL2FsZ29yYW5kZm91bmRhdGlvbi9URUFMU2NyaXB0CgovLyBUaGlzIGNvbnRyYWN0IGlzIGNvbXBsaWFudCB3aXRoIGFuZC9vciBpbXBsZW1lbnRzIHRoZSBmb2xsb3dpbmcgQVJDczogWyBBUkM0IF0KCi8vIFRoZSBmb2xsb3dpbmcgdGVuIGxpbmVzIG9mIFRFQUwgaGFuZGxlIGluaXRpYWwgcHJvZ3JhbSBmbG93Ci8vIFRoaXMgcGF0dGVybiBpcyB1c2VkIHRvIG1ha2UgaXQgZWFzeSBmb3IgYW55b25lIHRvIHBhcnNlIHRoZSBzdGFydCBvZiB0aGUgcHJvZ3JhbSBhbmQgZGV0ZXJtaW5lIGlmIGEgc3BlY2lmaWMgYWN0aW9uIGlzIGFsbG93ZWQKLy8gSGVyZSwgYWN0aW9uIHJlZmVycyB0byB0aGUgT25Db21wbGV0ZSBpbiBjb21iaW5hdGlvbiB3aXRoIHdoZXRoZXIgdGhlIGFwcCBpcyBiZWluZyBjcmVhdGVkIG9yIGNhbGxlZAovLyBFdmVyeSBwb3NzaWJsZSBhY3Rpb24gZm9yIHRoaXMgY29udHJhY3QgaXMgcmVwcmVzZW50ZWQgaW4gdGhlIHN3aXRjaCBzdGF0ZW1lbnQKLy8gSWYgdGhlIGFjdGlvbiBpcyBub3QgaW1wbGVtZW50ZWQgaW4gdGhlIGNvbnRyYWN0LCBpdHMgcmVzcGVjdGl2ZSBicmFuY2ggd2lsbCBiZSAiKk5PVF9JTVBMRU1FTlRFRCIgd2hpY2gganVzdCBjb250YWlucyAiZXJyIgp0eG4gQXBwbGljYXRpb25JRAohCmludCA2CioKdHhuIE9uQ29tcGxldGlvbgorCnN3aXRjaCAqY2FsbF9Ob09wICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqY3JlYXRlX05vT3AgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVECgoqTk9UX0lNUExFTUVOVEVEOgoJZXJyCgovLyBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoqYWJpX3JvdXRlX2NyZWF0ZUFwcGxpY2F0aW9uOgoJLy8gZXhlY3V0ZSBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoJY2FsbHN1YiBjcmVhdGVBcHBsaWNhdGlvbgoJaW50IDEKCXJldHVybgoKLy8gY3JlYXRlQXBwbGljYXRpb24oKTogdm9pZAovLwovLyBJbml0aWFsIHNldHVwCmNyZWF0ZUFwcGxpY2F0aW9uOgoJcHJvdG8gMCAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NDAKCS8vIGxvZyh2ZXJzaW9uKQoJYnl0ZSAiQklBVEVDLUNPTkZJRy0wMS0wMS0wMSIKCWxvZwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjQxCgkvLyB0aGlzLmFkZHJlc3NFeGVjdXRpdmUudmFsdWUgPSB0aGlzLnR4bi5zZW5kZXIKCWJ5dGUgMHg2NSAvLyAiZSIKCXR4biBTZW5kZXIKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NDIKCS8vIHRoaXMuYWRkcmVzc0dvdi52YWx1ZSA9IHRoaXMudHhuLnNlbmRlcgoJYnl0ZSAweDY3IC8vICJnIgoJdHhuIFNlbmRlcgoJYXBwX2dsb2JhbF9wdXQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo0MwoJLy8gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSA9IHRoaXMudHhuLnNlbmRlcgoJYnl0ZSAweDc1IC8vICJ1IgoJdHhuIFNlbmRlcgoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gYm9vdHN0cmFwKHVpbnQyNTYsdWludDY0KXZvaWQKKmFiaV9yb3V0ZV9ib290c3RyYXA6CgkvLyBhcHBJZGVudGl0eVByb3ZpZGVyOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDIKCWJ0b2kKCgkvLyBiaWF0ZWNGZWU6IHVpbnQyNTYKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWR1cAoJbGVuCglpbnQgMzIKCT09Cglhc3NlcnQKCgkvLyBleGVjdXRlIGJvb3RzdHJhcCh1aW50MjU2LHVpbnQ2NCl2b2lkCgljYWxsc3ViIGJvb3RzdHJhcAoJaW50IDEKCXJldHVybgoKLy8gYm9vdHN0cmFwKGJpYXRlY0ZlZTogdWludDI1NiwgYXBwSWRlbnRpdHlQcm92aWRlcjogQXBwSUQpOiB2b2lkCi8vCi8vIFNldHVwIHRoZSBjb250cmFjdAovLyBAcGFyYW0gYmlhdGVjRmVlIEJpYXRlYyBmZWVzCmJvb3RzdHJhcDoKCXByb3RvIDIgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjUxCgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjYWxsIGJvb3RzdHJhcCBtZXRob2QnKQoJdHhuIFNlbmRlcgoJYnl0ZSAweDc1IC8vICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjYWxsIGJvb3RzdHJhcCBtZXRob2QKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjUyCgkvLyBhc3NlcnQoYmlhdGVjRmVlIDw9IChTQ0FMRSBhcyB1aW50MjU2KSAvIDIsICdCaWF0ZWMgY2Fubm90IHNldCBmZWVzIGhpZ2hlciB0aGVuIDUwJSBvZiBscCBmZWVzJykKCWZyYW1lX2RpZyAtMSAvLyBiaWF0ZWNGZWU6IHVpbnQyNTYKCWJ5dGUgMHgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDNiOWFjYTAwCglieXRlIDB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMgoJYi8KCWI8PQoKCS8vIEJpYXRlYyBjYW5ub3Qgc2V0IGZlZXMgaGlnaGVyIHRoZW4gNTAlIG9mIGxwIGZlZXMKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjUzCgkvLyB0aGlzLmJpYXRlY0ZlZS52YWx1ZSA9IGJpYXRlY0ZlZQoJYnl0ZSAweDY2IC8vICJmIgoJZnJhbWVfZGlnIC0xIC8vIGJpYXRlY0ZlZTogdWludDI1NgoJYXBwX2dsb2JhbF9wdXQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo1NAoJLy8gdGhpcy5hcHBJZGVudGl0eVByb3ZpZGVyLnZhbHVlID0gYXBwSWRlbnRpdHlQcm92aWRlcgoJYnl0ZSAweDY5IC8vICJpIgoJZnJhbWVfZGlnIC0yIC8vIGFwcElkZW50aXR5UHJvdmlkZXI6IEFwcElECglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRBZGRyZXNzVWRwYXRlcihhZGRyZXNzKXZvaWQKKmFiaV9yb3V0ZV9zZXRBZGRyZXNzVWRwYXRlcjoKCS8vIGE6IGFkZHJlc3MKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWR1cAoJbGVuCglpbnQgMzIKCT09Cglhc3NlcnQKCgkvLyBleGVjdXRlIHNldEFkZHJlc3NVZHBhdGVyKGFkZHJlc3Mpdm9pZAoJY2FsbHN1YiBzZXRBZGRyZXNzVWRwYXRlcgoJaW50IDEKCXJldHVybgoKLy8gc2V0QWRkcmVzc1VkcGF0ZXIoYTogQWRkcmVzcyk6IHZvaWQKLy8KLy8gVG9wIHNlY3JldCBhY2NvdW50IHdpdGggd2hpY2ggaXQgaXMgcG9zc2libGUgdXBkYXRlIGNvbnRyYWN0cyBvciBpZGVudGl0eSBwcm92aWRlcgovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldEFkZHJlc3NVZHBhdGVyOgoJcHJvdG8gMSAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NjMKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc1VkcGF0ZXIudmFsdWUsICdPbmx5IHVwZGF0ZXIgY2FuIGNoYW5nZSB1cGRhdGVyIGFkZHJlc3MnKQoJdHhuIFNlbmRlcgoJYnl0ZSAweDc1IC8vICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgdXBkYXRlciBhZGRyZXNzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo2NAoJLy8gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSA9IGEKCWJ5dGUgMHg3NSAvLyAidSIKCWZyYW1lX2RpZyAtMSAvLyBhOiBBZGRyZXNzCglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRBZGRyZXNzR292KGFkZHJlc3Mpdm9pZAoqYWJpX3JvdXRlX3NldEFkZHJlc3NHb3Y6CgkvLyBhOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50IDMyCgk9PQoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRBZGRyZXNzR292KGFkZHJlc3Mpdm9pZAoJY2FsbHN1YiBzZXRBZGRyZXNzR292CglpbnQgMQoJcmV0dXJuCgovLyBzZXRBZGRyZXNzR292KGE6IEFkZHJlc3MpOiB2b2lkCi8vCi8vIEV4ZWN1dGlvbiBhZGRyZXNzIHdpdGggd2hpY2ggaXQgaXMgcG9zc2libGUgdG8gb3B0IGluIGZvciBnb3Zlcm5hbmNlCi8vCi8vIEBwYXJhbSBhIEFkZHJlc3MKc2V0QWRkcmVzc0dvdjoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjczCgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgZ292IGFkZHJlc3MnKQoJdHhuIFNlbmRlcgoJYnl0ZSAweDc1IC8vICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgZ292IGFkZHJlc3MKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjc0CgkvLyB0aGlzLmFkZHJlc3NHb3YudmFsdWUgPSBhCglieXRlIDB4NjcgLy8gImciCglmcmFtZV9kaWcgLTEgLy8gYTogQWRkcmVzcwoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QWRkcmVzc0V4ZWN1dGl2ZShhZGRyZXNzKXZvaWQKKmFiaV9yb3V0ZV9zZXRBZGRyZXNzRXhlY3V0aXZlOgoJLy8gYTogYWRkcmVzcwoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZHVwCglsZW4KCWludCAzMgoJPT0KCWFzc2VydAoKCS8vIGV4ZWN1dGUgc2V0QWRkcmVzc0V4ZWN1dGl2ZShhZGRyZXNzKXZvaWQKCWNhbGxzdWIgc2V0QWRkcmVzc0V4ZWN1dGl2ZQoJaW50IDEKCXJldHVybgoKLy8gc2V0QWRkcmVzc0V4ZWN1dGl2ZShhOiBBZGRyZXNzKTogdm9pZAovLwovLyBFeGVjdXRpb24gYWRkcmVzcyB3aXRoIHdoaWNoIGl0IGlzIHBvc3NpYmxlIHRvIGNoYW5nZSBnbG9iYWwgYmlhdGVjIGZlZXMKLy8KLy8gQHBhcmFtIGEgQWRkcmVzcwpzZXRBZGRyZXNzRXhlY3V0aXZlOgoJcHJvdG8gMSAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6ODMKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc1VkcGF0ZXIudmFsdWUsICdPbmx5IHVwZGF0ZXIgY2FuIGNoYW5nZSBnb3YgYWRkcmVzcycpCgl0eG4gU2VuZGVyCglieXRlIDB4NzUgLy8gInUiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBPbmx5IHVwZGF0ZXIgY2FuIGNoYW5nZSBnb3YgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6ODQKCS8vIHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZS52YWx1ZSA9IGEKCWJ5dGUgMHg2NSAvLyAiZSIKCWZyYW1lX2RpZyAtMSAvLyBhOiBBZGRyZXNzCglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRCaWF0ZWNJZGVudGl0eSh1aW50NjQpdm9pZAoqYWJpX3JvdXRlX3NldEJpYXRlY0lkZW50aXR5OgoJLy8gYTogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglidG9pCgoJLy8gZXhlY3V0ZSBzZXRCaWF0ZWNJZGVudGl0eSh1aW50NjQpdm9pZAoJY2FsbHN1YiBzZXRCaWF0ZWNJZGVudGl0eQoJaW50IDEKCXJldHVybgoKLy8gc2V0QmlhdGVjSWRlbnRpdHkoYTogQXBwSUQpOiB2b2lkCi8vCi8vIEFwcCBpZGVudGl0eSBzZXR0ZXIKLy8KLy8gQHBhcmFtIGEgQWRkcmVzcwpzZXRCaWF0ZWNJZGVudGl0eToKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjkzCgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgZ292IGFkZHJlc3MnKQoJdHhuIFNlbmRlcgoJYnl0ZSAweDc1IC8vICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgZ292IGFkZHJlc3MKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjk0CgkvLyB0aGlzLmFwcElkZW50aXR5UHJvdmlkZXIudmFsdWUgPSBhCglieXRlIDB4NjkgLy8gImkiCglmcmFtZV9kaWcgLTEgLy8gYTogQXBwSUQKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNldEJpYXRlY0ZlZSh1aW50MjU2KXZvaWQKKmFiaV9yb3V0ZV9zZXRCaWF0ZWNGZWU6CgkvLyBiaWF0ZWNGZWU6IHVpbnQyNTYKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWR1cAoJbGVuCglpbnQgMzIKCT09Cglhc3NlcnQKCgkvLyBleGVjdXRlIHNldEJpYXRlY0ZlZSh1aW50MjU2KXZvaWQKCWNhbGxzdWIgc2V0QmlhdGVjRmVlCglpbnQgMQoJcmV0dXJuCgovLyBzZXRCaWF0ZWNGZWUoYmlhdGVjRmVlOiB1aW50MjU2KTogdm9pZAovLwovLyBGZWVzIGluIDkgZGVjaW1hbHMuIDFfMDAwXzAwMF8wMDAgPSAxMDAlCi8vIEZlZXMgaW4gOSBkZWNpbWFscy4gMTBfMDAwXzAwMCA9IDElCi8vIEZlZXMgaW4gOSBkZWNpbWFscy4gMTAwXzAwMCA9IDAsMDElCi8vCi8vIEZlZXMgYXJlIHJlc3BlY3RmdWwgZnJvbSB0aGUgYWxsIGZlZXMgdGFrZW4gdG8gdGhlIExQIHByb3ZpZGVycy4gSWYgTFBzIGNoYXJnZSAxJSBmZWUsIGFuZCBiaWF0ZWMgY2hhcmdlcyAxMCUgZmVlLCBMUCB3aWxsIHJlY2VpdmUgMC4wOSUgZmVlIGFuZCBiaWF0ZWMgMC4wMSUgZmVlCi8vCi8vIEBwYXJhbSBiaWF0ZWNGZWUgRmVlCnNldEJpYXRlY0ZlZToKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjEwNwoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzRXhlY3V0aXZlLnZhbHVlLCAnT25seSBleGVjdXRpdmUgYWRkcmVzcyBjYW4gY2hhbmdlIGZlZXMnKQoJdHhuIFNlbmRlcgoJYnl0ZSAweDY1IC8vICJlIgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSBleGVjdXRpdmUgYWRkcmVzcyBjYW4gY2hhbmdlIGZlZXMKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjEwOAoJLy8gYXNzZXJ0KGJpYXRlY0ZlZSA8PSAoU0NBTEUgYXMgdWludDI1NikgLyAyLCAnQmlhdGVjIGNhbm5vdCBzZXQgZmVlcyBoaWdoZXIgdGhlbiA1MCUgb2YgbHAgZmVlcycpCglmcmFtZV9kaWcgLTEgLy8gYmlhdGVjRmVlOiB1aW50MjU2CglieXRlIDB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAzYjlhY2EwMAoJYnl0ZSAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIKCWIvCgliPD0KCgkvLyBCaWF0ZWMgY2Fubm90IHNldCBmZWVzIGhpZ2hlciB0aGVuIDUwJSBvZiBscCBmZWVzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxMDkKCS8vIHRoaXMuYmlhdGVjRmVlLnZhbHVlID0gYmlhdGVjRmVlCglieXRlIDB4NjYgLy8gImYiCglmcmFtZV9kaWcgLTEgLy8gYmlhdGVjRmVlOiB1aW50MjU2CglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgoqY3JlYXRlX05vT3A6CgltZXRob2QgImNyZWF0ZUFwcGxpY2F0aW9uKCl2b2lkIgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAoJbWF0Y2ggKmFiaV9yb3V0ZV9jcmVhdGVBcHBsaWNhdGlvbgoJZXJyCgoqY2FsbF9Ob09wOgoJbWV0aG9kICJib290c3RyYXAodWludDI1Nix1aW50NjQpdm9pZCIKCW1ldGhvZCAic2V0QWRkcmVzc1VkcGF0ZXIoYWRkcmVzcyl2b2lkIgoJbWV0aG9kICJzZXRBZGRyZXNzR292KGFkZHJlc3Mpdm9pZCIKCW1ldGhvZCAic2V0QWRkcmVzc0V4ZWN1dGl2ZShhZGRyZXNzKXZvaWQiCgltZXRob2QgInNldEJpYXRlY0lkZW50aXR5KHVpbnQ2NCl2b2lkIgoJbWV0aG9kICJzZXRCaWF0ZWNGZWUodWludDI1Nil2b2lkIgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAoJbWF0Y2ggKmFiaV9yb3V0ZV9ib290c3RyYXAgKmFiaV9yb3V0ZV9zZXRBZGRyZXNzVWRwYXRlciAqYWJpX3JvdXRlX3NldEFkZHJlc3NHb3YgKmFiaV9yb3V0ZV9zZXRBZGRyZXNzRXhlY3V0aXZlICphYmlfcm91dGVfc2V0QmlhdGVjSWRlbnRpdHkgKmFiaV9yb3V0ZV9zZXRCaWF0ZWNGZWUKCWVycg==",
     "clear": "I3ByYWdtYSB2ZXJzaW9uIDEw"
   },
   "contract": {
@@ -135,7 +135,7 @@ export const APP_SPEC: AppSpec = {
         "args": [
           {
             "name": "biatecFee",
-            "type": "uint64",
+            "type": "uint256",
             "desc": "Biatec fees"
           },
           {
@@ -209,7 +209,7 @@ export const APP_SPEC: AppSpec = {
         "args": [
           {
             "name": "biatecFee",
-            "type": "uint64",
+            "type": "uint256",
             "desc": "Fee"
           }
         ],
@@ -285,7 +285,7 @@ export type BiatecConfigProvider = {
       argsTuple: []
       returns: void
     }>
-    & Record<'bootstrap(uint64,uint64)void' | 'bootstrap', {
+    & Record<'bootstrap(uint256,uint64)void' | 'bootstrap', {
       argsObj: {
         /**
          * Biatec fees
@@ -336,7 +336,7 @@ export type BiatecConfigProvider = {
       argsTuple: [a: bigint | number]
       returns: void
     }>
-    & Record<'setBiatecFee(uint64)void' | 'setBiatecFee', {
+    & Record<'setBiatecFee(uint256)void' | 'setBiatecFee', {
       argsObj: {
         /**
          * Fee
@@ -355,7 +355,7 @@ export type BiatecConfigProvider = {
       'g'?: BinaryState
       'e'?: BinaryState
       'i'?: IntegerState
-      'f'?: IntegerState
+      'f'?: BinaryState
     }
   }
 }
@@ -431,7 +431,7 @@ export abstract class BiatecConfigProviderCallFactory {
   }
 
   /**
-   * Constructs a no op call for the bootstrap(uint64,uint64)void ABI method
+   * Constructs a no op call for the bootstrap(uint256,uint64)void ABI method
    *
    * Setup the contract
    *
@@ -439,9 +439,9 @@ export abstract class BiatecConfigProviderCallFactory {
    * @param params Any additional parameters for the call
    * @returns A TypedCallParams object for the call
    */
-  static bootstrap(args: MethodArgs<'bootstrap(uint64,uint64)void'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
+  static bootstrap(args: MethodArgs<'bootstrap(uint256,uint64)void'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
     return {
-      method: 'bootstrap(uint64,uint64)void' as const,
+      method: 'bootstrap(uint256,uint64)void' as const,
       methodArgs: Array.isArray(args) ? args : [args.biatecFee, args.appIdentityProvider],
       ...params,
     }
@@ -511,7 +511,7 @@ export abstract class BiatecConfigProviderCallFactory {
     }
   }
   /**
-   * Constructs a no op call for the setBiatecFee(uint64)void ABI method
+   * Constructs a no op call for the setBiatecFee(uint256)void ABI method
    *
    * Fees in 9 decimals. 1_000_000_000 = 100%Fees in 9 decimals. 10_000_000 = 1%Fees in 9 decimals. 100_000 = 0,01%Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
    *
@@ -519,9 +519,9 @@ export abstract class BiatecConfigProviderCallFactory {
    * @param params Any additional parameters for the call
    * @returns A TypedCallParams object for the call
    */
-  static setBiatecFee(args: MethodArgs<'setBiatecFee(uint64)void'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
+  static setBiatecFee(args: MethodArgs<'setBiatecFee(uint256)void'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
     return {
-      method: 'setBiatecFee(uint64)void' as const,
+      method: 'setBiatecFee(uint256)void' as const,
       methodArgs: Array.isArray(args) ? args : [args.biatecFee],
       ...params,
     }
@@ -626,7 +626,7 @@ export class BiatecConfigProviderClient {
   }
 
   /**
-   * Calls the bootstrap(uint64,uint64)void ABI method.
+   * Calls the bootstrap(uint256,uint64)void ABI method.
    *
    * Setup the contract
    *
@@ -634,7 +634,7 @@ export class BiatecConfigProviderClient {
    * @param params Any additional parameters for the call
    * @returns The result of the call
    */
-  public bootstrap(args: MethodArgs<'bootstrap(uint64,uint64)void'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
+  public bootstrap(args: MethodArgs<'bootstrap(uint256,uint64)void'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
     return this.call(BiatecConfigProviderCallFactory.bootstrap(args, params))
   }
 
@@ -691,7 +691,7 @@ export class BiatecConfigProviderClient {
   }
 
   /**
-   * Calls the setBiatecFee(uint64)void ABI method.
+   * Calls the setBiatecFee(uint256)void ABI method.
    *
    * Fees in 9 decimals. 1_000_000_000 = 100%Fees in 9 decimals. 10_000_000 = 1%Fees in 9 decimals. 100_000 = 0,01%Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
    *
@@ -699,7 +699,7 @@ export class BiatecConfigProviderClient {
    * @param params Any additional parameters for the call
    * @returns The result of the call
    */
-  public setBiatecFee(args: MethodArgs<'setBiatecFee(uint64)void'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
+  public setBiatecFee(args: MethodArgs<'setBiatecFee(uint256)void'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
     return this.call(BiatecConfigProviderCallFactory.setBiatecFee(args, params))
   }
 
@@ -766,7 +766,7 @@ export class BiatecConfigProviderClient {
         return BiatecConfigProviderClient.getIntegerState(state, 'i')
       },
       get f() {
-        return BiatecConfigProviderClient.getIntegerState(state, 'f')
+        return BiatecConfigProviderClient.getBinaryState(state, 'f')
       },
     }
   }
@@ -777,7 +777,7 @@ export class BiatecConfigProviderClient {
     let promiseChain:Promise<unknown> = Promise.resolve()
     const resultMappers: Array<undefined | ((x: any) => any)> = []
     return {
-      bootstrap(args: MethodArgs<'bootstrap(uint64,uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      bootstrap(args: MethodArgs<'bootstrap(uint256,uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.bootstrap(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
@@ -802,7 +802,7 @@ export class BiatecConfigProviderClient {
         resultMappers.push(undefined)
         return this
       },
-      setBiatecFee(args: MethodArgs<'setBiatecFee(uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      setBiatecFee(args: MethodArgs<'setBiatecFee(uint256)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.setBiatecFee(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
@@ -841,7 +841,7 @@ export class BiatecConfigProviderClient {
 }
 export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
   /**
-   * Calls the bootstrap(uint64,uint64)void ABI method.
+   * Calls the bootstrap(uint256,uint64)void ABI method.
    *
    * Setup the contract
    *
@@ -849,7 +849,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  bootstrap(args: MethodArgs<'bootstrap(uint64,uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'bootstrap(uint64,uint64)void'>]>
+  bootstrap(args: MethodArgs<'bootstrap(uint256,uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'bootstrap(uint256,uint64)void'>]>
 
   /**
    * Calls the setAddressUdpater(address)void ABI method.
@@ -896,7 +896,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
   setBiatecIdentity(args: MethodArgs<'setBiatecIdentity(uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setBiatecIdentity(uint64)void'>]>
 
   /**
-   * Calls the setBiatecFee(uint64)void ABI method.
+   * Calls the setBiatecFee(uint256)void ABI method.
    *
    * Fees in 9 decimals. 1_000_000_000 = 100%Fees in 9 decimals. 10_000_000 = 1%Fees in 9 decimals. 100_000 = 0,01%Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
    *
@@ -904,7 +904,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setBiatecFee(args: MethodArgs<'setBiatecFee(uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setBiatecFee(uint64)void'>]>
+  setBiatecFee(args: MethodArgs<'setBiatecFee(uint256)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setBiatecFee(uint256)void'>]>
 
   /**
    * Makes a clear_state call to an existing instance of the BiatecConfigProvider smart contract.
