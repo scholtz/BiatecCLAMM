@@ -138,14 +138,6 @@
       }
     },
     {
-      "name": "testFailVariableSet",
-      "readonly": true,
-      "args": [],
-      "returns": {
-        "type": "uint64"
-      }
-    },
-    {
       "name": "removeLiquidity",
       "desc": "This method retrieves from the liquidity provider LP token and returns Asset A and Asset B from the Automated Market Maker Concentrated Liqudidity Pool",
       "args": [
@@ -189,7 +181,7 @@
         },
         {
           "name": "txSwap",
-          "type": "axfer",
+          "type": "txn",
           "desc": "Transfer of the token to be deposited to the pool. To the owner the other asset will be sent."
         },
         {

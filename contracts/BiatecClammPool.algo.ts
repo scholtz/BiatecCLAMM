@@ -126,9 +126,9 @@ type AmmStatus = {
   releasedLiqudity: uint64;
   liqudityUsersFromFees: uint64;
   liqudityBiatecFromFees: uint64;
-  assetA: AssetID;
-  assetB: AssetID;
-  poolToken: AssetID;
+  assetA: uint64;
+  assetB: uint64;
+  poolToken: uint64;
   price: uint64;
   fee: uint64;
   biatecFee: uint64;
@@ -138,10 +138,13 @@ type AmmStatus = {
 // eslint-disable-next-line no-unused-vars
 class BiatecClammPool extends Contract {
   // asset A id
-  assetA = GlobalStateKey<AssetID>({ key: 'a' });
+  assetA = GlobalStateKey<uint64>({ key: 'a' });
 
   // asset B id
-  assetB = GlobalStateKey<AssetID>({ key: 'b' });
+  assetB = GlobalStateKey<uint64>({ key: 'b' });
+
+  // pool LP token id
+  assetLP = GlobalStateKey<uint64>({ key: 'lp' });
 
   // asset A balance - disponible for swapping. The difference between contract balance and asset A balance is the fees collected
   assetABalance = GlobalStateKey<uint256>({ key: 'ab' });
@@ -169,9 +172,6 @@ class BiatecClammPool extends Contract {
 
   // Liquidity held by biatec earned by swap fees
   LiqudityBiatecFromFees = GlobalStateKey<uint256>({ key: 'Lb' });
-
-  // pool LP token id
-  poolToken = GlobalStateKey<AssetID>({ key: 'p' });
 
   /**
    * LP Fees in 9 decimals. 1_000_000_000 = 100%
@@ -226,7 +226,7 @@ class BiatecClammPool extends Contract {
 
   @abi.readonly
   getLPTokenId(): uint64 {
-    return this.poolToken.value.id;
+    return this.assetLP.value;
   }
 
   /**
@@ -254,7 +254,7 @@ class BiatecClammPool extends Contract {
     priceMax: uint64,
     currentPrice: uint64,
     verificationClass: uint8
-  ): AssetID {
+  ): uint64 {
     verifyPayTxn(txSeed, { receiver: this.app.address, amount: { greaterThanEqualTo: 300_000 } });
     assert(this.priceMax.value === 0, 'It is not possible to call bootrap twice');
     assert(this.txn.sender === this.app.creator, 'Only creator of the app can set it up');
@@ -263,7 +263,9 @@ class BiatecClammPool extends Contract {
     assert(fee <= SCALE / 10); // fee must be lower then 10%
     assert(verificationClass <= 4); // verificationClass
     assert(!this.ratio.exists);
-    assert(assetA.decimals <= SCALE_DECIMALS);
+    if (assetA.id > 0) {
+      assert(assetA.decimals <= SCALE_DECIMALS); // asset A can be algo
+    }
     assert(assetB.decimals <= SCALE_DECIMALS);
     const s = SCALE as uint256;
 
@@ -280,23 +282,31 @@ class BiatecClammPool extends Contract {
     this.assetBBalance.value = <uint256>0;
     this.ratio.value = currentPrice;
 
-    this.assetA.value = assetA;
-    this.assetB.value = assetB;
-    this.poolToken.value = this.doCreatePoolToken(assetA, assetB);
+    this.assetA.value = assetA.id;
+    this.assetB.value = assetB.id;
+    this.assetLP.value = this.doCreatePoolToken(assetA, assetB).id;
     this.fee.value = fee;
     this.doOptIn(assetA);
     this.doOptIn(assetB);
 
-    return this.poolToken.value;
+    return this.assetLP.value;
   }
 
   private doAxfer(receiver: Address, asset: AssetID, amount: uint64): void {
-    sendAssetTransfer({
-      assetReceiver: receiver,
-      xferAsset: asset,
-      assetAmount: amount,
-      fee: 0,
-    });
+    if (asset.id === 0) {
+      sendPayment({
+        receiver: receiver,
+        amount: amount,
+        fee: 0,
+      });
+    } else {
+      sendAssetTransfer({
+        assetReceiver: receiver,
+        xferAsset: asset,
+        assetAmount: amount,
+        fee: 0,
+      });
+    }
   }
 
   private doOptIn(asset: AssetID): void {
@@ -310,7 +320,12 @@ class BiatecClammPool extends Contract {
     // const verificationClass = this.verificationClass.value.toString(); // TODO
     // const feeB100000 = this.feeB100000.value.toString();
     // const name = 'B-' + verificationClass + '-' + feeB100000 + '-' + assetA.unitName + '-' + assetB.unitName; // TODO
-    const name = 'B-' + assetA.unitName + '-' + assetB.unitName; // TODO
+    let nameAssetA = 'ALGO';
+    if (assetA.id > 0) {
+      nameAssetA = assetA.unitName;
+    }
+
+    const name = 'B-' + nameAssetA + '-' + assetB.unitName; // TODO
 
     return sendAssetCreation({
       configAssetName: name,
@@ -349,9 +364,10 @@ class BiatecClammPool extends Contract {
       appBiatecConfigProvider === this.appBiatecConfigProvider.value,
       'appBiatecConfigProvider must match to the global variable app id'
     );
-    assert(assetA === this.assetA.value, 'assetA must match to the global variable value');
-    assert(assetB === this.assetB.value, 'assetB must match to the global variable value');
-    assert(assetLP === this.poolToken.value, 'assetLP must match to the global variable value');
+
+    assert(assetA.id === this.assetA.value, 'assetA must match to the global variable value');
+    assert(assetB.id === this.assetB.value, 'assetB must match to the global variable value');
+    assert(assetLP.id === this.assetLP.value, 'assetLP must match to the global variable value');
     const identityFromConfig = appBiatecConfigProvider.globalState('i');
     assert(
       appBiatecIdentityProvider === identityFromConfig,
@@ -370,8 +386,10 @@ class BiatecClammPool extends Contract {
       'User cannot interact with this smart contract as his verification class is lower then required here'
     );
 
+    let assetADecimals = 6;
+    if (assetA.id > 0) assetADecimals = assetA.decimals;
     // if assetA.decimals == 8 then assetADelicmalScale2Scale = 10
-    const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetA.decimals)) as uint256;
+    const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetADecimals)) as uint256;
     // if assetB.decimals == 6 then assetBDelicmalScale2Scale = 1000
     const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256;
     // if assetLP.decimals == 6 then assetLPDelicmalScale2Scale = 1000
@@ -379,6 +397,12 @@ class BiatecClammPool extends Contract {
 
     const aDepositInBaseScale = (txAssetADeposit.assetAmount as uint256) * assetADelicmalScale2Scale;
     const bDepositInBaseScale = (txAssetBDeposit.assetAmount as uint256) * assetBDelicmalScale2Scale;
+
+    if (assetA.id > 0) {
+      assert(txAssetADeposit.typeEnum === TransactionType.AssetTransfer);
+    } else {
+      assert(txAssetADeposit.typeEnum === TransactionType.Payment);
+    }
 
     if (txAssetADeposit.typeEnum === TransactionType.AssetTransfer) {
       const xfer = txAssetADeposit as AssetTransferTxn;
@@ -414,15 +438,12 @@ class BiatecClammPool extends Contract {
       assert(false, 'Unsupported tx type of the asset B');
     }
 
-    if (
-      this.app.address.assetBalance(assetA) === txAssetADeposit.assetAmount &&
-      this.app.address.assetBalance(assetB) === txAssetBDeposit.assetAmount
-    ) {
+    if (this.assetABalance.value === <uint256>0 && this.assetBBalance.value === <uint256>0) {
       // calculate LP position
       // this.assetABalance.value = aDepositInBaseScale;
       // this.assetBBalance.value = bDepositInBaseScale;
 
-      return this.processAddLiqudity(aDepositInBaseScale, bDepositInBaseScale, assetLPDelicmalScale2Scale);
+      return this.processAddLiqudity(aDepositInBaseScale, bDepositInBaseScale, assetLPDelicmalScale2Scale, assetLP);
     }
 
     // add asset to LP position
@@ -462,7 +483,7 @@ class BiatecClammPool extends Contract {
       const realAssetADeposit = aDepositInBaseScale;
       const realAssetBDeposit =
         ((txAssetBDeposit.assetAmount - expectedBDepositB64) as uint256) * assetBDelicmalScale2Scale;
-      return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale);
+      return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale, assetLP);
     }
 
     if (expectedBDepositB64 > txAssetBDeposit.assetAmount) {
@@ -482,18 +503,18 @@ class BiatecClammPool extends Contract {
       const realAssetADeposit =
         ((txAssetADeposit.assetAmount - expectedADepositB64) as uint256) * assetADelicmalScale2Scale;
       const realAssetBDeposit = bDepositInBaseScale;
-      return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale);
+      return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale, assetLP);
     }
     if (expectedADepositB64 === txAssetADeposit.assetAmount && expectedBDepositB64 === txAssetBDeposit.assetAmount) {
       const realAssetADeposit = aDepositInBaseScale;
       const realAssetBDeposit = bDepositInBaseScale;
-      return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale);
+      return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale, assetLP);
     }
 
     if (expectedADepositB64 === txAssetADeposit.assetAmount && expectedBDepositB64 === txAssetBDeposit.assetAmount) {
       const realAssetADeposit = aDepositInBaseScale;
       const realAssetBDeposit = bDepositInBaseScale;
-      return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale);
+      return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale, assetLP);
     }
 
     if (expectedADepositB64 === 0 && expectedBDepositB64 === 0) {
@@ -513,7 +534,8 @@ class BiatecClammPool extends Contract {
   private processAddLiqudity(
     realAssetADeposit: uint256,
     realAssetBDeposit: uint256,
-    assetLPDelicmalScale2Scale: uint256
+    assetLPDelicmalScale2Scale: uint256,
+    assetLP: AssetID
   ): uint64 {
     // SET NEW ASSET A AND B VALUES
     this.assetABalance.value = this.assetABalance.value + realAssetADeposit;
@@ -533,17 +555,8 @@ class BiatecClammPool extends Contract {
 
     this.Liqudity.value = newLiqudity;
     // send LP tokens to user
-    this.doAxfer(this.txn.sender, this.poolToken.value, lpTokensToSend);
+    this.doAxfer(this.txn.sender, assetLP, lpTokensToSend);
     return lpTokensToSend;
-  }
-
-  @abi.readonly
-  testFailVariableSet(): uint64 {
-    let A = <uint256>250000000;
-    const B = <uint256>1000;
-    A = A / B;
-    const c = A as uint64;
-    return c;
   }
 
   /**
@@ -556,9 +569,9 @@ class BiatecClammPool extends Contract {
    */
   removeLiquidity(txLPXfer: AssetTransferTxn, assetLP: AssetID, assetA: AssetID, assetB: AssetID): uint256 {
     /// well formed mint
-    assert(assetA === this.assetA.value);
-    assert(assetB === this.assetB.value);
-    assert(assetLP === this.poolToken.value);
+    assert(assetA.id === this.assetA.value);
+    assert(assetB.id === this.assetB.value);
+    assert(assetLP.id === this.assetLP.value);
 
     verifyAssetTransferTxn(txLPXfer, {
       assetReceiver: this.app.address,
@@ -569,8 +582,10 @@ class BiatecClammPool extends Contract {
     // increase the budget by 1
     increaseOpcodeBudget();
 
+    let assetADecimals = 6;
+    if (assetA.id > 0) assetADecimals = assetA.decimals;
     // if assetA.decimals == 8 then assetADelicmalScale2Scale = 10
-    const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetA.decimals)) as uint256;
+    const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetADecimals)) as uint256;
     // if assetB.decimals == 6 then assetBDelicmalScale2Scale = 1000
     const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256;
     // if assetLP.decimals == 6 then assetLPDelicmalScale2Scale = 1000
@@ -637,7 +652,7 @@ class BiatecClammPool extends Contract {
   swap(
     appBiatecConfigProvider: AppID,
     appBiatecIdentityProvider: AppID,
-    txSwap: AssetTransferTxn,
+    txSwap: Txn,
     assetA: AssetID,
     assetB: AssetID,
     minimumToReceive: uint64
@@ -645,14 +660,27 @@ class BiatecClammPool extends Contract {
     increaseOpcodeBudget();
     // increaseOpcodeBudget();
     /// well formed swap
-    assert(assetA === this.assetA.value);
-    assert(assetB === this.assetB.value);
-    verifyAssetTransferTxn(txSwap, {
-      assetAmount: { greaterThan: 0 },
-      assetReceiver: this.app.address,
-      sender: this.txn.sender,
-      xferAsset: { includedIn: [assetA, assetB] },
-    });
+    assert(assetA.id === this.assetA.value);
+    assert(assetB.id === this.assetB.value);
+
+    if (txSwap.typeEnum === TransactionType.Payment) {
+      assert(assetA.id === 0);
+
+      verifyPayTxn(txSwap, {
+        amount: { greaterThan: 0 },
+        receiver: this.app.address,
+        sender: this.txn.sender,
+      });
+    } else {
+      assert(txSwap.typeEnum === TransactionType.AssetTransfer);
+
+      verifyAssetTransferTxn(txSwap, {
+        assetAmount: { greaterThan: 0 },
+        assetReceiver: this.app.address,
+        sender: this.txn.sender,
+        xferAsset: { includedIn: [assetA, assetB] },
+      });
+    }
 
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const identityFromConfig = appBiatecConfigProvider.globalState('i');
@@ -673,16 +701,30 @@ class BiatecClammPool extends Contract {
       'User cannot interact with this smart contract as his verification class is lower then required here'
     );
 
+    let assetADecimals = 6;
+    if (assetA.id > 0) assetADecimals = assetA.decimals;
     // if assetA.decimals == 8 then assetADelicmalScale2Scale = 10
-    const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetA.decimals)) as uint256;
+    const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetADecimals)) as uint256;
     // if assetA.decimals == 6 then assetADelicmalScale2Scale = 1000
     const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256;
 
     const s = SCALE as uint256;
     const feesMultiplier = (s - ((this.fee.value as uint256) * user.feeMultiplier) / user.base) as uint256;
     let ret: uint64 = 0;
-    if (txSwap.xferAsset === assetA) {
-      const assetInAssetDecimals = txSwap.assetAmount as uint256;
+    let isAssetA = false;
+    if (txSwap.typeEnum === TransactionType.Payment) {
+      isAssetA = true;
+    } else {
+      isAssetA = txSwap.xferAsset === assetA;
+    }
+
+    if (isAssetA) {
+      let assetInAssetDecimals = <uint256>0;
+      if (txSwap.typeEnum === TransactionType.Payment) {
+        assetInAssetDecimals = txSwap.amount as uint256;
+      } else {
+        assetInAssetDecimals = txSwap.assetAmount as uint256;
+      }
       const inAsset = (assetInAssetDecimals * assetADelicmalScale2Scale) as uint256;
       const inAssetAfterFee = (inAsset * feesMultiplier) / s;
 
@@ -708,7 +750,7 @@ class BiatecClammPool extends Contract {
       this.assetBBalance.value = this.assetBBalance.value - toSwap;
     }
     // SWAP B to A
-    if (txSwap.xferAsset === assetB) {
+    if (!isAssetA) {
       const assetInAssetDecimals = txSwap.assetAmount as uint256;
       const inAsset = (assetInAssetDecimals * assetBDelicmalScale2Scale) as uint256;
       const inAssetAfterFee = (inAsset * feesMultiplier) / s;
@@ -779,7 +821,7 @@ class BiatecClammPool extends Contract {
     const current = (this.app.address.assetBalance(assetLP) as uint256) - currentDeposit;
     const minted = TOTAL_SUPPLY as uint256;
     const distributedLPTokens = minted - current;
-    // if assetLP.decimals == 6 then assetADelicmalScale2Scale = 1000
+    // if assetLP.decimals == 6 then assetLPDelicmalScale2Scale = 1000
     const assetLPDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256;
     const ret = distributedLPTokens * assetLPDelicmalScale2Scale;
     return ret;
@@ -1115,13 +1157,13 @@ class BiatecClammPool extends Contract {
       appBiatecConfigProvider === this.appBiatecConfigProvider.value,
       'appBiatecConfigProvider must match to the global variable app id'
     );
-    assert(this.poolToken.value === assetLP, 'LP asset does not match');
+    assert(this.assetLP.value === assetLP.id, 'LP asset does not match');
     const biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256;
 
     return {
       assetA: this.assetA.value,
       assetB: this.assetB.value,
-      poolToken: this.poolToken.value,
+      poolToken: this.assetLP.value,
       assetABalance: this.assetABalance.value as uint64,
       assetBBalance: this.assetBBalance.value as uint64,
       fee: this.fee.value,
