@@ -47,6 +47,236 @@ type AmmStatus = {
   biatecFee: bigint;
   verificationClass: bigint;
 };
+type AppPoolInfo = {
+  isVerified: bigint;
+  assetA: bigint;
+  assetB: bigint;
+  verificationClass: bigint;
+
+  latestPrice: bigint;
+
+  period1NowVolumeA: bigint;
+  period1NowVolumeB: bigint;
+  period1NowFeeA: bigint;
+  period1NowFeeB: bigint;
+  period1NowVWAP: bigint;
+  period1NowTime: bigint;
+
+  period1PrevVolumeA: bigint;
+  period1PrevVolumeB: bigint;
+  period1PrevFeeA: bigint;
+  period1PrevFeeB: bigint;
+  period1PrevVWAP: bigint;
+  period1PrevTime: bigint;
+
+  period2NowVolumeA: bigint;
+  period2NowVolumeB: bigint;
+  period2NowFeeA: bigint;
+  period2NowFeeB: bigint;
+  period2NowVWAP: bigint;
+  period2NowTime: bigint;
+
+  period2PrevVolumeA: bigint;
+  period2PrevVolumeB: bigint;
+  period2PrevFeeA: bigint;
+  period2PrevFeeB: bigint;
+  period2PrevVWAP: bigint;
+  period2PrevTime: bigint;
+
+  period3NowVolumeA: bigint;
+  period3NowVolumeB: bigint;
+  period3NowFeeA: bigint;
+  period3NowFeeB: bigint;
+  period3NowVWAP: bigint;
+  period3NowTime: bigint;
+
+  period3PrevVolumeA: bigint;
+  period3PrevVolumeB: bigint;
+  period3PrevFeeA: bigint;
+  period3PrevFeeB: bigint;
+  period3PrevVWAP: bigint;
+  period3PrevTime: bigint;
+
+  period4NowVolumeA: bigint;
+  period4NowVolumeB: bigint;
+  period4NowFeeA: bigint;
+  period4NowFeeB: bigint;
+  period4NowVWAP: bigint;
+  period4NowTime: bigint;
+
+  period4PrevVolumeA: bigint;
+  period4PrevVolumeB: bigint;
+  period4PrevFeeA: bigint;
+  period4PrevFeeB: bigint;
+  period4PrevVWAP: bigint;
+  period4PrevTime: bigint;
+
+  period5NowVolumeA: bigint;
+  period5NowVolumeB: bigint;
+  period5NowFeeA: bigint;
+  period5NowFeeB: bigint;
+  period5NowVWAP: bigint;
+  period5NowTime: bigint;
+
+  period5PrevVolumeA: bigint;
+  period5PrevVolumeB: bigint;
+  period5PrevFeeA: bigint;
+  period5PrevFeeB: bigint;
+  period5PrevVWAP: bigint;
+  period5PrevTime: bigint;
+};
+
+const return2stats = (input: (bigint | number)[] | null | undefined): AppPoolInfo => {
+  if (!input)
+    return {
+      assetA: 0n,
+      assetB: 0n,
+      isVerified: 0n,
+      latestPrice: 0n,
+      verificationClass: 0n,
+      period1NowFeeA: 0n,
+      period1NowFeeB: 0n,
+      period1NowTime: 0n,
+      period1NowVolumeA: 0n,
+      period1NowVolumeB: 0n,
+      period1NowVWAP: 0n,
+      period1PrevFeeA: 0n,
+      period1PrevFeeB: 0n,
+      period1PrevTime: 0n,
+      period1PrevVolumeA: 0n,
+      period1PrevVolumeB: 0n,
+      period1PrevVWAP: 0n,
+
+      period2NowFeeA: 0n,
+      period2NowFeeB: 0n,
+      period2NowTime: 0n,
+      period2NowVolumeA: 0n,
+      period2NowVolumeB: 0n,
+      period2NowVWAP: 0n,
+      period2PrevFeeA: 0n,
+      period2PrevFeeB: 0n,
+      period2PrevTime: 0n,
+      period2PrevVolumeA: 0n,
+      period2PrevVolumeB: 0n,
+      period2PrevVWAP: 0n,
+
+      period3NowFeeA: 0n,
+      period3NowFeeB: 0n,
+      period3NowTime: 0n,
+      period3NowVolumeA: 0n,
+      period3NowVolumeB: 0n,
+      period3NowVWAP: 0n,
+      period3PrevFeeA: 0n,
+      period3PrevFeeB: 0n,
+      period3PrevTime: 0n,
+      period3PrevVolumeA: 0n,
+      period3PrevVolumeB: 0n,
+      period3PrevVWAP: 0n,
+
+      period4NowFeeA: 0n,
+      period4NowFeeB: 0n,
+      period4NowTime: 0n,
+      period4NowVolumeA: 0n,
+      period4NowVolumeB: 0n,
+      period4NowVWAP: 0n,
+      period4PrevFeeA: 0n,
+      period4PrevFeeB: 0n,
+      period4PrevTime: 0n,
+      period4PrevVolumeA: 0n,
+      period4PrevVolumeB: 0n,
+      period4PrevVWAP: 0n,
+
+      period5NowFeeA: 0n,
+      period5NowFeeB: 0n,
+      period5NowTime: 0n,
+      period5NowVolumeA: 0n,
+      period5NowVolumeB: 0n,
+      period5NowVWAP: 0n,
+      period5PrevFeeA: 0n,
+      period5PrevFeeB: 0n,
+      period5PrevTime: 0n,
+      period5PrevVolumeA: 0n,
+      period5PrevVolumeB: 0n,
+      period5PrevVWAP: 0n,
+    };
+  return {
+    isVerified: BigInt(input[0]),
+    assetA: BigInt(input[1]),
+    assetB: BigInt(input[2]),
+    verificationClass: BigInt(input[3]),
+    latestPrice: BigInt(input[4]),
+
+    period1NowVolumeA: BigInt(input[5]),
+    period1NowVolumeB: BigInt(input[6]),
+    period1NowFeeA: BigInt(input[7]),
+    period1NowFeeB: BigInt(input[8]),
+    period1NowVWAP: BigInt(input[9]),
+    period1NowTime: BigInt(input[10]),
+
+    period1PrevVolumeA: BigInt(input[11]),
+    period1PrevVolumeB: BigInt(input[12]),
+    period1PrevFeeA: BigInt(input[13]),
+    period1PrevFeeB: BigInt(input[14]),
+    period1PrevVWAP: BigInt(input[15]),
+    period1PrevTime: BigInt(input[16]),
+
+    period2NowVolumeA: BigInt(input[17]),
+    period2NowVolumeB: BigInt(input[18]),
+    period2NowFeeA: BigInt(input[19]),
+    period2NowFeeB: BigInt(input[20]),
+    period2NowVWAP: BigInt(input[21]),
+    period2NowTime: BigInt(input[22]),
+
+    period2PrevVolumeA: BigInt(input[23]),
+    period2PrevVolumeB: BigInt(input[24]),
+    period2PrevFeeA: BigInt(input[25]),
+    period2PrevFeeB: BigInt(input[26]),
+    period2PrevVWAP: BigInt(input[27]),
+    period2PrevTime: BigInt(input[28]),
+
+    period3NowVolumeA: BigInt(input[29]),
+    period3NowVolumeB: BigInt(input[30]),
+    period3NowFeeA: BigInt(input[31]),
+    period3NowFeeB: BigInt(input[32]),
+    period3NowVWAP: BigInt(input[33]),
+    period3NowTime: BigInt(input[34]),
+
+    period3PrevVolumeA: BigInt(input[35]),
+    period3PrevVolumeB: BigInt(input[36]),
+    period3PrevFeeA: BigInt(input[37]),
+    period3PrevFeeB: BigInt(input[38]),
+    period3PrevVWAP: BigInt(input[39]),
+    period3PrevTime: BigInt(input[40]),
+
+    period4NowVolumeA: BigInt(input[41]),
+    period4NowVolumeB: BigInt(input[42]),
+    period4NowFeeA: BigInt(input[43]),
+    period4NowFeeB: BigInt(input[44]),
+    period4NowVWAP: BigInt(input[45]),
+    period4NowTime: BigInt(input[46]),
+
+    period4PrevVolumeA: BigInt(input[47]),
+    period4PrevVolumeB: BigInt(input[48]),
+    period4PrevFeeA: BigInt(input[49]),
+    period4PrevFeeB: BigInt(input[50]),
+    period4PrevVWAP: BigInt(input[51]),
+    period4PrevTime: BigInt(input[52]),
+
+    period5NowVolumeA: BigInt(input[53]),
+    period5NowVolumeB: BigInt(input[54]),
+    period5NowFeeA: BigInt(input[55]),
+    period5NowFeeB: BigInt(input[56]),
+    period5NowVWAP: BigInt(input[57]),
+    period5NowTime: BigInt(input[58]),
+
+    period5PrevVolumeA: BigInt(input[59]),
+    period5PrevVolumeB: BigInt(input[60]),
+    period5PrevFeeA: BigInt(input[61]),
+    period5PrevFeeB: BigInt(input[62]),
+    period5PrevVWAP: BigInt(input[63]),
+    period5PrevTime: BigInt(input[64]),
+  };
+};
 const return2status = (input: (bigint | number)[] | null | undefined): AmmStatus => {
   if (!input)
     return {
@@ -86,7 +316,6 @@ const return2status = (input: (bigint | number)[] | null | undefined): AmmStatus
     verificationClass: BigInt(input[15]),
   };
 };
-
 // https://github.com/GoogleChromeLabs/jsbi/issues/30
 // eslint-disable-next-line no-extend-native, @typescript-eslint/no-explicit-any
 (BigInt.prototype as any).toJSON = function () {
@@ -159,7 +388,8 @@ const setupPool = async (input: ISetup) => {
     algod,
     clientBiatecConfigProvider,
     account: signer,
-    appIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+    appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+    appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
     biatecFee,
   });
   expect(txId.length).toBe(52);
@@ -271,11 +501,22 @@ describe('clamm', () => {
           y: 0.25,
           P1: 1,
           P2: 1.5625,
-          P: BigInt(1.5625 * SCALE),
+          P: 1.5625,
           L: 1,
           deposit: 0.2,
           expectedWithdrawResult: 0.25,
         },
+        {
+          x: 1,
+          y: 1,
+          P1: 1,
+          P2: 1,
+          P: 1,
+          L: 1,
+          deposit: 1,
+          expectedWithdrawResult: 1,
+        },
+        { x: 1000, y: 1100, P1: 1.1, P2: 1.1, L: 1, deposit: 1000, expectedWithdrawResult: 1099.999999643 }, // eurusd = 1.1 x = eur, y=usd, x = 1000 eur, y = 1100 usd, deposit 1100 usd, withdraw 1000 eur
       ];
 
       // eslint-disable-next-line no-restricted-syntax
@@ -295,8 +536,8 @@ describe('clamm', () => {
           inAmount: BigInt(t.deposit * SCALE),
           assetABalance: BigInt(t.x * SCALE),
           assetBBalance: BigInt(t.y * SCALE),
-          priceMinSqrt: BigInt(Math.sqrt(t.P1) * SCALE),
-          priceMaxSqrt: BigInt(Math.sqrt(t.P2) * SCALE),
+          priceMinSqrt: BigInt(Math.round(Math.sqrt(t.P1) * SCALE)),
+          priceMaxSqrt: BigInt(Math.round(Math.sqrt(t.P2) * SCALE)),
           liqudity: BigInt(t.L * SCALE),
         });
         console.log(
@@ -312,7 +553,14 @@ describe('clamm', () => {
   test('calculateAssetAWithdrawOnAssetBDeposit returns correct results', async () => {
     try {
       const { algod } = fixture.context;
-      const testSet = [{ x: 0.2, y: 0, P1: 1, P2: 1.5625, L: 1, deposit: 0.25, expectedWithdrawResult: 0.2 }];
+      const testSet = [
+        { x: 0.2, y: 0, P1: 1, P2: 1.5625, depositB: 0.25, expectedWithdrawResult: 0.2 },
+        { x: 2, y: 2, P1: 1, P2: 1, depositB: 1, expectedWithdrawResult: 1 },
+        { x: 2, y: 0, P1: 1, P2: 1, depositB: 2, expectedWithdrawResult: 2 },
+        { x: 1000, y: 1100, P1: 1.1, P2: 1.1, depositB: 1100, expectedWithdrawResult: 1000.000000324 }, // eurusd = 1.1 x = eur, y=usd, x = 1000 eur, y = 1100 usd, deposit 1100 usd, withdraw 1000 eur
+        { x: 4, y: 0, P1: 4, P2: 4, depositB: 4, expectedWithdrawResult: 1 },
+        { x: 4, y: 0, P1: 0.25, P2: 0.25, depositB: 1, expectedWithdrawResult: 4 },
+      ];
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
@@ -326,19 +574,64 @@ describe('clamm', () => {
           p1: BigInt(t.P1 * SCALE),
           p2: BigInt(t.P2 * SCALE),
         });
+        if (t.P1 === t.P2) {
+          const L = await clientBiatecClammPool.calculateLiquidityFlatPrice({
+            x: BigInt(t.x * SCALE),
+            y: BigInt(t.x * SCALE),
+            price: BigInt(t.P1 * SCALE),
+          });
 
-        const result = await clientBiatecClammPool.calculateAssetAWithdrawOnAssetBDeposit({
-          inAmount: BigInt(t.deposit * SCALE),
-          assetABalance: BigInt(t.x * SCALE),
-          assetBBalance: BigInt(t.y * SCALE),
-          priceMinSqrt: BigInt(Math.sqrt(t.P1) * SCALE),
-          priceMaxSqrt: BigInt(Math.sqrt(t.P2) * SCALE),
-          liqudity: BigInt(t.L * SCALE),
-        });
-        console.log(
-          `sent x${BigInt(t.x * SCALE)} y${BigInt(t.y * SCALE)} deposit: ${t.deposit * SCALE} result: ${result?.return?.valueOf()} expecting ${t.expectedWithdrawResult * SCALE}`
-        );
-        expect(result?.return?.valueOf()).toEqual(BigInt(t.expectedWithdrawResult * SCALE));
+          const l = L.return?.valueOf();
+          expect(l).toBeGreaterThan(0);
+          if (!l) throw Error('L is zero');
+          const input = {
+            inAmount: BigInt(t.depositB * SCALE),
+            assetABalance: BigInt(t.x * SCALE),
+            assetBBalance: BigInt(t.y * SCALE),
+            priceMinSqrt: BigInt(Math.round(Math.sqrt(t.P1) * SCALE)),
+            priceMaxSqrt: BigInt(Math.round(Math.sqrt(t.P2) * SCALE)),
+            liqudity: l,
+          };
+          console.log('input', input);
+          const result = await clientBiatecClammPool.calculateAssetAWithdrawOnAssetBDeposit(input);
+          console.log(
+            `sent x${BigInt(t.x * SCALE)} y${BigInt(t.y * SCALE)} deposit: ${t.depositB * SCALE} L: ${l} result: ${result?.return?.valueOf()} expecting ${t.expectedWithdrawResult * SCALE}`
+          );
+          expect(result?.return?.valueOf()).toEqual(BigInt(t.expectedWithdrawResult * SCALE));
+        } else {
+          const dSqrtRet = await clientBiatecClammPool.calculateLiquidityD({
+            x: BigInt(t.x * SCALE),
+            y: BigInt(t.x * SCALE),
+            priceMin: BigInt(t.P1 * SCALE),
+            priceMinSqrt: BigInt(Math.sqrt(t.P1) * SCALE),
+            priceMax: BigInt(t.P2 * SCALE),
+            priceMaxSqrt: BigInt(Math.sqrt(t.P2) * SCALE),
+          });
+          const D_SQRT = dSqrtRet.return?.valueOf();
+          if (!D_SQRT) throw Error('D_SQRT is expected here');
+          const L = await clientBiatecClammPool.calculateLiquidityWithD({
+            x: BigInt(t.x * SCALE),
+            y: BigInt(t.x * SCALE),
+            priceMinSqrt: BigInt(Math.sqrt(t.P1) * SCALE),
+            priceMaxSqrt: BigInt(Math.sqrt(t.P2) * SCALE),
+            D_SQRT,
+          });
+          const l = L.return?.valueOf();
+          expect(l).toBeGreaterThan(0);
+          if (!l) throw Error('L is zero');
+          const result = await clientBiatecClammPool.calculateAssetAWithdrawOnAssetBDeposit({
+            inAmount: BigInt(t.depositB * SCALE),
+            assetABalance: BigInt(t.x * SCALE),
+            assetBBalance: BigInt(t.y * SCALE),
+            priceMinSqrt: BigInt(Math.sqrt(t.P1) * SCALE),
+            priceMaxSqrt: BigInt(Math.sqrt(t.P2) * SCALE),
+            liqudity: l,
+          });
+          console.log(
+            `sent x${BigInt(t.x * SCALE)} y${BigInt(t.y * SCALE)} deposit: ${t.depositB * SCALE} L: ${l} result: ${result?.return?.valueOf()} expecting ${t.expectedWithdrawResult * SCALE}`
+          );
+          expect(result?.return?.valueOf()).toEqual(BigInt(t.expectedWithdrawResult * SCALE));
+        }
       }
     } catch (e) {
       console.debug(e);
@@ -349,13 +642,13 @@ describe('clamm', () => {
     try {
       const { algod } = fixture.context;
       const testSet = [
-        { x: 0.2, y: 0, P1: 1, P2: 1.5625, L: 1 },
-        { x: 2, y: 0, P: 1, P1: 1, P2: 1.5625, L: 10 },
-        { x: 0, y: 0.25, P: 1.5625, P1: 1, P2: 1.5625, L: 1 },
-        { x: 0.00000001, y: 0, P: 1, P1: 1, P2: 1.5625, L: 0.000000025 },
+        { x: 0.1, y: 0.1, P: 1, P1: 0.9999, P2: 1.0001, D_SQRT: 0.2, L: 2000.039996799 },
+        { x: 0.2, y: 0, P1: 1, P2: 1.5625, D_SQRT: 0.2, L: 1 },
+        { x: 2, y: 0, P: 1, P1: 1, P2: 1.5625, D_SQRT: 2, L: 10 },
+        { x: 0, y: 0.25, P: 1.5625, P1: 1, P2: 1.5625, D_SQRT: 0.2, L: 1 },
+        { x: 0.00000001, y: 0, P: 1, P1: 1, P2: 1.5625, D_SQRT: 0, L: 0.000000025 },
       ];
 
-      const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
         const { clientBiatecClammPool } = await setupPool({
@@ -369,19 +662,24 @@ describe('clamm', () => {
           p2: BigInt(t.P2 * SCALE),
         });
 
-        const result = await clientBiatecClammPool.calculateLiquidity(
-          {
-            x: BigInt(t.x * SCALE),
-            y: BigInt(t.y * SCALE),
-            priceMin: BigInt(t.P1 * SCALE),
-            priceMax: BigInt(t.P2 * SCALE),
-            priceMinSqrt: BigInt(Math.sqrt(t.P1) * SCALE),
-            priceMaxSqrt: BigInt(Math.sqrt(t.P2) * SCALE),
-          },
-          {
-            sendParams: { ...params, fee: algokit.microAlgos(2000) },
-          }
-        );
+        const dSqrtRet = await clientBiatecClammPool.calculateLiquidityD({
+          x: BigInt(t.x * SCALE),
+          y: BigInt(t.y * SCALE),
+          priceMin: BigInt(t.P1 * SCALE),
+          priceMinSqrt: BigInt(Math.round(Math.sqrt(t.P1) * SCALE)),
+          priceMax: BigInt(t.P2 * SCALE),
+          priceMaxSqrt: BigInt(Math.round(Math.sqrt(t.P2) * SCALE)),
+        });
+        const D_SQRT = dSqrtRet.return?.valueOf();
+        expect(D_SQRT).toBe(BigInt(t.D_SQRT * SCALE));
+        if (D_SQRT === undefined) throw Error('D_SQRT is expected here');
+        const result = await clientBiatecClammPool.calculateLiquidityWithD({
+          x: BigInt(Math.round(t.x * SCALE)),
+          y: BigInt(Math.round(t.y * SCALE)),
+          priceMinSqrt: BigInt(Math.round(Math.sqrt(t.P1) * SCALE)),
+          priceMaxSqrt: BigInt(Math.round(Math.sqrt(t.P2) * SCALE)),
+          D_SQRT,
+        });
         console.log(
           `sent x${BigInt(t.x * SCALE)} y${BigInt(t.y * SCALE)} priceMin: ${t.P1 * SCALE} priceMax: ${t.P2 * SCALE} result: ${result?.return?.valueOf()} expecting ${t.L * SCALE}`
         );
@@ -639,7 +937,7 @@ describe('clamm', () => {
         };
 
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(liquidityInput, {
-          sendParams: { ...params, fee: algokit.microAlgos(6000) },
+          sendParams: { ...params, fee: algokit.microAlgos(9000) },
         });
 
         const ret = await liqudidtyResult.return;
@@ -722,7 +1020,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const ret = await liqudidtyResult.return;
@@ -755,7 +1053,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const ret2 = await liqudidtyResult2.return;
@@ -775,7 +1073,12 @@ describe('clamm', () => {
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const { clientBiatecClammPool, clientBiatecConfigProvider, clientBiatecIdentityProvider } = await setupPool({
+        const {
+          clientBiatecClammPool,
+          clientBiatecConfigProvider,
+          clientBiatecIdentityProvider,
+          clientBiatecPoolProvider,
+        } = await setupPool({
           algod,
           signer: deployerSigner,
           assetA: assetAId,
@@ -790,6 +1093,8 @@ describe('clamm', () => {
         expect(refBiatecConfigProvider.appId).toBeGreaterThan(0);
         const refBiatecIdentityProvider = await clientBiatecIdentityProvider.appClient.getAppReference();
         expect(refBiatecIdentityProvider.appId).toBeGreaterThan(0);
+        const refBiatecPoolProvider = await clientBiatecPoolProvider.appClient.getAppReference();
+        expect(refBiatecPoolProvider.appId).toBeGreaterThan(0);
         const ammRef = await clientBiatecClammPool.appClient.getAppReference();
         expect(ammRef.appId).toBeGreaterThan(0);
 
@@ -835,7 +1140,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const ret = await liqudidtyResult.return;
@@ -858,8 +1163,9 @@ describe('clamm', () => {
             assetB: assetBId,
             appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+            appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const retSwap = await swapResult.return;
@@ -879,7 +1185,12 @@ describe('clamm', () => {
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const { clientBiatecClammPool, clientBiatecConfigProvider, clientBiatecIdentityProvider } = await setupPool({
+        const {
+          clientBiatecClammPool,
+          clientBiatecConfigProvider,
+          clientBiatecIdentityProvider,
+          clientBiatecPoolProvider,
+        } = await setupPool({
           algod,
           signer: deployerSigner,
           assetA: assetAId,
@@ -894,6 +1205,8 @@ describe('clamm', () => {
         expect(refBiatecConfigProvider.appId).toBeGreaterThan(0);
         const refBiatecIdentityProvider = await clientBiatecIdentityProvider.appClient.getAppReference();
         expect(refBiatecIdentityProvider.appId).toBeGreaterThan(0);
+        const refBiatecPoolProvider = await clientBiatecPoolProvider.appClient.getAppReference();
+        expect(refBiatecPoolProvider.appId).toBeGreaterThan(0);
         const ammRef = await clientBiatecClammPool.appClient.getAppReference();
         expect(ammRef.appId).toBeGreaterThan(0);
 
@@ -939,7 +1252,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const ret = await liqudidtyResult.return;
@@ -962,8 +1275,9 @@ describe('clamm', () => {
             assetB: assetBId,
             appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+            appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const retSwap = await swapResult.return;
@@ -1057,7 +1371,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const ret = await liqudidtyResult.return;
@@ -1078,7 +1392,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(7000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const retLRemove = await liqudidtyRemoveResult.return;
@@ -1189,7 +1503,12 @@ describe('clamm', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const { clientBiatecClammPool, clientBiatecConfigProvider, clientBiatecIdentityProvider } = await setupPool({
+        const {
+          clientBiatecClammPool,
+          clientBiatecConfigProvider,
+          clientBiatecIdentityProvider,
+          clientBiatecPoolProvider,
+        } = await setupPool({
           algod,
           signer: deployerSigner,
           assetA: assetAId,
@@ -1204,6 +1523,8 @@ describe('clamm', () => {
         expect(refBiatecConfigProvider.appId).toBeGreaterThan(0);
         const refBiatecIdentityProvider = await clientBiatecIdentityProvider.appClient.getAppReference();
         expect(refBiatecIdentityProvider.appId).toBeGreaterThan(0);
+        const refBiatecPoolProvider = await clientBiatecPoolProvider.appClient.getAppReference();
+        expect(refBiatecPoolProvider.appId).toBeGreaterThan(0);
         const ammRef = await clientBiatecClammPool.appClient.getAppReference();
         expect(ammRef.appId).toBeGreaterThan(0);
 
@@ -1265,7 +1586,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
-          sendParams: { ...params, fee: algokit.microAlgos(6000) },
+          sendParams: { ...params, fee: algokit.microAlgos(9000) },
         });
 
         const ret = await liqudidtyResult.return;
@@ -1297,12 +1618,13 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+            appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
             minimumToReceive: 0,
             txSwap: addSwapA,
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const retSwap = await swapResult.return;
@@ -1337,7 +1659,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(7000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const retLRemove = await liqudidtyRemoveResult.return;
@@ -1463,7 +1785,12 @@ describe('clamm', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const { clientBiatecClammPool, clientBiatecConfigProvider, clientBiatecIdentityProvider } = await setupPool({
+        const {
+          clientBiatecClammPool,
+          clientBiatecConfigProvider,
+          clientBiatecIdentityProvider,
+          clientBiatecPoolProvider,
+        } = await setupPool({
           algod,
           signer: deployerSigner,
           assetA: assetAId,
@@ -1478,6 +1805,8 @@ describe('clamm', () => {
         expect(refBiatecConfigProvider.appId).toBeGreaterThan(0);
         const refBiatecIdentityProvider = await clientBiatecIdentityProvider.appClient.getAppReference();
         expect(refBiatecIdentityProvider.appId).toBeGreaterThan(0);
+        const refBiatecPoolProvider = await clientBiatecPoolProvider.appClient.getAppReference();
+        expect(refBiatecPoolProvider.appId).toBeGreaterThan(0);
         const ammRef = await clientBiatecClammPool.appClient.getAppReference();
         expect(ammRef.appId).toBeGreaterThan(0);
 
@@ -1539,7 +1868,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
-          sendParams: { ...params, fee: algokit.microAlgos(6000) },
+          sendParams: { ...params, fee: algokit.microAlgos(9000) },
         });
 
         const ret = await liqudidtyResult.return;
@@ -1571,12 +1900,13 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+            appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
             minimumToReceive: 0,
             txSwap: addSwapA,
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const retSwap = await swapResult.return;
@@ -1611,7 +1941,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(7000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const retLRemove = await liqudidtyRemoveResult.return;
@@ -1712,6 +2042,74 @@ describe('clamm', () => {
             verificationClass: 0n,
           },
 
+          stats1: {
+            isVerified: 0n,
+            assetA: 17899n,
+            assetB: 17900n,
+            verificationClass: 0n,
+            latestPrice: 1281250000n,
+            period1NowVolumeA: 2500000000n,
+            period1NowVolumeB: 2500000000n,
+            period1NowFeeA: 500000000n,
+            period1NowFeeB: 0n,
+            period1NowVWAP: 1281250000n,
+            period1NowTime: 1710879521n,
+            period1PrevVolumeA: 0n,
+            period1PrevVolumeB: 0n,
+            period1PrevFeeA: 0n,
+            period1PrevFeeB: 0n,
+            period1PrevVWAP: 0n,
+            period1PrevTime: 0n,
+            period2NowVolumeA: 2500000000n,
+            period2NowVolumeB: 2500000000n,
+            period2NowFeeA: 500000000n,
+            period2NowFeeB: 0n,
+            period2NowVWAP: 1281250000n,
+            period2NowTime: 1710879521n,
+            period2PrevVolumeA: 0n,
+            period2PrevVolumeB: 0n,
+            period2PrevFeeA: 0n,
+            period2PrevFeeB: 0n,
+            period2PrevVWAP: 0n,
+            period2PrevTime: 0n,
+            period3NowVolumeA: 2500000000n,
+            period3NowVolumeB: 2500000000n,
+            period3NowFeeA: 500000000n,
+            period3NowFeeB: 0n,
+            period3NowVWAP: 1281250000n,
+            period3NowTime: 1710879521n,
+            period3PrevVolumeA: 0n,
+            period3PrevVolumeB: 0n,
+            period3PrevFeeA: 0n,
+            period3PrevFeeB: 0n,
+            period3PrevVWAP: 0n,
+            period3PrevTime: 0n,
+            period4NowVolumeA: 2500000000n,
+            period4NowVolumeB: 2500000000n,
+            period4NowFeeA: 500000000n,
+            period4NowFeeB: 0n,
+            period4NowVWAP: 1281250000n,
+            period4NowTime: 1710879521n,
+            period4PrevVolumeA: 0n,
+            period4PrevVolumeB: 0n,
+            period4PrevFeeA: 0n,
+            period4PrevFeeB: 0n,
+            period4PrevVWAP: 0n,
+            period4PrevTime: 0n,
+            period5NowVolumeA: 2500000000n,
+            period5NowVolumeB: 2500000000n,
+            period5NowFeeA: 500000000n,
+            period5NowFeeB: 0n,
+            period5NowVWAP: 1281250000n,
+            period5NowTime: 1710879521n,
+            period5PrevVolumeA: 0n,
+            period5PrevVolumeB: 0n,
+            period5PrevFeeA: 0n,
+            period5PrevFeeB: 0n,
+            period5PrevVWAP: 0n,
+            period5PrevTime: 0n,
+          },
+
           // in the pool is now A: 2.5 B: 0
 
           add2A: 7.5,
@@ -1761,6 +2159,73 @@ describe('clamm', () => {
             verificationClass: 0n,
           },
 
+          stats2: {
+            isVerified: 0n,
+            assetA: 18316n,
+            assetB: 18317n,
+            verificationClass: 0n,
+            latestPrice: 1281250000n,
+            period1NowVolumeA: 12500000000n,
+            period1NowVolumeB: 18125000000n,
+            period1NowFeeA: 500000000n,
+            period1NowFeeB: 3125000000n,
+            period1NowVWAP: 1281250000n,
+            period1NowTime: 1710884496n,
+            period1PrevVolumeA: 0n,
+            period1PrevVolumeB: 0n,
+            period1PrevFeeA: 0n,
+            period1PrevFeeB: 0n,
+            period1PrevVWAP: 0n,
+            period1PrevTime: 0n,
+            period2NowVolumeA: 12500000000n,
+            period2NowVolumeB: 18125000000n,
+            period2NowFeeA: 500000000n,
+            period2NowFeeB: 3125000000n,
+            period2NowVWAP: 1281250000n,
+            period2NowTime: 1710884496n,
+            period2PrevVolumeA: 0n,
+            period2PrevVolumeB: 0n,
+            period2PrevFeeA: 0n,
+            period2PrevFeeB: 0n,
+            period2PrevVWAP: 0n,
+            period2PrevTime: 0n,
+            period3NowVolumeA: 12500000000n,
+            period3NowVolumeB: 18125000000n,
+            period3NowFeeA: 500000000n,
+            period3NowFeeB: 3125000000n,
+            period3NowVWAP: 1281250000n,
+            period3NowTime: 1710884496n,
+            period3PrevVolumeA: 0n,
+            period3PrevVolumeB: 0n,
+            period3PrevFeeA: 0n,
+            period3PrevFeeB: 0n,
+            period3PrevVWAP: 0n,
+            period3PrevTime: 0n,
+            period4NowVolumeA: 12500000000n,
+            period4NowVolumeB: 18125000000n,
+            period4NowFeeA: 500000000n,
+            period4NowFeeB: 3125000000n,
+            period4NowVWAP: 1281250000n,
+            period4NowTime: 1710884496n,
+            period4PrevVolumeA: 0n,
+            period4PrevVolumeB: 0n,
+            period4PrevFeeA: 0n,
+            period4PrevFeeB: 0n,
+            period4PrevVWAP: 0n,
+            period4PrevTime: 0n,
+            period5NowVolumeA: 12500000000n,
+            period5NowVolumeB: 18125000000n,
+            period5NowFeeA: 500000000n,
+            period5NowFeeB: 3125000000n,
+            period5NowVWAP: 1281250000n,
+            period5NowTime: 1710884496n,
+            period5PrevVolumeA: 0n,
+            period5PrevVolumeB: 0n,
+            period5PrevFeeA: 0n,
+            period5PrevFeeB: 0n,
+            period5PrevVWAP: 0n,
+            period5PrevTime: 0n,
+          },
           checkDistributed3: 47.5,
 
           lpTokensToWithdraw: 47.5,
@@ -1789,7 +2254,12 @@ describe('clamm', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const { clientBiatecClammPool, clientBiatecConfigProvider, clientBiatecIdentityProvider } = await setupPool({
+        const {
+          clientBiatecClammPool,
+          clientBiatecConfigProvider,
+          clientBiatecIdentityProvider,
+          clientBiatecPoolProvider,
+        } = await setupPool({
           algod,
           signer: deployerSigner,
           assetA: assetAId,
@@ -1804,6 +2274,8 @@ describe('clamm', () => {
         expect(refBiatecConfigProvider.appId).toBeGreaterThan(0);
         const refBiatecIdentityProvider = await clientBiatecIdentityProvider.appClient.getAppReference();
         expect(refBiatecIdentityProvider.appId).toBeGreaterThan(0);
+        const refBiatecPoolProvider = await clientBiatecPoolProvider.appClient.getAppReference();
+        expect(refBiatecPoolProvider.appId).toBeGreaterThan(0);
         const ammRef = await clientBiatecClammPool.appClient.getAppReference();
         expect(ammRef.appId).toBeGreaterThan(0);
 
@@ -1865,7 +2337,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
-          sendParams: { ...params, fee: algokit.microAlgos(6000) },
+          sendParams: { ...params, fee: algokit.microAlgos(9000) },
         });
 
         const ret = await liqudidtyResult.return;
@@ -1903,12 +2375,13 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+            appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
             minimumToReceive: 0,
             txSwap: addSwapA,
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const retSwap = await swapResult.return;
@@ -1927,6 +2400,18 @@ describe('clamm', () => {
         t.checkStatus3.assetB = BigInt(assetBId);
 
         expect(status3).toEqual(t.checkStatus3);
+
+        const tradingStats = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
+        const stats1 = return2stats(tradingStats.return);
+        t.stats1.assetA = BigInt(assetAId);
+        t.stats1.assetB = BigInt(assetBId);
+        t.stats1.period1NowTime = stats1.period1NowTime;
+        t.stats1.period2NowTime = stats1.period2NowTime;
+        t.stats1.period3NowTime = stats1.period3NowTime;
+        t.stats1.period4NowTime = stats1.period4NowTime;
+        t.stats1.period5NowTime = stats1.period5NowTime;
+        expect(JSON.stringify(stats1)).toBe(JSON.stringify(t.stats1));
+
         /// /////// ADD LIQUDITY 2
 
         const addLiquidity2A = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -1954,7 +2439,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidity2Params', addLiquidity2Params);
         const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
-          sendParams: { ...params, fee: algokit.microAlgos(6000) },
+          sendParams: { ...params, fee: algokit.microAlgos(9000) },
         });
 
         const ret2 = await liqudidtyResult2.return;
@@ -1993,12 +2478,13 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+            appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
             minimumToReceive: 0,
             txSwap: addSwapA2,
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const retSwap2 = await swapResult2.return;
@@ -2023,6 +2509,18 @@ describe('clamm', () => {
         t.checkStatus5.assetB = BigInt(assetBId);
 
         expect(status5).toEqual(t.checkStatus5);
+
+        const tradingStats2 = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
+        const stats2 = return2stats(tradingStats2.return);
+        t.stats2.assetA = BigInt(assetAId);
+        t.stats2.assetB = BigInt(assetBId);
+        t.stats2.period1NowTime = stats2.period1NowTime;
+        t.stats2.period2NowTime = stats2.period2NowTime;
+        t.stats2.period3NowTime = stats2.period3NowTime;
+        t.stats2.period4NowTime = stats2.period4NowTime;
+        t.stats2.period5NowTime = stats2.period5NowTime;
+        expect(JSON.stringify(stats2)).toBe(JSON.stringify(t.stats2));
+
         /// /////// REMOVE LIQUIDITY
 
         const removeLiquidityLP = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -2040,7 +2538,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(7000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const retLRemove = await liqudidtyRemoveResult.return;
@@ -2166,7 +2664,12 @@ describe('clamm', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const { clientBiatecClammPool, clientBiatecConfigProvider, clientBiatecIdentityProvider } = await setupPool({
+        const {
+          clientBiatecClammPool,
+          clientBiatecConfigProvider,
+          clientBiatecIdentityProvider,
+          clientBiatecPoolProvider,
+        } = await setupPool({
           algod,
           signer: deployerSigner,
           assetA: 0,
@@ -2181,6 +2684,8 @@ describe('clamm', () => {
         expect(refBiatecConfigProvider.appId).toBeGreaterThan(0);
         const refBiatecIdentityProvider = await clientBiatecIdentityProvider.appClient.getAppReference();
         expect(refBiatecIdentityProvider.appId).toBeGreaterThan(0);
+        const refBiatecPoolProvider = await clientBiatecPoolProvider.appClient.getAppReference();
+        expect(refBiatecPoolProvider.appId).toBeGreaterThan(0);
         const ammRef = await clientBiatecClammPool.appClient.getAppReference();
         expect(ammRef.appId).toBeGreaterThan(0);
 
@@ -2259,7 +2764,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
-          sendParams: { ...params, fee: algokit.microAlgos(6000) },
+          sendParams: { ...params, fee: algokit.microAlgos(9000) },
         });
 
         const ret = await liqudidtyResult.return;
@@ -2299,12 +2804,13 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+            appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
             minimumToReceive: 0,
             txSwap: addSwapA,
             assetA: t.assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(6000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const retSwap = await swapResult.return;
@@ -2339,7 +2845,7 @@ describe('clamm', () => {
             assetA: t.assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(7000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
         );
 
         const retLRemove = await liqudidtyRemoveResult.return;
@@ -2358,6 +2864,1996 @@ describe('clamm', () => {
         t.checkStatus4.assetB = BigInt(assetBId);
 
         expect(status4).toEqual(t.checkStatus4);
+      }
+    } catch (e) {
+      console.debug(e);
+      throw e;
+    }
+  });
+  test('I can withdraw lp fees from biatec account', async () => {
+    try {
+      const { algod } = fixture.context;
+
+      const testSet = [
+        {
+          P: 1.5625,
+          P1: 1,
+          P2: 1.5625,
+
+          checkStatus1: {
+            scale: 1000000000n,
+            assetABalance: 0n,
+            assetBBalance: 0n,
+            priceMinSqrt: 1000000000n,
+            priceMaxSqrt: 1250000000n,
+            currentLiqudity: 0n,
+            releasedLiqudity: 0n,
+            liqudityUsersFromFees: 0n,
+            liqudityBiatecFromFees: 0n,
+            assetA: 0n,
+            assetB: 0n,
+            poolToken: 0n,
+            price: 1562500000n,
+            fee: 100000000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          add1A: 0,
+          add1B: 2.5,
+          lpTokensToReceive: 10,
+          checkDistributed1: 10,
+
+          checkStatus2: {
+            scale: 1000000000n,
+            assetABalance: 0n,
+            assetBBalance: 2500000000n,
+            priceMinSqrt: 1000000000n,
+            priceMaxSqrt: 1250000000n,
+            currentLiqudity: 10000000000n,
+            releasedLiqudity: 10000000000n,
+            liqudityUsersFromFees: 0n,
+            liqudityBiatecFromFees: 0n,
+            assetA: 5680n,
+            assetB: 5681n,
+            poolToken: 5690n,
+            price: 1562500000n,
+            fee: 100000000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          swap1A: 2 / 0.8, // i will swap this asset from A asset to B and this is what I deposit
+          swap1B: 2.5, // this is how much asset B is in the pool and what i want to receive
+
+          checkStatus3: {
+            scale: 1000000000n,
+            assetABalance: 2500000000n,
+            assetBBalance: 0n,
+            priceMinSqrt: 1000000000n,
+            priceMaxSqrt: 1250000000n,
+            currentLiqudity: 12500000000n,
+            releasedLiqudity: 10000000000n,
+            liqudityUsersFromFees: 2250000000n,
+            liqudityBiatecFromFees: 250000000n,
+            assetA: 11498n,
+            assetB: 11499n,
+            poolToken: 11508n,
+            price: 1000000000n,
+            fee: 100000000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          // in the pool is now A: 2.5 B: 0
+
+          removeFromBiatecFees1: 200000000n,
+          removeFromBiatecFees1Check: 200000n,
+
+          checkStatus4: {
+            scale: 1000000000n,
+            assetABalance: 2460000000n,
+            assetBBalance: 0n,
+            priceMinSqrt: 1000000000n,
+            priceMaxSqrt: 1250000000n,
+            currentLiqudity: 12300000000n,
+            releasedLiqudity: 10000000000n,
+            liqudityUsersFromFees: 2250000000n,
+            liqudityBiatecFromFees: 50000000n,
+            assetA: 11607n,
+            assetB: 11608n,
+            poolToken: 11617n,
+            price: 1000000000n,
+            fee: 100000000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          add2A: 7.54,
+          add2B: 0,
+          lpTokensToReceive2: 37.7,
+
+          checkStatus5: {
+            scale: 1000000000n,
+            assetABalance: 10000000000n,
+            assetBBalance: 0n,
+            priceMinSqrt: 1000000000n,
+            priceMaxSqrt: 1250000000n,
+            currentLiqudity: 50000000000n,
+            releasedLiqudity: 47700000000n,
+            liqudityUsersFromFees: 2250000000n,
+            liqudityBiatecFromFees: 50000000n,
+            assetA: 11695n,
+            assetB: 11696n,
+            poolToken: 11705n,
+            price: 1000000000n,
+            fee: 100000000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          swap2B: 12.5 / 0.8, // i will swap this asset from B asset to A and this is what I deposit
+          swap2A: 10, // this is how much asset A i should receive
+
+          checkStatus6: {
+            scale: 1000000000n,
+            assetABalance: 0n,
+            assetBBalance: 15625000000n,
+            priceMinSqrt: 1000000000n,
+            priceMaxSqrt: 1250000000n,
+            currentLiqudity: 62500000000n,
+            releasedLiqudity: 47700000000n,
+            liqudityUsersFromFees: 13500000000n,
+            liqudityBiatecFromFees: 1300000000n,
+            assetA: 11744n,
+            assetB: 11745n,
+            poolToken: 11754n,
+            price: 1562500000n,
+            fee: 100000000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          removeFromBiatecFees2: 0n,
+          removeFromBiatecFees2Check: 1300000n,
+
+          checkStatus7: {
+            scale: 1000000000n,
+            assetABalance: 0n,
+            assetBBalance: 15300000000n,
+            priceMinSqrt: 1000000000n,
+            priceMaxSqrt: 1250000000n,
+            currentLiqudity: 61200000000n,
+            releasedLiqudity: 47700000000n,
+            liqudityUsersFromFees: 13500000000n,
+            liqudityBiatecFromFees: 0n,
+            assetA: 12018n,
+            assetB: 12019n,
+            poolToken: 12028n,
+            price: 1562500000n,
+            fee: 100000000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+        },
+      ];
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const t of testSet) {
+        const {
+          clientBiatecClammPool,
+          clientBiatecConfigProvider,
+          clientBiatecIdentityProvider,
+          clientBiatecPoolProvider,
+        } = await setupPool({
+          algod,
+          signer: deployerSigner,
+          assetA: assetAId,
+          biatecFee: 100_000_000n,
+          lpFee: 100_000_000n,
+          p: BigInt(t.P * SCALE),
+          p1: BigInt(t.P1 * SCALE),
+          p2: BigInt(t.P2 * SCALE),
+        });
+
+        const refBiatecConfigProvider = await clientBiatecConfigProvider.appClient.getAppReference();
+        expect(refBiatecConfigProvider.appId).toBeGreaterThan(0);
+        const refBiatecIdentityProvider = await clientBiatecIdentityProvider.appClient.getAppReference();
+        expect(refBiatecIdentityProvider.appId).toBeGreaterThan(0);
+        const refBiatecPoolProvider = await clientBiatecPoolProvider.appClient.getAppReference();
+        expect(refBiatecPoolProvider.appId).toBeGreaterThan(0);
+        const ammRef = await clientBiatecClammPool.appClient.getAppReference();
+        expect(ammRef.appId).toBeGreaterThan(0);
+
+        const params = await algod.getTransactionParams().do();
+        // opt in to the LP token
+
+        const poolTokenId = (await clientBiatecClammPool.getLpTokenId({})).return as bigint;
+        expect(poolTokenId).toBeGreaterThan(0);
+        const optinToTheLPToken = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: 0,
+          assetIndex: Number(poolTokenId),
+          from: deployer.addr,
+          suggestedParams: params,
+          to: deployer.addr,
+        });
+        const signedOptin = algosdk.signTransaction(optinToTheLPToken, deployer.sk);
+
+        await algod.sendRawTransaction(signedOptin.blob).do();
+
+        await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
+
+        const status1 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus1.poolToken = BigInt(poolTokenId);
+        t.checkStatus1.assetA = BigInt(assetAId);
+        t.checkStatus1.assetB = BigInt(assetBId);
+
+        expect(status1).toEqual(t.checkStatus1);
+        console.log('status1', status1);
+        /// /////// ADD LIQUIDITY 1
+        const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add1A * SCALE_A)),
+          assetIndex: assetAId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidityB = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add1B * SCALE_B)),
+          assetIndex: assetBId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidityParams = {
+          appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+          appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+          txAssetADeposit: addLiquidityA,
+          txAssetBDeposit: addLiquidityB,
+          assetLP: poolTokenId,
+          assetA: assetAId,
+          assetB: assetBId,
+        };
+        console.log('addLiquidityParams', addLiquidityParams);
+        const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
+          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+        });
+
+        const ret = await liqudidtyResult.return;
+        expect(ret?.valueOf()).toEqual(BigInt(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS));
+
+        const distributed1 = await clientBiatecClammPool.calculateDistributedLiquidity({
+          assetLP: poolTokenId,
+          currentDeposit: 0,
+        });
+        expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
+        const status2 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus2.poolToken = BigInt(poolTokenId);
+        t.checkStatus2.assetA = BigInt(assetAId);
+        t.checkStatus2.assetB = BigInt(assetBId);
+
+        expect(status2).toEqual(t.checkStatus2);
+        /// /////// SWAP 1
+
+        const addSwapA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.swap1A * SCALE_A)), // price <1,1.5625> p = 1.5625 => Max EUR 0 USD
+          assetIndex: assetAId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+
+        const swapResult = await clientBiatecClammPool.swap(
+          {
+            appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+            appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+            appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
+            minimumToReceive: 0,
+            txSwap: addSwapA,
+            assetA: assetAId,
+            assetB: assetBId,
+          },
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+        );
+
+        const retSwap = await swapResult.return;
+        expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swap1B * SCALE_B)));
+
+        const status3 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus3.poolToken = BigInt(poolTokenId);
+        t.checkStatus3.assetA = BigInt(assetAId);
+        t.checkStatus3.assetB = BigInt(assetBId);
+
+        expect(status3).toEqual(t.checkStatus3);
+
+        // REMOVE LIQUIDITY FROM FEES FOR BIATEC
+
+        const liqudidtyRemoveResult1 = await clientBiatecClammPool.removeLiquidityAdmin(
+          {
+            appBiatecConfigProvider: refBiatecConfigProvider.appId,
+            assetLP: poolTokenId,
+            assetA: assetAId,
+            assetB: assetBId,
+            amount: t.removeFromBiatecFees1,
+          },
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+        );
+
+        const retLRemove1 = await liqudidtyRemoveResult1.return;
+        expect(retLRemove1?.valueOf()).toEqual(BigInt(t.removeFromBiatecFees1Check));
+
+        const status4 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus4.poolToken = BigInt(poolTokenId);
+        t.checkStatus4.assetA = BigInt(assetAId);
+        t.checkStatus4.assetB = BigInt(assetBId);
+
+        expect(status4).toEqual(t.checkStatus4);
+        /// /////// ADD LIQUDITY 2
+
+        const addLiquidity2A = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add2A * SCALE_A)),
+          assetIndex: assetAId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidity2B = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add2B * SCALE_B)),
+          assetIndex: assetBId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidity2Params = {
+          appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+          appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+          txAssetADeposit: addLiquidity2A,
+          txAssetBDeposit: addLiquidity2B,
+          assetLP: poolTokenId,
+          assetA: assetAId,
+          assetB: assetBId,
+        };
+        console.log('addLiquidity2Params', addLiquidity2Params);
+        const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
+          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+        });
+
+        const ret2 = await liqudidtyResult2.return;
+        expect(ret2?.valueOf()).toEqual(BigInt(t.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS));
+
+        const status5 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus5.poolToken = BigInt(poolTokenId);
+        t.checkStatus5.assetA = BigInt(assetAId);
+        t.checkStatus5.assetB = BigInt(assetBId);
+
+        expect(status5).toEqual(t.checkStatus5);
+        /// /////// SWAP 2
+
+        const addSwapA2 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.swap2B * SCALE_B)),
+          assetIndex: assetBId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+
+        const swapResult2 = await clientBiatecClammPool.swap(
+          {
+            appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+            appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+            appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
+            minimumToReceive: 0,
+            txSwap: addSwapA2,
+            assetA: assetAId,
+            assetB: assetBId,
+          },
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+        );
+
+        const retSwap2 = await swapResult2.return;
+        expect(retSwap2?.valueOf()).toEqual(BigInt(Math.round(t.swap2A * SCALE_A)));
+
+        const status6 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus6.poolToken = BigInt(poolTokenId);
+        t.checkStatus6.assetA = BigInt(assetAId);
+        t.checkStatus6.assetB = BigInt(assetBId);
+
+        expect(status6).toEqual(t.checkStatus6);
+
+        // REMOVE LIQUIDITY FROM FEES FOR BIATEC
+
+        const liqudidtyRemoveResult2 = await clientBiatecClammPool.removeLiquidityAdmin(
+          {
+            appBiatecConfigProvider: refBiatecConfigProvider.appId,
+            assetLP: poolTokenId,
+            assetA: assetAId,
+            assetB: assetBId,
+            amount: t.removeFromBiatecFees2,
+          },
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+        );
+
+        const retLRemove2 = await liqudidtyRemoveResult2.return;
+        expect(retLRemove2?.valueOf()).toEqual(BigInt(t.removeFromBiatecFees2Check));
+
+        const status7 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus7.poolToken = BigInt(poolTokenId);
+        t.checkStatus7.assetA = BigInt(assetAId);
+        t.checkStatus7.assetB = BigInt(assetBId);
+
+        expect(status7).toEqual(t.checkStatus7);
+      }
+    } catch (e) {
+      console.debug(e);
+      throw e;
+    }
+  });
+  test('If someone deposits the asset a or asset b to the pool, we can distribute these assets to lp holders', async () => {
+    try {
+      const { algod } = fixture.context;
+
+      const testSet = [
+        {
+          P: 1.5625,
+          P1: 1,
+          P2: 1.5625,
+
+          checkStatus1: {
+            scale: 1000000000n,
+            assetABalance: 0n,
+            assetBBalance: 0n,
+            priceMinSqrt: 1000000000n,
+            priceMaxSqrt: 1250000000n,
+            currentLiqudity: 0n,
+            releasedLiqudity: 0n,
+            liqudityUsersFromFees: 0n,
+            liqudityBiatecFromFees: 0n,
+            assetA: 0n,
+            assetB: 0n,
+            poolToken: 0n,
+            price: 1562500000n,
+            fee: 100000000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          add1A: 0,
+          add1B: 2.5,
+          lpTokensToReceive: 10,
+          checkDistributed1: 10,
+
+          checkStatus2: {
+            scale: 1000000000n,
+            assetABalance: 0n,
+            assetBBalance: 2500000000n,
+            priceMinSqrt: 1000000000n,
+            priceMaxSqrt: 1250000000n,
+            currentLiqudity: 10000000000n,
+            releasedLiqudity: 10000000000n,
+            liqudityUsersFromFees: 0n,
+            liqudityBiatecFromFees: 0n,
+            assetA: 5680n,
+            assetB: 5681n,
+            poolToken: 5690n,
+            price: 1562500000n,
+            fee: 100000000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          depositA: 1,
+          depositB: 1,
+          performDepositA: 1000000000n,
+          performDepositB: 1000000000n,
+          distributeResult: 9880269745n,
+
+          checkStatus3: {
+            scale: 1000000000n,
+            assetABalance: 1000000000n,
+            assetBBalance: 3500000000n,
+            priceMinSqrt: 1000000000n,
+            priceMaxSqrt: 1250000000n,
+            currentLiqudity: 19880269745n,
+            releasedLiqudity: 10000000000n,
+            liqudityUsersFromFees: 8892242770n,
+            liqudityBiatecFromFees: 988026975n,
+            assetA: 32620n,
+            assetB: 32621n,
+            poolToken: 32631n,
+            price: 1383102891n,
+            fee: 100000000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+        },
+
+        {
+          P: 1.5625,
+          P1: 1,
+          P2: 1.5625,
+
+          checkStatus1: {
+            scale: 1000000000n,
+            assetABalance: 0n,
+            assetBBalance: 0n,
+            priceMinSqrt: 1000000000n,
+            priceMaxSqrt: 1250000000n,
+            currentLiqudity: 0n,
+            releasedLiqudity: 0n,
+            liqudityUsersFromFees: 0n,
+            liqudityBiatecFromFees: 0n,
+            assetA: 0n,
+            assetB: 0n,
+            poolToken: 0n,
+            price: 1562500000n,
+            fee: 100000000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          add1A: 0,
+          add1B: 2.5,
+          lpTokensToReceive: 10,
+          checkDistributed1: 10,
+
+          checkStatus2: {
+            scale: 1000000000n,
+            assetABalance: 0n,
+            assetBBalance: 2500000000n,
+            priceMinSqrt: 1000000000n,
+            priceMaxSqrt: 1250000000n,
+            currentLiqudity: 10000000000n,
+            releasedLiqudity: 10000000000n,
+            liqudityUsersFromFees: 0n,
+            liqudityBiatecFromFees: 0n,
+            assetA: 5680n,
+            assetB: 5681n,
+            poolToken: 5690n,
+            price: 1562500000n,
+            fee: 100000000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          depositA: 0,
+          depositB: 1,
+          performDepositA: 0n,
+          performDepositB: 1000000000n,
+          distributeResult: 4000000000n,
+
+          checkStatus3: {
+            scale: 1000000000n,
+            assetABalance: 0n,
+            assetBBalance: 3500000000n,
+            priceMinSqrt: 1000000000n,
+            priceMaxSqrt: 1250000000n,
+            currentLiqudity: 14000000000n,
+            releasedLiqudity: 10000000000n,
+            liqudityUsersFromFees: 3600000000n,
+            liqudityBiatecFromFees: 400000000n,
+            assetA: 13731n,
+            assetB: 13732n,
+            poolToken: 13770n,
+            price: 1562500000n,
+            fee: 100000000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+        },
+      ];
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const t of testSet) {
+        const { clientBiatecClammPool, clientBiatecConfigProvider, clientBiatecIdentityProvider } = await setupPool({
+          algod,
+          signer: deployerSigner,
+          assetA: assetAId,
+          biatecFee: 100_000_000n,
+          lpFee: 100_000_000n,
+          p: BigInt(t.P * SCALE),
+          p1: BigInt(t.P1 * SCALE),
+          p2: BigInt(t.P2 * SCALE),
+        });
+
+        const refBiatecConfigProvider = await clientBiatecConfigProvider.appClient.getAppReference();
+        expect(refBiatecConfigProvider.appId).toBeGreaterThan(0);
+        const refBiatecIdentityProvider = await clientBiatecIdentityProvider.appClient.getAppReference();
+        expect(refBiatecIdentityProvider.appId).toBeGreaterThan(0);
+        const ammRef = await clientBiatecClammPool.appClient.getAppReference();
+        expect(ammRef.appId).toBeGreaterThan(0);
+
+        const params = await algod.getTransactionParams().do();
+        // opt in to the LP token
+
+        const poolTokenId = (await clientBiatecClammPool.getLpTokenId({})).return as bigint;
+        expect(poolTokenId).toBeGreaterThan(0);
+        const optinToTheLPToken = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: 0,
+          assetIndex: Number(poolTokenId),
+          from: deployer.addr,
+          suggestedParams: params,
+          to: deployer.addr,
+        });
+        const signedOptin = algosdk.signTransaction(optinToTheLPToken, deployer.sk);
+
+        await algod.sendRawTransaction(signedOptin.blob).do();
+
+        await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
+
+        const status1 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus1.poolToken = BigInt(poolTokenId);
+        t.checkStatus1.assetA = BigInt(assetAId);
+        t.checkStatus1.assetB = BigInt(assetBId);
+
+        expect(status1).toEqual(t.checkStatus1);
+        console.log('status1', status1);
+        /// /////// ADD LIQUIDITY 1
+        const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add1A * SCALE_A)),
+          assetIndex: assetAId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidityB = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add1B * SCALE_B)),
+          assetIndex: assetBId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidityParams = {
+          appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+          appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+          txAssetADeposit: addLiquidityA,
+          txAssetBDeposit: addLiquidityB,
+          assetLP: poolTokenId,
+          assetA: assetAId,
+          assetB: assetBId,
+        };
+        console.log('addLiquidityParams', addLiquidityParams);
+        const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
+          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+        });
+
+        const ret = await liqudidtyResult.return;
+        expect(ret?.valueOf()).toEqual(BigInt(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS));
+
+        const distributed1 = await clientBiatecClammPool.calculateDistributedLiquidity({
+          assetLP: poolTokenId,
+          currentDeposit: 0,
+        });
+        expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
+        const status2 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus2.poolToken = BigInt(poolTokenId);
+        t.checkStatus2.assetA = BigInt(assetAId);
+        t.checkStatus2.assetB = BigInt(assetBId);
+
+        expect(status2).toEqual(t.checkStatus2);
+
+        const depositA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.depositA * SCALE_A)),
+          assetIndex: assetAId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const depositASigned = depositA.signTxn(deployer.sk);
+        const depositB = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.depositB * SCALE_B)),
+          assetIndex: assetBId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const depositBSigned = depositB.signTxn(deployer.sk);
+        await algod.sendRawTransaction(depositASigned).do();
+        await algod.sendRawTransaction(depositBSigned).do();
+
+        // redistribute
+        const distributeResult = await clientBiatecClammPool.distributeExcessAssets(
+          {
+            amountA: t.performDepositA,
+            amountB: t.performDepositB,
+            assetA: assetAId,
+            assetB: assetBId,
+            appBiatecConfigProvider: refBiatecConfigProvider.appId,
+          },
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(3000) },
+          }
+        );
+        const distributeResultRet = await distributeResult.return;
+        expect(distributeResultRet?.valueOf()).toEqual(BigInt(t.distributeResult));
+
+        const status3 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus3.poolToken = BigInt(poolTokenId);
+        t.checkStatus3.assetA = BigInt(assetAId);
+        t.checkStatus3.assetB = BigInt(assetBId);
+
+        expect(status3).toEqual(t.checkStatus3);
+      }
+    } catch (e) {
+      console.debug(e);
+      throw e;
+    }
+  });
+  test('I can make the pool protect algorand network', async () => {
+    const { algod } = fixture.context;
+
+    const { clientBiatecClammPool } = await setupPool({
+      algod,
+      signer: deployerSigner,
+      assetA: assetAId,
+      biatecFee: 100_000_000n,
+      lpFee: 100_000_000n,
+      p: 100_000_000n,
+      p1: 100_000_000n,
+      p2: 100_000_000n,
+    });
+
+    expect(clientBiatecClammPool.sendOnlineKeyRegistration).not.toBeNull();
+  });
+  test('Extreme-SamePriceLowTop - ASASR - I can handle the trade as an order book item', async () => {
+    try {
+      const { algod } = fixture.context;
+
+      const testSet = [
+        {
+          P: 4,
+          P1: 4,
+          P2: 4,
+
+          checkStatus1: {
+            scale: 1000000000n,
+            assetABalance: 0n,
+            assetBBalance: 0n,
+            priceMinSqrt: 2000000000n,
+            priceMaxSqrt: 2000000000n,
+            currentLiqudity: 0n,
+            releasedLiqudity: 0n,
+            liqudityUsersFromFees: 0n,
+            liqudityBiatecFromFees: 0n,
+            assetA: 0n,
+            assetB: 0n,
+            poolToken: 0n,
+            price: 4000000000n,
+            fee: 100000000n,
+            biatecFee: 500000000n,
+            verificationClass: 0n,
+          },
+
+          add1A: 0,
+          add1B: 8,
+          lpTokensToReceive: 8,
+          checkDistributed1: 8,
+
+          checkStatus2: {
+            scale: 1000000000n,
+            assetABalance: 0n,
+            assetBBalance: 8000000000n,
+            priceMinSqrt: 2000000000n,
+            priceMaxSqrt: 2000000000n,
+            currentLiqudity: 8000000000n,
+            releasedLiqudity: 8000000000n,
+            liqudityUsersFromFees: 0n,
+            liqudityBiatecFromFees: 0n,
+            assetA: 19855n,
+            assetB: 19856n,
+            poolToken: 19866n,
+            price: 4000000000n,
+            fee: 100000000n,
+            biatecFee: 500000000n,
+            verificationClass: 0n,
+          },
+
+          swap1A: 1, // i will swap this asset from A asset to B and this is what I deposit
+          swap1B: 3.2, // this is how much asset B is in the pool and what i want to receive
+
+          checkStatus3: {
+            scale: 1000000000n,
+            assetABalance: 1000000000n,
+            assetBBalance: 4800000000n,
+            priceMinSqrt: 2000000000n,
+            priceMaxSqrt: 2000000000n,
+            currentLiqudity: 8800000000n,
+            releasedLiqudity: 8000000000n,
+            liqudityUsersFromFees: 400000000n,
+            liqudityBiatecFromFees: 400000000n,
+            assetA: 25290n,
+            assetB: 25291n,
+            poolToken: 26231n,
+            price: 4000000000n,
+            fee: 100000000n,
+            biatecFee: 500000000n,
+            verificationClass: 0n,
+          },
+
+          stats1: {
+            isVerified: 0n,
+            assetA: 26426n,
+            assetB: 26427n,
+            verificationClass: 0n,
+            latestPrice: 4000000000n,
+            period1NowVolumeA: 1000000000n,
+            period1NowVolumeB: 3200000000n,
+            period1NowFeeA: 90909090n,
+            period1NowFeeB: 0n,
+            period1NowVWAP: 4000000000n,
+            period1NowTime: 1710988646n,
+            period1PrevVolumeA: 0n,
+            period1PrevVolumeB: 0n,
+            period1PrevFeeA: 0n,
+            period1PrevFeeB: 0n,
+            period1PrevVWAP: 0n,
+            period1PrevTime: 0n,
+            period2NowVolumeA: 1000000000n,
+            period2NowVolumeB: 3200000000n,
+            period2NowFeeA: 90909090n,
+            period2NowFeeB: 0n,
+            period2NowVWAP: 4000000000n,
+            period2NowTime: 1710988646n,
+            period2PrevVolumeA: 0n,
+            period2PrevVolumeB: 0n,
+            period2PrevFeeA: 0n,
+            period2PrevFeeB: 0n,
+            period2PrevVWAP: 0n,
+            period2PrevTime: 0n,
+            period3NowVolumeA: 1000000000n,
+            period3NowVolumeB: 3200000000n,
+            period3NowFeeA: 90909090n,
+            period3NowFeeB: 0n,
+            period3NowVWAP: 4000000000n,
+            period3NowTime: 1710988646n,
+            period3PrevVolumeA: 0n,
+            period3PrevVolumeB: 0n,
+            period3PrevFeeA: 0n,
+            period3PrevFeeB: 0n,
+            period3PrevVWAP: 0n,
+            period3PrevTime: 0n,
+            period4NowVolumeA: 1000000000n,
+            period4NowVolumeB: 3200000000n,
+            period4NowFeeA: 90909090n,
+            period4NowFeeB: 0n,
+            period4NowVWAP: 4000000000n,
+            period4NowTime: 1710988646n,
+            period4PrevVolumeA: 0n,
+            period4PrevVolumeB: 0n,
+            period4PrevFeeA: 0n,
+            period4PrevFeeB: 0n,
+            period4PrevVWAP: 0n,
+            period4PrevTime: 0n,
+            period5NowVolumeA: 1000000000n,
+            period5NowVolumeB: 3200000000n,
+            period5NowFeeA: 90909090n,
+            period5NowFeeB: 0n,
+            period5NowVWAP: 4000000000n,
+            period5NowTime: 1710988646n,
+            period5PrevVolumeA: 0n,
+            period5PrevVolumeB: 0n,
+            period5PrevFeeA: 0n,
+            period5PrevFeeB: 0n,
+            period5PrevVWAP: 0n,
+            period5PrevTime: 0n,
+          },
+
+          // in the pool is now A: 2.5 B: 0
+
+          add2A: 7.5,
+          add2B: 0,
+          lpTokensToReceive2: 30, // 7.5*4
+
+          checkStatus4: {
+            scale: 1000000000n,
+            assetABalance: 8500000000n,
+            assetBBalance: 4800000000n,
+            priceMinSqrt: 2000000000n,
+            priceMaxSqrt: 2000000000n,
+            currentLiqudity: 38800000000n,
+            releasedLiqudity: 38000000000n,
+            liqudityUsersFromFees: 400000000n,
+            liqudityBiatecFromFees: 400000000n,
+            assetA: 26615n,
+            assetB: 26616n,
+            poolToken: 26626n,
+            price: 4000000000n,
+            fee: 100000000n,
+            biatecFee: 500000000n,
+            verificationClass: 0n,
+          },
+
+          checkDistributed2: 38,
+
+          swap2B: 10, // 10*0.8 =8.. 2 = fee .. i will swap this asset from B asset to A and this is what I deposit
+          swap2A: 2, // 10*0.8/4 this is how much asset A i should receive
+
+          checkDistributed3: 38,
+
+          checkStatus5: {
+            scale: 1000000000n,
+            assetABalance: 6500000000n,
+            assetBBalance: 14800000000n,
+            priceMinSqrt: 2000000000n,
+            priceMaxSqrt: 2000000000n,
+            currentLiqudity: 40800000000n,
+            releasedLiqudity: 38000000000n,
+            liqudityUsersFromFees: 1400000000n,
+            liqudityBiatecFromFees: 1400000000n,
+            assetA: 26909n,
+            assetB: 26910n,
+            poolToken: 26920n,
+            price: 4000000000n,
+            fee: 100000000n,
+            biatecFee: 500000000n,
+            verificationClass: 0n,
+          },
+
+          stats2: {
+            isVerified: 0n,
+            assetA: 27034n,
+            assetB: 27035n,
+            verificationClass: 0n,
+            latestPrice: 4000000000n,
+            period1NowVolumeA: 3000000000n,
+            period1NowVolumeB: 13200000000n,
+            period1NowFeeA: 90909090n,
+            period1NowFeeB: 725490196n,
+            period1NowVWAP: 4000000000n,
+            period1NowTime: 1710995096n,
+            period1PrevVolumeA: 0n,
+            period1PrevVolumeB: 0n,
+            period1PrevFeeA: 0n,
+            period1PrevFeeB: 0n,
+            period1PrevVWAP: 0n,
+            period1PrevTime: 0n,
+            period2NowVolumeA: 3000000000n,
+            period2NowVolumeB: 13200000000n,
+            period2NowFeeA: 90909090n,
+            period2NowFeeB: 725490196n,
+            period2NowVWAP: 4000000000n,
+            period2NowTime: 1710995096n,
+            period2PrevVolumeA: 0n,
+            period2PrevVolumeB: 0n,
+            period2PrevFeeA: 0n,
+            period2PrevFeeB: 0n,
+            period2PrevVWAP: 0n,
+            period2PrevTime: 0n,
+            period3NowVolumeA: 3000000000n,
+            period3NowVolumeB: 13200000000n,
+            period3NowFeeA: 90909090n,
+            period3NowFeeB: 725490196n,
+            period3NowVWAP: 4000000000n,
+            period3NowTime: 1710995096n,
+            period3PrevVolumeA: 0n,
+            period3PrevVolumeB: 0n,
+            period3PrevFeeA: 0n,
+            period3PrevFeeB: 0n,
+            period3PrevVWAP: 0n,
+            period3PrevTime: 0n,
+            period4NowVolumeA: 3000000000n,
+            period4NowVolumeB: 13200000000n,
+            period4NowFeeA: 90909090n,
+            period4NowFeeB: 725490196n,
+            period4NowVWAP: 4000000000n,
+            period4NowTime: 1710995096n,
+            period4PrevVolumeA: 0n,
+            period4PrevVolumeB: 0n,
+            period4PrevFeeA: 0n,
+            period4PrevFeeB: 0n,
+            period4PrevVWAP: 0n,
+            period4PrevTime: 0n,
+            period5NowVolumeA: 3000000000n,
+            period5NowVolumeB: 13200000000n,
+            period5NowFeeA: 90909090n,
+            period5NowFeeB: 725490196n,
+            period5NowVWAP: 4000000000n,
+            period5NowTime: 1710995096n,
+            period5PrevVolumeA: 0n,
+            period5PrevVolumeB: 0n,
+            period5PrevFeeA: 0n,
+            period5PrevFeeB: 0n,
+            period5PrevVWAP: 0n,
+            period5PrevTime: 0n,
+          },
+
+          lpTokensToWithdraw: 38,
+          retLRemove: 39.4, // 38+1.4
+
+          checkStatus6: {
+            scale: 1000000000n,
+            assetABalance: 223039216n,
+            assetBBalance: 507843138n,
+            priceMinSqrt: 2000000000n,
+            priceMaxSqrt: 2000000000n,
+            currentLiqudity: 1400000002n,
+            releasedLiqudity: 0n,
+            liqudityUsersFromFees: 0n,
+            liqudityBiatecFromFees: 1400000000n, // 223039216n*4+507843138n=1400000002
+            assetA: 27292n,
+            assetB: 27293n,
+            poolToken: 27303n,
+            price: 4000000000n,
+            fee: 100000000n,
+            biatecFee: 500000000n,
+            verificationClass: 0n,
+          },
+        },
+      ];
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const t of testSet) {
+        const {
+          clientBiatecClammPool,
+          clientBiatecConfigProvider,
+          clientBiatecIdentityProvider,
+          clientBiatecPoolProvider,
+        } = await setupPool({
+          algod,
+          signer: deployerSigner,
+          assetA: assetAId,
+          biatecFee: 500_000_000n,
+          lpFee: 100_000_000n,
+          p: BigInt(t.P * SCALE),
+          p1: BigInt(t.P1 * SCALE),
+          p2: BigInt(t.P2 * SCALE),
+        });
+
+        const refBiatecConfigProvider = await clientBiatecConfigProvider.appClient.getAppReference();
+        expect(refBiatecConfigProvider.appId).toBeGreaterThan(0);
+        const refBiatecIdentityProvider = await clientBiatecIdentityProvider.appClient.getAppReference();
+        expect(refBiatecIdentityProvider.appId).toBeGreaterThan(0);
+        const refBiatecPoolProvider = await clientBiatecPoolProvider.appClient.getAppReference();
+        expect(refBiatecPoolProvider.appId).toBeGreaterThan(0);
+        const ammRef = await clientBiatecClammPool.appClient.getAppReference();
+        expect(ammRef.appId).toBeGreaterThan(0);
+
+        const params = await algod.getTransactionParams().do();
+        // opt in to the LP token
+
+        const poolTokenId = (await clientBiatecClammPool.getLpTokenId({})).return as bigint;
+        expect(poolTokenId).toBeGreaterThan(0);
+        const optinToTheLPToken = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: 0,
+          assetIndex: Number(poolTokenId),
+          from: deployer.addr,
+          suggestedParams: params,
+          to: deployer.addr,
+        });
+        const signedOptin = algosdk.signTransaction(optinToTheLPToken, deployer.sk);
+
+        await algod.sendRawTransaction(signedOptin.blob).do();
+
+        await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
+
+        const status1 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus1.poolToken = BigInt(poolTokenId);
+        t.checkStatus1.assetA = BigInt(assetAId);
+        t.checkStatus1.assetB = BigInt(assetBId);
+
+        expect(status1).toEqual(t.checkStatus1);
+        console.log('status1', status1);
+        /// /////// ADD LIQUIDITY 1
+        const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add1A * SCALE_A)),
+          assetIndex: assetAId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidityB = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add1B * SCALE_B)),
+          assetIndex: assetBId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidityParams = {
+          appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+          appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+          txAssetADeposit: addLiquidityA,
+          txAssetBDeposit: addLiquidityB,
+          assetLP: poolTokenId,
+          assetA: assetAId,
+          assetB: assetBId,
+        };
+        console.log('addLiquidityParams', addLiquidityParams);
+        const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
+          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+        });
+
+        const ret = await liqudidtyResult.return;
+        expect(ret?.valueOf()).toEqual(BigInt(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS));
+
+        const distributed1 = await clientBiatecClammPool.calculateDistributedLiquidity({
+          assetLP: poolTokenId,
+          currentDeposit: 0,
+        });
+        expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
+        const status2 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus2.poolToken = BigInt(poolTokenId);
+        t.checkStatus2.assetA = BigInt(assetAId);
+        t.checkStatus2.assetB = BigInt(assetBId);
+
+        expect(status2).toEqual(t.checkStatus2);
+        /// /////// SWAP 1
+
+        const addSwapA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.swap1A * SCALE_A)), // price <1,1.5625> p = 1.5625 => Max EUR 0 USD
+          assetIndex: assetAId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+
+        const swapResult = await clientBiatecClammPool.swap(
+          {
+            appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+            appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+            appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
+            minimumToReceive: 0,
+            txSwap: addSwapA,
+            assetA: assetAId,
+            assetB: assetBId,
+          },
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+        );
+
+        const retSwap = await swapResult.return;
+        expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swap1B * SCALE_B)));
+
+        const status3 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus3.poolToken = BigInt(poolTokenId);
+        t.checkStatus3.assetA = BigInt(assetAId);
+        t.checkStatus3.assetB = BigInt(assetBId);
+
+        expect(status3).toEqual(t.checkStatus3);
+
+        const tradingStats = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
+        const stats1 = return2stats(tradingStats.return);
+        t.stats1.assetA = BigInt(assetAId);
+        t.stats1.assetB = BigInt(assetBId);
+        t.stats1.period1NowTime = stats1.period1NowTime;
+        t.stats1.period2NowTime = stats1.period2NowTime;
+        t.stats1.period3NowTime = stats1.period3NowTime;
+        t.stats1.period4NowTime = stats1.period4NowTime;
+        t.stats1.period5NowTime = stats1.period5NowTime;
+        expect(JSON.stringify(stats1)).toBe(JSON.stringify(t.stats1));
+
+        /// /////// ADD LIQUDITY 2
+
+        const addLiquidity2A = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add2A * SCALE_A)),
+          assetIndex: assetAId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidity2B = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add2B * SCALE_B)),
+          assetIndex: assetBId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidity2Params = {
+          appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+          appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+          txAssetADeposit: addLiquidity2A,
+          txAssetBDeposit: addLiquidity2B,
+          assetLP: poolTokenId,
+          assetA: assetAId,
+          assetB: assetBId,
+        };
+        console.log('addLiquidity2Params', addLiquidity2Params);
+        const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
+          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+        });
+
+        const ret2 = await liqudidtyResult2.return;
+        expect(ret2?.valueOf()).toEqual(BigInt(t.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS));
+
+        const distributed2 = await clientBiatecClammPool.calculateDistributedLiquidity({
+          assetLP: poolTokenId,
+          currentDeposit: 0,
+        });
+        expect(distributed2.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed2 * SCALE)));
+
+        const status4 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus4.poolToken = BigInt(poolTokenId);
+        t.checkStatus4.assetA = BigInt(assetAId);
+        t.checkStatus4.assetB = BigInt(assetBId);
+
+        expect(status4).toEqual(t.checkStatus4);
+        /// /////// SWAP 2
+
+        const addSwapA2 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.swap2B * SCALE_B)),
+          assetIndex: assetBId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+
+        const swapResult2 = await clientBiatecClammPool.swap(
+          {
+            appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+            appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+            appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
+            minimumToReceive: 0,
+            txSwap: addSwapA2,
+            assetA: assetAId,
+            assetB: assetBId,
+          },
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+        );
+
+        const retSwap2 = await swapResult2.return;
+        expect(retSwap2?.valueOf()).toEqual(BigInt(Math.round(t.swap2A * SCALE_A)));
+
+        const distributed3 = await clientBiatecClammPool.calculateDistributedLiquidity({
+          assetLP: poolTokenId,
+          currentDeposit: 0,
+        });
+        expect(distributed3.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed3 * SCALE)));
+
+        const status5 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus5.poolToken = BigInt(poolTokenId);
+        t.checkStatus5.assetA = BigInt(assetAId);
+        t.checkStatus5.assetB = BigInt(assetBId);
+
+        expect(status5).toEqual(t.checkStatus5);
+
+        const tradingStats2 = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
+        const stats2 = return2stats(tradingStats2.return);
+        t.stats2.assetA = BigInt(assetAId);
+        t.stats2.assetB = BigInt(assetBId);
+        t.stats2.period1NowTime = stats2.period1NowTime;
+        t.stats2.period2NowTime = stats2.period2NowTime;
+        t.stats2.period3NowTime = stats2.period3NowTime;
+        t.stats2.period4NowTime = stats2.period4NowTime;
+        t.stats2.period5NowTime = stats2.period5NowTime;
+        // expect(stats2).toBe(t.stats2);
+        expect(JSON.stringify(stats2)).toBe(JSON.stringify(t.stats2));
+
+        /// /////// REMOVE LIQUIDITY
+
+        const removeLiquidityLP = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.lpTokensToWithdraw * SCALE_LP)),
+          assetIndex: Number(poolTokenId),
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+
+        const liqudidtyRemoveResult = await clientBiatecClammPool.removeLiquidity(
+          {
+            txLPXfer: removeLiquidityLP,
+            assetLP: poolTokenId,
+            assetA: assetAId,
+            assetB: assetBId,
+          },
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+        );
+
+        const retLRemove = await liqudidtyRemoveResult.return;
+        expect(retLRemove?.valueOf()).toEqual(BigInt(t.retLRemove * 10 ** LP_TOKEN_DECIMALS));
+
+        const status6 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus6.poolToken = BigInt(poolTokenId);
+        t.checkStatus6.assetA = BigInt(assetAId);
+        t.checkStatus6.assetB = BigInt(assetBId);
+
+        expect(status6).toEqual(t.checkStatus6);
+      }
+    } catch (e) {
+      console.debug(e);
+      throw e;
+    }
+  });
+  test('Extreme-SmallMinMaxPriceDiff - ASASR 0.9999 - 1.0001, LP fee 1BPS, Biatec fee 10%', async () => {
+    try {
+      const { algod } = fixture.context;
+
+      const testSet = [
+        {
+          P: 1,
+          P1: 0.9999,
+          P2: 1.0001,
+
+          checkStatus1: {
+            scale: 1000000000n,
+            assetABalance: 0n,
+            assetBBalance: 0n,
+            priceMinSqrt: 999949998n,
+            priceMaxSqrt: 1000049998n,
+            currentLiqudity: 0n,
+            releasedLiqudity: 0n,
+            liqudityUsersFromFees: 0n,
+            liqudityBiatecFromFees: 0n,
+            assetA: 28503n,
+            assetB: 28504n,
+            poolToken: 28515n,
+            price: 1000000000n,
+            fee: 100000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          add1A: 0.1,
+          add1B: 0.1,
+          lpTokensToReceive: 2000.039996,
+          checkDistributed1: 2000.039996,
+
+          checkStatus2: {
+            scale: 1000000000n,
+            assetABalance: 100000000n,
+            assetBBalance: 100000000n,
+            priceMinSqrt: 999949998n,
+            priceMaxSqrt: 1000049998n,
+            currentLiqudity: 2000039996799n,
+            releasedLiqudity: 2000039996000n,
+            liqudityUsersFromFees: 0n,
+            liqudityBiatecFromFees: 0n,
+            assetA: 29358n,
+            assetB: 29359n,
+            poolToken: 29370n,
+            price: 1000000000n,
+            fee: 100000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          swap1A: 0.1, // i will swap this asset from A asset to B and this is what I deposit
+          swap1B: 0.099975, // this is how much asset B is in the pool and what i want to receive
+
+          checkStatus3: {
+            scale: 1000000000n,
+            assetABalance: 200000000n,
+            assetBBalance: 24999n,
+            priceMinSqrt: 999949998n,
+            priceMaxSqrt: 1000049998n,
+            currentLiqudity: 2000239985799n,
+            releasedLiqudity: 2000039996000n,
+            liqudityUsersFromFees: 179990100n,
+            liqudityBiatecFromFees: 19998900n,
+            assetA: 29467n,
+            assetB: 29468n,
+            poolToken: 29478n,
+            price: 999900022n,
+            fee: 100000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          stats1: {
+            isVerified: 0n,
+            assetA: 29548n,
+            assetB: 29549n,
+            verificationClass: 0n,
+            latestPrice: 999950011n,
+            period1NowVolumeA: 100000000n,
+            period1NowVolumeB: 99975000n,
+            period1NowFeeA: 19996n,
+            period1NowFeeB: 0n,
+            period1NowVWAP: 999950011n,
+            period1NowTime: 1711026521n,
+            period1PrevVolumeA: 0n,
+            period1PrevVolumeB: 0n,
+            period1PrevFeeA: 0n,
+            period1PrevFeeB: 0n,
+            period1PrevVWAP: 0n,
+            period1PrevTime: 0n,
+            period2NowVolumeA: 100000000n,
+            period2NowVolumeB: 99975000n,
+            period2NowFeeA: 19996n,
+            period2NowFeeB: 0n,
+            period2NowVWAP: 999950011n,
+            period2NowTime: 1711026521n,
+            period2PrevVolumeA: 0n,
+            period2PrevVolumeB: 0n,
+            period2PrevFeeA: 0n,
+            period2PrevFeeB: 0n,
+            period2PrevVWAP: 0n,
+            period2PrevTime: 0n,
+            period3NowVolumeA: 100000000n,
+            period3NowVolumeB: 99975000n,
+            period3NowFeeA: 19996n,
+            period3NowFeeB: 0n,
+            period3NowVWAP: 999950011n,
+            period3NowTime: 1711026521n,
+            period3PrevVolumeA: 0n,
+            period3PrevVolumeB: 0n,
+            period3PrevFeeA: 0n,
+            period3PrevFeeB: 0n,
+            period3PrevVWAP: 0n,
+            period3PrevTime: 0n,
+            period4NowVolumeA: 100000000n,
+            period4NowVolumeB: 99975000n,
+            period4NowFeeA: 19996n,
+            period4NowFeeB: 0n,
+            period4NowVWAP: 999950011n,
+            period4NowTime: 1711026521n,
+            period4PrevVolumeA: 0n,
+            period4PrevVolumeB: 0n,
+            period4PrevFeeA: 0n,
+            period4PrevFeeB: 0n,
+            period4PrevVWAP: 0n,
+            period4PrevTime: 0n,
+            period5NowVolumeA: 100000000n,
+            period5NowVolumeB: 99975000n,
+            period5NowFeeA: 19996n,
+            period5NowFeeB: 0n,
+            period5NowVWAP: 999950011n,
+            period5NowTime: 1711026521n,
+            period5PrevVolumeA: 0n,
+            period5PrevVolumeB: 0n,
+            period5PrevFeeA: 0n,
+            period5PrevFeeB: 0n,
+            period5PrevVWAP: 0n,
+            period5PrevTime: 0n,
+          },
+
+          // in the pool is now A: 2.5 B: 0
+
+          add2A: 10,
+          add2B: 1,
+          lpTokensToReceive2: 109987.869639,
+          checkDistributed2: 111987.909635,
+
+          checkStatus4: {
+            scale: 1000000000n,
+            assetABalance: 10200000000n,
+            assetBBalance: 998775999n,
+            priceMinSqrt: 999949998n,
+            priceMaxSqrt: 1000049998n,
+            currentLiqudity: 111988109624933n,
+            releasedLiqudity: 111987909635000n,
+            liqudityUsersFromFees: 179990100n,
+            liqudityBiatecFromFees: 19998900n,
+            assetA: 29822n,
+            assetB: 29823n,
+            poolToken: 29833n,
+            price: 999900022n,
+            fee: 100000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          swap2B: 10, //  i will swap this asset from B asset to A and this is what I deposit
+          swap2A: 9.99792893, //  this is how much asset A i should receive
+
+          checkDistributed3: 111987.909635,
+
+          checkStatus5: {
+            scale: 1000000000n,
+            assetABalance: 202071061n,
+            assetBBalance: 10998775999n,
+            priceMinSqrt: 999949998n,
+            priceMaxSqrt: 1000049998n,
+            currentLiqudity: 112008109409923n,
+            releasedLiqudity: 111987909635000n,
+            liqudityUsersFromFees: 18179796591n,
+            liqudityBiatecFromFees: 2019977399n,
+            assetA: 29998n,
+            assetB: 29999n,
+            poolToken: 30009n,
+            price: 1000096390n,
+            fee: 100000n,
+            biatecFee: 100000000n,
+            verificationClass: 0n,
+          },
+
+          stats2: {
+            isVerified: 0n,
+            assetA: 30125n,
+            assetB: 30126n,
+            verificationClass: 0n,
+            latestPrice: 999998206n,
+            period1NowVolumeA: 10097928930n,
+            period1NowVolumeB: 10099975000n,
+            period1NowFeeA: 19996n,
+            period1NowFeeB: 1963903n,
+            period1NowVWAP: 999997728n,
+            period1NowTime: 1711032746n,
+            period1PrevVolumeA: 0n,
+            period1PrevVolumeB: 0n,
+            period1PrevFeeA: 0n,
+            period1PrevFeeB: 0n,
+            period1PrevVWAP: 0n,
+            period1PrevTime: 0n,
+            period2NowVolumeA: 10097928930n,
+            period2NowVolumeB: 10099975000n,
+            period2NowFeeA: 19996n,
+            period2NowFeeB: 1963903n,
+            period2NowVWAP: 999997728n,
+            period2NowTime: 1711032746n,
+            period2PrevVolumeA: 0n,
+            period2PrevVolumeB: 0n,
+            period2PrevFeeA: 0n,
+            period2PrevFeeB: 0n,
+            period2PrevVWAP: 0n,
+            period2PrevTime: 0n,
+            period3NowVolumeA: 10097928930n,
+            period3NowVolumeB: 10099975000n,
+            period3NowFeeA: 19996n,
+            period3NowFeeB: 1963903n,
+            period3NowVWAP: 999997728n,
+            period3NowTime: 1711032746n,
+            period3PrevVolumeA: 0n,
+            period3PrevVolumeB: 0n,
+            period3PrevFeeA: 0n,
+            period3PrevFeeB: 0n,
+            period3PrevVWAP: 0n,
+            period3PrevTime: 0n,
+            period4NowVolumeA: 10097928930n,
+            period4NowVolumeB: 10099975000n,
+            period4NowFeeA: 19996n,
+            period4NowFeeB: 1963903n,
+            period4NowVWAP: 999997728n,
+            period4NowTime: 1711032746n,
+            period4PrevVolumeA: 0n,
+            period4PrevVolumeB: 0n,
+            period4PrevFeeA: 0n,
+            period4PrevFeeB: 0n,
+            period4PrevVWAP: 0n,
+            period4PrevTime: 0n,
+            period5NowVolumeA: 10097928930n,
+            period5NowVolumeB: 10099975000n,
+            period5NowFeeA: 19996n,
+            period5NowFeeB: 1963903n,
+            period5NowVWAP: 999997965n,
+            period5NowTime: 1711032746n,
+            period5PrevVolumeA: 0n,
+            period5PrevVolumeB: 0n,
+            period5PrevFeeA: 0n,
+            period5PrevFeeB: 0n,
+            period5PrevVWAP: 0n,
+            period5PrevTime: 0n,
+          },
+
+          lpTokensToWithdraw: 111987.909635,
+          retLRemove: 39.4, // 38+1.4
+
+          checkStatus6: {
+            scale: 1000000000n,
+            assetABalance: 223039216n,
+            assetBBalance: 507843138n,
+            priceMinSqrt: 2000000000n,
+            priceMaxSqrt: 2000000000n,
+            currentLiqudity: 1400000002n,
+            releasedLiqudity: 0n,
+            liqudityUsersFromFees: 0n,
+            liqudityBiatecFromFees: 1400000000n, // 223039216n*4+507843138n=1400000002
+            assetA: 27292n,
+            assetB: 27293n,
+            poolToken: 27303n,
+            price: 4000000000n,
+            fee: 100000000n,
+            biatecFee: 500000000n,
+            verificationClass: 0n,
+          },
+        },
+      ];
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const t of testSet) {
+        const {
+          clientBiatecClammPool,
+          clientBiatecConfigProvider,
+          clientBiatecIdentityProvider,
+          clientBiatecPoolProvider,
+        } = await setupPool({
+          algod,
+          signer: deployerSigner,
+          assetA: assetAId,
+          biatecFee: 100_000_000n,
+          lpFee: 100_000n, // 0.01%
+          p: BigInt(t.P * SCALE),
+          p1: BigInt(t.P1 * SCALE),
+          p2: BigInt(t.P2 * SCALE),
+        });
+
+        const refBiatecConfigProvider = await clientBiatecConfigProvider.appClient.getAppReference();
+        expect(refBiatecConfigProvider.appId).toBeGreaterThan(0);
+        const refBiatecIdentityProvider = await clientBiatecIdentityProvider.appClient.getAppReference();
+        expect(refBiatecIdentityProvider.appId).toBeGreaterThan(0);
+        const refBiatecPoolProvider = await clientBiatecPoolProvider.appClient.getAppReference();
+        expect(refBiatecPoolProvider.appId).toBeGreaterThan(0);
+        const ammRef = await clientBiatecClammPool.appClient.getAppReference();
+        expect(ammRef.appId).toBeGreaterThan(0);
+
+        const params = await algod.getTransactionParams().do();
+        // opt in to the LP token
+
+        const poolTokenId = (await clientBiatecClammPool.getLpTokenId({})).return as bigint;
+        expect(poolTokenId).toBeGreaterThan(0);
+        const optinToTheLPToken = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: 0,
+          assetIndex: Number(poolTokenId),
+          from: deployer.addr,
+          suggestedParams: params,
+          to: deployer.addr,
+        });
+        const signedOptin = algosdk.signTransaction(optinToTheLPToken, deployer.sk);
+
+        await algod.sendRawTransaction(signedOptin.blob).do();
+
+        await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
+
+        const status1 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus1.poolToken = BigInt(poolTokenId);
+        t.checkStatus1.assetA = BigInt(assetAId);
+        t.checkStatus1.assetB = BigInt(assetBId);
+
+        expect(status1).toEqual(t.checkStatus1);
+        console.log('status1', status1);
+        /// /////// ADD LIQUIDITY 1
+        const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add1A * SCALE_A)),
+          assetIndex: assetAId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidityB = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add1B * SCALE_B)),
+          assetIndex: assetBId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidityParams = {
+          appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+          appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+          txAssetADeposit: addLiquidityA,
+          txAssetBDeposit: addLiquidityB,
+          assetLP: poolTokenId,
+          assetA: assetAId,
+          assetB: assetBId,
+        };
+        console.log('addLiquidityParams', addLiquidityParams);
+        const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
+          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+        });
+
+        const ret = await liqudidtyResult.return;
+        expect(ret?.valueOf()).toEqual(BigInt(Math.round(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS)));
+
+        const distributed1 = await clientBiatecClammPool.calculateDistributedLiquidity({
+          assetLP: poolTokenId,
+          currentDeposit: 0,
+        });
+        expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
+        const status2 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus2.poolToken = BigInt(poolTokenId);
+        t.checkStatus2.assetA = BigInt(assetAId);
+        t.checkStatus2.assetB = BigInt(assetBId);
+
+        expect(status2).toEqual(t.checkStatus2);
+        /// /////// SWAP 1
+
+        const addSwapA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.swap1A * SCALE_A)), // price <1,1.5625> p = 1.5625 => Max EUR 0 USD
+          assetIndex: assetAId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+
+        const swapResult = await clientBiatecClammPool.swap(
+          {
+            appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+            appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+            appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
+            minimumToReceive: 0,
+            txSwap: addSwapA,
+            assetA: assetAId,
+            assetB: assetBId,
+          },
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+        );
+
+        const retSwap = await swapResult.return;
+        expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swap1B * SCALE_B)));
+
+        const status3 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus3.poolToken = BigInt(poolTokenId);
+        t.checkStatus3.assetA = BigInt(assetAId);
+        t.checkStatus3.assetB = BigInt(assetBId);
+
+        expect(status3).toEqual(t.checkStatus3);
+
+        const tradingStats = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
+        const stats1 = return2stats(tradingStats.return);
+        t.stats1.assetA = BigInt(assetAId);
+        t.stats1.assetB = BigInt(assetBId);
+        t.stats1.period1NowTime = stats1.period1NowTime;
+        t.stats1.period2NowTime = stats1.period2NowTime;
+        t.stats1.period3NowTime = stats1.period3NowTime;
+        t.stats1.period4NowTime = stats1.period4NowTime;
+        t.stats1.period5NowTime = stats1.period5NowTime;
+        // expect(stats1).toBe(t.stats1);
+        expect(JSON.stringify(stats1)).toBe(JSON.stringify(t.stats1));
+
+        /// /////// ADD LIQUDITY 2
+
+        const addLiquidity2A = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add2A * SCALE_A)),
+          assetIndex: assetAId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidity2B = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.add2B * SCALE_B)),
+          assetIndex: assetBId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+        const addLiquidity2Params = {
+          appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+          appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+          txAssetADeposit: addLiquidity2A,
+          txAssetBDeposit: addLiquidity2B,
+          assetLP: poolTokenId,
+          assetA: assetAId,
+          assetB: assetBId,
+        };
+        console.log('addLiquidity2Params', addLiquidity2Params);
+        const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
+          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+        });
+
+        const ret2 = await liqudidtyResult2.return;
+        expect(ret2?.valueOf()).toEqual(BigInt(t.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS));
+
+        const distributed2 = await clientBiatecClammPool.calculateDistributedLiquidity({
+          assetLP: poolTokenId,
+          currentDeposit: 0,
+        });
+        expect(distributed2.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed2 * SCALE)));
+
+        const status4 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus4.poolToken = BigInt(poolTokenId);
+        t.checkStatus4.assetA = BigInt(assetAId);
+        t.checkStatus4.assetB = BigInt(assetBId);
+
+        expect(status4).toEqual(t.checkStatus4);
+        /// /////// SWAP 2
+
+        const addSwapA2 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.swap2B * SCALE_B)),
+          assetIndex: assetBId,
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+
+        const swapResult2 = await clientBiatecClammPool.swap(
+          {
+            appBiatecConfigProvider: BigInt(refBiatecConfigProvider.appId),
+            appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
+            appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
+            minimumToReceive: 0,
+            txSwap: addSwapA2,
+            assetA: assetAId,
+            assetB: assetBId,
+          },
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+        );
+
+        const retSwap2 = await swapResult2.return;
+        expect(retSwap2?.valueOf()).toEqual(BigInt(Math.round(t.swap2A * SCALE_A)));
+
+        const distributed3 = await clientBiatecClammPool.calculateDistributedLiquidity({
+          assetLP: poolTokenId,
+          currentDeposit: 0,
+        });
+        expect(distributed3.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed3 * SCALE)));
+
+        const status5 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus5.poolToken = BigInt(poolTokenId);
+        t.checkStatus5.assetA = BigInt(assetAId);
+        t.checkStatus5.assetB = BigInt(assetBId);
+
+        expect(status5).toEqual(t.checkStatus5);
+
+        const tradingStats2 = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
+        const stats2 = return2stats(tradingStats2.return);
+        t.stats2.assetA = BigInt(assetAId);
+        t.stats2.assetB = BigInt(assetBId);
+        t.stats2.period1NowTime = stats2.period1NowTime;
+        t.stats2.period2NowTime = stats2.period2NowTime;
+        t.stats2.period3NowTime = stats2.period3NowTime;
+        t.stats2.period4NowTime = stats2.period4NowTime;
+        t.stats2.period5NowTime = stats2.period5NowTime;
+        // expect(stats2).toBe(t.stats2);
+        expect(JSON.stringify(stats2)).toBe(JSON.stringify(t.stats2));
+
+        /// /////// REMOVE LIQUIDITY
+
+        const removeLiquidityLP = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          amount: BigInt(Math.round(t.lpTokensToWithdraw * SCALE_LP)),
+          assetIndex: Number(poolTokenId),
+          from: deployer.addr,
+          suggestedParams: params,
+          to: ammRef.appAddress,
+        });
+
+        const liqudidtyRemoveResult = await clientBiatecClammPool.removeLiquidity(
+          {
+            txLPXfer: removeLiquidityLP,
+            assetLP: poolTokenId,
+            assetA: assetAId,
+            assetB: assetBId,
+          },
+          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+        );
+
+        const retLRemove = await liqudidtyRemoveResult.return;
+        expect(retLRemove?.valueOf()).toEqual(BigInt(t.retLRemove * 10 ** LP_TOKEN_DECIMALS));
+
+        const status6 = return2status(
+          (
+            await clientBiatecClammPool.status({
+              appBiatecConfigProvider: refBiatecConfigProvider.appId,
+              assetLP: poolTokenId,
+            })
+          ).return
+        );
+        t.checkStatus6.poolToken = BigInt(poolTokenId);
+        t.checkStatus6.assetA = BigInt(assetAId);
+        t.checkStatus6.assetB = BigInt(assetBId);
+
+        expect(status6).toEqual(t.checkStatus6);
       }
     } catch (e) {
       console.debug(e);

@@ -20,7 +20,11 @@
           "desc": "Biatec fees"
         },
         {
-          "name": "appIdentityProvider",
+          "name": "appBiatecIdentityProvider",
+          "type": "uint64"
+        },
+        {
+          "name": "appBiatecPoolProvider",
           "type": "uint64"
         }
       ],
@@ -71,7 +75,35 @@
       }
     },
     {
+      "name": "setAddressExecutiveFee",
+      "desc": "Execution fee address is address which can take fees from pools.",
+      "args": [
+        {
+          "name": "a",
+          "type": "address",
+          "desc": "Address"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
       "name": "setBiatecIdentity",
+      "desc": "App identity setter",
+      "args": [
+        {
+          "name": "a",
+          "type": "uint64",
+          "desc": "Address"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "setBiatecPool",
       "desc": "App identity setter",
       "args": [
         {

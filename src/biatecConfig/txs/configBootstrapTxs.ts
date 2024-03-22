@@ -7,16 +7,18 @@ interface IConfigBootstrapTxsInput {
   params: SuggestedParams;
   clientBiatecConfigProvider: BiatecConfigProviderClient;
   account: TransactionSignerAccount;
-  appIdentityProvider: bigint;
+  appBiatecIdentityProvider: bigint;
+  appBiatecPoolProvider: bigint;
   biatecFee: bigint;
 }
 const bootstrapTxs = async (input: IConfigBootstrapTxsInput): Promise<algosdk.Transaction[]> => {
-  const { clientBiatecConfigProvider, account, appIdentityProvider, biatecFee } = input;
+  const { clientBiatecConfigProvider, account, appBiatecIdentityProvider, appBiatecPoolProvider, biatecFee } = input;
 
   const compose = clientBiatecConfigProvider.compose().bootstrap(
     {
       biatecFee,
-      appIdentityProvider,
+      appBiatecIdentityProvider,
+      appBiatecPoolProvider,
     },
     {
       sender: account,

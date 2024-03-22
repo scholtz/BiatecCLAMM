@@ -20,9 +20,19 @@ class BiatecConfigProvider extends Contract {
   addressExecutive = GlobalStateKey<Address>({ key: 'e' });
 
   /**
+   * Execution address with which it is possible to change global biatec fees
+   */
+  addressExecutiveFee = GlobalStateKey<Address>({ key: 'ef' });
+
+  /**
    * Biatec identity provider smart contract
    */
-  appIdentityProvider = GlobalStateKey<AppID>({ key: 'i' });
+  appBiatecIdentityProvider = GlobalStateKey<AppID>({ key: 'i' });
+
+  /**
+   * Biatec pool provider smart contract
+   */
+  appBiatecPoolProvider = GlobalStateKey<AppID>({ key: 'p' });
 
   /**
    * Fees in 9 decimals. 1_000_000_000 = 100%
@@ -41,17 +51,19 @@ class BiatecConfigProvider extends Contract {
     this.addressExecutive.value = this.txn.sender;
     this.addressGov.value = this.txn.sender;
     this.addressUdpater.value = this.txn.sender;
+    this.addressExecutiveFee.value = this.txn.sender;
   }
 
   /**
    * Setup the contract
    * @param biatecFee Biatec fees
    */
-  bootstrap(biatecFee: uint256, appIdentityProvider: AppID): void {
+  bootstrap(biatecFee: uint256, appBiatecIdentityProvider: AppID, appBiatecPoolProvider: AppID): void {
     assert(this.txn.sender === this.addressUdpater.value, 'Only updater can call bootstrap method');
     assert(biatecFee <= (SCALE as uint256) / 2, 'Biatec cannot set fees higher then 50% of lp fees');
     this.biatecFee.value = biatecFee;
-    this.appIdentityProvider.value = appIdentityProvider;
+    this.appBiatecIdentityProvider.value = appBiatecIdentityProvider;
+    this.appBiatecPoolProvider.value = appBiatecPoolProvider;
   }
 
   /**
@@ -80,8 +92,18 @@ class BiatecConfigProvider extends Contract {
    * @param a Address
    */
   setAddressExecutive(a: Address) {
-    assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change gov address');
+    assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change addressExecutive');
     this.addressExecutive.value = a;
+  }
+
+  /**
+   * Execution fee address is address which can take fees from pools.
+   *
+   * @param a Address
+   */
+  setAddressExecutiveFee(a: Address) {
+    assert(this.txn.sender === this.addressExecutive.value, 'Only addressExecutive can change fee executor address');
+    this.addressExecutiveFee.value = a;
   }
 
   /**
@@ -90,8 +112,18 @@ class BiatecConfigProvider extends Contract {
    * @param a Address
    */
   setBiatecIdentity(a: AppID) {
-    assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change gov address');
-    this.appIdentityProvider.value = a;
+    assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change appIdentityProvider');
+    this.appBiatecIdentityProvider.value = a;
+  }
+
+  /**
+   * App identity setter
+   *
+   * @param a Address
+   */
+  setBiatecPool(a: AppID) {
+    assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change appPoolProvider');
+    this.appBiatecPoolProvider.value = a;
   }
 
   /** 

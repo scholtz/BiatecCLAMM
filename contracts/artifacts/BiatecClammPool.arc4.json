@@ -168,6 +168,40 @@
       }
     },
     {
+      "name": "removeLiquidityAdmin",
+      "desc": "This method allows biatec admin to reduce the lp position created by lp fees allocation.Only addressExecutiveFee is allowed to execute this method.",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64",
+          "desc": "Biatec config app. Only addressExecutiveFee is allowed to execute this method."
+        },
+        {
+          "name": "assetLP",
+          "type": "uint64"
+        },
+        {
+          "name": "assetA",
+          "type": "uint64",
+          "desc": "Asset A"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64",
+          "desc": "Asset B"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "desc": "Amount to withdraw. If zero, removes all available lps from fees."
+        }
+      ],
+      "returns": {
+        "type": "uint256",
+        "desc": "LP position reduced"
+      }
+    },
+    {
       "name": "swap",
       "desc": "Swap Asset A to Asset B or Asset B to Asst A",
       "args": [
@@ -177,6 +211,10 @@
         },
         {
           "name": "appBiatecIdentityProvider",
+          "type": "uint64"
+        },
+        {
+          "name": "appBiatecPoolProvider",
           "type": "uint64"
         },
         {
@@ -205,6 +243,104 @@
       }
     },
     {
+      "name": "distributeExcessAssets",
+      "desc": "If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.This method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.Only addressExecutiveFee is allowed to execute this method.",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64",
+          "desc": "Biatec config app. Only addressExecutiveFee is allowed to execute this method."
+        },
+        {
+          "name": "assetA",
+          "type": "uint64",
+          "desc": "Asset A"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64",
+          "desc": "Asset B"
+        },
+        {
+          "name": "amountA",
+          "type": "uint256",
+          "desc": "Amount of asset A to be deposited to the liquidity. In base decimals (9)"
+        },
+        {
+          "name": "amountB",
+          "type": "uint256",
+          "desc": "Amount of asset B to be deposited to the liquidity. In base decimals (9)"
+        }
+      ],
+      "returns": {
+        "type": "uint256"
+      }
+    },
+    {
+      "name": "withdrawExcessAssets",
+      "desc": "If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.This method is used to distribute amount a and amount b of asset a and asset b to addressExecutiveFee account.Only addressExecutiveFee is allowed to execute this method.",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64",
+          "desc": "Biatec config app. Only addressExecutiveFee is allowed to execute this method."
+        },
+        {
+          "name": "assetA",
+          "type": "uint64",
+          "desc": "Asset A"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64",
+          "desc": "Asset B"
+        },
+        {
+          "name": "amountA",
+          "type": "uint64",
+          "desc": "Amount of asset A to be deposited to the liquidity. In asset a decimals"
+        },
+        {
+          "name": "amountB",
+          "type": "uint64",
+          "desc": "Amount of asset B to be deposited to the liquidity. In asset b decimals"
+        }
+      ],
+      "returns": {
+        "type": "uint64"
+      }
+    },
+    {
+      "name": "sendOnlineKeyRegistration",
+      "desc": "addressExecutiveFee can perfom key registration for this LP poolOnly addressExecutiveFee is allowed to execute this method.",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64"
+        },
+        {
+          "name": "params",
+          "type": "keyreg"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "sendOfflineKeyRegistration",
+      "desc": "addressExecutiveFee can perfom key unregistration for this LP poolOnly addressExecutiveFee is allowed to execute this method.",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
       "name": "calculateDistributedLiquidity",
       "desc": "Calculates the number of LP tokens issued to users",
       "readonly": true,
@@ -223,8 +359,29 @@
       }
     },
     {
-      "name": "calculateLiquidity",
-      "desc": "Calculates the liquidity  from the x - Asset A position and y - Asset B position",
+      "name": "calculateLiquidityFlatPrice",
+      "readonly": true,
+      "args": [
+        {
+          "name": "x",
+          "type": "uint256"
+        },
+        {
+          "name": "y",
+          "type": "uint256"
+        },
+        {
+          "name": "price",
+          "type": "uint256"
+        }
+      ],
+      "returns": {
+        "type": "uint256"
+      }
+    },
+    {
+      "name": "calculateLiquidityD",
+      "desc": "Calculates the liquidity  from the x - Asset A position and y - Asset B positionThis method calculates discriminant - first part of the calculation.It is divided so that the readonly method does not need to charge fees",
       "readonly": true,
       "args": [
         {
@@ -256,6 +413,41 @@
           "name": "priceMaxSqrt",
           "type": "uint256",
           "desc": "sqrt(priceMax) in base scale decimals Variable pbs"
+        }
+      ],
+      "returns": {
+        "type": "uint256",
+        "desc": "Liquidity is constant in swapping each direction. On deposit the diff between the liquidity is number of LP tokens received by user."
+      }
+    },
+    {
+      "name": "calculateLiquidityWithD",
+      "desc": "Calculates the liquidity  from the x - Asset A position and y - Asset B position",
+      "readonly": true,
+      "args": [
+        {
+          "name": "x",
+          "type": "uint256",
+          "desc": "Asset A position balanced on the curve"
+        },
+        {
+          "name": "y",
+          "type": "uint256",
+          "desc": "Asset B position balanced on the curve"
+        },
+        {
+          "name": "priceMinSqrt",
+          "type": "uint256",
+          "desc": "sqrt(priceMin) in base scale decimals Variable pas"
+        },
+        {
+          "name": "priceMaxSqrt",
+          "type": "uint256",
+          "desc": "sqrt(priceMax) in base scale decimals Variable pbs"
+        },
+        {
+          "name": "D_SQRT",
+          "type": "uint256"
         }
       ],
       "returns": {

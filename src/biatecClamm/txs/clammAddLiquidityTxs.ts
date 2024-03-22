@@ -8,6 +8,8 @@ interface IClammBootstrapTxsInput {
   clientBiatecClammPool: BiatecClammPoolClient;
   account: TransactionSignerAccount;
 
+  appBiatecConfigProvider: bigint;
+  appBiatecIdentityProvider: bigint;
   assetA: bigint;
   assetB: bigint;
   assetLP: bigint;
@@ -19,7 +21,18 @@ interface IClammBootstrapTxsInput {
  * @returns List of transactions to sign
  */
 const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.Transaction[]> => {
-  const { params, clientBiatecClammPool, account, assetA, assetB, assetLP, assetADeposit, assetBDeposit } = input;
+  const {
+    params,
+    clientBiatecClammPool,
+    account,
+    appBiatecConfigProvider,
+    appBiatecIdentityProvider,
+    assetA,
+    assetB,
+    assetLP,
+    assetADeposit,
+    assetBDeposit,
+  } = input;
 
   const clammRef = await clientBiatecClammPool.appClient.getAppReference();
   let txAssetADeposit: algosdk.Transaction;
@@ -59,6 +72,8 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
   }
   const compose = clientBiatecClammPool.compose().addLiquidity(
     {
+      appBiatecConfigProvider,
+      appBiatecIdentityProvider,
       txAssetADeposit,
       txAssetBDeposit,
       assetA,

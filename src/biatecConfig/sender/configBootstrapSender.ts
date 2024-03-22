@@ -8,7 +8,8 @@ interface IConfigBootstrapSkInput {
   account: TransactionSignerAccount;
   algod: algosdk.Algodv2;
 
-  appIdentityProvider: bigint;
+  appBiatecIdentityProvider: bigint;
+  appBiatecPoolProvider: bigint;
   biatecFee: bigint;
 }
 /**

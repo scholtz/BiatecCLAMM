@@ -34,33 +34,43 @@ switch *call_NoOp *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEM
 createApplication:
 	proto 0 0
 
-	// contracts\BiatecConfigProvider.algo.ts:40
+	// contracts\BiatecConfigProvider.algo.ts:50
 	// log(version)
 	byte "BIATEC-CONFIG-01-01-01"
 	log
 
-	// contracts\BiatecConfigProvider.algo.ts:41
+	// contracts\BiatecConfigProvider.algo.ts:51
 	// this.addressExecutive.value = this.txn.sender
 	byte 0x65 // "e"
 	txn Sender
 	app_global_put
 
-	// contracts\BiatecConfigProvider.algo.ts:42
+	// contracts\BiatecConfigProvider.algo.ts:52
 	// this.addressGov.value = this.txn.sender
 	byte 0x67 // "g"
 	txn Sender
 	app_global_put
 
-	// contracts\BiatecConfigProvider.algo.ts:43
+	// contracts\BiatecConfigProvider.algo.ts:53
 	// this.addressUdpater.value = this.txn.sender
 	byte 0x75 // "u"
 	txn Sender
 	app_global_put
+
+	// contracts\BiatecConfigProvider.algo.ts:54
+	// this.addressExecutiveFee.value = this.txn.sender
+	byte 0x6566 // "ef"
+	txn Sender
+	app_global_put
 	retsub
 
-// bootstrap(uint256,uint64)void
+// bootstrap(uint256,uint64,uint64)void
 *abi_route_bootstrap:
-	// appIdentityProvider: uint64
+	// appBiatecPoolProvider: uint64
+	txna ApplicationArgs 3
+	btoi
+
+	// appBiatecIdentityProvider: uint64
 	txna ApplicationArgs 2
 	btoi
 
@@ -72,19 +82,19 @@ createApplication:
 	==
 	assert
 
-	// execute bootstrap(uint256,uint64)void
+	// execute bootstrap(uint256,uint64,uint64)void
 	callsub bootstrap
 	int 1
 	return
 
-// bootstrap(biatecFee: uint256, appIdentityProvider: AppID): void
+// bootstrap(biatecFee: uint256, appBiatecIdentityProvider: AppID, appBiatecPoolProvider: AppID): void
 //
 // Setup the contract
 // @param biatecFee Biatec fees
 bootstrap:
-	proto 2 0
+	proto 3 0
 
-	// contracts\BiatecConfigProvider.algo.ts:51
+	// contracts\BiatecConfigProvider.algo.ts:62
 	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can call bootstrap method')
 	txn Sender
 	byte 0x75 // "u"
@@ -94,7 +104,7 @@ bootstrap:
 	// Only updater can call bootstrap method
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:52
+	// contracts\BiatecConfigProvider.algo.ts:63
 	// assert(biatecFee <= (SCALE as uint256) / 2, 'Biatec cannot set fees higher then 50% of lp fees')
 	frame_dig -1 // biatecFee: uint256
 	byte 0x000000000000000000000000000000000000000000000000000000003b9aca00
@@ -105,16 +115,22 @@ bootstrap:
 	// Biatec cannot set fees higher then 50% of lp fees
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:53
+	// contracts\BiatecConfigProvider.algo.ts:64
 	// this.biatecFee.value = biatecFee
 	byte 0x66 // "f"
 	frame_dig -1 // biatecFee: uint256
 	app_global_put
 
-	// contracts\BiatecConfigProvider.algo.ts:54
-	// this.appIdentityProvider.value = appIdentityProvider
+	// contracts\BiatecConfigProvider.algo.ts:65
+	// this.appBiatecIdentityProvider.value = appBiatecIdentityProvider
 	byte 0x69 // "i"
-	frame_dig -2 // appIdentityProvider: AppID
+	frame_dig -2 // appBiatecIdentityProvider: AppID
+	app_global_put
+
+	// contracts\BiatecConfigProvider.algo.ts:66
+	// this.appBiatecPoolProvider.value = appBiatecPoolProvider
+	byte 0x70 // "p"
+	frame_dig -3 // appBiatecPoolProvider: AppID
 	app_global_put
 	retsub
 
@@ -141,7 +157,7 @@ bootstrap:
 setAddressUdpater:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:63
+	// contracts\BiatecConfigProvider.algo.ts:75
 	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change updater address')
 	txn Sender
 	byte 0x75 // "u"
@@ -151,7 +167,7 @@ setAddressUdpater:
 	// Only updater can change updater address
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:64
+	// contracts\BiatecConfigProvider.algo.ts:76
 	// this.addressUdpater.value = a
 	byte 0x75 // "u"
 	frame_dig -1 // a: Address
@@ -181,7 +197,7 @@ setAddressUdpater:
 setAddressGov:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:73
+	// contracts\BiatecConfigProvider.algo.ts:85
 	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change gov address')
 	txn Sender
 	byte 0x75 // "u"
@@ -191,7 +207,7 @@ setAddressGov:
 	// Only updater can change gov address
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:74
+	// contracts\BiatecConfigProvider.algo.ts:86
 	// this.addressGov.value = a
 	byte 0x67 // "g"
 	frame_dig -1 // a: Address
@@ -221,19 +237,59 @@ setAddressGov:
 setAddressExecutive:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:83
-	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change gov address')
+	// contracts\BiatecConfigProvider.algo.ts:95
+	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change addressExecutive')
 	txn Sender
 	byte 0x75 // "u"
 	app_global_get
 	==
 
-	// Only updater can change gov address
+	// Only updater can change addressExecutive
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:84
+	// contracts\BiatecConfigProvider.algo.ts:96
 	// this.addressExecutive.value = a
 	byte 0x65 // "e"
+	frame_dig -1 // a: Address
+	app_global_put
+	retsub
+
+// setAddressExecutiveFee(address)void
+*abi_route_setAddressExecutiveFee:
+	// a: address
+	txna ApplicationArgs 1
+	dup
+	len
+	int 32
+	==
+	assert
+
+	// execute setAddressExecutiveFee(address)void
+	callsub setAddressExecutiveFee
+	int 1
+	return
+
+// setAddressExecutiveFee(a: Address): void
+//
+// Execution fee address is address which can take fees from pools.
+//
+// @param a Address
+setAddressExecutiveFee:
+	proto 1 0
+
+	// contracts\BiatecConfigProvider.algo.ts:105
+	// assert(this.txn.sender === this.addressExecutive.value, 'Only addressExecutive can change fee executor address')
+	txn Sender
+	byte 0x65 // "e"
+	app_global_get
+	==
+
+	// Only addressExecutive can change fee executor address
+	assert
+
+	// contracts\BiatecConfigProvider.algo.ts:106
+	// this.addressExecutiveFee.value = a
+	byte 0x6566 // "ef"
 	frame_dig -1 // a: Address
 	app_global_put
 	retsub
@@ -257,19 +313,55 @@ setAddressExecutive:
 setBiatecIdentity:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:93
-	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change gov address')
+	// contracts\BiatecConfigProvider.algo.ts:115
+	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change appIdentityProvider')
 	txn Sender
 	byte 0x75 // "u"
 	app_global_get
 	==
 
-	// Only updater can change gov address
+	// Only updater can change appIdentityProvider
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:94
-	// this.appIdentityProvider.value = a
+	// contracts\BiatecConfigProvider.algo.ts:116
+	// this.appBiatecIdentityProvider.value = a
 	byte 0x69 // "i"
+	frame_dig -1 // a: AppID
+	app_global_put
+	retsub
+
+// setBiatecPool(uint64)void
+*abi_route_setBiatecPool:
+	// a: uint64
+	txna ApplicationArgs 1
+	btoi
+
+	// execute setBiatecPool(uint64)void
+	callsub setBiatecPool
+	int 1
+	return
+
+// setBiatecPool(a: AppID): void
+//
+// App identity setter
+//
+// @param a Address
+setBiatecPool:
+	proto 1 0
+
+	// contracts\BiatecConfigProvider.algo.ts:125
+	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change appPoolProvider')
+	txn Sender
+	byte 0x75 // "u"
+	app_global_get
+	==
+
+	// Only updater can change appPoolProvider
+	assert
+
+	// contracts\BiatecConfigProvider.algo.ts:126
+	// this.appBiatecPoolProvider.value = a
+	byte 0x70 // "p"
 	frame_dig -1 // a: AppID
 	app_global_put
 	retsub
@@ -301,7 +393,7 @@ setBiatecIdentity:
 setBiatecFee:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:107
+	// contracts\BiatecConfigProvider.algo.ts:139
 	// assert(this.txn.sender === this.addressExecutive.value, 'Only executive address can change fees')
 	txn Sender
 	byte 0x65 // "e"
@@ -311,7 +403,7 @@ setBiatecFee:
 	// Only executive address can change fees
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:108
+	// contracts\BiatecConfigProvider.algo.ts:140
 	// assert(biatecFee <= (SCALE as uint256) / 2, 'Biatec cannot set fees higher then 50% of lp fees')
 	frame_dig -1 // biatecFee: uint256
 	byte 0x000000000000000000000000000000000000000000000000000000003b9aca00
@@ -322,7 +414,7 @@ setBiatecFee:
 	// Biatec cannot set fees higher then 50% of lp fees
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:109
+	// contracts\BiatecConfigProvider.algo.ts:141
 	// this.biatecFee.value = biatecFee
 	byte 0x66 // "f"
 	frame_dig -1 // biatecFee: uint256
@@ -336,12 +428,14 @@ setBiatecFee:
 	err
 
 *call_NoOp:
-	method "bootstrap(uint256,uint64)void"
+	method "bootstrap(uint256,uint64,uint64)void"
 	method "setAddressUdpater(address)void"
 	method "setAddressGov(address)void"
 	method "setAddressExecutive(address)void"
+	method "setAddressExecutiveFee(address)void"
 	method "setBiatecIdentity(uint64)void"
+	method "setBiatecPool(uint64)void"
 	method "setBiatecFee(uint256)void"
 	txna ApplicationArgs 0
-	match *abi_route_bootstrap *abi_route_setAddressUdpater *abi_route_setAddressGov *abi_route_setAddressExecutive *abi_route_setBiatecIdentity *abi_route_setBiatecFee
+	match *abi_route_bootstrap *abi_route_setAddressUdpater *abi_route_setAddressGov *abi_route_setAddressExecutive *abi_route_setAddressExecutiveFee *abi_route_setBiatecIdentity *abi_route_setBiatecPool *abi_route_setBiatecFee
 	err

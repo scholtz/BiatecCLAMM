@@ -3,6 +3,22 @@
   "desc": "",
   "methods": [
     {
+      "name": "getCurrentStatus",
+      "desc": "Returns current status",
+      "readonly": true,
+      "args": [
+        {
+          "name": "appPoolId",
+          "type": "uint64",
+          "desc": "Pool id to retrieve the stats"
+        }
+      ],
+      "returns": {
+        "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
+        "desc": "Pool info statistics"
+      }
+    },
+    {
       "name": "createApplication",
       "desc": "Initial setup",
       "args": [],
@@ -12,10 +28,86 @@
     },
     {
       "name": "registerPool",
+      "desc": "This method is called by constructor of the luquidity pool",
       "args": [
         {
           "name": "appPoolId",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "Luquidity pool id"
+        },
+        {
+          "name": "assetA",
+          "type": "uint64",
+          "desc": "Asset A"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64",
+          "desc": "Asset B"
+        },
+        {
+          "name": "verificationClass",
+          "type": "uint8",
+          "desc": "Verification class"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "registerTrade",
+      "desc": "This metod registers the trade and calculates and store the trade statistics",
+      "args": [
+        {
+          "name": "appPoolId",
+          "type": "uint64",
+          "desc": "Liqudity pool smart contract"
+        },
+        {
+          "name": "assetA",
+          "type": "uint64",
+          "desc": "Asset A"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64",
+          "desc": "Asset B"
+        },
+        {
+          "name": "priceFrom",
+          "type": "uint64",
+          "desc": "The original price"
+        },
+        {
+          "name": "priceTo",
+          "type": "uint64",
+          "desc": "The new price"
+        },
+        {
+          "name": "amountA",
+          "type": "uint64",
+          "desc": "Asset A amount spent or received"
+        },
+        {
+          "name": "amountB",
+          "type": "uint64",
+          "desc": "Asset B amount spent or received"
+        },
+        {
+          "name": "feeAmountA",
+          "type": "uint64",
+          "desc": "Fees paid in asset A if any"
+        },
+        {
+          "name": "feeAmountB",
+          "type": "uint64",
+          "desc": "Fees paid in asset B if any"
+        },
+        {
+          "name": "s",
+          "type": "uint64",
+          "desc": "Scale multiplier"
         }
       ],
       "returns": {

@@ -21,6 +21,41 @@ switch *call_NoOp *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEM
 *NOT_IMPLEMENTED:
 	err
 
+// getCurrentStatus(uint64)(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)
+*abi_route_getCurrentStatus:
+	// The ABI return prefix
+	byte 0x151f7c75
+
+	// appPoolId: uint64
+	txna ApplicationArgs 1
+	btoi
+
+	// execute getCurrentStatus(uint64)(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)
+	callsub getCurrentStatus
+	concat
+	log
+	int 1
+	return
+
+// getCurrentStatus(appPoolId: AppID): AppPoolInfo
+//
+// Returns current status
+//
+// @param appPoolId Pool id to retrieve the stats
+// @returns Pool info statistics
+getCurrentStatus:
+	proto 1 1
+
+	// contracts\BiatecPoolProvider.algo.ts:119
+	// return this.pools(appPoolId.id).value;
+	byte 0x70 // "p"
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	box_get
+	assert
+	retsub
+
 // createApplication()void
 *abi_route_createApplication:
 	// execute createApplication()void
@@ -34,29 +69,87 @@ switch *call_NoOp *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEM
 createApplication:
 	proto 0 0
 
-	// contracts\BiatecPoolProvider.algo.ts:44
+	// contracts\BiatecPoolProvider.algo.ts:126
 	// log(version)
 	byte "BIATEC-PP-01-01-01"
 	log
+
+	// contracts\BiatecPoolProvider.algo.ts:127
+	// this.period1.value = 3600
+	byte 0x7031 // "p1"
+	int 3600
+	app_global_put
+
+	// contracts\BiatecPoolProvider.algo.ts:128
+	// this.period2.value = 3600 * 24
+	byte 0x7032 // "p2"
+	int 86400
+	app_global_put
+
+	// contracts\BiatecPoolProvider.algo.ts:129
+	// this.period3.value = 3600 * 24 * 7
+	byte 0x7033 // "p3"
+	int 604800
+	app_global_put
+
+	// contracts\BiatecPoolProvider.algo.ts:130
+	// this.period4.value = 3600 * 24 * 30
+	byte 0x7034 // "p4"
+	int 2592000
+	app_global_put
+
+	// contracts\BiatecPoolProvider.algo.ts:131
+	// this.period5.value = 3600 * 24 * 365
+	byte 0x7035 // "p5"
+	int 31536000
+	app_global_put
 	retsub
 
-// registerPool(uint64)void
+// registerPool(uint64,uint64,uint64,uint8)void
 *abi_route_registerPool:
+	// verificationClass: uint8
+	txna ApplicationArgs 4
+	dup
+	len
+	int 1
+	==
+	assert
+	btoi
+
+	// assetB: uint64
+	txna ApplicationArgs 3
+	btoi
+
+	// assetA: uint64
+	txna ApplicationArgs 2
+	btoi
+
 	// appPoolId: uint64
 	txna ApplicationArgs 1
 	btoi
 
-	// execute registerPool(uint64)void
+	// execute registerPool(uint64,uint64,uint64,uint8)void
 	callsub registerPool
 	int 1
 	return
 
-// registerPool(appPoolId: AppID): void
+// registerPool(appPoolId: AppID, assetA: AssetID, assetB: AssetID, verificationClass: uint8): void
+//
+// This method is called by constructor of the luquidity pool
+//
+// @param appPoolId Luquidity pool id
+// @param assetA Asset A
+// @param assetB Asset B
+// @param verificationClass Verification class
 registerPool:
-	proto 1 0
+	proto 4 0
 
-	// contracts\BiatecPoolProvider.algo.ts:55
-	// assert(this.pools(appPoolId).exists)
+	// Push empty bytes after the frame pointer to reserve space for local variables
+	byte 0x
+	dupn 2
+
+	// contracts\BiatecPoolProvider.algo.ts:143
+	// assert(!this.pools(appPoolId.id).exists)
 	byte 0x70 // "p"
 	frame_dig -1 // appPoolId: AppID
 	itob
@@ -64,17 +157,2528 @@ registerPool:
 	box_len
 	swap
 	pop
+	!
 	assert
 
-	// contracts\BiatecPoolProvider.algo.ts:56
-	// this.pools(appPoolId).create()
+	// contracts\BiatecPoolProvider.algo.ts:144
+	// assert(globals.callerApplicationID === appPoolId)
+	global CallerApplicationID
+	frame_dig -1 // appPoolId: AppID
+	==
+	assert
+
+	// *if0_condition
+	// contracts\BiatecPoolProvider.algo.ts:145
+	// this.assets(assetA.id).exists
+	byte 0x61 // "a"
+	frame_dig -2 // assetA: AssetID
+	itob
+	concat
+	box_len
+	swap
+	pop
+	bz *if0_else
+
+	// *if0_consequent
+	// contracts\BiatecPoolProvider.algo.ts:146
+	// this.assets(assetA.id).value.push(appPoolId)
+	byte 0x61 // "a"
+	frame_dig -2 // assetA: AssetID
+	itob
+	concat
+	int 2
+	int 0
+	box_extract
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	byte 0x61 // "a"
+	frame_dig -2 // assetA: AssetID
+	itob
+	concat
+	dup
+	box_del
+	pop
+	swap
+	dup
+	len
+	int 8
+	/
+	itob
+	extract 6 2
+	swap
+	concat
+	box_put
+	b *if0_end
+
+*if0_else:
+	// contracts\BiatecPoolProvider.algo.ts:148
+	// newWhitelist: AppID[] = [appPoolId]
+	frame_dig -1 // appPoolId: AppID
+	itob
+	frame_bury 0 // newWhitelist: AppID[]
+
+	// contracts\BiatecPoolProvider.algo.ts:149
+	// this.assets(assetA.id).value = newWhitelist
+	byte 0x61 // "a"
+	frame_dig -2 // assetA: AssetID
+	itob
+	concat
+	dup
+	box_del
+	pop
+	frame_dig 0 // newWhitelist: AppID[]
+	dup
+	len
+	int 8
+	/
+	itob
+	extract 6 2
+	swap
+	concat
+	box_put
+
+*if0_end:
+	// *if1_condition
+	// contracts\BiatecPoolProvider.algo.ts:152
+	// this.assets(assetB.id).exists
+	byte 0x61 // "a"
+	frame_dig -3 // assetB: AssetID
+	itob
+	concat
+	box_len
+	swap
+	pop
+	bz *if1_else
+
+	// *if1_consequent
+	// contracts\BiatecPoolProvider.algo.ts:153
+	// this.assets(assetB.id).value.push(appPoolId)
+	byte 0x61 // "a"
+	frame_dig -3 // assetB: AssetID
+	itob
+	concat
+	int 2
+	int 0
+	box_extract
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	byte 0x61 // "a"
+	frame_dig -3 // assetB: AssetID
+	itob
+	concat
+	dup
+	box_del
+	pop
+	swap
+	dup
+	len
+	int 8
+	/
+	itob
+	extract 6 2
+	swap
+	concat
+	box_put
+	b *if1_end
+
+*if1_else:
+	// contracts\BiatecPoolProvider.algo.ts:155
+	// newWhitelist: AppID[] = [appPoolId]
+	frame_dig -1 // appPoolId: AppID
+	itob
+	frame_bury 1 // newWhitelist: AppID[]
+
+	// contracts\BiatecPoolProvider.algo.ts:156
+	// this.assets(assetB.id).value = newWhitelist
+	byte 0x61 // "a"
+	frame_dig -3 // assetB: AssetID
+	itob
+	concat
+	dup
+	box_del
+	pop
+	frame_dig 1 // newWhitelist: AppID[]
+	dup
+	len
+	int 8
+	/
+	itob
+	extract 6 2
+	swap
+	concat
+	box_put
+
+*if1_end:
+	// contracts\BiatecPoolProvider.algo.ts:158
+	// data: AppPoolInfo = {
+	//       assetA: assetA.id,
+	//       assetB: assetB.id,
+	//       isVerified: 0,
+	//       verificationClass: verificationClass as uint64,
+	//
+	//       latestPrice: 0,
+	//
+	//       period1NowFeeA: <uint64>0,
+	//       period1NowFeeB: <uint64>0,
+	//       period1NowTime: 0,
+	//       period1NowVolumeA: <uint64>0,
+	//       period1NowVolumeB: <uint64>0,
+	//       period1NowVWAP: <uint64>0,
+	//       period1PrevFeeA: <uint64>0,
+	//       period1PrevFeeB: <uint64>0,
+	//       period1PrevTime: 0,
+	//       period1PrevVolumeA: <uint64>0,
+	//       period1PrevVolumeB: <uint64>0,
+	//       period1PrevVWAP: <uint64>0,
+	//
+	//       period2NowFeeA: <uint64>0,
+	//       period2NowFeeB: <uint64>0,
+	//       period2NowTime: 0,
+	//       period2NowVolumeA: <uint64>0,
+	//       period2NowVolumeB: <uint64>0,
+	//       period2NowVWAP: <uint64>0,
+	//       period2PrevFeeA: <uint64>0,
+	//       period2PrevFeeB: <uint64>0,
+	//       period2PrevTime: 0,
+	//       period2PrevVolumeA: <uint64>0,
+	//       period2PrevVolumeB: <uint64>0,
+	//       period2PrevVWAP: <uint64>0,
+	//
+	//       period3NowFeeA: <uint64>0,
+	//       period3NowFeeB: <uint64>0,
+	//       period3NowTime: 0,
+	//       period3NowVolumeA: <uint64>0,
+	//       period3NowVolumeB: <uint64>0,
+	//       period3NowVWAP: <uint64>0,
+	//       period3PrevFeeA: <uint64>0,
+	//       period3PrevFeeB: <uint64>0,
+	//       period3PrevTime: 0,
+	//       period3PrevVolumeA: <uint64>0,
+	//       period3PrevVolumeB: <uint64>0,
+	//       period3PrevVWAP: <uint64>0,
+	//
+	//       period4NowFeeA: <uint64>0,
+	//       period4NowFeeB: <uint64>0,
+	//       period4NowTime: 0,
+	//       period4NowVolumeA: <uint64>0,
+	//       period4NowVolumeB: <uint64>0,
+	//       period4NowVWAP: <uint64>0,
+	//       period4PrevFeeA: <uint64>0,
+	//       period4PrevFeeB: <uint64>0,
+	//       period4PrevTime: 0,
+	//       period4PrevVolumeA: <uint64>0,
+	//       period4PrevVolumeB: <uint64>0,
+	//       period4PrevVWAP: <uint64>0,
+	//
+	//       period5NowFeeA: <uint64>0,
+	//       period5NowFeeB: <uint64>0,
+	//       period5NowTime: 0,
+	//       period5NowVolumeA: <uint64>0,
+	//       period5NowVolumeB: <uint64>0,
+	//       period5NowVWAP: <uint64>0,
+	//       period5PrevFeeA: <uint64>0,
+	//       period5PrevFeeB: <uint64>0,
+	//       period5PrevTime: 0,
+	//       period5PrevVolumeA: <uint64>0,
+	//       period5PrevVolumeB: <uint64>0,
+	//       period5PrevVWAP: <uint64>0,
+	//     }
+	byte 0x0000000000000000
+	frame_dig -2 // assetA: AssetID
+	itob
+	concat
+	frame_dig -3 // assetB: AssetID
+	itob
+	concat
+	frame_dig -4 // verificationClass: uint8
+	itob
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	byte 0x0000000000000000
+	concat
+	frame_bury 2 // data: AppPoolInfo
+
+	// contracts\BiatecPoolProvider.algo.ts:231
+	// this.pools(appPoolId.id).value = data
 	byte 0x70 // "p"
 	frame_dig -1 // appPoolId: AppID
 	itob
 	concat
-	int 122
-	box_create
-	pop
+	frame_dig 2 // data: AppPoolInfo
+	box_put
+	retsub
+
+// registerTrade(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)void
+*abi_route_registerTrade:
+	// s: uint64
+	txna ApplicationArgs 10
+	btoi
+
+	// feeAmountB: uint64
+	txna ApplicationArgs 9
+	btoi
+
+	// feeAmountA: uint64
+	txna ApplicationArgs 8
+	btoi
+
+	// amountB: uint64
+	txna ApplicationArgs 7
+	btoi
+
+	// amountA: uint64
+	txna ApplicationArgs 6
+	btoi
+
+	// priceTo: uint64
+	txna ApplicationArgs 5
+	btoi
+
+	// priceFrom: uint64
+	txna ApplicationArgs 4
+	btoi
+
+	// assetB: uint64
+	txna ApplicationArgs 3
+	btoi
+
+	// assetA: uint64
+	txna ApplicationArgs 2
+	btoi
+
+	// appPoolId: uint64
+	txna ApplicationArgs 1
+	btoi
+
+	// execute registerTrade(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)void
+	callsub registerTrade
+	int 1
+	return
+
+// registerTrade(appPoolId: AppID, assetA: AssetID, assetB: AssetID, priceFrom: uint64, priceTo: uint64, amountA: uint64, amountB: uint64, feeAmountA: uint64, feeAmountB: uint64, s: uint64): void
+//
+// This metod registers the trade and calculates and store the trade statistics
+//
+// @param appPoolId Liqudity pool smart contract
+// @param assetA Asset A
+// @param assetB Asset B
+// @param priceFrom The original price
+// @param priceTo The new price
+// @param amountA Asset A amount spent or received
+// @param amountB Asset B amount spent or received
+// @param feeAmountA Fees paid in asset A if any
+// @param feeAmountB Fees paid in asset B if any
+// @param s Scale multiplier
+registerTrade:
+	proto 10 0
+
+	// Push empty bytes after the frame pointer to reserve space for local variables
+	byte 0x
+	dupn 23
+
+	// contracts\BiatecPoolProvider.algo.ts:260
+	// increaseOpcodeBudget()
+	itxn_begin
+	int appl
+	itxn_field TypeEnum
+	int 0
+	itxn_field Fee
+	byte b64 CoEB // #pragma version 10; int 1
+	dup
+	itxn_field ApprovalProgram
+	itxn_field ClearStateProgram
+	int DeleteApplication
+	itxn_field OnCompletion
+	itxn_submit
+
+	// contracts\BiatecPoolProvider.algo.ts:261
+	// increaseOpcodeBudget()
+	itxn_begin
+	int appl
+	itxn_field TypeEnum
+	int 0
+	itxn_field Fee
+	byte b64 CoEB // #pragma version 10; int 1
+	dup
+	itxn_field ApprovalProgram
+	itxn_field ClearStateProgram
+	int DeleteApplication
+	itxn_field OnCompletion
+	itxn_submit
+
+	// contracts\BiatecPoolProvider.algo.ts:262
+	// assert(appPoolId === globals.callerApplicationID)
+	frame_dig -1 // appPoolId: AppID
+	global CallerApplicationID
+	==
+	assert
+
+	// contracts\BiatecPoolProvider.algo.ts:263
+	// assert(s === SCALE)
+	frame_dig -10 // s: uint64
+	int 1000000000
+	==
+	assert
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// info = this.pools(appPoolId.id).value
+	byte 0x70 // "p"
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	frame_bury 0 // storage key//info
+
+	// contracts\BiatecPoolProvider.algo.ts:265
+	// assert(assetA.id === info.assetA)
+	frame_dig -2 // assetA: AssetID
+	int 8 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	==
+	assert
+
+	// contracts\BiatecPoolProvider.algo.ts:266
+	// assert(assetB.id === info.assetB)
+	frame_dig -3 // assetB: AssetID
+	int 16 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	==
+	assert
+
+	// contracts\BiatecPoolProvider.algo.ts:267
+	// assert(amountA > 0 && amountB > 0)
+	frame_dig -6 // amountA: uint64
+	int 0
+	>
+	dup
+	bz *skip_and0
+	frame_dig -7 // amountB: uint64
+	int 0
+	>
+	&&
+
+*skip_and0:
+	assert
+
+	// contracts\BiatecPoolProvider.algo.ts:268
+	// price = (priceFrom + priceTo) / <uint64>2
+	frame_dig -4 // priceFrom: uint64
+	frame_dig -5 // priceTo: uint64
+	+
+	int 2
+	/
+	frame_bury 1 // price: uint64
+
+	// contracts\BiatecPoolProvider.algo.ts:269
+	// priceUint256 = price as uint256
+	frame_dig 1 // price: uint64
+	itob
+	frame_bury 2 // priceUint256: unsafe uint256
+
+	// contracts\BiatecPoolProvider.algo.ts:270
+	// amountBUint256 = amountB as uint256
+	frame_dig -7 // amountB: uint64
+	itob
+	frame_bury 3 // amountBUint256: unsafe uint256
+
+	// contracts\BiatecPoolProvider.algo.ts:271
+	// info.latestPrice = price
+	int 32 // headOffset
+	frame_dig 1 // price: uint64
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:272
+	// period1IterFromNowObj = info.period1NowTime / this.period1.value
+	int 80 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+
+	// contracts\BiatecPoolProvider.algo.ts:272
+	// this.period1.value
+	byte 0x7031 // "p1"
+	app_global_get
+	/
+	frame_bury 4 // period1IterFromNowObj: uint64
+
+	// contracts\BiatecPoolProvider.algo.ts:273
+	// period1IterFromCurrTime = globals.latestTimestamp / this.period1.value
+	global LatestTimestamp
+	byte 0x7031 // "p1"
+	app_global_get
+	/
+	frame_bury 5 // period1IterFromCurrTime: uint64
+
+	// *if2_condition
+	// contracts\BiatecPoolProvider.algo.ts:276
+	// period1IterFromNowObj !== period1IterFromCurrTime
+	frame_dig 4 // period1IterFromNowObj: uint64
+	frame_dig 5 // period1IterFromCurrTime: uint64
+	!=
+	bz *if2_end
+
+	// *if2_consequent
+	// contracts\BiatecPoolProvider.algo.ts:278
+	// info.period1PrevFeeA = info.period1NowFeeA
+	int 104 // headOffset
+	int 56 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:279
+	// info.period1NowFeeA = 0
+	frame_dig 0 // storage key//info
+	int 56 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:280
+	// info.period1PrevFeeB = info.period1NowFeeB
+	int 112 // headOffset
+	int 64 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:281
+	// info.period1NowFeeB = 0
+	frame_dig 0 // storage key//info
+	int 64 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:282
+	// info.period1PrevVWAP = info.period1NowVWAP
+	int 120 // headOffset
+	int 72 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:283
+	// info.period1PrevVolumeA = info.period1NowVolumeA
+	int 88 // headOffset
+	int 40 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:284
+	// info.period1NowVolumeA = 0
+	frame_dig 0 // storage key//info
+	int 40 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:285
+	// info.period1PrevVolumeB = info.period1NowVolumeB
+	int 96 // headOffset
+	int 48 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:286
+	// info.period1NowVolumeB = 0
+	frame_dig 0 // storage key//info
+	int 48 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:287
+	// info.period1PrevTime = info.period1NowTime
+	int 128 // headOffset
+	int 80 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// *if3_condition
+	// contracts\BiatecPoolProvider.algo.ts:288
+	// info.period1NowTime === 0
+	int 80 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	int 0
+	==
+	bz *if3_else
+
+	// *if3_consequent
+	// contracts\BiatecPoolProvider.algo.ts:289
+	// info.period1NowTime = globals.latestTimestamp
+	int 80 // headOffset
+	global LatestTimestamp
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+	b *if3_end
+
+*if3_else:
+	// contracts\BiatecPoolProvider.algo.ts:291
+	// info.period1NowTime = period1IterFromCurrTime * this.period1.value
+	int 80 // headOffset
+	frame_dig 5 // period1IterFromCurrTime: uint64
+	byte 0x7031 // "p1"
+	app_global_get
+	*
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+*if3_end:
+
+*if2_end:
+	// contracts\BiatecPoolProvider.algo.ts:295
+	// info.period1NowFeeA = info.period1NowFeeA + feeAmountA
+	int 56 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -8 // feeAmountA: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:296
+	// info.period1NowFeeB = info.period1NowFeeB + feeAmountB
+	int 64 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -9 // feeAmountB: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:297
+	// period1NowVolumeBUint256 = info.period1NowVolumeB as uint256
+	int 48 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_bury 6 // period1NowVolumeBUint256: unsafe uint256
+
+	// contracts\BiatecPoolProvider.algo.ts:298
+	// period1NowVWAPUint256 = info.period1NowVWAP as uint256
+	int 72 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_bury 7 // period1NowVWAPUint256: unsafe uint256
+
+	// contracts\BiatecPoolProvider.algo.ts:299
+	// info.period1NowVWAP = ((period1NowVolumeBUint256 * period1NowVWAPUint256 + amountBUint256 * priceUint256) /
+	//       (period1NowVolumeBUint256 + amountBUint256)) as uint64
+	int 72 // headOffset
+	frame_dig 6 // period1NowVolumeBUint256: unsafe uint256
+	frame_dig 7 // period1NowVWAPUint256: unsafe uint256
+	b*
+	frame_dig 3 // amountBUint256: unsafe uint256
+	frame_dig 2 // priceUint256: unsafe uint256
+	b*
+	b+
+	frame_dig 6 // period1NowVolumeBUint256: unsafe uint256
+	frame_dig 3 // amountBUint256: unsafe uint256
+	b+
+	b/
+	dup
+	bitlen
+	int 64
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 8
+	-
+	swap
+	substring3
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:301
+	// info.period1NowVolumeA = info.period1NowVolumeA + amountA
+	int 40 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -6 // amountA: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:302
+	// info.period1NowVolumeB = info.period1NowVolumeB + amountB
+	int 48 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -7 // amountB: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:305
+	// period2IterFromNowObj = info.period2NowTime / this.period2.value
+	int 176 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+
+	// contracts\BiatecPoolProvider.algo.ts:305
+	// this.period2.value
+	byte 0x7032 // "p2"
+	app_global_get
+	/
+	frame_bury 8 // period2IterFromNowObj: uint64
+
+	// contracts\BiatecPoolProvider.algo.ts:306
+	// period2IterFromCurrTime = globals.latestTimestamp / this.period2.value
+	global LatestTimestamp
+	byte 0x7032 // "p2"
+	app_global_get
+	/
+	frame_bury 9 // period2IterFromCurrTime: uint64
+
+	// *if4_condition
+	// contracts\BiatecPoolProvider.algo.ts:309
+	// period2IterFromNowObj !== period2IterFromCurrTime
+	frame_dig 8 // period2IterFromNowObj: uint64
+	frame_dig 9 // period2IterFromCurrTime: uint64
+	!=
+	bz *if4_end
+
+	// *if4_consequent
+	// contracts\BiatecPoolProvider.algo.ts:311
+	// info.period2PrevFeeA = info.period2NowFeeA
+	int 200 // headOffset
+	int 152 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:312
+	// info.period2NowFeeA = 0
+	frame_dig 0 // storage key//info
+	int 152 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:313
+	// info.period2PrevFeeB = info.period2NowFeeB
+	int 208 // headOffset
+	int 160 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:314
+	// info.period2NowFeeB = 0
+	frame_dig 0 // storage key//info
+	int 160 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:315
+	// info.period2PrevVWAP = info.period2NowVWAP
+	int 216 // headOffset
+	int 168 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:316
+	// info.period2PrevVolumeA = info.period2NowVolumeA
+	int 184 // headOffset
+	int 136 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:317
+	// info.period2NowVolumeA = 0
+	frame_dig 0 // storage key//info
+	int 136 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:318
+	// info.period2PrevVolumeB = info.period2NowVolumeB
+	int 192 // headOffset
+	int 144 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:319
+	// info.period2NowVolumeB = 0
+	frame_dig 0 // storage key//info
+	int 144 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:320
+	// info.period2PrevTime = info.period2NowTime
+	int 224 // headOffset
+	int 176 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// *if5_condition
+	// contracts\BiatecPoolProvider.algo.ts:321
+	// info.period2NowTime === 0
+	int 176 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	int 0
+	==
+	bz *if5_else
+
+	// *if5_consequent
+	// contracts\BiatecPoolProvider.algo.ts:322
+	// info.period2NowTime = globals.latestTimestamp
+	int 176 // headOffset
+	global LatestTimestamp
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+	b *if5_end
+
+*if5_else:
+	// contracts\BiatecPoolProvider.algo.ts:324
+	// info.period2NowTime = period2IterFromCurrTime * this.period2.value
+	int 176 // headOffset
+	frame_dig 9 // period2IterFromCurrTime: uint64
+	byte 0x7032 // "p2"
+	app_global_get
+	*
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+*if5_end:
+
+*if4_end:
+	// contracts\BiatecPoolProvider.algo.ts:328
+	// info.period2NowFeeA = info.period2NowFeeA + feeAmountA
+	int 152 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -8 // feeAmountA: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:329
+	// info.period2NowFeeB = info.period2NowFeeB + feeAmountB
+	int 160 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -9 // feeAmountB: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:330
+	// period2NowVolumeBUint256 = info.period2NowVolumeB as uint256
+	int 144 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_bury 10 // period2NowVolumeBUint256: unsafe uint256
+
+	// contracts\BiatecPoolProvider.algo.ts:331
+	// period2NowVWAPUint256 = info.period2NowVWAP as uint256
+	int 168 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_bury 11 // period2NowVWAPUint256: unsafe uint256
+
+	// contracts\BiatecPoolProvider.algo.ts:332
+	// info.period2NowVWAP = ((period2NowVolumeBUint256 * period2NowVWAPUint256 + amountBUint256 * priceUint256) /
+	//       (period2NowVolumeBUint256 + amountBUint256)) as uint64
+	int 168 // headOffset
+	frame_dig 10 // period2NowVolumeBUint256: unsafe uint256
+	frame_dig 11 // period2NowVWAPUint256: unsafe uint256
+	b*
+	frame_dig 3 // amountBUint256: unsafe uint256
+	frame_dig 2 // priceUint256: unsafe uint256
+	b*
+	b+
+	frame_dig 10 // period2NowVolumeBUint256: unsafe uint256
+	frame_dig 3 // amountBUint256: unsafe uint256
+	b+
+	b/
+	dup
+	bitlen
+	int 64
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 8
+	-
+	swap
+	substring3
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:334
+	// info.period2NowVolumeA = info.period2NowVolumeA + amountA
+	int 136 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -6 // amountA: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:335
+	// info.period2NowVolumeB = info.period2NowVolumeB + amountB
+	int 144 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -7 // amountB: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:338
+	// period3IterFromNowObj = info.period3NowTime / this.period3.value
+	int 272 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+
+	// contracts\BiatecPoolProvider.algo.ts:338
+	// this.period3.value
+	byte 0x7033 // "p3"
+	app_global_get
+	/
+	frame_bury 12 // period3IterFromNowObj: uint64
+
+	// contracts\BiatecPoolProvider.algo.ts:339
+	// period3IterFromCurrTime = globals.latestTimestamp / this.period3.value
+	global LatestTimestamp
+	byte 0x7033 // "p3"
+	app_global_get
+	/
+	frame_bury 13 // period3IterFromCurrTime: uint64
+
+	// *if6_condition
+	// contracts\BiatecPoolProvider.algo.ts:342
+	// period3IterFromNowObj !== period3IterFromCurrTime
+	frame_dig 12 // period3IterFromNowObj: uint64
+	frame_dig 13 // period3IterFromCurrTime: uint64
+	!=
+	bz *if6_end
+
+	// *if6_consequent
+	// contracts\BiatecPoolProvider.algo.ts:344
+	// info.period3PrevFeeA = info.period3NowFeeA
+	int 296 // headOffset
+	int 248 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:345
+	// info.period3NowFeeA = 0
+	frame_dig 0 // storage key//info
+	int 248 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:346
+	// info.period3PrevFeeB = info.period3NowFeeB
+	int 304 // headOffset
+	int 256 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:347
+	// info.period3NowFeeB = 0
+	frame_dig 0 // storage key//info
+	int 256 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:348
+	// info.period3PrevVWAP = info.period3NowVWAP
+	int 312 // headOffset
+	int 264 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:349
+	// info.period3PrevVolumeA = info.period3NowVolumeA
+	int 280 // headOffset
+	int 232 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:350
+	// info.period3NowVolumeA = 0
+	frame_dig 0 // storage key//info
+	int 232 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:351
+	// info.period3PrevVolumeB = info.period3NowVolumeB
+	int 288 // headOffset
+	int 240 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:352
+	// info.period3NowVolumeB = 0
+	frame_dig 0 // storage key//info
+	int 240 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:353
+	// info.period3PrevTime = info.period3NowTime
+	int 320 // headOffset
+	int 272 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// *if7_condition
+	// contracts\BiatecPoolProvider.algo.ts:354
+	// info.period3NowTime === 0
+	int 272 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	int 0
+	==
+	bz *if7_else
+
+	// *if7_consequent
+	// contracts\BiatecPoolProvider.algo.ts:355
+	// info.period3NowTime = globals.latestTimestamp
+	int 272 // headOffset
+	global LatestTimestamp
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+	b *if7_end
+
+*if7_else:
+	// contracts\BiatecPoolProvider.algo.ts:357
+	// info.period3NowTime = period3IterFromCurrTime * this.period3.value
+	int 272 // headOffset
+	frame_dig 13 // period3IterFromCurrTime: uint64
+	byte 0x7033 // "p3"
+	app_global_get
+	*
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+*if7_end:
+
+*if6_end:
+	// contracts\BiatecPoolProvider.algo.ts:361
+	// info.period3NowFeeA = info.period3NowFeeA + feeAmountA
+	int 248 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -8 // feeAmountA: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:362
+	// info.period3NowFeeB = info.period3NowFeeB + feeAmountB
+	int 256 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -9 // feeAmountB: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:363
+	// period3NowVolumeBUint256 = info.period3NowVolumeB as uint256
+	int 240 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_bury 14 // period3NowVolumeBUint256: unsafe uint256
+
+	// contracts\BiatecPoolProvider.algo.ts:364
+	// period3NowVWAPUint256 = info.period3NowVWAP as uint256
+	int 264 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_bury 15 // period3NowVWAPUint256: unsafe uint256
+
+	// contracts\BiatecPoolProvider.algo.ts:365
+	// info.period3NowVWAP = ((period3NowVolumeBUint256 * period3NowVWAPUint256 + amountBUint256 * priceUint256) /
+	//       (period3NowVolumeBUint256 + amountBUint256)) as uint64
+	int 264 // headOffset
+	frame_dig 14 // period3NowVolumeBUint256: unsafe uint256
+	frame_dig 15 // period3NowVWAPUint256: unsafe uint256
+	b*
+	frame_dig 3 // amountBUint256: unsafe uint256
+	frame_dig 2 // priceUint256: unsafe uint256
+	b*
+	b+
+	frame_dig 14 // period3NowVolumeBUint256: unsafe uint256
+	frame_dig 3 // amountBUint256: unsafe uint256
+	b+
+	b/
+	dup
+	bitlen
+	int 64
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 8
+	-
+	swap
+	substring3
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:367
+	// info.period3NowVolumeA = info.period3NowVolumeA + amountA
+	int 232 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -6 // amountA: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:368
+	// info.period3NowVolumeB = info.period3NowVolumeB + amountB
+	int 240 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -7 // amountB: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:370
+	// period4IterFromNowObj = info.period4NowTime / this.period4.value
+	int 368 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+
+	// contracts\BiatecPoolProvider.algo.ts:370
+	// this.period4.value
+	byte 0x7034 // "p4"
+	app_global_get
+	/
+	frame_bury 16 // period4IterFromNowObj: uint64
+
+	// contracts\BiatecPoolProvider.algo.ts:371
+	// period4IterFromCurrTime = globals.latestTimestamp / this.period4.value
+	global LatestTimestamp
+	byte 0x7034 // "p4"
+	app_global_get
+	/
+	frame_bury 17 // period4IterFromCurrTime: uint64
+
+	// *if8_condition
+	// contracts\BiatecPoolProvider.algo.ts:374
+	// period4IterFromNowObj !== period4IterFromCurrTime
+	frame_dig 16 // period4IterFromNowObj: uint64
+	frame_dig 17 // period4IterFromCurrTime: uint64
+	!=
+	bz *if8_end
+
+	// *if8_consequent
+	// contracts\BiatecPoolProvider.algo.ts:376
+	// info.period4PrevFeeA = info.period4NowFeeA
+	int 392 // headOffset
+	int 344 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:377
+	// info.period4NowFeeA = 0
+	frame_dig 0 // storage key//info
+	int 344 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:378
+	// info.period4PrevFeeB = info.period4NowFeeB
+	int 400 // headOffset
+	int 352 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:379
+	// info.period4NowFeeB = 0
+	frame_dig 0 // storage key//info
+	int 352 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:380
+	// info.period4PrevVWAP = info.period4NowVWAP
+	int 408 // headOffset
+	int 360 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:381
+	// info.period4PrevVolumeA = info.period4NowVolumeA
+	int 376 // headOffset
+	int 328 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:382
+	// info.period4NowVolumeA = 0
+	frame_dig 0 // storage key//info
+	int 328 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:383
+	// info.period4PrevVolumeB = info.period4NowVolumeB
+	int 384 // headOffset
+	int 336 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:384
+	// info.period4NowVolumeB = 0
+	frame_dig 0 // storage key//info
+	int 336 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:385
+	// info.period4PrevTime = info.period4NowTime
+	int 416 // headOffset
+	int 368 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// *if9_condition
+	// contracts\BiatecPoolProvider.algo.ts:386
+	// info.period4NowTime === 0
+	int 368 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	int 0
+	==
+	bz *if9_else
+
+	// *if9_consequent
+	// contracts\BiatecPoolProvider.algo.ts:387
+	// info.period4NowTime = globals.latestTimestamp
+	int 368 // headOffset
+	global LatestTimestamp
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+	b *if9_end
+
+*if9_else:
+	// contracts\BiatecPoolProvider.algo.ts:389
+	// info.period4NowTime = period4IterFromCurrTime * this.period4.value
+	int 368 // headOffset
+	frame_dig 17 // period4IterFromCurrTime: uint64
+	byte 0x7034 // "p4"
+	app_global_get
+	*
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+*if9_end:
+
+*if8_end:
+	// contracts\BiatecPoolProvider.algo.ts:393
+	// info.period4NowFeeA = info.period4NowFeeA + feeAmountA
+	int 344 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -8 // feeAmountA: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:394
+	// info.period4NowFeeB = info.period4NowFeeB + feeAmountB
+	int 352 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -9 // feeAmountB: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:395
+	// period4NowVolumeBUint256 = info.period4NowVolumeB as uint256
+	int 336 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_bury 18 // period4NowVolumeBUint256: unsafe uint256
+
+	// contracts\BiatecPoolProvider.algo.ts:396
+	// period4NowVWAPUint256 = info.period4NowVWAP as uint256
+	int 360 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_bury 19 // period4NowVWAPUint256: unsafe uint256
+
+	// contracts\BiatecPoolProvider.algo.ts:397
+	// info.period4NowVWAP = ((period4NowVolumeBUint256 * period4NowVWAPUint256 + amountBUint256 * priceUint256) /
+	//       (period4NowVolumeBUint256 + amountBUint256)) as uint64
+	int 360 // headOffset
+	frame_dig 18 // period4NowVolumeBUint256: unsafe uint256
+	frame_dig 19 // period4NowVWAPUint256: unsafe uint256
+	b*
+	frame_dig 3 // amountBUint256: unsafe uint256
+	frame_dig 2 // priceUint256: unsafe uint256
+	b*
+	b+
+	frame_dig 18 // period4NowVolumeBUint256: unsafe uint256
+	frame_dig 3 // amountBUint256: unsafe uint256
+	b+
+	b/
+	dup
+	bitlen
+	int 64
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 8
+	-
+	swap
+	substring3
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:399
+	// info.period4NowVolumeA = info.period4NowVolumeA + amountA
+	int 328 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -6 // amountA: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:400
+	// info.period4NowVolumeB = info.period4NowVolumeB + amountB
+	int 336 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -7 // amountB: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:402
+	// period5IterFromNowObj = info.period5NowTime / this.period5.value
+	int 464 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+
+	// contracts\BiatecPoolProvider.algo.ts:402
+	// this.period5.value
+	byte 0x7035 // "p5"
+	app_global_get
+	/
+	frame_bury 20 // period5IterFromNowObj: uint64
+
+	// contracts\BiatecPoolProvider.algo.ts:403
+	// period5IterFromCurrTime = globals.latestTimestamp / this.period5.value
+	global LatestTimestamp
+	byte 0x7035 // "p5"
+	app_global_get
+	/
+	frame_bury 21 // period5IterFromCurrTime: uint64
+
+	// *if10_condition
+	// contracts\BiatecPoolProvider.algo.ts:406
+	// period5IterFromNowObj !== period5IterFromCurrTime
+	frame_dig 20 // period5IterFromNowObj: uint64
+	frame_dig 21 // period5IterFromCurrTime: uint64
+	!=
+	bz *if10_end
+
+	// *if10_consequent
+	// contracts\BiatecPoolProvider.algo.ts:408
+	// info.period5PrevFeeA = info.period5NowFeeA
+	int 488 // headOffset
+	int 440 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:409
+	// info.period5NowFeeA = 0
+	frame_dig 0 // storage key//info
+	int 440 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:410
+	// info.period5PrevFeeB = info.period5NowFeeB
+	int 496 // headOffset
+	int 448 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:411
+	// info.period5NowFeeB = 0
+	frame_dig 0 // storage key//info
+	int 448 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:412
+	// info.period5PrevVWAP = info.period5NowVWAP
+	int 504 // headOffset
+	int 456 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:413
+	// info.period5PrevVolumeA = info.period5NowVolumeA
+	int 472 // headOffset
+	int 424 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:414
+	// info.period5NowVolumeA = 0
+	frame_dig 0 // storage key//info
+	int 424 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:415
+	// info.period5PrevVolumeB = info.period5NowVolumeB
+	int 480 // headOffset
+	int 432 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:416
+	// info.period5NowVolumeB = 0
+	frame_dig 0 // storage key//info
+	int 432 // headOffset
+	byte 0x0000000000000000
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:417
+	// info.period5PrevTime = info.period5NowTime
+	int 512 // headOffset
+	int 464 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// *if11_condition
+	// contracts\BiatecPoolProvider.algo.ts:418
+	// info.period5NowTime === 0
+	int 464 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	int 0
+	==
+	bz *if11_else
+
+	// *if11_consequent
+	// contracts\BiatecPoolProvider.algo.ts:419
+	// info.period5NowTime = globals.latestTimestamp
+	int 464 // headOffset
+	global LatestTimestamp
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+	b *if11_end
+
+*if11_else:
+	// contracts\BiatecPoolProvider.algo.ts:421
+	// info.period5NowTime = period5IterFromCurrTime * this.period5.value
+	int 464 // headOffset
+	frame_dig 21 // period5IterFromCurrTime: uint64
+	byte 0x7035 // "p5"
+	app_global_get
+	*
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+*if11_end:
+
+*if10_end:
+	// contracts\BiatecPoolProvider.algo.ts:425
+	// info.period5NowFeeA = info.period5NowFeeA + feeAmountA
+	int 440 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -8 // feeAmountA: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:426
+	// info.period5NowFeeB = info.period5NowFeeB + feeAmountB
+	int 448 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -9 // feeAmountB: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:427
+	// period5NowVolumeBUint256 = info.period4NowVolumeB as uint256
+	int 336 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_bury 22 // period5NowVolumeBUint256: unsafe uint256
+
+	// contracts\BiatecPoolProvider.algo.ts:428
+	// period5NowVWAPUint256 = info.period4NowVWAP as uint256
+	int 360 // headOffset
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	itob
+	frame_bury 23 // period5NowVWAPUint256: unsafe uint256
+
+	// contracts\BiatecPoolProvider.algo.ts:429
+	// info.period5NowVWAP = ((period5NowVolumeBUint256 * period5NowVWAPUint256 + amountBUint256 * priceUint256) /
+	//       (period5NowVolumeBUint256 + amountBUint256)) as uint64
+	int 456 // headOffset
+	frame_dig 22 // period5NowVolumeBUint256: unsafe uint256
+	frame_dig 23 // period5NowVWAPUint256: unsafe uint256
+	b*
+	frame_dig 3 // amountBUint256: unsafe uint256
+	frame_dig 2 // priceUint256: unsafe uint256
+	b*
+	b+
+	frame_dig 22 // period5NowVolumeBUint256: unsafe uint256
+	frame_dig 3 // amountBUint256: unsafe uint256
+	b+
+	b/
+	dup
+	bitlen
+	int 64
+	<=
+	assert
+	byte 0xFFFFFFFFFFFFFFFF
+	b&
+	dup
+	len
+	dup
+	int 8
+	-
+	swap
+	substring3
+	btoi
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:431
+	// info.period5NowVolumeA = info.period5NowVolumeA + amountA
+	int 424 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -6 // amountA: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
+
+	// contracts\BiatecPoolProvider.algo.ts:432
+	// info.period5NowVolumeB = info.period5NowVolumeB + amountB
+	int 432 // headOffset
+	dup
+	int 8
+	byte 0x70 // "p"
+
+	// contracts\BiatecPoolProvider.algo.ts:264
+	// appPoolId.id
+	frame_dig -1 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	frame_dig -7 // amountB: uint64
+	+
+	itob
+	frame_dig 0 // storage key//info
+	cover 2
+	box_replace
 	retsub
 
 *create_NoOp:
@@ -84,7 +2688,9 @@ registerPool:
 	err
 
 *call_NoOp:
-	method "registerPool(uint64)void"
+	method "getCurrentStatus(uint64)(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)"
+	method "registerPool(uint64,uint64,uint64,uint8)void"
+	method "registerTrade(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)void"
 	txna ApplicationArgs 0
-	match *abi_route_registerPool
+	match *abi_route_getCurrentStatus *abi_route_registerPool *abi_route_registerTrade
 	err
