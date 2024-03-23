@@ -462,7 +462,23 @@ class BiatecClammPool extends Contract {
       // this.assetABalance.value = aDepositInBaseScale;
       // this.assetBBalance.value = bDepositInBaseScale;
 
-      return this.processAddLiqudity(aDepositInBaseScale, bDepositInBaseScale, assetLPDelicmalScale2Scale, assetLP);
+      const ret = this.processAddLiqudity(
+        aDepositInBaseScale,
+        bDepositInBaseScale,
+        assetLPDelicmalScale2Scale,
+        assetLP
+      );
+
+      const newPrice = this.calculatePrice(
+        this.assetABalance.value, // assetAQuantity: uint256,
+        this.assetBBalance.value, // assetBQuantity: uint256,
+        this.priceMinSqrt.value, // priceMinSqrt: uint256,
+        this.priceMaxSqrt.value, // priceMaxSqrt: uint256,
+        this.Liqudity.value // liquidity: uint256
+      );
+
+      this.ratio.value = newPrice as uint64;
+      return ret;
     }
 
     // add asset to LP position
@@ -582,6 +598,8 @@ class BiatecClammPool extends Contract {
     // return lpTokensToSend;
     // 2000000000n
     // 2000000000n
+
+    assert(lpTokensToSend > 0, 'Adding the liqudity would lead to zero LP tokens deposited to the user'); // Liquidity provider protection.. He must receive at least 1 LP token
     return lpTokensToSend as uint64;
   }
 
@@ -647,6 +665,8 @@ class BiatecClammPool extends Contract {
     if (bToSend64 > 0) {
       this.doAxfer(this.txn.sender, assetB, bToSend64);
     }
+
+    assert(aToSend64 > 0 || bToSend64 > 0, 'Removal of the liquidity would lead to zero withdrawal');
 
     const newAssetA = this.assetABalance.value - aToSend;
     const newAssetB = this.assetBBalance.value - bToSend;
@@ -1046,10 +1066,7 @@ class BiatecClammPool extends Contract {
       ((this.assetBBalance.value / assetBDelicmalScale2Scale) as uint64) <= this.app.address.assetBalance(assetB),
       'current B balance must be above the assetBBalance value'
     );
-    // 24999n this.assetBBalance.value
-    // 25n this.app.address.assetBalance(assetB)
-    // return this.app.address.assetBalance(assetB) as uint256;
-    // return this.assetBBalance.value;
+    assert(ret > 1, 'The result would lead to deposit but zero withdrawal'); // protection of the client
     return ret as uint256;
   }
 
