@@ -33,6 +33,8 @@ type AmmStatus = {
   scale: bigint;
   assetABalance: bigint;
   assetBBalance: bigint;
+  realABalance: bigint;
+  realBBalance: bigint;
   priceMinSqrt: bigint;
   priceMaxSqrt: bigint;
   currentLiqudity: bigint;
@@ -283,6 +285,8 @@ const return2status = (input: (bigint | number)[] | null | undefined): AmmStatus
       scale: 0n,
       assetABalance: 0n,
       assetBBalance: 0n,
+      realABalance: 0n,
+      realBBalance: 0n,
       priceMinSqrt: 0n,
       priceMaxSqrt: 0n,
       currentLiqudity: 0n,
@@ -301,19 +305,21 @@ const return2status = (input: (bigint | number)[] | null | undefined): AmmStatus
     scale: BigInt(input[0]),
     assetABalance: BigInt(input[1]),
     assetBBalance: BigInt(input[2]),
-    priceMinSqrt: BigInt(input[3]),
-    priceMaxSqrt: BigInt(input[4]),
-    currentLiqudity: BigInt(input[5]),
-    releasedLiqudity: BigInt(input[6]),
-    liqudityUsersFromFees: BigInt(input[7]),
-    liqudityBiatecFromFees: BigInt(input[8]),
-    assetA: BigInt(input[9]),
-    assetB: BigInt(input[10]),
-    poolToken: BigInt(input[11]),
-    price: BigInt(input[12]),
-    fee: BigInt(input[13]),
-    biatecFee: BigInt(input[14]),
-    verificationClass: BigInt(input[15]),
+    realABalance: BigInt(input[3]),
+    realBBalance: BigInt(input[4]),
+    priceMinSqrt: BigInt(input[5]),
+    priceMaxSqrt: BigInt(input[6]),
+    currentLiqudity: BigInt(input[7]),
+    releasedLiqudity: BigInt(input[8]),
+    liqudityUsersFromFees: BigInt(input[9]),
+    liqudityBiatecFromFees: BigInt(input[10]),
+    assetA: BigInt(input[11]),
+    assetB: BigInt(input[12]),
+    poolToken: BigInt(input[13]),
+    price: BigInt(input[14]),
+    fee: BigInt(input[15]),
+    biatecFee: BigInt(input[16]),
+    verificationClass: BigInt(input[17]),
   };
 };
 // https://github.com/GoogleChromeLabs/jsbi/issues/30
@@ -1417,15 +1423,17 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 0n,
+            realABalance: 0n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 0n,
             releasedLiqudity: 0n,
             liqudityUsersFromFees: 0n,
             liqudityBiatecFromFees: 0n,
-            assetA: 0n,
-            assetB: 0n,
-            poolToken: 0n,
+            assetA: 37134n,
+            assetB: 37135n,
+            poolToken: 37145n,
             price: 1562500000n,
             fee: 100000000n,
             biatecFee: 0n,
@@ -1440,15 +1448,17 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 2500000000n,
+            realABalance: 0n,
+            realBBalance: 2500000n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 10000000000n,
             releasedLiqudity: 10000000000n,
             liqudityUsersFromFees: 0n,
             liqudityBiatecFromFees: 0n,
-            assetA: 8868n,
-            assetB: 8869n,
-            poolToken: 8878n,
+            assetA: 37183n,
+            assetB: 37184n,
+            poolToken: 37194n,
             price: 1562500000n,
             fee: 100000000n,
             biatecFee: 0n,
@@ -1462,6 +1472,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 2500000000n,
             assetBBalance: 0n,
+            realABalance: 250000000n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 12500000000n,
@@ -1484,6 +1496,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 1750000000n,
             assetBBalance: 0n,
+            realABalance: 175000000n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 8750000000n,
@@ -1550,6 +1564,8 @@ describe('clamm', () => {
         const status1 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -1595,6 +1611,8 @@ describe('clamm', () => {
         const status2 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -1633,6 +1651,8 @@ describe('clamm', () => {
         const status3 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -1668,6 +1688,8 @@ describe('clamm', () => {
         const status4 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -1699,6 +1721,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 0n,
+            realABalance: 0n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 0n,
@@ -1722,6 +1746,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 2500000000n,
+            realABalance: 0n,
+            realBBalance: 2500000n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 10000000000n,
@@ -1744,6 +1770,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 2500000000n,
             assetBBalance: 0n,
+            realABalance: 250000000n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 12500000000n,
@@ -1766,6 +1794,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 1825000000n,
             assetBBalance: 0n,
+            realABalance: 182500000n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 9125000000n,
@@ -1832,6 +1862,8 @@ describe('clamm', () => {
         const status1 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -1877,6 +1909,8 @@ describe('clamm', () => {
         const status2 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -1915,6 +1949,8 @@ describe('clamm', () => {
         const status3 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -1950,6 +1986,8 @@ describe('clamm', () => {
         const status4 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -1981,6 +2019,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 0n,
+            realABalance: 0n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 0n,
@@ -2005,6 +2045,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 2500000000n,
+            realABalance: 0n,
+            realBBalance: 2500000n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 10000000000n,
@@ -2027,6 +2069,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 2500000000n,
             assetBBalance: 0n,
+            realABalance: 250000000n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 12500000000n,
@@ -2120,6 +2164,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 10000000000n,
             assetBBalance: 0n,
+            realABalance: 1000000000n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 50000000000n,
@@ -2144,6 +2190,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 15625000000n,
+            realABalance: 0n,
+            realBBalance: 15625000n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 62500000000n,
@@ -2235,6 +2283,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 0n,
+            realABalance: 0n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 0n,
@@ -2300,6 +2350,8 @@ describe('clamm', () => {
         const status1 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -2351,6 +2403,8 @@ describe('clamm', () => {
         const status2 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -2390,6 +2444,8 @@ describe('clamm', () => {
         const status3 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -2454,6 +2510,8 @@ describe('clamm', () => {
         const status4 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -2499,6 +2557,8 @@ describe('clamm', () => {
         const status5 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -2547,6 +2607,8 @@ describe('clamm', () => {
         const status6 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -2578,6 +2640,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 0n,
+            realABalance: 400000n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 0n,
@@ -2585,8 +2649,8 @@ describe('clamm', () => {
             liqudityUsersFromFees: 0n,
             liqudityBiatecFromFees: 0n,
             assetA: 0n,
-            assetB: 0n,
-            poolToken: 0n,
+            assetB: 37658n,
+            poolToken: 37668n,
             price: 1562500000n,
             fee: 100000000n,
             biatecFee: 0n,
@@ -2601,15 +2665,17 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 2500000000n,
+            realABalance: 400000n,
+            realBBalance: 2500000n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 10000000000n,
             releasedLiqudity: 10000000000n,
             liqudityUsersFromFees: 0n,
             liqudityBiatecFromFees: 0n,
-            assetA: 8868n,
-            assetB: 8869n,
-            poolToken: 8878n,
+            assetA: 0n,
+            assetB: 37677n,
+            poolToken: 37687n,
             price: 1562500000n,
             fee: 100000000n,
             biatecFee: 0n,
@@ -2623,15 +2689,17 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 2500000000n,
             assetBBalance: 0n,
+            realABalance: 2900000n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 12500000000n,
             releasedLiqudity: 10000000000n,
             liqudityUsersFromFees: 2500000000n,
             liqudityBiatecFromFees: 0n,
-            assetA: 8895n,
-            assetB: 8896n,
-            poolToken: 8905n,
+            assetA: 0n,
+            assetB: 37705n,
+            poolToken: 37715n,
             price: 1000000000n,
             fee: 100000000n,
             biatecFee: 0n,
@@ -2645,15 +2713,17 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 1750000000n,
             assetBBalance: 0n,
+            realABalance: 2150000n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 8750000000n,
             releasedLiqudity: 7000000000n,
             liqudityUsersFromFees: 1750000000n,
             liqudityBiatecFromFees: 0n,
-            assetA: 8968n,
-            assetB: 8969n,
-            poolToken: 8978n,
+            assetA: 0n,
+            assetB: 37744n,
+            poolToken: 37754n,
             price: 1000000000n,
             fee: 100000000n,
             biatecFee: 0n,
@@ -2711,6 +2781,8 @@ describe('clamm', () => {
         const status1 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: t.assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -2773,6 +2845,8 @@ describe('clamm', () => {
         const status2 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: t.assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -2819,6 +2893,8 @@ describe('clamm', () => {
         const status3 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: t.assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -2854,6 +2930,8 @@ describe('clamm', () => {
         const status4 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: t.assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -2884,6 +2962,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 0n,
+            realABalance: 0n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 0n,
@@ -2908,6 +2988,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 2500000000n,
+            realABalance: 0n,
+            realBBalance: 2500000n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 10000000000n,
@@ -2930,6 +3012,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 2500000000n,
             assetBBalance: 0n,
+            realABalance: 250000000n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 12500000000n,
@@ -2954,6 +3038,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 2460000000n,
             assetBBalance: 0n,
+            realABalance: 246000000n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 12300000000n,
@@ -2977,6 +3063,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 10000000000n,
             assetBBalance: 0n,
+            realABalance: 1000000000n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 50000000000n,
@@ -2999,6 +3087,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 15625000000n,
+            realABalance: 0n,
+            realBBalance: 15625000n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 62500000000n,
@@ -3021,6 +3111,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 15300000000n,
+            realABalance: 0n,
+            realBBalance: 15300000n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 61200000000n,
@@ -3086,6 +3178,8 @@ describe('clamm', () => {
         const status1 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -3137,6 +3231,8 @@ describe('clamm', () => {
         const status2 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -3176,6 +3272,8 @@ describe('clamm', () => {
         const status3 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -3206,6 +3304,8 @@ describe('clamm', () => {
         const status4 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -3252,6 +3352,8 @@ describe('clamm', () => {
         const status5 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -3291,6 +3393,8 @@ describe('clamm', () => {
         const status6 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -3321,6 +3425,8 @@ describe('clamm', () => {
         const status7 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -3351,6 +3457,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 0n,
+            realABalance: 0n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 0n,
@@ -3375,6 +3483,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 2500000000n,
+            realABalance: 0n,
+            realBBalance: 2500000n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 10000000000n,
@@ -3400,6 +3510,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 1000000000n,
             assetBBalance: 3500000000n,
+            realABalance: 100000000n,
+            realBBalance: 3500000n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 19880269745n,
@@ -3425,6 +3537,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 0n,
+            realABalance: 0n,
+            realBBalance: 0n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 0n,
@@ -3449,6 +3563,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 2500000000n,
+            realABalance: 0n,
+            realBBalance: 2500000n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 10000000000n,
@@ -3474,6 +3590,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 3500000000n,
+            realABalance: 0n,
+            realBBalance: 3500000n,
             priceMinSqrt: 1000000000n,
             priceMaxSqrt: 1250000000n,
             currentLiqudity: 14000000000n,
@@ -3532,6 +3650,8 @@ describe('clamm', () => {
         const status1 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -3583,6 +3703,8 @@ describe('clamm', () => {
         const status2 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -3632,6 +3754,8 @@ describe('clamm', () => {
         const status3 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -3678,6 +3802,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 0n,
+            realABalance: 0n,
+            realBBalance: 0n,
             priceMinSqrt: 2000000000n,
             priceMaxSqrt: 2000000000n,
             currentLiqudity: 0n,
@@ -3702,6 +3828,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 8000000000n,
+            realABalance: 0n,
+            realBBalance: 8000000n,
             priceMinSqrt: 2000000000n,
             priceMaxSqrt: 2000000000n,
             currentLiqudity: 8000000000n,
@@ -3724,6 +3852,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 1000000000n,
             assetBBalance: 4800000000n,
+            realABalance: 100000000n,
+            realBBalance: 4800000n,
             priceMinSqrt: 2000000000n,
             priceMaxSqrt: 2000000000n,
             currentLiqudity: 8800000000n,
@@ -3817,6 +3947,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 8500000000n,
             assetBBalance: 4800000000n,
+            realABalance: 850000000n,
+            realBBalance: 4800000n,
             priceMinSqrt: 2000000000n,
             priceMaxSqrt: 2000000000n,
             currentLiqudity: 38800000000n,
@@ -3843,6 +3975,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 6500000000n,
             assetBBalance: 14800000000n,
+            realABalance: 650000000n,
+            realBBalance: 14800000n,
             priceMinSqrt: 2000000000n,
             priceMaxSqrt: 2000000000n,
             currentLiqudity: 40800000000n,
@@ -3933,6 +4067,8 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 223039216n,
             assetBBalance: 507843138n,
+            realABalance: 22303922n,
+            realBBalance: 507844n,
             priceMinSqrt: 2000000000n,
             priceMaxSqrt: 2000000000n,
             currentLiqudity: 1400000002n,
@@ -3998,6 +4134,8 @@ describe('clamm', () => {
         const status1 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -4049,6 +4187,8 @@ describe('clamm', () => {
         const status2 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -4088,6 +4228,8 @@ describe('clamm', () => {
         const status3 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -4152,6 +4294,8 @@ describe('clamm', () => {
         const status4 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -4197,6 +4341,8 @@ describe('clamm', () => {
         const status5 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -4246,6 +4392,8 @@ describe('clamm', () => {
         const status6 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -4276,15 +4424,17 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 0n,
             assetBBalance: 0n,
+            realABalance: 0n,
+            realBBalance: 0n,
             priceMinSqrt: 999949998n,
             priceMaxSqrt: 1000049998n,
             currentLiqudity: 0n,
             releasedLiqudity: 0n,
             liqudityUsersFromFees: 0n,
             liqudityBiatecFromFees: 0n,
-            assetA: 28503n,
-            assetB: 28504n,
-            poolToken: 28515n,
+            assetA: 35188n,
+            assetB: 35189n,
+            poolToken: 35199n,
             price: 1000000000n,
             fee: 100000n,
             biatecFee: 100000000n,
@@ -4300,15 +4450,17 @@ describe('clamm', () => {
             scale: 1000000000n,
             assetABalance: 100000000n,
             assetBBalance: 100000000n,
+            realABalance: 10000000n,
+            realBBalance: 100000n,
             priceMinSqrt: 999949998n,
             priceMaxSqrt: 1000049998n,
             currentLiqudity: 2000039996799n,
             releasedLiqudity: 2000039996000n,
             liqudityUsersFromFees: 0n,
             liqudityBiatecFromFees: 0n,
-            assetA: 29358n,
-            assetB: 29359n,
-            poolToken: 29370n,
+            assetA: 35278n,
+            assetB: 35279n,
+            poolToken: 35289n,
             price: 1000000000n,
             fee: 100000n,
             biatecFee: 100000000n,
@@ -4316,22 +4468,24 @@ describe('clamm', () => {
           },
 
           swap1A: 0.1, // i will swap this asset from A asset to B and this is what I deposit
-          swap1B: 0.099975, // this is how much asset B is in the pool and what i want to receive
+          swap1B: 0.099974, // this is how much asset B is in the pool and what i want to receive
 
           checkStatus3: {
             scale: 1000000000n,
             assetABalance: 200000000n,
-            assetBBalance: 24999n,
+            assetBBalance: 26000n,
+            realABalance: 20000000n,
+            realBBalance: 26n,
             priceMinSqrt: 999949998n,
             priceMaxSqrt: 1000049998n,
-            currentLiqudity: 2000239985799n,
+            currentLiqudity: 2000250001250n,
             releasedLiqudity: 2000039996000n,
-            liqudityUsersFromFees: 179990100n,
-            liqudityBiatecFromFees: 19998900n,
-            assetA: 29467n,
-            assetB: 29468n,
-            poolToken: 29478n,
-            price: 999900022n,
+            liqudityUsersFromFees: 189004005n,
+            liqudityBiatecFromFees: 21000446n,
+            assetA: 35308n,
+            assetB: 35309n,
+            poolToken: 35319n,
+            price: 999900023n,
             fee: 100000n,
             biatecFee: 100000000n,
             verificationClass: 0n,
@@ -4339,16 +4493,16 @@ describe('clamm', () => {
 
           stats1: {
             isVerified: 0n,
-            assetA: 29548n,
-            assetB: 29549n,
+            assetA: 34328n,
+            assetB: 34329n,
             verificationClass: 0n,
             latestPrice: 999950011n,
             period1NowVolumeA: 100000000n,
-            period1NowVolumeB: 99975000n,
-            period1NowFeeA: 19996n,
+            period1NowVolumeB: 99974000n,
+            period1NowFeeA: 20997n,
             period1NowFeeB: 0n,
             period1NowVWAP: 999950011n,
-            period1NowTime: 1711026521n,
+            period1NowTime: 1711080996n,
             period1PrevVolumeA: 0n,
             period1PrevVolumeB: 0n,
             period1PrevFeeA: 0n,
@@ -4356,11 +4510,11 @@ describe('clamm', () => {
             period1PrevVWAP: 0n,
             period1PrevTime: 0n,
             period2NowVolumeA: 100000000n,
-            period2NowVolumeB: 99975000n,
-            period2NowFeeA: 19996n,
+            period2NowVolumeB: 99974000n,
+            period2NowFeeA: 20997n,
             period2NowFeeB: 0n,
             period2NowVWAP: 999950011n,
-            period2NowTime: 1711026521n,
+            period2NowTime: 1711080996n,
             period2PrevVolumeA: 0n,
             period2PrevVolumeB: 0n,
             period2PrevFeeA: 0n,
@@ -4368,11 +4522,11 @@ describe('clamm', () => {
             period2PrevVWAP: 0n,
             period2PrevTime: 0n,
             period3NowVolumeA: 100000000n,
-            period3NowVolumeB: 99975000n,
-            period3NowFeeA: 19996n,
+            period3NowVolumeB: 99974000n,
+            period3NowFeeA: 20997n,
             period3NowFeeB: 0n,
             period3NowVWAP: 999950011n,
-            period3NowTime: 1711026521n,
+            period3NowTime: 1711080996n,
             period3PrevVolumeA: 0n,
             period3PrevVolumeB: 0n,
             period3PrevFeeA: 0n,
@@ -4380,11 +4534,11 @@ describe('clamm', () => {
             period3PrevVWAP: 0n,
             period3PrevTime: 0n,
             period4NowVolumeA: 100000000n,
-            period4NowVolumeB: 99975000n,
-            period4NowFeeA: 19996n,
+            period4NowVolumeB: 99974000n,
+            period4NowFeeA: 20997n,
             period4NowFeeB: 0n,
             period4NowVWAP: 999950011n,
-            period4NowTime: 1711026521n,
+            period4NowTime: 1711080996n,
             period4PrevVolumeA: 0n,
             period4PrevVolumeB: 0n,
             period4PrevFeeA: 0n,
@@ -4392,11 +4546,11 @@ describe('clamm', () => {
             period4PrevVWAP: 0n,
             period4PrevTime: 0n,
             period5NowVolumeA: 100000000n,
-            period5NowVolumeB: 99975000n,
-            period5NowFeeA: 19996n,
+            period5NowVolumeB: 99974000n,
+            period5NowFeeA: 20997n,
             period5NowFeeB: 0n,
             period5NowVWAP: 999950011n,
-            period5NowTime: 1711026521n,
+            period5NowTime: 1711080996n,
             period5PrevVolumeA: 0n,
             period5PrevVolumeB: 0n,
             period5PrevFeeA: 0n,
@@ -4409,47 +4563,51 @@ describe('clamm', () => {
 
           add2A: 10,
           add2B: 1,
-          lpTokensToReceive2: 109987.869639,
-          checkDistributed2: 111987.909635,
+          lpTokensToReceive2: 100012.501062,
+          checkDistributed2: 102012.541058,
 
           checkStatus4: {
             scale: 1000000000n,
             assetABalance: 10200000000n,
-            assetBBalance: 998775999n,
+            assetBBalance: 1326000n,
+            realABalance: 1020000000n,
+            realBBalance: 1326n,
             priceMinSqrt: 999949998n,
             priceMaxSqrt: 1000049998n,
-            currentLiqudity: 111988109624933n,
-            releasedLiqudity: 111987909635000n,
-            liqudityUsersFromFees: 179990100n,
-            liqudityBiatecFromFees: 19998900n,
-            assetA: 29822n,
-            assetB: 29823n,
-            poolToken: 29833n,
-            price: 999900022n,
+            currentLiqudity: 102012751063797n,
+            releasedLiqudity: 102012541058000n,
+            liqudityUsersFromFees: 189004005n,
+            liqudityBiatecFromFees: 21000446n,
+            assetA: 35554n,
+            assetB: 35555n,
+            poolToken: 35565n,
+            price: 999900023n,
             fee: 100000n,
             biatecFee: 100000000n,
             verificationClass: 0n,
           },
 
           swap2B: 10, //  i will swap this asset from B asset to A and this is what I deposit
-          swap2A: 9.99792893, //  this is how much asset A i should receive
+          swap2A: 9.99801972, //  this is how much asset A i should receive
 
-          checkDistributed3: 111987.909635,
+          checkDistributed3: 102012.541058,
 
           checkStatus5: {
             scale: 1000000000n,
-            assetABalance: 202071061n,
-            assetBBalance: 10998775999n,
+            assetABalance: 201980280n,
+            assetBBalance: 10001326000n,
+            realABalance: 20198028n,
+            realBBalance: 10001326n,
             priceMinSqrt: 999949998n,
             priceMaxSqrt: 1000049998n,
-            currentLiqudity: 112008109409923n,
-            releasedLiqudity: 111987909635000n,
-            liqudityUsersFromFees: 18179796591n,
-            liqudityBiatecFromFees: 2019977399n,
-            assetA: 29998n,
-            assetB: 29999n,
-            poolToken: 30009n,
-            price: 1000096390n,
+            currentLiqudity: 102032751003795n,
+            releasedLiqudity: 102012541058000n,
+            liqudityUsersFromFees: 18188950003n,
+            liqudityBiatecFromFees: 2020994446n,
+            assetA: 35729n,
+            assetB: 35730n,
+            poolToken: 35740n,
+            price: 1000096039n,
             fee: 100000n,
             biatecFee: 100000000n,
             verificationClass: 0n,
@@ -4457,64 +4615,64 @@ describe('clamm', () => {
 
           stats2: {
             isVerified: 0n,
-            assetA: 30125n,
-            assetB: 30126n,
+            assetA: 35984n,
+            assetB: 35985n,
             verificationClass: 0n,
-            latestPrice: 999998206n,
-            period1NowVolumeA: 10097928930n,
-            period1NowVolumeB: 10099975000n,
-            period1NowFeeA: 19996n,
-            period1NowFeeB: 1963903n,
-            period1NowVWAP: 999997728n,
-            period1NowTime: 1711032746n,
+            latestPrice: 999998031n,
+            period1NowVolumeA: 10098019720n,
+            period1NowVolumeB: 10099974000n,
+            period1NowFeeA: 20997n,
+            period1NowFeeB: 1960408n,
+            period1NowVWAP: 999997555n,
+            period1NowTime: 1711099346n,
             period1PrevVolumeA: 0n,
             period1PrevVolumeB: 0n,
             period1PrevFeeA: 0n,
             period1PrevFeeB: 0n,
             period1PrevVWAP: 0n,
             period1PrevTime: 0n,
-            period2NowVolumeA: 10097928930n,
-            period2NowVolumeB: 10099975000n,
-            period2NowFeeA: 19996n,
-            period2NowFeeB: 1963903n,
-            period2NowVWAP: 999997728n,
-            period2NowTime: 1711032746n,
+            period2NowVolumeA: 10098019720n,
+            period2NowVolumeB: 10099974000n,
+            period2NowFeeA: 20997n,
+            period2NowFeeB: 1960408n,
+            period2NowVWAP: 999997555n,
+            period2NowTime: 1711099346n,
             period2PrevVolumeA: 0n,
             period2PrevVolumeB: 0n,
             period2PrevFeeA: 0n,
             period2PrevFeeB: 0n,
             period2PrevVWAP: 0n,
             period2PrevTime: 0n,
-            period3NowVolumeA: 10097928930n,
-            period3NowVolumeB: 10099975000n,
-            period3NowFeeA: 19996n,
-            period3NowFeeB: 1963903n,
-            period3NowVWAP: 999997728n,
-            period3NowTime: 1711032746n,
+            period3NowVolumeA: 10098019720n,
+            period3NowVolumeB: 10099974000n,
+            period3NowFeeA: 20997n,
+            period3NowFeeB: 1960408n,
+            period3NowVWAP: 999997555n,
+            period3NowTime: 1711099346n,
             period3PrevVolumeA: 0n,
             period3PrevVolumeB: 0n,
             period3PrevFeeA: 0n,
             period3PrevFeeB: 0n,
             period3PrevVWAP: 0n,
             period3PrevTime: 0n,
-            period4NowVolumeA: 10097928930n,
-            period4NowVolumeB: 10099975000n,
-            period4NowFeeA: 19996n,
-            period4NowFeeB: 1963903n,
-            period4NowVWAP: 999997728n,
-            period4NowTime: 1711032746n,
+            period4NowVolumeA: 10098019720n,
+            period4NowVolumeB: 10099974000n,
+            period4NowFeeA: 20997n,
+            period4NowFeeB: 1960408n,
+            period4NowVWAP: 999997555n,
+            period4NowTime: 1711099346n,
             period4PrevVolumeA: 0n,
             period4PrevVolumeB: 0n,
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVWAP: 0n,
             period4PrevTime: 0n,
-            period5NowVolumeA: 10097928930n,
-            period5NowVolumeB: 10099975000n,
-            period5NowFeeA: 19996n,
-            period5NowFeeB: 1963903n,
-            period5NowVWAP: 999997965n,
-            period5NowTime: 1711032746n,
+            period5NowVolumeA: 10098019720n,
+            period5NowVolumeB: 10099974000n,
+            period5NowFeeA: 20997n,
+            period5NowFeeB: 1960408n,
+            period5NowVWAP: 999997791n,
+            period5NowTime: 1711099346n,
             period5PrevVolumeA: 0n,
             period5PrevVolumeB: 0n,
             period5PrevFeeA: 0n,
@@ -4523,25 +4681,27 @@ describe('clamm', () => {
             period5PrevTime: 0n,
           },
 
-          lpTokensToWithdraw: 111987.909635,
-          retLRemove: 39.4, // 38+1.4
+          lpTokensToWithdraw: 102012.541058,
+          retLRemove: 102030.730008,
 
           checkStatus6: {
             scale: 1000000000n,
-            assetABalance: 223039216n,
-            assetBBalance: 507843138n,
-            priceMinSqrt: 2000000000n,
-            priceMaxSqrt: 2000000000n,
-            currentLiqudity: 1400000002n,
+            assetABalance: 4001n,
+            assetBBalance: 198100n,
+            realABalance: 401n,
+            realBBalance: 199n,
+            priceMinSqrt: 999949998n,
+            priceMaxSqrt: 1000049998n,
+            currentLiqudity: 2010540474n,
             releasedLiqudity: 0n,
             liqudityUsersFromFees: 0n,
-            liqudityBiatecFromFees: 1400000000n, // 223039216n*4+507843138n=1400000002
-            assetA: 27292n,
-            assetB: 27293n,
-            poolToken: 27303n,
-            price: 4000000000n,
-            fee: 100000000n,
-            biatecFee: 500000000n,
+            liqudityBiatecFromFees: 2020994446n,
+            assetA: 36183n,
+            assetB: 36184n,
+            poolToken: 36194n,
+            price: 1000096039n,
+            fee: 100000n,
+            biatecFee: 100000000n,
             verificationClass: 0n,
           },
         },
@@ -4595,6 +4755,8 @@ describe('clamm', () => {
         const status1 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -4646,6 +4808,8 @@ describe('clamm', () => {
         const status2 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -4685,6 +4849,8 @@ describe('clamm', () => {
         const status3 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -4750,6 +4916,8 @@ describe('clamm', () => {
         const status4 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -4795,6 +4963,8 @@ describe('clamm', () => {
         const status5 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })
@@ -4844,6 +5014,8 @@ describe('clamm', () => {
         const status6 = return2status(
           (
             await clientBiatecClammPool.status({
+              assetA: assetAId,
+              assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
               assetLP: poolTokenId,
             })

@@ -121,6 +121,8 @@ type AmmStatus = {
   scale: uint64;
   assetABalance: uint64;
   assetBBalance: uint64;
+  realABalance: uint64;
+  realBBalance: uint64;
   priceMinSqrt: uint64;
   priceMaxSqrt: uint64;
   currentLiqudity: uint64;
@@ -498,8 +500,7 @@ class BiatecClammPool extends Contract {
         this.doAxfer(this.txn.sender, assetB, txAssetBDeposit.assetAmount - expectedBDepositB64);
       }
       const realAssetADeposit = aDepositInBaseScale;
-      const realAssetBDeposit =
-        ((txAssetBDeposit.assetAmount - expectedBDepositB64) as uint256) * assetBDelicmalScale2Scale;
+      const realAssetBDeposit = (expectedBDepositB64 as uint256) * assetBDelicmalScale2Scale;
       return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale, assetLP);
     }
 
@@ -517,8 +518,7 @@ class BiatecClammPool extends Contract {
         // return excess asset A to the user
         this.doAxfer(this.txn.sender, assetB, txAssetADeposit.assetAmount - expectedADepositB64);
       }
-      const realAssetADeposit =
-        ((txAssetADeposit.assetAmount - expectedADepositB64) as uint256) * assetADelicmalScale2Scale;
+      const realAssetADeposit = (expectedADepositB64 as uint256) * assetADelicmalScale2Scale;
       const realAssetBDeposit = bDepositInBaseScale;
       return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale, assetLP);
     }
@@ -875,7 +875,8 @@ class BiatecClammPool extends Contract {
     } else {
       isAssetA = txSwap.xferAsset === assetA;
     }
-
+    let realSwapBaseDecimals = <uint256>0;
+    let inAsset = <uint256>0;
     if (isAssetA) {
       let assetInAssetDecimals = <uint256>0;
       if (txSwap.typeEnum === TransactionType.Payment) {
@@ -885,7 +886,7 @@ class BiatecClammPool extends Contract {
         assetInAssetDecimals = txSwap.assetAmount as uint256;
         amountAForStats = txSwap.assetAmount;
       }
-      const inAsset = (assetInAssetDecimals * assetADelicmalScale2Scale) as uint256;
+      inAsset = (assetInAssetDecimals * assetADelicmalScale2Scale) as uint256;
       const inAssetAfterFee = (inAsset * feesMultiplier) / s;
 
       const toSwap = this.calculateAssetBWithdrawOnAssetADeposit(
@@ -896,8 +897,14 @@ class BiatecClammPool extends Contract {
         this.priceMaxSqrt.value,
         this.Liqudity.value
       );
+      realSwapBaseDecimals = toSwap;
+      let realSwapBDecimals = (toSwap / assetBDelicmalScale2Scale) as uint256;
 
-      const toSwapBDecimals = (toSwap / assetBDelicmalScale2Scale) as uint64;
+      if (realSwapBDecimals * assetBDelicmalScale2Scale !== toSwap) {
+        realSwapBDecimals = realSwapBDecimals - <uint256>1; // rounding issue.. do not allow the LP to bleed
+        realSwapBaseDecimals = realSwapBDecimals * assetBDelicmalScale2Scale;
+      }
+      const toSwapBDecimals = realSwapBDecimals as uint64;
       ret = toSwapBDecimals;
       if (minimumToReceive > 0) {
         // if minimumToReceive == 0, do not restrict the price
@@ -907,13 +914,13 @@ class BiatecClammPool extends Contract {
       this.doAxfer(this.txn.sender, assetB, toSwapBDecimals);
 
       this.assetABalance.value = this.assetABalance.value + inAsset;
-      this.assetBBalance.value = this.assetBBalance.value - toSwap;
+      this.assetBBalance.value = this.assetBBalance.value - realSwapBaseDecimals;
     }
     // SWAP B to A
     if (!isAssetA) {
       const assetInAssetDecimals = txSwap.assetAmount as uint256;
       amountBForStats = txSwap.assetAmount;
-      const inAsset = (assetInAssetDecimals * assetBDelicmalScale2Scale) as uint256;
+      inAsset = (assetInAssetDecimals * assetBDelicmalScale2Scale) as uint256;
       const inAssetAfterFee = (inAsset * feesMultiplier) / s;
       const toSwap = this.calculateAssetAWithdrawOnAssetBDeposit(
         inAssetAfterFee,
@@ -923,8 +930,14 @@ class BiatecClammPool extends Contract {
         this.priceMaxSqrt.value,
         this.Liqudity.value
       );
+      realSwapBaseDecimals = toSwap;
+      let realSwapADecimals = toSwap / assetADelicmalScale2Scale;
 
-      const toSwapADecimals = (toSwap / assetADelicmalScale2Scale) as uint64;
+      if (realSwapADecimals * assetADelicmalScale2Scale !== toSwap) {
+        realSwapADecimals = realSwapADecimals - <uint256>1; // rounding issue.. do not allow the LP to bleed
+        realSwapBaseDecimals = realSwapADecimals * assetADelicmalScale2Scale;
+      }
+      const toSwapADecimals = realSwapADecimals as uint64;
       ret = toSwapADecimals;
       if (minimumToReceive > 0) {
         // if minimumToReceive == 0, do not restrict the price
@@ -934,7 +947,7 @@ class BiatecClammPool extends Contract {
       this.doAxfer(this.txn.sender, assetA, toSwapADecimals);
 
       this.assetBBalance.value = this.assetBBalance.value + inAsset;
-      this.assetABalance.value = this.assetABalance.value - toSwap;
+      this.assetABalance.value = this.assetABalance.value - realSwapBaseDecimals;
     }
     let newL = <uint256>0;
     if (this.priceMin.value === this.priceMax.value) {
@@ -1028,10 +1041,15 @@ class BiatecClammPool extends Contract {
         'current a balance must be above the assetABalance value'
       );
     }
+
     assert(
       ((this.assetBBalance.value / assetBDelicmalScale2Scale) as uint64) <= this.app.address.assetBalance(assetB),
-      'current b balance must be above the assetBBalance value'
+      'current B balance must be above the assetBBalance value'
     );
+    // 24999n this.assetBBalance.value
+    // 25n this.app.address.assetBalance(assetB)
+    // return this.app.address.assetBalance(assetB) as uint256;
+    // return this.assetBBalance.value;
     return ret as uint256;
   }
 
@@ -1662,20 +1680,28 @@ class BiatecClammPool extends Contract {
   }
 
   @abi.readonly
-  status(appBiatecConfigProvider: AppID, assetLP: AssetID): AmmStatus {
+  status(appBiatecConfigProvider: AppID, assetA: AssetID, assetB: AssetID, assetLP: AssetID): AmmStatus {
     assert(
       appBiatecConfigProvider === this.appBiatecConfigProvider.value,
       'appBiatecConfigProvider must match to the global variable app id'
     );
+    assert(assetA.id === this.assetA.value);
+    assert(assetB.id === this.assetB.value);
     assert(this.assetLP.value === assetLP.id, 'LP asset does not match');
     const biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256;
-
+    const realBalanceA =
+      assetA.id === 0
+        ? globals.currentApplicationAddress.balance
+        : globals.currentApplicationAddress.assetBalance(assetA);
+    const realBalanceB = globals.currentApplicationAddress.assetBalance(assetB);
     return {
       assetA: this.assetA.value,
       assetB: this.assetB.value,
       poolToken: this.assetLP.value,
       assetABalance: this.assetABalance.value as uint64,
       assetBBalance: this.assetBBalance.value as uint64,
+      realABalance: realBalanceA,
+      realBBalance: realBalanceB,
       fee: this.fee.value,
       biatecFee: biatecFee as uint64,
       currentLiqudity: this.Liqudity.value as uint64,

@@ -696,12 +696,20 @@
           "type": "uint64"
         },
         {
+          "name": "assetA",
+          "type": "uint64"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64"
+        },
+        {
           "name": "assetLP",
           "type": "uint64"
         }
       ],
       "returns": {
-        "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)"
+        "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)"
       }
     }
   ]
