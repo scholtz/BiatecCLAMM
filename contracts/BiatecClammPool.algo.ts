@@ -826,7 +826,7 @@ class BiatecClammPool extends Contract {
   ): uint256 {
     increaseOpcodeBudget();
     increaseOpcodeBudget();
-    // increaseOpcodeBudget();
+    increaseOpcodeBudget();
     /// well formed swap
     assert(assetA.id === this.assetA.value);
     assert(assetB.id === this.assetB.value);

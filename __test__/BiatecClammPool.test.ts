@@ -11,6 +11,9 @@ import { BiatecPoolProviderClient } from '../contracts/clients/BiatecPoolProvide
 import { BiatecConfigProviderClient } from '../contracts/clients/BiatecConfigProviderClient';
 import clammBootstrapSender from '../src/biatecClamm/sender/clammBootstrapSender';
 import configBootstrapSender from '../src/biatecConfig/sender/configBootstrapSender';
+import getBoxReferenceStats from '../src/biatecPools/getBoxReferenceStats';
+import parseStatus from '../src/biatecClamm/parseStatus';
+import parseStats from '../src/biatecPools/parseStats';
 
 const fixture = algorandFixture();
 algokit.Config.configure({ populateAppCallResources: true });
@@ -29,299 +32,6 @@ let assetBId: number = 0;
 let deployer: algosdk.Account;
 let deployerSigner: TransactionSignerAccount;
 
-type AmmStatus = {
-  scale: bigint;
-  assetABalance: bigint;
-  assetBBalance: bigint;
-  realABalance: bigint;
-  realBBalance: bigint;
-  priceMinSqrt: bigint;
-  priceMaxSqrt: bigint;
-  currentLiqudity: bigint;
-  releasedLiqudity: bigint;
-  liqudityUsersFromFees: bigint;
-  liqudityBiatecFromFees: bigint;
-  assetA: bigint;
-  assetB: bigint;
-  poolToken: bigint;
-  price: bigint;
-  fee: bigint;
-  biatecFee: bigint;
-  verificationClass: bigint;
-};
-type AppPoolInfo = {
-  isVerified: bigint;
-  assetA: bigint;
-  assetB: bigint;
-  verificationClass: bigint;
-
-  latestPrice: bigint;
-
-  period1NowVolumeA: bigint;
-  period1NowVolumeB: bigint;
-  period1NowFeeA: bigint;
-  period1NowFeeB: bigint;
-  period1NowVWAP: bigint;
-  period1NowTime: bigint;
-
-  period1PrevVolumeA: bigint;
-  period1PrevVolumeB: bigint;
-  period1PrevFeeA: bigint;
-  period1PrevFeeB: bigint;
-  period1PrevVWAP: bigint;
-  period1PrevTime: bigint;
-
-  period2NowVolumeA: bigint;
-  period2NowVolumeB: bigint;
-  period2NowFeeA: bigint;
-  period2NowFeeB: bigint;
-  period2NowVWAP: bigint;
-  period2NowTime: bigint;
-
-  period2PrevVolumeA: bigint;
-  period2PrevVolumeB: bigint;
-  period2PrevFeeA: bigint;
-  period2PrevFeeB: bigint;
-  period2PrevVWAP: bigint;
-  period2PrevTime: bigint;
-
-  period3NowVolumeA: bigint;
-  period3NowVolumeB: bigint;
-  period3NowFeeA: bigint;
-  period3NowFeeB: bigint;
-  period3NowVWAP: bigint;
-  period3NowTime: bigint;
-
-  period3PrevVolumeA: bigint;
-  period3PrevVolumeB: bigint;
-  period3PrevFeeA: bigint;
-  period3PrevFeeB: bigint;
-  period3PrevVWAP: bigint;
-  period3PrevTime: bigint;
-
-  period4NowVolumeA: bigint;
-  period4NowVolumeB: bigint;
-  period4NowFeeA: bigint;
-  period4NowFeeB: bigint;
-  period4NowVWAP: bigint;
-  period4NowTime: bigint;
-
-  period4PrevVolumeA: bigint;
-  period4PrevVolumeB: bigint;
-  period4PrevFeeA: bigint;
-  period4PrevFeeB: bigint;
-  period4PrevVWAP: bigint;
-  period4PrevTime: bigint;
-
-  period5NowVolumeA: bigint;
-  period5NowVolumeB: bigint;
-  period5NowFeeA: bigint;
-  period5NowFeeB: bigint;
-  period5NowVWAP: bigint;
-  period5NowTime: bigint;
-
-  period5PrevVolumeA: bigint;
-  period5PrevVolumeB: bigint;
-  period5PrevFeeA: bigint;
-  period5PrevFeeB: bigint;
-  period5PrevVWAP: bigint;
-  period5PrevTime: bigint;
-};
-
-const return2stats = (input: (bigint | number)[] | null | undefined): AppPoolInfo => {
-  if (!input)
-    return {
-      assetA: 0n,
-      assetB: 0n,
-      isVerified: 0n,
-      latestPrice: 0n,
-      verificationClass: 0n,
-      period1NowFeeA: 0n,
-      period1NowFeeB: 0n,
-      period1NowTime: 0n,
-      period1NowVolumeA: 0n,
-      period1NowVolumeB: 0n,
-      period1NowVWAP: 0n,
-      period1PrevFeeA: 0n,
-      period1PrevFeeB: 0n,
-      period1PrevTime: 0n,
-      period1PrevVolumeA: 0n,
-      period1PrevVolumeB: 0n,
-      period1PrevVWAP: 0n,
-
-      period2NowFeeA: 0n,
-      period2NowFeeB: 0n,
-      period2NowTime: 0n,
-      period2NowVolumeA: 0n,
-      period2NowVolumeB: 0n,
-      period2NowVWAP: 0n,
-      period2PrevFeeA: 0n,
-      period2PrevFeeB: 0n,
-      period2PrevTime: 0n,
-      period2PrevVolumeA: 0n,
-      period2PrevVolumeB: 0n,
-      period2PrevVWAP: 0n,
-
-      period3NowFeeA: 0n,
-      period3NowFeeB: 0n,
-      period3NowTime: 0n,
-      period3NowVolumeA: 0n,
-      period3NowVolumeB: 0n,
-      period3NowVWAP: 0n,
-      period3PrevFeeA: 0n,
-      period3PrevFeeB: 0n,
-      period3PrevTime: 0n,
-      period3PrevVolumeA: 0n,
-      period3PrevVolumeB: 0n,
-      period3PrevVWAP: 0n,
-
-      period4NowFeeA: 0n,
-      period4NowFeeB: 0n,
-      period4NowTime: 0n,
-      period4NowVolumeA: 0n,
-      period4NowVolumeB: 0n,
-      period4NowVWAP: 0n,
-      period4PrevFeeA: 0n,
-      period4PrevFeeB: 0n,
-      period4PrevTime: 0n,
-      period4PrevVolumeA: 0n,
-      period4PrevVolumeB: 0n,
-      period4PrevVWAP: 0n,
-
-      period5NowFeeA: 0n,
-      period5NowFeeB: 0n,
-      period5NowTime: 0n,
-      period5NowVolumeA: 0n,
-      period5NowVolumeB: 0n,
-      period5NowVWAP: 0n,
-      period5PrevFeeA: 0n,
-      period5PrevFeeB: 0n,
-      period5PrevTime: 0n,
-      period5PrevVolumeA: 0n,
-      period5PrevVolumeB: 0n,
-      period5PrevVWAP: 0n,
-    };
-  return {
-    isVerified: BigInt(input[0]),
-    assetA: BigInt(input[1]),
-    assetB: BigInt(input[2]),
-    verificationClass: BigInt(input[3]),
-    latestPrice: BigInt(input[4]),
-
-    period1NowVolumeA: BigInt(input[5]),
-    period1NowVolumeB: BigInt(input[6]),
-    period1NowFeeA: BigInt(input[7]),
-    period1NowFeeB: BigInt(input[8]),
-    period1NowVWAP: BigInt(input[9]),
-    period1NowTime: BigInt(input[10]),
-
-    period1PrevVolumeA: BigInt(input[11]),
-    period1PrevVolumeB: BigInt(input[12]),
-    period1PrevFeeA: BigInt(input[13]),
-    period1PrevFeeB: BigInt(input[14]),
-    period1PrevVWAP: BigInt(input[15]),
-    period1PrevTime: BigInt(input[16]),
-
-    period2NowVolumeA: BigInt(input[17]),
-    period2NowVolumeB: BigInt(input[18]),
-    period2NowFeeA: BigInt(input[19]),
-    period2NowFeeB: BigInt(input[20]),
-    period2NowVWAP: BigInt(input[21]),
-    period2NowTime: BigInt(input[22]),
-
-    period2PrevVolumeA: BigInt(input[23]),
-    period2PrevVolumeB: BigInt(input[24]),
-    period2PrevFeeA: BigInt(input[25]),
-    period2PrevFeeB: BigInt(input[26]),
-    period2PrevVWAP: BigInt(input[27]),
-    period2PrevTime: BigInt(input[28]),
-
-    period3NowVolumeA: BigInt(input[29]),
-    period3NowVolumeB: BigInt(input[30]),
-    period3NowFeeA: BigInt(input[31]),
-    period3NowFeeB: BigInt(input[32]),
-    period3NowVWAP: BigInt(input[33]),
-    period3NowTime: BigInt(input[34]),
-
-    period3PrevVolumeA: BigInt(input[35]),
-    period3PrevVolumeB: BigInt(input[36]),
-    period3PrevFeeA: BigInt(input[37]),
-    period3PrevFeeB: BigInt(input[38]),
-    period3PrevVWAP: BigInt(input[39]),
-    period3PrevTime: BigInt(input[40]),
-
-    period4NowVolumeA: BigInt(input[41]),
-    period4NowVolumeB: BigInt(input[42]),
-    period4NowFeeA: BigInt(input[43]),
-    period4NowFeeB: BigInt(input[44]),
-    period4NowVWAP: BigInt(input[45]),
-    period4NowTime: BigInt(input[46]),
-
-    period4PrevVolumeA: BigInt(input[47]),
-    period4PrevVolumeB: BigInt(input[48]),
-    period4PrevFeeA: BigInt(input[49]),
-    period4PrevFeeB: BigInt(input[50]),
-    period4PrevVWAP: BigInt(input[51]),
-    period4PrevTime: BigInt(input[52]),
-
-    period5NowVolumeA: BigInt(input[53]),
-    period5NowVolumeB: BigInt(input[54]),
-    period5NowFeeA: BigInt(input[55]),
-    period5NowFeeB: BigInt(input[56]),
-    period5NowVWAP: BigInt(input[57]),
-    period5NowTime: BigInt(input[58]),
-
-    period5PrevVolumeA: BigInt(input[59]),
-    period5PrevVolumeB: BigInt(input[60]),
-    period5PrevFeeA: BigInt(input[61]),
-    period5PrevFeeB: BigInt(input[62]),
-    period5PrevVWAP: BigInt(input[63]),
-    period5PrevTime: BigInt(input[64]),
-  };
-};
-const return2status = (input: (bigint | number)[] | null | undefined): AmmStatus => {
-  if (!input)
-    return {
-      scale: 0n,
-      assetABalance: 0n,
-      assetBBalance: 0n,
-      realABalance: 0n,
-      realBBalance: 0n,
-      priceMinSqrt: 0n,
-      priceMaxSqrt: 0n,
-      currentLiqudity: 0n,
-      releasedLiqudity: 0n,
-      liqudityUsersFromFees: 0n,
-      liqudityBiatecFromFees: 0n,
-      assetA: 0n,
-      assetB: 0n,
-      poolToken: 0n,
-      price: 0n,
-      fee: 0n,
-      biatecFee: 0n,
-      verificationClass: 0n,
-    };
-  return {
-    scale: BigInt(input[0]),
-    assetABalance: BigInt(input[1]),
-    assetBBalance: BigInt(input[2]),
-    realABalance: BigInt(input[3]),
-    realBBalance: BigInt(input[4]),
-    priceMinSqrt: BigInt(input[5]),
-    priceMaxSqrt: BigInt(input[6]),
-    currentLiqudity: BigInt(input[7]),
-    releasedLiqudity: BigInt(input[8]),
-    liqudityUsersFromFees: BigInt(input[9]),
-    liqudityBiatecFromFees: BigInt(input[10]),
-    assetA: BigInt(input[11]),
-    assetB: BigInt(input[12]),
-    poolToken: BigInt(input[13]),
-    price: BigInt(input[14]),
-    fee: BigInt(input[15]),
-    biatecFee: BigInt(input[16]),
-    verificationClass: BigInt(input[17]),
-  };
-};
 // https://github.com/GoogleChromeLabs/jsbi/issues/30
 // eslint-disable-next-line no-extend-native, @typescript-eslint/no-explicit-any
 (BigInt.prototype as any).toJSON = function () {
@@ -943,7 +653,7 @@ describe('clamm', () => {
         };
 
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(liquidityInput, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret = await liqudidtyResult.return;
@@ -1026,7 +736,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const ret = await liqudidtyResult.return;
@@ -1059,7 +769,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const ret2 = await liqudidtyResult2.return;
@@ -1146,7 +856,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const ret = await liqudidtyResult.return;
@@ -1171,7 +881,22 @@ describe('clamm', () => {
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
             appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap = await swapResult.return;
@@ -1258,7 +983,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const ret = await liqudidtyResult.return;
@@ -1283,7 +1008,22 @@ describe('clamm', () => {
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
             appBiatecPoolProvider: BigInt(refBiatecPoolProvider.appId),
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap = await swapResult.return;
@@ -1377,7 +1117,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const ret = await liqudidtyResult.return;
@@ -1398,7 +1138,7 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const retLRemove = await liqudidtyRemoveResult.return;
@@ -1561,7 +1301,7 @@ describe('clamm', () => {
         await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
         // console.log(`deployer account ${deployer.addr} is now opted in to BLP asset ${poolTokenId}`);
 
-        const status1 = return2status(
+        const status1 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -1602,13 +1342,13 @@ describe('clamm', () => {
         };
         console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret = await liqudidtyResult.return;
         expect(ret?.valueOf()).toEqual(BigInt(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS));
 
-        const status2 = return2status(
+        const status2 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -1642,13 +1382,28 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap = await swapResult.return;
         expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swapB * SCALE_B)));
 
-        const status3 = return2status(
+        const status3 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -1679,13 +1434,13 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const retLRemove = await liqudidtyRemoveResult.return;
         expect(retLRemove?.valueOf()).toEqual(BigInt(t.retLRemove * 10 ** LP_TOKEN_DECIMALS));
 
-        const status4 = return2status(
+        const status4 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -1859,7 +1614,7 @@ describe('clamm', () => {
         await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
         // console.log(`deployer account ${deployer.addr} is now opted in to BLP asset ${poolTokenId}`);
 
-        const status1 = return2status(
+        const status1 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -1900,13 +1655,13 @@ describe('clamm', () => {
         };
         console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret = await liqudidtyResult.return;
         expect(ret?.valueOf()).toEqual(BigInt(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS));
 
-        const status2 = return2status(
+        const status2 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -1940,13 +1695,28 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap = await swapResult.return;
         expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swapB * SCALE_B)));
 
-        const status3 = return2status(
+        const status3 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -1977,13 +1747,13 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const retLRemove = await liqudidtyRemoveResult.return;
         expect(retLRemove?.valueOf()).toEqual(BigInt(t.retLRemove * 10 ** LP_TOKEN_DECIMALS));
 
-        const status4 = return2status(
+        const status4 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -2088,70 +1858,88 @@ describe('clamm', () => {
 
           stats1: {
             isVerified: 0n,
-            assetA: 17899n,
-            assetB: 17900n,
+            assetA: 51951n,
+            assetB: 51952n,
             verificationClass: 0n,
             latestPrice: 1281250000n,
-            period1NowVolumeA: 2500000000n,
+            period1Duration: 60n,
+            period1NowVolumeA: 2000000000n,
             period1NowVolumeB: 2500000000n,
             period1NowFeeA: 500000000n,
             period1NowFeeB: 0n,
             period1NowVWAP: 1281250000n,
-            period1NowTime: 1710879521n,
+            period1NowTime: 1711233954n,
             period1PrevVolumeA: 0n,
             period1PrevVolumeB: 0n,
             period1PrevFeeA: 0n,
             period1PrevFeeB: 0n,
             period1PrevVWAP: 0n,
             period1PrevTime: 0n,
-            period2NowVolumeA: 2500000000n,
+            period2Duration: 3600n,
+            period2NowVolumeA: 2000000000n,
             period2NowVolumeB: 2500000000n,
             period2NowFeeA: 500000000n,
             period2NowFeeB: 0n,
             period2NowVWAP: 1281250000n,
-            period2NowTime: 1710879521n,
+            period2NowTime: 1711233954n,
             period2PrevVolumeA: 0n,
             period2PrevVolumeB: 0n,
             period2PrevFeeA: 0n,
             period2PrevFeeB: 0n,
             period2PrevVWAP: 0n,
             period2PrevTime: 0n,
-            period3NowVolumeA: 2500000000n,
+            period3Duration: 86400n,
+            period3NowVolumeA: 2000000000n,
             period3NowVolumeB: 2500000000n,
             period3NowFeeA: 500000000n,
             period3NowFeeB: 0n,
             period3NowVWAP: 1281250000n,
-            period3NowTime: 1710879521n,
+            period3NowTime: 1711233954n,
             period3PrevVolumeA: 0n,
             period3PrevVolumeB: 0n,
             period3PrevFeeA: 0n,
             period3PrevFeeB: 0n,
             period3PrevVWAP: 0n,
             period3PrevTime: 0n,
-            period4NowVolumeA: 2500000000n,
+            period4Duration: 604800n,
+            period4NowVolumeA: 2000000000n,
             period4NowVolumeB: 2500000000n,
             period4NowFeeA: 500000000n,
             period4NowFeeB: 0n,
             period4NowVWAP: 1281250000n,
-            period4NowTime: 1710879521n,
+            period4NowTime: 1711233954n,
             period4PrevVolumeA: 0n,
             period4PrevVolumeB: 0n,
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVWAP: 0n,
             period4PrevTime: 0n,
-            period5NowVolumeA: 2500000000n,
+            period5Duration: 2592000n,
+            period5NowVolumeA: 2000000000n,
             period5NowVolumeB: 2500000000n,
             period5NowFeeA: 500000000n,
             period5NowFeeB: 0n,
             period5NowVWAP: 1281250000n,
-            period5NowTime: 1710879521n,
+            period5NowTime: 1711233954n,
             period5PrevVolumeA: 0n,
             period5PrevVolumeB: 0n,
             period5PrevFeeA: 0n,
             period5PrevFeeB: 0n,
             period5PrevVWAP: 0n,
             period5PrevTime: 0n,
+            period6Duration: 31536000n,
+            period6NowVolumeA: 2000000000n,
+            period6NowVolumeB: 2500000000n,
+            period6NowFeeA: 500000000n,
+            period6NowFeeB: 0n,
+            period6NowVWAP: 1281250000n,
+            period6NowTime: 1711233954n,
+            period6PrevVolumeA: 0n,
+            period6PrevVolumeB: 0n,
+            period6PrevFeeA: 0n,
+            period6PrevFeeB: 0n,
+            period6PrevVWAP: 0n,
+            period6PrevTime: 0n,
           },
 
           // in the pool is now A: 2.5 B: 0
@@ -2209,70 +1997,88 @@ describe('clamm', () => {
 
           stats2: {
             isVerified: 0n,
-            assetA: 18316n,
-            assetB: 18317n,
+            assetA: 51996n,
+            assetB: 51997n,
             verificationClass: 0n,
             latestPrice: 1281250000n,
-            period1NowVolumeA: 12500000000n,
-            period1NowVolumeB: 18125000000n,
+            period1Duration: 60n,
+            period1NowVolumeA: 12000000000n,
+            period1NowVolumeB: 15000000000n,
             period1NowFeeA: 500000000n,
             period1NowFeeB: 3125000000n,
             period1NowVWAP: 1281250000n,
-            period1NowTime: 1710884496n,
+            period1NowTime: 1711233995n,
             period1PrevVolumeA: 0n,
             period1PrevVolumeB: 0n,
             period1PrevFeeA: 0n,
             period1PrevFeeB: 0n,
             period1PrevVWAP: 0n,
             period1PrevTime: 0n,
-            period2NowVolumeA: 12500000000n,
-            period2NowVolumeB: 18125000000n,
+            period2Duration: 3600n,
+            period2NowVolumeA: 12000000000n,
+            period2NowVolumeB: 15000000000n,
             period2NowFeeA: 500000000n,
             period2NowFeeB: 3125000000n,
             period2NowVWAP: 1281250000n,
-            period2NowTime: 1710884496n,
+            period2NowTime: 1711233995n,
             period2PrevVolumeA: 0n,
             period2PrevVolumeB: 0n,
             period2PrevFeeA: 0n,
             period2PrevFeeB: 0n,
             period2PrevVWAP: 0n,
             period2PrevTime: 0n,
-            period3NowVolumeA: 12500000000n,
-            period3NowVolumeB: 18125000000n,
+            period3Duration: 86400n,
+            period3NowVolumeA: 12000000000n,
+            period3NowVolumeB: 15000000000n,
             period3NowFeeA: 500000000n,
             period3NowFeeB: 3125000000n,
             period3NowVWAP: 1281250000n,
-            period3NowTime: 1710884496n,
+            period3NowTime: 1711233995n,
             period3PrevVolumeA: 0n,
             period3PrevVolumeB: 0n,
             period3PrevFeeA: 0n,
             period3PrevFeeB: 0n,
             period3PrevVWAP: 0n,
             period3PrevTime: 0n,
-            period4NowVolumeA: 12500000000n,
-            period4NowVolumeB: 18125000000n,
+            period4Duration: 604800n,
+            period4NowVolumeA: 12000000000n,
+            period4NowVolumeB: 15000000000n,
             period4NowFeeA: 500000000n,
             period4NowFeeB: 3125000000n,
             period4NowVWAP: 1281250000n,
-            period4NowTime: 1710884496n,
+            period4NowTime: 1711233995n,
             period4PrevVolumeA: 0n,
             period4PrevVolumeB: 0n,
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVWAP: 0n,
             period4PrevTime: 0n,
-            period5NowVolumeA: 12500000000n,
-            period5NowVolumeB: 18125000000n,
+            period5Duration: 2592000n,
+            period5NowVolumeA: 12000000000n,
+            period5NowVolumeB: 15000000000n,
             period5NowFeeA: 500000000n,
             period5NowFeeB: 3125000000n,
             period5NowVWAP: 1281250000n,
-            period5NowTime: 1710884496n,
+            period5NowTime: 1711233995n,
             period5PrevVolumeA: 0n,
             period5PrevVolumeB: 0n,
             period5PrevFeeA: 0n,
             period5PrevFeeB: 0n,
             period5PrevVWAP: 0n,
             period5PrevTime: 0n,
+            period6Duration: 31536000n,
+            period6NowVolumeA: 12000000000n,
+            period6NowVolumeB: 15000000000n,
+            period6NowFeeA: 500000000n,
+            period6NowFeeB: 3125000000n,
+            period6NowVWAP: 1281250000n,
+            period6NowTime: 1711233995n,
+            period6PrevVolumeA: 0n,
+            period6PrevVolumeB: 0n,
+            period6PrevFeeA: 0n,
+            period6PrevFeeB: 0n,
+            period6PrevVWAP: 0n,
+            period6PrevTime: 0n,
           },
           checkDistributed3: 47.5,
 
@@ -2347,7 +2153,7 @@ describe('clamm', () => {
 
         await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
 
-        const status1 = return2status(
+        const status1 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -2389,7 +2195,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret = await liqudidtyResult.return;
@@ -2400,7 +2206,7 @@ describe('clamm', () => {
           currentDeposit: 0,
         });
         expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
-        const status2 = return2status(
+        const status2 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -2435,13 +2241,28 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap = await swapResult.return;
         expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swap1B * SCALE_B)));
 
-        const status3 = return2status(
+        const status3 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -2458,7 +2279,7 @@ describe('clamm', () => {
         expect(status3).toEqual(t.checkStatus3);
 
         const tradingStats = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
-        const stats1 = return2stats(tradingStats.return);
+        const stats1 = parseStats(tradingStats.return);
         t.stats1.assetA = BigInt(assetAId);
         t.stats1.assetB = BigInt(assetBId);
         t.stats1.period1NowTime = stats1.period1NowTime;
@@ -2466,8 +2287,8 @@ describe('clamm', () => {
         t.stats1.period3NowTime = stats1.period3NowTime;
         t.stats1.period4NowTime = stats1.period4NowTime;
         t.stats1.period5NowTime = stats1.period5NowTime;
-        expect(JSON.stringify(stats1)).toBe(JSON.stringify(t.stats1));
-
+        t.stats1.period6NowTime = stats1.period6NowTime;
+        expect(stats1).toStrictEqual(t.stats1);
         /// /////// ADD LIQUDITY 2
 
         const addLiquidity2A = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -2495,7 +2316,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidity2Params', addLiquidity2Params);
         const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret2 = await liqudidtyResult2.return;
@@ -2507,7 +2328,7 @@ describe('clamm', () => {
         });
         expect(distributed2.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed2 * SCALE)));
 
-        const status4 = return2status(
+        const status4 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -2542,7 +2363,22 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap2 = await swapResult2.return;
@@ -2554,7 +2390,7 @@ describe('clamm', () => {
         });
         expect(distributed3.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed3 * SCALE)));
 
-        const status5 = return2status(
+        const status5 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -2571,7 +2407,7 @@ describe('clamm', () => {
         expect(status5).toEqual(t.checkStatus5);
 
         const tradingStats2 = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
-        const stats2 = return2stats(tradingStats2.return);
+        const stats2 = parseStats(tradingStats2.return);
         t.stats2.assetA = BigInt(assetAId);
         t.stats2.assetB = BigInt(assetBId);
         t.stats2.period1NowTime = stats2.period1NowTime;
@@ -2579,8 +2415,8 @@ describe('clamm', () => {
         t.stats2.period3NowTime = stats2.period3NowTime;
         t.stats2.period4NowTime = stats2.period4NowTime;
         t.stats2.period5NowTime = stats2.period5NowTime;
-        expect(JSON.stringify(stats2)).toBe(JSON.stringify(t.stats2));
-
+        t.stats2.period6NowTime = stats2.period6NowTime;
+        expect(stats2).toStrictEqual(t.stats2);
         /// /////// REMOVE LIQUIDITY
 
         const removeLiquidityLP = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -2598,13 +2434,13 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const retLRemove = await liqudidtyRemoveResult.return;
         expect(retLRemove?.valueOf()).toEqual(BigInt(t.retLRemove * 10 ** LP_TOKEN_DECIMALS));
 
-        const status6 = return2status(
+        const status6 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -2778,7 +2614,7 @@ describe('clamm', () => {
         await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
         // console.log(`deployer account ${deployer.addr} is now opted in to BLP asset ${poolTokenId}`);
 
-        const status1 = return2status(
+        const status1 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: t.assetAId,
@@ -2836,13 +2672,13 @@ describe('clamm', () => {
         };
         console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret = await liqudidtyResult.return;
         expect(ret?.valueOf()).toEqual(BigInt(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS));
 
-        const status2 = return2status(
+        const status2 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: t.assetAId,
@@ -2884,13 +2720,28 @@ describe('clamm', () => {
             assetA: t.assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: t.assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(t.assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap = await swapResult.return;
         expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swapB * SCALE_B)));
 
-        const status3 = return2status(
+        const status3 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: t.assetAId,
@@ -2921,13 +2772,13 @@ describe('clamm', () => {
             assetA: t.assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const retLRemove = await liqudidtyRemoveResult.return;
         expect(retLRemove?.valueOf()).toEqual(BigInt(t.retLRemove * 10 ** LP_TOKEN_DECIMALS));
 
-        const status4 = return2status(
+        const status4 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: t.assetAId,
@@ -3175,7 +3026,7 @@ describe('clamm', () => {
 
         await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
 
-        const status1 = return2status(
+        const status1 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -3217,7 +3068,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret = await liqudidtyResult.return;
@@ -3228,7 +3079,7 @@ describe('clamm', () => {
           currentDeposit: 0,
         });
         expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
-        const status2 = return2status(
+        const status2 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -3263,13 +3114,28 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap = await swapResult.return;
         expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swap1B * SCALE_B)));
 
-        const status3 = return2status(
+        const status3 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -3295,13 +3161,13 @@ describe('clamm', () => {
             assetB: assetBId,
             amount: t.removeFromBiatecFees1,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const retLRemove1 = await liqudidtyRemoveResult1.return;
         expect(retLRemove1?.valueOf()).toEqual(BigInt(t.removeFromBiatecFees1Check));
 
-        const status4 = return2status(
+        const status4 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -3343,13 +3209,13 @@ describe('clamm', () => {
         };
         console.log('addLiquidity2Params', addLiquidity2Params);
         const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret2 = await liqudidtyResult2.return;
         expect(ret2?.valueOf()).toEqual(BigInt(t.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS));
 
-        const status5 = return2status(
+        const status5 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -3384,13 +3250,28 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap2 = await swapResult2.return;
         expect(retSwap2?.valueOf()).toEqual(BigInt(Math.round(t.swap2A * SCALE_A)));
 
-        const status6 = return2status(
+        const status6 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -3416,13 +3297,13 @@ describe('clamm', () => {
             assetB: assetBId,
             amount: t.removeFromBiatecFees2,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const retLRemove2 = await liqudidtyRemoveResult2.return;
         expect(retLRemove2?.valueOf()).toEqual(BigInt(t.removeFromBiatecFees2Check));
 
-        const status7 = return2status(
+        const status7 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -3647,7 +3528,7 @@ describe('clamm', () => {
 
         await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
 
-        const status1 = return2status(
+        const status1 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -3689,7 +3570,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret = await liqudidtyResult.return;
@@ -3700,7 +3581,7 @@ describe('clamm', () => {
           currentDeposit: 0,
         });
         expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
-        const status2 = return2status(
+        const status2 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -3751,7 +3632,7 @@ describe('clamm', () => {
         const distributeResultRet = await distributeResult.return;
         expect(distributeResultRet?.valueOf()).toEqual(BigInt(t.distributeResult));
 
-        const status3 = return2status(
+        const status3 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -3871,70 +3752,88 @@ describe('clamm', () => {
 
           stats1: {
             isVerified: 0n,
-            assetA: 26426n,
-            assetB: 26427n,
+            assetA: 50507n,
+            assetB: 50508n,
             verificationClass: 0n,
             latestPrice: 4000000000n,
-            period1NowVolumeA: 1000000000n,
+            period1Duration: 60n,
+            period1NowVolumeA: 909090910n,
             period1NowVolumeB: 3200000000n,
             period1NowFeeA: 90909090n,
             period1NowFeeB: 0n,
             period1NowVWAP: 4000000000n,
-            period1NowTime: 1710988646n,
+            period1NowTime: 1711233777n,
             period1PrevVolumeA: 0n,
             period1PrevVolumeB: 0n,
             period1PrevFeeA: 0n,
             period1PrevFeeB: 0n,
             period1PrevVWAP: 0n,
             period1PrevTime: 0n,
-            period2NowVolumeA: 1000000000n,
+            period2Duration: 3600n,
+            period2NowVolumeA: 909090910n,
             period2NowVolumeB: 3200000000n,
             period2NowFeeA: 90909090n,
             period2NowFeeB: 0n,
             period2NowVWAP: 4000000000n,
-            period2NowTime: 1710988646n,
+            period2NowTime: 1711233777n,
             period2PrevVolumeA: 0n,
             period2PrevVolumeB: 0n,
             period2PrevFeeA: 0n,
             period2PrevFeeB: 0n,
             period2PrevVWAP: 0n,
             period2PrevTime: 0n,
-            period3NowVolumeA: 1000000000n,
+            period3Duration: 86400n,
+            period3NowVolumeA: 909090910n,
             period3NowVolumeB: 3200000000n,
             period3NowFeeA: 90909090n,
             period3NowFeeB: 0n,
             period3NowVWAP: 4000000000n,
-            period3NowTime: 1710988646n,
+            period3NowTime: 1711233777n,
             period3PrevVolumeA: 0n,
             period3PrevVolumeB: 0n,
             period3PrevFeeA: 0n,
             period3PrevFeeB: 0n,
             period3PrevVWAP: 0n,
             period3PrevTime: 0n,
-            period4NowVolumeA: 1000000000n,
+            period4Duration: 604800n,
+            period4NowVolumeA: 909090910n,
             period4NowVolumeB: 3200000000n,
             period4NowFeeA: 90909090n,
             period4NowFeeB: 0n,
             period4NowVWAP: 4000000000n,
-            period4NowTime: 1710988646n,
+            period4NowTime: 1711233777n,
             period4PrevVolumeA: 0n,
             period4PrevVolumeB: 0n,
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVWAP: 0n,
             period4PrevTime: 0n,
-            period5NowVolumeA: 1000000000n,
+            period5Duration: 2592000n,
+            period5NowVolumeA: 909090910n,
             period5NowVolumeB: 3200000000n,
             period5NowFeeA: 90909090n,
             period5NowFeeB: 0n,
             period5NowVWAP: 4000000000n,
-            period5NowTime: 1710988646n,
+            period5NowTime: 1711233777n,
             period5PrevVolumeA: 0n,
             period5PrevVolumeB: 0n,
             period5PrevFeeA: 0n,
             period5PrevFeeB: 0n,
             period5PrevVWAP: 0n,
             period5PrevTime: 0n,
+            period6Duration: 31536000n,
+            period6NowVolumeA: 909090910n,
+            period6NowVolumeB: 3200000000n,
+            period6NowFeeA: 90909090n,
+            period6NowFeeB: 0n,
+            period6NowVWAP: 4000000000n,
+            period6NowTime: 1711233777n,
+            period6PrevVolumeA: 0n,
+            period6PrevVolumeB: 0n,
+            period6PrevFeeA: 0n,
+            period6PrevFeeB: 0n,
+            period6PrevVWAP: 0n,
+            period6PrevTime: 0n,
           },
 
           // in the pool is now A: 2.5 B: 0
@@ -3994,70 +3893,88 @@ describe('clamm', () => {
 
           stats2: {
             isVerified: 0n,
-            assetA: 27034n,
-            assetB: 27035n,
+            assetA: 50552n,
+            assetB: 50553n,
             verificationClass: 0n,
             latestPrice: 4000000000n,
-            period1NowVolumeA: 3000000000n,
-            period1NowVolumeB: 13200000000n,
+            period1Duration: 60n,
+            period1NowVolumeA: 2909090910n,
+            period1NowVolumeB: 12474509804n,
             period1NowFeeA: 90909090n,
             period1NowFeeB: 725490196n,
             period1NowVWAP: 4000000000n,
-            period1NowTime: 1710995096n,
+            period1NowTime: 1711233811n,
             period1PrevVolumeA: 0n,
             period1PrevVolumeB: 0n,
             period1PrevFeeA: 0n,
             period1PrevFeeB: 0n,
             period1PrevVWAP: 0n,
             period1PrevTime: 0n,
-            period2NowVolumeA: 3000000000n,
-            period2NowVolumeB: 13200000000n,
+            period2Duration: 3600n,
+            period2NowVolumeA: 2909090910n,
+            period2NowVolumeB: 12474509804n,
             period2NowFeeA: 90909090n,
             period2NowFeeB: 725490196n,
             period2NowVWAP: 4000000000n,
-            period2NowTime: 1710995096n,
+            period2NowTime: 1711233811n,
             period2PrevVolumeA: 0n,
             period2PrevVolumeB: 0n,
             period2PrevFeeA: 0n,
             period2PrevFeeB: 0n,
             period2PrevVWAP: 0n,
             period2PrevTime: 0n,
-            period3NowVolumeA: 3000000000n,
-            period3NowVolumeB: 13200000000n,
+            period3Duration: 86400n,
+            period3NowVolumeA: 2909090910n,
+            period3NowVolumeB: 12474509804n,
             period3NowFeeA: 90909090n,
             period3NowFeeB: 725490196n,
             period3NowVWAP: 4000000000n,
-            period3NowTime: 1710995096n,
+            period3NowTime: 1711233811n,
             period3PrevVolumeA: 0n,
             period3PrevVolumeB: 0n,
             period3PrevFeeA: 0n,
             period3PrevFeeB: 0n,
             period3PrevVWAP: 0n,
             period3PrevTime: 0n,
-            period4NowVolumeA: 3000000000n,
-            period4NowVolumeB: 13200000000n,
+            period4Duration: 604800n,
+            period4NowVolumeA: 2909090910n,
+            period4NowVolumeB: 12474509804n,
             period4NowFeeA: 90909090n,
             period4NowFeeB: 725490196n,
             period4NowVWAP: 4000000000n,
-            period4NowTime: 1710995096n,
+            period4NowTime: 1711233811n,
             period4PrevVolumeA: 0n,
             period4PrevVolumeB: 0n,
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVWAP: 0n,
             period4PrevTime: 0n,
-            period5NowVolumeA: 3000000000n,
-            period5NowVolumeB: 13200000000n,
+            period5Duration: 2592000n,
+            period5NowVolumeA: 2909090910n,
+            period5NowVolumeB: 12474509804n,
             period5NowFeeA: 90909090n,
             period5NowFeeB: 725490196n,
             period5NowVWAP: 4000000000n,
-            period5NowTime: 1710995096n,
+            period5NowTime: 1711233811n,
             period5PrevVolumeA: 0n,
             period5PrevVolumeB: 0n,
             period5PrevFeeA: 0n,
             period5PrevFeeB: 0n,
             period5PrevVWAP: 0n,
             period5PrevTime: 0n,
+            period6Duration: 31536000n,
+            period6NowVolumeA: 2909090910n,
+            period6NowVolumeB: 12474509804n,
+            period6NowFeeA: 90909090n,
+            period6NowFeeB: 725490196n,
+            period6NowVWAP: 4000000000n,
+            period6NowTime: 1711233811n,
+            period6PrevVolumeA: 0n,
+            period6PrevVolumeB: 0n,
+            period6PrevFeeA: 0n,
+            period6PrevFeeB: 0n,
+            period6PrevVWAP: 0n,
+            period6PrevTime: 0n,
           },
 
           lpTokensToWithdraw: 38,
@@ -4131,7 +4048,7 @@ describe('clamm', () => {
 
         await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
 
-        const status1 = return2status(
+        const status1 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -4173,7 +4090,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret = await liqudidtyResult.return;
@@ -4184,7 +4101,7 @@ describe('clamm', () => {
           currentDeposit: 0,
         });
         expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
-        const status2 = return2status(
+        const status2 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -4219,13 +4136,28 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap = await swapResult.return;
         expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swap1B * SCALE_B)));
 
-        const status3 = return2status(
+        const status3 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -4242,7 +4174,7 @@ describe('clamm', () => {
         expect(status3).toEqual(t.checkStatus3);
 
         const tradingStats = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
-        const stats1 = return2stats(tradingStats.return);
+        const stats1 = parseStats(tradingStats.return);
         t.stats1.assetA = BigInt(assetAId);
         t.stats1.assetB = BigInt(assetBId);
         t.stats1.period1NowTime = stats1.period1NowTime;
@@ -4250,8 +4182,8 @@ describe('clamm', () => {
         t.stats1.period3NowTime = stats1.period3NowTime;
         t.stats1.period4NowTime = stats1.period4NowTime;
         t.stats1.period5NowTime = stats1.period5NowTime;
-        expect(JSON.stringify(stats1)).toBe(JSON.stringify(t.stats1));
-
+        t.stats1.period6NowTime = stats1.period6NowTime;
+        expect(stats1).toStrictEqual(t.stats1);
         /// /////// ADD LIQUDITY 2
 
         const addLiquidity2A = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -4279,7 +4211,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidity2Params', addLiquidity2Params);
         const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret2 = await liqudidtyResult2.return;
@@ -4291,7 +4223,7 @@ describe('clamm', () => {
         });
         expect(distributed2.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed2 * SCALE)));
 
-        const status4 = return2status(
+        const status4 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -4326,7 +4258,22 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap2 = await swapResult2.return;
@@ -4338,7 +4285,7 @@ describe('clamm', () => {
         });
         expect(distributed3.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed3 * SCALE)));
 
-        const status5 = return2status(
+        const status5 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -4355,7 +4302,7 @@ describe('clamm', () => {
         expect(status5).toEqual(t.checkStatus5);
 
         const tradingStats2 = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
-        const stats2 = return2stats(tradingStats2.return);
+        const stats2 = parseStats(tradingStats2.return);
         t.stats2.assetA = BigInt(assetAId);
         t.stats2.assetB = BigInt(assetBId);
         t.stats2.period1NowTime = stats2.period1NowTime;
@@ -4363,9 +4310,9 @@ describe('clamm', () => {
         t.stats2.period3NowTime = stats2.period3NowTime;
         t.stats2.period4NowTime = stats2.period4NowTime;
         t.stats2.period5NowTime = stats2.period5NowTime;
+        t.stats2.period6NowTime = stats2.period6NowTime;
         // expect(stats2).toBe(t.stats2);
-        expect(JSON.stringify(stats2)).toBe(JSON.stringify(t.stats2));
-
+        expect(stats2).toStrictEqual(t.stats2);
         /// /////// REMOVE LIQUIDITY
 
         const removeLiquidityLP = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -4383,13 +4330,13 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const retLRemove = await liqudidtyRemoveResult.return;
         expect(retLRemove?.valueOf()).toEqual(BigInt(t.retLRemove * 10 ** LP_TOKEN_DECIMALS));
 
-        const status6 = return2status(
+        const status6 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -4493,70 +4440,88 @@ describe('clamm', () => {
 
           stats1: {
             isVerified: 0n,
-            assetA: 34328n,
-            assetB: 34329n,
+            assetA: 50311n,
+            assetB: 50312n,
             verificationClass: 0n,
             latestPrice: 999950008n,
-            period1NowVolumeA: 100000000n,
+            period1Duration: 60n,
+            period1NowVolumeA: 99979003n,
             period1NowVolumeB: 99974000n,
             period1NowFeeA: 20997n,
             period1NowFeeB: 0n,
             period1NowVWAP: 999950008n,
-            period1NowTime: 1711080996n,
+            period1NowTime: 1711233686n,
             period1PrevVolumeA: 0n,
             period1PrevVolumeB: 0n,
             period1PrevFeeA: 0n,
             period1PrevFeeB: 0n,
             period1PrevVWAP: 0n,
             period1PrevTime: 0n,
-            period2NowVolumeA: 100000000n,
+            period2Duration: 3600n,
+            period2NowVolumeA: 99979003n,
             period2NowVolumeB: 99974000n,
             period2NowFeeA: 20997n,
             period2NowFeeB: 0n,
             period2NowVWAP: 999950008n,
-            period2NowTime: 1711080996n,
+            period2NowTime: 1711233686n,
             period2PrevVolumeA: 0n,
             period2PrevVolumeB: 0n,
             period2PrevFeeA: 0n,
             period2PrevFeeB: 0n,
             period2PrevVWAP: 0n,
             period2PrevTime: 0n,
-            period3NowVolumeA: 100000000n,
+            period3Duration: 86400n,
+            period3NowVolumeA: 99979003n,
             period3NowVolumeB: 99974000n,
             period3NowFeeA: 20997n,
             period3NowFeeB: 0n,
             period3NowVWAP: 999950008n,
-            period3NowTime: 1711080996n,
+            period3NowTime: 1711233686n,
             period3PrevVolumeA: 0n,
             period3PrevVolumeB: 0n,
             period3PrevFeeA: 0n,
             period3PrevFeeB: 0n,
             period3PrevVWAP: 0n,
             period3PrevTime: 0n,
-            period4NowVolumeA: 100000000n,
+            period4Duration: 604800n,
+            period4NowVolumeA: 99979003n,
             period4NowVolumeB: 99974000n,
             period4NowFeeA: 20997n,
             period4NowFeeB: 0n,
             period4NowVWAP: 999950008n,
-            period4NowTime: 1711080996n,
+            period4NowTime: 1711233686n,
             period4PrevVolumeA: 0n,
             period4PrevVolumeB: 0n,
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVWAP: 0n,
             period4PrevTime: 0n,
-            period5NowVolumeA: 100000000n,
+            period5Duration: 2592000n,
+            period5NowVolumeA: 99979003n,
             period5NowVolumeB: 99974000n,
             period5NowFeeA: 20997n,
             period5NowFeeB: 0n,
             period5NowVWAP: 999950008n,
-            period5NowTime: 1711080996n,
+            period5NowTime: 1711233686n,
             period5PrevVolumeA: 0n,
             period5PrevVolumeB: 0n,
             period5PrevFeeA: 0n,
             period5PrevFeeB: 0n,
             period5PrevVWAP: 0n,
             period5PrevTime: 0n,
+            period6Duration: 31536000n,
+            period6NowVolumeA: 99979003n,
+            period6NowVolumeB: 99974000n,
+            period6NowFeeA: 20997n,
+            period6NowFeeB: 0n,
+            period6NowVWAP: 999950008n,
+            period6NowTime: 1711233686n,
+            period6PrevVolumeA: 0n,
+            period6PrevVolumeB: 0n,
+            period6PrevFeeA: 0n,
+            period6PrevFeeB: 0n,
+            period6PrevVWAP: 0n,
+            period6PrevTime: 0n,
           },
 
           // in the pool is now A: 2.5 B: 0
@@ -4615,70 +4580,88 @@ describe('clamm', () => {
 
           stats2: {
             isVerified: 0n,
-            assetA: 35984n,
-            assetB: 35985n,
+            assetA: 50356n,
+            assetB: 50357n,
             verificationClass: 0n,
             latestPrice: 999998031n,
-            period1NowVolumeA: 10098019720n,
-            period1NowVolumeB: 10099974000n,
+            period1Duration: 60n,
+            period1NowVolumeA: 10097998723n,
+            period1NowVolumeB: 10098013592n,
             period1NowFeeA: 20997n,
             period1NowFeeB: 1960408n,
             period1NowVWAP: 999997555n,
-            period1NowTime: 1711099346n,
+            period1NowTime: 1711233717n,
             period1PrevVolumeA: 0n,
             period1PrevVolumeB: 0n,
             period1PrevFeeA: 0n,
             period1PrevFeeB: 0n,
             period1PrevVWAP: 0n,
             period1PrevTime: 0n,
-            period2NowVolumeA: 10098019720n,
-            period2NowVolumeB: 10099974000n,
+            period2Duration: 3600n,
+            period2NowVolumeA: 10097998723n,
+            period2NowVolumeB: 10098013592n,
             period2NowFeeA: 20997n,
             period2NowFeeB: 1960408n,
             period2NowVWAP: 999997555n,
-            period2NowTime: 1711099346n,
+            period2NowTime: 1711233717n,
             period2PrevVolumeA: 0n,
             period2PrevVolumeB: 0n,
             period2PrevFeeA: 0n,
             period2PrevFeeB: 0n,
             period2PrevVWAP: 0n,
             period2PrevTime: 0n,
-            period3NowVolumeA: 10098019720n,
-            period3NowVolumeB: 10099974000n,
+            period3Duration: 86400n,
+            period3NowVolumeA: 10097998723n,
+            period3NowVolumeB: 10098013592n,
             period3NowFeeA: 20997n,
             period3NowFeeB: 1960408n,
             period3NowVWAP: 999997555n,
-            period3NowTime: 1711099346n,
+            period3NowTime: 1711233717n,
             period3PrevVolumeA: 0n,
             period3PrevVolumeB: 0n,
             period3PrevFeeA: 0n,
             period3PrevFeeB: 0n,
             period3PrevVWAP: 0n,
             period3PrevTime: 0n,
-            period4NowVolumeA: 10098019720n,
-            period4NowVolumeB: 10099974000n,
+            period4Duration: 604800n,
+            period4NowVolumeA: 10097998723n,
+            period4NowVolumeB: 10098013592n,
             period4NowFeeA: 20997n,
             period4NowFeeB: 1960408n,
             period4NowVWAP: 999997555n,
-            period4NowTime: 1711099346n,
+            period4NowTime: 1711233717n,
             period4PrevVolumeA: 0n,
             period4PrevVolumeB: 0n,
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVWAP: 0n,
             period4PrevTime: 0n,
-            period5NowVolumeA: 10098019720n,
-            period5NowVolumeB: 10099974000n,
+            period5Duration: 2592000n,
+            period5NowVolumeA: 10097998723n,
+            period5NowVolumeB: 10098013592n,
             period5NowFeeA: 20997n,
             period5NowFeeB: 1960408n,
             period5NowVWAP: 999997791n,
-            period5NowTime: 1711099346n,
+            period5NowTime: 1711233717n,
             period5PrevVolumeA: 0n,
             period5PrevVolumeB: 0n,
             period5PrevFeeA: 0n,
             period5PrevFeeB: 0n,
             period5PrevVWAP: 0n,
             period5PrevTime: 0n,
+            period6Duration: 31536000n,
+            period6NowVolumeA: 10097998723n,
+            period6NowVolumeB: 10098013592n,
+            period6NowFeeA: 20997n,
+            period6NowFeeB: 1960408n,
+            period6NowVWAP: 999997791n,
+            period6NowTime: 1711233717n,
+            period6PrevVolumeA: 0n,
+            period6PrevVolumeB: 0n,
+            period6PrevFeeA: 0n,
+            period6PrevFeeB: 0n,
+            period6PrevVWAP: 0n,
+            period6PrevTime: 0n,
           },
 
           lpTokensToWithdraw: 102012.541058,
@@ -4752,7 +4735,7 @@ describe('clamm', () => {
 
         await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
 
-        const status1 = return2status(
+        const status1 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -4794,7 +4777,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret = await liqudidtyResult.return;
@@ -4805,7 +4788,7 @@ describe('clamm', () => {
           currentDeposit: 0,
         });
         expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
-        const status2 = return2status(
+        const status2 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -4840,13 +4823,28 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap = await swapResult.return;
         expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swap1B * SCALE_B)));
 
-        const status3 = return2status(
+        const status3 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -4863,7 +4861,7 @@ describe('clamm', () => {
         expect(status3).toEqual(t.checkStatus3);
 
         const tradingStats = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
-        const stats1 = return2stats(tradingStats.return);
+        const stats1 = parseStats(tradingStats.return);
         t.stats1.assetA = BigInt(assetAId);
         t.stats1.assetB = BigInt(assetBId);
         t.stats1.period1NowTime = stats1.period1NowTime;
@@ -4871,9 +4869,9 @@ describe('clamm', () => {
         t.stats1.period3NowTime = stats1.period3NowTime;
         t.stats1.period4NowTime = stats1.period4NowTime;
         t.stats1.period5NowTime = stats1.period5NowTime;
+        t.stats1.period6NowTime = stats1.period6NowTime;
         // expect(stats1).toBe(t.stats1);
-        expect(JSON.stringify(stats1)).toBe(JSON.stringify(t.stats1));
-
+        expect(stats1).toStrictEqual(t.stats1);
         /// /////// ADD LIQUDITY 2
 
         const addLiquidity2A = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -4901,7 +4899,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidity2Params', addLiquidity2Params);
         const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret2 = await liqudidtyResult2.return;
@@ -4913,7 +4911,7 @@ describe('clamm', () => {
         });
         expect(distributed2.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed2 * SCALE)));
 
-        const status4 = return2status(
+        const status4 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -4948,7 +4946,22 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap2 = await swapResult2.return;
@@ -4960,7 +4973,7 @@ describe('clamm', () => {
         });
         expect(distributed3.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed3 * SCALE)));
 
-        const status5 = return2status(
+        const status5 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -4977,7 +4990,7 @@ describe('clamm', () => {
         expect(status5).toEqual(t.checkStatus5);
 
         const tradingStats2 = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
-        const stats2 = return2stats(tradingStats2.return);
+        const stats2 = parseStats(tradingStats2.return);
         t.stats2.assetA = BigInt(assetAId);
         t.stats2.assetB = BigInt(assetBId);
         t.stats2.period1NowTime = stats2.period1NowTime;
@@ -4985,9 +4998,8 @@ describe('clamm', () => {
         t.stats2.period3NowTime = stats2.period3NowTime;
         t.stats2.period4NowTime = stats2.period4NowTime;
         t.stats2.period5NowTime = stats2.period5NowTime;
-        // expect(stats2).toBe(t.stats2);
-        expect(JSON.stringify(stats2)).toBe(JSON.stringify(t.stats2));
-
+        t.stats2.period6NowTime = stats2.period6NowTime;
+        expect(stats2).toStrictEqual(t.stats2);
         /// /////// REMOVE LIQUIDITY
 
         const removeLiquidityLP = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -5005,13 +5017,13 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const retLRemove = await liqudidtyRemoveResult.return;
         expect(retLRemove?.valueOf()).toEqual(BigInt(t.retLRemove * 10 ** LP_TOKEN_DECIMALS));
 
-        const status6 = return2status(
+        const status6 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -5116,70 +5128,88 @@ describe('clamm', () => {
 
           stats1: {
             isVerified: 0n,
-            assetA: 44379n,
-            assetB: 44380n,
+            assetA: 49540n,
+            assetB: 49541n,
             verificationClass: 0n,
             latestPrice: 989952491n,
-            period1NowVolumeA: 1000000n,
+            period1Duration: 60n,
+            period1NowVolumeA: 999981n,
             period1NowVolumeB: 988000n,
             period1NowFeeA: 19n,
             period1NowFeeB: 0n,
             period1NowVWAP: 989952491n,
-            period1NowTime: 1711195021n,
+            period1NowTime: 1711232892n,
             period1PrevVolumeA: 0n,
             period1PrevVolumeB: 0n,
             period1PrevFeeA: 0n,
             period1PrevFeeB: 0n,
             period1PrevVWAP: 0n,
             period1PrevTime: 0n,
-            period2NowVolumeA: 1000000n,
+            period2Duration: 3600n,
+            period2NowVolumeA: 999981n,
             period2NowVolumeB: 988000n,
             period2NowFeeA: 19n,
             period2NowFeeB: 0n,
             period2NowVWAP: 989952491n,
-            period2NowTime: 1711195021n,
+            period2NowTime: 1711232892n,
             period2PrevVolumeA: 0n,
             period2PrevVolumeB: 0n,
             period2PrevFeeA: 0n,
             period2PrevFeeB: 0n,
             period2PrevVWAP: 0n,
             period2PrevTime: 0n,
-            period3NowVolumeA: 1000000n,
+            period3Duration: 86400n,
+            period3NowVolumeA: 999981n,
             period3NowVolumeB: 988000n,
             period3NowFeeA: 19n,
             period3NowFeeB: 0n,
             period3NowVWAP: 989952491n,
-            period3NowTime: 1711195021n,
+            period3NowTime: 1711232892n,
             period3PrevVolumeA: 0n,
             period3PrevVolumeB: 0n,
             period3PrevFeeA: 0n,
             period3PrevFeeB: 0n,
             period3PrevVWAP: 0n,
             period3PrevTime: 0n,
-            period4NowVolumeA: 1000000n,
+            period4Duration: 604800n,
+            period4NowVolumeA: 999981n,
             period4NowVolumeB: 988000n,
             period4NowFeeA: 19n,
             period4NowFeeB: 0n,
             period4NowVWAP: 989952491n,
-            period4NowTime: 1711195021n,
+            period4NowTime: 1711232892n,
             period4PrevVolumeA: 0n,
             period4PrevVolumeB: 0n,
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVWAP: 0n,
             period4PrevTime: 0n,
-            period5NowVolumeA: 1000000n,
+            period5Duration: 2592000n,
+            period5NowVolumeA: 999981n,
             period5NowVolumeB: 988000n,
             period5NowFeeA: 19n,
             period5NowFeeB: 0n,
             period5NowVWAP: 989952491n,
-            period5NowTime: 1711195021n,
+            period5NowTime: 1711232892n,
             period5PrevVolumeA: 0n,
             period5PrevVolumeB: 0n,
             period5PrevFeeA: 0n,
             period5PrevFeeB: 0n,
             period5PrevVWAP: 0n,
             period5PrevTime: 0n,
+            period6Duration: 31536000n,
+            period6NowVolumeA: 999981n,
+            period6NowVolumeB: 988000n,
+            period6NowFeeA: 19n,
+            period6NowFeeB: 0n,
+            period6NowVWAP: 989952491n,
+            period6NowTime: 1711232892n,
+            period6PrevVolumeA: 0n,
+            period6PrevVolumeB: 0n,
+            period6PrevFeeA: 0n,
+            period6PrevFeeB: 0n,
+            period6PrevVWAP: 0n,
+            period6PrevTime: 0n,
           },
 
           // in the pool is now A: 2.5 B: 0
@@ -5238,70 +5268,88 @@ describe('clamm', () => {
 
           stats2: {
             isVerified: 0n,
-            assetA: 44525n,
-            assetB: 44526n,
+            assetA: 49820n,
+            assetB: 49821n,
             verificationClass: 0n,
             latestPrice: 985110358n,
-            period1NowVolumeA: 508462380n,
-            period1NowVolumeB: 500988000n,
+            period1Duration: 60n,
+            period1NowVolumeA: 508462361n,
+            period1NowVolumeB: 500888481n,
             period1NowFeeA: 19n,
             period1NowFeeB: 99519n,
-            period1NowVWAP: 985119907n,
-            period1NowTime: 1711196696n,
+            period1NowVWAP: 985119909n,
+            period1NowTime: 1711233400n,
             period1PrevVolumeA: 0n,
             period1PrevVolumeB: 0n,
             period1PrevFeeA: 0n,
             period1PrevFeeB: 0n,
             period1PrevVWAP: 0n,
             period1PrevTime: 0n,
-            period2NowVolumeA: 508462380n,
-            period2NowVolumeB: 500988000n,
+            period2Duration: 3600n,
+            period2NowVolumeA: 508462361n,
+            period2NowVolumeB: 500888481n,
             period2NowFeeA: 19n,
             period2NowFeeB: 99519n,
-            period2NowVWAP: 985119907n,
-            period2NowTime: 1711196696n,
+            period2NowVWAP: 985119909n,
+            period2NowTime: 1711233400n,
             period2PrevVolumeA: 0n,
             period2PrevVolumeB: 0n,
             period2PrevFeeA: 0n,
             period2PrevFeeB: 0n,
             period2PrevVWAP: 0n,
             period2PrevTime: 0n,
-            period3NowVolumeA: 508462380n,
-            period3NowVolumeB: 500988000n,
+            period3Duration: 86400n,
+            period3NowVolumeA: 508462361n,
+            period3NowVolumeB: 500888481n,
             period3NowFeeA: 19n,
             period3NowFeeB: 99519n,
-            period3NowVWAP: 985119907n,
-            period3NowTime: 1711196696n,
+            period3NowVWAP: 985119909n,
+            period3NowTime: 1711233400n,
             period3PrevVolumeA: 0n,
             period3PrevVolumeB: 0n,
             period3PrevFeeA: 0n,
             period3PrevFeeB: 0n,
             period3PrevVWAP: 0n,
             period3PrevTime: 0n,
-            period4NowVolumeA: 508462380n,
-            period4NowVolumeB: 500988000n,
+            period4Duration: 604800n,
+            period4NowVolumeA: 508462361n,
+            period4NowVolumeB: 500888481n,
             period4NowFeeA: 19n,
             period4NowFeeB: 99519n,
-            period4NowVWAP: 985119907n,
-            period4NowTime: 1711196696n,
+            period4NowVWAP: 985119909n,
+            period4NowTime: 1711233400n,
             period4PrevVolumeA: 0n,
             period4PrevVolumeB: 0n,
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVWAP: 0n,
             period4PrevTime: 0n,
-            period5NowVolumeA: 508462380n,
-            period5NowVolumeB: 500988000n,
+            period5Duration: 2592000n,
+            period5NowVolumeA: 508462361n,
+            period5NowVolumeB: 500888481n,
             period5NowFeeA: 19n,
             period5NowFeeB: 99519n,
-            period5NowVWAP: 985115137n,
-            period5NowTime: 1711196696n,
+            period5NowVWAP: 985115138n,
+            period5NowTime: 1711233400n,
             period5PrevVolumeA: 0n,
             period5PrevVolumeB: 0n,
             period5PrevFeeA: 0n,
             period5PrevFeeB: 0n,
             period5PrevVWAP: 0n,
             period5PrevTime: 0n,
+            period6Duration: 31536000n,
+            period6NowVolumeA: 508462361n,
+            period6NowVolumeB: 500888481n,
+            period6NowFeeA: 19n,
+            period6NowFeeB: 99519n,
+            period6NowVWAP: 985115138n,
+            period6NowTime: 1711233400n,
+            period6PrevVolumeA: 0n,
+            period6PrevVolumeB: 0n,
+            period6PrevFeeA: 0n,
+            period6PrevFeeB: 0n,
+            period6PrevVWAP: 0n,
+            period6PrevTime: 0n,
           },
 
           lpTokensToWithdraw: 99.124829,
@@ -5407,70 +5455,88 @@ describe('clamm', () => {
 
           stats1: {
             isVerified: 0n,
-            assetA: 42119n,
-            assetB: 42120n,
+            assetA: 49892n,
+            assetB: 49893n,
             verificationClass: 0n,
             latestPrice: 99317n,
-            period1NowVolumeA: 100000000n,
+            period1Duration: 60n,
+            period1NowVolumeA: 90307962n,
             period1NowVolumeB: 8000n,
             period1NowFeeA: 9692038n,
             period1NowFeeB: 0n,
             period1NowVWAP: 99317n,
-            period1NowTime: 1711170071n,
+            period1NowTime: 1711233480n,
             period1PrevVolumeA: 0n,
             period1PrevVolumeB: 0n,
             period1PrevFeeA: 0n,
             period1PrevFeeB: 0n,
             period1PrevVWAP: 0n,
             period1PrevTime: 0n,
-            period2NowVolumeA: 100000000n,
+            period2Duration: 3600n,
+            period2NowVolumeA: 90307962n,
             period2NowVolumeB: 8000n,
             period2NowFeeA: 9692038n,
             period2NowFeeB: 0n,
             period2NowVWAP: 99317n,
-            period2NowTime: 1711170071n,
+            period2NowTime: 1711233480n,
             period2PrevVolumeA: 0n,
             period2PrevVolumeB: 0n,
             period2PrevFeeA: 0n,
             period2PrevFeeB: 0n,
             period2PrevVWAP: 0n,
             period2PrevTime: 0n,
-            period3NowVolumeA: 100000000n,
+            period3Duration: 86400n,
+            period3NowVolumeA: 90307962n,
             period3NowVolumeB: 8000n,
             period3NowFeeA: 9692038n,
             period3NowFeeB: 0n,
             period3NowVWAP: 99317n,
-            period3NowTime: 1711170071n,
+            period3NowTime: 1711233480n,
             period3PrevVolumeA: 0n,
             period3PrevVolumeB: 0n,
             period3PrevFeeA: 0n,
             period3PrevFeeB: 0n,
             period3PrevVWAP: 0n,
             period3PrevTime: 0n,
-            period4NowVolumeA: 100000000n,
+            period4Duration: 604800n,
+            period4NowVolumeA: 90307962n,
             period4NowVolumeB: 8000n,
             period4NowFeeA: 9692038n,
             period4NowFeeB: 0n,
             period4NowVWAP: 99317n,
-            period4NowTime: 1711170071n,
+            period4NowTime: 1711233480n,
             period4PrevVolumeA: 0n,
             period4PrevVolumeB: 0n,
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVWAP: 0n,
             period4PrevTime: 0n,
-            period5NowVolumeA: 100000000n,
+            period5Duration: 2592000n,
+            period5NowVolumeA: 90307962n,
             period5NowVolumeB: 8000n,
             period5NowFeeA: 9692038n,
             period5NowFeeB: 0n,
             period5NowVWAP: 99317n,
-            period5NowTime: 1711170071n,
+            period5NowTime: 1711233480n,
             period5PrevVolumeA: 0n,
             period5PrevVolumeB: 0n,
             period5PrevFeeA: 0n,
             period5PrevFeeB: 0n,
             period5PrevVWAP: 0n,
             period5PrevTime: 0n,
+            period6Duration: 31536000n,
+            period6NowVolumeA: 90307962n,
+            period6NowVolumeB: 8000n,
+            period6NowFeeA: 9692038n,
+            period6NowFeeB: 0n,
+            period6NowVWAP: 99317n,
+            period6NowTime: 1711233480n,
+            period6PrevVolumeA: 0n,
+            period6PrevVolumeB: 0n,
+            period6PrevFeeA: 0n,
+            period6PrevFeeB: 0n,
+            period6PrevVWAP: 0n,
+            period6PrevTime: 0n,
           },
 
           // in the pool is now A: 2.5 B: 0
@@ -5529,70 +5595,88 @@ describe('clamm', () => {
 
           stats2: {
             isVerified: 0n,
-            assetA: 42891n,
-            assetB: 42892n,
+            assetA: 50011n,
+            assetB: 50012n,
             verificationClass: 0n,
             latestPrice: 161145n,
-            period1NowVolumeA: 3359473682200n,
-            period1NowVolumeB: 500008000n,
+            period1Duration: 60n,
+            period1NowVolumeA: 3359463990162n,
+            period1NowVolumeB: 499957677n,
             period1NowFeeA: 9692038n,
             period1NowFeeB: 50323n,
             period1NowVWAP: 161144n,
-            period1NowTime: 1711178446n,
+            period1NowTime: 1711233525n,
             period1PrevVolumeA: 0n,
             period1PrevVolumeB: 0n,
             period1PrevFeeA: 0n,
             period1PrevFeeB: 0n,
             period1PrevVWAP: 0n,
             period1PrevTime: 0n,
-            period2NowVolumeA: 3359473682200n,
-            period2NowVolumeB: 500008000n,
+            period2Duration: 3600n,
+            period2NowVolumeA: 3359463990162n,
+            period2NowVolumeB: 499957677n,
             period2NowFeeA: 9692038n,
             period2NowFeeB: 50323n,
             period2NowVWAP: 161144n,
-            period2NowTime: 1711178446n,
+            period2NowTime: 1711233525n,
             period2PrevVolumeA: 0n,
             period2PrevVolumeB: 0n,
             period2PrevFeeA: 0n,
             period2PrevFeeB: 0n,
             period2PrevVWAP: 0n,
             period2PrevTime: 0n,
-            period3NowVolumeA: 3359473682200n,
-            period3NowVolumeB: 500008000n,
+            period3Duration: 86400n,
+            period3NowVolumeA: 3359463990162n,
+            period3NowVolumeB: 499957677n,
             period3NowFeeA: 9692038n,
             period3NowFeeB: 50323n,
             period3NowVWAP: 161144n,
-            period3NowTime: 1711178446n,
+            period3NowTime: 1711233525n,
             period3PrevVolumeA: 0n,
             period3PrevVolumeB: 0n,
             period3PrevFeeA: 0n,
             period3PrevFeeB: 0n,
             period3PrevVWAP: 0n,
             period3PrevTime: 0n,
-            period4NowVolumeA: 3359473682200n,
-            period4NowVolumeB: 500008000n,
+            period4Duration: 604800n,
+            period4NowVolumeA: 3359463990162n,
+            period4NowVolumeB: 499957677n,
             period4NowFeeA: 9692038n,
             period4NowFeeB: 50323n,
             period4NowVWAP: 161144n,
-            period4NowTime: 1711178446n,
+            period4NowTime: 1711233525n,
             period4PrevVolumeA: 0n,
             period4PrevVolumeB: 0n,
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVWAP: 0n,
             period4PrevTime: 0n,
-            period5NowVolumeA: 3359473682200n,
-            period5NowVolumeB: 500008000n,
+            period5Duration: 2592000n,
+            period5NowVolumeA: 3359463990162n,
+            period5NowVolumeB: 499957677n,
             period5NowFeeA: 9692038n,
             period5NowFeeB: 50323n,
             period5NowVWAP: 161144n,
-            period5NowTime: 1711178446n,
+            period5NowTime: 1711233525n,
             period5PrevVolumeA: 0n,
             period5PrevVolumeB: 0n,
             period5PrevFeeA: 0n,
             period5PrevFeeB: 0n,
             period5PrevVWAP: 0n,
             period5PrevTime: 0n,
+            period6Duration: 31536000n,
+            period6NowVolumeA: 3359463990162n,
+            period6NowVolumeB: 499957677n,
+            period6NowFeeA: 9692038n,
+            period6NowFeeB: 50323n,
+            period6NowVWAP: 161144n,
+            period6NowTime: 1711233525n,
+            period6PrevVolumeA: 0n,
+            period6PrevVolumeB: 0n,
+            period6PrevFeeA: 0n,
+            period6PrevFeeB: 0n,
+            period6PrevVWAP: 0n,
+            period6PrevTime: 0n,
           },
 
           lpTokensToWithdraw: 99.124829,
@@ -5666,7 +5750,7 @@ describe('clamm', () => {
 
         await algosdk.waitForConfirmation(algod, signedOptin.txID, 4);
 
-        const status1 = return2status(
+        const status1 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -5708,7 +5792,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret = await liqudidtyResult.return;
@@ -5719,7 +5803,7 @@ describe('clamm', () => {
           currentDeposit: 0,
         });
         expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
-        const status2 = return2status(
+        const status2 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -5754,13 +5838,28 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap = await swapResult.return;
         expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swap1B * SCALE_B)));
 
-        const status3 = return2status(
+        const status3 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -5777,7 +5876,7 @@ describe('clamm', () => {
         expect(status3).toEqual(t.checkStatus3);
 
         const tradingStats = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
-        const stats1 = return2stats(tradingStats.return);
+        const stats1 = parseStats(tradingStats.return);
         t.stats1.assetA = BigInt(assetAId);
         t.stats1.assetB = BigInt(assetBId);
         t.stats1.period1NowTime = stats1.period1NowTime;
@@ -5785,8 +5884,8 @@ describe('clamm', () => {
         t.stats1.period3NowTime = stats1.period3NowTime;
         t.stats1.period4NowTime = stats1.period4NowTime;
         t.stats1.period5NowTime = stats1.period5NowTime;
-        // expect(stats1).toBe(t.stats1);
-        expect(JSON.stringify(stats1)).toBe(JSON.stringify(t.stats1));
+        t.stats1.period6NowTime = stats1.period6NowTime;
+        expect(stats1).toStrictEqual(t.stats1);
 
         /// /////// ADD LIQUDITY 2
 
@@ -5815,7 +5914,7 @@ describe('clamm', () => {
         };
         console.log('addLiquidity2Params', addLiquidity2Params);
         const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
-          sendParams: { ...params, fee: algokit.microAlgos(9000) },
+          sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
 
         const ret2 = await liqudidtyResult2.return;
@@ -5827,7 +5926,7 @@ describe('clamm', () => {
         });
         expect(distributed2.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed2 * SCALE)));
 
-        const status4 = return2status(
+        const status4 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -5862,7 +5961,22 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          {
+            sendParams: { ...params, fee: algokit.microAlgos(12000) },
+            boxes: getBoxReferenceStats({
+              appBiatecCLAMMPool: ammRef.appId,
+              appBiatecPoolProvider: refBiatecPoolProvider.appId,
+              assetA: assetAId,
+              assetB: assetBId,
+              includingAssetBoxes: false,
+            }),
+            apps: [
+              Number(refBiatecConfigProvider.appId),
+              Number(refBiatecIdentityProvider.appId),
+              Number(refBiatecPoolProvider.appId),
+            ],
+            assets: [Number(assetAId), Number(assetBId)],
+          }
         );
 
         const retSwap2 = await swapResult2.return;
@@ -5874,7 +5988,7 @@ describe('clamm', () => {
         });
         expect(distributed3.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed3 * SCALE)));
 
-        const status5 = return2status(
+        const status5 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,
@@ -5891,7 +6005,7 @@ describe('clamm', () => {
         expect(status5).toEqual(t.checkStatus5);
 
         const tradingStats2 = await clientBiatecPoolProvider.getCurrentStatus({ appPoolId: ammRef.appId });
-        const stats2 = return2stats(tradingStats2.return);
+        const stats2 = parseStats(tradingStats2.return);
         t.stats2.assetA = BigInt(assetAId);
         t.stats2.assetB = BigInt(assetBId);
         t.stats2.period1NowTime = stats2.period1NowTime;
@@ -5899,8 +6013,8 @@ describe('clamm', () => {
         t.stats2.period3NowTime = stats2.period3NowTime;
         t.stats2.period4NowTime = stats2.period4NowTime;
         t.stats2.period5NowTime = stats2.period5NowTime;
-        // expect(stats2).toBe(t.stats2);
-        expect(JSON.stringify(stats2)).toBe(JSON.stringify(t.stats2));
+        t.stats2.period6NowTime = stats2.period6NowTime;
+        expect(stats2).toStrictEqual(t.stats2);
 
         /// /////// REMOVE LIQUIDITY
 
@@ -5919,13 +6033,13 @@ describe('clamm', () => {
             assetA: assetAId,
             assetB: assetBId,
           },
-          { sendParams: { ...params, fee: algokit.microAlgos(9000) } }
+          { sendParams: { ...params, fee: algokit.microAlgos(12000) } }
         );
 
         const retLRemove = await liqudidtyRemoveResult.return;
         expect(retLRemove?.valueOf()).toEqual(BigInt(t.retLRemove * 10 ** LP_TOKEN_DECIMALS));
 
-        const status6 = return2status(
+        const status6 = parseStatus(
           (
             await clientBiatecClammPool.status({
               assetA: assetAId,

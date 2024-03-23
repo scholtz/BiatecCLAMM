@@ -37,7 +37,7 @@ const clammBootstrapTxs = async (input: IClammBootstrapTxsInput): Promise<algosd
 
   const clammRef = await clientBiatecClammPool.appClient.getAppReference();
   const fillInPoolProviderMBR = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-    amount: 334300,
+    amount: 666800,
     from: account.addr,
     suggestedParams: params,
     to: algosdk.getApplicationAddress(appBiatecPoolProvider),
@@ -49,7 +49,13 @@ const clammBootstrapTxs = async (input: IClammBootstrapTxsInput): Promise<algosd
     to: clammRef.appAddress,
   });
   const ammRef = await clientBiatecClammPool.appClient.getAppReference();
-  const boxes = getBoxReferenceStats({ appBiatecCLAMMPool: ammRef.appId, appBiatecPoolProvider, assetA, assetB });
+  const boxes = getBoxReferenceStats({
+    appBiatecCLAMMPool: ammRef.appId,
+    appBiatecPoolProvider,
+    assetA,
+    assetB,
+    includingAssetBoxes: true,
+  });
   // console.debug('boxes', boxes, Buffer.from(boxes[0].name).toString('hex'), Buffer.from(boxes[1].name).toString('hex'));
   const compose = clientBiatecClammPool.compose().bootstrap(
     {

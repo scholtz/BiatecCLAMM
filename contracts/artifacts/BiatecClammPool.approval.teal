@@ -3788,6 +3788,21 @@ swap:
 	itxn_field OnCompletion
 	itxn_submit
 
+	// contracts\BiatecClammPool.algo.ts:829
+	// increaseOpcodeBudget()
+	itxn_begin
+	int appl
+	itxn_field TypeEnum
+	int 0
+	itxn_field Fee
+	byte b64 CoEB // #pragma version 10; int 1
+	dup
+	itxn_field ApprovalProgram
+	itxn_field ClearStateProgram
+	int DeleteApplication
+	itxn_field OnCompletion
+	itxn_submit
+
 	// well formed swap
 	// contracts\BiatecClammPool.algo.ts:831
 	// assert(assetA.id === this.assetA.value)
