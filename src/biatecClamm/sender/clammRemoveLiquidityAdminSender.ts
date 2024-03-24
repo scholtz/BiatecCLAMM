@@ -1,30 +1,27 @@
 import algosdk from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
-import clammSwapTxs from '../txs/clammSwapTxs';
+import clammRemoveLiquidityAdminTxs from '../txs/clammRemoveLiquidityAdminTxs';
 
-interface IClammSwapInput {
+interface IClammRemoveLiquidityAdminInput {
   clientBiatecClammPool: BiatecClammPoolClient;
   account: TransactionSignerAccount;
   algod: algosdk.Algodv2;
 
   appBiatecConfigProvider: bigint;
-  appBiatecIdentityProvider: bigint;
-  appBiatecPoolProvider: bigint;
   assetA: bigint;
   assetB: bigint;
-  minimumToReceive: bigint;
-  fromAsset: bigint;
-  fromAmount: bigint;
+  assetLP: bigint;
+  amount: bigint;
 }
 /**
- * Swap asset a or asset b at the biatec concentrated liquidity amm
+ * Admin can remove the collected liquidity from fees
  *
  * @returns txId
  */
-const clammSwapSender = async (input: IClammSwapInput): Promise<string> => {
+const clammRemoveLiquidityAdminSender = async (input: IClammRemoveLiquidityAdminInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
-  const txs = await clammSwapTxs({
+  const txs = await clammRemoveLiquidityAdminTxs({
     ...input,
     params,
   });
@@ -35,4 +32,4 @@ const clammSwapSender = async (input: IClammSwapInput): Promise<string> => {
   const { txId } = await input.algod.sendRawTransaction(signed).do();
   return txId;
 };
-export default clammSwapSender;
+export default clammRemoveLiquidityAdminSender;

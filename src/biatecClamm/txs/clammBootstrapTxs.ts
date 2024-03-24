@@ -19,6 +19,11 @@ interface IClammBootstrapTxsInput {
   priceMax: bigint;
   currentPrice: bigint;
 }
+/**
+ * Bootstrap the concentrated liquidity pool
+ * This method creates list of transactions to be signed
+ * @returns List of transactions to sign
+ */
 const clammBootstrapTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.Transaction[]> => {
   const {
     params,

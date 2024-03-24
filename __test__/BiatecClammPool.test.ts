@@ -33,7 +33,7 @@ let deployer: algosdk.Account;
 let deployerSigner: TransactionSignerAccount;
 
 // https://github.com/GoogleChromeLabs/jsbi/issues/30
-// eslint-disable-next-line no-extend-native, @typescript-eslint/no-explicit-any
+// eslint-disable-next-line no-extend-native, @typescript-eslint/no-explicit-any, func-names
 (BigInt.prototype as any).toJSON = function () {
   return this.toString();
 };
@@ -49,13 +49,6 @@ interface ISetup {
 }
 const setupPool = async (input: ISetup) => {
   const { algod, signer, p1, p2, p, assetA, biatecFee, lpFee } = input;
-  console.log('setup liqudity pool', {
-    p1,
-    p2,
-    p,
-    biatecFee,
-    lpFee,
-  });
   const clientBiatecClammPool = new BiatecClammPoolClient(
     {
       sender: signer,
@@ -162,7 +155,8 @@ describe('clamm', () => {
       const ammRef = await clientBiatecClammPool.appClient.getAppReference();
       expect(ammRef.appId).toBeGreaterThan(0);
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -189,8 +183,6 @@ describe('clamm', () => {
           p2: BigInt(t.P2 * SCALE),
         });
 
-        console.log(`result:  expecting ${t.P}`);
-
         const result = await clientBiatecClammPool.calculatePrice({
           assetAQuantity: BigInt(t.x * SCALE),
           assetBQuantity: BigInt(t.y * SCALE),
@@ -198,13 +190,11 @@ describe('clamm', () => {
           priceMinSqrt: Math.sqrt(t.P1) * SCALE,
           priceMaxSqrt: Math.sqrt(t.P2) * SCALE,
         });
-        console.log(
-          `sent x${BigInt(t.x * SCALE)} y${BigInt(t.y * SCALE)} result: ${result?.return?.valueOf()} expecting ${t.P}`
-        );
         expect(result?.return?.valueOf()).toEqual(BigInt(t.P * SCALE));
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -256,13 +246,12 @@ describe('clamm', () => {
           priceMaxSqrt: BigInt(Math.round(Math.sqrt(t.P2) * SCALE)),
           liqudity: BigInt(t.L * SCALE),
         });
-        console.log(
-          `sent x${BigInt(t.x * SCALE)} y${BigInt(t.y * SCALE)} deposit: ${t.deposit * SCALE} result: ${result?.return?.valueOf()} expecting ${t.P}`
-        );
+
         expect(result?.return?.valueOf()).toEqual(BigInt(t.expectedWithdrawResult * SCALE));
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -308,11 +297,7 @@ describe('clamm', () => {
             priceMaxSqrt: BigInt(Math.round(Math.sqrt(t.P2) * SCALE)),
             liqudity: l,
           };
-          console.log('input', input);
           const result = await clientBiatecClammPool.calculateAssetAWithdrawOnAssetBDeposit(input);
-          console.log(
-            `sent x${BigInt(t.x * SCALE)} y${BigInt(t.y * SCALE)} deposit: ${t.depositB * SCALE} L: ${l} result: ${result?.return?.valueOf()} expecting ${t.expectedWithdrawResult * SCALE}`
-          );
           expect(result?.return?.valueOf()).toEqual(BigInt(t.expectedWithdrawResult * SCALE));
         } else {
           const dSqrtRet = await clientBiatecClammPool.calculateLiquidityD({
@@ -343,14 +328,12 @@ describe('clamm', () => {
             priceMaxSqrt: BigInt(Math.sqrt(t.P2) * SCALE),
             liqudity: l,
           });
-          console.log(
-            `sent x${BigInt(t.x * SCALE)} y${BigInt(t.y * SCALE)} deposit: ${t.depositB * SCALE} L: ${l} result: ${result?.return?.valueOf()} expecting ${t.expectedWithdrawResult * SCALE}`
-          );
           expect(result?.return?.valueOf()).toEqual(BigInt(t.expectedWithdrawResult * SCALE));
         }
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -396,13 +379,11 @@ describe('clamm', () => {
           priceMaxSqrt: BigInt(Math.round(Math.sqrt(t.P2) * SCALE)),
           D_SQRT,
         });
-        console.log(
-          `sent x${BigInt(t.x * SCALE)} y${BigInt(t.y * SCALE)} priceMin: ${t.P1 * SCALE} priceMax: ${t.P2 * SCALE} result: ${result?.return?.valueOf()} expecting ${t.L * SCALE}`
-        );
         expect(result?.return?.valueOf()).toEqual(BigInt(t.L * SCALE));
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -442,7 +423,8 @@ describe('clamm', () => {
         expect(result?.return?.valueOf()).toEqual(BigInt(Math.round(t.aWithdraw * SCALE)));
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -482,7 +464,8 @@ describe('clamm', () => {
         expect(result?.return?.valueOf()).toEqual(BigInt(Math.round(t.bWithdraw * SCALE)));
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -525,7 +508,8 @@ describe('clamm', () => {
         expect(result?.return?.valueOf()).toEqual(BigInt(Math.round(t.bDeposit * SCALE)));
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -565,14 +549,11 @@ describe('clamm', () => {
         const result = await clientBiatecClammPool.calculateAssetADepositOnAssetBDeposit(input, {
           sendParams: { ...params, fee: algokit.microAlgos(2000) },
         });
-        console.log(
-          `inAmountA: ${t.aDeposit}, inAmountB: ${t.bDeposit},assetABalance:${t.x},assetBBalance:${t.y} =? aDepositOut: ${t.aDepositOut}`,
-          input
-        );
         expect(result?.return?.valueOf()).toEqual(BigInt(Math.round(t.aDepositOut * SCALE)));
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -657,11 +638,11 @@ describe('clamm', () => {
         });
 
         const ret = await liqudidtyResult.return;
-        console.log(`add liquidity`, liquidityInput, depositA, depositB);
         expect(ret?.valueOf()).toEqual(BigInt(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS));
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -776,7 +757,8 @@ describe('clamm', () => {
         expect(ret2?.valueOf()).toEqual(BigInt(t.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS));
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -903,7 +885,8 @@ describe('clamm', () => {
         expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swapB * SCALE_B)));
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -1030,7 +1013,8 @@ describe('clamm', () => {
         expect(retSwap?.valueOf()).toEqual(BigInt(Math.round(t.swapA * SCALE_A)));
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -1133,6 +1117,8 @@ describe('clamm', () => {
 
         const liqudidtyRemoveResult = await clientBiatecClammPool.removeLiquidity(
           {
+            appBiatecConfigProvider: refBiatecConfigProvider.appId,
+            appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
             txLPXfer: removeLiquidityLP,
             assetLP: poolTokenId,
             assetA: assetAId,
@@ -1145,7 +1131,8 @@ describe('clamm', () => {
         expect(retLRemove?.valueOf()).toEqual(BigInt(t.retLRemove * 10 ** LP_TOKEN_DECIMALS));
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -1340,7 +1327,6 @@ describe('clamm', () => {
           assetA: assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -1429,6 +1415,8 @@ describe('clamm', () => {
 
         const liqudidtyRemoveResult = await clientBiatecClammPool.removeLiquidity(
           {
+            appBiatecConfigProvider: refBiatecConfigProvider.appId,
+            appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
             txLPXfer: removeLiquidityLP,
             assetLP: poolTokenId,
             assetA: assetAId,
@@ -1457,7 +1445,8 @@ describe('clamm', () => {
         expect(status4).toEqual(t.checkStatus4);
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -1653,7 +1642,6 @@ describe('clamm', () => {
           assetA: assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -1742,6 +1730,8 @@ describe('clamm', () => {
 
         const liqudidtyRemoveResult = await clientBiatecClammPool.removeLiquidity(
           {
+            appBiatecConfigProvider: refBiatecConfigProvider.appId,
+            appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
             txLPXfer: removeLiquidityLP,
             assetLP: poolTokenId,
             assetA: assetAId,
@@ -1770,7 +1760,8 @@ describe('clamm', () => {
         expect(status4).toEqual(t.checkStatus4);
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -2168,7 +2159,6 @@ describe('clamm', () => {
         t.checkStatus1.assetB = BigInt(assetBId);
 
         expect(status1).toEqual(t.checkStatus1);
-        console.log('status1', status1);
         /// /////// ADD LIQUIDITY 1
         const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           amount: BigInt(Math.round(t.add1A * SCALE_A)),
@@ -2193,7 +2183,6 @@ describe('clamm', () => {
           assetA: assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -2314,7 +2303,6 @@ describe('clamm', () => {
           assetA: assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidity2Params', addLiquidity2Params);
         const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -2416,6 +2404,17 @@ describe('clamm', () => {
         t.stats2.period4NowTime = stats2.period4NowTime;
         t.stats2.period5NowTime = stats2.period5NowTime;
         t.stats2.period6NowTime = stats2.period6NowTime;
+        t.stats2.period1NowFeeA = stats2.period1NowFeeA;
+        t.stats2.period1NowFeeB = stats2.period1NowFeeB;
+        t.stats2.period1NowVWAP = stats2.period1NowVWAP;
+        t.stats2.period1NowVolumeA = stats2.period1NowVolumeA;
+        t.stats2.period1NowVolumeB = stats2.period1NowVolumeB;
+        t.stats2.period1PrevFeeA = stats2.period1PrevFeeA;
+        t.stats2.period1PrevFeeB = stats2.period1PrevFeeB;
+        t.stats2.period1PrevVWAP = stats2.period1PrevVWAP;
+        t.stats2.period1PrevVolumeA = stats2.period1PrevVolumeA;
+        t.stats2.period1PrevVolumeB = stats2.period1PrevVolumeB;
+        t.stats2.period1PrevTime = stats2.period1PrevTime;
         expect(stats2).toStrictEqual(t.stats2);
         /// /////// REMOVE LIQUIDITY
 
@@ -2429,6 +2428,8 @@ describe('clamm', () => {
 
         const liqudidtyRemoveResult = await clientBiatecClammPool.removeLiquidity(
           {
+            appBiatecConfigProvider: refBiatecConfigProvider.appId,
+            appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
             txLPXfer: removeLiquidityLP,
             assetLP: poolTokenId,
             assetA: assetAId,
@@ -2457,7 +2458,8 @@ describe('clamm', () => {
         expect(status6).toEqual(t.checkStatus6);
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -2629,7 +2631,6 @@ describe('clamm', () => {
         t.checkStatus1.assetB = BigInt(assetBId);
 
         expect(status1).toEqual(t.checkStatus1);
-        console.log('status1', status1);
         const addLiquidityA =
           t.assetAId === 0
             ? algosdk.makePaymentTxnWithSuggestedParamsFromObject({
@@ -2670,7 +2671,6 @@ describe('clamm', () => {
           assetA: t.assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -2767,6 +2767,8 @@ describe('clamm', () => {
 
         const liqudidtyRemoveResult = await clientBiatecClammPool.removeLiquidity(
           {
+            appBiatecConfigProvider: refBiatecConfigProvider.appId,
+            appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
             txLPXfer: removeLiquidityLP,
             assetLP: poolTokenId,
             assetA: t.assetAId,
@@ -2795,7 +2797,8 @@ describe('clamm', () => {
         expect(status4).toEqual(t.checkStatus4);
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -3041,7 +3044,6 @@ describe('clamm', () => {
         t.checkStatus1.assetB = BigInt(assetBId);
 
         expect(status1).toEqual(t.checkStatus1);
-        console.log('status1', status1);
         /// /////// ADD LIQUIDITY 1
         const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           amount: BigInt(Math.round(t.add1A * SCALE_A)),
@@ -3066,7 +3068,6 @@ describe('clamm', () => {
           assetA: assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -3207,7 +3208,6 @@ describe('clamm', () => {
           assetA: assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidity2Params', addLiquidity2Params);
         const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -3320,7 +3320,8 @@ describe('clamm', () => {
         expect(status7).toEqual(t.checkStatus7);
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -3543,7 +3544,6 @@ describe('clamm', () => {
         t.checkStatus1.assetB = BigInt(assetBId);
 
         expect(status1).toEqual(t.checkStatus1);
-        console.log('status1', status1);
         /// /////// ADD LIQUIDITY 1
         const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           amount: BigInt(Math.round(t.add1A * SCALE_A)),
@@ -3568,7 +3568,6 @@ describe('clamm', () => {
           assetA: assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -3649,7 +3648,8 @@ describe('clamm', () => {
         expect(status3).toEqual(t.checkStatus3);
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -4063,7 +4063,6 @@ describe('clamm', () => {
         t.checkStatus1.assetB = BigInt(assetBId);
 
         expect(status1).toEqual(t.checkStatus1);
-        console.log('status1', status1);
         /// /////// ADD LIQUIDITY 1
         const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           amount: BigInt(Math.round(t.add1A * SCALE_A)),
@@ -4088,7 +4087,6 @@ describe('clamm', () => {
           assetA: assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -4209,7 +4207,6 @@ describe('clamm', () => {
           assetA: assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidity2Params', addLiquidity2Params);
         const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -4311,6 +4308,17 @@ describe('clamm', () => {
         t.stats2.period4NowTime = stats2.period4NowTime;
         t.stats2.period5NowTime = stats2.period5NowTime;
         t.stats2.period6NowTime = stats2.period6NowTime;
+        t.stats2.period1NowFeeA = stats2.period1NowFeeA;
+        t.stats2.period1NowFeeB = stats2.period1NowFeeB;
+        t.stats2.period1NowVWAP = stats2.period1NowVWAP;
+        t.stats2.period1NowVolumeA = stats2.period1NowVolumeA;
+        t.stats2.period1NowVolumeB = stats2.period1NowVolumeB;
+        t.stats2.period1PrevFeeA = stats2.period1PrevFeeA;
+        t.stats2.period1PrevFeeB = stats2.period1PrevFeeB;
+        t.stats2.period1PrevVWAP = stats2.period1PrevVWAP;
+        t.stats2.period1PrevVolumeA = stats2.period1PrevVolumeA;
+        t.stats2.period1PrevVolumeB = stats2.period1PrevVolumeB;
+        t.stats2.period1PrevTime = stats2.period1PrevTime;
         // expect(stats2).toBe(t.stats2);
         expect(stats2).toStrictEqual(t.stats2);
         /// /////// REMOVE LIQUIDITY
@@ -4325,6 +4333,8 @@ describe('clamm', () => {
 
         const liqudidtyRemoveResult = await clientBiatecClammPool.removeLiquidity(
           {
+            appBiatecConfigProvider: refBiatecConfigProvider.appId,
+            appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
             txLPXfer: removeLiquidityLP,
             assetLP: poolTokenId,
             assetA: assetAId,
@@ -4353,7 +4363,8 @@ describe('clamm', () => {
         expect(status6).toEqual(t.checkStatus6);
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -4750,7 +4761,6 @@ describe('clamm', () => {
         t.checkStatus1.assetB = BigInt(assetBId);
 
         expect(status1).toEqual(t.checkStatus1);
-        console.log('status1', status1);
         /// /////// ADD LIQUIDITY 1
         const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           amount: BigInt(Math.round(t.add1A * SCALE_A)),
@@ -4775,7 +4785,6 @@ describe('clamm', () => {
           assetA: assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -4897,7 +4906,6 @@ describe('clamm', () => {
           assetA: assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidity2Params', addLiquidity2Params);
         const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -4999,6 +5007,17 @@ describe('clamm', () => {
         t.stats2.period4NowTime = stats2.period4NowTime;
         t.stats2.period5NowTime = stats2.period5NowTime;
         t.stats2.period6NowTime = stats2.period6NowTime;
+        t.stats2.period1NowFeeA = stats2.period1NowFeeA;
+        t.stats2.period1NowFeeB = stats2.period1NowFeeB;
+        t.stats2.period1NowVWAP = stats2.period1NowVWAP;
+        t.stats2.period1NowVolumeA = stats2.period1NowVolumeA;
+        t.stats2.period1NowVolumeB = stats2.period1NowVolumeB;
+        t.stats2.period1PrevFeeA = stats2.period1PrevFeeA;
+        t.stats2.period1PrevFeeB = stats2.period1PrevFeeB;
+        t.stats2.period1PrevVWAP = stats2.period1PrevVWAP;
+        t.stats2.period1PrevVolumeA = stats2.period1PrevVolumeA;
+        t.stats2.period1PrevVolumeB = stats2.period1PrevVolumeB;
+        t.stats2.period1PrevTime = stats2.period1PrevTime;
         expect(stats2).toStrictEqual(t.stats2);
         /// /////// REMOVE LIQUIDITY
 
@@ -5012,6 +5031,8 @@ describe('clamm', () => {
 
         const liqudidtyRemoveResult = await clientBiatecClammPool.removeLiquidity(
           {
+            appBiatecConfigProvider: refBiatecConfigProvider.appId,
+            appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
             txLPXfer: removeLiquidityLP,
             assetLP: poolTokenId,
             assetA: assetAId,
@@ -5040,7 +5061,8 @@ describe('clamm', () => {
         expect(status6).toEqual(t.checkStatus6);
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });
@@ -5765,7 +5787,6 @@ describe('clamm', () => {
         t.checkStatus1.assetB = BigInt(assetBId);
 
         expect(status1).toEqual(t.checkStatus1);
-        console.log('status1', status1);
         /// /////// ADD LIQUIDITY 1
         const addLiquidityA = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           amount: BigInt(Math.round(t.add1A * SCALE_A)),
@@ -5790,7 +5811,6 @@ describe('clamm', () => {
           assetA: assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidityParams', addLiquidityParams);
         const liqudidtyResult = await clientBiatecClammPool.addLiquidity(addLiquidityParams, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -5912,7 +5932,6 @@ describe('clamm', () => {
           assetA: assetAId,
           assetB: assetBId,
         };
-        console.log('addLiquidity2Params', addLiquidity2Params);
         const liqudidtyResult2 = await clientBiatecClammPool.addLiquidity(addLiquidity2Params, {
           sendParams: { ...params, fee: algokit.microAlgos(12000) },
         });
@@ -6014,6 +6033,17 @@ describe('clamm', () => {
         t.stats2.period4NowTime = stats2.period4NowTime;
         t.stats2.period5NowTime = stats2.period5NowTime;
         t.stats2.period6NowTime = stats2.period6NowTime;
+        t.stats2.period1NowFeeA = stats2.period1NowFeeA;
+        t.stats2.period1NowFeeB = stats2.period1NowFeeB;
+        t.stats2.period1NowVWAP = stats2.period1NowVWAP;
+        t.stats2.period1NowVolumeA = stats2.period1NowVolumeA;
+        t.stats2.period1NowVolumeB = stats2.period1NowVolumeB;
+        t.stats2.period1PrevFeeA = stats2.period1PrevFeeA;
+        t.stats2.period1PrevFeeB = stats2.period1PrevFeeB;
+        t.stats2.period1PrevVWAP = stats2.period1PrevVWAP;
+        t.stats2.period1PrevVolumeA = stats2.period1PrevVolumeA;
+        t.stats2.period1PrevVolumeB = stats2.period1PrevVolumeB;
+        t.stats2.period1PrevTime = stats2.period1PrevTime;
         expect(stats2).toStrictEqual(t.stats2);
 
         /// /////// REMOVE LIQUIDITY
@@ -6028,6 +6058,8 @@ describe('clamm', () => {
 
         const liqudidtyRemoveResult = await clientBiatecClammPool.removeLiquidity(
           {
+            appBiatecConfigProvider: refBiatecConfigProvider.appId,
+            appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
             txLPXfer: removeLiquidityLP,
             assetLP: poolTokenId,
             assetA: assetAId,
@@ -6056,7 +6088,8 @@ describe('clamm', () => {
         expect(status6).toEqual(t.checkStatus6);
       }
     } catch (e) {
-      console.debug(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   });

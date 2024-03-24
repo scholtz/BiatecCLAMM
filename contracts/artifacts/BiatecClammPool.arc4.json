@@ -11,6 +11,19 @@
       }
     },
     {
+      "name": "updateApplication",
+      "desc": "addressUdpater from global biatec configuration is allowed to update application",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
       "name": "getCurrentPrice",
       "readonly": true,
       "args": [],
@@ -100,11 +113,13 @@
       "args": [
         {
           "name": "appBiatecConfigProvider",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "Configuration reference"
         },
         {
           "name": "appBiatecIdentityProvider",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "Identity service reference"
         },
         {
           "name": "txAssetADeposit",
@@ -117,11 +132,6 @@
           "desc": "Transfer of asset B to the LP pool"
         },
         {
-          "name": "assetLP",
-          "type": "uint64",
-          "desc": "Liquidity pool asset"
-        },
-        {
           "name": "assetA",
           "type": "uint64",
           "desc": "Asset A"
@@ -130,6 +140,11 @@
           "name": "assetB",
           "type": "uint64",
           "desc": "Asset B"
+        },
+        {
+          "name": "assetLP",
+          "type": "uint64",
+          "desc": "Liquidity pool asset"
         }
       ],
       "returns": {
@@ -142,14 +157,19 @@
       "desc": "This method retrieves from the liquidity provider LP token and returns Asset A and Asset B from the Automated Market Maker Concentrated Liqudidity Pool",
       "args": [
         {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64",
+          "desc": "Configuration reference"
+        },
+        {
+          "name": "appBiatecIdentityProvider",
+          "type": "uint64",
+          "desc": "Identity service reference"
+        },
+        {
           "name": "txLPXfer",
           "type": "axfer",
           "desc": "Transfer of the LP token"
-        },
-        {
-          "name": "assetLP",
-          "type": "uint64",
-          "desc": "LP pool asset"
         },
         {
           "name": "assetA",
@@ -160,6 +180,11 @@
           "name": "assetB",
           "type": "uint64",
           "desc": "Asset B"
+        },
+        {
+          "name": "assetLP",
+          "type": "uint64",
+          "desc": "LP pool asset"
         }
       ],
       "returns": {
@@ -177,10 +202,6 @@
           "desc": "Biatec config app. Only addressExecutiveFee is allowed to execute this method."
         },
         {
-          "name": "assetLP",
-          "type": "uint64"
-        },
-        {
           "name": "assetA",
           "type": "uint64",
           "desc": "Asset A"
@@ -189,6 +210,10 @@
           "name": "assetB",
           "type": "uint64",
           "desc": "Asset B"
+        },
+        {
+          "name": "assetLP",
+          "type": "uint64"
         },
         {
           "name": "amount",
@@ -319,8 +344,28 @@
           "type": "uint64"
         },
         {
-          "name": "params",
-          "type": "keyreg"
+          "name": "votePK",
+          "type": "byte[]"
+        },
+        {
+          "name": "selectionPK",
+          "type": "byte[]"
+        },
+        {
+          "name": "stateProofPK",
+          "type": "byte[]"
+        },
+        {
+          "name": "voteFirst",
+          "type": "uint64"
+        },
+        {
+          "name": "voteLast",
+          "type": "uint64"
+        },
+        {
+          "name": "voteKeyDilution",
+          "type": "uint64"
         }
       ],
       "returns": {

@@ -1,30 +1,27 @@
 import algosdk from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
-import clammSwapTxs from '../txs/clammSwapTxs';
+import clammWithdrawExcessAssetsTxs from '../txs/clammWithdrawExcessAssetsTxs';
 
-interface IClammSwapInput {
+interface IClammRemoveLiquidityInput {
   clientBiatecClammPool: BiatecClammPoolClient;
   account: TransactionSignerAccount;
   algod: algosdk.Algodv2;
 
   appBiatecConfigProvider: bigint;
-  appBiatecIdentityProvider: bigint;
-  appBiatecPoolProvider: bigint;
   assetA: bigint;
   assetB: bigint;
-  minimumToReceive: bigint;
-  fromAsset: bigint;
-  fromAmount: bigint;
+  amountA: bigint;
+  amountB: bigint;
 }
 /**
- * Swap asset a or asset b at the biatec concentrated liquidity amm
+ * Biatec can withdraw excess assets from the pool
  *
  * @returns txId
  */
-const clammSwapSender = async (input: IClammSwapInput): Promise<string> => {
+const clammWithdrawExcessAssetsSender = async (input: IClammRemoveLiquidityInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
-  const txs = await clammSwapTxs({
+  const txs = await clammWithdrawExcessAssetsTxs({
     ...input,
     params,
   });
@@ -35,4 +32,4 @@ const clammSwapSender = async (input: IClammSwapInput): Promise<string> => {
   const { txId } = await input.algod.sendRawTransaction(signed).do();
   return txId;
 };
-export default clammSwapSender;
+export default clammWithdrawExcessAssetsSender;

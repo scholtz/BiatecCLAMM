@@ -19,7 +19,7 @@ interface IClammSwapTxsInput {
   fromAmount: bigint;
 }
 /**
- * This method creates list of transactions to be signed to add liquidity to the concentrated liquidity amm
+ * This method creates list of transactions to be signed to swap asset a or asset b at the biatec concentrated liquidity amm
  * @returns List of transactions to sign
  */
 const clammSwapTxs = async (input: IClammSwapTxsInput): Promise<algosdk.Transaction[]> => {

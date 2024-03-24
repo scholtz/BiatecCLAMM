@@ -137,7 +137,6 @@ type AmmStatus = {
   biatecFee: uint64;
   verificationClass: uint64;
 };
-
 // eslint-disable-next-line no-unused-vars
 class BiatecClammPool extends Contract {
   // asset A id
@@ -186,7 +185,7 @@ class BiatecClammPool extends Contract {
   fee = GlobalStateKey<uint64>({ key: 'f' });
 
   // current price
-  ratio = GlobalStateKey<uint64>({ key: 'r' });
+  currentPrice = GlobalStateKey<uint64>({ key: 'price' });
 
   // scale in this contranct
   scale = GlobalStateKey<uint64>({ key: 'scale' });
@@ -214,9 +213,18 @@ class BiatecClammPool extends Contract {
     this.priceMax.value = 0;
   }
 
+  /**
+   * addressUdpater from global biatec configuration is allowed to update application
+   */
+  updateApplication(appBiatecConfigProvider: AppID): void {
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('u');
+    assert(this.txn.sender === addressExecutiveFee, 'Only addressUdpater setup in the config can update application');
+  }
+
   @abi.readonly
   getCurrentPrice(): uint64 {
-    return this.ratio.value;
+    return this.currentPrice.value;
   }
 
   @abi.readonly
@@ -262,7 +270,7 @@ class BiatecClammPool extends Contract {
     assert(assetA < assetB);
     assert(fee <= SCALE / 10); // fee must be lower then 10%
     assert(verificationClass <= 4); // verificationClass
-    assert(!this.ratio.exists);
+    assert(!this.currentPrice.exists);
     if (assetA.id > 0) {
       assert(assetA.decimals <= SCALE_DECIMALS); // asset A can be algo
     }
@@ -284,7 +292,7 @@ class BiatecClammPool extends Contract {
     this.priceMaxSqrt.value = sqrt((priceMax as uint256) * s);
     this.assetABalance.value = <uint256>0;
     this.assetBBalance.value = <uint256>0;
-    this.ratio.value = currentPrice;
+    this.currentPrice.value = currentPrice;
 
     this.assetA.value = assetA.id;
     this.assetB.value = assetB.id;
@@ -303,6 +311,12 @@ class BiatecClammPool extends Contract {
     return this.assetLP.value;
   }
 
+  /**
+   * Executes xfer of pay payment methods to specified receiver from smart contract aggregated account with specified asset and amount in tokens decimals
+   * @param receiver Receiver
+   * @param asset Asset. Zero for algo
+   * @param amount Amount to transfer
+   */
   private doAxfer(receiver: Address, asset: AssetID, amount: uint64): void {
     if (asset.id === 0) {
       sendPayment({
@@ -320,6 +334,10 @@ class BiatecClammPool extends Contract {
     }
   }
 
+  /**
+   * Performs opt in to the asset. If native token is provided (0) it does not perform any action
+   * @param asset Asset to opt in to
+   */
   private doOptIn(asset: AssetID): void {
     if (asset.id > 0) {
       // if asset id = 0 we do not have to opt in to native token
@@ -327,6 +345,12 @@ class BiatecClammPool extends Contract {
     }
   }
 
+  /**
+   * Creates LP token
+   * @param assetA Asset A
+   * @param assetB Asset B
+   * @returns id of the token
+   */
   private doCreatePoolToken(assetA: AssetID, assetB: AssetID): AssetID {
     // const verificationClass = this.verificationClass.value.toString(); // TODO
     // const feeB100000 = this.feeB100000.value.toString();
@@ -336,11 +360,12 @@ class BiatecClammPool extends Contract {
       nameAssetA = assetA.unitName;
     }
 
-    const name = 'B-' + nameAssetA + '-' + assetB.unitName; // TODO
+    const name =
+      'B-' + itob(this.verificationClass.value) + '-' + nameAssetA + '-' + assetB.unitName + '-' + itob(this.fee.value); // TODO
 
     return sendAssetCreation({
       configAssetName: name,
-      configAssetUnitName: 'BLP',
+      configAssetUnitName: 'BLP', // Biatec LP token
       configAssetTotal: TOTAL_SUPPLY,
       configAssetDecimals: LP_TOKEN_DECIMALS,
       configAssetManager: this.app.address,
@@ -348,8 +373,20 @@ class BiatecClammPool extends Contract {
     });
   }
 
+  private checkAssetsAB(assetA: AssetID, assetB: AssetID) {
+    assert(assetA.id === this.assetA.value, 'assetA does not match');
+    assert(assetB.id === this.assetB.value, 'assetB does not match');
+  }
+
+  private checkAssets(assetA: AssetID, assetB: AssetID, assetLP: AssetID) {
+    this.checkAssetsAB(assetA, assetB);
+    assert(assetLP.id === this.assetLP.value, 'assetLP does not match');
+  }
+
   /**
    * This method adds Asset A and Asset B to the Automated Market Maker Concentrated Liqudidity Pool and send to the liqudidty provider the liqudity token
+   * @param appBiatecConfigProvider Configuration reference
+   * @param appBiatecIdentityProvider Identity service reference
    * @param txAssetADeposit Transfer of asset A to the LP pool
    * @param txAssetBDeposit Transfer of asset B to the LP pool
    * @param assetLP Liquidity pool asset
@@ -358,44 +395,20 @@ class BiatecClammPool extends Contract {
    * @returns LP Token quantity distributed
    */
   addLiquidity(
-    //    aXfer: AssetTransferTxn | PayTxn,
-    //    bXfer: AssetTransferTxn | PayTxn,
     appBiatecConfigProvider: AppID,
     appBiatecIdentityProvider: AppID,
     txAssetADeposit: Txn,
     txAssetBDeposit: Txn,
-    assetLP: AssetID,
     assetA: AssetID,
-    assetB: AssetID
+    assetB: AssetID,
+    assetLP: AssetID
   ): uint64 {
     increaseOpcodeBudget();
     increaseOpcodeBudget();
     /// well formed mint
-    assert(
-      appBiatecConfigProvider === this.appBiatecConfigProvider.value,
-      'appBiatecConfigProvider must match to the global variable app id'
-    );
+    this.checkAssets(assetA, assetB, assetLP);
 
-    assert(assetA.id === this.assetA.value, 'assetA must match to the global variable value');
-    assert(assetB.id === this.assetB.value, 'assetB must match to the global variable value');
-    assert(assetLP.id === this.assetLP.value, 'assetLP must match to the global variable value');
-    const identityFromConfig = appBiatecConfigProvider.globalState('i');
-    assert(
-      appBiatecIdentityProvider === identityFromConfig,
-      'appBiatecIdentityProvider must match to the config in appBiatecConfigProvider'
-    );
-
-    const user = sendMethodCall<[Address, uint8], UserInfoV1>({
-      name: 'getUser',
-      methodArgs: [this.txn.sender, <uint8>1],
-      fee: 0,
-      applicationID: appBiatecIdentityProvider,
-    });
-    assert(!user.isLocked, 'User must not be locked');
-    assert(
-      user.verificationClass >= this.verificationClass.value, // if(user.verificationClass >= this.verificationClass.value) then ok
-      'User cannot interact with this smart contract as his verification class is lower then required here'
-    );
+    this.verifyIdentity(appBiatecConfigProvider, appBiatecIdentityProvider);
 
     let assetADecimals = 6;
     if (assetA.id > 0) assetADecimals = assetA.decimals;
@@ -477,7 +490,7 @@ class BiatecClammPool extends Contract {
         this.Liqudity.value // liquidity: uint256
       );
 
-      this.ratio.value = newPrice as uint64;
+      this.currentPrice.value = newPrice as uint64;
       return ret;
     }
 
@@ -564,6 +577,14 @@ class BiatecClammPool extends Contract {
     return expectedBDepositB64; //
   }
 
+  /**
+   * This method is used in addLiquidity to process the liquidity addition from calculated values
+   * @param realAssetADeposit Real asset a deposit
+   * @param realAssetBDeposit Real asset b deposit
+   * @param assetLPDelicmalScale2Scale LP decimal scale
+   * @param assetLP LP Asset
+   * @returns LP Token quantity distributed
+   */
   private processAddLiqudity(
     realAssetADeposit: uint256,
     realAssetBDeposit: uint256,
@@ -599,29 +620,38 @@ class BiatecClammPool extends Contract {
     // 2000000000n
     // 2000000000n
 
-    assert(lpTokensToSend > 0, 'Adding the liqudity would lead to zero LP tokens deposited to the user'); // Liquidity provider protection.. He must receive at least 1 LP token
+    // assert(lpTokensToSend > 0, 'Adding the liqudity would lead to zero LP tokens deposited to the user'); // Liquidity provider protection.. He must receive at least 1 LP token
+    assert(lpTokensToSend > 0, 'LP-ZERO-ERR'); // Liquidity provider protection.. He must receive at least 1 LP token
     return lpTokensToSend as uint64;
   }
 
   /**
    * This method retrieves from the liquidity provider LP token and returns Asset A and Asset B from the Automated Market Maker Concentrated Liqudidity Pool
+   * @param appBiatecConfigProvider Configuration reference
+   * @param appBiatecIdentityProvider Identity service reference
    * @param txLPXfer Transfer of the LP token
    * @param assetLP LP pool asset
    * @param assetA Asset A
    * @param assetB Asset B
    * @returns LP position reduced
    */
-  removeLiquidity(txLPXfer: AssetTransferTxn, assetLP: AssetID, assetA: AssetID, assetB: AssetID): uint256 {
+  removeLiquidity(
+    appBiatecConfigProvider: AppID,
+    appBiatecIdentityProvider: AppID,
+    txLPXfer: AssetTransferTxn,
+    assetA: AssetID,
+    assetB: AssetID,
+    assetLP: AssetID
+  ): uint256 {
     /// well formed mint
-    assert(assetA.id === this.assetA.value);
-    assert(assetB.id === this.assetB.value);
-    assert(assetLP.id === this.assetLP.value);
-
+    this.checkAssets(assetA, assetB, assetLP);
     verifyAssetTransferTxn(txLPXfer, {
       assetReceiver: this.app.address,
       xferAsset: assetLP,
       assetAmount: { greaterThanEqualTo: 0 },
     });
+
+    this.verifyIdentity(appBiatecConfigProvider, appBiatecIdentityProvider);
 
     // increase the budget by 1
     increaseOpcodeBudget();
@@ -666,7 +696,8 @@ class BiatecClammPool extends Contract {
       this.doAxfer(this.txn.sender, assetB, bToSend64);
     }
 
-    assert(aToSend64 > 0 || bToSend64 > 0, 'Removal of the liquidity would lead to zero withdrawal');
+    // assert(aToSend64 > 0 || bToSend64 > 0, 'Removal of the liquidity would lead to zero withdrawal');
+    assert(aToSend64 > 0 || bToSend64 > 0, 'ERR-REM-ZERO');
 
     const newAssetA = this.assetABalance.value - aToSend;
     const newAssetB = this.assetBBalance.value - bToSend;
@@ -706,7 +737,7 @@ class BiatecClammPool extends Contract {
   /**
    * This method allows biatec admin to reduce the lp position created by lp fees allocation.
    *
-   *  Only addressExecutiveFee is allowed to execute this method.
+   * Only addressExecutiveFee is allowed to execute this method.
    *
    * @param appBiatecConfigProvider Biatec config app. Only addressExecutiveFee is allowed to execute this method.
    * @param assetA Asset A
@@ -717,23 +748,21 @@ class BiatecClammPool extends Contract {
    */
   removeLiquidityAdmin(
     appBiatecConfigProvider: AppID,
-    assetLP: AssetID,
     assetA: AssetID,
     assetB: AssetID,
+    assetLP: AssetID,
     amount: uint256
   ): uint256 {
     /// well formed mint
-    assert(assetA.id === this.assetA.value);
-    assert(assetB.id === this.assetB.value);
-    assert(assetLP.id === this.assetLP.value);
+    this.checkAssets(assetA, assetB, assetLP);
 
-    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value);
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef');
-    assert(
-      this.txn.sender === addressExecutiveFee,
-      'Only fee executor setup in the config can take the collected fees'
-    );
-
+    // assert(
+    //   this.txn.sender === addressExecutiveFee,
+    //   'Only fee executor setup in the config can take the collected fees'
+    // );
+    assert(this.txn.sender === addressExecutiveFee, 'ERR-EXEC-ONLY');
     // increase the budget by 1
     increaseOpcodeBudget();
     increaseOpcodeBudget();
@@ -751,7 +780,7 @@ class BiatecClammPool extends Contract {
     if (lpDeltaWithFees === <uint256>0) lpDeltaWithFees = this.LiqudityBiatecFromFees.value;
     assert(
       lpDeltaWithFees <= this.LiqudityBiatecFromFees.value,
-      'Biatec cannot take more lp then is collected in fees'
+      'ERR-TOO-MUCH' // 'Biatec cannot take more lp then is collected in fees'
     );
     this.LiqudityBiatecFromFees.value = this.LiqudityBiatecFromFees.value - lpDeltaWithFees;
     const aToSend = this.calculateAssetAWithdrawOnLpDeposit(
@@ -809,6 +838,43 @@ class BiatecClammPool extends Contract {
   }
 
   /**
+   * Checks if config matches with the app configuration, identity matches with the config, and user is not banned.
+   *
+   * Fetches the user info from the identity app and returns the engagement, verification class,...
+   *
+   * @param appBiatecConfigProvider Biatec config provider
+   * @param appBiatecIdentityProvider Biatec identity provider
+   * @returns User info object
+   */
+  private verifyIdentity(appBiatecConfigProvider: AppID, appBiatecIdentityProvider: AppID): UserInfoV1 {
+    assert(
+      appBiatecConfigProvider === this.appBiatecConfigProvider.value,
+      'ERR-INVALID-CONFIG' // 'Configuration app does not match'
+    );
+    const identityFromConfig = appBiatecConfigProvider.globalState('i');
+    assert(
+      appBiatecIdentityProvider === identityFromConfig,
+      'ERR-WRONG-IDENT' // appBiatecIdentityProvider must match to the config in appBiatecConfigProvider'
+    );
+
+    const user = sendMethodCall<[Address, uint8], UserInfoV1>({
+      name: 'getUser',
+      methodArgs: [this.txn.sender, <uint8>1],
+      fee: 0,
+      applicationID: appBiatecIdentityProvider,
+    });
+    assert(
+      !user.isLocked,
+      'ERR-USER-LOCKED' // 'User must not be locked'
+    );
+    assert(
+      user.verificationClass >= this.verificationClass.value, // if(user.verificationClass >= this.verificationClass.value) then ok
+      'ERR-LOW-VER' // 'User cannot interact with this smart contract as his verification class is lower then required here'
+    );
+    return user;
+  }
+
+  /**
    * Swap Asset A to Asset B or Asset B to Asst A
    * @param txSwap Transfer of the token to be deposited to the pool. To the owner the other asset will be sent.
    * @param assetA Asset A
@@ -828,8 +894,7 @@ class BiatecClammPool extends Contract {
     increaseOpcodeBudget();
     increaseOpcodeBudget();
     /// well formed swap
-    assert(assetA.id === this.assetA.value);
-    assert(assetB.id === this.assetB.value);
+    this.checkAssetsAB(assetA, assetB);
 
     if (txSwap.typeEnum === TransactionType.Payment) {
       assert(assetA.id === 0);
@@ -850,30 +915,12 @@ class BiatecClammPool extends Contract {
       });
     }
 
-    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
-    const identityFromConfig = appBiatecConfigProvider.globalState('i');
-    assert(
-      appBiatecIdentityProvider === identityFromConfig,
-      'appBiatecIdentityProvider must match to the config in appBiatecConfigProvider'
-    );
-
-    const user = sendMethodCall<[Address, uint8], UserInfoV1>({
-      name: 'getUser',
-      methodArgs: [this.txn.sender, <uint8>1],
-      fee: 0,
-      applicationID: appBiatecIdentityProvider,
-    });
-    assert(!user.isLocked, 'User must not be locked');
-    assert(
-      user.verificationClass >= this.verificationClass.value, // if(user.verificationClass >= this.verificationClass.value) then ok
-      'User cannot interact with this smart contract as his verification class is lower then required here'
-    );
-
     const poolProviderFromConfig = appBiatecConfigProvider.globalState('p');
     assert(
       appBiatecPoolProvider === poolProviderFromConfig,
-      'appBiatecPoolProvider must match to the config in appBiatecConfigProvider'
+      'ERR-INVALID-PP' // appBiatecPoolProvider must match to the config in appBiatecConfigProvider'
     );
+    const user = this.verifyIdentity(appBiatecConfigProvider, appBiatecIdentityProvider);
 
     let assetADecimals = 6;
     if (assetA.id > 0) assetADecimals = assetA.decimals;
@@ -1037,7 +1084,7 @@ class BiatecClammPool extends Contract {
         globals.currentApplicationID,
         assetA,
         assetB,
-        this.ratio.value as uint64,
+        this.currentPrice.value as uint64,
         newPrice as uint64,
         amountAForStats * (assetADelicmalScale2Scale as uint64),
         amountBForStats * (assetBDelicmalScale2Scale as uint64),
@@ -1049,24 +1096,27 @@ class BiatecClammPool extends Contract {
       applicationID: appBiatecPoolProvider,
     });
 
-    this.ratio.value = newPrice as uint64;
+    this.currentPrice.value = newPrice as uint64;
     if (assetA.id === 0) {
       assert(
         ((this.assetABalance.value / assetADelicmalScale2Scale) as uint64) <= this.app.address.balance,
-        'current algo balance must be above the assetABalance value'
+        'ERR-BALANCE-CHECK-1' // current algo balance must be above the assetABalance value'
       );
     } else {
       assert(
         ((this.assetABalance.value / assetADelicmalScale2Scale) as uint64) <= this.app.address.assetBalance(assetA),
-        'current a balance must be above the assetABalance value'
+        'ERR-BALANCE-CHECK-2' // 'current a balance must be above the assetABalance value'
       );
     }
 
     assert(
       ((this.assetBBalance.value / assetBDelicmalScale2Scale) as uint64) <= this.app.address.assetBalance(assetB),
-      'current B balance must be above the assetBBalance value'
+      'ERR-BALANCE-CHECK-3' // 'current B balance must be above the assetBBalance value'
     );
-    assert(ret > 1, 'The result would lead to deposit but zero withdrawal'); // protection of the client
+    assert(
+      ret > 1,
+      'ERR-ZERO-DEPOSIT' // 'The result would lead to deposit but zero withdrawal'
+    ); // protection of the client
     return ret as uint256;
   }
 
@@ -1093,8 +1143,7 @@ class BiatecClammPool extends Contract {
   ): uint256 {
     increaseOpcodeBudget();
     increaseOpcodeBudget();
-    assert(assetA.id === this.assetA.value);
-    assert(assetB.id === this.assetB.value);
+    this.checkAssetsAB(assetA, assetB);
 
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef');
@@ -1173,7 +1222,7 @@ class BiatecClammPool extends Contract {
       this.priceMaxSqrt.value, // priceMaxSqrt: uint256,
       this.Liqudity.value // liquidity: uint256
     );
-    this.ratio.value = newPrice as uint64;
+    this.currentPrice.value = newPrice as uint64;
     return diff;
   }
 
@@ -1198,8 +1247,7 @@ class BiatecClammPool extends Contract {
     amountA: uint64,
     amountB: uint64
   ): uint64 {
-    assert(assetA.id === this.assetA.value);
-    assert(assetB.id === this.assetB.value);
+    this.checkAssetsAB(assetA, assetB);
 
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef');
@@ -1245,7 +1293,15 @@ class BiatecClammPool extends Contract {
    *
    * Only addressExecutiveFee is allowed to execute this method.
    */
-  sendOnlineKeyRegistration(appBiatecConfigProvider: AppID, params: OnlineKeyRegParams): void {
+  sendOnlineKeyRegistration(
+    appBiatecConfigProvider: AppID,
+    votePK: bytes,
+    selectionPK: bytes,
+    stateProofPK: bytes,
+    voteFirst: uint64,
+    voteLast: uint64,
+    voteKeyDilution: uint64
+  ): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef');
     assert(
@@ -1253,12 +1309,12 @@ class BiatecClammPool extends Contract {
       'Only fee executor setup in the config can take the collected fees'
     );
     sendOnlineKeyRegistration({
-      selectionPK: params.selectionPK,
-      stateProofPK: params.stateProofPK,
-      voteFirst: params.voteFirst,
-      voteKeyDilution: params.voteKeyDilution,
-      voteLast: params.voteLast,
-      votePK: params.votePK,
+      selectionPK: selectionPK,
+      stateProofPK: stateProofPK,
+      voteFirst: voteFirst,
+      voteKeyDilution: voteKeyDilution,
+      voteLast: voteLast,
+      votePK: votePK,
       fee: 0,
     });
   }
@@ -1724,7 +1780,7 @@ class BiatecClammPool extends Contract {
       currentLiqudity: this.Liqudity.value as uint64,
       liqudityBiatecFromFees: this.LiqudityBiatecFromFees.value as uint64,
       liqudityUsersFromFees: this.LiqudityUsersFromFees.value as uint64,
-      price: this.ratio.value as uint64,
+      price: this.currentPrice.value as uint64,
       priceMaxSqrt: this.priceMaxSqrt.value as uint64,
       priceMinSqrt: this.priceMinSqrt.value as uint64,
       releasedLiqudity: this.calculateDistributedLiquidity(assetLP, <uint256>0) as uint64,

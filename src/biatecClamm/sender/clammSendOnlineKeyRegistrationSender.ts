@@ -1,30 +1,25 @@
 import algosdk from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
-import clammSwapTxs from '../txs/clammSwapTxs';
+import clammSendOnlineKeyRegistrationTxs from '../txs/clammSendOnlineKeyRegistrationTxs';
+import { ICustomOnlineKeyRegParams } from '../../interface/ICustomOnlineKeyRegParams';
 
-interface IClammSwapInput {
+interface IClammRemoveLiquidityInput {
   clientBiatecClammPool: BiatecClammPoolClient;
   account: TransactionSignerAccount;
   algod: algosdk.Algodv2;
 
   appBiatecConfigProvider: bigint;
-  appBiatecIdentityProvider: bigint;
-  appBiatecPoolProvider: bigint;
-  assetA: bigint;
-  assetB: bigint;
-  minimumToReceive: bigint;
-  fromAsset: bigint;
-  fromAmount: bigint;
+  keyregParams: ICustomOnlineKeyRegParams;
 }
 /**
- * Swap asset a or asset b at the biatec concentrated liquidity amm
+ * Biatec can execute the online key registration to protect algorand network with algos deposited in the lp pool
  *
  * @returns txId
  */
-const clammSwapSender = async (input: IClammSwapInput): Promise<string> => {
+const clammSendOnlineKeyRegistrationSender = async (input: IClammRemoveLiquidityInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
-  const txs = await clammSwapTxs({
+  const txs = await clammSendOnlineKeyRegistrationTxs({
     ...input,
     params,
   });
@@ -35,4 +30,4 @@ const clammSwapSender = async (input: IClammSwapInput): Promise<string> => {
   const { txId } = await input.algod.sendRawTransaction(signed).do();
   return txId;
 };
-export default clammSwapSender;
+export default clammSendOnlineKeyRegistrationSender;
