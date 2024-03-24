@@ -1,7 +1,7 @@
 {
   "name": "biatec-concentrated-liquidity-amm",
   "version": "0.9.0",
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "categories": [
     "Algorand",
     "DeFi",
