@@ -17,3 +17,92 @@ This work has been performed with support from the Algorand Foundation xGov Gran
 ## Biatec Concentrated Liquidity Smart Contract
 
 This repo is dedicated to Biatec CL AMM Smart contract.
+
+## Tests
+
+![Tests](https://raw.githubusercontent.com/scholtz/BiatecCLAMM/main/img/tests.png)
+
+## NPM package
+
+```
+npm i biatec-concentrated-liquidity-amm
+```
+
+## Examples
+
+## Add liquidity
+
+```
+import {clientBiatecClammPool, clammAddLiquiditySender} from "biatec-concentrated-liquidity-amm"
+
+const client = clientBiatecClammPool({
+  appId: .. ,
+  sender: ..;
+  algod: ..;
+})
+const txId = await clammAddLiquiditySender({
+  clientBiatecClammPool,
+  account: TransactionSignerAccount,
+  algod: algosdk.Algodv2,
+
+  appBiatecConfigProvider: bigint,
+  appBiatecIdentityProvider: bigint,
+  assetA: bigint,
+  assetB: bigint,
+  assetLP: bigint,
+
+  assetADeposit: bigint,
+  assetBDeposit: bigint,
+})
+```
+
+## SWAP
+
+```
+import {clientBiatecClammPool, clammSwapSender} from "biatec-concentrated-liquidity-amm"
+
+const client = clientBiatecClammPool({
+  appId: .. ,
+  sender: ..;
+  algod: ..;
+})
+const txId = await clammSwapSender({
+  clientBiatecClammPool: BiatecClammPoolClient;
+  account: TransactionSignerAccount;
+  algod: algosdk.Algodv2;
+
+  appBiatecConfigProvider: bigint;
+  appBiatecIdentityProvider: bigint;
+  assetA: bigint;
+  assetB: bigint;
+  assetLP: bigint;
+
+  assetADeposit: bigint;
+  assetBDeposit: bigint;
+})
+```
+
+## Remove liquidity and collect fees
+
+```
+import {clientBiatecClammPool, clammRemoveLiquiditySender} from "biatec-concentrated-liquidity-amm"
+
+const client = clientBiatecClammPool({
+  appId: .. ,
+  sender: ..;
+  algod: ..;
+})
+const txId = await clammRemoveLiquiditySender({
+  clientBiatecClammPool: BiatecClammPoolClient;
+  account: TransactionSignerAccount;
+  algod: algosdk.Algodv2;
+
+  appBiatecConfigProvider: bigint;
+  appBiatecIdentityProvider: bigint;
+  assetA: bigint;
+  assetB: bigint;
+  assetLP: bigint;
+
+  lpToSend: bigint;
+})
+```

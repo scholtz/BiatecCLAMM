@@ -22,8 +22,16 @@
     "test:1:nobuild": "jest -t \"Extreme-ExtremePrice-Min - ASASR 0.000000001\"",
     "test:nobuild": "jest",
     "lint": "eslint . --ext .ts",
-    "fix": "eslint . --ext .ts --fix"
+    "fix": "eslint . --ext .ts --fix",
+    "build-package": "tsup src/index.ts --format cjs,esm --clean --sourcemap index --dts src/index.ts --dts-resolve",
+    "publishCmd": "npm publish"
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@algorandfoundation/algokit-utils": "^5.6.0",
     "algosdk": "^2.7.0"
@@ -44,6 +52,7 @@
     "jest": "^29.7.0",
     "prettier": "^3.2.5",
     "ts-jest": "^29.1.2",
+    "tsup": "^8.0.2",
     "typescript": "5.0.2"
   }
 }
