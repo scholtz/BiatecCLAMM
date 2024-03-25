@@ -93,6 +93,7 @@ const setupPool = async (input: ISetup) => {
   const refBiatecPoolProvider = await clientBiatecPoolProvider.appClient.getAppReference();
   const refBiatecClammPool = await clientBiatecClammPool.appClient.getAppReference();
   expect(refBiatecClammPool.appId).toBeGreaterThan(0);
+
   let txId = await configBootstrapSender({
     algod,
     clientBiatecConfigProvider,

@@ -11,6 +11,19 @@
       }
     },
     {
+      "name": "updateApplication",
+      "desc": "addressUdpater from global biatec configuration is allowed to update application",
+      "args": [
+        {
+          "name": "newVersion",
+          "type": "byte[]"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
       "name": "bootstrap",
       "desc": "Setup the contract",
       "args": [
@@ -39,6 +52,20 @@
         {
           "name": "a",
           "type": "address",
+          "desc": "Address"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "setPaused",
+      "desc": "Kill switch. In the extreme case all services (deposit, trading, withdrawal, identity modifications and more) can be suspended.",
+      "args": [
+        {
+          "name": "a",
+          "type": "uint64",
           "desc": "Address"
         }
       ],
@@ -128,6 +155,58 @@
       ],
       "returns": {
         "type": "void"
+      }
+    },
+    {
+      "name": "sendOnlineKeyRegistration",
+      "desc": "addressExecutiveFee can perfom key registration for this LP poolOnly addressExecutiveFee is allowed to execute this method.",
+      "args": [
+        {
+          "name": "votePK",
+          "type": "byte[]"
+        },
+        {
+          "name": "selectionPK",
+          "type": "byte[]"
+        },
+        {
+          "name": "stateProofPK",
+          "type": "byte[]"
+        },
+        {
+          "name": "voteFirst",
+          "type": "uint64"
+        },
+        {
+          "name": "voteLast",
+          "type": "uint64"
+        },
+        {
+          "name": "voteKeyDilution",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "withdrawExcessAssets",
+      "desc": "If someone deposits excess assets to this smart contract biatec can use them.Only addressExecutiveFee is allowed to execute this method.",
+      "args": [
+        {
+          "name": "asset",
+          "type": "uint64",
+          "desc": "Asset to withdraw. If native token, then zero"
+        },
+        {
+          "name": "amount",
+          "type": "uint64",
+          "desc": "Amount of the asset to be withdrawn"
+        }
+      ],
+      "returns": {
+        "type": "uint64"
       }
     }
   ]

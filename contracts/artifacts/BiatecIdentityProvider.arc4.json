@@ -11,6 +11,37 @@
       }
     },
     {
+      "name": "bootstrap",
+      "desc": "Biatec deploys single identity provider smart contract",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64",
+          "desc": "Biatec amm provider"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "updateApplication",
+      "desc": "addressUdpater from global biatec configuration is allowed to update application",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64"
+        },
+        {
+          "name": "newVersion",
+          "type": "byte[]"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
       "name": "selfRegistration",
       "args": [
         {
@@ -43,6 +74,43 @@
       }
     },
     {
+      "name": "sendOnlineKeyRegistration",
+      "desc": "addressExecutiveFee can perfom key registration for this LP poolOnly addressExecutiveFee is allowed to execute this method.",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64"
+        },
+        {
+          "name": "votePK",
+          "type": "byte[]"
+        },
+        {
+          "name": "selectionPK",
+          "type": "byte[]"
+        },
+        {
+          "name": "stateProofPK",
+          "type": "byte[]"
+        },
+        {
+          "name": "voteFirst",
+          "type": "uint64"
+        },
+        {
+          "name": "voteLast",
+          "type": "uint64"
+        },
+        {
+          "name": "voteKeyDilution",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
       "name": "getUser",
       "desc": "Returns user information - fee multiplier, verification class, engagement class ..",
       "readonly": true,
@@ -60,6 +128,30 @@
       ],
       "returns": {
         "type": "(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)"
+      }
+    },
+    {
+      "name": "withdrawExcessAssets",
+      "desc": "If someone deposits excess assets to this smart contract biatec can use them.Only addressExecutiveFee is allowed to execute this method.",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64",
+          "desc": "Biatec config app. Only addressExecutiveFee is allowed to execute this method."
+        },
+        {
+          "name": "asset",
+          "type": "uint64",
+          "desc": "Asset to withdraw. If native token, then zero"
+        },
+        {
+          "name": "amount",
+          "type": "uint64",
+          "desc": "Amount of the asset to be withdrawn"
+        }
+      ],
+      "returns": {
+        "type": "uint64"
       }
     }
   ]

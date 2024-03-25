@@ -1,6 +1,6 @@
 {
   "name": "biatec-concentrated-liquidity-amm",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "license": "AGPL-3.0",
   "categories": [
     "Algorand",
@@ -18,13 +18,14 @@
     "generate-components": "algokit-generate-component contracts/artifacts/Biatecclamm.arc32.json contracts/artifacts/components",
     "build": "npm run compile-contract && npm run generate-client",
     "test": "npm run build && jest",
-    "test:1:build": "npm run build && jest -t \"Extreme-ExtremePrice-Min - ASASR 0.000000001\"",
-    "test:1:nobuild": "jest -t \"Extreme-ExtremePrice-Min - ASASR 0.000000001\"",
+    "test:1:build": "npm run build && jest -t \"Extreme-ExtremePrice-Min - ASASR 0.000000001 - 1\"",
+    "test:1:nobuild": "jest -t \"Extreme-ExtremePrice-Min - ASASR 0.000000001 - 1\"",
     "test:nobuild": "jest",
     "lint": "eslint . --ext .ts",
     "fix": "eslint . --ext .ts --fix",
     "build-package": "tsup src/index.ts --format cjs,esm --clean --sourcemap index --dts src/index.ts --dts-resolve",
-    "publishCmd": "npm publish"
+    "publishCmd": "npm publish",
+    "deploy": "ts-node src/bin/deploy.ts"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

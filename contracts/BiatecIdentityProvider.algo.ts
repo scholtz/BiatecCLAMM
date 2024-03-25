@@ -143,10 +143,43 @@ class BiatecIdentityProvider extends Contract {
   engagementSetter = GlobalStateKey<Address>({ key: 'e' });
 
   /**
+   * Biatec config provider
+   */
+  appBiatecConfigProvider = GlobalStateKey<AppID>({ key: 'B' });
+
+  /**
+   * Version of the smart contract
+   */
+  version = GlobalStateKey<bytes>({ key: 'scver' });
+
+  /**
    * Initial setup
    */
   createApplication(): void {
-    log(version);
+    this.version.value = version;
+  }
+
+  /**
+   * Biatec deploys single identity provider smart contract
+   * @param appBiatecConfigProvider Biatec amm provider
+   */
+  bootstrap(appBiatecConfigProvider: AppID): void {
+    assert(this.txn.sender === this.app.creator, 'Only creator of the app can set it up');
+    this.appBiatecConfigProvider.value = appBiatecConfigProvider;
+    const paused = appBiatecConfigProvider.globalState('s') as uint64;
+    assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
+  }
+
+  /**
+   * addressUdpater from global biatec configuration is allowed to update application
+   */
+  updateApplication(appBiatecConfigProvider: AppID, newVersion: bytes): void {
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+    const addressUdpater = appBiatecConfigProvider.globalState('u');
+    assert(this.txn.sender === addressUdpater, 'Only addressUdpater setup in the config can update application');
+    const paused = appBiatecConfigProvider.globalState('s') as uint64;
+    assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
+    this.version.value = newVersion;
   }
 
   selfRegistration(user: Address, info: IdentityInfo) {
@@ -194,6 +227,39 @@ class BiatecIdentityProvider extends Contract {
   setInfo(user: Address, info: IdentityInfo) {
     assert(this.txn.sender === this.engagementSetter.value);
     this.identities(user).value = info;
+  }
+
+  /**
+   * addressExecutiveFee can perfom key registration for this LP pool
+   *
+   * Only addressExecutiveFee is allowed to execute this method.
+   */
+  sendOnlineKeyRegistration(
+    appBiatecConfigProvider: AppID,
+    votePK: bytes,
+    selectionPK: bytes,
+    stateProofPK: bytes,
+    voteFirst: uint64,
+    voteLast: uint64,
+    voteKeyDilution: uint64
+  ): void {
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef');
+    assert(
+      this.txn.sender === addressExecutiveFee,
+      'Only fee executor setup in the config can take the collected fees'
+    );
+    const paused = appBiatecConfigProvider.globalState('s') as uint64;
+    assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
+    sendOnlineKeyRegistration({
+      selectionPK: selectionPK,
+      stateProofPK: stateProofPK,
+      voteFirst: voteFirst,
+      voteKeyDilution: voteKeyDilution,
+      voteLast: voteLast,
+      votePK: votePK,
+      fee: 0,
+    });
   }
 
   /**
@@ -245,5 +311,52 @@ class BiatecIdentityProvider extends Contract {
       isProfessionalInvestor: identity.isProfessionalInvestor,
     };
     return ret;
+  }
+
+  /**
+   * If someone deposits excess assets to this smart contract biatec can use them.
+   *
+   * Only addressExecutiveFee is allowed to execute this method.
+   *
+   * @param appBiatecConfigProvider Biatec config app. Only addressExecutiveFee is allowed to execute this method.
+   * @param asset Asset to withdraw. If native token, then zero
+   * @param amount Amount of the asset to be withdrawn
+   */
+  withdrawExcessAssets(appBiatecConfigProvider: AppID, asset: AssetID, amount: uint64): uint64 {
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef');
+    const paused = appBiatecConfigProvider.globalState('s') as uint64;
+    assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
+    assert(
+      this.txn.sender === addressExecutiveFee,
+      'Only fee executor setup in the config can take the collected fees'
+    );
+
+    this.doAxfer(this.txn.sender, asset, amount);
+
+    return amount;
+  }
+
+  /**
+   * Executes xfer of pay payment methods to specified receiver from smart contract aggregated account with specified asset and amount in tokens decimals
+   * @param receiver Receiver
+   * @param asset Asset. Zero for algo
+   * @param amount Amount to transfer
+   */
+  private doAxfer(receiver: Address, asset: AssetID, amount: uint64): void {
+    if (asset.id === 0) {
+      sendPayment({
+        receiver: receiver,
+        amount: amount,
+        fee: 0,
+      });
+    } else {
+      sendAssetTransfer({
+        assetReceiver: receiver,
+        xferAsset: asset,
+        assetAmount: amount,
+        fee: 0,
+      });
+    }
   }
 }

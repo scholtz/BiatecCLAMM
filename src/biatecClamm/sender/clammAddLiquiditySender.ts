@@ -21,7 +21,7 @@ interface IClammBootstrapSkInput {
  *
  * @returns txId
  */
-const clammBootstrapSender = async (input: IClammBootstrapSkInput): Promise<string> => {
+const clammAddLiquiditySender = async (input: IClammBootstrapSkInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
   const txs = await clammAddLiquidityTxs({
     ...input,
@@ -34,4 +34,4 @@ const clammBootstrapSender = async (input: IClammBootstrapSkInput): Promise<stri
   const { txId } = await input.algod.sendRawTransaction(signed).do();
   return txId;
 };
-export default clammBootstrapSender;
+export default clammAddLiquiditySender;

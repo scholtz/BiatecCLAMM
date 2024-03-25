@@ -86,6 +86,7 @@ const clammBootstrapTxs = async (input: IClammBootstrapTxsInput): Promise<algosd
       accounts: [],
     }
   );
+
   const atc = await compose.atc();
   const ret = [fillInPoolProviderMBR, ...atc.buildGroup().map((tx) => tx.txn)].map((tx: algosdk.Transaction) => {
     // eslint-disable-next-line no-param-reassign

@@ -17,6 +17,10 @@
         {
           "name": "appBiatecConfigProvider",
           "type": "uint64"
+        },
+        {
+          "name": "newVersion",
+          "type": "byte[]"
         }
       ],
       "returns": {
