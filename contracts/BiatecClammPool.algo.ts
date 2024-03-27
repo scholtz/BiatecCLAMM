@@ -3,7 +3,8 @@ import { Contract } from '@algorandfoundation/tealscript';
 // eslint-disable-next-line no-unused-vars
 const version = 'BIATEC-CLAMM-01-01-01';
 const LP_TOKEN_DECIMALS = 6;
-const TOTAL_SUPPLY = 10_000_000_000_000_000;
+const TOTAL_SUPPLY = 18_000_000_000_000_000_000;
+
 const SCALE = 1_000_000_000;
 const s = <uint256>1_000_000_000;
 // const SCALEUINT256 = <uint256>1_000_000_000;
@@ -377,6 +378,7 @@ class BiatecClammPool extends Contract {
     return sendAssetCreation({
       configAssetName: name,
       configAssetUnitName: 'BLP', // Biatec LP token
+      // eslint-disable-next-line no-loss-of-precision
       configAssetTotal: TOTAL_SUPPLY,
       configAssetDecimals: LP_TOKEN_DECIMALS,
       configAssetManager: this.app.address,
@@ -1060,7 +1062,7 @@ class BiatecClammPool extends Contract {
       );
     }
 
-    if (newL !== this.Liqudity.value) {
+    if (newL > this.Liqudity.value) {
       // liquidity increase is the result of the fees
 
       const diff = (newL - this.Liqudity.value) as uint256; // difference is the lp increment by fees .. ready to be split between users and biatec

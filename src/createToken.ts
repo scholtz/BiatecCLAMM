@@ -14,7 +14,7 @@ const createToken = async (input: ICreateGoldTokenInput) => {
     reserve: input.account.addr,
     decimals: input.decimals,
     defaultFrozen: false,
-    total: 1_000_000_000_000_000,
+    total: 1_000_000_000_000_000_000n,
     assetName: input.name,
     manager: input.account.addr,
     unitName: input.name,

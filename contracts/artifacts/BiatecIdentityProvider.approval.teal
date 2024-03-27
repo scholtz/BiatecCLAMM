@@ -59,6 +59,9 @@ createApplication:
 bootstrap:
 	proto 1 0
 
+	// Push empty bytes after the frame pointer to reserve space for local variables
+	byte 0x
+
 	// contracts\BiatecIdentityProvider.algo.ts:167
 	// assert(this.txn.sender === this.app.creator, 'Only creator of the app can set it up')
 	txn Sender
@@ -75,6 +78,23 @@ bootstrap:
 	byte 0x42 // "B"
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	app_global_put
+
+	// contracts\BiatecIdentityProvider.algo.ts:169
+	// paused = appBiatecConfigProvider.globalState('s') as uint64
+	frame_dig -1 // appBiatecConfigProvider: AppID
+	byte 0x73 // "s"
+	app_global_get_ex
+	assert
+	frame_bury 0 // paused: uint64
+
+	// contracts\BiatecIdentityProvider.algo.ts:170
+	// assert(paused === 0, 'ERR_PAUSED')
+	frame_dig 0 // paused: uint64
+	int 0
+	==
+
+	// ERR_PAUSED
+	assert
 	retsub
 
 // updateApplication(uint64,byte[])void
@@ -100,8 +120,9 @@ updateApplication:
 
 	// Push empty bytes after the frame pointer to reserve space for local variables
 	byte 0x
+	dup
 
-	// contracts\BiatecIdentityProvider.algo.ts:175
+	// contracts\BiatecIdentityProvider.algo.ts:177
 	// assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match')
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	byte 0x42 // "B"
@@ -111,7 +132,7 @@ updateApplication:
 	// Configuration app does not match
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:176
+	// contracts\BiatecIdentityProvider.algo.ts:178
 	// addressUdpater = appBiatecConfigProvider.globalState('u')
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	byte 0x75 // "u"
@@ -119,7 +140,7 @@ updateApplication:
 	assert
 	frame_bury 0 // addressUdpater: any
 
-	// contracts\BiatecIdentityProvider.algo.ts:177
+	// contracts\BiatecIdentityProvider.algo.ts:179
 	// assert(this.txn.sender === addressUdpater, 'Only addressUdpater setup in the config can update application')
 	txn Sender
 	frame_dig 0 // addressUdpater: any
@@ -128,7 +149,24 @@ updateApplication:
 	// Only addressUdpater setup in the config can update application
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:178
+	// contracts\BiatecIdentityProvider.algo.ts:180
+	// paused = appBiatecConfigProvider.globalState('s') as uint64
+	frame_dig -1 // appBiatecConfigProvider: AppID
+	byte 0x73 // "s"
+	app_global_get_ex
+	assert
+	frame_bury 1 // paused: uint64
+
+	// contracts\BiatecIdentityProvider.algo.ts:181
+	// assert(paused === 0, 'ERR_PAUSED')
+	frame_dig 1 // paused: uint64
+	int 0
+	==
+
+	// ERR_PAUSED
+	assert
+
+	// contracts\BiatecIdentityProvider.algo.ts:182
 	// this.version.value = newVersion
 	byte 0x7363766572 // "scver"
 	frame_dig -2 // newVersion: bytes
@@ -157,7 +195,7 @@ updateApplication:
 selfRegistration:
 	proto 2 0
 
-	// contracts\BiatecIdentityProvider.algo.ts:182
+	// contracts\BiatecIdentityProvider.algo.ts:186
 	// assert(!this.identities(user).exists, 'Self registration cannot be executed if address is already registered')
 	byte 0x69 // "i"
 	frame_dig -1 // user: Address
@@ -170,7 +208,7 @@ selfRegistration:
 	// Self registration cannot be executed if address is already registered
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:185
+	// contracts\BiatecIdentityProvider.algo.ts:189
 	// assert(info.verificationStatus === 1, 'Verification status must be empty')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -183,7 +221,7 @@ selfRegistration:
 	// Verification status must be empty
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:187
+	// contracts\BiatecIdentityProvider.algo.ts:191
 	// assert(info.verificationClass === 0, 'verificationClass must equal to 0')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -196,7 +234,7 @@ selfRegistration:
 	// verificationClass must equal to 0
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:190
+	// contracts\BiatecIdentityProvider.algo.ts:194
 	// assert(
 	//       info.personUUID === '00000000-0000-0000-0000-000000000000',
 	//       'personUUID must equal to 00000000-0000-0000-0000-000000000000'
@@ -224,7 +262,7 @@ selfRegistration:
 	// personUUID must equal to 00000000-0000-0000-0000-000000000000
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:195
+	// contracts\BiatecIdentityProvider.algo.ts:199
 	// assert(
 	//       info.legalEntityUUID === '00000000-0000-0000-0000-000000000000',
 	//       'legalEntityUUID must equal to 00000000-0000-0000-0000-000000000000'
@@ -252,7 +290,7 @@ selfRegistration:
 	// legalEntityUUID must equal to 00000000-0000-0000-0000-000000000000
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:200
+	// contracts\BiatecIdentityProvider.algo.ts:204
 	// assert(info.biatecEngagementPoints === 0, 'biatecEngagementPoints must equal to 0')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -265,7 +303,7 @@ selfRegistration:
 	// biatecEngagementPoints must equal to 0
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:202
+	// contracts\BiatecIdentityProvider.algo.ts:206
 	// assert(info.biatecEngagementRank === 0, 'biatecEngagementRank must equal to 0')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -278,7 +316,7 @@ selfRegistration:
 	// biatecEngagementRank must equal to 0
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:204
+	// contracts\BiatecIdentityProvider.algo.ts:208
 	// assert(info.avmEngagementPoints === 0, 'avmEngagementPoints must equal to 0')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -291,7 +329,7 @@ selfRegistration:
 	// avmEngagementPoints must equal to 0
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:206
+	// contracts\BiatecIdentityProvider.algo.ts:210
 	// assert(info.avmEngagementRank === 0, 'avmEngagementRank must equal to 0')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -304,7 +342,7 @@ selfRegistration:
 	// avmEngagementRank must equal to 0
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:208
+	// contracts\BiatecIdentityProvider.algo.ts:212
 	// assert(info.tradingEngagementPoints === 0, 'tradingEngagementPoints must equal to 0')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -317,7 +355,7 @@ selfRegistration:
 	// tradingEngagementPoints must equal to 0
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:210
+	// contracts\BiatecIdentityProvider.algo.ts:214
 	// assert(info.tradingEngagementRank === 0, 'tradingEngagementRank must equal to 0')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -330,7 +368,7 @@ selfRegistration:
 	// tradingEngagementRank must equal to 0
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:212
+	// contracts\BiatecIdentityProvider.algo.ts:216
 	// assert(info.isLocked === false, 'isLocked must equal to false')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -343,7 +381,7 @@ selfRegistration:
 	// isLocked must equal to false
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:214
+	// contracts\BiatecIdentityProvider.algo.ts:218
 	// assert(info.kycExpiration === 0, 'kycExpiration must equal to 0')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -356,7 +394,7 @@ selfRegistration:
 	// kycExpiration must equal to 0
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:216
+	// contracts\BiatecIdentityProvider.algo.ts:220
 	// assert(info.investorForExpiration === 0, 'investorForExpiration must equal to 0')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -369,7 +407,7 @@ selfRegistration:
 	// investorForExpiration must equal to 0
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:218
+	// contracts\BiatecIdentityProvider.algo.ts:222
 	// assert(info.isProfessionalInvestor === false, 'isProfessionalInvestor must equal to false')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -382,7 +420,7 @@ selfRegistration:
 	// isProfessionalInvestor must equal to false
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:220
+	// contracts\BiatecIdentityProvider.algo.ts:224
 	// this.identities(user).value = info
 	byte 0x69 // "i"
 	frame_dig -1 // user: Address
@@ -416,7 +454,7 @@ selfRegistration:
 setInfo:
 	proto 2 0
 
-	// contracts\BiatecIdentityProvider.algo.ts:224
+	// contracts\BiatecIdentityProvider.algo.ts:228
 	// assert(this.txn.sender === this.engagementSetter.value)
 	txn Sender
 	byte 0x65 // "e"
@@ -424,7 +462,7 @@ setInfo:
 	==
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:225
+	// contracts\BiatecIdentityProvider.algo.ts:229
 	// this.identities(user).value = info
 	byte 0x69 // "i"
 	frame_dig -1 // user: Address
@@ -481,8 +519,9 @@ sendOnlineKeyRegistration:
 
 	// Push empty bytes after the frame pointer to reserve space for local variables
 	byte 0x
+	dup
 
-	// contracts\BiatecIdentityProvider.algo.ts:242
+	// contracts\BiatecIdentityProvider.algo.ts:246
 	// assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match')
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	byte 0x42 // "B"
@@ -492,7 +531,7 @@ sendOnlineKeyRegistration:
 	// Configuration app does not match
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:243
+	// contracts\BiatecIdentityProvider.algo.ts:247
 	// addressExecutiveFee = appBiatecConfigProvider.globalState('ef')
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	byte 0x6566 // "ef"
@@ -500,7 +539,7 @@ sendOnlineKeyRegistration:
 	assert
 	frame_bury 0 // addressExecutiveFee: any
 
-	// contracts\BiatecIdentityProvider.algo.ts:244
+	// contracts\BiatecIdentityProvider.algo.ts:248
 	// assert(
 	//       this.txn.sender === addressExecutiveFee,
 	//       'Only fee executor setup in the config can take the collected fees'
@@ -512,7 +551,24 @@ sendOnlineKeyRegistration:
 	// Only fee executor setup in the config can take the collected fees
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:248
+	// contracts\BiatecIdentityProvider.algo.ts:252
+	// paused = appBiatecConfigProvider.globalState('s') as uint64
+	frame_dig -1 // appBiatecConfigProvider: AppID
+	byte 0x73 // "s"
+	app_global_get_ex
+	assert
+	frame_bury 1 // paused: uint64
+
+	// contracts\BiatecIdentityProvider.algo.ts:253
+	// assert(paused === 0, 'ERR_PAUSED')
+	frame_dig 1 // paused: uint64
+	int 0
+	==
+
+	// ERR_PAUSED
+	assert
+
+	// contracts\BiatecIdentityProvider.algo.ts:254
 	// sendOnlineKeyRegistration({
 	//       selectionPK: selectionPK,
 	//       stateProofPK: stateProofPK,
@@ -526,37 +582,37 @@ sendOnlineKeyRegistration:
 	int keyreg
 	itxn_field TypeEnum
 
-	// contracts\BiatecIdentityProvider.algo.ts:249
+	// contracts\BiatecIdentityProvider.algo.ts:255
 	// selectionPK: selectionPK
 	frame_dig -3 // selectionPK: bytes
 	itxn_field SelectionPK
 
-	// contracts\BiatecIdentityProvider.algo.ts:250
+	// contracts\BiatecIdentityProvider.algo.ts:256
 	// stateProofPK: stateProofPK
 	frame_dig -4 // stateProofPK: bytes
 	itxn_field StateProofPK
 
-	// contracts\BiatecIdentityProvider.algo.ts:251
+	// contracts\BiatecIdentityProvider.algo.ts:257
 	// voteFirst: voteFirst
 	frame_dig -5 // voteFirst: uint64
 	itxn_field VoteFirst
 
-	// contracts\BiatecIdentityProvider.algo.ts:252
+	// contracts\BiatecIdentityProvider.algo.ts:258
 	// voteKeyDilution: voteKeyDilution
 	frame_dig -7 // voteKeyDilution: uint64
 	itxn_field VoteKeyDilution
 
-	// contracts\BiatecIdentityProvider.algo.ts:253
+	// contracts\BiatecIdentityProvider.algo.ts:259
 	// voteLast: voteLast
 	frame_dig -6 // voteLast: uint64
 	itxn_field VoteLast
 
-	// contracts\BiatecIdentityProvider.algo.ts:254
+	// contracts\BiatecIdentityProvider.algo.ts:260
 	// votePK: votePK
 	frame_dig -2 // votePK: bytes
 	itxn_field VotePK
 
-	// contracts\BiatecIdentityProvider.algo.ts:255
+	// contracts\BiatecIdentityProvider.algo.ts:261
 	// fee: 0
 	int 0
 	itxn_field Fee
@@ -607,7 +663,7 @@ getUser:
 	byte 0x
 	dupn 2
 
-	// contracts\BiatecIdentityProvider.algo.ts:267
+	// contracts\BiatecIdentityProvider.algo.ts:273
 	// assert(v === 1, "Currently supported version of the data structure is '1'")
 	frame_dig -2 // v: uint8
 	int 1
@@ -617,7 +673,7 @@ getUser:
 	assert
 
 	// *if0_condition
-	// contracts\BiatecIdentityProvider.algo.ts:268
+	// contracts\BiatecIdentityProvider.algo.ts:274
 	// !this.identities(user).exists
 	byte 0x69 // "i"
 	frame_dig -1 // user: Address
@@ -629,7 +685,7 @@ getUser:
 	bz *if0_end
 
 	// *if0_consequent
-	// contracts\BiatecIdentityProvider.algo.ts:269
+	// contracts\BiatecIdentityProvider.algo.ts:275
 	// retNoIdentity: UserInfoV1 = {
 	//         version: v,
 	//         base: SCALE as uint256,
@@ -700,7 +756,7 @@ getUser:
 	concat
 	frame_bury 0 // retNoIdentity: UserInfoV1
 
-	// contracts\BiatecIdentityProvider.algo.ts:286
+	// contracts\BiatecIdentityProvider.algo.ts:292
 	// return retNoIdentity;
 	frame_dig 0 // retNoIdentity: UserInfoV1
 
@@ -709,14 +765,14 @@ getUser:
 	retsub
 
 *if0_end:
-	// contracts\BiatecIdentityProvider.algo.ts:288
+	// contracts\BiatecIdentityProvider.algo.ts:294
 	// identity = this.identities(user).value
 	byte 0x69 // "i"
 	frame_dig -1 // user: Address
 	concat
 	frame_bury 1 // storage key//identity
 
-	// contracts\BiatecIdentityProvider.algo.ts:290
+	// contracts\BiatecIdentityProvider.algo.ts:296
 	// ret: UserInfoV1 = {
 	//       version: v,
 	//       base: SCALE as uint256,
@@ -869,7 +925,7 @@ getUser:
 	concat
 	frame_bury 2 // ret: UserInfoV1
 
-	// contracts\BiatecIdentityProvider.algo.ts:307
+	// contracts\BiatecIdentityProvider.algo.ts:313
 	// return ret;
 	frame_dig 2 // ret: UserInfoV1
 
@@ -919,8 +975,9 @@ withdrawExcessAssets:
 
 	// Push empty bytes after the frame pointer to reserve space for local variables
 	byte 0x
+	dup
 
-	// contracts\BiatecIdentityProvider.algo.ts:320
+	// contracts\BiatecIdentityProvider.algo.ts:326
 	// assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match')
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	byte 0x42 // "B"
@@ -930,7 +987,7 @@ withdrawExcessAssets:
 	// Configuration app does not match
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:321
+	// contracts\BiatecIdentityProvider.algo.ts:327
 	// addressExecutiveFee = appBiatecConfigProvider.globalState('ef')
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	byte 0x6566 // "ef"
@@ -938,7 +995,24 @@ withdrawExcessAssets:
 	assert
 	frame_bury 0 // addressExecutiveFee: any
 
-	// contracts\BiatecIdentityProvider.algo.ts:322
+	// contracts\BiatecIdentityProvider.algo.ts:328
+	// paused = appBiatecConfigProvider.globalState('s') as uint64
+	frame_dig -1 // appBiatecConfigProvider: AppID
+	byte 0x73 // "s"
+	app_global_get_ex
+	assert
+	frame_bury 1 // paused: uint64
+
+	// contracts\BiatecIdentityProvider.algo.ts:329
+	// assert(paused === 0, 'ERR_PAUSED')
+	frame_dig 1 // paused: uint64
+	int 0
+	==
+
+	// ERR_PAUSED
+	assert
+
+	// contracts\BiatecIdentityProvider.algo.ts:330
 	// assert(
 	//       this.txn.sender === addressExecutiveFee,
 	//       'Only fee executor setup in the config can take the collected fees'
@@ -950,19 +1024,22 @@ withdrawExcessAssets:
 	// Only fee executor setup in the config can take the collected fees
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:327
+	// contracts\BiatecIdentityProvider.algo.ts:335
 	// this.doAxfer(this.txn.sender, asset, amount)
 	frame_dig -3 // amount: uint64
 	frame_dig -2 // asset: AssetID
 	txn Sender
 	callsub doAxfer
 
-	// contracts\BiatecIdentityProvider.algo.ts:329
+	// contracts\BiatecIdentityProvider.algo.ts:337
 	// return amount;
 	frame_dig -3 // amount: uint64
 
 	// set the subroutine return value
 	frame_bury 0
+
+	// pop all local variables from the stack
+	popn 1
 	retsub
 
 // doAxfer(receiver: Address, asset: AssetID, amount: uint64): void
@@ -975,7 +1052,7 @@ doAxfer:
 	proto 3 0
 
 	// *if1_condition
-	// contracts\BiatecIdentityProvider.algo.ts:339
+	// contracts\BiatecIdentityProvider.algo.ts:347
 	// asset.id === 0
 	frame_dig -2 // asset: AssetID
 	int 0
@@ -983,7 +1060,7 @@ doAxfer:
 	bz *if1_else
 
 	// *if1_consequent
-	// contracts\BiatecIdentityProvider.algo.ts:340
+	// contracts\BiatecIdentityProvider.algo.ts:348
 	// sendPayment({
 	//         receiver: receiver,
 	//         amount: amount,
@@ -993,17 +1070,17 @@ doAxfer:
 	int pay
 	itxn_field TypeEnum
 
-	// contracts\BiatecIdentityProvider.algo.ts:341
+	// contracts\BiatecIdentityProvider.algo.ts:349
 	// receiver: receiver
 	frame_dig -1 // receiver: Address
 	itxn_field Receiver
 
-	// contracts\BiatecIdentityProvider.algo.ts:342
+	// contracts\BiatecIdentityProvider.algo.ts:350
 	// amount: amount
 	frame_dig -3 // amount: uint64
 	itxn_field Amount
 
-	// contracts\BiatecIdentityProvider.algo.ts:343
+	// contracts\BiatecIdentityProvider.algo.ts:351
 	// fee: 0
 	int 0
 	itxn_field Fee
@@ -1013,7 +1090,7 @@ doAxfer:
 	b *if1_end
 
 *if1_else:
-	// contracts\BiatecIdentityProvider.algo.ts:346
+	// contracts\BiatecIdentityProvider.algo.ts:354
 	// sendAssetTransfer({
 	//         assetReceiver: receiver,
 	//         xferAsset: asset,
@@ -1024,22 +1101,22 @@ doAxfer:
 	int axfer
 	itxn_field TypeEnum
 
-	// contracts\BiatecIdentityProvider.algo.ts:347
+	// contracts\BiatecIdentityProvider.algo.ts:355
 	// assetReceiver: receiver
 	frame_dig -1 // receiver: Address
 	itxn_field AssetReceiver
 
-	// contracts\BiatecIdentityProvider.algo.ts:348
+	// contracts\BiatecIdentityProvider.algo.ts:356
 	// xferAsset: asset
 	frame_dig -2 // asset: AssetID
 	itxn_field XferAsset
 
-	// contracts\BiatecIdentityProvider.algo.ts:349
+	// contracts\BiatecIdentityProvider.algo.ts:357
 	// assetAmount: amount
 	frame_dig -3 // amount: uint64
 	itxn_field AssetAmount
 
-	// contracts\BiatecIdentityProvider.algo.ts:350
+	// contracts\BiatecIdentityProvider.algo.ts:358
 	// fee: 0
 	int 0
 	itxn_field Fee
