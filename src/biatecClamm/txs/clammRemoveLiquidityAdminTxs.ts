@@ -1,4 +1,4 @@
-import algosdk, { SuggestedParams } from 'algosdk';
+import algosdk, { AtomicTransactionComposer, SuggestedParams } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
@@ -11,7 +11,7 @@ interface IClammRemoveLiquidityAdminTxsInput {
   appBiatecConfigProvider: bigint;
   assetA: bigint;
   assetB: bigint;
-  assetLP: bigint;
+  assetLp: bigint;
   amount: bigint;
 }
 /**
@@ -22,14 +22,15 @@ interface IClammRemoveLiquidityAdminTxsInput {
 const clammRemoveLiquidityAdminTxs = async (
   input: IClammRemoveLiquidityAdminTxsInput
 ): Promise<algosdk.Transaction[]> => {
-  const { clientBiatecClammPool, account, appBiatecConfigProvider, assetA, assetB, assetLP, amount } = input;
+  const { clientBiatecClammPool, account, appBiatecConfigProvider, assetA, assetB, assetLp, amount } = input;
+  const atc = new AtomicTransactionComposer();
 
-  const compose = clientBiatecClammPool.compose().removeLiquidityAdmin(
+  await clientBiatecClammPool.removeLiquidityAdmin(
     {
       appBiatecConfigProvider,
       assetA,
       assetB,
-      assetLP,
+      assetLp,
       amount,
     },
     {
@@ -42,7 +43,6 @@ const clammRemoveLiquidityAdminTxs = async (
       accounts: [],
     }
   );
-  const atc = await compose.atc();
   return atc.buildGroup().map((tx) => tx.txn);
 };
 export default clammRemoveLiquidityAdminTxs;

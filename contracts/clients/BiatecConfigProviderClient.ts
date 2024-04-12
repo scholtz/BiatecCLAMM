@@ -12,6 +12,7 @@ import type {
   AppCompilationResult,
   AppReference,
   AppState,
+  AppStorageSchema,
   CoreAppCallArgs,
   RawAppCallArgs,
   TealTemplateParams,
@@ -24,7 +25,7 @@ import type {
   ApplicationClient,
 } from '@algorandfoundation/algokit-utils/types/app-client'
 import type { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
-import type { SendTransactionResult, TransactionToSign, SendTransactionFrom } from '@algorandfoundation/algokit-utils/types/transaction'
+import type { SendTransactionResult, TransactionToSign, SendTransactionFrom, SendTransactionParams } from '@algorandfoundation/algokit-utils/types/transaction'
 import type { ABIResult, TransactionWithSigner } from 'algosdk'
 import { Algodv2, OnApplicationComplete, Transaction, AtomicTransactionComposer, modelsv2 } from 'algosdk'
 export const APP_SPEC: AppSpec = {
@@ -403,7 +404,7 @@ export type OnCompleteUpdApp =  { onCompleteAction: 'update_application' | OnApp
  */
 export type IntegerState = {
   /**
-   * Gets the state value as a BigInt 
+   * Gets the state value as a BigInt.
    */
   asBigInt(): bigint
   /**
@@ -427,6 +428,18 @@ export type BinaryState = {
 
 export type AppCreateCallTransactionResult = AppCallTransactionResult & Partial<AppCompilationResult> & AppReference
 export type AppUpdateCallTransactionResult = AppCallTransactionResult & Partial<AppCompilationResult>
+
+export type AppClientComposeCallCoreParams = Omit<AppClientCallCoreParams, 'sendParams'> & {
+  sendParams?: Omit<SendTransactionParams, 'skipSending' | 'atc' | 'skipWaiting' | 'maxRoundsToWaitForConfirmation' | 'populateAppCallResources'>
+}
+export type AppClientComposeExecuteParams = Pick<SendTransactionParams, 'skipWaiting' | 'maxRoundsToWaitForConfirmation' | 'populateAppCallResources' | 'suppressLog'>
+
+export type IncludeSchema = {
+  /**
+   * Any overrides for the storage schema to request for the created app; by default the schema indicated by the app spec is used.
+   */
+  schema?: Partial<AppStorageSchema>
+}
 
 /**
  * Defines the types of available calls and state of the BiatecConfigProvider smart contract.
@@ -543,14 +556,14 @@ export type BiatecConfigProvider = {
     }>
     & Record<'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void' | 'sendOnlineKeyRegistration', {
       argsObj: {
-        votePK: Uint8Array
-        selectionPK: Uint8Array
-        stateProofPK: Uint8Array
+        votePk: Uint8Array
+        selectionPk: Uint8Array
+        stateProofPk: Uint8Array
         voteFirst: bigint | number
         voteLast: bigint | number
         voteKeyDilution: bigint | number
       }
-      argsTuple: [votePK: Uint8Array, selectionPK: Uint8Array, stateProofPK: Uint8Array, voteFirst: bigint | number, voteLast: bigint | number, voteKeyDilution: bigint | number]
+      argsTuple: [votePk: Uint8Array, selectionPk: Uint8Array, stateProofPk: Uint8Array, voteFirst: bigint | number, voteLast: bigint | number, voteKeyDilution: bigint | number]
       returns: void
     }>
     & Record<'withdrawExcessAssets(uint64,uint64)uint64' | 'withdrawExcessAssets', {
@@ -572,15 +585,15 @@ export type BiatecConfigProvider = {
    */
   state: {
     global: {
-      'u'?: BinaryState
-      'g'?: BinaryState
-      'e'?: BinaryState
-      'ef'?: BinaryState
-      'i'?: IntegerState
-      'p'?: IntegerState
-      's'?: IntegerState
-      'f'?: BinaryState
-      'scver'?: BinaryState
+      u?: BinaryState
+      g?: BinaryState
+      e?: BinaryState
+      ef?: BinaryState
+      i?: IntegerState
+      p?: IntegerState
+      s?: IntegerState
+      f?: BinaryState
+      scver?: BinaryState
     }
   }
 }
@@ -846,7 +859,7 @@ export abstract class BiatecConfigProviderCallFactory {
   static sendOnlineKeyRegistration(args: MethodArgs<'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
     return {
       method: 'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void' as const,
-      methodArgs: Array.isArray(args) ? args : [args.votePK, args.selectionPK, args.stateProofPK, args.voteFirst, args.voteLast, args.voteKeyDilution],
+      methodArgs: Array.isArray(args) ? args : [args.votePk, args.selectionPk, args.stateProofPk, args.voteFirst, args.voteLast, args.voteKeyDilution],
       ...params,
     }
   }
@@ -927,7 +940,7 @@ export class BiatecConfigProviderClient {
    * @param params The arguments for the contract calls and any additional parameters for the call
    * @returns The deployment result
    */
-  public deploy(params: BiatecConfigProviderDeployArgs & AppClientDeployCoreParams = {}): ReturnType<ApplicationClient['deploy']> {
+  public deploy(params: BiatecConfigProviderDeployArgs & AppClientDeployCoreParams & IncludeSchema = {}): ReturnType<ApplicationClient['deploy']> {
     const createArgs = params.createCall?.(BiatecConfigProviderCallFactory.create)
     const updateArgs = params.updateCall?.(BiatecConfigProviderCallFactory.update)
     return this.appClient.deploy({
@@ -951,7 +964,7 @@ export class BiatecConfigProviderClient {
        * @param params Any additional parameters for the call
        * @returns The create result
        */
-      async createApplication(args: MethodArgs<'createApplication()void'>, params: AppClientCallCoreParams & AppClientCompilationParams & (OnCompleteNoOp) = {}) {
+      async createApplication(args: MethodArgs<'createApplication()void'>, params: AppClientCallCoreParams & AppClientCompilationParams & IncludeSchema & (OnCompleteNoOp) = {}) {
         return $this.mapReturnValue<MethodReturn<'createApplication()void'>, AppCreateCallTransactionResult>(await $this.appClient.create(BiatecConfigProviderCallFactory.create.createApplication(args, params)))
       },
     }
@@ -1215,57 +1228,57 @@ export class BiatecConfigProviderClient {
     let promiseChain:Promise<unknown> = Promise.resolve()
     const resultMappers: Array<undefined | ((x: any) => any)> = []
     return {
-      bootstrap(args: MethodArgs<'bootstrap(uint256,uint64,uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      bootstrap(args: MethodArgs<'bootstrap(uint256,uint64,uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.bootstrap(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      setAddressUdpater(args: MethodArgs<'setAddressUdpater(address)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      setAddressUdpater(args: MethodArgs<'setAddressUdpater(address)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.setAddressUdpater(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      setPaused(args: MethodArgs<'setPaused(uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      setPaused(args: MethodArgs<'setPaused(uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.setPaused(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      setAddressGov(args: MethodArgs<'setAddressGov(address)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      setAddressGov(args: MethodArgs<'setAddressGov(address)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.setAddressGov(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      setAddressExecutive(args: MethodArgs<'setAddressExecutive(address)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      setAddressExecutive(args: MethodArgs<'setAddressExecutive(address)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.setAddressExecutive(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      setAddressExecutiveFee(args: MethodArgs<'setAddressExecutiveFee(address)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      setAddressExecutiveFee(args: MethodArgs<'setAddressExecutiveFee(address)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.setAddressExecutiveFee(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      setBiatecIdentity(args: MethodArgs<'setBiatecIdentity(uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      setBiatecIdentity(args: MethodArgs<'setBiatecIdentity(uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.setBiatecIdentity(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      setBiatecPool(args: MethodArgs<'setBiatecPool(uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      setBiatecPool(args: MethodArgs<'setBiatecPool(uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.setBiatecPool(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      setBiatecFee(args: MethodArgs<'setBiatecFee(uint256)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      setBiatecFee(args: MethodArgs<'setBiatecFee(uint256)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.setBiatecFee(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      sendOnlineKeyRegistration(args: MethodArgs<'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      sendOnlineKeyRegistration(args: MethodArgs<'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.sendOnlineKeyRegistration(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      withdrawExcessAssets(args: MethodArgs<'withdrawExcessAssets(uint64,uint64)uint64'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      withdrawExcessAssets(args: MethodArgs<'withdrawExcessAssets(uint64,uint64)uint64'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.withdrawExcessAssets(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
@@ -1273,14 +1286,14 @@ export class BiatecConfigProviderClient {
       get update() {
         const $this = this
         return {
-          updateApplication(args: MethodArgs<'updateApplication(byte[])void'>, params?: AppClientCallCoreParams & AppClientCompilationParams) {
+          updateApplication(args: MethodArgs<'updateApplication(byte[])void'>, params?: AppClientComposeCallCoreParams & AppClientCompilationParams) {
             promiseChain = promiseChain.then(() => client.update.updateApplication(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
             resultMappers.push(undefined)
             return $this
           },
         }
       },
-      clearState(args?: BareCallArgs & AppClientCallCoreParams & CoreAppCallArgs) {
+      clearState(args?: BareCallArgs & AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.clearState({...args, sendParams: {...args?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
@@ -1301,9 +1314,9 @@ export class BiatecConfigProviderClient {
           returns: result.methodResults?.map((val, i) => resultMappers[i] !== undefined ? resultMappers[i]!(val.returnValue) : val.returnValue)
         }
       },
-      async execute() {
+      async execute(sendParams?: AppClientComposeExecuteParams) {
         await promiseChain
-        const result = await algokit.sendAtomicTransactionComposer({ atc, sendParams: {} }, client.algod)
+        const result = await algokit.sendAtomicTransactionComposer({ atc, sendParams }, client.algod)
         return {
           ...result,
           returns: result.returns?.map((val, i) => resultMappers[i] !== undefined ? resultMappers[i]!(val.returnValue) : val.returnValue)
@@ -1322,7 +1335,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  bootstrap(args: MethodArgs<'bootstrap(uint256,uint64,uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'bootstrap(uint256,uint64,uint64)void'>]>
+  bootstrap(args: MethodArgs<'bootstrap(uint256,uint64,uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'bootstrap(uint256,uint64,uint64)void'>]>
 
   /**
    * Calls the setAddressUdpater(address)void ABI method.
@@ -1333,7 +1346,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setAddressUdpater(args: MethodArgs<'setAddressUdpater(address)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setAddressUdpater(address)void'>]>
+  setAddressUdpater(args: MethodArgs<'setAddressUdpater(address)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setAddressUdpater(address)void'>]>
 
   /**
    * Calls the setPaused(uint64)void ABI method.
@@ -1344,7 +1357,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setPaused(args: MethodArgs<'setPaused(uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setPaused(uint64)void'>]>
+  setPaused(args: MethodArgs<'setPaused(uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setPaused(uint64)void'>]>
 
   /**
    * Calls the setAddressGov(address)void ABI method.
@@ -1355,7 +1368,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setAddressGov(args: MethodArgs<'setAddressGov(address)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setAddressGov(address)void'>]>
+  setAddressGov(args: MethodArgs<'setAddressGov(address)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setAddressGov(address)void'>]>
 
   /**
    * Calls the setAddressExecutive(address)void ABI method.
@@ -1366,7 +1379,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setAddressExecutive(args: MethodArgs<'setAddressExecutive(address)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setAddressExecutive(address)void'>]>
+  setAddressExecutive(args: MethodArgs<'setAddressExecutive(address)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setAddressExecutive(address)void'>]>
 
   /**
    * Calls the setAddressExecutiveFee(address)void ABI method.
@@ -1377,7 +1390,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setAddressExecutiveFee(args: MethodArgs<'setAddressExecutiveFee(address)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setAddressExecutiveFee(address)void'>]>
+  setAddressExecutiveFee(args: MethodArgs<'setAddressExecutiveFee(address)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setAddressExecutiveFee(address)void'>]>
 
   /**
    * Calls the setBiatecIdentity(uint64)void ABI method.
@@ -1388,7 +1401,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setBiatecIdentity(args: MethodArgs<'setBiatecIdentity(uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setBiatecIdentity(uint64)void'>]>
+  setBiatecIdentity(args: MethodArgs<'setBiatecIdentity(uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setBiatecIdentity(uint64)void'>]>
 
   /**
    * Calls the setBiatecPool(uint64)void ABI method.
@@ -1399,7 +1412,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setBiatecPool(args: MethodArgs<'setBiatecPool(uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setBiatecPool(uint64)void'>]>
+  setBiatecPool(args: MethodArgs<'setBiatecPool(uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setBiatecPool(uint64)void'>]>
 
   /**
    * Calls the setBiatecFee(uint256)void ABI method.
@@ -1410,7 +1423,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setBiatecFee(args: MethodArgs<'setBiatecFee(uint256)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setBiatecFee(uint256)void'>]>
+  setBiatecFee(args: MethodArgs<'setBiatecFee(uint256)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'setBiatecFee(uint256)void'>]>
 
   /**
    * Calls the sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void ABI method.
@@ -1421,7 +1434,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  sendOnlineKeyRegistration(args: MethodArgs<'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'>]>
+  sendOnlineKeyRegistration(args: MethodArgs<'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'>]>
 
   /**
    * Calls the withdrawExcessAssets(uint64,uint64)uint64 ABI method.
@@ -1432,7 +1445,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  withdrawExcessAssets(args: MethodArgs<'withdrawExcessAssets(uint64,uint64)uint64'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'withdrawExcessAssets(uint64,uint64)uint64'>]>
+  withdrawExcessAssets(args: MethodArgs<'withdrawExcessAssets(uint64,uint64)uint64'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'withdrawExcessAssets(uint64,uint64)uint64'>]>
 
   /**
    * Gets available update methods
@@ -1445,7 +1458,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
      * @param params Any additional parameters for the call
      * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
      */
-    updateApplication(args: MethodArgs<'updateApplication(byte[])void'>, params?: AppClientCallCoreParams & AppClientCompilationParams): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'updateApplication(byte[])void'>]>
+    updateApplication(args: MethodArgs<'updateApplication(byte[])void'>, params?: AppClientComposeCallCoreParams & AppClientCompilationParams): BiatecConfigProviderComposer<[...TReturns, MethodReturn<'updateApplication(byte[])void'>]>
   }
 
   /**
@@ -1454,7 +1467,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param args The arguments for the bare call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  clearState(args?: BareCallArgs & AppClientCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, undefined]>
+  clearState(args?: BareCallArgs & AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecConfigProviderComposer<[...TReturns, undefined]>
 
   /**
    * Adds a transaction to the composer
@@ -1474,7 +1487,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
   /**
    * Executes the transaction group and returns the results
    */
-  execute(): Promise<BiatecConfigProviderComposerResults<TReturns>>
+  execute(sendParams?: AppClientComposeExecuteParams): Promise<BiatecConfigProviderComposerResults<TReturns>>
 }
 export type SimulateOptions = Omit<ConstructorParameters<typeof modelsv2.SimulateRequest>[0], 'txnGroups'>
 export type BiatecConfigProviderComposerSimulateResult<TReturns extends [...any[]]> = {

@@ -84,6 +84,13 @@ const setupPool = async (input: ISetup) => {
   await clientBiatecConfigProvider.create.createApplication({});
   await clientBiatecIdentityProvider.create.createApplication({});
   await clientBiatecPoolProvider.create.createApplication({});
+
+  // by calling clammCreateSender the clientBiatecClammPool.appClient.ref is not filled in
+  // await clammCreateSender({
+  //   algod,
+  //   clientBiatecClammPool,
+  //   account: signer,
+  // });
   await clientBiatecClammPool.create.createApplication({});
 
   const refBiatecConfigProvider = await clientBiatecConfigProvider.appClient.getAppReference();
@@ -309,14 +316,14 @@ describe('clamm', () => {
             priceMax: BigInt(t.P2 * SCALE),
             priceMaxSqrt: BigInt(Math.sqrt(t.P2) * SCALE),
           });
-          const D_SQRT = dSqrtRet.return?.valueOf();
-          if (!D_SQRT) throw Error('D_SQRT is expected here');
+          const dSqrt = dSqrtRet.return?.valueOf();
+          if (!dSqrt) throw Error('dSqrt is expected here');
           const L = await clientBiatecClammPool.calculateLiquidityWithD({
             x: BigInt(t.x * SCALE),
             y: BigInt(t.x * SCALE),
             priceMinSqrt: BigInt(Math.sqrt(t.P1) * SCALE),
             priceMaxSqrt: BigInt(Math.sqrt(t.P2) * SCALE),
-            D_SQRT,
+            dSqrt,
           });
           const l = L.return?.valueOf();
           expect(l).toBeGreaterThan(0);
@@ -342,11 +349,11 @@ describe('clamm', () => {
     try {
       const { algod } = fixture.context;
       const testSet = [
-        { x: 0.1, y: 0.1, P: 1, P1: 0.9999, P2: 1.0001, D_SQRT: 0.2, L: 2000.039996799 },
-        { x: 0.2, y: 0, P1: 1, P2: 1.5625, D_SQRT: 0.2, L: 1 },
-        { x: 2, y: 0, P: 1, P1: 1, P2: 1.5625, D_SQRT: 2, L: 10 },
-        { x: 0, y: 0.25, P: 1.5625, P1: 1, P2: 1.5625, D_SQRT: 0.2, L: 1 },
-        { x: 0.00000001, y: 0, P: 1, P1: 1, P2: 1.5625, D_SQRT: 0, L: 0.000000025 },
+        { x: 0.1, y: 0.1, P: 1, P1: 0.9999, P2: 1.0001, dSqrt: 0.2, L: 2000.039996799 },
+        { x: 0.2, y: 0, P1: 1, P2: 1.5625, dSqrt: 0.2, L: 1 },
+        { x: 2, y: 0, P: 1, P1: 1, P2: 1.5625, dSqrt: 2, L: 10 },
+        { x: 0, y: 0.25, P: 1.5625, P1: 1, P2: 1.5625, dSqrt: 0.2, L: 1 },
+        { x: 0.00000001, y: 0, P: 1, P1: 1, P2: 1.5625, dSqrt: 0, L: 0.000000025 },
       ];
 
       // eslint-disable-next-line no-restricted-syntax
@@ -370,15 +377,15 @@ describe('clamm', () => {
           priceMax: BigInt(t.P2 * SCALE),
           priceMaxSqrt: BigInt(Math.round(Math.sqrt(t.P2) * SCALE)),
         });
-        const D_SQRT = dSqrtRet.return?.valueOf();
-        expect(D_SQRT).toBe(BigInt(t.D_SQRT * SCALE));
-        if (D_SQRT === undefined) throw Error('D_SQRT is expected here');
+        const dSqrt = dSqrtRet.return?.valueOf();
+        expect(dSqrt).toBe(BigInt(t.dSqrt * SCALE));
+        if (dSqrt === undefined) throw Error('dSqrt is expected here');
         const result = await clientBiatecClammPool.calculateLiquidityWithD({
           x: BigInt(Math.round(t.x * SCALE)),
           y: BigInt(Math.round(t.y * SCALE)),
           priceMinSqrt: BigInt(Math.round(Math.sqrt(t.P1) * SCALE)),
           priceMaxSqrt: BigInt(Math.round(Math.sqrt(t.P2) * SCALE)),
-          D_SQRT,
+          dSqrt,
         });
         expect(result?.return?.valueOf()).toEqual(BigInt(t.L * SCALE));
       }
@@ -629,7 +636,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidityA,
           txAssetBDeposit: addLiquidityB,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -714,7 +721,7 @@ describe('clamm', () => {
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
             txAssetADeposit: addLiquidityA,
             txAssetBDeposit: addLiquidityB,
-            assetLP: poolTokenId,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
           },
@@ -747,7 +754,7 @@ describe('clamm', () => {
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
             txAssetADeposit: addLiquidityA2,
             txAssetBDeposit: addLiquidityB2,
-            assetLP: poolTokenId,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
           },
@@ -835,7 +842,7 @@ describe('clamm', () => {
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
             txAssetADeposit: addLiquidityA,
             txAssetBDeposit: addLiquidityB,
-            assetLP: poolTokenId,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
           },
@@ -963,7 +970,7 @@ describe('clamm', () => {
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
             txAssetADeposit: addLiquidityA,
             txAssetBDeposit: addLiquidityB,
-            assetLP: poolTokenId,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
           },
@@ -1098,7 +1105,7 @@ describe('clamm', () => {
             appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
             txAssetADeposit: addLiquidityA,
             txAssetBDeposit: addLiquidityB,
-            assetLP: poolTokenId,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
           },
@@ -1120,8 +1127,8 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: refBiatecConfigProvider.appId,
             appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
-            txLPXfer: removeLiquidityLP,
-            assetLP: poolTokenId,
+            txLpXfer: removeLiquidityLP,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
           },
@@ -1295,7 +1302,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -1324,7 +1331,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidityA,
           txAssetBDeposit: addLiquidityB,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -1341,7 +1348,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -1396,7 +1403,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -1418,8 +1425,8 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: refBiatecConfigProvider.appId,
             appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
-            txLPXfer: removeLiquidityLP,
-            assetLP: poolTokenId,
+            txLpXfer: removeLiquidityLP,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
           },
@@ -1435,7 +1442,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -1610,7 +1617,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -1639,7 +1646,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidityA,
           txAssetBDeposit: addLiquidityB,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -1656,7 +1663,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -1711,7 +1718,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -1733,8 +1740,8 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: refBiatecConfigProvider.appId,
             appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
-            txLPXfer: removeLiquidityLP,
-            assetLP: poolTokenId,
+            txLpXfer: removeLiquidityLP,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
           },
@@ -1750,7 +1757,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -2151,7 +2158,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -2180,7 +2187,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidityA,
           txAssetBDeposit: addLiquidityB,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -2192,7 +2199,7 @@ describe('clamm', () => {
         expect(ret?.valueOf()).toEqual(BigInt(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS));
 
         const distributed1 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
@@ -2202,7 +2209,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -2258,7 +2265,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -2300,7 +2307,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidity2A,
           txAssetBDeposit: addLiquidity2B,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -2312,7 +2319,7 @@ describe('clamm', () => {
         expect(ret2?.valueOf()).toEqual(BigInt(t.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS));
 
         const distributed2 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed2.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed2 * SCALE)));
@@ -2323,7 +2330,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -2374,7 +2381,7 @@ describe('clamm', () => {
         expect(retSwap2?.valueOf()).toEqual(BigInt(Math.round(t.swap2A * SCALE_A)));
 
         const distributed3 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed3.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed3 * SCALE)));
@@ -2385,7 +2392,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -2431,8 +2438,8 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: refBiatecConfigProvider.appId,
             appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
-            txLPXfer: removeLiquidityLP,
-            assetLP: poolTokenId,
+            txLpXfer: removeLiquidityLP,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
           },
@@ -2448,7 +2455,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -2623,7 +2630,7 @@ describe('clamm', () => {
               assetA: t.assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -2668,7 +2675,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidityA,
           txAssetBDeposit: addLiquidityB,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: t.assetAId,
           assetB: assetBId,
         };
@@ -2685,7 +2692,7 @@ describe('clamm', () => {
               assetA: t.assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -2748,7 +2755,7 @@ describe('clamm', () => {
               assetA: t.assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -2770,8 +2777,8 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: refBiatecConfigProvider.appId,
             appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
-            txLPXfer: removeLiquidityLP,
-            assetLP: poolTokenId,
+            txLpXfer: removeLiquidityLP,
+            assetLp: poolTokenId,
             assetA: t.assetAId,
             assetB: assetBId,
           },
@@ -2787,7 +2794,7 @@ describe('clamm', () => {
               assetA: t.assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -3036,7 +3043,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -3065,7 +3072,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidityA,
           txAssetBDeposit: addLiquidityB,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -3077,7 +3084,7 @@ describe('clamm', () => {
         expect(ret?.valueOf()).toEqual(BigInt(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS));
 
         const distributed1 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
@@ -3087,7 +3094,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -3143,7 +3150,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -3158,7 +3165,7 @@ describe('clamm', () => {
         const liqudidtyRemoveResult1 = await clientBiatecClammPool.removeLiquidityAdmin(
           {
             appBiatecConfigProvider: refBiatecConfigProvider.appId,
-            assetLP: poolTokenId,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
             amount: t.removeFromBiatecFees1,
@@ -3175,7 +3182,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -3205,7 +3212,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidity2A,
           txAssetBDeposit: addLiquidity2B,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -3222,7 +3229,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -3278,7 +3285,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -3293,7 +3300,7 @@ describe('clamm', () => {
         const liqudidtyRemoveResult2 = await clientBiatecClammPool.removeLiquidityAdmin(
           {
             appBiatecConfigProvider: refBiatecConfigProvider.appId,
-            assetLP: poolTokenId,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
             amount: t.removeFromBiatecFees2,
@@ -3310,7 +3317,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -3536,7 +3543,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -3565,7 +3572,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidityA,
           txAssetBDeposit: addLiquidityB,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -3577,7 +3584,7 @@ describe('clamm', () => {
         expect(ret?.valueOf()).toEqual(BigInt(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS));
 
         const distributed1 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
@@ -3587,7 +3594,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -3638,7 +3645,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -4055,7 +4062,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -4084,7 +4091,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidityA,
           txAssetBDeposit: addLiquidityB,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -4096,7 +4103,7 @@ describe('clamm', () => {
         expect(ret?.valueOf()).toEqual(BigInt(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS));
 
         const distributed1 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
@@ -4106,7 +4113,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -4162,7 +4169,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -4204,7 +4211,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidity2A,
           txAssetBDeposit: addLiquidity2B,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -4216,7 +4223,7 @@ describe('clamm', () => {
         expect(ret2?.valueOf()).toEqual(BigInt(t.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS));
 
         const distributed2 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed2.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed2 * SCALE)));
@@ -4227,7 +4234,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -4278,7 +4285,7 @@ describe('clamm', () => {
         expect(retSwap2?.valueOf()).toEqual(BigInt(Math.round(t.swap2A * SCALE_A)));
 
         const distributed3 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed3.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed3 * SCALE)));
@@ -4289,7 +4296,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -4336,8 +4343,8 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: refBiatecConfigProvider.appId,
             appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
-            txLPXfer: removeLiquidityLP,
-            assetLP: poolTokenId,
+            txLpXfer: removeLiquidityLP,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
           },
@@ -4353,7 +4360,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -4753,7 +4760,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -4782,7 +4789,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidityA,
           txAssetBDeposit: addLiquidityB,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -4794,7 +4801,7 @@ describe('clamm', () => {
         expect(ret?.valueOf()).toEqual(BigInt(Math.round(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS)));
 
         const distributed1 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
@@ -4804,7 +4811,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -4860,7 +4867,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -4903,7 +4910,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidity2A,
           txAssetBDeposit: addLiquidity2B,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -4915,7 +4922,7 @@ describe('clamm', () => {
         expect(ret2?.valueOf()).toEqual(BigInt(t.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS));
 
         const distributed2 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed2.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed2 * SCALE)));
@@ -4926,7 +4933,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -4977,7 +4984,7 @@ describe('clamm', () => {
         expect(retSwap2?.valueOf()).toEqual(BigInt(Math.round(t.swap2A * SCALE_A)));
 
         const distributed3 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed3.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed3 * SCALE)));
@@ -4988,7 +4995,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -5034,8 +5041,8 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: refBiatecConfigProvider.appId,
             appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
-            txLPXfer: removeLiquidityLP,
-            assetLP: poolTokenId,
+            txLpXfer: removeLiquidityLP,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
           },
@@ -5051,7 +5058,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -5779,7 +5786,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -5808,7 +5815,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidityA,
           txAssetBDeposit: addLiquidityB,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -5820,7 +5827,7 @@ describe('clamm', () => {
         expect(ret?.valueOf()).toEqual(BigInt(Math.round(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS)));
 
         const distributed1 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
@@ -5830,7 +5837,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -5886,7 +5893,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -5929,7 +5936,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidity2A,
           txAssetBDeposit: addLiquidity2B,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -5941,7 +5948,7 @@ describe('clamm', () => {
         expect(ret2?.valueOf()).toEqual(BigInt(t.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS));
 
         const distributed2 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed2.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed2 * SCALE)));
@@ -5952,7 +5959,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -6003,7 +6010,7 @@ describe('clamm', () => {
         expect(retSwap2?.valueOf()).toEqual(BigInt(Math.round(t.swap2A * SCALE_A)));
 
         const distributed3 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed3.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed3 * SCALE)));
@@ -6014,7 +6021,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -6061,8 +6068,8 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: refBiatecConfigProvider.appId,
             appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
-            txLPXfer: removeLiquidityLP,
-            assetLP: poolTokenId,
+            txLpXfer: removeLiquidityLP,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
           },
@@ -6078,7 +6085,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -6474,7 +6481,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -6503,7 +6510,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidityA,
           txAssetBDeposit: addLiquidityB,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -6515,7 +6522,7 @@ describe('clamm', () => {
         expect(ret?.valueOf()).toEqual(BigInt(Math.round(t.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS)));
 
         const distributed1 = await clientBiatecClammPool.calculateDistributedLiquidity({
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           currentDeposit: 0,
         });
         expect(distributed1.return?.valueOf()).toEqual(BigInt(Math.round(t.checkDistributed1 * SCALE)));
@@ -6525,7 +6532,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -6581,7 +6588,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -6624,7 +6631,7 @@ describe('clamm', () => {
           appBiatecIdentityProvider: BigInt(refBiatecIdentityProvider.appId),
           txAssetADeposit: addLiquidity2A,
           txAssetBDeposit: addLiquidity2B,
-          assetLP: poolTokenId,
+          assetLp: poolTokenId,
           assetA: assetAId,
           assetB: assetBId,
         };
@@ -6638,7 +6645,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -6694,7 +6701,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );
@@ -6741,8 +6748,8 @@ describe('clamm', () => {
           {
             appBiatecConfigProvider: refBiatecConfigProvider.appId,
             appBiatecIdentityProvider: refBiatecIdentityProvider.appId,
-            txLPXfer: removeLiquidityLP,
-            assetLP: poolTokenId,
+            txLpXfer: removeLiquidityLP,
+            assetLp: poolTokenId,
             assetA: assetAId,
             assetB: assetBId,
           },
@@ -6758,7 +6765,7 @@ describe('clamm', () => {
               assetA: assetAId,
               assetB: assetBId,
               appBiatecConfigProvider: refBiatecConfigProvider.appId,
-              assetLP: poolTokenId,
+              assetLp: poolTokenId,
             })
           ).return
         );

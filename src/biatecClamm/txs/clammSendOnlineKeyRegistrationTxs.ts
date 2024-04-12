@@ -1,4 +1,4 @@
-import algosdk, { SuggestedParams } from 'algosdk';
+import algosdk, { AtomicTransactionComposer, SuggestedParams } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
@@ -23,12 +23,13 @@ const clammSendOnlineKeyRegistrationTxs = async (
   const { clientBiatecClammPool, account, appBiatecConfigProvider, keyregParams } = input;
   // [Uint8Array, Uint8Array, Uint8Array, number | bigint, number | bigint, number | bigint]
   // [Uint8Array, Uint8Array, Uint8Array, number | bigint, number | bigint, number | bigint]
-  const compose = clientBiatecClammPool.compose().sendOnlineKeyRegistration(
+  const atc = new AtomicTransactionComposer();
+  await clientBiatecClammPool.sendOnlineKeyRegistration(
     {
       appBiatecConfigProvider,
-      votePK: keyregParams.votePK,
-      selectionPK: keyregParams.selectionPK,
-      stateProofPK: keyregParams.stateProofPK,
+      votePk: keyregParams.votePk,
+      selectionPk: keyregParams.selectionPk,
+      stateProofPk: keyregParams.stateProofPk,
       voteFirst: keyregParams.voteFirst,
       voteLast: keyregParams.voteLast,
       voteKeyDilution: keyregParams.voteKeyDilution,
@@ -42,7 +43,6 @@ const clammSendOnlineKeyRegistrationTxs = async (
       accounts: [],
     }
   );
-  const atc = await compose.atc();
   return atc.buildGroup().map((tx) => tx.txn);
 };
 export default clammSendOnlineKeyRegistrationTxs;

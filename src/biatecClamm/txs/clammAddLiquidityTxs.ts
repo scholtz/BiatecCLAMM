@@ -1,4 +1,4 @@
-import algosdk, { SuggestedParams } from 'algosdk';
+import algosdk, { AtomicTransactionComposer, SuggestedParams } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
@@ -12,7 +12,7 @@ interface IClammBootstrapTxsInput {
   appBiatecIdentityProvider: bigint;
   assetA: bigint;
   assetB: bigint;
-  assetLP: bigint;
+  assetLp: bigint;
   assetADeposit: bigint;
   assetBDeposit: bigint;
 }
@@ -29,7 +29,7 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
     appBiatecIdentityProvider,
     assetA,
     assetB,
-    assetLP,
+    assetLp,
     assetADeposit,
     assetBDeposit,
   } = input;
@@ -70,7 +70,9 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
       to: clammRef.appAddress,
     });
   }
-  const compose = clientBiatecClammPool.compose().addLiquidity(
+  const atc = new AtomicTransactionComposer();
+
+  await clientBiatecClammPool.addLiquidity(
     {
       appBiatecConfigProvider,
       appBiatecIdentityProvider,
@@ -78,19 +80,19 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
       txAssetBDeposit,
       assetA,
       assetB,
-      assetLP,
+      assetLp,
     },
     {
       sender: account,
       sendParams: {
         fee: algokit.microAlgos(4000),
+        atc,
       },
       boxes: [],
       assets: [Number(assetA), Number(assetB)],
       accounts: [],
     }
   );
-  const atc = await compose.atc();
   return atc.buildGroup().map((tx) => tx.txn);
 };
 export default clammAddLiquidityTxs;

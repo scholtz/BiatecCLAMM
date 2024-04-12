@@ -12,6 +12,7 @@ import type {
   AppCompilationResult,
   AppReference,
   AppState,
+  AppStorageSchema,
   CoreAppCallArgs,
   RawAppCallArgs,
   TealTemplateParams,
@@ -24,7 +25,7 @@ import type {
   ApplicationClient,
 } from '@algorandfoundation/algokit-utils/types/app-client'
 import type { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
-import type { SendTransactionResult, TransactionToSign, SendTransactionFrom } from '@algorandfoundation/algokit-utils/types/transaction'
+import type { SendTransactionResult, TransactionToSign, SendTransactionFrom, SendTransactionParams } from '@algorandfoundation/algokit-utils/types/transaction'
 import type { ABIResult, TransactionWithSigner } from 'algosdk'
 import { Algodv2, OnApplicationComplete, Transaction, AtomicTransactionComposer, modelsv2 } from 'algosdk'
 export const APP_SPEC: AppSpec = {
@@ -307,7 +308,7 @@ export type OnCompleteUpdApp =  { onCompleteAction: 'update_application' | OnApp
  */
 export type IntegerState = {
   /**
-   * Gets the state value as a BigInt 
+   * Gets the state value as a BigInt.
    */
   asBigInt(): bigint
   /**
@@ -331,6 +332,18 @@ export type BinaryState = {
 
 export type AppCreateCallTransactionResult = AppCallTransactionResult & Partial<AppCompilationResult> & AppReference
 export type AppUpdateCallTransactionResult = AppCallTransactionResult & Partial<AppCompilationResult>
+
+export type AppClientComposeCallCoreParams = Omit<AppClientCallCoreParams, 'sendParams'> & {
+  sendParams?: Omit<SendTransactionParams, 'skipSending' | 'atc' | 'skipWaiting' | 'maxRoundsToWaitForConfirmation' | 'populateAppCallResources'>
+}
+export type AppClientComposeExecuteParams = Pick<SendTransactionParams, 'skipWaiting' | 'maxRoundsToWaitForConfirmation' | 'populateAppCallResources' | 'suppressLog'>
+
+export type IncludeSchema = {
+  /**
+   * Any overrides for the storage schema to request for the created app; by default the schema indicated by the app spec is used.
+   */
+  schema?: Partial<AppStorageSchema>
+}
 
 /**
  * Defines the types of available calls and state of the BiatecIdentityProvider smart contract.
@@ -383,14 +396,14 @@ export type BiatecIdentityProvider = {
     & Record<'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void' | 'sendOnlineKeyRegistration', {
       argsObj: {
         appBiatecConfigProvider: bigint | number
-        votePK: Uint8Array
-        selectionPK: Uint8Array
-        stateProofPK: Uint8Array
+        votePk: Uint8Array
+        selectionPk: Uint8Array
+        stateProofPk: Uint8Array
         voteFirst: bigint | number
         voteLast: bigint | number
         voteKeyDilution: bigint | number
       }
-      argsTuple: [appBiatecConfigProvider: bigint | number, votePK: Uint8Array, selectionPK: Uint8Array, stateProofPK: Uint8Array, voteFirst: bigint | number, voteLast: bigint | number, voteKeyDilution: bigint | number]
+      argsTuple: [appBiatecConfigProvider: bigint | number, votePk: Uint8Array, selectionPk: Uint8Array, stateProofPk: Uint8Array, voteFirst: bigint | number, voteLast: bigint | number, voteKeyDilution: bigint | number]
       returns: void
     }>
     & Record<'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)' | 'getUser', {
@@ -430,11 +443,11 @@ export type BiatecIdentityProvider = {
    */
   state: {
     global: {
-      'g'?: BinaryState
-      'v'?: BinaryState
-      'e'?: BinaryState
-      'B'?: IntegerState
-      'scver'?: BinaryState
+      g?: BinaryState
+      v?: BinaryState
+      e?: BinaryState
+      b?: IntegerState
+      scver?: BinaryState
     }
   }
 }
@@ -600,7 +613,7 @@ export abstract class BiatecIdentityProviderCallFactory {
   static sendOnlineKeyRegistration(args: MethodArgs<'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
     return {
       method: 'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void' as const,
-      methodArgs: Array.isArray(args) ? args : [args.appBiatecConfigProvider, args.votePK, args.selectionPK, args.stateProofPK, args.voteFirst, args.voteLast, args.voteKeyDilution],
+      methodArgs: Array.isArray(args) ? args : [args.appBiatecConfigProvider, args.votePk, args.selectionPk, args.stateProofPk, args.voteFirst, args.voteLast, args.voteKeyDilution],
       ...params,
     }
   }
@@ -697,7 +710,7 @@ export class BiatecIdentityProviderClient {
    * @param params The arguments for the contract calls and any additional parameters for the call
    * @returns The deployment result
    */
-  public deploy(params: BiatecIdentityProviderDeployArgs & AppClientDeployCoreParams = {}): ReturnType<ApplicationClient['deploy']> {
+  public deploy(params: BiatecIdentityProviderDeployArgs & AppClientDeployCoreParams & IncludeSchema = {}): ReturnType<ApplicationClient['deploy']> {
     const createArgs = params.createCall?.(BiatecIdentityProviderCallFactory.create)
     const updateArgs = params.updateCall?.(BiatecIdentityProviderCallFactory.update)
     return this.appClient.deploy({
@@ -721,7 +734,7 @@ export class BiatecIdentityProviderClient {
        * @param params Any additional parameters for the call
        * @returns The create result
        */
-      async createApplication(args: MethodArgs<'createApplication()void'>, params: AppClientCallCoreParams & AppClientCompilationParams & (OnCompleteNoOp) = {}) {
+      async createApplication(args: MethodArgs<'createApplication()void'>, params: AppClientCallCoreParams & AppClientCompilationParams & IncludeSchema & (OnCompleteNoOp) = {}) {
         return $this.mapReturnValue<MethodReturn<'createApplication()void'>, AppCreateCallTransactionResult>(await $this.appClient.create(BiatecIdentityProviderCallFactory.create.createApplication(args, params)))
       },
     }
@@ -889,7 +902,7 @@ export class BiatecIdentityProviderClient {
       get e() {
         return BiatecIdentityProviderClient.getBinaryState(state, 'e')
       },
-      get B() {
+      get b() {
         return BiatecIdentityProviderClient.getIntegerState(state, 'B')
       },
       get scver() {
@@ -904,32 +917,32 @@ export class BiatecIdentityProviderClient {
     let promiseChain:Promise<unknown> = Promise.resolve()
     const resultMappers: Array<undefined | ((x: any) => any)> = []
     return {
-      bootstrap(args: MethodArgs<'bootstrap(uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      bootstrap(args: MethodArgs<'bootstrap(uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.bootstrap(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      selfRegistration(args: MethodArgs<'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      selfRegistration(args: MethodArgs<'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.selfRegistration(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      setInfo(args: MethodArgs<'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      setInfo(args: MethodArgs<'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.setInfo(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      sendOnlineKeyRegistration(args: MethodArgs<'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      sendOnlineKeyRegistration(args: MethodArgs<'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.sendOnlineKeyRegistration(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      getUser(args: MethodArgs<'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      getUser(args: MethodArgs<'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.getUser(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      withdrawExcessAssets(args: MethodArgs<'withdrawExcessAssets(uint64,uint64,uint64)uint64'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+      withdrawExcessAssets(args: MethodArgs<'withdrawExcessAssets(uint64,uint64,uint64)uint64'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.withdrawExcessAssets(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
@@ -937,14 +950,14 @@ export class BiatecIdentityProviderClient {
       get update() {
         const $this = this
         return {
-          updateApplication(args: MethodArgs<'updateApplication(uint64,byte[])void'>, params?: AppClientCallCoreParams & AppClientCompilationParams) {
+          updateApplication(args: MethodArgs<'updateApplication(uint64,byte[])void'>, params?: AppClientComposeCallCoreParams & AppClientCompilationParams) {
             promiseChain = promiseChain.then(() => client.update.updateApplication(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
             resultMappers.push(undefined)
             return $this
           },
         }
       },
-      clearState(args?: BareCallArgs & AppClientCallCoreParams & CoreAppCallArgs) {
+      clearState(args?: BareCallArgs & AppClientComposeCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.clearState({...args, sendParams: {...args?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
@@ -965,9 +978,9 @@ export class BiatecIdentityProviderClient {
           returns: result.methodResults?.map((val, i) => resultMappers[i] !== undefined ? resultMappers[i]!(val.returnValue) : val.returnValue)
         }
       },
-      async execute() {
+      async execute(sendParams?: AppClientComposeExecuteParams) {
         await promiseChain
-        const result = await algokit.sendAtomicTransactionComposer({ atc, sendParams: {} }, client.algod)
+        const result = await algokit.sendAtomicTransactionComposer({ atc, sendParams }, client.algod)
         return {
           ...result,
           returns: result.returns?.map((val, i) => resultMappers[i] !== undefined ? resultMappers[i]!(val.returnValue) : val.returnValue)
@@ -986,7 +999,7 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  bootstrap(args: MethodArgs<'bootstrap(uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'bootstrap(uint64)void'>]>
+  bootstrap(args: MethodArgs<'bootstrap(uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'bootstrap(uint64)void'>]>
 
   /**
    * Calls the selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void ABI method.
@@ -995,7 +1008,7 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  selfRegistration(args: MethodArgs<'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>]>
+  selfRegistration(args: MethodArgs<'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>]>
 
   /**
    * Calls the setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void ABI method.
@@ -1004,7 +1017,7 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setInfo(args: MethodArgs<'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>]>
+  setInfo(args: MethodArgs<'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'>]>
 
   /**
    * Calls the sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void ABI method.
@@ -1015,7 +1028,7 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  sendOnlineKeyRegistration(args: MethodArgs<'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'>]>
+  sendOnlineKeyRegistration(args: MethodArgs<'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'>]>
 
   /**
    * Calls the getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool) ABI method.
@@ -1026,7 +1039,7 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  getUser(args: MethodArgs<'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'>]>
+  getUser(args: MethodArgs<'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'getUser(address,uint8)(uint8,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'>]>
 
   /**
    * Calls the withdrawExcessAssets(uint64,uint64,uint64)uint64 ABI method.
@@ -1037,7 +1050,7 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  withdrawExcessAssets(args: MethodArgs<'withdrawExcessAssets(uint64,uint64,uint64)uint64'>, params?: AppClientCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'withdrawExcessAssets(uint64,uint64,uint64)uint64'>]>
+  withdrawExcessAssets(args: MethodArgs<'withdrawExcessAssets(uint64,uint64,uint64)uint64'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'withdrawExcessAssets(uint64,uint64,uint64)uint64'>]>
 
   /**
    * Gets available update methods
@@ -1050,7 +1063,7 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
      * @param params Any additional parameters for the call
      * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
      */
-    updateApplication(args: MethodArgs<'updateApplication(uint64,byte[])void'>, params?: AppClientCallCoreParams & AppClientCompilationParams): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'updateApplication(uint64,byte[])void'>]>
+    updateApplication(args: MethodArgs<'updateApplication(uint64,byte[])void'>, params?: AppClientComposeCallCoreParams & AppClientCompilationParams): BiatecIdentityProviderComposer<[...TReturns, MethodReturn<'updateApplication(uint64,byte[])void'>]>
   }
 
   /**
@@ -1059,7 +1072,7 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * @param args The arguments for the bare call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  clearState(args?: BareCallArgs & AppClientCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, undefined]>
+  clearState(args?: BareCallArgs & AppClientComposeCallCoreParams & CoreAppCallArgs): BiatecIdentityProviderComposer<[...TReturns, undefined]>
 
   /**
    * Adds a transaction to the composer
@@ -1079,7 +1092,7 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
   /**
    * Executes the transaction group and returns the results
    */
-  execute(): Promise<BiatecIdentityProviderComposerResults<TReturns>>
+  execute(sendParams?: AppClientComposeExecuteParams): Promise<BiatecIdentityProviderComposerResults<TReturns>>
 }
 export type SimulateOptions = Omit<ConstructorParameters<typeof modelsv2.SimulateRequest>[0], 'txnGroups'>
 export type BiatecIdentityProviderComposerSimulateResult<TReturns extends [...any[]]> = {

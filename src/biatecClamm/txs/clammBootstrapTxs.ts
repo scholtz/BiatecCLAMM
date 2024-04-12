@@ -1,4 +1,4 @@
-import algosdk, { SuggestedParams, assignGroupID } from 'algosdk';
+import algosdk, { AtomicTransactionComposer, SuggestedParams, assignGroupID } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
@@ -62,7 +62,8 @@ const clammBootstrapTxs = async (input: IClammBootstrapTxsInput): Promise<algosd
     includingAssetBoxes: true,
   });
   // console.debug('boxes', boxes, Buffer.from(boxes[0].name).toString('hex'), Buffer.from(boxes[1].name).toString('hex'));
-  const compose = clientBiatecClammPool.compose().bootstrap(
+  const atc = new AtomicTransactionComposer();
+  await clientBiatecClammPool.bootstrap(
     {
       assetA,
       assetB,
@@ -79,6 +80,7 @@ const clammBootstrapTxs = async (input: IClammBootstrapTxsInput): Promise<algosd
       sender: account,
       sendParams: {
         fee: algokit.microAlgos(5000),
+        atc,
       },
       boxes,
       apps: [Number(appBiatecConfigProvider), Number(appBiatecPoolProvider)],
@@ -87,7 +89,6 @@ const clammBootstrapTxs = async (input: IClammBootstrapTxsInput): Promise<algosd
     }
   );
 
-  const atc = await compose.atc();
   const ret = [fillInPoolProviderMBR, ...atc.buildGroup().map((tx) => tx.txn)].map((tx: algosdk.Transaction) => {
     // eslint-disable-next-line no-param-reassign
     tx.group = undefined;

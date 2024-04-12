@@ -109,7 +109,7 @@ updateApplication:
 	// contracts\BiatecClammPool.algo.ts:229
 	// assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG')
 	frame_dig -1 // appBiatecConfigProvider: AppID
-	byte 0x42 // "B"
+	byte 0x6263 // "bc"
 	app_global_get
 	==
 
@@ -204,7 +204,7 @@ getLPTokenId:
 	proto 0 1
 
 	// contracts\BiatecClammPool.algo.ts:247
-	// return this.assetLP.value;
+	// return this.assetLp.value;
 	byte 0x6c70 // "lp"
 	app_global_get
 	retsub
@@ -448,7 +448,7 @@ bootstrap:
 
 	// contracts\BiatecClammPool.algo.ts:299
 	// this.appBiatecConfigProvider.value = appBiatecConfigProvider
-	byte 0x42 // "B"
+	byte 0x6263 // "bc"
 	frame_dig -3 // appBiatecConfigProvider: AppID
 	app_global_put
 
@@ -543,7 +543,7 @@ bootstrap:
 	app_global_put
 
 	// contracts\BiatecClammPool.algo.ts:311
-	// this.assetLP.value = this.doCreatePoolToken(assetA, assetB).id
+	// this.assetLp.value = this.doCreatePoolToken(assetA, assetB).id
 	byte 0x6c70 // "lp"
 	frame_dig -2 // assetB: AssetID
 	frame_dig -1 // assetA: AssetID
@@ -609,7 +609,7 @@ bootstrap:
 	itxn_submit
 
 	// contracts\BiatecClammPool.algo.ts:323
-	// return this.assetLP.value;
+	// return this.assetLp.value;
 	byte 0x6c70 // "lp"
 	app_global_get
 
@@ -876,7 +876,7 @@ checkAssetsAB:
 	assert
 	retsub
 
-// checkAssets(assetA: AssetID, assetB: AssetID, assetLP: AssetID): void
+// checkAssets(assetA: AssetID, assetB: AssetID, assetLp: AssetID): void
 checkAssets:
 	proto 3 0
 
@@ -887,13 +887,13 @@ checkAssets:
 	callsub checkAssetsAB
 
 	// contracts\BiatecClammPool.algo.ts:396
-	// assert(assetLP.id === this.assetLP.value, 'assetLP does not match')
-	frame_dig -3 // assetLP: AssetID
+	// assert(assetLp.id === this.assetLp.value, 'assetLp does not match')
+	frame_dig -3 // assetLp: AssetID
 	byte 0x6c70 // "lp"
 	app_global_get
 	==
 
-	// assetLP does not match
+	// assetLp does not match
 	assert
 	retsub
 
@@ -902,7 +902,7 @@ checkAssets:
 	// The ABI return prefix
 	byte 0x151f7c75
 
-	// assetLP: uint64
+	// assetLp: uint64
 	txna ApplicationArgs 5
 	btoi
 
@@ -940,14 +940,14 @@ checkAssets:
 	int 1
 	return
 
-// addLiquidity(appBiatecConfigProvider: AppID, appBiatecIdentityProvider: AppID, txAssetADeposit: Txn, txAssetBDeposit: Txn, assetA: AssetID, assetB: AssetID, assetLP: AssetID): uint64
+// addLiquidity(appBiatecConfigProvider: AppID, appBiatecIdentityProvider: AppID, txAssetADeposit: Txn, txAssetBDeposit: Txn, assetA: AssetID, assetB: AssetID, assetLp: AssetID): uint64
 //
 // This method adds Asset A and Asset B to the Automated Market Maker Concentrated Liqudidity Pool and send to the liqudidty provider the liqudity token
 // @param appBiatecConfigProvider Configuration reference
 // @param appBiatecIdentityProvider Identity service reference
 // @param txAssetADeposit Transfer of asset A to the LP pool
 // @param txAssetBDeposit Transfer of asset B to the LP pool
-// @param assetLP Liquidity pool asset
+// @param assetLp Liquidity pool asset
 // @param assetA Asset A
 // @param assetB Asset B
 // @returns LP Token quantity distributed
@@ -990,8 +990,8 @@ addLiquidity:
 
 	// well formed mint
 	// contracts\BiatecClammPool.algo.ts:422
-	// this.checkAssets(assetA, assetB, assetLP)
-	frame_dig -7 // assetLP: AssetID
+	// this.checkAssets(assetA, assetB, assetLp)
+	frame_dig -7 // assetLp: AssetID
 	frame_dig -6 // assetB: AssetID
 	frame_dig -5 // assetA: AssetID
 	callsub checkAssets
@@ -1047,12 +1047,12 @@ addLiquidity:
 	frame_bury 2 // assetBDelicmalScale2Scale: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:433
-	// assetLPDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256
+	// assetLpDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256
 	int 10
 	int 3
 	exp
 	itob
-	frame_bury 3 // assetLPDelicmalScale2Scale: unsafe uint256
+	frame_bury 3 // assetLpDelicmalScale2Scale: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:435
 	// aDepositInBaseScale = (txAssetADeposit.assetAmount as uint256) * assetADelicmalScale2Scale
@@ -1334,9 +1334,9 @@ addLiquidity:
 
 	// *if8_consequent
 	// contracts\BiatecClammPool.algo.ts:481
-	// return this.processAddLiqudity(aDepositInBaseScale, bDepositInBaseScale, assetLPDelicmalScale2Scale, assetLP);
-	frame_dig -7 // assetLP: AssetID
-	frame_dig 3 // assetLPDelicmalScale2Scale: unsafe uint256
+	// return this.processAddLiqudity(aDepositInBaseScale, bDepositInBaseScale, assetLpDelicmalScale2Scale, assetLp);
+	frame_dig -7 // assetLp: AssetID
+	frame_dig 3 // assetLpDelicmalScale2Scale: unsafe uint256
 	dup
 	bitlen
 	int 256
@@ -1414,11 +1414,11 @@ addLiquidity:
 	// ret = this.processAddLiqudity(
 	//         aDepositInBaseScale,
 	//         bDepositInBaseScale,
-	//         assetLPDelicmalScale2Scale,
-	//         assetLP
+	//         assetLpDelicmalScale2Scale,
+	//         assetLp
 	//       )
-	frame_dig -7 // assetLP: AssetID
-	frame_dig 3 // assetLPDelicmalScale2Scale: unsafe uint256
+	frame_dig -7 // assetLp: AssetID
+	frame_dig 3 // assetLpDelicmalScale2Scale: unsafe uint256
 	dup
 	bitlen
 	int 256
@@ -1717,9 +1717,9 @@ addLiquidity:
 	frame_bury 17 // realAssetBDeposit: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:546
-	// return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale, assetLP);
-	frame_dig -7 // assetLP: AssetID
-	frame_dig 3 // assetLPDelicmalScale2Scale: unsafe uint256
+	// return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp);
+	frame_dig -7 // assetLp: AssetID
+	frame_dig 3 // assetLpDelicmalScale2Scale: unsafe uint256
 	dup
 	bitlen
 	int 256
@@ -1839,9 +1839,9 @@ addLiquidity:
 	frame_bury 19 // realAssetBDeposit: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:565
-	// return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale, assetLP);
-	frame_dig -7 // assetLP: AssetID
-	frame_dig 3 // assetLPDelicmalScale2Scale: unsafe uint256
+	// return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp);
+	frame_dig -7 // assetLp: AssetID
+	frame_dig 3 // assetLpDelicmalScale2Scale: unsafe uint256
 	dup
 	bitlen
 	int 256
@@ -1926,9 +1926,9 @@ addLiquidity:
 	frame_bury 21 // realAssetBDeposit: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:570
-	// return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale, assetLP);
-	frame_dig -7 // assetLP: AssetID
-	frame_dig 3 // assetLPDelicmalScale2Scale: unsafe uint256
+	// return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp);
+	frame_dig -7 // assetLp: AssetID
+	frame_dig 3 // assetLpDelicmalScale2Scale: unsafe uint256
 	dup
 	bitlen
 	int 256
@@ -2013,9 +2013,9 @@ addLiquidity:
 	frame_bury 23 // realAssetBDeposit: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:576
-	// return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLPDelicmalScale2Scale, assetLP);
-	frame_dig -7 // assetLP: AssetID
-	frame_dig 3 // assetLPDelicmalScale2Scale: unsafe uint256
+	// return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp);
+	frame_dig -7 // assetLp: AssetID
+	frame_dig 3 // assetLpDelicmalScale2Scale: unsafe uint256
 	dup
 	bitlen
 	int 256
@@ -2155,13 +2155,13 @@ addLiquidity:
 	popn 23
 	retsub
 
-// processAddLiqudity(realAssetADeposit: uint256, realAssetBDeposit: uint256, assetLPDelicmalScale2Scale: uint256, assetLP: AssetID): uint64
+// processAddLiqudity(realAssetADeposit: uint256, realAssetBDeposit: uint256, assetLpDelicmalScale2Scale: uint256, assetLp: AssetID): uint64
 //
 // This method is used in addLiquidity to process the liquidity addition from calculated values
 // @param realAssetADeposit Real asset a deposit
 // @param realAssetBDeposit Real asset b deposit
-// @param assetLPDelicmalScale2Scale LP decimal scale
-// @param assetLP LP Asset
+// @param assetLpDelicmalScale2Scale LP decimal scale
+// @param assetLp LP Asset
 // @returns LP Token quantity distributed
 processAddLiqudity:
 	proto 4 1
@@ -2372,12 +2372,12 @@ processAddLiqudity:
 
 *if21_end:
 	// contracts\BiatecClammPool.algo.ts:627
-	// lpTokensToSend = ((newLiqudity - this.Liqudity.value) / assetLPDelicmalScale2Scale) as uint64
+	// lpTokensToSend = ((newLiqudity - this.Liqudity.value) / assetLpDelicmalScale2Scale) as uint64
 	frame_dig 6 // newLiqudity: unsafe uint256
 	byte 0x4c // "L"
 	app_global_get
 	b-
-	frame_dig -3 // assetLPDelicmalScale2Scale: uint256
+	frame_dig -3 // assetLpDelicmalScale2Scale: uint256
 	b/
 	dup
 	bitlen
@@ -2417,9 +2417,9 @@ processAddLiqudity:
 	app_global_put
 
 	// contracts\BiatecClammPool.algo.ts:631
-	// this.doAxfer(this.txn.sender, assetLP, lpTokensToSend)
+	// this.doAxfer(this.txn.sender, assetLp, lpTokensToSend)
 	frame_dig 8 // lpTokensToSend: uint64
-	frame_dig -4 // assetLP: AssetID
+	frame_dig -4 // assetLp: AssetID
 	txn Sender
 	callsub doAxfer
 
@@ -2448,7 +2448,7 @@ processAddLiqudity:
 	// The ABI return prefix
 	byte 0x151f7c75
 
-	// assetLP: uint64
+	// assetLp: uint64
 	txna ApplicationArgs 5
 	btoi
 
@@ -2460,7 +2460,7 @@ processAddLiqudity:
 	txna ApplicationArgs 3
 	btoi
 
-	// txLPXfer: axfer
+	// txLpXfer: axfer
 	txn GroupIndex
 	int 1
 	-
@@ -2499,13 +2499,13 @@ processAddLiqudity:
 	int 1
 	return
 
-// removeLiquidity(appBiatecConfigProvider: AppID, appBiatecIdentityProvider: AppID, txLPXfer: AssetTransferTxn, assetA: AssetID, assetB: AssetID, assetLP: AssetID): uint256
+// removeLiquidity(appBiatecConfigProvider: AppID, appBiatecIdentityProvider: AppID, txLpXfer: AssetTransferTxn, assetA: AssetID, assetB: AssetID, assetLp: AssetID): uint256
 //
 // This method retrieves from the liquidity provider LP token and returns Asset A and Asset B from the Automated Market Maker Concentrated Liqudidity Pool
 // @param appBiatecConfigProvider Configuration reference
 // @param appBiatecIdentityProvider Identity service reference
-// @param txLPXfer Transfer of the LP token
-// @param assetLP LP pool asset
+// @param txLpXfer Transfer of the LP token
+// @param assetLp LP pool asset
 // @param assetA Asset A
 // @param assetB Asset B
 // @returns LP position reduced
@@ -2518,34 +2518,34 @@ removeLiquidity:
 
 	// well formed mint
 	// contracts\BiatecClammPool.algo.ts:660
-	// this.checkAssets(assetA, assetB, assetLP)
-	frame_dig -6 // assetLP: AssetID
+	// this.checkAssets(assetA, assetB, assetLp)
+	frame_dig -6 // assetLp: AssetID
 	frame_dig -5 // assetB: AssetID
 	frame_dig -4 // assetA: AssetID
 	callsub checkAssets
 
 	// contracts\BiatecClammPool.algo.ts:661
-	// verifyAssetTransferTxn(txLPXfer, {
+	// verifyAssetTransferTxn(txLpXfer, {
 	//       assetReceiver: this.app.address,
-	//       xferAsset: assetLP,
+	//       xferAsset: assetLp,
 	//       assetAmount: { greaterThanEqualTo: 0 },
 	//     })
 	// verify assetReceiver
-	frame_dig -3 // txLPXfer: AssetTransferTxn
+	frame_dig -3 // txLpXfer: AssetTransferTxn
 	gtxns AssetReceiver
 	global CurrentApplicationAddress
 	==
 	assert
 
 	// verify xferAsset
-	frame_dig -3 // txLPXfer: AssetTransferTxn
+	frame_dig -3 // txLpXfer: AssetTransferTxn
 	gtxns XferAsset
-	frame_dig -6 // assetLP: AssetID
+	frame_dig -6 // assetLp: AssetID
 	==
 	assert
 
 	// verify assetAmount
-	frame_dig -3 // txLPXfer: AssetTransferTxn
+	frame_dig -3 // txLpXfer: AssetTransferTxn
 	gtxns AssetAmount
 	int 0
 	>=
@@ -2632,24 +2632,24 @@ removeLiquidity:
 	frame_bury 2 // assetBDelicmalScale2Scale: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:680
-	// assetLPDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256
+	// assetLpDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256
 	int 10
 	int 3
 	exp
 	itob
-	frame_bury 3 // assetLPDelicmalScale2Scale: unsafe uint256
+	frame_bury 3 // assetLpDelicmalScale2Scale: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:682
-	// lpDelta = txLPXfer.assetAmount as uint256
-	frame_dig -3 // txLPXfer: AssetTransferTxn
+	// lpDelta = txLpXfer.assetAmount as uint256
+	frame_dig -3 // txLpXfer: AssetTransferTxn
 	gtxns AssetAmount
 	itob
 	frame_bury 4 // lpDelta: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:683
-	// lpDeltaBase = lpDelta * assetLPDelicmalScale2Scale
+	// lpDeltaBase = lpDelta * assetLpDelicmalScale2Scale
 	frame_dig 4 // lpDelta: unsafe uint256
-	frame_dig 3 // assetLPDelicmalScale2Scale: unsafe uint256
+	frame_dig 3 // assetLpDelicmalScale2Scale: unsafe uint256
 	b*
 	frame_bury 5 // lpDeltaBase: unsafe uint256
 
@@ -2659,7 +2659,7 @@ removeLiquidity:
 	frame_bury 6 // lpDeltaWithFees: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:685
-	// lpWithOthers = this.calculateDistributedLiquidity(assetLP, lpDelta)
+	// lpWithOthers = this.calculateDistributedLiquidity(assetLp, lpDelta)
 	frame_dig 4 // lpDelta: unsafe uint256
 	dup
 	bitlen
@@ -2675,7 +2675,7 @@ removeLiquidity:
 	-
 	swap
 	substring3
-	frame_dig -6 // assetLP: AssetID
+	frame_dig -6 // assetLp: AssetID
 	callsub calculateDistributedLiquidity
 	frame_bury 7 // lpWithOthers: unsafe uint256
 
@@ -3102,9 +3102,9 @@ removeLiquidity:
 	app_global_put
 
 	// contracts\BiatecClammPool.algo.ts:747
-	// return lpDeltaWithFees / assetLPDelicmalScale2Scale;
+	// return lpDeltaWithFees / assetLpDelicmalScale2Scale;
 	frame_dig 6 // lpDeltaWithFees: unsafe uint256
-	frame_dig 3 // assetLPDelicmalScale2Scale: unsafe uint256
+	frame_dig 3 // assetLpDelicmalScale2Scale: unsafe uint256
 	b/
 
 	// set the subroutine return value
@@ -3127,7 +3127,7 @@ removeLiquidity:
 	==
 	assert
 
-	// assetLP: uint64
+	// assetLp: uint64
 	txna ApplicationArgs 4
 	btoi
 
@@ -3164,7 +3164,7 @@ removeLiquidity:
 	int 1
 	return
 
-// removeLiquidityAdmin(appBiatecConfigProvider: AppID, assetA: AssetID, assetB: AssetID, assetLP: AssetID, amount: uint256): uint256
+// removeLiquidityAdmin(appBiatecConfigProvider: AppID, assetA: AssetID, assetB: AssetID, assetLp: AssetID, amount: uint256): uint256
 //
 // This method allows biatec admin to reduce the lp position created by lp fees allocation.
 //
@@ -3185,8 +3185,8 @@ removeLiquidityAdmin:
 
 	// well formed mint
 	// contracts\BiatecClammPool.algo.ts:770
-	// this.checkAssets(assetA, assetB, assetLP)
-	frame_dig -4 // assetLP: AssetID
+	// this.checkAssets(assetA, assetB, assetLp)
+	frame_dig -4 // assetLp: AssetID
 	frame_dig -3 // assetB: AssetID
 	frame_dig -2 // assetA: AssetID
 	callsub checkAssets
@@ -3194,7 +3194,7 @@ removeLiquidityAdmin:
 	// contracts\BiatecClammPool.algo.ts:772
 	// assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value)
 	frame_dig -1 // appBiatecConfigProvider: AppID
-	byte 0x42 // "B"
+	byte 0x6263 // "bc"
 	app_global_get
 	==
 	assert
@@ -3308,12 +3308,12 @@ removeLiquidityAdmin:
 	frame_bury 4 // assetBDelicmalScale2Scale: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:794
-	// assetLPDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256
+	// assetLpDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256
 	int 10
 	int 3
 	exp
 	itob
-	frame_bury 5 // assetLPDelicmalScale2Scale: unsafe uint256
+	frame_bury 5 // assetLpDelicmalScale2Scale: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:796
 	// lpDeltaWithFees = amount
@@ -3720,9 +3720,9 @@ removeLiquidityAdmin:
 	app_global_put
 
 	// contracts\BiatecClammPool.algo.ts:854
-	// return lpDeltaWithFees / assetLPDelicmalScale2Scale;
+	// return lpDeltaWithFees / assetLpDelicmalScale2Scale;
 	frame_dig 6 // lpDeltaWithFees: unsafe uint256
-	frame_dig 5 // assetLPDelicmalScale2Scale: unsafe uint256
+	frame_dig 5 // assetLpDelicmalScale2Scale: unsafe uint256
 	b/
 
 	// set the subroutine return value
@@ -3754,7 +3754,7 @@ verifyIdentity:
 	//       'ERR-INVALID-CONFIG' // 'Configuration app does not match'
 	//     )
 	frame_dig -1 // appBiatecConfigProvider: AppID
-	byte 0x42 // "B"
+	byte 0x6263 // "bc"
 	app_global_get
 	==
 
@@ -4979,7 +4979,7 @@ swap:
 *if44_end:
 	// contracts\BiatecClammPool.algo.ts:1083
 	// biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256
-	byte 0x42 // "B"
+	byte 0x6263 // "bc"
 	app_global_get
 	byte 0x66 // "f"
 	app_global_get_ex
@@ -5406,7 +5406,7 @@ distributeExcessAssets:
 	// contracts\BiatecClammPool.algo.ts:1170
 	// assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG')
 	frame_dig -1 // appBiatecConfigProvider: AppID
-	byte 0x42 // "B"
+	byte 0x6263 // "bc"
 	app_global_get
 	==
 
@@ -5777,7 +5777,7 @@ distributeExcessAssets:
 
 	// contracts\BiatecClammPool.algo.ts:1233
 	// biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256
-	byte 0x42 // "B"
+	byte 0x6263 // "bc"
 	app_global_get
 	byte 0x66 // "f"
 	app_global_get_ex
@@ -6004,7 +6004,7 @@ withdrawExcessAssets:
 	// contracts\BiatecClammPool.algo.ts:1278
 	// assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG')
 	frame_dig -1 // appBiatecConfigProvider: AppID
-	byte 0x42 // "B"
+	byte 0x6263 // "bc"
 	app_global_get
 	==
 
@@ -6223,15 +6223,15 @@ withdrawExcessAssets:
 	txna ApplicationArgs 5
 	btoi
 
-	// stateProofPK: byte[]
+	// stateProofPk: byte[]
 	txna ApplicationArgs 4
 	extract 2 0
 
-	// selectionPK: byte[]
+	// selectionPk: byte[]
 	txna ApplicationArgs 3
 	extract 2 0
 
-	// votePK: byte[]
+	// votePk: byte[]
 	txna ApplicationArgs 2
 	extract 2 0
 
@@ -6244,7 +6244,7 @@ withdrawExcessAssets:
 	int 1
 	return
 
-// sendOnlineKeyRegistration(appBiatecConfigProvider: AppID, votePK: bytes, selectionPK: bytes, stateProofPK: bytes, voteFirst: uint64, voteLast: uint64, voteKeyDilution: uint64): void
+// sendOnlineKeyRegistration(appBiatecConfigProvider: AppID, votePk: bytes, selectionPk: bytes, stateProofPk: bytes, voteFirst: uint64, voteLast: uint64, voteKeyDilution: uint64): void
 //
 // addressExecutiveFee can perfom key registration for this LP pool
 //
@@ -6258,7 +6258,7 @@ sendOnlineKeyRegistration:
 	// contracts\BiatecClammPool.algo.ts:1335
 	// assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG')
 	frame_dig -1 // appBiatecConfigProvider: AppID
-	byte 0x42 // "B"
+	byte 0x6263 // "bc"
 	app_global_get
 	==
 
@@ -6287,12 +6287,12 @@ sendOnlineKeyRegistration:
 
 	// contracts\BiatecClammPool.algo.ts:1341
 	// sendOnlineKeyRegistration({
-	//       selectionPK: selectionPK,
-	//       stateProofPK: stateProofPK,
+	//       selectionPK: selectionPk,
+	//       stateProofPK: stateProofPk,
 	//       voteFirst: voteFirst,
 	//       voteKeyDilution: voteKeyDilution,
 	//       voteLast: voteLast,
-	//       votePK: votePK,
+	//       votePK: votePk,
 	//       fee: 0,
 	//     })
 	itxn_begin
@@ -6300,13 +6300,13 @@ sendOnlineKeyRegistration:
 	itxn_field TypeEnum
 
 	// contracts\BiatecClammPool.algo.ts:1342
-	// selectionPK: selectionPK
-	frame_dig -3 // selectionPK: bytes
+	// selectionPK: selectionPk
+	frame_dig -3 // selectionPk: bytes
 	itxn_field SelectionPK
 
 	// contracts\BiatecClammPool.algo.ts:1343
-	// stateProofPK: stateProofPK
-	frame_dig -4 // stateProofPK: bytes
+	// stateProofPK: stateProofPk
+	frame_dig -4 // stateProofPk: bytes
 	itxn_field StateProofPK
 
 	// contracts\BiatecClammPool.algo.ts:1344
@@ -6325,8 +6325,8 @@ sendOnlineKeyRegistration:
 	itxn_field VoteLast
 
 	// contracts\BiatecClammPool.algo.ts:1347
-	// votePK: votePK
-	frame_dig -2 // votePK: bytes
+	// votePK: votePk
+	frame_dig -2 // votePk: bytes
 	itxn_field VotePK
 
 	// contracts\BiatecClammPool.algo.ts:1348
@@ -6364,7 +6364,7 @@ sendOfflineKeyRegistration:
 	// contracts\BiatecClammPool.algo.ts:1358
 	// assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG')
 	frame_dig -1 // appBiatecConfigProvider: AppID
-	byte 0x42 // "B"
+	byte 0x6263 // "bc"
 	app_global_get
 	==
 
@@ -6436,7 +6436,7 @@ sendOfflineKeyRegistration:
 	==
 	assert
 
-	// assetLP: uint64
+	// assetLp: uint64
 	txna ApplicationArgs 1
 	btoi
 
@@ -6461,7 +6461,7 @@ sendOfflineKeyRegistration:
 	int 1
 	return
 
-// calculateDistributedLiquidity(assetLP: AssetID, currentDeposit: uint256): uint256
+// calculateDistributedLiquidity(assetLp: AssetID, currentDeposit: uint256): uint256
 //
 // Calculates the number of LP tokens issued to users
 calculateDistributedLiquidity:
@@ -6472,9 +6472,9 @@ calculateDistributedLiquidity:
 	dupn 4
 
 	// contracts\BiatecClammPool.algo.ts:1376
-	// current = (this.app.address.assetBalance(assetLP) as uint256) - currentDeposit
+	// current = (this.app.address.assetBalance(assetLp) as uint256) - currentDeposit
 	global CurrentApplicationAddress
-	frame_dig -1 // assetLP: AssetID
+	frame_dig -1 // assetLp: AssetID
 	asset_holding_get AssetBalance
 	pop
 	itob
@@ -6495,17 +6495,17 @@ calculateDistributedLiquidity:
 	frame_bury 2 // distributedLPTokens: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:1380
-	// assetLPDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256
+	// assetLpDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256
 	int 10
 	int 3
 	exp
 	itob
-	frame_bury 3 // assetLPDelicmalScale2Scale: unsafe uint256
+	frame_bury 3 // assetLpDelicmalScale2Scale: unsafe uint256
 
 	// contracts\BiatecClammPool.algo.ts:1381
-	// ret = distributedLPTokens * assetLPDelicmalScale2Scale
+	// ret = distributedLPTokens * assetLpDelicmalScale2Scale
 	frame_dig 2 // distributedLPTokens: unsafe uint256
-	frame_dig 3 // assetLPDelicmalScale2Scale: unsafe uint256
+	frame_dig 3 // assetLpDelicmalScale2Scale: unsafe uint256
 	b*
 	frame_bury 4 // ret: unsafe uint256
 
@@ -6789,7 +6789,7 @@ calculateLiquidityD:
 	// The ABI return prefix
 	byte 0x151f7c75
 
-	// D_SQRT: uint256
+	// dSqrt: uint256
 	txna ApplicationArgs 5
 	dup
 	len
@@ -6850,7 +6850,7 @@ calculateLiquidityD:
 	int 1
 	return
 
-// calculateLiquidityWithD(x: uint256, y: uint256, priceMinSqrt: uint256, priceMaxSqrt: uint256, D_SQRT: uint256): uint256
+// calculateLiquidityWithD(x: uint256, y: uint256, priceMinSqrt: uint256, priceMaxSqrt: uint256, dSqrt: uint256): uint256
 //
 // Calculates the liquidity  from the x - Asset A position and y - Asset B position
 //
@@ -6922,11 +6922,11 @@ calculateLiquidityWithD:
 
 	// *if54_consequent
 	// contracts\BiatecClammPool.algo.ts:1532
-	// nom = L1 + L2 + D_SQRT
+	// nom = L1 + L2 + dSqrt
 	frame_dig 0 // L1: unsafe uint256
 	frame_dig 1 // L2: unsafe uint256
 	b+
-	frame_dig -5 // D_SQRT: uint256
+	frame_dig -5 // dSqrt: uint256
 	b+
 	frame_bury 6 // nom: unsafe uint256
 
@@ -6961,11 +6961,11 @@ calculateLiquidityWithD:
 
 *if54_end:
 	// contracts\BiatecClammPool.algo.ts:1537
-	// nom = L1 + L2 - D_SQRT
+	// nom = L1 + L2 - dSqrt
 	frame_dig 0 // L1: unsafe uint256
 	frame_dig 1 // L2: unsafe uint256
 	b+
-	frame_dig -5 // D_SQRT: uint256
+	frame_dig -5 // dSqrt: uint256
 	b-
 	frame_bury 9 // nom: unsafe uint256
 
@@ -7998,7 +7998,7 @@ calculateAssetADepositOnAssetBDeposit:
 	// The ABI return prefix
 	byte 0x151f7c75
 
-	// assetLP: uint64
+	// assetLp: uint64
 	txna ApplicationArgs 4
 	btoi
 
@@ -8021,7 +8021,7 @@ calculateAssetADepositOnAssetBDeposit:
 	int 1
 	return
 
-// status(appBiatecConfigProvider: AppID, assetA: AssetID, assetB: AssetID, assetLP: AssetID): AmmStatus
+// status(appBiatecConfigProvider: AppID, assetA: AssetID, assetB: AssetID, assetLp: AssetID): AmmStatus
 status:
 	proto 4 1
 
@@ -8035,7 +8035,7 @@ status:
 	//       'ERR_CONFIG' // 'appBiatecConfigProvider must match to the global variable app id'
 	//     )
 	frame_dig -1 // appBiatecConfigProvider: AppID
-	byte 0x42 // "B"
+	byte 0x6263 // "bc"
 	app_global_get
 	==
 
@@ -8059,10 +8059,10 @@ status:
 	assert
 
 	// contracts\BiatecClammPool.algo.ts:1797
-	// assert(this.assetLP.value === assetLP.id, 'ERR_LP')
+	// assert(this.assetLp.value === assetLp.id, 'ERR_LP')
 	byte 0x6c70 // "lp"
 	app_global_get
-	frame_dig -4 // assetLP: AssetID
+	frame_dig -4 // assetLp: AssetID
 	==
 
 	// ERR_LP
@@ -8070,7 +8070,7 @@ status:
 
 	// contracts\BiatecClammPool.algo.ts:1798
 	// biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256
-	byte 0x42 // "B"
+	byte 0x6263 // "bc"
 	app_global_get
 	byte 0x66 // "f"
 	app_global_get_ex
@@ -8112,7 +8112,7 @@ status:
 	// return {
 	//       assetA: this.assetA.value,
 	//       assetB: this.assetB.value,
-	//       poolToken: this.assetLP.value,
+	//       poolToken: this.assetLp.value,
 	//       assetABalance: this.assetABalance.value as uint64,
 	//       assetBBalance: this.assetBBalance.value as uint64,
 	//       realABalance: realBalanceA,
@@ -8125,7 +8125,7 @@ status:
 	//       price: this.currentPrice.value as uint64,
 	//       priceMaxSqrt: this.priceMaxSqrt.value as uint64,
 	//       priceMinSqrt: this.priceMinSqrt.value as uint64,
-	//       releasedLiqudity: this.calculateDistributedLiquidity(assetLP, <uint256>0) as uint64,
+	//       releasedLiqudity: this.calculateDistributedLiquidity(assetLp, <uint256>0) as uint64,
 	//       scale: SCALE,
 	//       verificationClass: this.verificationClass.value,
 	//     };
@@ -8192,7 +8192,7 @@ status:
 	itob
 	concat
 	byte 0x0000000000000000000000000000000000000000000000000000000000000000
-	frame_dig -4 // assetLP: AssetID
+	frame_dig -4 // assetLp: AssetID
 	callsub calculateDistributedLiquidity
 	dup
 	bitlen

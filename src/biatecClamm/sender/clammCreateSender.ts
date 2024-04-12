@@ -1,29 +1,21 @@
 import algosdk from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
-import clammAddLiquidityTxs from '../txs/clammAddLiquidityTxs';
+import clammCreateTxs from '../txs/clammCreateTxs';
 
 interface IClammBootstrapSkInput {
   clientBiatecClammPool: BiatecClammPoolClient;
   account: TransactionSignerAccount;
   algod: algosdk.Algodv2;
-
-  appBiatecConfigProvider: bigint;
-  appBiatecIdentityProvider: bigint;
-  assetA: bigint;
-  assetB: bigint;
-  assetLp: bigint;
-  assetADeposit: bigint;
-  assetBDeposit: bigint;
 }
 /**
  * Add the liqudity to the concentrated liquidity AMM
  *
  * @returns txId
  */
-const clammAddLiquiditySender = async (input: IClammBootstrapSkInput): Promise<string> => {
+const clammCreateSender = async (input: IClammBootstrapSkInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
-  const txs = await clammAddLiquidityTxs({
+  const txs = await clammCreateTxs({
     ...input,
     params,
   });
@@ -32,6 +24,7 @@ const clammAddLiquiditySender = async (input: IClammBootstrapSkInput): Promise<s
     Array.from(Array(txs.length), (_, i) => i)
   );
   const { txId } = await input.algod.sendRawTransaction(signed).do();
+
   return txId;
 };
-export default clammAddLiquiditySender;
+export default clammCreateSender;

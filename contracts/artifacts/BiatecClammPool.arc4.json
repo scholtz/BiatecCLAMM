@@ -146,7 +146,7 @@
           "desc": "Asset B"
         },
         {
-          "name": "assetLP",
+          "name": "assetLp",
           "type": "uint64",
           "desc": "Liquidity pool asset"
         }
@@ -171,7 +171,7 @@
           "desc": "Identity service reference"
         },
         {
-          "name": "txLPXfer",
+          "name": "txLpXfer",
           "type": "axfer",
           "desc": "Transfer of the LP token"
         },
@@ -186,7 +186,7 @@
           "desc": "Asset B"
         },
         {
-          "name": "assetLP",
+          "name": "assetLp",
           "type": "uint64",
           "desc": "LP pool asset"
         }
@@ -216,7 +216,7 @@
           "desc": "Asset B"
         },
         {
-          "name": "assetLP",
+          "name": "assetLp",
           "type": "uint64"
         },
         {
@@ -348,15 +348,15 @@
           "type": "uint64"
         },
         {
-          "name": "votePK",
+          "name": "votePk",
           "type": "byte[]"
         },
         {
-          "name": "selectionPK",
+          "name": "selectionPk",
           "type": "byte[]"
         },
         {
-          "name": "stateProofPK",
+          "name": "stateProofPk",
           "type": "byte[]"
         },
         {
@@ -395,7 +395,7 @@
       "readonly": true,
       "args": [
         {
-          "name": "assetLP",
+          "name": "assetLp",
           "type": "uint64"
         },
         {
@@ -495,7 +495,7 @@
           "desc": "sqrt(priceMax) in base scale decimals Variable pbs"
         },
         {
-          "name": "D_SQRT",
+          "name": "dSqrt",
           "type": "uint256"
         }
       ],
@@ -753,7 +753,7 @@
           "type": "uint64"
         },
         {
-          "name": "assetLP",
+          "name": "assetLp",
           "type": "uint64"
         }
       ],

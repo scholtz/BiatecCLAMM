@@ -1,4 +1,4 @@
-import algosdk, { SuggestedParams } from 'algosdk';
+import algosdk, { AtomicTransactionComposer, SuggestedParams } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
@@ -36,6 +36,7 @@ const clammSwapTxs = async (input: IClammSwapTxsInput): Promise<algosdk.Transact
     fromAsset,
     fromAmount,
   } = input;
+  const atc = new AtomicTransactionComposer();
 
   const clammRef = await clientBiatecClammPool.appClient.getAppReference();
   let txSwap: algosdk.Transaction;
@@ -65,7 +66,7 @@ const clammSwapTxs = async (input: IClammSwapTxsInput): Promise<algosdk.Transact
     includingAssetBoxes: false,
   });
 
-  const compose = clientBiatecClammPool.compose().swap(
+  await clientBiatecClammPool.swap(
     {
       appBiatecConfigProvider,
       appBiatecIdentityProvider,
@@ -79,13 +80,13 @@ const clammSwapTxs = async (input: IClammSwapTxsInput): Promise<algosdk.Transact
       sender: account,
       sendParams: {
         fee: algokit.microAlgos(12000),
+        atc,
       },
       boxes,
       assets: [Number(assetA), Number(assetB)],
       accounts: [],
     }
   );
-  const atc = await compose.atc();
   return atc.buildGroup().map((tx) => tx.txn);
 };
 export default clammSwapTxs;

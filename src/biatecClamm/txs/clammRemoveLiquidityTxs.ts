@@ -1,4 +1,4 @@
-import algosdk, { SuggestedParams } from 'algosdk';
+import algosdk, { AtomicTransactionComposer, SuggestedParams } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
@@ -12,7 +12,7 @@ interface IClammRemoveLiquidityTxsInput {
   appBiatecIdentityProvider: bigint;
   assetA: bigint;
   assetB: bigint;
-  assetLP: bigint;
+  assetLp: bigint;
   lpToSend: bigint;
 }
 /**
@@ -28,39 +28,40 @@ const clammRemoveLiquidityTxs = async (input: IClammRemoveLiquidityTxsInput): Pr
     appBiatecIdentityProvider,
     assetA,
     assetB,
-    assetLP,
+    assetLp,
     lpToSend,
   } = input;
+  const atc = new AtomicTransactionComposer();
 
   const clammRef = await clientBiatecClammPool.appClient.getAppReference();
-  const txLPXfer = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+  const txLpXfer = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
     amount: lpToSend,
-    assetIndex: Number(assetLP),
+    assetIndex: Number(assetLp),
     from: account.addr,
     suggestedParams: params,
     to: clammRef.appAddress,
   });
 
-  const compose = clientBiatecClammPool.compose().removeLiquidity(
+  await clientBiatecClammPool.removeLiquidity(
     {
       appBiatecConfigProvider,
       appBiatecIdentityProvider,
       assetA,
       assetB,
-      assetLP,
-      txLPXfer,
+      assetLp,
+      txLpXfer,
     },
     {
       sender: account,
       sendParams: {
         fee: algokit.microAlgos(12000),
+        atc,
       },
       apps: [Number(appBiatecConfigProvider), Number(appBiatecIdentityProvider)],
       assets: [Number(assetA), Number(assetB)],
       accounts: [],
     }
   );
-  const atc = await compose.atc();
   return atc.buildGroup().map((tx) => tx.txn);
 };
 export default clammRemoveLiquidityTxs;
