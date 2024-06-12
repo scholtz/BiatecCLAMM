@@ -180,14 +180,15 @@
     ]
   },
   {
-    "teal": 22,
+    "teal": 23,
     "source": 6,
+    "errorMessage": "The requested action is not implemented in this contract. Are you using the correct OnComplete? Did you set your app ID?",
     "pc": [
       132
     ]
   },
   {
-    "teal": 27,
+    "teal": 28,
     "source": 60,
     "pc": [
       133,
@@ -196,21 +197,21 @@
     ]
   },
   {
-    "teal": 28,
+    "teal": 29,
     "source": 60,
     "pc": [
       136
     ]
   },
   {
-    "teal": 29,
+    "teal": 30,
     "source": 60,
     "pc": [
       137
     ]
   },
   {
-    "teal": 35,
+    "teal": 36,
     "source": 60,
     "pc": [
       138,
@@ -219,14 +220,14 @@
     ]
   },
   {
-    "teal": 39,
+    "teal": 40,
     "source": 61,
     "pc": [
       141
     ]
   },
   {
-    "teal": 40,
+    "teal": 41,
     "source": 61,
     "pc": [
       142,
@@ -256,21 +257,21 @@
     ]
   },
   {
-    "teal": 41,
+    "teal": 42,
     "source": 61,
     "pc": [
       166
     ]
   },
   {
-    "teal": 45,
+    "teal": 46,
     "source": 62,
     "pc": [
       167
     ]
   },
   {
-    "teal": 46,
+    "teal": 47,
     "source": 62,
     "pc": [
       168,
@@ -278,14 +279,14 @@
     ]
   },
   {
-    "teal": 47,
+    "teal": 48,
     "source": 62,
     "pc": [
       170
     ]
   },
   {
-    "teal": 51,
+    "teal": 52,
     "source": 63,
     "pc": [
       171,
@@ -293,7 +294,7 @@
     ]
   },
   {
-    "teal": 52,
+    "teal": 53,
     "source": 63,
     "pc": [
       173,
@@ -301,21 +302,21 @@
     ]
   },
   {
-    "teal": 53,
+    "teal": 54,
     "source": 63,
     "pc": [
       175
     ]
   },
   {
-    "teal": 57,
+    "teal": 58,
     "source": 64,
     "pc": [
       176
     ]
   },
   {
-    "teal": 58,
+    "teal": 59,
     "source": 64,
     "pc": [
       177,
@@ -323,21 +324,21 @@
     ]
   },
   {
-    "teal": 59,
+    "teal": 60,
     "source": 64,
     "pc": [
       179
     ]
   },
   {
-    "teal": 63,
+    "teal": 64,
     "source": 65,
     "pc": [
       180
     ]
   },
   {
-    "teal": 64,
+    "teal": 65,
     "source": 65,
     "pc": [
       181,
@@ -345,14 +346,14 @@
     ]
   },
   {
-    "teal": 65,
+    "teal": 66,
     "source": 65,
     "pc": [
       183
     ]
   },
   {
-    "teal": 69,
+    "teal": 70,
     "source": 66,
     "pc": [
       184,
@@ -360,28 +361,28 @@
     ]
   },
   {
-    "teal": 70,
+    "teal": 71,
     "source": 66,
     "pc": [
       186
     ]
   },
   {
-    "teal": 71,
+    "teal": 72,
     "source": 66,
     "pc": [
       187
     ]
   },
   {
-    "teal": 72,
+    "teal": 73,
     "source": 60,
     "pc": [
       188
     ]
   },
   {
-    "teal": 77,
+    "teal": 78,
     "source": 72,
     "pc": [
       189,
@@ -390,7 +391,7 @@
     ]
   },
   {
-    "teal": 78,
+    "teal": 79,
     "source": 72,
     "pc": [
       192,
@@ -399,7 +400,7 @@
     ]
   },
   {
-    "teal": 81,
+    "teal": 82,
     "source": 72,
     "pc": [
       195,
@@ -408,21 +409,21 @@
     ]
   },
   {
-    "teal": 82,
+    "teal": 83,
     "source": 72,
     "pc": [
       198
     ]
   },
   {
-    "teal": 83,
+    "teal": 84,
     "source": 72,
     "pc": [
       199
     ]
   },
   {
-    "teal": 89,
+    "teal": 90,
     "source": 72,
     "pc": [
       200,
@@ -431,7 +432,7 @@
     ]
   },
   {
-    "teal": 96,
+    "teal": 97,
     "source": 74,
     "pc": [
       203,
@@ -439,42 +440,43 @@
     ]
   },
   {
-    "teal": 97,
+    "teal": 98,
     "source": 74,
     "pc": [
       205
     ]
   },
   {
-    "teal": 98,
+    "teal": 99,
     "source": 74,
     "pc": [
       206
     ]
   },
   {
-    "teal": 99,
+    "teal": 100,
     "source": 74,
     "pc": [
       207
     ]
   },
   {
-    "teal": 102,
+    "teal": 103,
     "source": 73,
+    "errorMessage": "Only addressUdpater setup in the config can update application",
     "pc": [
       208
     ]
   },
   {
-    "teal": 106,
+    "teal": 107,
     "source": 77,
     "pc": [
       209
     ]
   },
   {
-    "teal": 107,
+    "teal": 108,
     "source": 77,
     "pc": [
       210,
@@ -482,21 +484,21 @@
     ]
   },
   {
-    "teal": 108,
+    "teal": 109,
     "source": 77,
     "pc": [
       212
     ]
   },
   {
-    "teal": 109,
+    "teal": 110,
     "source": 72,
     "pc": [
       213
     ]
   },
   {
-    "teal": 114,
+    "teal": 115,
     "source": 84,
     "pc": [
       214,
@@ -505,14 +507,14 @@
     ]
   },
   {
-    "teal": 115,
+    "teal": 116,
     "source": 84,
     "pc": [
       217
     ]
   },
   {
-    "teal": 118,
+    "teal": 119,
     "source": 84,
     "pc": [
       218,
@@ -521,14 +523,14 @@
     ]
   },
   {
-    "teal": 119,
+    "teal": 120,
     "source": 84,
     "pc": [
       221
     ]
   },
   {
-    "teal": 122,
+    "teal": 123,
     "source": 84,
     "pc": [
       222,
@@ -537,42 +539,43 @@
     ]
   },
   {
-    "teal": 123,
+    "teal": 124,
     "source": 84,
     "pc": [
       225
     ]
   },
   {
-    "teal": 124,
+    "teal": 125,
     "source": 84,
     "pc": [
       226
     ]
   },
   {
-    "teal": 125,
+    "teal": 126,
     "source": 84,
     "pc": [
       227
     ]
   },
   {
-    "teal": 126,
+    "teal": 127,
     "source": 84,
     "pc": [
       228
     ]
   },
   {
-    "teal": 127,
+    "teal": 130,
     "source": 84,
+    "errorMessage": "argument 2 (biatecFee) for bootstrap must be a uint256",
     "pc": [
       229
     ]
   },
   {
-    "teal": 130,
+    "teal": 133,
     "source": 84,
     "pc": [
       230,
@@ -581,21 +584,21 @@
     ]
   },
   {
-    "teal": 131,
+    "teal": 134,
     "source": 84,
     "pc": [
       233
     ]
   },
   {
-    "teal": 132,
+    "teal": 135,
     "source": 84,
     "pc": [
       234
     ]
   },
   {
-    "teal": 139,
+    "teal": 142,
     "source": 84,
     "pc": [
       235,
@@ -604,7 +607,7 @@
     ]
   },
   {
-    "teal": 143,
+    "teal": 146,
     "source": 85,
     "pc": [
       238,
@@ -612,35 +615,36 @@
     ]
   },
   {
-    "teal": 144,
+    "teal": 147,
     "source": 85,
     "pc": [
       240
     ]
   },
   {
-    "teal": 145,
+    "teal": 148,
     "source": 85,
     "pc": [
       241
     ]
   },
   {
-    "teal": 146,
+    "teal": 149,
     "source": 85,
     "pc": [
       242
     ]
   },
   {
-    "teal": 149,
+    "teal": 152,
     "source": 85,
+    "errorMessage": "Only updater can call bootstrap method",
     "pc": [
       243
     ]
   },
   {
-    "teal": 153,
+    "teal": 156,
     "source": 86,
     "pc": [
       244,
@@ -648,7 +652,7 @@
     ]
   },
   {
-    "teal": 154,
+    "teal": 157,
     "source": 86,
     "pc": [
       246,
@@ -656,7 +660,7 @@
     ]
   },
   {
-    "teal": 155,
+    "teal": 158,
     "source": 86,
     "pc": [
       248,
@@ -664,28 +668,29 @@
     ]
   },
   {
-    "teal": 156,
+    "teal": 159,
     "source": 86,
     "pc": [
       250
     ]
   },
   {
-    "teal": 157,
+    "teal": 160,
     "source": 86,
     "pc": [
       251
     ]
   },
   {
-    "teal": 160,
+    "teal": 163,
     "source": 86,
+    "errorMessage": "Biatec cannot set fees higher then 50% of lp fees",
     "pc": [
       252
     ]
   },
   {
-    "teal": 164,
+    "teal": 167,
     "source": 87,
     "pc": [
       253,
@@ -693,7 +698,7 @@
     ]
   },
   {
-    "teal": 165,
+    "teal": 168,
     "source": 87,
     "pc": [
       255,
@@ -701,14 +706,14 @@
     ]
   },
   {
-    "teal": 166,
+    "teal": 169,
     "source": 87,
     "pc": [
       257
     ]
   },
   {
-    "teal": 170,
+    "teal": 173,
     "source": 88,
     "pc": [
       258,
@@ -716,7 +721,7 @@
     ]
   },
   {
-    "teal": 171,
+    "teal": 174,
     "source": 88,
     "pc": [
       260,
@@ -724,14 +729,14 @@
     ]
   },
   {
-    "teal": 172,
+    "teal": 175,
     "source": 88,
     "pc": [
       262
     ]
   },
   {
-    "teal": 176,
+    "teal": 179,
     "source": 89,
     "pc": [
       263,
@@ -739,7 +744,7 @@
     ]
   },
   {
-    "teal": 177,
+    "teal": 180,
     "source": 89,
     "pc": [
       265,
@@ -747,21 +752,21 @@
     ]
   },
   {
-    "teal": 178,
+    "teal": 181,
     "source": 89,
     "pc": [
       267
     ]
   },
   {
-    "teal": 179,
+    "teal": 182,
     "source": 84,
     "pc": [
       268
     ]
   },
   {
-    "teal": 184,
+    "teal": 187,
     "source": 97,
     "pc": [
       269,
@@ -770,42 +775,43 @@
     ]
   },
   {
-    "teal": 185,
+    "teal": 188,
     "source": 97,
     "pc": [
       272
     ]
   },
   {
-    "teal": 186,
+    "teal": 189,
     "source": 97,
     "pc": [
       273
     ]
   },
   {
-    "teal": 187,
+    "teal": 190,
     "source": 97,
     "pc": [
       274
     ]
   },
   {
-    "teal": 188,
+    "teal": 191,
     "source": 97,
     "pc": [
       275
     ]
   },
   {
-    "teal": 189,
+    "teal": 194,
     "source": 97,
+    "errorMessage": "argument 0 (a) for setAddressUdpater must be a address",
     "pc": [
       276
     ]
   },
   {
-    "teal": 192,
+    "teal": 197,
     "source": 97,
     "pc": [
       277,
@@ -814,21 +820,21 @@
     ]
   },
   {
-    "teal": 193,
+    "teal": 198,
     "source": 97,
     "pc": [
       280
     ]
   },
   {
-    "teal": 194,
+    "teal": 199,
     "source": 97,
     "pc": [
       281
     ]
   },
   {
-    "teal": 202,
+    "teal": 207,
     "source": 97,
     "pc": [
       282,
@@ -837,7 +843,7 @@
     ]
   },
   {
-    "teal": 206,
+    "teal": 211,
     "source": 98,
     "pc": [
       285,
@@ -845,42 +851,43 @@
     ]
   },
   {
-    "teal": 207,
+    "teal": 212,
     "source": 98,
     "pc": [
       287
     ]
   },
   {
-    "teal": 208,
+    "teal": 213,
     "source": 98,
     "pc": [
       288
     ]
   },
   {
-    "teal": 209,
+    "teal": 214,
     "source": 98,
     "pc": [
       289
     ]
   },
   {
-    "teal": 212,
+    "teal": 217,
     "source": 98,
+    "errorMessage": "Only updater can change updater address",
     "pc": [
       290
     ]
   },
   {
-    "teal": 216,
+    "teal": 221,
     "source": 99,
     "pc": [
       291
     ]
   },
   {
-    "teal": 217,
+    "teal": 222,
     "source": 99,
     "pc": [
       292,
@@ -888,21 +895,21 @@
     ]
   },
   {
-    "teal": 218,
+    "teal": 223,
     "source": 99,
     "pc": [
       294
     ]
   },
   {
-    "teal": 219,
+    "teal": 224,
     "source": 97,
     "pc": [
       295
     ]
   },
   {
-    "teal": 224,
+    "teal": 229,
     "source": 107,
     "pc": [
       296,
@@ -911,14 +918,14 @@
     ]
   },
   {
-    "teal": 225,
+    "teal": 230,
     "source": 107,
     "pc": [
       299
     ]
   },
   {
-    "teal": 228,
+    "teal": 233,
     "source": 107,
     "pc": [
       300,
@@ -927,21 +934,21 @@
     ]
   },
   {
-    "teal": 229,
+    "teal": 234,
     "source": 107,
     "pc": [
       303
     ]
   },
   {
-    "teal": 230,
+    "teal": 235,
     "source": 107,
     "pc": [
       304
     ]
   },
   {
-    "teal": 238,
+    "teal": 243,
     "source": 107,
     "pc": [
       305,
@@ -950,7 +957,7 @@
     ]
   },
   {
-    "teal": 242,
+    "teal": 247,
     "source": 108,
     "pc": [
       308,
@@ -958,35 +965,36 @@
     ]
   },
   {
-    "teal": 243,
+    "teal": 248,
     "source": 108,
     "pc": [
       310
     ]
   },
   {
-    "teal": 244,
+    "teal": 249,
     "source": 108,
     "pc": [
       311
     ]
   },
   {
-    "teal": 245,
+    "teal": 250,
     "source": 108,
     "pc": [
       312
     ]
   },
   {
-    "teal": 248,
+    "teal": 253,
     "source": 108,
+    "errorMessage": "Only updater can pause and unpause the biatec services",
     "pc": [
       313
     ]
   },
   {
-    "teal": 252,
+    "teal": 257,
     "source": 109,
     "pc": [
       314,
@@ -994,7 +1002,7 @@
     ]
   },
   {
-    "teal": 253,
+    "teal": 258,
     "source": 109,
     "pc": [
       316,
@@ -1002,21 +1010,21 @@
     ]
   },
   {
-    "teal": 254,
+    "teal": 259,
     "source": 109,
     "pc": [
       318
     ]
   },
   {
-    "teal": 255,
+    "teal": 260,
     "source": 107,
     "pc": [
       319
     ]
   },
   {
-    "teal": 260,
+    "teal": 265,
     "source": 117,
     "pc": [
       320,
@@ -1025,42 +1033,43 @@
     ]
   },
   {
-    "teal": 261,
+    "teal": 266,
     "source": 117,
     "pc": [
       323
     ]
   },
   {
-    "teal": 262,
+    "teal": 267,
     "source": 117,
     "pc": [
       324
     ]
   },
   {
-    "teal": 263,
+    "teal": 268,
     "source": 117,
     "pc": [
       325
     ]
   },
   {
-    "teal": 264,
+    "teal": 269,
     "source": 117,
     "pc": [
       326
     ]
   },
   {
-    "teal": 265,
+    "teal": 272,
     "source": 117,
+    "errorMessage": "argument 0 (a) for setAddressGov must be a address",
     "pc": [
       327
     ]
   },
   {
-    "teal": 268,
+    "teal": 275,
     "source": 117,
     "pc": [
       328,
@@ -1069,21 +1078,21 @@
     ]
   },
   {
-    "teal": 269,
+    "teal": 276,
     "source": 117,
     "pc": [
       331
     ]
   },
   {
-    "teal": 270,
+    "teal": 277,
     "source": 117,
     "pc": [
       332
     ]
   },
   {
-    "teal": 278,
+    "teal": 285,
     "source": 117,
     "pc": [
       333,
@@ -1092,7 +1101,7 @@
     ]
   },
   {
-    "teal": 282,
+    "teal": 289,
     "source": 118,
     "pc": [
       336,
@@ -1100,35 +1109,36 @@
     ]
   },
   {
-    "teal": 283,
+    "teal": 290,
     "source": 118,
     "pc": [
       338
     ]
   },
   {
-    "teal": 284,
+    "teal": 291,
     "source": 118,
     "pc": [
       339
     ]
   },
   {
-    "teal": 285,
+    "teal": 292,
     "source": 118,
     "pc": [
       340
     ]
   },
   {
-    "teal": 288,
+    "teal": 295,
     "source": 118,
+    "errorMessage": "Only updater can change gov address",
     "pc": [
       341
     ]
   },
   {
-    "teal": 292,
+    "teal": 299,
     "source": 119,
     "pc": [
       342,
@@ -1136,7 +1146,7 @@
     ]
   },
   {
-    "teal": 293,
+    "teal": 300,
     "source": 119,
     "pc": [
       344,
@@ -1144,21 +1154,21 @@
     ]
   },
   {
-    "teal": 294,
+    "teal": 301,
     "source": 119,
     "pc": [
       346
     ]
   },
   {
-    "teal": 295,
+    "teal": 302,
     "source": 117,
     "pc": [
       347
     ]
   },
   {
-    "teal": 300,
+    "teal": 307,
     "source": 127,
     "pc": [
       348,
@@ -1167,42 +1177,43 @@
     ]
   },
   {
-    "teal": 301,
+    "teal": 308,
     "source": 127,
     "pc": [
       351
     ]
   },
   {
-    "teal": 302,
+    "teal": 309,
     "source": 127,
     "pc": [
       352
     ]
   },
   {
-    "teal": 303,
+    "teal": 310,
     "source": 127,
     "pc": [
       353
     ]
   },
   {
-    "teal": 304,
+    "teal": 311,
     "source": 127,
     "pc": [
       354
     ]
   },
   {
-    "teal": 305,
+    "teal": 314,
     "source": 127,
+    "errorMessage": "argument 0 (a) for setAddressExecutive must be a address",
     "pc": [
       355
     ]
   },
   {
-    "teal": 308,
+    "teal": 317,
     "source": 127,
     "pc": [
       356,
@@ -1211,21 +1222,21 @@
     ]
   },
   {
-    "teal": 309,
+    "teal": 318,
     "source": 127,
     "pc": [
       359
     ]
   },
   {
-    "teal": 310,
+    "teal": 319,
     "source": 127,
     "pc": [
       360
     ]
   },
   {
-    "teal": 318,
+    "teal": 327,
     "source": 127,
     "pc": [
       361,
@@ -1234,7 +1245,7 @@
     ]
   },
   {
-    "teal": 322,
+    "teal": 331,
     "source": 128,
     "pc": [
       364,
@@ -1242,42 +1253,43 @@
     ]
   },
   {
-    "teal": 323,
+    "teal": 332,
     "source": 128,
     "pc": [
       366
     ]
   },
   {
-    "teal": 324,
+    "teal": 333,
     "source": 128,
     "pc": [
       367
     ]
   },
   {
-    "teal": 325,
+    "teal": 334,
     "source": 128,
     "pc": [
       368
     ]
   },
   {
-    "teal": 328,
+    "teal": 337,
     "source": 128,
+    "errorMessage": "Only updater can change addressExecutive",
     "pc": [
       369
     ]
   },
   {
-    "teal": 332,
+    "teal": 341,
     "source": 129,
     "pc": [
       370
     ]
   },
   {
-    "teal": 333,
+    "teal": 342,
     "source": 129,
     "pc": [
       371,
@@ -1285,21 +1297,21 @@
     ]
   },
   {
-    "teal": 334,
+    "teal": 343,
     "source": 129,
     "pc": [
       373
     ]
   },
   {
-    "teal": 335,
+    "teal": 344,
     "source": 127,
     "pc": [
       374
     ]
   },
   {
-    "teal": 340,
+    "teal": 349,
     "source": 137,
     "pc": [
       375,
@@ -1308,42 +1320,43 @@
     ]
   },
   {
-    "teal": 341,
+    "teal": 350,
     "source": 137,
     "pc": [
       378
     ]
   },
   {
-    "teal": 342,
+    "teal": 351,
     "source": 137,
     "pc": [
       379
     ]
   },
   {
-    "teal": 343,
+    "teal": 352,
     "source": 137,
     "pc": [
       380
     ]
   },
   {
-    "teal": 344,
+    "teal": 353,
     "source": 137,
     "pc": [
       381
     ]
   },
   {
-    "teal": 345,
+    "teal": 356,
     "source": 137,
+    "errorMessage": "argument 0 (a) for setAddressExecutiveFee must be a address",
     "pc": [
       382
     ]
   },
   {
-    "teal": 348,
+    "teal": 359,
     "source": 137,
     "pc": [
       383,
@@ -1352,21 +1365,21 @@
     ]
   },
   {
-    "teal": 349,
+    "teal": 360,
     "source": 137,
     "pc": [
       386
     ]
   },
   {
-    "teal": 350,
+    "teal": 361,
     "source": 137,
     "pc": [
       387
     ]
   },
   {
-    "teal": 358,
+    "teal": 369,
     "source": 137,
     "pc": [
       388,
@@ -1375,7 +1388,7 @@
     ]
   },
   {
-    "teal": 362,
+    "teal": 373,
     "source": 138,
     "pc": [
       391,
@@ -1383,42 +1396,43 @@
     ]
   },
   {
-    "teal": 363,
+    "teal": 374,
     "source": 138,
     "pc": [
       393
     ]
   },
   {
-    "teal": 364,
+    "teal": 375,
     "source": 138,
     "pc": [
       394
     ]
   },
   {
-    "teal": 365,
+    "teal": 376,
     "source": 138,
     "pc": [
       395
     ]
   },
   {
-    "teal": 368,
+    "teal": 379,
     "source": 138,
+    "errorMessage": "Only addressExecutive can change fee executor address",
     "pc": [
       396
     ]
   },
   {
-    "teal": 372,
+    "teal": 383,
     "source": 139,
     "pc": [
       397
     ]
   },
   {
-    "teal": 373,
+    "teal": 384,
     "source": 139,
     "pc": [
       398,
@@ -1426,21 +1440,21 @@
     ]
   },
   {
-    "teal": 374,
+    "teal": 385,
     "source": 139,
     "pc": [
       400
     ]
   },
   {
-    "teal": 375,
+    "teal": 386,
     "source": 137,
     "pc": [
       401
     ]
   },
   {
-    "teal": 380,
+    "teal": 391,
     "source": 147,
     "pc": [
       402,
@@ -1449,14 +1463,14 @@
     ]
   },
   {
-    "teal": 381,
+    "teal": 392,
     "source": 147,
     "pc": [
       405
     ]
   },
   {
-    "teal": 384,
+    "teal": 395,
     "source": 147,
     "pc": [
       406,
@@ -1465,21 +1479,21 @@
     ]
   },
   {
-    "teal": 385,
+    "teal": 396,
     "source": 147,
     "pc": [
       409
     ]
   },
   {
-    "teal": 386,
+    "teal": 397,
     "source": 147,
     "pc": [
       410
     ]
   },
   {
-    "teal": 394,
+    "teal": 405,
     "source": 147,
     "pc": [
       411,
@@ -1488,7 +1502,7 @@
     ]
   },
   {
-    "teal": 398,
+    "teal": 409,
     "source": 148,
     "pc": [
       414,
@@ -1496,35 +1510,36 @@
     ]
   },
   {
-    "teal": 399,
+    "teal": 410,
     "source": 148,
     "pc": [
       416
     ]
   },
   {
-    "teal": 400,
+    "teal": 411,
     "source": 148,
     "pc": [
       417
     ]
   },
   {
-    "teal": 401,
+    "teal": 412,
     "source": 148,
     "pc": [
       418
     ]
   },
   {
-    "teal": 404,
+    "teal": 415,
     "source": 148,
+    "errorMessage": "Only updater can change appIdentityProvider",
     "pc": [
       419
     ]
   },
   {
-    "teal": 408,
+    "teal": 419,
     "source": 149,
     "pc": [
       420,
@@ -1532,7 +1547,7 @@
     ]
   },
   {
-    "teal": 409,
+    "teal": 420,
     "source": 149,
     "pc": [
       422,
@@ -1540,21 +1555,21 @@
     ]
   },
   {
-    "teal": 410,
+    "teal": 421,
     "source": 149,
     "pc": [
       424
     ]
   },
   {
-    "teal": 411,
+    "teal": 422,
     "source": 147,
     "pc": [
       425
     ]
   },
   {
-    "teal": 416,
+    "teal": 427,
     "source": 157,
     "pc": [
       426,
@@ -1563,14 +1578,14 @@
     ]
   },
   {
-    "teal": 417,
+    "teal": 428,
     "source": 157,
     "pc": [
       429
     ]
   },
   {
-    "teal": 420,
+    "teal": 431,
     "source": 157,
     "pc": [
       430,
@@ -1579,21 +1594,21 @@
     ]
   },
   {
-    "teal": 421,
+    "teal": 432,
     "source": 157,
     "pc": [
       433
     ]
   },
   {
-    "teal": 422,
+    "teal": 433,
     "source": 157,
     "pc": [
       434
     ]
   },
   {
-    "teal": 430,
+    "teal": 441,
     "source": 157,
     "pc": [
       435,
@@ -1602,7 +1617,7 @@
     ]
   },
   {
-    "teal": 434,
+    "teal": 445,
     "source": 158,
     "pc": [
       438,
@@ -1610,35 +1625,36 @@
     ]
   },
   {
-    "teal": 435,
+    "teal": 446,
     "source": 158,
     "pc": [
       440
     ]
   },
   {
-    "teal": 436,
+    "teal": 447,
     "source": 158,
     "pc": [
       441
     ]
   },
   {
-    "teal": 437,
+    "teal": 448,
     "source": 158,
     "pc": [
       442
     ]
   },
   {
-    "teal": 440,
+    "teal": 451,
     "source": 158,
+    "errorMessage": "Only updater can change appPoolProvider",
     "pc": [
       443
     ]
   },
   {
-    "teal": 444,
+    "teal": 455,
     "source": 159,
     "pc": [
       444,
@@ -1646,7 +1662,7 @@
     ]
   },
   {
-    "teal": 445,
+    "teal": 456,
     "source": 159,
     "pc": [
       446,
@@ -1654,21 +1670,21 @@
     ]
   },
   {
-    "teal": 446,
+    "teal": 457,
     "source": 159,
     "pc": [
       448
     ]
   },
   {
-    "teal": 447,
+    "teal": 458,
     "source": 157,
     "pc": [
       449
     ]
   },
   {
-    "teal": 452,
+    "teal": 463,
     "source": 171,
     "pc": [
       450,
@@ -1677,42 +1693,43 @@
     ]
   },
   {
-    "teal": 453,
+    "teal": 464,
     "source": 171,
     "pc": [
       453
     ]
   },
   {
-    "teal": 454,
+    "teal": 465,
     "source": 171,
     "pc": [
       454
     ]
   },
   {
-    "teal": 455,
+    "teal": 466,
     "source": 171,
     "pc": [
       455
     ]
   },
   {
-    "teal": 456,
+    "teal": 467,
     "source": 171,
     "pc": [
       456
     ]
   },
   {
-    "teal": 457,
+    "teal": 470,
     "source": 171,
+    "errorMessage": "argument 0 (biatecFee) for setBiatecFee must be a uint256",
     "pc": [
       457
     ]
   },
   {
-    "teal": 460,
+    "teal": 473,
     "source": 171,
     "pc": [
       458,
@@ -1721,21 +1738,21 @@
     ]
   },
   {
-    "teal": 461,
+    "teal": 474,
     "source": 171,
     "pc": [
       461
     ]
   },
   {
-    "teal": 462,
+    "teal": 475,
     "source": 171,
     "pc": [
       462
     ]
   },
   {
-    "teal": 474,
+    "teal": 487,
     "source": 171,
     "pc": [
       463,
@@ -1744,7 +1761,7 @@
     ]
   },
   {
-    "teal": 478,
+    "teal": 491,
     "source": 172,
     "pc": [
       466,
@@ -1752,35 +1769,36 @@
     ]
   },
   {
-    "teal": 479,
+    "teal": 492,
     "source": 172,
     "pc": [
       468
     ]
   },
   {
-    "teal": 480,
+    "teal": 493,
     "source": 172,
     "pc": [
       469
     ]
   },
   {
-    "teal": 481,
+    "teal": 494,
     "source": 172,
     "pc": [
       470
     ]
   },
   {
-    "teal": 484,
+    "teal": 497,
     "source": 172,
+    "errorMessage": "Only executive address can change fees",
     "pc": [
       471
     ]
   },
   {
-    "teal": 488,
+    "teal": 501,
     "source": 173,
     "pc": [
       472,
@@ -1788,7 +1806,7 @@
     ]
   },
   {
-    "teal": 489,
+    "teal": 502,
     "source": 173,
     "pc": [
       474,
@@ -1796,7 +1814,7 @@
     ]
   },
   {
-    "teal": 490,
+    "teal": 503,
     "source": 173,
     "pc": [
       476,
@@ -1804,28 +1822,29 @@
     ]
   },
   {
-    "teal": 491,
+    "teal": 504,
     "source": 173,
     "pc": [
       478
     ]
   },
   {
-    "teal": 492,
+    "teal": 505,
     "source": 173,
     "pc": [
       479
     ]
   },
   {
-    "teal": 495,
+    "teal": 508,
     "source": 173,
+    "errorMessage": "Biatec cannot set fees higher then 50% of lp fees",
     "pc": [
       480
     ]
   },
   {
-    "teal": 499,
+    "teal": 512,
     "source": 174,
     "pc": [
       481,
@@ -1833,7 +1852,7 @@
     ]
   },
   {
-    "teal": 500,
+    "teal": 513,
     "source": 174,
     "pc": [
       483,
@@ -1841,21 +1860,21 @@
     ]
   },
   {
-    "teal": 501,
+    "teal": 514,
     "source": 174,
     "pc": [
       485
     ]
   },
   {
-    "teal": 502,
+    "teal": 515,
     "source": 171,
     "pc": [
       486
     ]
   },
   {
-    "teal": 507,
+    "teal": 520,
     "source": 188,
     "pc": [
       487,
@@ -1864,14 +1883,14 @@
     ]
   },
   {
-    "teal": 508,
+    "teal": 521,
     "source": 188,
     "pc": [
       490
     ]
   },
   {
-    "teal": 511,
+    "teal": 524,
     "source": 187,
     "pc": [
       491,
@@ -1880,14 +1899,14 @@
     ]
   },
   {
-    "teal": 512,
+    "teal": 525,
     "source": 187,
     "pc": [
       494
     ]
   },
   {
-    "teal": 515,
+    "teal": 528,
     "source": 186,
     "pc": [
       495,
@@ -1896,14 +1915,14 @@
     ]
   },
   {
-    "teal": 516,
+    "teal": 529,
     "source": 186,
     "pc": [
       498
     ]
   },
   {
-    "teal": 519,
+    "teal": 532,
     "source": 185,
     "pc": [
       499,
@@ -1912,7 +1931,7 @@
     ]
   },
   {
-    "teal": 520,
+    "teal": 533,
     "source": 185,
     "pc": [
       502,
@@ -1921,7 +1940,7 @@
     ]
   },
   {
-    "teal": 523,
+    "teal": 536,
     "source": 184,
     "pc": [
       505,
@@ -1930,7 +1949,7 @@
     ]
   },
   {
-    "teal": 524,
+    "teal": 537,
     "source": 184,
     "pc": [
       508,
@@ -1939,7 +1958,7 @@
     ]
   },
   {
-    "teal": 527,
+    "teal": 540,
     "source": 183,
     "pc": [
       511,
@@ -1948,7 +1967,7 @@
     ]
   },
   {
-    "teal": 528,
+    "teal": 541,
     "source": 183,
     "pc": [
       514,
@@ -1957,7 +1976,7 @@
     ]
   },
   {
-    "teal": 531,
+    "teal": 544,
     "source": 182,
     "pc": [
       517,
@@ -1966,21 +1985,21 @@
     ]
   },
   {
-    "teal": 532,
+    "teal": 545,
     "source": 182,
     "pc": [
       520
     ]
   },
   {
-    "teal": 533,
+    "teal": 546,
     "source": 182,
     "pc": [
       521
     ]
   },
   {
-    "teal": 541,
+    "teal": 554,
     "source": 182,
     "pc": [
       522,
@@ -1989,7 +2008,7 @@
     ]
   },
   {
-    "teal": 548,
+    "teal": 561,
     "source": 191,
     "pc": [
       525,
@@ -1997,42 +2016,43 @@
     ]
   },
   {
-    "teal": 549,
+    "teal": 562,
     "source": 191,
     "pc": [
       527
     ]
   },
   {
-    "teal": 550,
+    "teal": 563,
     "source": 191,
     "pc": [
       528
     ]
   },
   {
-    "teal": 551,
+    "teal": 564,
     "source": 191,
     "pc": [
       529
     ]
   },
   {
-    "teal": 554,
+    "teal": 567,
     "source": 190,
+    "errorMessage": "Only fee executor setup in the config can take the collected fees",
     "pc": [
       530
     ]
   },
   {
-    "teal": 566,
+    "teal": 579,
     "source": 194,
     "pc": [
       531
     ]
   },
   {
-    "teal": 567,
+    "teal": 580,
     "source": 194,
     "pc": [
       532,
@@ -2040,7 +2060,7 @@
     ]
   },
   {
-    "teal": 568,
+    "teal": 581,
     "source": 194,
     "pc": [
       534,
@@ -2048,7 +2068,7 @@
     ]
   },
   {
-    "teal": 572,
+    "teal": 585,
     "source": 195,
     "pc": [
       536,
@@ -2056,7 +2076,7 @@
     ]
   },
   {
-    "teal": 573,
+    "teal": 586,
     "source": 195,
     "pc": [
       538,
@@ -2064,7 +2084,7 @@
     ]
   },
   {
-    "teal": 577,
+    "teal": 590,
     "source": 196,
     "pc": [
       540,
@@ -2072,7 +2092,7 @@
     ]
   },
   {
-    "teal": 578,
+    "teal": 591,
     "source": 196,
     "pc": [
       542,
@@ -2080,7 +2100,7 @@
     ]
   },
   {
-    "teal": 582,
+    "teal": 595,
     "source": 197,
     "pc": [
       544,
@@ -2088,7 +2108,7 @@
     ]
   },
   {
-    "teal": 583,
+    "teal": 596,
     "source": 197,
     "pc": [
       546,
@@ -2096,7 +2116,7 @@
     ]
   },
   {
-    "teal": 587,
+    "teal": 600,
     "source": 198,
     "pc": [
       548,
@@ -2104,7 +2124,7 @@
     ]
   },
   {
-    "teal": 588,
+    "teal": 601,
     "source": 198,
     "pc": [
       550,
@@ -2112,7 +2132,7 @@
     ]
   },
   {
-    "teal": 592,
+    "teal": 605,
     "source": 199,
     "pc": [
       552,
@@ -2120,7 +2140,7 @@
     ]
   },
   {
-    "teal": 593,
+    "teal": 606,
     "source": 199,
     "pc": [
       554,
@@ -2128,7 +2148,7 @@
     ]
   },
   {
-    "teal": 597,
+    "teal": 610,
     "source": 200,
     "pc": [
       556,
@@ -2136,7 +2156,7 @@
     ]
   },
   {
-    "teal": 598,
+    "teal": 611,
     "source": 200,
     "pc": [
       558,
@@ -2144,14 +2164,14 @@
     ]
   },
   {
-    "teal": 602,
+    "teal": 615,
     "source": 201,
     "pc": [
       560
     ]
   },
   {
-    "teal": 603,
+    "teal": 616,
     "source": 201,
     "pc": [
       561,
@@ -2159,21 +2179,21 @@
     ]
   },
   {
-    "teal": 606,
+    "teal": 619,
     "source": 194,
     "pc": [
       563
     ]
   },
   {
-    "teal": 607,
+    "teal": 620,
     "source": 182,
     "pc": [
       564
     ]
   },
   {
-    "teal": 612,
+    "teal": 625,
     "source": 213,
     "pc": [
       565,
@@ -2185,7 +2205,7 @@
     ]
   },
   {
-    "teal": 615,
+    "teal": 628,
     "source": 213,
     "pc": [
       571,
@@ -2194,14 +2214,14 @@
     ]
   },
   {
-    "teal": 616,
+    "teal": 629,
     "source": 213,
     "pc": [
       574
     ]
   },
   {
-    "teal": 619,
+    "teal": 632,
     "source": 213,
     "pc": [
       575,
@@ -2210,14 +2230,14 @@
     ]
   },
   {
-    "teal": 620,
+    "teal": 633,
     "source": 213,
     "pc": [
       578
     ]
   },
   {
-    "teal": 623,
+    "teal": 636,
     "source": 213,
     "pc": [
       579,
@@ -2226,42 +2246,42 @@
     ]
   },
   {
-    "teal": 624,
+    "teal": 637,
     "source": 213,
     "pc": [
       582
     ]
   },
   {
-    "teal": 625,
+    "teal": 638,
     "source": 213,
     "pc": [
       583
     ]
   },
   {
-    "teal": 626,
+    "teal": 639,
     "source": 213,
     "pc": [
       584
     ]
   },
   {
-    "teal": 627,
+    "teal": 640,
     "source": 213,
     "pc": [
       585
     ]
   },
   {
-    "teal": 628,
+    "teal": 641,
     "source": 213,
     "pc": [
       586
     ]
   },
   {
-    "teal": 639,
+    "teal": 652,
     "source": 213,
     "pc": [
       587,
@@ -2270,7 +2290,7 @@
     ]
   },
   {
-    "teal": 646,
+    "teal": 659,
     "source": 215,
     "pc": [
       590,
@@ -2278,35 +2298,36 @@
     ]
   },
   {
-    "teal": 647,
+    "teal": 660,
     "source": 215,
     "pc": [
       592
     ]
   },
   {
-    "teal": 648,
+    "teal": 661,
     "source": 215,
     "pc": [
       593
     ]
   },
   {
-    "teal": 649,
+    "teal": 662,
     "source": 215,
     "pc": [
       594
     ]
   },
   {
-    "teal": 652,
+    "teal": 665,
     "source": 214,
+    "errorMessage": "Only fee executor setup in the config can take the collected fees",
     "pc": [
       595
     ]
   },
   {
-    "teal": 656,
+    "teal": 669,
     "source": 219,
     "pc": [
       596,
@@ -2314,7 +2335,7 @@
     ]
   },
   {
-    "teal": 657,
+    "teal": 670,
     "source": 219,
     "pc": [
       598,
@@ -2322,7 +2343,7 @@
     ]
   },
   {
-    "teal": 658,
+    "teal": 671,
     "source": 219,
     "pc": [
       600,
@@ -2330,7 +2351,7 @@
     ]
   },
   {
-    "teal": 659,
+    "teal": 672,
     "source": 219,
     "pc": [
       602,
@@ -2339,7 +2360,7 @@
     ]
   },
   {
-    "teal": 663,
+    "teal": 676,
     "source": 221,
     "pc": [
       605,
@@ -2347,14 +2368,14 @@
     ]
   },
   {
-    "teal": 664,
-    "source": 221,
+    "teal": 677,
+    "source": 213,
     "pc": [
       607
     ]
   },
   {
-    "teal": 673,
+    "teal": 686,
     "source": 230,
     "pc": [
       608,
@@ -2363,7 +2384,7 @@
     ]
   },
   {
-    "teal": 678,
+    "teal": 691,
     "source": 231,
     "pc": [
       611,
@@ -2371,21 +2392,21 @@
     ]
   },
   {
-    "teal": 679,
+    "teal": 692,
     "source": 231,
     "pc": [
       613
     ]
   },
   {
-    "teal": 680,
+    "teal": 693,
     "source": 231,
     "pc": [
       614
     ]
   },
   {
-    "teal": 681,
+    "teal": 694,
     "source": 231,
     "pc": [
       615,
@@ -2394,21 +2415,21 @@
     ]
   },
   {
-    "teal": 690,
+    "teal": 703,
     "source": 232,
     "pc": [
       618
     ]
   },
   {
-    "teal": 691,
+    "teal": 704,
     "source": 232,
     "pc": [
       619
     ]
   },
   {
-    "teal": 692,
+    "teal": 705,
     "source": 232,
     "pc": [
       620,
@@ -2416,7 +2437,7 @@
     ]
   },
   {
-    "teal": 696,
+    "teal": 709,
     "source": 233,
     "pc": [
       622,
@@ -2424,7 +2445,7 @@
     ]
   },
   {
-    "teal": 697,
+    "teal": 710,
     "source": 233,
     "pc": [
       624,
@@ -2432,7 +2453,7 @@
     ]
   },
   {
-    "teal": 701,
+    "teal": 714,
     "source": 234,
     "pc": [
       626,
@@ -2440,7 +2461,7 @@
     ]
   },
   {
-    "teal": 702,
+    "teal": 715,
     "source": 234,
     "pc": [
       628,
@@ -2448,14 +2469,14 @@
     ]
   },
   {
-    "teal": 706,
+    "teal": 719,
     "source": 235,
     "pc": [
       630
     ]
   },
   {
-    "teal": 707,
+    "teal": 720,
     "source": 235,
     "pc": [
       631,
@@ -2463,14 +2484,14 @@
     ]
   },
   {
-    "teal": 710,
+    "teal": 723,
     "source": 232,
     "pc": [
       633
     ]
   },
   {
-    "teal": 711,
+    "teal": 724,
     "source": 231,
     "pc": [
       634,
@@ -2479,14 +2500,14 @@
     ]
   },
   {
-    "teal": 721,
+    "teal": 734,
     "source": 238,
     "pc": [
       637
     ]
   },
   {
-    "teal": 722,
+    "teal": 735,
     "source": 238,
     "pc": [
       638,
@@ -2494,7 +2515,7 @@
     ]
   },
   {
-    "teal": 723,
+    "teal": 736,
     "source": 238,
     "pc": [
       640,
@@ -2502,7 +2523,7 @@
     ]
   },
   {
-    "teal": 727,
+    "teal": 740,
     "source": 239,
     "pc": [
       642,
@@ -2510,7 +2531,7 @@
     ]
   },
   {
-    "teal": 728,
+    "teal": 741,
     "source": 239,
     "pc": [
       644,
@@ -2518,7 +2539,7 @@
     ]
   },
   {
-    "teal": 732,
+    "teal": 745,
     "source": 240,
     "pc": [
       646,
@@ -2526,7 +2547,7 @@
     ]
   },
   {
-    "teal": 733,
+    "teal": 746,
     "source": 240,
     "pc": [
       648,
@@ -2534,7 +2555,7 @@
     ]
   },
   {
-    "teal": 737,
+    "teal": 750,
     "source": 241,
     "pc": [
       650,
@@ -2542,7 +2563,7 @@
     ]
   },
   {
-    "teal": 738,
+    "teal": 751,
     "source": 241,
     "pc": [
       652,
@@ -2550,14 +2571,14 @@
     ]
   },
   {
-    "teal": 742,
+    "teal": 755,
     "source": 242,
     "pc": [
       654
     ]
   },
   {
-    "teal": 743,
+    "teal": 756,
     "source": 242,
     "pc": [
       655,
@@ -2565,21 +2586,21 @@
     ]
   },
   {
-    "teal": 746,
+    "teal": 759,
     "source": 238,
     "pc": [
       657
     ]
   },
   {
-    "teal": 749,
+    "teal": 762,
     "source": 230,
     "pc": [
       658
     ]
   },
   {
-    "teal": 752,
+    "teal": 765,
     "source": 6,
     "pc": [
       659,
@@ -2591,7 +2612,7 @@
     ]
   },
   {
-    "teal": 753,
+    "teal": 766,
     "source": 6,
     "pc": [
       665,
@@ -2600,7 +2621,7 @@
     ]
   },
   {
-    "teal": 754,
+    "teal": 767,
     "source": 6,
     "pc": [
       668,
@@ -2610,14 +2631,15 @@
     ]
   },
   {
-    "teal": 755,
+    "teal": 770,
     "source": 6,
+    "errorMessage": "this contract does not implement the given ABI method for create NoOp",
     "pc": [
       672
     ]
   },
   {
-    "teal": 758,
+    "teal": 773,
     "source": 6,
     "pc": [
       673,
@@ -2629,7 +2651,7 @@
     ]
   },
   {
-    "teal": 759,
+    "teal": 774,
     "source": 6,
     "pc": [
       679,
@@ -2641,7 +2663,7 @@
     ]
   },
   {
-    "teal": 760,
+    "teal": 775,
     "source": 6,
     "pc": [
       685,
@@ -2653,7 +2675,7 @@
     ]
   },
   {
-    "teal": 761,
+    "teal": 776,
     "source": 6,
     "pc": [
       691,
@@ -2665,7 +2687,7 @@
     ]
   },
   {
-    "teal": 762,
+    "teal": 777,
     "source": 6,
     "pc": [
       697,
@@ -2677,7 +2699,7 @@
     ]
   },
   {
-    "teal": 763,
+    "teal": 778,
     "source": 6,
     "pc": [
       703,
@@ -2689,7 +2711,7 @@
     ]
   },
   {
-    "teal": 764,
+    "teal": 779,
     "source": 6,
     "pc": [
       709,
@@ -2701,7 +2723,7 @@
     ]
   },
   {
-    "teal": 765,
+    "teal": 780,
     "source": 6,
     "pc": [
       715,
@@ -2713,7 +2735,7 @@
     ]
   },
   {
-    "teal": 766,
+    "teal": 781,
     "source": 6,
     "pc": [
       721,
@@ -2725,7 +2747,7 @@
     ]
   },
   {
-    "teal": 767,
+    "teal": 782,
     "source": 6,
     "pc": [
       727,
@@ -2737,7 +2759,7 @@
     ]
   },
   {
-    "teal": 768,
+    "teal": 783,
     "source": 6,
     "pc": [
       733,
@@ -2749,7 +2771,7 @@
     ]
   },
   {
-    "teal": 769,
+    "teal": 784,
     "source": 6,
     "pc": [
       739,
@@ -2758,7 +2780,7 @@
     ]
   },
   {
-    "teal": 770,
+    "teal": 785,
     "source": 6,
     "pc": [
       742,
@@ -2788,14 +2810,15 @@
     ]
   },
   {
-    "teal": 771,
+    "teal": 788,
     "source": 6,
+    "errorMessage": "this contract does not implement the given ABI method for call NoOp",
     "pc": [
       766
     ]
   },
   {
-    "teal": 774,
+    "teal": 791,
     "source": 6,
     "pc": [
       767,
@@ -2807,7 +2830,7 @@
     ]
   },
   {
-    "teal": 775,
+    "teal": 792,
     "source": 6,
     "pc": [
       773,
@@ -2816,7 +2839,7 @@
     ]
   },
   {
-    "teal": 776,
+    "teal": 793,
     "source": 6,
     "pc": [
       776,
@@ -2826,8 +2849,9 @@
     ]
   },
   {
-    "teal": 777,
+    "teal": 796,
     "source": 6,
+    "errorMessage": "this contract does not implement the given ABI method for call UpdateApplication",
     "pc": [
       780
     ]
