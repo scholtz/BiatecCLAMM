@@ -3,8 +3,8 @@ import { Contract } from '@algorandfoundation/tealscript';
 // eslint-disable-next-line no-unused-vars
 const version = 'BIATEC-CLAMM-01-01-01';
 const LP_TOKEN_DECIMALS = 6;
-const TOTAL_SUPPLY = 18_000_000_000_000_000_000;
-
+// const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
+const TOTAL_SUPPLY = '18000000000000000000';
 const SCALE = 1_000_000_000;
 const s = <uint256>1_000_000_000;
 // const SCALEUINT256 = <uint256>1_000_000_000;
@@ -227,7 +227,7 @@ class BiatecClammPool extends Contract {
    */
   updateApplication(appBiatecConfigProvider: AppID, newVersion: bytes): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
-    const addressUdpater = appBiatecConfigProvider.globalState('u');
+    const addressUdpater = appBiatecConfigProvider.globalState('u') as Address;
     assert(this.txn.sender === addressUdpater, 'ERR_UPDATER'); // 'Only addressUdpater setup in the config can update application');
     this.version.value = newVersion;
   }
@@ -288,7 +288,7 @@ class BiatecClammPool extends Contract {
 
     assert(this.fee.value <= 0, 'ERR_FEE'); // , 'You can bootstrap contract only once'); // check that this contract deployment was not yet initialized
 
-    const poolProviderFromConfig = appBiatecConfigProvider.globalState('p');
+    const poolProviderFromConfig = appBiatecConfigProvider.globalState('p') as AppID;
     assert(
       appBiatecPoolProvider === poolProviderFromConfig,
       'ERR_CONFIG' // 'appBiatecPoolProvider must match to the config in appBiatecConfigProvider'
@@ -379,7 +379,7 @@ class BiatecClammPool extends Contract {
       configAssetName: name,
       configAssetUnitName: 'BLP', // Biatec LP token
       // eslint-disable-next-line no-loss-of-precision
-      configAssetTotal: TOTAL_SUPPLY,
+      configAssetTotal: Uint<64>(TOTAL_SUPPLY),
       configAssetDecimals: LP_TOKEN_DECIMALS,
       configAssetManager: this.app.address,
       configAssetReserve: this.app.address,
@@ -770,7 +770,7 @@ class BiatecClammPool extends Contract {
     this.checkAssets(assetA, assetB, assetLp);
 
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value);
-    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
 
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
@@ -868,7 +868,7 @@ class BiatecClammPool extends Contract {
       appBiatecConfigProvider === this.appBiatecConfigProvider.value,
       'ERR-INVALID-CONFIG' // 'Configuration app does not match'
     );
-    const identityFromConfig = appBiatecConfigProvider.globalState('i');
+    const identityFromConfig = appBiatecConfigProvider.globalState('i') as AppID;
     assert(
       appBiatecIdentityProvider === identityFromConfig,
       'ERR-WRONG-IDENT' // appBiatecIdentityProvider must match to the config in appBiatecConfigProvider'
@@ -936,7 +936,7 @@ class BiatecClammPool extends Contract {
       });
     }
 
-    const poolProviderFromConfig = appBiatecConfigProvider.globalState('p');
+    const poolProviderFromConfig = appBiatecConfigProvider.globalState('p') as AppID;
     assert(
       appBiatecPoolProvider === poolProviderFromConfig,
       'ERR-INVALID-PP' // appBiatecPoolProvider must match to the config in appBiatecConfigProvider'
@@ -1168,7 +1168,7 @@ class BiatecClammPool extends Contract {
     this.checkAssetsAB(assetA, assetB);
 
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
-    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
 
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
@@ -1276,7 +1276,7 @@ class BiatecClammPool extends Contract {
     this.checkAssetsAB(assetA, assetB);
 
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
-    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
 
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
@@ -1333,7 +1333,7 @@ class BiatecClammPool extends Contract {
     voteKeyDilution: uint64
   ): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
-    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
     assert(
       this.txn.sender === addressExecutiveFee,
       'ERR_SENDER' // 'Only fee executor setup in the config can take the collected fees'
@@ -1356,7 +1356,7 @@ class BiatecClammPool extends Contract {
    */
   sendOfflineKeyRegistration(appBiatecConfigProvider: AppID): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
-    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
 
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
@@ -1374,7 +1374,7 @@ class BiatecClammPool extends Contract {
   @abi.readonly
   calculateDistributedLiquidity(assetLp: AssetID, currentDeposit: uint256): uint256 {
     const current = (this.app.address.assetBalance(assetLp) as uint256) - currentDeposit;
-    const minted = TOTAL_SUPPLY as uint256;
+    const minted = Uint<256>(TOTAL_SUPPLY) as uint256;
     const distributedLPTokens = minted - current;
     // if assetLp.decimals == 6 then assetLpDelicmalScale2Scale = 1000
     const assetLpDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256;
