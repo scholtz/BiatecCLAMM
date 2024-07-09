@@ -198,7 +198,7 @@
     },
     {
       "name": "removeLiquidityAdmin",
-      "desc": "This method allows biatec admin to reduce the lp position created by lp fees allocation.Only addressExecutiveFee is allowed to execute this method.",
+      "desc": "This method allows biatec admin to reduce the lp position created by lp fees allocation.\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
       "args": [
         {
           "name": "appBiatecConfigProvider",
@@ -273,7 +273,7 @@
     },
     {
       "name": "distributeExcessAssets",
-      "desc": "If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.This method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.Only addressExecutiveFee is allowed to execute this method.",
+      "desc": "If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.\nIf someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.\n\n\nThis method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
       "args": [
         {
           "name": "appBiatecConfigProvider",
@@ -307,7 +307,7 @@
     },
     {
       "name": "withdrawExcessAssets",
-      "desc": "If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.This method is used to distribute amount a and amount b of asset a and asset b to addressExecutiveFee account.Only addressExecutiveFee is allowed to execute this method.",
+      "desc": "If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.\nIf someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.\n\n\nThis method is used to distribute amount a and amount b of asset a and asset b to addressExecutiveFee account.\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
       "args": [
         {
           "name": "appBiatecConfigProvider",
@@ -341,7 +341,7 @@
     },
     {
       "name": "sendOnlineKeyRegistration",
-      "desc": "addressExecutiveFee can perfom key registration for this LP poolOnly addressExecutiveFee is allowed to execute this method.",
+      "desc": "addressExecutiveFee can perfom key registration for this LP pool\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
       "args": [
         {
           "name": "appBiatecConfigProvider",
@@ -378,7 +378,7 @@
     },
     {
       "name": "sendOfflineKeyRegistration",
-      "desc": "addressExecutiveFee can perfom key unregistration for this LP poolOnly addressExecutiveFee is allowed to execute this method.",
+      "desc": "addressExecutiveFee can perfom key unregistration for this LP pool\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
       "args": [
         {
           "name": "appBiatecConfigProvider",
@@ -430,7 +430,7 @@
     },
     {
       "name": "calculateLiquidityD",
-      "desc": "Calculates the liquidity  from the x - Asset A position and y - Asset B positionThis method calculates discriminant - first part of the calculation.It is divided so that the readonly method does not need to charge fees",
+      "desc": "Calculates the liquidity  from the x - Asset A position and y - Asset B position\nThis method calculates discriminant - first part of the calculation.\nIt is divided so that the readonly method does not need to charge fees",
       "readonly": true,
       "args": [
         {
@@ -676,7 +676,7 @@
     },
     {
       "name": "calculateAssetBDepositOnAssetADeposit",
-      "desc": "Calculates how much asset B should be deposited when user deposit asset a and b.On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user",
+      "desc": "Calculates how much asset B should be deposited when user deposit asset a and b.\n\n\nOn deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user",
       "readonly": true,
       "args": [
         {
@@ -707,7 +707,7 @@
     },
     {
       "name": "calculateAssetADepositOnAssetBDeposit",
-      "desc": "Calculates how much asset A should be deposited when user deposit asset a and bOn deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user",
+      "desc": "Calculates how much asset A should be deposited when user deposit asset a and b\n\n\nOn deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user",
       "readonly": true,
       "args": [
         {

@@ -75,7 +75,7 @@
     },
     {
       "name": "sendOnlineKeyRegistration",
-      "desc": "addressExecutiveFee can perfom key registration for this LP poolOnly addressExecutiveFee is allowed to execute this method.",
+      "desc": "addressExecutiveFee can perfom key registration for this LP pool\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
       "args": [
         {
           "name": "appBiatecConfigProvider",
@@ -132,7 +132,7 @@
     },
     {
       "name": "withdrawExcessAssets",
-      "desc": "If someone deposits excess assets to this smart contract biatec can use them.Only addressExecutiveFee is allowed to execute this method.",
+      "desc": "If someone deposits excess assets to this smart contract biatec can use them.\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
       "args": [
         {
           "name": "appBiatecConfigProvider",
