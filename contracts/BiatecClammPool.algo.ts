@@ -19,102 +19,22 @@ type UserInfoV1 = {
    * Version of this structure.
    */
   version: uint8;
-  /**
-   * Verification class of the user. Uses bits system - 7 = 1 + 2 + 4 = Email and mobile verified
-   *
-   * 0 - No information about user
-   * 1 - Box created for address
-   * 2 - Email verified
-   * 4 - Mobile Phone verified
-   * 8 - Address verified
-   * 16 - Address verified
-   * 32 - X account verified
-   * 64 - Discord account verified
-   * 128 - Telegram account verified
-   * 256 - First government document with gov id stored in secure storage
-   * 512 - Second government document with gov id stored in secure storage
-   * 1024 - Corporation government documents stored in secure storage
-   * 2048 - First government document verified by online verification process
-   * 4096 - Second government document verified by online verification process
-   * 8192 - Corporation government documents verified by online verification process
-   * 16384 - First government document verified by in person verification process
-   * 32768 - Second government document verified by in person verification process
-   * 65536 - Corporation government documents verified by in person verification process
-   *
-   */
   verificationStatus: uint64;
-  /**
-   * Verification class of the user.
-   *
-   * 0 - No information about user
-   * 1 - KYC filled in
-   * 2 - KYC checked by online process
-   * 3 - In person verification
-   * 4 - Professional investor verified
-   *
-   */
   verificationClass: uint64;
   /**
    * Each user who interacts with Biatec services will receive engagement points
    */
   biatecEngagementPoints: uint64;
-  /**
-   * All accounts are sorted by points and rank expresses their percentil in the total biatec population
-   *
-   * Rank 0 means no interaction
-   * Rank 10000 means highest interaction
-   * Rank 5000 means median interaction level
-   *
-   */
   biatecEngagementRank: uint64;
-  /**
-   * Each user who interacts with AVM services - Algorand network,Voi network,Aramid network,... will receive engagement points
-   */
   avmEngagementPoints: uint64;
-  /**
-   * All accounts are sorted by points and rank expresses their percentil in the total avm population
-   *
-   * Rank 0 means no interaction
-   * Rank 10000 means highest interaction
-   * Rank 5000 means median interaction level
-   */
   avmEngagementRank: uint64;
-  /**
-   * Each user who is trading through biatec services will receive point according to fees in dollar nomination paid to biatec
-   */
   tradingEngagementPoints: uint64;
-  /**
-   * All accounts are sorted by trading points and rank expresses their percentil in the total traders population
-   *
-   * Rank 0 means no interaction
-   * Rank 10000 means highest interaction
-   * Rank 5000 means median interaction level
-   *
-   */
   tradingEngagementRank: uint64;
-  /**
-   * Depending on verification class, biatecEngagementRank, avmEngagementRank and trading history
-   */
   feeMultiplier: uint256;
-  /**
-   * Scale multiplier for decimal numbers. 1_000_000_000 means that number 10 is expressed as 10_000_000_000
-   */
   base: uint256;
-  /**
-   * In case of account is suspicious of theft, malicious activity, not renewing the kyc or investor form, or other legal actions enforces us to lock the account, the account cannot perform any trade or liqudity removal
-   */
   isLocked: boolean;
-  /**
-   * unix time in seconds when kyc form expires. If no kyc provided, equals to zero.
-   */
   kycExpiration: uint64;
-  /**
-   * unix time in seconds when investor form expires. If no form provided, equals to zero.
-   */
   investorForExpiration: uint64;
-  /**
-   * information weather the account belongs to professional investor or to MiFID regulated instutution like bank or securities trader
-   */
   isProfessionalInvestor: boolean;
 };
 
@@ -140,77 +60,42 @@ type AmmStatus = {
 };
 // eslint-disable-next-line no-unused-vars
 class BiatecClammPool extends Contract {
-  // asset A id
   assetA = GlobalStateKey<uint64>({ key: 'a' });
 
-  // asset B id
   assetB = GlobalStateKey<uint64>({ key: 'b' });
 
-  // pool LP token id
   assetLp = GlobalStateKey<uint64>({ key: 'lp' });
 
-  // asset A balance - disponible for swapping. The difference between contract balance and asset A balance is the fees collected
   assetABalance = GlobalStateKey<uint256>({ key: 'ab' });
 
-  // asset B balance - disponible for swapping. The difference between contract balance and asset B balance is the fees collected
   assetBBalance = GlobalStateKey<uint256>({ key: 'bb' });
 
-  // min price
   priceMin = GlobalStateKey<uint64>({ key: 'pMin' });
 
-  // max price
   priceMax = GlobalStateKey<uint64>({ key: 'pMax' });
 
-  // min price in square root
   priceMinSqrt = GlobalStateKey<uint256>({ key: 'pMinS' });
 
-  // max price in square root
   priceMaxSqrt = GlobalStateKey<uint256>({ key: 'pMaxS' });
 
-  // Current liquidity at the pool
   Liqudity = GlobalStateKey<uint256>({ key: 'L' });
 
-  // Liquidity held by users earned by swap fees
   LiqudityUsersFromFees = GlobalStateKey<uint256>({ key: 'Lu' });
 
-  // Liquidity held by biatec earned by swap fees
   LiqudityBiatecFromFees = GlobalStateKey<uint256>({ key: 'Lb' });
 
-  /**
-   * LP Fees in 9 decimals. 1_000_000_000 = 100%
-   * LP Fees in 9 decimals. 10_000_000 = 1%
-   * LP Fees in 9 decimals. 100_000 = 0,01%
-   *
-   * The Biatec fee is defined in the Biatec AMM Provider.
-   */
   fee = GlobalStateKey<uint64>({ key: 'f' });
 
-  // current price
   currentPrice = GlobalStateKey<uint64>({ key: 'price' });
 
-  // scale in this contranct
   scale = GlobalStateKey<uint64>({ key: 'scale' });
 
-  /**
-   * Biatec config provider
-   */
   appBiatecConfigProvider = GlobalStateKey<AppID>({ key: 'bc' });
 
-  /**
-   * Verification class is level of KYC verification by Biatec Identity
-   *
-   * 0 = Unverified, 1 = Identity documents uploaded without personal id, 2= Identity documents including government id provided, 3 = Personal verification
-   */
   verificationClass = GlobalStateKey<uint64>({ key: 'c' });
 
-  /**
-   * Version of the smart contract
-   */
   version = GlobalStateKey<bytes>({ key: 'scver' });
 
-  /**
-   * Initial setup
-   */
   createApplication(): void {
     log(version);
     this.scale.value = SCALE;
@@ -222,9 +107,6 @@ class BiatecClammPool extends Contract {
     this.version.value = version;
   }
 
-  /**
-   * addressUdpater from global biatec configuration is allowed to update application
-   */
   updateApplication(appBiatecConfigProvider: AppID, newVersion: bytes): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressUdpater = appBiatecConfigProvider.globalState('u') as Address;
@@ -247,20 +129,6 @@ class BiatecClammPool extends Contract {
     return this.assetLp.value;
   }
 
-  /**
-   * Anybody can deploy the clamm smart contract
-   * @param assetA Asset A ID must be lower then Asset B ID
-   * @param assetB Asset B
-   * @param appBiatecConfigProvider Biatec amm provider
-   * @param appBiatecPoolProvider Pool provider
-   * @param txSeed Seed transaction so that smart contract can opt in to the assets
-   * @param fee Fee in base level (9 decimals). value 1_000_000_000 = 1 = 100%. 10_000_000 = 1%. 1_000_000 = 0.1%
-   * @param priceMin Min price range. At this point all assets are in asset A.
-   * @param priceMax Max price range. At this point all assets are in asset B.
-   * @param currentPrice Deployer can specify the current price for easier deployemnt.
-   * @param verificationClass Minimum verification level from the biatec identity. Level 0 means no kyc.
-   * @returns LP token ID
-   */
   bootstrap(
     assetA: AssetID,
     assetB: AssetID,
@@ -323,12 +191,6 @@ class BiatecClammPool extends Contract {
     return this.assetLp.value;
   }
 
-  /**
-   * Executes xfer of pay payment methods to specified receiver from smart contract aggregated account with specified asset and amount in tokens decimals
-   * @param receiver Receiver
-   * @param asset Asset. Zero for algo
-   * @param amount Amount to transfer
-   */
   private doAxfer(receiver: Address, asset: AssetID, amount: uint64): void {
     if (asset.id === 0) {
       sendPayment({
@@ -346,10 +208,6 @@ class BiatecClammPool extends Contract {
     }
   }
 
-  /**
-   * Performs opt in to the asset. If native token is provided (0) it does not perform any action
-   * @param asset Asset to opt in to
-   */
   private doOptIn(asset: AssetID): void {
     if (asset.id > 0) {
       // if asset id = 0 we do not have to opt in to native token
@@ -357,16 +215,7 @@ class BiatecClammPool extends Contract {
     }
   }
 
-  /**
-   * Creates LP token
-   * @param assetA Asset A
-   * @param assetB Asset B
-   * @returns id of the token
-   */
   private doCreatePoolToken(assetA: AssetID, assetB: AssetID): AssetID {
-    // const verificationClass = this.verificationClass.value.toString(); // TODO
-    // const feeB100000 = this.feeB100000.value.toString();
-    // const name = 'B-' + verificationClass + '-' + feeB100000 + '-' + assetA.unitName + '-' + assetB.unitName; // TODO
     let nameAssetA = 'ALGO';
     if (assetA.id > 0) {
       nameAssetA = assetA.unitName;
@@ -396,17 +245,6 @@ class BiatecClammPool extends Contract {
     assert(assetLp.id === this.assetLp.value, 'assetLp does not match');
   }
 
-  /**
-   * This method adds Asset A and Asset B to the Automated Market Maker Concentrated Liqudidity Pool and send to the liqudidty provider the liqudity token
-   * @param appBiatecConfigProvider Configuration reference
-   * @param appBiatecIdentityProvider Identity service reference
-   * @param txAssetADeposit Transfer of asset A to the LP pool
-   * @param txAssetBDeposit Transfer of asset B to the LP pool
-   * @param assetLp Liquidity pool asset
-   * @param assetA Asset A
-   * @param assetB Asset B
-   * @returns LP Token quantity distributed
-   */
   addLiquidity(
     appBiatecConfigProvider: AppID,
     appBiatecIdentityProvider: AppID,
@@ -528,12 +366,6 @@ class BiatecClammPool extends Contract {
     const expectedBDepositB64 = (b / assetBDelicmalScale2Scale) as uint64;
 
     if (expectedADepositB64 > txAssetADeposit.assetAmount) {
-      // dominant is asset B. User sent more asset B then asset A, so we should return excess asset B to the user back.
-
-      // AB=1,BB=1, P = 1, deposit A = 0.5, deposit B = 1
-      // expected a = (inAmountB * assetABalance) / assetBBalance = 1 * 1 / 1 = 1
-      // expected b = (inAmountA * assetBBalance) / assetABalance = 0.5 * 1 / 1 = 0.5
-
       if (expectedBDepositB64 > txAssetBDeposit.assetAmount) {
         assert(false, 'Dominant is asset B'); // there should not be case to return bot asset a and asset b
       }
@@ -547,12 +379,6 @@ class BiatecClammPool extends Contract {
     }
 
     if (expectedBDepositB64 > txAssetBDeposit.assetAmount) {
-      // dominant is asset A. User sent more asset A then asset B, so we should return excess asset A to the user back.
-
-      // AB=1,BB=1, P = 1, deposit A = 1, deposit B = 0.5
-      // expected a = (inAmountB * assetABalance) / assetBBalance = 0.5 * 1 / 1 = 0.5
-      // expected b = (inAmountA * assetBBalance) / assetABalance = 1 * 1 / 1 = 1
-
       if (expectedADepositB64 > txAssetADeposit.assetAmount) {
         assert(false, 'Dominant is asset A'); // there should not be case to return bot asset a and asset b
       }
@@ -747,18 +573,6 @@ class BiatecClammPool extends Contract {
     return lpDeltaWithFees / assetLpDelicmalScale2Scale;
   }
 
-  /**
-   * This method allows biatec admin to reduce the lp position created by lp fees allocation.
-   *
-   * Only addressExecutiveFee is allowed to execute this method.
-   *
-   * @param appBiatecConfigProvider Biatec config app. Only addressExecutiveFee is allowed to execute this method.
-   * @param assetA Asset A
-   * @param assetB Asset B
-   * @param amount Amount to withdraw. If zero, removes all available lps from fees.
-   *
-   * @returns LP position reduced
-   */
   removeLiquidityAdmin(
     appBiatecConfigProvider: AppID,
     assetA: AssetID,
@@ -824,8 +638,6 @@ class BiatecClammPool extends Contract {
     this.assetABalance.value = newAssetA;
     this.assetBBalance.value = newAssetB;
 
-    // verify that L with new x and y is correctly calculated
-    // this part can be removed if all tests goes through to lower cost by 1 tx
     let lAfter = <uint256>0;
     if (this.priceMin.value === this.priceMax.value) {
       lAfter = this.calculateLiquidityFlatPrice(
@@ -854,15 +666,6 @@ class BiatecClammPool extends Contract {
     return lpDeltaWithFees / assetLpDelicmalScale2Scale;
   }
 
-  /**
-   * Checks if config matches with the app configuration, identity matches with the config, and user is not banned.
-   *
-   * Fetches the user info from the identity app and returns the engagement, verification class,...
-   *
-   * @param appBiatecConfigProvider Biatec config provider
-   * @param appBiatecIdentityProvider Biatec identity provider
-   * @returns User info object
-   */
   private verifyIdentity(appBiatecConfigProvider: AppID, appBiatecIdentityProvider: AppID): UserInfoV1 {
     assert(
       appBiatecConfigProvider === this.appBiatecConfigProvider.value,
@@ -895,13 +698,6 @@ class BiatecClammPool extends Contract {
     return user;
   }
 
-  /**
-   * Swap Asset A to Asset B or Asset B to Asst A
-   * @param txSwap Transfer of the token to be deposited to the pool. To the owner the other asset will be sent.
-   * @param assetA Asset A
-   * @param assetB Asset B
-   * @param minimumToReceive If number greater then zero, the check is performed for the output of the other asset
-   */
   swap(
     appBiatecConfigProvider: AppID,
     appBiatecIdentityProvider: AppID,
@@ -1142,20 +938,6 @@ class BiatecClammPool extends Contract {
     return ret as uint256;
   }
 
-  /**
-   * If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.
-   * If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
-   *
-   * This method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.
-   *
-   * Only addressExecutiveFee is allowed to execute this method.
-   *
-   * @param appBiatecConfigProvider Biatec config app. Only addressExecutiveFee is allowed to execute this method.
-   * @param assetA Asset A
-   * @param assetB Asset B
-   * @param amountA Amount of asset A to be deposited to the liquidity. In base decimals (9)
-   * @param amountB Amount of asset B to be deposited to the liquidity. In base decimals (9)
-   */
   distributeExcessAssets(
     appBiatecConfigProvider: AppID,
     assetA: AssetID,
@@ -1252,20 +1034,6 @@ class BiatecClammPool extends Contract {
     return diff;
   }
 
-  /**
-   * If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.
-   * If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
-   *
-   * This method is used to distribute amount a and amount b of asset a and asset b to addressExecutiveFee account.
-   *
-   * Only addressExecutiveFee is allowed to execute this method.
-   *
-   * @param appBiatecConfigProvider Biatec config app. Only addressExecutiveFee is allowed to execute this method.
-   * @param assetA Asset A
-   * @param assetB Asset B
-   * @param amountA Amount of asset A to be deposited to the liquidity. In asset a decimals
-   * @param amountB Amount of asset B to be deposited to the liquidity. In asset b decimals
-   */
   withdrawExcessAssets(
     appBiatecConfigProvider: AppID,
     assetA: AssetID,
@@ -1318,11 +1086,6 @@ class BiatecClammPool extends Contract {
     return amountA + amountB;
   }
 
-  /**
-   * addressExecutiveFee can perfom key registration for this LP pool
-   *
-   * Only addressExecutiveFee is allowed to execute this method.
-   */
   sendOnlineKeyRegistration(
     appBiatecConfigProvider: AppID,
     votePk: bytes,
@@ -1349,11 +1112,6 @@ class BiatecClammPool extends Contract {
     });
   }
 
-  /**
-   * addressExecutiveFee can perfom key unregistration for this LP pool
-   *
-   * Only addressExecutiveFee is allowed to execute this method.
-   */
   sendOfflineKeyRegistration(appBiatecConfigProvider: AppID): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
@@ -1368,9 +1126,6 @@ class BiatecClammPool extends Contract {
     sendOfflineKeyRegistration({ fee: 0 });
   }
 
-  /**
-   * Calculates the number of LP tokens issued to users
-   */
   @abi.readonly
   calculateDistributedLiquidity(assetLp: AssetID, currentDeposit: uint256): uint256 {
     const current = (this.app.address.assetBalance(assetLp) as uint256) - currentDeposit;
@@ -1384,36 +1139,9 @@ class BiatecClammPool extends Contract {
 
   @abi.readonly
   calculateLiquidityFlatPrice(x: uint256, y: uint256, price: uint256): uint256 {
-    // if priceMinSqrt == priceMaxSqrt
-    // EURUSD = 1.1  .. 1000 EUR 1100 USD
-
-    // (x + L/sqrt(P2))*(y+L*sqrt(P1))=L*L
-    // (x + L/sqrt(P))*(y+L*sqrt(P))=L*L
-    // (x + L/S)*(y+L*S) = L*L
-    // x*y + l/s*l*s + x*l*s+y*l/s=l*l
-    // x*y  + x*l*s+y*l/s=0
-    //  l(x*s+y/s)=-xy
-    // l = -xy/(x*s+y/s)
-
-    // 1000*1100/(1000*(1,1)^(1/2)+1100/(1,1)^(1/2))=524,40442408507577349572675683997
-
-    // (1000 - 524,4/(1,1)^(1/2))*(1100-524,4*(1,1)^(1/2))=524,4*524,4 = 275004,64003914505751536355485248
     return (x * price) / s + y;
   }
 
-  /**
-   * Calculates the liquidity  from the x - Asset A position and y - Asset B position
-   * This method calculates discriminant - first part of the calculation.
-   * It is divided so that the readonly method does not need to charge fees
-   *
-   * @param x Asset A position balanced on the curve
-   * @param y Asset B position balanced on the curve
-   * @param priceMin Minimum price variable in base scale decimals (pa)
-   * @param priceMax Maximum price variable in base scale decimals (pb)
-   * @param priceMinSqrt sqrt(priceMin) in base scale decimals Variable pas
-   * @param priceMaxSqrt sqrt(priceMax) in base scale decimals Variable pbs
-   * @returns Liquidity is constant in swapping each direction. On deposit the diff between the liquidity is number of LP tokens received by user.
-   */
   @abi.readonly
   calculateLiquidityD(
     x: uint256,
@@ -1423,35 +1151,6 @@ class BiatecClammPool extends Contract {
     priceMinSqrt: uint256,
     priceMaxSqrt: uint256
   ): uint256 {
-    // (x + L/sqrt(P2))*(y+L*sqrt(P1))=L*L
-    // y + L*sqrt(P1) = L*L / (x + L/sqrt(P2))
-    // x*y + L*sqrt(P1)*L/sqrt(P2) + x * L*sqrt(P1) + y * L/sqrt(P2) =L*L
-    // x*y = L*L - L*sqrt(P1)*L/sqrt(P2) -  x * L*sqrt(P1) -y * L/sqrt(P2)
-    // x*y = L^2 ( 1 - sqrt(P1) / sqrt(P2) ) - L * (x * sqrt(P1) + y /sqrt(P2)  )
-    // 0 = L^2 ( 1 - sqrt(P1) / sqrt(P2) ) + L * (- 1 * x * sqrt(P1) - y /sqrt(P2)) + (-1 * x*y)
-
-    // D = (- 1 * x * sqrt(P1) - y /sqrt(P2)) * (- 1 * x * sqrt(P1) - y /sqrt(P2)) - 4 * ( 1 - sqrt(P1) / sqrt(P2) ) * (-1 * x*y)
-    // D = (- 1 * x * sqrt(P1) - y /sqrt(P2)) * (- 1 * x * sqrt(P1) - y /sqrt(P2)) + 4 * ( 1 - sqrt(P1) / sqrt(P2) ) * ( x*y)
-    // D = ( ( x * sqrt(P1)) ( x * sqrt(P1)) + (y /sqrt(P2))*(y /sqrt(P2)) + 2 * x * sqrt(P1) * y /sqrt(P2)) +  4 * x*y - 4*x*y * sqrt(P1) / sqrt(P2)
-    // D = x^2 * P1 + y^2/P2 + 2*x*y*sqrt(P1)/sqrt(P2) + 4*x*y-4*x*y*sqrt(P1)/sqrt(P2)
-    //
-    // x = 20000, y = 0, P1 = 1, P2 = 125/80
-    // D = 20000^2 * P1^2 + 0^2/P2 + 2*20000*0*P1/sqrt(P2) + 4*20000*0-4*20000*0*P1/sqrt(P2)
-    // D = 20000^2 * 1^2
-    // D = 400000000
-
-    // L = (-b +-sqrt(D))/2a
-    // L = -1 * (- 1 * x * P1 - y /sqrt(P2)) +- sqrt(D)) / (2 * (1 - P1 / sqrt(P2)) )
-    // L = ( x * P1 + y /sqrt(P2) +- sqrt(D)) / (2  - 2 * P1 / sqrt(P2)))
-    // L = ( 20000 * 1 + 0/sqrt(P2) +- sqrt(400000000) ) / (2 - 2 * 1 / sqrt(125/80) )
-    // L = (20000 + 20000)  / ( 2 - 2 * 1 / sqrt(125/80))
-    // L = 40000 / ( 2 - 2 / 1,25) = 40000 / 0.4 = 100000
-
-    // D = x^2 * P1 + y^2/P2 + 2*x*y*sqrt(P1)/sqrt(P2) + 4*x*y - 4*x*y*sqrt(P1)/sqrt(P2)
-    // D = D1       + D2     + D3                      + D4    - D5
-
-    // increaseOpcodeBudget();
-    // D1 = x^2 * P1
     const D1 = (x * x * priceMin) / s / s;
     // D2 = y^2/P2
     const D2 = (y * y) / priceMax;
@@ -1469,15 +1168,6 @@ class BiatecClammPool extends Contract {
     return D_SQRT;
   }
 
-  /**
-   * Calculates the liquidity  from the x - Asset A position and y - Asset B position
-   *
-   * @param x Asset A position balanced on the curve
-   * @param y Asset B position balanced on the curve
-   * @param priceMinSqrt sqrt(priceMin) in base scale decimals Variable pas
-   * @param priceMaxSqrt sqrt(priceMax) in base scale decimals Variable pbs
-   * @returns Liquidity is constant in swapping each direction. On deposit the diff between the liquidity is number of LP tokens received by user.
-   */
   @abi.readonly
   calculateLiquidityWithD(
     x: uint256,
@@ -1486,36 +1176,6 @@ class BiatecClammPool extends Contract {
     priceMaxSqrt: uint256,
     dSqrt: uint256
   ): uint256 {
-    // (x + L/sqrt(P2))*(y+L*sqrt(P1))=L*L
-    // y + L*sqrt(P1) = L*L / (x + L/sqrt(P2))
-    // x*y + L*sqrt(P1)*L/sqrt(P2) + x * L*sqrt(P1) + y * L/sqrt(P2) =L*L
-    // x*y = L*L - L*sqrt(P1)*L/sqrt(P2) -  x * L*sqrt(P1) -y * L/sqrt(P2)
-    // x*y = L^2 ( 1 - sqrt(P1) / sqrt(P2) ) - L * (x * sqrt(P1) + y /sqrt(P2)  )
-    // 0 = L^2 ( 1 - sqrt(P1) / sqrt(P2) ) + L * (- 1 * x * sqrt(P1) - y /sqrt(P2)) + (-1 * x*y)
-
-    // D = (- 1 * x * sqrt(P1) - y /sqrt(P2)) * (- 1 * x * sqrt(P1) - y /sqrt(P2)) - 4 * ( 1 - sqrt(P1) / sqrt(P2) ) * (-1 * x*y)
-    // D = (- 1 * x * sqrt(P1) - y /sqrt(P2)) * (- 1 * x * sqrt(P1) - y /sqrt(P2)) + 4 * ( 1 - sqrt(P1) / sqrt(P2) ) * ( x*y)
-    // D = ( ( x * sqrt(P1)) ( x * sqrt(P1)) + (y /sqrt(P2))*(y /sqrt(P2)) + 2 * x * sqrt(P1) * y /sqrt(P2)) +  4 * x*y - 4*x*y * sqrt(P1) / sqrt(P2)
-    // D = x^2 * P1 + y^2/P2 + 2*x*y*sqrt(P1)/sqrt(P2) + 4*x*y-4*x*y*sqrt(P1)/sqrt(P2)
-    //
-    // x = 20000, y = 0, P1 = 1, P2 = 125/80
-    // D = 20000^2 * P1^2 + 0^2/P2 + 2*20000*0*P1/sqrt(P2) + 4*20000*0-4*20000*0*P1/sqrt(P2)
-    // D = 20000^2 * 1^2
-    // D = 400000000
-
-    // L = (-b +-sqrt(D))/2a
-    // L = -1 * (- 1 * x * P1 - y /sqrt(P2)) +- sqrt(D)) / (2 * (1 - P1 / sqrt(P2)) )
-    // L = ( x * P1 + y /sqrt(P2) +- sqrt(D)) / (2  - 2 * P1 / sqrt(P2)))
-    // L = ( 20000 * 1 + 0/sqrt(P2) +- sqrt(400000000) ) / (2 - 2 * 1 / sqrt(125/80) )
-    // L = (20000 + 20000)  / ( 2 - 2 * 1 / sqrt(125/80))
-    // L = 40000 / ( 2 - 2 / 1,25) = 40000 / 0.4 = 100000
-
-    // D = x^2 * P1 + y^2/P2 + 2*x*y*sqrt(P1)/sqrt(P2) + 4*x*y - 4*x*y*sqrt(P1)/sqrt(P2)
-    // D = D1       + D2     + D3                      + D4    - D5
-
-    // L = ( x * sqrt(P1) + y /sqrt(P2) +- sqrt(D)) / (2  - 2 * P1 / sqrt(P2)))
-    // L = ( L1           + L2          +- sqrt(D) ) / (2 - L3)
-    // L1 = x * sqrt(P1)
     const L1 = (x * priceMinSqrt) / s;
     // L2 = 0 * 1000000000n / 1250000000n
     // L2 = y /sqrt(P2)
@@ -1543,15 +1203,6 @@ class BiatecClammPool extends Contract {
     // return (L1 + L2 + sqrt(D) / sqrt(SCALE)) / (2 * SCALE - L3) / SCALE;
   }
 
-  /**
-   * Get the current price when asset a has x
-   * @param assetAQuantity x
-   * @param assetBQuantity y
-   * @param priceMinSqrt sqrt(priceMin)
-   * @param priceMaxSqrt sqrt(priceMax)
-   * @param liquidity Current pool liquidity - L variable
-   * @returns the price with specified quantity with the price range set in the contract
-   */
   @abi.readonly
   calculatePrice(
     assetAQuantity: uint256,
@@ -1576,16 +1227,6 @@ class BiatecClammPool extends Contract {
     return ret;
   }
 
-  /**
-   * Calculates how much asset B will be taken from the smart contract on asset A deposit
-   * @param inAmount Asset A amount in Base decimal representation.. If asset has 6 decimals, 1 is represented as 1000000000
-   * @param assetABalance Asset A balance. Variable ab, in base scale
-   * @param assetBBalance Asset B balance. Variable bb, in base scale
-   * @param priceMinSqrt sqrt(Min price). Variable pMinS, in base scale
-   * @param priceMaxSqrt sqrt(Max price). Variable pMaxS, in base scale
-   * @param liqudity sqrt(Max price). Variable L, in base scale
-   * @returns Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)
-   */
   @abi.readonly
   calculateAssetBWithdrawOnAssetADeposit(
     inAmount: uint256,
@@ -1600,21 +1241,6 @@ class BiatecClammPool extends Contract {
       const ret = (inAmount * priceMinSqrt * priceMinSqrt) / s / s;
       return ret;
     }
-    // (x + L / sqrt(P2))*(y+L*sqrt(P1))= L*L
-    // (x1 + L / sqrt(P2))*(y1 + L * sqrt(P1))= L*L
-    // (x2 + L / sqrt(P2))*(y2 + L * sqrt(P1))= L*L
-    // (x1 + deposit) = x2
-    // (y1 - withdraw ) = y2
-    // (x1 + L / sqrt(P2))*(y1 + L * sqrt(P1)) = (x2 + L / sqrt(P2))*(y2 + L * sqrt(P1))
-    // (x1 + L / sqrt(P2))*(y1 + L * sqrt(P1)) = (x1 + deposit + L / sqrt(P2))*(y1 - withdraw + L * sqrt(P1))
-    // (x1 + L / sqrt(P2))*(y1 + L * sqrt(P1)) = (x1 + deposit + L / sqrt(P2))*(y1 - withdraw + L * sqrt(P1))
-    // SP2 = B
-    // SP1 = A
-    // (X + L / B)*(Y + L * A) = (X + D + L / B)*(Y - W + L * A)
-    // https://www.mathpapa.com/equation-solver/
-    // w = (a*b*d*l + b*d*y)/(b*d+b*x+l)
-    // const assetADelicmalScale: uint64 = 10 ** assetADecimals;
-    // const assetBDelicmalScale: uint64 = 10 ** assetBDecimals;
 
     const x = assetABalance;
     const y = assetBBalance;
@@ -1638,17 +1264,6 @@ class BiatecClammPool extends Contract {
     return ret;
   }
 
-  /**
-   * Calculates how much asset A will be taken from the smart contract on asset B deposit
-   * @param inAmount Asset B amount in Base decimal representation.. If asset has 6 decimals, 1 is represented as 1000000000
-   * @param assetABalance Asset A balance. Variable ab, in base scale
-   * @param assetBBalance Asset B balance. Variable bb, in base scale
-   * @param priceMinSqrt sqrt(Min price). Variable pMinS, in base scale
-   * @param priceMaxSqrt sqrt(Max price). Variable pMaxS, in base scale
-   * @param liqudity sqrt(Max price). Variable L, in base scale
-   *
-   * @returns Amount of asset A to be given to the caller before fees. The result is in Base decimals (9)
-   */
   @abi.readonly
   calculateAssetAWithdrawOnAssetBDeposit(
     inAmount: uint256,
@@ -1662,19 +1277,6 @@ class BiatecClammPool extends Contract {
       const ret = (inAmount * s * s) / priceMinSqrt / priceMinSqrt;
       return ret;
     }
-    // return (inAmount * priceMinSqrt * priceMinSqrt) / s / s;
-    // (x + L / sqrt(P2))*(y+L*sqrt(P1))= L*L
-    // (x1 + L / sqrt(P2))*(y1 + L * sqrt(P1))= L*L
-    // (x2 + L / sqrt(P2))*(y2 + L * sqrt(P1))= L*L
-    // (x1 - withdraw) = x2
-    // (y1 + deposit ) = y2
-    // (x1 + L / sqrt(P2))*(y1 + L * sqrt(P1))= (x1 - withdraw + L / sqrt(P2))*(y1 + deposit + L * sqrt(P1))
-    // SP2 = B
-    // SP1 = A
-    // (X + L / B)*(Y + L * A) = (X - W + L / B)*(Y + D + L * A)
-
-    // https://www.mathpapa.com/equation-solver/
-    // w = (d*l + b*d*x)/(a*b*l+b*d+b*y)
     const x = assetABalance;
     const y = assetBBalance;
     const a = priceMinSqrt;
@@ -1700,14 +1302,6 @@ class BiatecClammPool extends Contract {
     return ret;
   }
 
-  /**
-   * Calculates how much asset A will be taken from the smart contract on LP asset deposit
-   * @param inAmount LP Asset amount in Base decimal representation..
-   * @param assetABalance Asset A balance. Variable ab, in base scale
-   * @param liqudity Current liqudity. Variable L, in base scale
-   *
-   * @returns Amount of asset A to be given to the caller before fees. The result is in Base decimals (9)
-   */
   @abi.readonly
   calculateAssetAWithdrawOnLpDeposit(inAmount: uint256, assetABalance: uint256, liqudity: uint256): uint256 {
     // const s = SCALE as uint256;
@@ -1717,14 +1311,6 @@ class BiatecClammPool extends Contract {
     return ret;
   }
 
-  /**
-   * Calculates how much asset B will be taken from the smart contract on LP asset deposit
-   * @param inAmount LP Asset amount in Base decimal representation..
-   * @param assetBBalance Asset B balance. Variable ab, in base scale
-   * @param liqudity Current liqudity. Variable L, in base scale
-   *
-   * @returns Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)
-   */
   @abi.readonly
   calculateAssetBWithdrawOnLpDeposit(inAmount: uint256, assetBBalance: uint256, liqudity: uint256): uint256 {
     // const s = SCALE as uint256;
@@ -1734,18 +1320,6 @@ class BiatecClammPool extends Contract {
     return ret;
   }
 
-  /**
-   * Calculates how much asset B should be deposited when user deposit asset a and b.
-   *
-   * On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
-   *
-   * @param inAmountA Asset A amount in Base decimal representation
-   * @param inAmountB Asset B amount in Base decimal representation
-   * @param assetABalance Asset A balance. Variable ab, in base scale
-   * @param assetBBalance Asset B balance. Variable bb, in base scale
-   *
-   * @returns Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)
-   */
   @abi.readonly
   calculateAssetBDepositOnAssetADeposit(
     inAmountA: uint256,
@@ -1760,18 +1334,6 @@ class BiatecClammPool extends Contract {
     return inAmountB;
   }
 
-  /**
-   * Calculates how much asset A should be deposited when user deposit asset a and b
-   *
-   * On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
-   *
-   * @param inAmountA Asset A amount in Base decimal representation
-   * @param inAmountB Asset B amount in Base decimal representation
-   * @param assetABalance Asset A balance. Variable ab, in base scale
-   * @param assetBBalance Asset B balance. Variable bb, in base scale
-   *
-   * @returns Amount of asset A to be deposited. The result is in Base decimals (9)
-   */
   @abi.readonly
   calculateAssetADepositOnAssetBDeposit(
     inAmountA: uint256,

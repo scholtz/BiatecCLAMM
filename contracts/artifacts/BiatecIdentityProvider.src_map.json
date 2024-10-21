@@ -1,13 +1,25 @@
 [
   {
     "teal": 1,
-    "source": 133,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
     "pc": [
-      0,
+      0
+    ]
+  },
+  {
+    "teal": 2,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
       1,
       2,
       3,
-      4,
+      4
+    ]
+  },
+  {
+    "teal": 3,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
       5,
       6,
       7,
@@ -152,68 +164,68 @@
       146,
       147,
       148,
-      149
-    ]
-  },
-  {
-    "teal": 13,
-    "source": 133,
-    "pc": [
+      149,
       150,
-      151
-    ]
-  },
-  {
-    "teal": 14,
-    "source": 133,
-    "pc": [
-      152
+      151,
+      152,
+      153,
+      154,
+      155,
+      156,
+      157,
+      158,
+      159
     ]
   },
   {
     "teal": 15,
-    "source": 133,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
     "pc": [
-      153,
-      154
+      160,
+      161
     ]
   },
   {
     "teal": 16,
-    "source": 133,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
     "pc": [
-      155
+      162
     ]
   },
   {
     "teal": 17,
-    "source": 133,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
     "pc": [
-      156,
-      157
+      163,
+      164
     ]
   },
   {
     "teal": 18,
-    "source": 133,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
     "pc": [
-      158
+      165
     ]
   },
   {
     "teal": 19,
-    "source": 133,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
     "pc": [
-      159,
-      160,
-      161,
-      162,
-      163,
-      164,
-      165,
       166,
-      167,
-      168,
+      167
+    ]
+  },
+  {
+    "teal": 20,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      168
+    ]
+  },
+  {
+    "teal": 21,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
       169,
       170,
       171,
@@ -229,303 +241,223 @@
       181,
       182,
       183,
-      184
-    ]
-  },
-  {
-    "teal": 23,
-    "source": 133,
-    "errorMessage": "The requested action is not implemented in this contract. Are you using the correct OnComplete? Did you set your app ID?",
-    "pc": [
-      185
-    ]
-  },
-  {
-    "teal": 28,
-    "source": 158,
-    "pc": [
+      184,
+      185,
       186,
       187,
-      188
-    ]
-  },
-  {
-    "teal": 29,
-    "source": 158,
-    "pc": [
-      189
-    ]
-  },
-  {
-    "teal": 30,
-    "source": 158,
-    "pc": [
-      190
-    ]
-  },
-  {
-    "teal": 36,
-    "source": 158,
-    "pc": [
+      188,
+      189,
+      190,
       191,
       192,
-      193
+      193,
+      194
     ]
   },
   {
-    "teal": 40,
-    "source": 159,
+    "teal": 25,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "errorMessage": "The requested action is not implemented in this contract. Are you using the correct OnComplete? Did you set your app ID?",
     "pc": [
-      194,
       195
     ]
   },
   {
-    "teal": 41,
-    "source": 159,
+    "teal": 30,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:158",
     "pc": [
       196,
       197,
-      198,
+      198
+    ]
+  },
+  {
+    "teal": 31,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:158",
+    "pc": [
       199,
-      200,
-      201,
+      200
+    ]
+  },
+  {
+    "teal": 32,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:158",
+    "pc": [
+      201
+    ]
+  },
+  {
+    "teal": 38,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:158",
+    "pc": [
       202,
       203,
-      204,
+      204
+    ]
+  },
+  {
+    "teal": 42,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:159",
+    "pc": [
       205,
       206,
       207,
       208,
       209,
       210,
-      211,
+      211
+    ]
+  },
+  {
+    "teal": 43,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:159",
+    "pc": [
       212,
       213,
       214,
       215,
       216,
       217,
-      218
-    ]
-  },
-  {
-    "teal": 42,
-    "source": 159,
-    "pc": [
-      219
-    ]
-  },
-  {
-    "teal": 43,
-    "source": 158,
-    "pc": [
-      220
-    ]
-  },
-  {
-    "teal": 48,
-    "source": 166,
-    "pc": [
+      218,
+      219,
+      220,
       221,
       222,
-      223
-    ]
-  },
-  {
-    "teal": 49,
-    "source": 166,
-    "pc": [
-      224
-    ]
-  },
-  {
-    "teal": 52,
-    "source": 166,
-    "pc": [
+      223,
+      224,
       225,
       226,
-      227
-    ]
-  },
-  {
-    "teal": 53,
-    "source": 166,
-    "pc": [
-      228
-    ]
-  },
-  {
-    "teal": 54,
-    "source": 166,
-    "pc": [
-      229
-    ]
-  },
-  {
-    "teal": 61,
-    "source": 166,
-    "pc": [
+      227,
+      228,
+      229,
       230,
       231,
-      232
+      232,
+      233,
+      234
     ]
   },
   {
-    "teal": 64,
-    "source": 166,
+    "teal": 44,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:159",
     "pc": [
-      233
-    ]
-  },
-  {
-    "teal": 68,
-    "source": 167,
-    "pc": [
-      234,
       235
     ]
   },
   {
-    "teal": 69,
-    "source": 167,
+    "teal": 45,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:158",
     "pc": [
-      236,
-      237,
-      238
+      236
     ]
   },
   {
-    "teal": 70,
-    "source": 167,
+    "teal": 50,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:166",
     "pc": [
-      239,
+      237,
+      238,
+      239
+    ]
+  },
+  {
+    "teal": 51,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:166",
+    "pc": [
       240
     ]
   },
   {
-    "teal": 71,
-    "source": 167,
+    "teal": 54,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:166",
     "pc": [
-      241
-    ]
-  },
-  {
-    "teal": 72,
-    "source": 167,
-    "pc": [
-      242
-    ]
-  },
-  {
-    "teal": 75,
-    "source": 167,
-    "errorMessage": "Only creator of the app can set it up",
-    "pc": [
+      241,
+      242,
       243
     ]
   },
   {
-    "teal": 79,
-    "source": 168,
+    "teal": 55,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:166",
     "pc": [
-      244
+      244,
+      245
     ]
   },
   {
-    "teal": 80,
-    "source": 168,
+    "teal": 56,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:166",
     "pc": [
-      245,
       246
     ]
   },
   {
-    "teal": 81,
-    "source": 168,
+    "teal": 63,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:166",
     "pc": [
-      247
-    ]
-  },
-  {
-    "teal": 85,
-    "source": 169,
-    "pc": [
+      247,
       248,
       249
     ]
   },
   {
-    "teal": 86,
-    "source": 169,
+    "teal": 66,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:166",
     "pc": [
       250,
       251
     ]
   },
   {
-    "teal": 87,
-    "source": 169,
+    "teal": 70,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:167",
     "pc": [
-      252
-    ]
-  },
-  {
-    "teal": 90,
-    "source": 169,
-    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('s')",
-    "pc": [
+      252,
       253
     ]
   },
   {
-    "teal": 91,
-    "source": 169,
+    "teal": 71,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:167",
     "pc": [
       254,
-      255
+      255,
+      256
     ]
   },
   {
-    "teal": 95,
-    "source": 170,
+    "teal": 72,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:167",
     "pc": [
-      256,
-      257
-    ]
-  },
-  {
-    "teal": 96,
-    "source": 170,
-    "pc": [
+      257,
       258
     ]
   },
   {
-    "teal": 97,
-    "source": 170,
+    "teal": 73,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:167",
     "pc": [
       259
     ]
   },
   {
-    "teal": 100,
-    "source": 170,
-    "errorMessage": "ERR_PAUSED",
+    "teal": 74,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:167",
     "pc": [
       260
     ]
   },
   {
-    "teal": 101,
-    "source": 166,
+    "teal": 77,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:167",
+    "errorMessage": "Only creator of the app can set it up",
     "pc": [
       261
     ]
   },
   {
-    "teal": 106,
-    "source": 176,
+    "teal": 81,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:168",
     "pc": [
       262,
       263,
@@ -533,124 +465,119 @@
     ]
   },
   {
-    "teal": 107,
-    "source": 176,
+    "teal": 82,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:168",
     "pc": [
       265,
-      266,
+      266
+    ]
+  },
+  {
+    "teal": 83,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:168",
+    "pc": [
       267
     ]
   },
   {
-    "teal": 110,
-    "source": 176,
+    "teal": 87,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:169",
     "pc": [
       268,
-      269,
-      270
+      269
     ]
   },
   {
-    "teal": 111,
-    "source": 176,
+    "teal": 88,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:169",
     "pc": [
-      271
+      270,
+      271,
+      272
     ]
   },
   {
-    "teal": 114,
-    "source": 176,
+    "teal": 89,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:169",
     "pc": [
-      272,
-      273,
+      273
+    ]
+  },
+  {
+    "teal": 92,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:169",
+    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('s')",
+    "pc": [
       274
     ]
   },
   {
-    "teal": 115,
-    "source": 176,
+    "teal": 93,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:169",
     "pc": [
-      275
-    ]
-  },
-  {
-    "teal": 116,
-    "source": 176,
-    "pc": [
+      275,
       276
     ]
   },
   {
-    "teal": 122,
-    "source": 176,
+    "teal": 97,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:170",
     "pc": [
       277,
-      278,
-      279
+      278
     ]
   },
   {
-    "teal": 125,
-    "source": 176,
+    "teal": 98,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:170",
     "pc": [
+      279,
       280
     ]
   },
   {
-    "teal": 126,
-    "source": 176,
+    "teal": 99,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:170",
     "pc": [
       281
     ]
   },
   {
-    "teal": 130,
-    "source": 177,
+    "teal": 102,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:170",
+    "errorMessage": "ERR_PAUSED",
     "pc": [
-      282,
+      282
+    ]
+  },
+  {
+    "teal": 103,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:166",
+    "pc": [
       283
     ]
   },
   {
-    "teal": 131,
-    "source": 177,
+    "teal": 108,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:176",
     "pc": [
-      284
-    ]
-  },
-  {
-    "teal": 132,
-    "source": 177,
-    "pc": [
-      285
-    ]
-  },
-  {
-    "teal": 133,
-    "source": 177,
-    "pc": [
+      284,
+      285,
       286
     ]
   },
   {
-    "teal": 136,
-    "source": 177,
-    "errorMessage": "Configuration app does not match",
+    "teal": 109,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:176",
     "pc": [
-      287
-    ]
-  },
-  {
-    "teal": 140,
-    "source": 178,
-    "pc": [
+      287,
       288,
       289
     ]
   },
   {
-    "teal": 141,
-    "source": 178,
+    "teal": 112,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:176",
     "pc": [
       290,
       291,
@@ -658,1603 +585,1207 @@
     ]
   },
   {
-    "teal": 142,
-    "source": 178,
+    "teal": 113,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:176",
     "pc": [
       293
     ]
   },
   {
-    "teal": 145,
-    "source": 178,
-    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('u')",
+    "teal": 116,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:176",
     "pc": [
-      294
-    ]
-  },
-  {
-    "teal": 146,
-    "source": 178,
-    "pc": [
+      294,
       295,
       296
     ]
   },
   {
-    "teal": 150,
-    "source": 179,
+    "teal": 117,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:176",
     "pc": [
       297,
       298
     ]
   },
   {
-    "teal": 151,
-    "source": 179,
+    "teal": 118,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:176",
     "pc": [
-      299,
-      300
+      299
     ]
   },
   {
-    "teal": 152,
-    "source": 179,
+    "teal": 124,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:176",
     "pc": [
-      301
-    ]
-  },
-  {
-    "teal": 155,
-    "source": 179,
-    "errorMessage": "Only addressUdpater setup in the config can update application",
-    "pc": [
+      300,
+      301,
       302
     ]
   },
   {
-    "teal": 159,
-    "source": 180,
+    "teal": 127,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:176",
     "pc": [
       303,
       304
     ]
   },
   {
-    "teal": 160,
-    "source": 180,
+    "teal": 128,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:176",
     "pc": [
-      305,
-      306
+      305
     ]
   },
   {
-    "teal": 161,
-    "source": 180,
+    "teal": 132,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:177",
     "pc": [
+      306,
       307
     ]
   },
   {
-    "teal": 164,
-    "source": 180,
-    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('s')",
+    "teal": 133,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:177",
     "pc": [
-      308
-    ]
-  },
-  {
-    "teal": 165,
-    "source": 180,
-    "pc": [
+      308,
       309,
       310
     ]
   },
   {
-    "teal": 169,
-    "source": 181,
+    "teal": 134,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:177",
     "pc": [
-      311,
+      311
+    ]
+  },
+  {
+    "teal": 135,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:177",
+    "pc": [
       312
     ]
   },
   {
-    "teal": 170,
-    "source": 181,
+    "teal": 138,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:177",
+    "errorMessage": "Configuration app does not match",
     "pc": [
       313
     ]
   },
   {
-    "teal": 171,
-    "source": 181,
+    "teal": 142,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:178",
     "pc": [
-      314
-    ]
-  },
-  {
-    "teal": 174,
-    "source": 181,
-    "errorMessage": "ERR_PAUSED",
-    "pc": [
+      314,
       315
     ]
   },
   {
-    "teal": 178,
-    "source": 182,
+    "teal": 143,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:178",
     "pc": [
       316,
-      317
+      317,
+      318
     ]
   },
   {
-    "teal": 179,
-    "source": 182,
+    "teal": 144,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:178",
     "pc": [
-      318,
       319
     ]
   },
   {
-    "teal": 180,
-    "source": 182,
+    "teal": 147,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:178",
+    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('u')",
     "pc": [
       320
     ]
   },
   {
-    "teal": 181,
-    "source": 176,
+    "teal": 148,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:178",
     "pc": [
-      321
+      321,
+      322
     ]
   },
   {
-    "teal": 186,
-    "source": 185,
+    "teal": 152,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:179",
     "pc": [
-      322,
       323,
       324
     ]
   },
   {
-    "teal": 189,
-    "source": 185,
+    "teal": 153,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:179",
     "pc": [
       325,
-      326,
+      326
+    ]
+  },
+  {
+    "teal": 154,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:179",
+    "pc": [
       327
     ]
   },
   {
-    "teal": 190,
-    "source": 185,
+    "teal": 157,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:179",
+    "errorMessage": "Only addressUdpater setup in the config can update application",
     "pc": [
       328
     ]
   },
   {
-    "teal": 191,
-    "source": 185,
+    "teal": 161,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:180",
     "pc": [
-      329
-    ]
-  },
-  {
-    "teal": 192,
-    "source": 185,
-    "pc": [
+      329,
       330
     ]
   },
   {
-    "teal": 193,
-    "source": 185,
+    "teal": 162,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:180",
     "pc": [
-      331
+      331,
+      332,
+      333
     ]
   },
   {
-    "teal": 196,
-    "source": 185,
-    "errorMessage": "argument 1 (user) for selfRegistration must be a address",
+    "teal": 163,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:180",
     "pc": [
-      332
+      334
     ]
   },
   {
-    "teal": 199,
-    "source": 185,
+    "teal": 166,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:180",
+    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('s')",
     "pc": [
-      333,
-      334,
       335
     ]
   },
   {
-    "teal": 200,
-    "source": 185,
+    "teal": 167,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:180",
     "pc": [
-      336
-    ]
-  },
-  {
-    "teal": 201,
-    "source": 185,
-    "pc": [
+      336,
       337
     ]
   },
   {
-    "teal": 205,
-    "source": 185,
+    "teal": 171,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:181",
     "pc": [
       338,
-      339,
-      340
+      339
     ]
   },
   {
-    "teal": 209,
-    "source": 186,
+    "teal": 172,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:181",
     "pc": [
+      340,
       341
     ]
   },
   {
-    "teal": 210,
-    "source": 186,
+    "teal": 173,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:181",
     "pc": [
-      342,
+      342
+    ]
+  },
+  {
+    "teal": 176,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:181",
+    "errorMessage": "ERR_PAUSED",
+    "pc": [
       343
     ]
   },
   {
-    "teal": 211,
-    "source": 186,
+    "teal": 180,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:182",
     "pc": [
-      344
+      344,
+      345,
+      346,
+      347,
+      348,
+      349,
+      350
     ]
   },
   {
-    "teal": 212,
-    "source": 186,
+    "teal": 181,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:182",
     "pc": [
-      345
+      351,
+      352
     ]
   },
   {
-    "teal": 213,
-    "source": 186,
+    "teal": 182,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:182",
     "pc": [
-      346
-    ]
-  },
-  {
-    "teal": 214,
-    "source": 186,
-    "pc": [
-      347
-    ]
-  },
-  {
-    "teal": 215,
-    "source": 186,
-    "pc": [
-      348
-    ]
-  },
-  {
-    "teal": 218,
-    "source": 186,
-    "errorMessage": "Self registration cannot be executed if address is already registered",
-    "pc": [
-      349
-    ]
-  },
-  {
-    "teal": 222,
-    "source": 189,
-    "pc": [
-      350,
-      351
-    ]
-  },
-  {
-    "teal": 223,
-    "source": 189,
-    "pc": [
-      352,
       353
     ]
   },
   {
-    "teal": 224,
-    "source": 189,
+    "teal": 183,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:176",
     "pc": [
-      354,
-      355
+      354
     ]
   },
   {
-    "teal": 225,
-    "source": 189,
+    "teal": 188,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:185",
     "pc": [
+      355,
       356,
-      357,
-      358
+      357
     ]
   },
   {
-    "teal": 226,
-    "source": 189,
+    "teal": 191,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:185",
     "pc": [
-      359
-    ]
-  },
-  {
-    "teal": 227,
-    "source": 189,
-    "pc": [
+      358,
+      359,
       360
     ]
   },
   {
-    "teal": 228,
-    "source": 189,
+    "teal": 192,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:185",
     "pc": [
       361
     ]
   },
   {
-    "teal": 231,
-    "source": 189,
-    "errorMessage": "Verification status must be empty",
+    "teal": 193,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:185",
     "pc": [
       362
     ]
   },
   {
-    "teal": 235,
-    "source": 191,
+    "teal": 194,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:185",
     "pc": [
       363,
       364
     ]
   },
   {
-    "teal": 236,
-    "source": 191,
+    "teal": 195,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:185",
     "pc": [
-      365,
+      365
+    ]
+  },
+  {
+    "teal": 198,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:185",
+    "errorMessage": "argument 1 (user) for selfRegistration must be a address",
+    "pc": [
       366
     ]
   },
   {
-    "teal": 237,
-    "source": 191,
+    "teal": 201,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:185",
     "pc": [
       367,
-      368
+      368,
+      369
     ]
   },
   {
-    "teal": 238,
-    "source": 191,
+    "teal": 202,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:185",
     "pc": [
-      369,
       370,
       371
     ]
   },
   {
-    "teal": 239,
-    "source": 191,
+    "teal": 203,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:185",
     "pc": [
       372
     ]
   },
   {
-    "teal": 240,
-    "source": 191,
+    "teal": 207,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:185",
     "pc": [
-      373
-    ]
-  },
-  {
-    "teal": 241,
-    "source": 191,
-    "pc": [
-      374
-    ]
-  },
-  {
-    "teal": 244,
-    "source": 191,
-    "errorMessage": "verificationClass must equal to 0",
-    "pc": [
+      373,
+      374,
       375
     ]
   },
   {
-    "teal": 251,
-    "source": 195,
+    "teal": 211,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:186",
     "pc": [
       376,
-      377
+      377,
+      378
     ]
   },
   {
-    "teal": 252,
-    "source": 195,
+    "teal": 212,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:186",
     "pc": [
-      378,
-      379
+      379,
+      380
     ]
   },
   {
-    "teal": 253,
-    "source": 195,
+    "teal": 213,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:186",
     "pc": [
-      380,
       381
     ]
   },
   {
-    "teal": 254,
-    "source": 195,
+    "teal": 214,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:186",
     "pc": [
-      382,
+      382
+    ]
+  },
+  {
+    "teal": 215,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:186",
+    "pc": [
       383
     ]
   },
   {
-    "teal": 255,
-    "source": 195,
+    "teal": 216,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:186",
     "pc": [
-      384,
+      384
+    ]
+  },
+  {
+    "teal": 217,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:186",
+    "pc": [
       385
     ]
   },
   {
-    "teal": 256,
-    "source": 195,
+    "teal": 220,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:186",
+    "errorMessage": "Self registration cannot be executed if address is already registered",
     "pc": [
-      386,
-      387
+      386
     ]
   },
   {
-    "teal": 257,
-    "source": 195,
+    "teal": 224,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:189",
     "pc": [
+      387,
       388
     ]
   },
   {
-    "teal": 258,
-    "source": 195,
+    "teal": 225,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:189",
     "pc": [
-      389
+      389,
+      390
     ]
   },
   {
-    "teal": 259,
-    "source": 195,
+    "teal": 226,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:189",
     "pc": [
-      390,
-      391
-    ]
-  },
-  {
-    "teal": 260,
-    "source": 195,
-    "pc": [
+      391,
       392
     ]
   },
   {
-    "teal": 261,
-    "source": 195,
+    "teal": 227,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:189",
     "pc": [
-      393
-    ]
-  },
-  {
-    "teal": 262,
-    "source": 195,
-    "pc": [
-      394
-    ]
-  },
-  {
-    "teal": 263,
-    "source": 195,
-    "pc": [
+      393,
+      394,
       395
     ]
   },
   {
-    "teal": 264,
-    "source": 195,
+    "teal": 228,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:189",
     "pc": [
       396
     ]
   },
   {
-    "teal": 265,
-    "source": 195,
+    "teal": 229,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:189",
     "pc": [
-      397
-    ]
-  },
-  {
-    "teal": 266,
-    "source": 195,
-    "pc": [
+      397,
       398
     ]
   },
   {
-    "teal": 267,
-    "source": 195,
+    "teal": 230,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:189",
     "pc": [
-      399,
-      400,
-      401
+      399
     ]
   },
   {
-    "teal": 268,
-    "source": 195,
+    "teal": 233,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:189",
+    "errorMessage": "Verification status must be empty",
     "pc": [
-      402,
-      403
+      400
     ]
   },
   {
-    "teal": 269,
-    "source": 195,
+    "teal": 237,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:191",
     "pc": [
+      401,
+      402
+    ]
+  },
+  {
+    "teal": 238,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:191",
+    "pc": [
+      403,
       404
     ]
   },
   {
-    "teal": 272,
-    "source": 194,
-    "errorMessage": "personUUID must equal to 00000000-0000-0000-0000-000000000000",
+    "teal": 239,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:191",
     "pc": [
-      405
+      405,
+      406
     ]
   },
   {
-    "teal": 279,
-    "source": 200,
+    "teal": 240,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:191",
     "pc": [
-      406,
-      407
-    ]
-  },
-  {
-    "teal": 280,
-    "source": 200,
-    "pc": [
+      407,
       408,
       409
     ]
   },
   {
-    "teal": 281,
-    "source": 200,
+    "teal": 241,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:191",
     "pc": [
-      410,
-      411
+      410
     ]
   },
   {
-    "teal": 282,
-    "source": 200,
+    "teal": 242,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:191",
     "pc": [
-      412,
+      411,
+      412
+    ]
+  },
+  {
+    "teal": 243,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:191",
+    "pc": [
       413
     ]
   },
   {
-    "teal": 283,
-    "source": 200,
+    "teal": 246,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:191",
+    "errorMessage": "verificationClass must equal to 0",
     "pc": [
-      414,
-      415
+      414
     ]
   },
   {
-    "teal": 284,
-    "source": 200,
+    "teal": 253,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
-      416,
-      417
+      415,
+      416
     ]
   },
   {
-    "teal": 285,
-    "source": 200,
+    "teal": 254,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
+      417,
       418
     ]
   },
   {
-    "teal": 286,
-    "source": 200,
+    "teal": 255,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
-      419
+      419,
+      420
     ]
   },
   {
-    "teal": 287,
-    "source": 200,
+    "teal": 256,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
-      420,
-      421
-    ]
-  },
-  {
-    "teal": 288,
-    "source": 200,
-    "pc": [
+      421,
       422
     ]
   },
   {
-    "teal": 289,
-    "source": 200,
+    "teal": 257,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
-      423
-    ]
-  },
-  {
-    "teal": 290,
-    "source": 200,
-    "pc": [
+      423,
       424
     ]
   },
   {
-    "teal": 291,
-    "source": 200,
+    "teal": 258,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
-      425
-    ]
-  },
-  {
-    "teal": 292,
-    "source": 200,
-    "pc": [
+      425,
       426
     ]
   },
   {
-    "teal": 293,
-    "source": 200,
+    "teal": 259,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
       427
     ]
   },
   {
-    "teal": 294,
-    "source": 200,
+    "teal": 260,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
       428
     ]
   },
   {
-    "teal": 295,
-    "source": 200,
+    "teal": 261,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
       429,
-      430,
+      430
+    ]
+  },
+  {
+    "teal": 262,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
+    "pc": [
       431
     ]
   },
   {
-    "teal": 296,
-    "source": 200,
+    "teal": 263,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
-      432,
-      433
+      432
     ]
   },
   {
-    "teal": 297,
-    "source": 200,
+    "teal": 264,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
+      433,
       434
     ]
   },
   {
-    "teal": 300,
-    "source": 199,
-    "errorMessage": "legalEntityUUID must equal to 00000000-0000-0000-0000-000000000000",
+    "teal": 265,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
       435
     ]
   },
   {
-    "teal": 304,
-    "source": 204,
+    "teal": 266,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
       436,
       437
     ]
   },
   {
-    "teal": 305,
-    "source": 204,
+    "teal": 267,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
-      438,
+      438
+    ]
+  },
+  {
+    "teal": 268,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
+    "pc": [
       439
     ]
   },
   {
-    "teal": 306,
-    "source": 204,
+    "teal": 269,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
       440,
-      441
+      441,
+      442
     ]
   },
   {
-    "teal": 307,
-    "source": 204,
+    "teal": 270,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
-      442,
       443,
-      444
-    ]
-  },
-  {
-    "teal": 308,
-    "source": 204,
-    "pc": [
-      445
-    ]
-  },
-  {
-    "teal": 309,
-    "source": 204,
-    "pc": [
-      446
-    ]
-  },
-  {
-    "teal": 310,
-    "source": 204,
-    "pc": [
-      447
-    ]
-  },
-  {
-    "teal": 313,
-    "source": 204,
-    "errorMessage": "biatecEngagementPoints must equal to 0",
-    "pc": [
-      448
-    ]
-  },
-  {
-    "teal": 317,
-    "source": 206,
-    "pc": [
+      444,
+      445,
+      446,
+      447,
+      448,
       449,
-      450
-    ]
-  },
-  {
-    "teal": 318,
-    "source": 206,
-    "pc": [
+      450,
       451,
-      452
-    ]
-  },
-  {
-    "teal": 319,
-    "source": 206,
-    "pc": [
+      452,
       453,
-      454
-    ]
-  },
-  {
-    "teal": 320,
-    "source": 206,
-    "pc": [
+      454,
       455,
       456,
-      457
-    ]
-  },
-  {
-    "teal": 321,
-    "source": 206,
-    "pc": [
-      458
-    ]
-  },
-  {
-    "teal": 322,
-    "source": 206,
-    "pc": [
-      459
-    ]
-  },
-  {
-    "teal": 323,
-    "source": 206,
-    "pc": [
-      460
-    ]
-  },
-  {
-    "teal": 326,
-    "source": 206,
-    "errorMessage": "biatecEngagementRank must equal to 0",
-    "pc": [
-      461
-    ]
-  },
-  {
-    "teal": 330,
-    "source": 208,
-    "pc": [
+      457,
+      458,
+      459,
+      460,
+      461,
       462,
-      463
-    ]
-  },
-  {
-    "teal": 331,
-    "source": 208,
-    "pc": [
+      463,
       464,
-      465
-    ]
-  },
-  {
-    "teal": 332,
-    "source": 208,
-    "pc": [
+      465,
       466,
-      467
-    ]
-  },
-  {
-    "teal": 333,
-    "source": 208,
-    "pc": [
+      467,
       468,
       469,
-      470
-    ]
-  },
-  {
-    "teal": 334,
-    "source": 208,
-    "pc": [
-      471
-    ]
-  },
-  {
-    "teal": 335,
-    "source": 208,
-    "pc": [
-      472
-    ]
-  },
-  {
-    "teal": 336,
-    "source": 208,
-    "pc": [
-      473
-    ]
-  },
-  {
-    "teal": 339,
-    "source": 208,
-    "errorMessage": "avmEngagementPoints must equal to 0",
-    "pc": [
-      474
-    ]
-  },
-  {
-    "teal": 343,
-    "source": 210,
-    "pc": [
+      470,
+      471,
+      472,
+      473,
+      474,
       475,
-      476
-    ]
-  },
-  {
-    "teal": 344,
-    "source": 210,
-    "pc": [
+      476,
       477,
-      478
-    ]
-  },
-  {
-    "teal": 345,
-    "source": 210,
-    "pc": [
+      478,
       479,
       480
     ]
   },
   {
-    "teal": 346,
-    "source": 210,
+    "teal": 271,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:195",
     "pc": [
-      481,
-      482,
-      483
+      481
     ]
   },
   {
-    "teal": 347,
-    "source": 210,
+    "teal": 274,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:194",
+    "errorMessage": "personUUID must equal to 00000000-0000-0000-0000-000000000000",
     "pc": [
+      482
+    ]
+  },
+  {
+    "teal": 281,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
+    "pc": [
+      483,
       484
     ]
   },
   {
-    "teal": 348,
-    "source": 210,
+    "teal": 282,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
-      485
-    ]
-  },
-  {
-    "teal": 349,
-    "source": 210,
-    "pc": [
+      485,
       486
     ]
   },
   {
-    "teal": 352,
-    "source": 210,
-    "errorMessage": "avmEngagementRank must equal to 0",
+    "teal": 283,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
-      487
+      487,
+      488
     ]
   },
   {
-    "teal": 356,
-    "source": 212,
+    "teal": 284,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
-      488,
-      489
+      489,
+      490
     ]
   },
   {
-    "teal": 357,
-    "source": 212,
+    "teal": 285,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
-      490,
-      491
+      491,
+      492
     ]
   },
   {
-    "teal": 358,
-    "source": 212,
+    "teal": 286,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
-      492,
-      493
+      493,
+      494
     ]
   },
   {
-    "teal": 359,
-    "source": 212,
+    "teal": 287,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
-      494,
-      495,
+      495
+    ]
+  },
+  {
+    "teal": 288,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
+    "pc": [
       496
     ]
   },
   {
-    "teal": 360,
-    "source": 212,
+    "teal": 289,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
-      497
-    ]
-  },
-  {
-    "teal": 361,
-    "source": 212,
-    "pc": [
+      497,
       498
     ]
   },
   {
-    "teal": 362,
-    "source": 212,
+    "teal": 290,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
       499
     ]
   },
   {
-    "teal": 365,
-    "source": 212,
-    "errorMessage": "tradingEngagementPoints must equal to 0",
+    "teal": 291,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
       500
     ]
   },
   {
-    "teal": 369,
-    "source": 214,
+    "teal": 292,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
       501,
       502
     ]
   },
   {
-    "teal": 370,
-    "source": 214,
+    "teal": 293,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
-      503,
-      504
+      503
     ]
   },
   {
-    "teal": 371,
-    "source": 214,
+    "teal": 294,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
-      505,
+      504,
+      505
+    ]
+  },
+  {
+    "teal": 295,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
+    "pc": [
       506
     ]
   },
   {
-    "teal": 372,
-    "source": 214,
+    "teal": 296,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
-      507,
-      508,
-      509
+      507
     ]
   },
   {
-    "teal": 373,
-    "source": 214,
+    "teal": 297,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
+      508,
+      509,
       510
     ]
   },
   {
-    "teal": 374,
-    "source": 214,
+    "teal": 298,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
-      511
-    ]
-  },
-  {
-    "teal": 375,
-    "source": 214,
-    "pc": [
-      512
-    ]
-  },
-  {
-    "teal": 378,
-    "source": 214,
-    "errorMessage": "tradingEngagementRank must equal to 0",
-    "pc": [
-      513
-    ]
-  },
-  {
-    "teal": 382,
-    "source": 216,
-    "pc": [
+      511,
+      512,
+      513,
       514,
-      515
-    ]
-  },
-  {
-    "teal": 383,
-    "source": 216,
-    "pc": [
+      515,
       516,
-      517
-    ]
-  },
-  {
-    "teal": 384,
-    "source": 216,
-    "pc": [
+      517,
       518,
-      519
-    ]
-  },
-  {
-    "teal": 385,
-    "source": 216,
-    "pc": [
+      519,
       520,
-      521
-    ]
-  },
-  {
-    "teal": 386,
-    "source": 216,
-    "pc": [
-      522
-    ]
-  },
-  {
-    "teal": 387,
-    "source": 216,
-    "pc": [
-      523
-    ]
-  },
-  {
-    "teal": 388,
-    "source": 216,
-    "pc": [
-      524
-    ]
-  },
-  {
-    "teal": 391,
-    "source": 216,
-    "errorMessage": "isLocked must equal to false",
-    "pc": [
-      525
-    ]
-  },
-  {
-    "teal": 395,
-    "source": 218,
-    "pc": [
+      521,
+      522,
+      523,
+      524,
+      525,
       526,
-      527
-    ]
-  },
-  {
-    "teal": 396,
-    "source": 218,
-    "pc": [
+      527,
       528,
-      529
-    ]
-  },
-  {
-    "teal": 397,
-    "source": 218,
-    "pc": [
+      529,
       530,
-      531
-    ]
-  },
-  {
-    "teal": 398,
-    "source": 218,
-    "pc": [
+      531,
       532,
       533,
-      534
-    ]
-  },
-  {
-    "teal": 399,
-    "source": 218,
-    "pc": [
-      535
-    ]
-  },
-  {
-    "teal": 400,
-    "source": 218,
-    "pc": [
-      536
-    ]
-  },
-  {
-    "teal": 401,
-    "source": 218,
-    "pc": [
-      537
-    ]
-  },
-  {
-    "teal": 404,
-    "source": 218,
-    "errorMessage": "kycExpiration must equal to 0",
-    "pc": [
-      538
-    ]
-  },
-  {
-    "teal": 408,
-    "source": 220,
-    "pc": [
+      534,
+      535,
+      536,
+      537,
+      538,
       539,
-      540
-    ]
-  },
-  {
-    "teal": 409,
-    "source": 220,
-    "pc": [
+      540,
       541,
-      542
-    ]
-  },
-  {
-    "teal": 410,
-    "source": 220,
-    "pc": [
+      542,
       543,
-      544
-    ]
-  },
-  {
-    "teal": 411,
-    "source": 220,
-    "pc": [
+      544,
       545,
       546,
-      547
-    ]
-  },
-  {
-    "teal": 412,
-    "source": 220,
-    "pc": [
+      547,
       548
     ]
   },
   {
-    "teal": 413,
-    "source": 220,
+    "teal": 299,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:200",
     "pc": [
       549
     ]
   },
   {
-    "teal": 414,
-    "source": 220,
+    "teal": 302,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:199",
+    "errorMessage": "legalEntityUUID must equal to 00000000-0000-0000-0000-000000000000",
     "pc": [
       550
     ]
   },
   {
-    "teal": 417,
-    "source": 220,
-    "errorMessage": "investorForExpiration must equal to 0",
+    "teal": 306,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:204",
     "pc": [
-      551
+      551,
+      552
     ]
   },
   {
-    "teal": 421,
-    "source": 222,
+    "teal": 307,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:204",
     "pc": [
-      552,
-      553
+      553,
+      554
     ]
   },
   {
-    "teal": 422,
-    "source": 222,
+    "teal": 308,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:204",
     "pc": [
-      554,
-      555
+      555,
+      556
     ]
   },
   {
-    "teal": 423,
-    "source": 222,
+    "teal": 309,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:204",
     "pc": [
-      556,
-      557
-    ]
-  },
-  {
-    "teal": 424,
-    "source": 222,
-    "pc": [
+      557,
       558,
       559
     ]
   },
   {
-    "teal": 425,
-    "source": 222,
+    "teal": 310,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:204",
     "pc": [
       560
     ]
   },
   {
-    "teal": 426,
-    "source": 222,
+    "teal": 311,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:204",
     "pc": [
-      561
-    ]
-  },
-  {
-    "teal": 427,
-    "source": 222,
-    "pc": [
+      561,
       562
     ]
   },
   {
-    "teal": 430,
-    "source": 222,
-    "errorMessage": "isProfessionalInvestor must equal to false",
+    "teal": 312,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:204",
     "pc": [
       563
     ]
   },
   {
-    "teal": 434,
-    "source": 224,
+    "teal": 315,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:204",
+    "errorMessage": "biatecEngagementPoints must equal to 0",
     "pc": [
       564
     ]
   },
   {
-    "teal": 435,
-    "source": 224,
+    "teal": 319,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:206",
     "pc": [
       565,
       566
     ]
   },
   {
-    "teal": 436,
-    "source": 224,
+    "teal": 320,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:206",
     "pc": [
-      567
-    ]
-  },
-  {
-    "teal": 437,
-    "source": 224,
-    "pc": [
+      567,
       568
     ]
   },
   {
-    "teal": 438,
-    "source": 224,
+    "teal": 321,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:206",
     "pc": [
-      569
-    ]
-  },
-  {
-    "teal": 439,
-    "source": 224,
-    "pc": [
+      569,
       570
     ]
   },
   {
-    "teal": 440,
-    "source": 224,
+    "teal": 322,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:206",
     "pc": [
       571,
-      572
-    ]
-  },
-  {
-    "teal": 441,
-    "source": 224,
-    "pc": [
+      572,
       573
     ]
   },
   {
-    "teal": 442,
-    "source": 185,
+    "teal": 323,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:206",
     "pc": [
       574
     ]
   },
   {
-    "teal": 447,
-    "source": 227,
+    "teal": 324,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:206",
     "pc": [
       575,
-      576,
+      576
+    ]
+  },
+  {
+    "teal": 325,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:206",
+    "pc": [
       577
     ]
   },
   {
-    "teal": 450,
-    "source": 227,
+    "teal": 328,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:206",
+    "errorMessage": "biatecEngagementRank must equal to 0",
     "pc": [
-      578,
+      578
+    ]
+  },
+  {
+    "teal": 332,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:208",
+    "pc": [
       579,
       580
     ]
   },
   {
-    "teal": 451,
-    "source": 227,
+    "teal": 333,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:208",
     "pc": [
-      581
-    ]
-  },
-  {
-    "teal": 452,
-    "source": 227,
-    "pc": [
+      581,
       582
     ]
   },
   {
-    "teal": 453,
-    "source": 227,
+    "teal": 334,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:208",
     "pc": [
-      583
-    ]
-  },
-  {
-    "teal": 454,
-    "source": 227,
-    "pc": [
+      583,
       584
     ]
   },
   {
-    "teal": 457,
-    "source": 227,
-    "errorMessage": "argument 1 (user) for setInfo must be a address",
+    "teal": 335,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:208",
     "pc": [
-      585
+      585,
+      586,
+      587
     ]
   },
   {
-    "teal": 460,
-    "source": 227,
+    "teal": 336,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:208",
     "pc": [
-      586,
-      587,
       588
     ]
   },
   {
-    "teal": 461,
-    "source": 227,
+    "teal": 337,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:208",
     "pc": [
-      589
-    ]
-  },
-  {
-    "teal": 462,
-    "source": 227,
-    "pc": [
+      589,
       590
     ]
   },
   {
-    "teal": 466,
-    "source": 227,
+    "teal": 338,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:208",
     "pc": [
-      591,
-      592,
-      593
+      591
     ]
   },
   {
-    "teal": 470,
-    "source": 228,
+    "teal": 341,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:208",
+    "errorMessage": "avmEngagementPoints must equal to 0",
     "pc": [
-      594,
-      595
+      592
     ]
   },
   {
-    "teal": 471,
-    "source": 228,
+    "teal": 345,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:210",
     "pc": [
-      596,
+      593,
+      594
+    ]
+  },
+  {
+    "teal": 346,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:210",
+    "pc": [
+      595,
+      596
+    ]
+  },
+  {
+    "teal": 347,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:210",
+    "pc": [
       597,
       598
     ]
   },
   {
-    "teal": 472,
-    "source": 228,
+    "teal": 348,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:210",
     "pc": [
-      599
-    ]
-  },
-  {
-    "teal": 473,
-    "source": 228,
-    "pc": [
-      600
-    ]
-  },
-  {
-    "teal": 474,
-    "source": 228,
-    "pc": [
+      599,
+      600,
       601
     ]
   },
   {
-    "teal": 478,
-    "source": 229,
+    "teal": 349,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:210",
     "pc": [
       602
     ]
   },
   {
-    "teal": 479,
-    "source": 229,
+    "teal": 350,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:210",
     "pc": [
       603,
       604
     ]
   },
   {
-    "teal": 480,
-    "source": 229,
+    "teal": 351,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:210",
     "pc": [
       605
     ]
   },
   {
-    "teal": 481,
-    "source": 229,
+    "teal": 354,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:210",
+    "errorMessage": "avmEngagementRank must equal to 0",
     "pc": [
       606
     ]
   },
   {
-    "teal": 482,
-    "source": 229,
+    "teal": 358,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:212",
     "pc": [
-      607
-    ]
-  },
-  {
-    "teal": 483,
-    "source": 229,
-    "pc": [
+      607,
       608
     ]
   },
   {
-    "teal": 484,
-    "source": 229,
+    "teal": 359,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:212",
     "pc": [
       609,
       610
     ]
   },
   {
-    "teal": 485,
-    "source": 229,
+    "teal": 360,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:212",
     "pc": [
-      611
-    ]
-  },
-  {
-    "teal": 486,
-    "source": 227,
-    "pc": [
+      611,
       612
     ]
   },
   {
-    "teal": 491,
-    "source": 244,
+    "teal": 361,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:212",
     "pc": [
       613,
       614,
@@ -2262,1510 +1793,1367 @@
     ]
   },
   {
-    "teal": 492,
-    "source": 244,
+    "teal": 362,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:212",
     "pc": [
       616
     ]
   },
   {
-    "teal": 495,
-    "source": 243,
+    "teal": 363,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:212",
     "pc": [
       617,
-      618,
+      618
+    ]
+  },
+  {
+    "teal": 364,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:212",
+    "pc": [
       619
     ]
   },
   {
-    "teal": 496,
-    "source": 243,
+    "teal": 367,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:212",
+    "errorMessage": "tradingEngagementPoints must equal to 0",
     "pc": [
       620
     ]
   },
   {
-    "teal": 499,
-    "source": 242,
+    "teal": 371,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:214",
     "pc": [
       621,
-      622,
-      623
+      622
     ]
   },
   {
-    "teal": 500,
-    "source": 242,
+    "teal": 372,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:214",
     "pc": [
+      623,
       624
     ]
   },
   {
-    "teal": 503,
-    "source": 241,
+    "teal": 373,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:214",
     "pc": [
       625,
-      626,
-      627
+      626
     ]
   },
   {
-    "teal": 504,
-    "source": 241,
+    "teal": 374,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:214",
     "pc": [
+      627,
       628,
-      629,
+      629
+    ]
+  },
+  {
+    "teal": 375,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:214",
+    "pc": [
       630
     ]
   },
   {
-    "teal": 507,
-    "source": 240,
+    "teal": 376,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:214",
     "pc": [
       631,
-      632,
+      632
+    ]
+  },
+  {
+    "teal": 377,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:214",
+    "pc": [
       633
     ]
   },
   {
-    "teal": 508,
-    "source": 240,
+    "teal": 380,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:214",
+    "errorMessage": "tradingEngagementRank must equal to 0",
     "pc": [
-      634,
+      634
+    ]
+  },
+  {
+    "teal": 384,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:216",
+    "pc": [
       635,
       636
     ]
   },
   {
-    "teal": 511,
-    "source": 239,
+    "teal": 385,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:216",
     "pc": [
       637,
-      638,
-      639
+      638
     ]
   },
   {
-    "teal": 512,
-    "source": 239,
+    "teal": 386,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:216",
     "pc": [
-      640,
+      639,
+      640
+    ]
+  },
+  {
+    "teal": 387,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:216",
+    "pc": [
       641,
-      642
+      642,
+      643
     ]
   },
   {
-    "teal": 515,
-    "source": 238,
+    "teal": 388,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:216",
     "pc": [
-      643,
-      644,
-      645
+      644
     ]
   },
   {
-    "teal": 516,
-    "source": 238,
+    "teal": 389,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:216",
     "pc": [
+      645,
       646
     ]
   },
   {
-    "teal": 519,
-    "source": 237,
+    "teal": 390,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:216",
     "pc": [
-      647,
-      648,
-      649
+      647
     ]
   },
   {
-    "teal": 520,
-    "source": 237,
+    "teal": 393,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:216",
+    "errorMessage": "isLocked must equal to false",
     "pc": [
+      648
+    ]
+  },
+  {
+    "teal": 397,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:218",
+    "pc": [
+      649,
       650
     ]
   },
   {
-    "teal": 521,
-    "source": 237,
+    "teal": 398,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:218",
     "pc": [
-      651
+      651,
+      652
     ]
   },
   {
-    "teal": 529,
-    "source": 237,
+    "teal": 399,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:218",
     "pc": [
-      652,
       653,
       654
     ]
   },
   {
-    "teal": 532,
-    "source": 237,
+    "teal": 400,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:218",
     "pc": [
-      655
+      655,
+      656,
+      657
     ]
   },
   {
-    "teal": 533,
-    "source": 237,
+    "teal": 401,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:218",
     "pc": [
-      656
-    ]
-  },
-  {
-    "teal": 537,
-    "source": 246,
-    "pc": [
-      657,
       658
     ]
   },
   {
-    "teal": 538,
-    "source": 246,
+    "teal": 402,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:218",
     "pc": [
-      659
-    ]
-  },
-  {
-    "teal": 539,
-    "source": 246,
-    "pc": [
+      659,
       660
     ]
   },
   {
-    "teal": 540,
-    "source": 246,
+    "teal": 403,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:218",
     "pc": [
       661
     ]
   },
   {
-    "teal": 543,
-    "source": 246,
-    "errorMessage": "Configuration app does not match",
+    "teal": 406,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:218",
+    "errorMessage": "kycExpiration must equal to 0",
     "pc": [
       662
     ]
   },
   {
-    "teal": 547,
-    "source": 247,
+    "teal": 410,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:220",
     "pc": [
       663,
       664
     ]
   },
   {
-    "teal": 548,
-    "source": 247,
+    "teal": 411,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:220",
     "pc": [
       665,
       666
     ]
   },
   {
-    "teal": 549,
-    "source": 247,
+    "teal": 412,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:220",
     "pc": [
-      667
-    ]
-  },
-  {
-    "teal": 552,
-    "source": 247,
-    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('ef')",
-    "pc": [
+      667,
       668
     ]
   },
   {
-    "teal": 553,
-    "source": 247,
+    "teal": 413,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:220",
     "pc": [
       669,
-      670
+      670,
+      671
     ]
   },
   {
-    "teal": 560,
-    "source": 249,
+    "teal": 414,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:220",
     "pc": [
-      671,
       672
     ]
   },
   {
-    "teal": 561,
-    "source": 249,
+    "teal": 415,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:220",
     "pc": [
       673,
       674
     ]
   },
   {
-    "teal": 562,
-    "source": 249,
+    "teal": 416,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:220",
     "pc": [
       675
     ]
   },
   {
-    "teal": 565,
-    "source": 248,
-    "errorMessage": "Only fee executor setup in the config can take the collected fees",
+    "teal": 419,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:220",
+    "errorMessage": "investorForExpiration must equal to 0",
     "pc": [
       676
     ]
   },
   {
-    "teal": 569,
-    "source": 252,
+    "teal": 423,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:222",
     "pc": [
       677,
       678
     ]
   },
   {
-    "teal": 570,
-    "source": 252,
+    "teal": 424,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:222",
     "pc": [
       679,
       680
     ]
   },
   {
-    "teal": 571,
-    "source": 252,
+    "teal": 425,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:222",
     "pc": [
-      681
-    ]
-  },
-  {
-    "teal": 574,
-    "source": 252,
-    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('s')",
-    "pc": [
+      681,
       682
     ]
   },
   {
-    "teal": 575,
-    "source": 252,
+    "teal": 426,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:222",
     "pc": [
       683,
-      684
+      684,
+      685
     ]
   },
   {
-    "teal": 579,
-    "source": 253,
+    "teal": 427,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:222",
     "pc": [
-      685,
       686
     ]
   },
   {
-    "teal": 580,
-    "source": 253,
+    "teal": 428,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:222",
     "pc": [
-      687
-    ]
-  },
-  {
-    "teal": 581,
-    "source": 253,
-    "pc": [
+      687,
       688
     ]
   },
   {
-    "teal": 584,
-    "source": 253,
-    "errorMessage": "ERR_PAUSED",
+    "teal": 429,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:222",
     "pc": [
       689
     ]
   },
   {
-    "teal": 596,
-    "source": 254,
+    "teal": 432,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:222",
+    "errorMessage": "isProfessionalInvestor must equal to false",
     "pc": [
       690
     ]
   },
   {
-    "teal": 597,
-    "source": 254,
+    "teal": 436,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:224",
     "pc": [
-      691
-    ]
-  },
-  {
-    "teal": 598,
-    "source": 254,
-    "pc": [
+      691,
       692,
       693
     ]
   },
   {
-    "teal": 602,
-    "source": 255,
+    "teal": 437,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:224",
     "pc": [
       694,
       695
     ]
   },
   {
-    "teal": 603,
-    "source": 255,
+    "teal": 438,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:224",
     "pc": [
-      696,
+      696
+    ]
+  },
+  {
+    "teal": 439,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:224",
+    "pc": [
       697
     ]
   },
   {
-    "teal": 607,
-    "source": 256,
+    "teal": 440,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:224",
     "pc": [
-      698,
+      698
+    ]
+  },
+  {
+    "teal": 441,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:224",
+    "pc": [
       699
     ]
   },
   {
-    "teal": 608,
-    "source": 256,
+    "teal": 442,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:224",
     "pc": [
       700,
       701
     ]
   },
   {
-    "teal": 612,
-    "source": 257,
+    "teal": 443,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:224",
     "pc": [
-      702,
+      702
+    ]
+  },
+  {
+    "teal": 444,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:185",
+    "pc": [
       703
     ]
   },
   {
-    "teal": 613,
-    "source": 257,
+    "teal": 449,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:227",
     "pc": [
       704,
-      705
+      705,
+      706
     ]
   },
   {
-    "teal": 617,
-    "source": 258,
+    "teal": 452,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:227",
     "pc": [
-      706,
-      707
-    ]
-  },
-  {
-    "teal": 618,
-    "source": 258,
-    "pc": [
+      707,
       708,
       709
     ]
   },
   {
-    "teal": 622,
-    "source": 259,
+    "teal": 453,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:227",
     "pc": [
-      710,
+      710
+    ]
+  },
+  {
+    "teal": 454,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:227",
+    "pc": [
       711
     ]
   },
   {
-    "teal": 623,
-    "source": 259,
+    "teal": 455,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:227",
     "pc": [
       712,
       713
     ]
   },
   {
-    "teal": 627,
-    "source": 260,
+    "teal": 456,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:227",
     "pc": [
-      714,
+      714
+    ]
+  },
+  {
+    "teal": 459,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:227",
+    "errorMessage": "argument 1 (user) for setInfo must be a address",
+    "pc": [
       715
     ]
   },
   {
-    "teal": 628,
-    "source": 260,
+    "teal": 462,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:227",
     "pc": [
       716,
-      717
-    ]
-  },
-  {
-    "teal": 632,
-    "source": 261,
-    "pc": [
+      717,
       718
     ]
   },
   {
-    "teal": 633,
-    "source": 261,
+    "teal": 463,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:227",
     "pc": [
       719,
       720
     ]
   },
   {
-    "teal": 636,
-    "source": 254,
+    "teal": 464,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:227",
     "pc": [
       721
     ]
   },
   {
-    "teal": 637,
-    "source": 237,
+    "teal": 468,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:227",
     "pc": [
-      722
-    ]
-  },
-  {
-    "teal": 642,
-    "source": 271,
-    "pc": [
+      722,
       723,
       724
     ]
   },
   {
-    "teal": 645,
-    "source": 272,
+    "teal": 472,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:228",
     "pc": [
       725,
-      726,
-      727
+      726
     ]
   },
   {
-    "teal": 646,
-    "source": 272,
+    "teal": 473,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:228",
     "pc": [
-      728
-    ]
-  },
-  {
-    "teal": 647,
-    "source": 272,
-    "pc": [
+      727,
+      728,
       729
     ]
   },
   {
-    "teal": 648,
-    "source": 272,
+    "teal": 474,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:228",
     "pc": [
       730
     ]
   },
   {
-    "teal": 649,
-    "source": 272,
+    "teal": 475,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:228",
     "pc": [
       731
     ]
   },
   {
-    "teal": 652,
-    "source": 272,
-    "errorMessage": "argument 0 (v) for getUser must be a uint8",
+    "teal": 476,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:228",
     "pc": [
       732
     ]
   },
   {
-    "teal": 653,
-    "source": 272,
+    "teal": 480,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:229",
     "pc": [
-      733
-    ]
-  },
-  {
-    "teal": 656,
-    "source": 272,
-    "pc": [
+      733,
       734,
-      735,
-      736
+      735
     ]
   },
   {
-    "teal": 657,
-    "source": 272,
+    "teal": 481,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:229",
     "pc": [
+      736,
       737
     ]
   },
   {
-    "teal": 658,
-    "source": 272,
+    "teal": 482,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:229",
     "pc": [
       738
     ]
   },
   {
-    "teal": 659,
-    "source": 272,
+    "teal": 483,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:229",
     "pc": [
       739
     ]
   },
   {
-    "teal": 660,
-    "source": 272,
+    "teal": 484,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:229",
     "pc": [
       740
     ]
   },
   {
-    "teal": 663,
-    "source": 272,
-    "errorMessage": "argument 1 (user) for getUser must be a address",
+    "teal": 485,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:229",
     "pc": [
       741
     ]
   },
   {
-    "teal": 666,
-    "source": 271,
+    "teal": 486,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:229",
     "pc": [
       742,
-      743,
+      743
+    ]
+  },
+  {
+    "teal": 487,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:229",
+    "pc": [
       744
     ]
   },
   {
-    "teal": 667,
-    "source": 271,
+    "teal": 488,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:227",
     "pc": [
       745
     ]
   },
   {
-    "teal": 668,
-    "source": 271,
+    "teal": 493,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:244",
     "pc": [
-      746
-    ]
-  },
-  {
-    "teal": 669,
-    "source": 271,
-    "pc": [
-      747
-    ]
-  },
-  {
-    "teal": 670,
-    "source": 271,
-    "pc": [
+      746,
+      747,
       748
     ]
   },
   {
-    "teal": 679,
-    "source": 271,
+    "teal": 494,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:244",
     "pc": [
-      749,
-      750,
-      751
+      749
     ]
   },
   {
-    "teal": 682,
-    "source": 271,
+    "teal": 497,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:243",
     "pc": [
+      750,
+      751,
       752
     ]
   },
   {
-    "teal": 683,
-    "source": 271,
+    "teal": 498,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:243",
     "pc": [
-      753,
-      754
+      753
     ]
   },
   {
-    "teal": 687,
-    "source": 273,
+    "teal": 501,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:242",
     "pc": [
+      754,
       755,
       756
     ]
   },
   {
-    "teal": 688,
-    "source": 273,
+    "teal": 502,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:242",
     "pc": [
       757
     ]
   },
   {
-    "teal": 689,
-    "source": 273,
+    "teal": 505,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:241",
     "pc": [
-      758
-    ]
-  },
-  {
-    "teal": 692,
-    "source": 273,
-    "errorMessage": "Currently supported version of the data structure is '1'",
-    "pc": [
-      759
-    ]
-  },
-  {
-    "teal": 697,
-    "source": 274,
-    "pc": [
+      758,
+      759,
       760
     ]
   },
   {
-    "teal": 698,
-    "source": 274,
+    "teal": 506,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:241",
     "pc": [
       761,
-      762
-    ]
-  },
-  {
-    "teal": 699,
-    "source": 274,
-    "pc": [
+      762,
       763
     ]
   },
   {
-    "teal": 700,
-    "source": 274,
+    "teal": 509,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:240",
     "pc": [
-      764
-    ]
-  },
-  {
-    "teal": 701,
-    "source": 274,
-    "pc": [
-      765
-    ]
-  },
-  {
-    "teal": 702,
-    "source": 274,
-    "pc": [
+      764,
+      765,
       766
     ]
   },
   {
-    "teal": 703,
-    "source": 274,
+    "teal": 510,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:240",
     "pc": [
-      767
-    ]
-  },
-  {
-    "teal": 704,
-    "source": 274,
-    "pc": [
+      767,
       768,
-      769,
-      770
+      769
     ]
   },
   {
-    "teal": 725,
-    "source": 276,
+    "teal": 513,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:239",
     "pc": [
+      770,
       771,
       772
     ]
   },
   {
-    "teal": 726,
-    "source": 276,
+    "teal": 514,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:239",
     "pc": [
-      773
-    ]
-  },
-  {
-    "teal": 727,
-    "source": 276,
-    "pc": [
+      773,
       774,
-      775,
-      776
+      775
     ]
   },
   {
-    "teal": 728,
-    "source": 281,
+    "teal": 517,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:238",
     "pc": [
-      777
-    ]
-  },
-  {
-    "teal": 729,
-    "source": 281,
-    "pc": [
+      776,
+      777,
       778
     ]
   },
   {
-    "teal": 730,
-    "source": 280,
+    "teal": 518,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:238",
     "pc": [
       779
     ]
   },
   {
-    "teal": 731,
-    "source": 280,
+    "teal": 521,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:237",
     "pc": [
-      780
-    ]
-  },
-  {
-    "teal": 732,
-    "source": 282,
-    "pc": [
-      781
-    ]
-  },
-  {
-    "teal": 733,
-    "source": 282,
-    "pc": [
+      780,
+      781,
       782
     ]
   },
   {
-    "teal": 734,
-    "source": 283,
+    "teal": 522,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:237",
     "pc": [
-      783
-    ]
-  },
-  {
-    "teal": 735,
-    "source": 283,
-    "pc": [
+      783,
       784
     ]
   },
   {
-    "teal": 736,
-    "source": 284,
+    "teal": 523,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:237",
     "pc": [
       785
     ]
   },
   {
-    "teal": 737,
-    "source": 284,
+    "teal": 531,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:237",
     "pc": [
-      786
-    ]
-  },
-  {
-    "teal": 738,
-    "source": 285,
-    "pc": [
-      787
-    ]
-  },
-  {
-    "teal": 739,
-    "source": 285,
-    "pc": [
+      786,
+      787,
       788
     ]
   },
   {
-    "teal": 740,
-    "source": 286,
+    "teal": 534,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:237",
     "pc": [
-      789
-    ]
-  },
-  {
-    "teal": 741,
-    "source": 286,
-    "pc": [
+      789,
       790
     ]
   },
   {
-    "teal": 742,
-    "source": 287,
+    "teal": 535,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:237",
     "pc": [
       791
     ]
   },
   {
-    "teal": 743,
-    "source": 287,
+    "teal": 539,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:246",
     "pc": [
-      792
+      792,
+      793
     ]
   },
   {
-    "teal": 744,
-    "source": 278,
+    "teal": 540,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:246",
     "pc": [
-      793,
       794,
       795,
-      796,
-      797,
-      798,
-      799,
+      796
+    ]
+  },
+  {
+    "teal": 541,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:246",
+    "pc": [
+      797
+    ]
+  },
+  {
+    "teal": 542,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:246",
+    "pc": [
+      798
+    ]
+  },
+  {
+    "teal": 545,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:246",
+    "errorMessage": "Configuration app does not match",
+    "pc": [
+      799
+    ]
+  },
+  {
+    "teal": 549,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:247",
+    "pc": [
       800,
-      801,
-      802
+      801
     ]
   },
   {
-    "teal": 745,
-    "source": 278,
+    "teal": 550,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:247",
     "pc": [
-      803
+      802,
+      803,
+      804,
+      805
     ]
   },
   {
-    "teal": 746,
-    "source": 278,
+    "teal": 551,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:247",
     "pc": [
-      804
-    ]
-  },
-  {
-    "teal": 747,
-    "source": 278,
-    "pc": [
-      805,
       806
     ]
   },
   {
-    "teal": 748,
-    "source": 278,
+    "teal": 554,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:247",
+    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('ef')",
     "pc": [
       807
     ]
   },
   {
-    "teal": 751,
-    "source": 278,
-    "errorMessage": "(2 * SCALE) as uint256 overflowed 256 bits",
+    "teal": 555,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:247",
     "pc": [
-      808
+      808,
+      809
     ]
   },
   {
-    "teal": 752,
-    "source": 278,
+    "teal": 562,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:249",
     "pc": [
-      809,
-      810
-    ]
-  },
-  {
-    "teal": 753,
-    "source": 278,
-    "pc": [
+      810,
       811
     ]
   },
   {
-    "teal": 754,
-    "source": 278,
+    "teal": 563,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:249",
     "pc": [
-      812
-    ]
-  },
-  {
-    "teal": 755,
-    "source": 278,
-    "pc": [
+      812,
       813
     ]
   },
   {
-    "teal": 756,
-    "source": 278,
+    "teal": 564,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:249",
     "pc": [
       814
     ]
   },
   {
-    "teal": 757,
-    "source": 278,
+    "teal": 567,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:248",
+    "errorMessage": "Only fee executor setup in the config can take the collected fees",
     "pc": [
       815
     ]
   },
   {
-    "teal": 758,
-    "source": 278,
+    "teal": 571,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:252",
     "pc": [
-      816
-    ]
-  },
-  {
-    "teal": 759,
-    "source": 278,
-    "pc": [
+      816,
       817
     ]
   },
   {
-    "teal": 760,
-    "source": 278,
+    "teal": 572,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:252",
     "pc": [
-      818
+      818,
+      819,
+      820
     ]
   },
   {
-    "teal": 761,
-    "source": 278,
+    "teal": 573,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:252",
     "pc": [
-      819
-    ]
-  },
-  {
-    "teal": 762,
-    "source": 277,
-    "pc": [
-      820,
       821
     ]
   },
   {
-    "teal": 763,
-    "source": 277,
+    "teal": 576,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:252",
+    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('s')",
     "pc": [
       822
     ]
   },
   {
-    "teal": 764,
-    "source": 279,
+    "teal": 577,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:252",
     "pc": [
       823,
       824
     ]
   },
   {
-    "teal": 765,
-    "source": 279,
+    "teal": 581,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:253",
     "pc": [
-      825
-    ]
-  },
-  {
-    "teal": 766,
-    "source": 279,
-    "pc": [
+      825,
       826
     ]
   },
   {
-    "teal": 767,
-    "source": 279,
+    "teal": 582,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:253",
     "pc": [
-      827
-    ]
-  },
-  {
-    "teal": 768,
-    "source": 288,
-    "pc": [
+      827,
       828
     ]
   },
   {
-    "teal": 769,
-    "source": 288,
+    "teal": 583,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:253",
     "pc": [
       829
     ]
   },
   {
-    "teal": 770,
-    "source": 288,
+    "teal": 586,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:253",
+    "errorMessage": "ERR_PAUSED",
     "pc": [
       830
     ]
   },
   {
-    "teal": 771,
-    "source": 289,
+    "teal": 598,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:254",
     "pc": [
       831
     ]
   },
   {
-    "teal": 772,
-    "source": 289,
+    "teal": 599,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:254",
     "pc": [
-      832
+      832,
+      833
     ]
   },
   {
-    "teal": 773,
-    "source": 290,
+    "teal": 600,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:254",
     "pc": [
-      833,
-      834
-    ]
-  },
-  {
-    "teal": 774,
-    "source": 290,
-    "pc": [
+      834,
       835
     ]
   },
   {
-    "teal": 775,
-    "source": 290,
+    "teal": 604,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:255",
     "pc": [
-      836
-    ]
-  },
-  {
-    "teal": 776,
-    "source": 290,
-    "pc": [
+      836,
       837
     ]
   },
   {
-    "teal": 777,
-    "source": 275,
+    "teal": 605,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:255",
     "pc": [
-      838
+      838,
+      839
     ]
   },
   {
-    "teal": 778,
-    "source": 275,
+    "teal": 609,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:256",
     "pc": [
-      839,
-      840
+      840,
+      841
     ]
   },
   {
-    "teal": 782,
-    "source": 292,
+    "teal": 610,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:256",
     "pc": [
-      841,
-      842
+      842,
+      843
     ]
   },
   {
-    "teal": 783,
-    "source": 292,
+    "teal": 614,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:257",
     "pc": [
-      843,
       844,
       845
     ]
   },
   {
-    "teal": 788,
-    "source": 294,
+    "teal": 615,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:257",
     "pc": [
-      846
+      846,
+      847
     ]
   },
   {
-    "teal": 789,
-    "source": 294,
+    "teal": 619,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:258",
     "pc": [
-      847,
-      848
-    ]
-  },
-  {
-    "teal": 790,
-    "source": 294,
-    "pc": [
+      848,
       849
     ]
   },
   {
-    "teal": 791,
-    "source": 294,
+    "teal": 620,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:258",
     "pc": [
       850,
       851
     ]
   },
   {
-    "teal": 811,
-    "source": 297,
+    "teal": 624,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:259",
     "pc": [
       852,
       853
     ]
   },
   {
-    "teal": 812,
-    "source": 297,
+    "teal": 625,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:259",
     "pc": [
-      854
+      854,
+      855
     ]
   },
   {
-    "teal": 813,
-    "source": 297,
+    "teal": 629,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:260",
     "pc": [
-      855,
       856,
       857
     ]
   },
   {
-    "teal": 814,
-    "source": 294,
+    "teal": 630,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:260",
     "pc": [
       858,
       859
     ]
   },
   {
-    "teal": 815,
-    "source": 294,
+    "teal": 634,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:261",
     "pc": [
-      860
-    ]
-  },
-  {
-    "teal": 818,
-    "source": 294,
-    "errorMessage": "box value does not exist: this.identities(user).value",
-    "pc": [
+      860,
       861
     ]
   },
   {
-    "teal": 819,
-    "source": 302,
+    "teal": 635,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:261",
     "pc": [
       862,
       863
     ]
   },
   {
-    "teal": 820,
-    "source": 302,
+    "teal": 638,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:254",
     "pc": [
-      864,
+      864
+    ]
+  },
+  {
+    "teal": 639,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:237",
+    "pc": [
       865
     ]
   },
   {
-    "teal": 821,
-    "source": 302,
+    "teal": 644,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:271",
     "pc": [
       866,
       867,
-      868
-    ]
-  },
-  {
-    "teal": 822,
-    "source": 302,
-    "pc": [
-      869
-    ]
-  },
-  {
-    "teal": 823,
-    "source": 302,
-    "pc": [
-      870
-    ]
-  },
-  {
-    "teal": 824,
-    "source": 302,
-    "pc": [
+      868,
+      869,
+      870,
       871
     ]
   },
   {
-    "teal": 825,
-    "source": 294,
+    "teal": 647,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:272",
     "pc": [
       872,
-      873
-    ]
-  },
-  {
-    "teal": 826,
-    "source": 294,
-    "pc": [
+      873,
       874
     ]
   },
   {
-    "teal": 829,
-    "source": 294,
-    "errorMessage": "box value does not exist: this.identities(user).value",
+    "teal": 648,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:272",
     "pc": [
       875
     ]
   },
   {
-    "teal": 830,
-    "source": 301,
+    "teal": 649,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:272",
     "pc": [
-      876,
-      877
+      876
     ]
   },
   {
-    "teal": 831,
-    "source": 301,
+    "teal": 650,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:272",
     "pc": [
-      878,
+      877,
+      878
+    ]
+  },
+  {
+    "teal": 651,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:272",
+    "pc": [
       879
     ]
   },
   {
-    "teal": 832,
-    "source": 301,
+    "teal": 654,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:272",
+    "errorMessage": "argument 0 (v) for getUser must be a uint8",
     "pc": [
-      880,
-      881,
-      882
+      880
     ]
   },
   {
-    "teal": 833,
-    "source": 301,
+    "teal": 655,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:272",
     "pc": [
-      883
+      881
     ]
   },
   {
-    "teal": 834,
-    "source": 301,
+    "teal": 658,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:272",
     "pc": [
+      882,
+      883,
       884
     ]
   },
   {
-    "teal": 835,
-    "source": 301,
+    "teal": 659,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:272",
     "pc": [
       885
     ]
   },
   {
-    "teal": 836,
-    "source": 294,
+    "teal": 660,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:272",
     "pc": [
-      886,
-      887
+      886
     ]
   },
   {
-    "teal": 837,
-    "source": 294,
+    "teal": 661,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:272",
     "pc": [
+      887,
       888
     ]
   },
   {
-    "teal": 840,
-    "source": 294,
-    "errorMessage": "box value does not exist: this.identities(user).value",
+    "teal": 662,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:272",
     "pc": [
       889
     ]
   },
   {
-    "teal": 841,
-    "source": 303,
+    "teal": 665,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:272",
+    "errorMessage": "argument 1 (user) for getUser must be a address",
     "pc": [
-      890,
-      891
+      890
     ]
   },
   {
-    "teal": 842,
-    "source": 303,
+    "teal": 668,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:271",
     "pc": [
+      891,
       892,
       893
     ]
   },
   {
-    "teal": 843,
-    "source": 303,
+    "teal": 669,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:271",
     "pc": [
-      894,
-      895,
-      896
+      894
     ]
   },
   {
-    "teal": 844,
-    "source": 303,
+    "teal": 670,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:271",
     "pc": [
+      895
+    ]
+  },
+  {
+    "teal": 671,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:271",
+    "pc": [
+      896,
       897
     ]
   },
   {
-    "teal": 845,
-    "source": 303,
+    "teal": 672,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:271",
     "pc": [
       898
     ]
   },
   {
-    "teal": 846,
-    "source": 303,
+    "teal": 681,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:271",
     "pc": [
-      899
-    ]
-  },
-  {
-    "teal": 847,
-    "source": 294,
-    "pc": [
+      899,
       900,
       901
     ]
   },
   {
-    "teal": 848,
-    "source": 294,
+    "teal": 684,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:271",
     "pc": [
-      902
-    ]
-  },
-  {
-    "teal": 851,
-    "source": 294,
-    "errorMessage": "box value does not exist: this.identities(user).value",
-    "pc": [
+      902,
       903
     ]
   },
   {
-    "teal": 852,
-    "source": 304,
+    "teal": 685,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:271",
     "pc": [
       904,
       905
     ]
   },
   {
-    "teal": 853,
-    "source": 304,
+    "teal": 689,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:273",
     "pc": [
       906,
       907
     ]
   },
   {
-    "teal": 854,
-    "source": 304,
+    "teal": 690,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:273",
     "pc": [
       908,
-      909,
+      909
+    ]
+  },
+  {
+    "teal": 691,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:273",
+    "pc": [
       910
     ]
   },
   {
-    "teal": 855,
-    "source": 304,
+    "teal": 694,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:273",
+    "errorMessage": "Currently supported version of the data structure is '1'",
     "pc": [
       911
     ]
   },
   {
-    "teal": 856,
-    "source": 304,
+    "teal": 699,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:274",
     "pc": [
-      912
+      912,
+      913,
+      914
     ]
   },
   {
-    "teal": 857,
-    "source": 304,
+    "teal": 700,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:274",
     "pc": [
-      913
-    ]
-  },
-  {
-    "teal": 858,
-    "source": 294,
-    "pc": [
-      914,
-      915
-    ]
-  },
-  {
-    "teal": 859,
-    "source": 294,
-    "pc": [
+      915,
       916
     ]
   },
   {
-    "teal": 862,
-    "source": 294,
-    "errorMessage": "box value does not exist: this.identities(user).value",
+    "teal": 701,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:274",
     "pc": [
       917
     ]
   },
   {
-    "teal": 863,
-    "source": 305,
+    "teal": 702,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:274",
     "pc": [
-      918,
+      918
+    ]
+  },
+  {
+    "teal": 703,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:274",
+    "pc": [
       919
     ]
   },
   {
-    "teal": 864,
-    "source": 305,
+    "teal": 704,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:274",
     "pc": [
-      920,
+      920
+    ]
+  },
+  {
+    "teal": 705,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:274",
+    "pc": [
       921
     ]
   },
   {
-    "teal": 865,
-    "source": 305,
+    "teal": 706,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:274",
     "pc": [
       922,
       923,
@@ -3773,1081 +3161,505 @@
     ]
   },
   {
-    "teal": 866,
-    "source": 305,
+    "teal": 727,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:276",
     "pc": [
-      925
-    ]
-  },
-  {
-    "teal": 867,
-    "source": 305,
-    "pc": [
+      925,
       926
     ]
   },
   {
-    "teal": 868,
-    "source": 305,
+    "teal": 728,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:276",
     "pc": [
       927
     ]
   },
   {
-    "teal": 869,
-    "source": 294,
+    "teal": 729,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:276",
     "pc": [
       928,
-      929
-    ]
-  },
-  {
-    "teal": 870,
-    "source": 294,
-    "pc": [
+      929,
       930
     ]
   },
   {
-    "teal": 873,
-    "source": 294,
-    "errorMessage": "box value does not exist: this.identities(user).value",
+    "teal": 730,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:281",
     "pc": [
-      931
-    ]
-  },
-  {
-    "teal": 874,
-    "source": 306,
-    "pc": [
+      931,
       932,
-      933
-    ]
-  },
-  {
-    "teal": 875,
-    "source": 306,
-    "pc": [
+      933,
       934,
-      935
-    ]
-  },
-  {
-    "teal": 876,
-    "source": 306,
-    "pc": [
+      935,
       936,
       937,
-      938
-    ]
-  },
-  {
-    "teal": 877,
-    "source": 306,
-    "pc": [
-      939
-    ]
-  },
-  {
-    "teal": 878,
-    "source": 306,
-    "pc": [
+      938,
+      939,
       940
     ]
   },
   {
-    "teal": 879,
-    "source": 306,
+    "teal": 731,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:281",
     "pc": [
       941
     ]
   },
   {
-    "teal": 880,
-    "source": 294,
+    "teal": 732,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:280",
     "pc": [
       942,
-      943
-    ]
-  },
-  {
-    "teal": 881,
-    "source": 294,
-    "pc": [
-      944
-    ]
-  },
-  {
-    "teal": 884,
-    "source": 294,
-    "errorMessage": "box value does not exist: this.identities(user).value",
-    "pc": [
-      945
-    ]
-  },
-  {
-    "teal": 885,
-    "source": 307,
-    "pc": [
+      943,
+      944,
+      945,
       946,
-      947
-    ]
-  },
-  {
-    "teal": 886,
-    "source": 307,
-    "pc": [
+      947,
       948,
-      949
+      949,
+      950,
+      951
     ]
   },
   {
-    "teal": 887,
-    "source": 307,
+    "teal": 733,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:280",
     "pc": [
-      950,
-      951,
       952
     ]
   },
   {
-    "teal": 888,
-    "source": 307,
+    "teal": 734,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:282",
     "pc": [
-      953
-    ]
-  },
-  {
-    "teal": 889,
-    "source": 307,
-    "pc": [
-      954
-    ]
-  },
-  {
-    "teal": 890,
-    "source": 307,
-    "pc": [
-      955
-    ]
-  },
-  {
-    "teal": 891,
-    "source": 294,
-    "pc": [
+      953,
+      954,
+      955,
       956,
-      957
-    ]
-  },
-  {
-    "teal": 892,
-    "source": 294,
-    "pc": [
-      958
-    ]
-  },
-  {
-    "teal": 895,
-    "source": 294,
-    "errorMessage": "box value does not exist: this.identities(user).value",
-    "pc": [
-      959
-    ]
-  },
-  {
-    "teal": 896,
-    "source": 308,
-    "pc": [
+      957,
+      958,
+      959,
       960,
-      961
+      961,
+      962
     ]
   },
   {
-    "teal": 897,
-    "source": 308,
+    "teal": 735,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:282",
     "pc": [
-      962,
       963
     ]
   },
   {
-    "teal": 898,
-    "source": 308,
+    "teal": 736,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:283",
     "pc": [
       964,
       965,
-      966
-    ]
-  },
-  {
-    "teal": 899,
-    "source": 308,
-    "pc": [
-      967
-    ]
-  },
-  {
-    "teal": 900,
-    "source": 308,
-    "pc": [
-      968
-    ]
-  },
-  {
-    "teal": 901,
-    "source": 308,
-    "pc": [
-      969
-    ]
-  },
-  {
-    "teal": 902,
-    "source": 299,
-    "pc": [
+      966,
+      967,
+      968,
+      969,
       970,
       971,
       972,
-      973,
-      974,
+      973
+    ]
+  },
+  {
+    "teal": 737,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:283",
+    "pc": [
+      974
+    ]
+  },
+  {
+    "teal": 738,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:284",
+    "pc": [
       975,
       976,
       977,
       978,
-      979
-    ]
-  },
-  {
-    "teal": 903,
-    "source": 299,
-    "pc": [
-      980
-    ]
-  },
-  {
-    "teal": 904,
-    "source": 299,
-    "pc": [
-      981
-    ]
-  },
-  {
-    "teal": 905,
-    "source": 299,
-    "pc": [
+      979,
+      980,
+      981,
       982,
-      983
-    ]
-  },
-  {
-    "teal": 906,
-    "source": 299,
-    "pc": [
+      983,
       984
     ]
   },
   {
-    "teal": 909,
-    "source": 299,
-    "errorMessage": "(1 * SCALE) as uint256 overflowed 256 bits",
+    "teal": 739,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:284",
     "pc": [
       985
     ]
   },
   {
-    "teal": 910,
-    "source": 299,
+    "teal": 740,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:285",
     "pc": [
       986,
-      987
-    ]
-  },
-  {
-    "teal": 911,
-    "source": 299,
-    "pc": [
-      988
-    ]
-  },
-  {
-    "teal": 912,
-    "source": 299,
-    "pc": [
-      989
-    ]
-  },
-  {
-    "teal": 913,
-    "source": 299,
-    "pc": [
-      990
-    ]
-  },
-  {
-    "teal": 914,
-    "source": 299,
-    "pc": [
-      991
-    ]
-  },
-  {
-    "teal": 915,
-    "source": 299,
-    "pc": [
-      992
-    ]
-  },
-  {
-    "teal": 916,
-    "source": 299,
-    "pc": [
-      993
-    ]
-  },
-  {
-    "teal": 917,
-    "source": 299,
-    "pc": [
-      994
-    ]
-  },
-  {
-    "teal": 918,
-    "source": 299,
-    "pc": [
+      987,
+      988,
+      989,
+      990,
+      991,
+      992,
+      993,
+      994,
       995
     ]
   },
   {
-    "teal": 919,
-    "source": 299,
+    "teal": 741,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:285",
     "pc": [
       996
     ]
   },
   {
-    "teal": 920,
-    "source": 298,
+    "teal": 742,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:286",
     "pc": [
       997,
-      998
-    ]
-  },
-  {
-    "teal": 921,
-    "source": 298,
-    "pc": [
-      999
-    ]
-  },
-  {
-    "teal": 922,
-    "source": 300,
-    "pc": [
+      998,
+      999,
       1000,
-      1001
-    ]
-  },
-  {
-    "teal": 923,
-    "source": 300,
-    "pc": [
-      1002
-    ]
-  },
-  {
-    "teal": 924,
-    "source": 294,
-    "pc": [
+      1001,
+      1002,
       1003,
-      1004
-    ]
-  },
-  {
-    "teal": 925,
-    "source": 294,
-    "pc": [
-      1005
-    ]
-  },
-  {
-    "teal": 928,
-    "source": 294,
-    "errorMessage": "box value does not exist: this.identities(user).value",
-    "pc": [
+      1004,
+      1005,
       1006
     ]
   },
   {
-    "teal": 929,
-    "source": 300,
+    "teal": 743,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:286",
     "pc": [
-      1007,
-      1008
+      1007
     ]
   },
   {
-    "teal": 930,
-    "source": 300,
+    "teal": 744,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:287",
     "pc": [
+      1008,
       1009,
-      1010
-    ]
-  },
-  {
-    "teal": 931,
-    "source": 300,
-    "pc": [
+      1010,
       1011,
-      1012
-    ]
-  },
-  {
-    "teal": 932,
-    "source": 300,
-    "pc": [
-      1013
-    ]
-  },
-  {
-    "teal": 933,
-    "source": 300,
-    "pc": [
-      1014
-    ]
-  },
-  {
-    "teal": 934,
-    "source": 309,
-    "pc": [
-      1015
-    ]
-  },
-  {
-    "teal": 935,
-    "source": 294,
-    "pc": [
+      1012,
+      1013,
+      1014,
+      1015,
       1016,
       1017
     ]
   },
   {
-    "teal": 936,
-    "source": 294,
+    "teal": 745,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:287",
     "pc": [
       1018
     ]
   },
   {
-    "teal": 939,
-    "source": 294,
-    "errorMessage": "box value does not exist: this.identities(user).value",
+    "teal": 746,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
     "pc": [
-      1019
-    ]
-  },
-  {
-    "teal": 940,
-    "source": 309,
-    "pc": [
+      1019,
       1020,
-      1021
-    ]
-  },
-  {
-    "teal": 941,
-    "source": 309,
-    "pc": [
+      1021,
       1022,
-      1023
-    ]
-  },
-  {
-    "teal": 942,
-    "source": 309,
-    "pc": [
+      1023,
       1024,
       1025,
-      1026
-    ]
-  },
-  {
-    "teal": 943,
-    "source": 309,
-    "pc": [
-      1027
-    ]
-  },
-  {
-    "teal": 944,
-    "source": 309,
-    "pc": [
+      1026,
+      1027,
       1028
     ]
   },
   {
-    "teal": 945,
-    "source": 309,
+    "teal": 747,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
     "pc": [
       1029
     ]
   },
   {
-    "teal": 946,
-    "source": 294,
+    "teal": 748,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
     "pc": [
-      1030,
-      1031
+      1030
     ]
   },
   {
-    "teal": 947,
-    "source": 294,
+    "teal": 749,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
     "pc": [
-      1032
-    ]
-  },
-  {
-    "teal": 950,
-    "source": 294,
-    "errorMessage": "box value does not exist: this.identities(user).value",
-    "pc": [
+      1031,
+      1032,
       1033
     ]
   },
   {
-    "teal": 951,
-    "source": 310,
+    "teal": 750,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
     "pc": [
-      1034,
+      1034
+    ]
+  },
+  {
+    "teal": 753,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
+    "errorMessage": "(2 * SCALE) as uint256 overflowed 256 bits",
+    "pc": [
       1035
     ]
   },
   {
-    "teal": 952,
-    "source": 310,
+    "teal": 754,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
     "pc": [
       1036,
-      1037
-    ]
-  },
-  {
-    "teal": 953,
-    "source": 310,
-    "pc": [
+      1037,
       1038,
       1039,
-      1040
-    ]
-  },
-  {
-    "teal": 954,
-    "source": 310,
-    "pc": [
-      1041
-    ]
-  },
-  {
-    "teal": 955,
-    "source": 310,
-    "pc": [
-      1042
-    ]
-  },
-  {
-    "teal": 956,
-    "source": 310,
-    "pc": [
-      1043
-    ]
-  },
-  {
-    "teal": 957,
-    "source": 311,
-    "pc": [
+      1040,
+      1041,
+      1042,
+      1043,
       1044,
-      1045
-    ]
-  },
-  {
-    "teal": 958,
-    "source": 311,
-    "pc": [
-      1046
-    ]
-  },
-  {
-    "teal": 959,
-    "source": 294,
-    "pc": [
+      1045,
+      1046,
       1047,
-      1048
-    ]
-  },
-  {
-    "teal": 960,
-    "source": 294,
-    "pc": [
-      1049
-    ]
-  },
-  {
-    "teal": 963,
-    "source": 294,
-    "errorMessage": "box value does not exist: this.identities(user).value",
-    "pc": [
-      1050
-    ]
-  },
-  {
-    "teal": 964,
-    "source": 311,
-    "pc": [
+      1048,
+      1049,
+      1050,
       1051,
-      1052
-    ]
-  },
-  {
-    "teal": 965,
-    "source": 311,
-    "pc": [
+      1052,
       1053,
-      1054
-    ]
-  },
-  {
-    "teal": 966,
-    "source": 311,
-    "pc": [
+      1054,
       1055,
-      1056
-    ]
-  },
-  {
-    "teal": 967,
-    "source": 311,
-    "pc": [
-      1057
-    ]
-  },
-  {
-    "teal": 968,
-    "source": 311,
-    "pc": [
-      1058
-    ]
-  },
-  {
-    "teal": 969,
-    "source": 296,
-    "pc": [
-      1059
-    ]
-  },
-  {
-    "teal": 970,
-    "source": 296,
-    "pc": [
+      1056,
+      1057,
+      1058,
+      1059,
       1060,
-      1061
-    ]
-  },
-  {
-    "teal": 974,
-    "source": 313,
-    "pc": [
+      1061,
       1062,
-      1063
-    ]
-  },
-  {
-    "teal": 978,
-    "source": 271,
-    "pc": [
+      1063,
       1064,
-      1065
-    ]
-  },
-  {
-    "teal": 981,
-    "source": 271,
-    "pc": [
+      1065,
       1066,
-      1067
+      1067,
+      1068,
+      1069
     ]
   },
   {
-    "teal": 982,
-    "source": 271,
+    "teal": 755,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
     "pc": [
-      1068
-    ]
-  },
-  {
-    "teal": 987,
-    "source": 325,
-    "pc": [
-      1069,
       1070
     ]
   },
   {
-    "teal": 990,
-    "source": 325,
+    "teal": 756,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
     "pc": [
-      1071,
-      1072,
+      1071
+    ]
+  },
+  {
+    "teal": 757,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
+    "pc": [
+      1072
+    ]
+  },
+  {
+    "teal": 758,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
+    "pc": [
       1073
     ]
   },
   {
-    "teal": 991,
-    "source": 325,
+    "teal": 759,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
     "pc": [
-      1074
+      1074,
+      1075
     ]
   },
   {
-    "teal": 994,
-    "source": 325,
+    "teal": 760,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
     "pc": [
-      1075,
-      1076,
+      1076
+    ]
+  },
+  {
+    "teal": 761,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
+    "pc": [
       1077
     ]
   },
   {
-    "teal": 995,
-    "source": 325,
+    "teal": 762,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
     "pc": [
       1078
     ]
   },
   {
-    "teal": 998,
-    "source": 325,
+    "teal": 763,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:278",
     "pc": [
-      1079,
+      1079
+    ]
+  },
+  {
+    "teal": 764,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:277",
+    "pc": [
       1080,
-      1081
-    ]
-  },
-  {
-    "teal": 999,
-    "source": 325,
-    "pc": [
-      1082
-    ]
-  },
-  {
-    "teal": 1002,
-    "source": 325,
-    "pc": [
+      1081,
+      1082,
       1083,
       1084,
-      1085
-    ]
-  },
-  {
-    "teal": 1003,
-    "source": 325,
-    "pc": [
-      1086
-    ]
-  },
-  {
-    "teal": 1004,
-    "source": 325,
-    "pc": [
-      1087
-    ]
-  },
-  {
-    "teal": 1005,
-    "source": 325,
-    "pc": [
-      1088
-    ]
-  },
-  {
-    "teal": 1006,
-    "source": 325,
-    "pc": [
-      1089
-    ]
-  },
-  {
-    "teal": 1007,
-    "source": 325,
-    "pc": [
-      1090
-    ]
-  },
-  {
-    "teal": 1019,
-    "source": 325,
-    "pc": [
+      1085,
+      1086,
+      1087,
+      1088,
+      1089,
+      1090,
       1091,
       1092,
-      1093
-    ]
-  },
-  {
-    "teal": 1022,
-    "source": 325,
-    "pc": [
-      1094
-    ]
-  },
-  {
-    "teal": 1023,
-    "source": 325,
-    "pc": [
-      1095
-    ]
-  },
-  {
-    "teal": 1027,
-    "source": 326,
-    "pc": [
+      1093,
+      1094,
+      1095,
       1096,
-      1097
-    ]
-  },
-  {
-    "teal": 1028,
-    "source": 326,
-    "pc": [
-      1098
-    ]
-  },
-  {
-    "teal": 1029,
-    "source": 326,
-    "pc": [
-      1099
-    ]
-  },
-  {
-    "teal": 1030,
-    "source": 326,
-    "pc": [
-      1100
-    ]
-  },
-  {
-    "teal": 1033,
-    "source": 326,
-    "errorMessage": "Configuration app does not match",
-    "pc": [
-      1101
-    ]
-  },
-  {
-    "teal": 1037,
-    "source": 327,
-    "pc": [
+      1097,
+      1098,
+      1099,
+      1100,
+      1101,
       1102,
-      1103
-    ]
-  },
-  {
-    "teal": 1038,
-    "source": 327,
-    "pc": [
+      1103,
       1104,
-      1105
-    ]
-  },
-  {
-    "teal": 1039,
-    "source": 327,
-    "pc": [
-      1106
-    ]
-  },
-  {
-    "teal": 1042,
-    "source": 327,
-    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('ef')",
-    "pc": [
-      1107
-    ]
-  },
-  {
-    "teal": 1043,
-    "source": 327,
-    "pc": [
+      1105,
+      1106,
+      1107,
       1108,
-      1109
-    ]
-  },
-  {
-    "teal": 1047,
-    "source": 328,
-    "pc": [
+      1109,
       1110,
-      1111
-    ]
-  },
-  {
-    "teal": 1048,
-    "source": 328,
-    "pc": [
+      1111,
       1112,
       1113
     ]
   },
   {
-    "teal": 1049,
-    "source": 328,
+    "teal": 765,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:277",
     "pc": [
       1114
     ]
   },
   {
-    "teal": 1052,
-    "source": 328,
-    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('s')",
+    "teal": 766,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:279",
     "pc": [
-      1115
-    ]
-  },
-  {
-    "teal": 1053,
-    "source": 328,
-    "pc": [
+      1115,
       1116,
       1117
     ]
   },
   {
-    "teal": 1057,
-    "source": 329,
+    "teal": 767,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:279",
     "pc": [
       1118,
       1119
     ]
   },
   {
-    "teal": 1058,
-    "source": 329,
+    "teal": 768,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:279",
     "pc": [
       1120
     ]
   },
   {
-    "teal": 1059,
-    "source": 329,
+    "teal": 769,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:279",
     "pc": [
       1121
     ]
   },
   {
-    "teal": 1062,
-    "source": 329,
-    "errorMessage": "ERR_PAUSED",
+    "teal": 770,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:288",
     "pc": [
       1122
     ]
   },
   {
-    "teal": 1069,
-    "source": 331,
+    "teal": 771,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:288",
     "pc": [
       1123,
-      1124
-    ]
-  },
-  {
-    "teal": 1070,
-    "source": 331,
-    "pc": [
+      1124,
       1125,
-      1126
-    ]
-  },
-  {
-    "teal": 1071,
-    "source": 331,
-    "pc": [
-      1127
-    ]
-  },
-  {
-    "teal": 1074,
-    "source": 330,
-    "errorMessage": "Only fee executor setup in the config can take the collected fees",
-    "pc": [
-      1128
-    ]
-  },
-  {
-    "teal": 1078,
-    "source": 335,
-    "pc": [
+      1126,
+      1127,
+      1128,
       1129,
-      1130
-    ]
-  },
-  {
-    "teal": 1079,
-    "source": 335,
-    "pc": [
+      1130,
       1131,
       1132
     ]
   },
   {
-    "teal": 1080,
-    "source": 335,
+    "teal": 772,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:288",
     "pc": [
-      1133,
-      1134
+      1133
     ]
   },
   {
-    "teal": 1081,
-    "source": 335,
+    "teal": 773,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:289",
     "pc": [
+      1134,
       1135,
       1136,
-      1137
-    ]
-  },
-  {
-    "teal": 1085,
-    "source": 337,
-    "pc": [
+      1137,
       1138,
-      1139
-    ]
-  },
-  {
-    "teal": 1088,
-    "source": 325,
-    "pc": [
+      1139,
       1140,
-      1141
-    ]
-  },
-  {
-    "teal": 1091,
-    "source": 325,
-    "pc": [
+      1141,
       1142,
       1143
     ]
   },
   {
-    "teal": 1092,
-    "source": 325,
+    "teal": 774,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:289",
     "pc": [
       1144
     ]
   },
   {
-    "teal": 1101,
-    "source": 346,
+    "teal": 775,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:290",
     "pc": [
       1145,
       1146,
@@ -4855,115 +3667,109 @@
     ]
   },
   {
-    "teal": 1106,
-    "source": 347,
+    "teal": 776,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:290",
     "pc": [
       1148,
       1149
     ]
   },
   {
-    "teal": 1107,
-    "source": 347,
+    "teal": 777,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:290",
     "pc": [
       1150
     ]
   },
   {
-    "teal": 1108,
-    "source": 347,
+    "teal": 778,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:290",
     "pc": [
       1151
     ]
   },
   {
-    "teal": 1109,
-    "source": 347,
+    "teal": 779,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:275",
     "pc": [
-      1152,
+      1152
+    ]
+  },
+  {
+    "teal": 780,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:275",
+    "pc": [
       1153,
       1154
     ]
   },
   {
-    "teal": 1118,
-    "source": 348,
+    "teal": 784,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:292",
     "pc": [
-      1155
-    ]
-  },
-  {
-    "teal": 1119,
-    "source": 348,
-    "pc": [
+      1155,
       1156
     ]
   },
   {
-    "teal": 1120,
-    "source": 348,
+    "teal": 785,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:292",
     "pc": [
       1157,
-      1158
+      1158,
+      1159
     ]
   },
   {
-    "teal": 1124,
-    "source": 349,
+    "teal": 790,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
     "pc": [
-      1159,
-      1160
-    ]
-  },
-  {
-    "teal": 1125,
-    "source": 349,
-    "pc": [
+      1160,
       1161,
       1162
     ]
   },
   {
-    "teal": 1129,
-    "source": 350,
+    "teal": 791,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
     "pc": [
       1163,
       1164
     ]
   },
   {
-    "teal": 1130,
-    "source": 350,
+    "teal": 792,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
     "pc": [
-      1165,
-      1166
+      1165
     ]
   },
   {
-    "teal": 1134,
-    "source": 351,
+    "teal": 793,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
     "pc": [
+      1166,
       1167
     ]
   },
   {
-    "teal": 1135,
-    "source": 351,
+    "teal": 813,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:297",
     "pc": [
       1168,
       1169
     ]
   },
   {
-    "teal": 1138,
-    "source": 348,
+    "teal": 814,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:297",
     "pc": [
       1170
     ]
   },
   {
-    "teal": 1139,
-    "source": 347,
+    "teal": 815,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:297",
     "pc": [
       1171,
       1172,
@@ -4971,290 +3777,1900 @@
     ]
   },
   {
-    "teal": 1149,
-    "source": 354,
+    "teal": 816,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
     "pc": [
-      1174
+      1174,
+      1175
     ]
   },
   {
-    "teal": 1150,
-    "source": 354,
+    "teal": 817,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
     "pc": [
-      1175,
       1176
     ]
   },
   {
-    "teal": 1151,
-    "source": 354,
+    "teal": 820,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "errorMessage": "box value does not exist: this.identities(user).value",
     "pc": [
-      1177,
-      1178
+      1177
     ]
   },
   {
-    "teal": 1155,
-    "source": 355,
+    "teal": 821,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:302",
     "pc": [
-      1179,
-      1180
+      1178,
+      1179
     ]
   },
   {
-    "teal": 1156,
-    "source": 355,
+    "teal": 822,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:302",
     "pc": [
-      1181,
-      1182
+      1180,
+      1181
     ]
   },
   {
-    "teal": 1160,
-    "source": 356,
+    "teal": 823,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:302",
     "pc": [
+      1182,
       1183,
       1184
     ]
   },
   {
-    "teal": 1161,
-    "source": 356,
+    "teal": 824,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:302",
     "pc": [
-      1185,
+      1185
+    ]
+  },
+  {
+    "teal": 825,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:302",
+    "pc": [
       1186
     ]
   },
   {
-    "teal": 1165,
-    "source": 357,
+    "teal": 826,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:302",
     "pc": [
-      1187,
-      1188
+      1187
     ]
   },
   {
-    "teal": 1166,
-    "source": 357,
+    "teal": 827,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
     "pc": [
-      1189,
+      1188,
+      1189
+    ]
+  },
+  {
+    "teal": 828,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
       1190
     ]
   },
   {
-    "teal": 1170,
-    "source": 358,
+    "teal": 831,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "errorMessage": "box value does not exist: this.identities(user).value",
     "pc": [
       1191
     ]
   },
   {
-    "teal": 1171,
-    "source": 358,
+    "teal": 832,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:301",
     "pc": [
       1192,
       1193
     ]
   },
   {
-    "teal": 1174,
-    "source": 354,
+    "teal": 833,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:301",
     "pc": [
-      1194
-    ]
-  },
-  {
-    "teal": 1177,
-    "source": 346,
-    "pc": [
+      1194,
       1195
     ]
   },
   {
-    "teal": 1180,
-    "source": 133,
+    "teal": 834,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:301",
     "pc": [
       1196,
       1197,
-      1198,
-      1199,
-      1200,
+      1198
+    ]
+  },
+  {
+    "teal": 835,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:301",
+    "pc": [
+      1199
+    ]
+  },
+  {
+    "teal": 836,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:301",
+    "pc": [
+      1200
+    ]
+  },
+  {
+    "teal": 837,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:301",
+    "pc": [
       1201
     ]
   },
   {
-    "teal": 1181,
-    "source": 133,
+    "teal": 838,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
     "pc": [
       1202,
-      1203,
+      1203
+    ]
+  },
+  {
+    "teal": 839,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
       1204
     ]
   },
   {
-    "teal": 1182,
-    "source": 133,
+    "teal": 842,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "errorMessage": "box value does not exist: this.identities(user).value",
     "pc": [
-      1205,
-      1206,
-      1207,
-      1208
+      1205
     ]
   },
   {
-    "teal": 1185,
-    "source": 133,
-    "errorMessage": "this contract does not implement the given ABI method for create NoOp",
+    "teal": 843,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:303",
     "pc": [
+      1206,
+      1207
+    ]
+  },
+  {
+    "teal": 844,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:303",
+    "pc": [
+      1208,
       1209
     ]
   },
   {
-    "teal": 1188,
-    "source": 133,
+    "teal": 845,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:303",
     "pc": [
       1210,
       1211,
-      1212,
-      1213,
-      1214,
+      1212
+    ]
+  },
+  {
+    "teal": 846,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:303",
+    "pc": [
+      1213
+    ]
+  },
+  {
+    "teal": 847,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:303",
+    "pc": [
+      1214
+    ]
+  },
+  {
+    "teal": 848,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:303",
+    "pc": [
       1215
     ]
   },
   {
-    "teal": 1189,
-    "source": 133,
+    "teal": 849,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
     "pc": [
       1216,
-      1217,
-      1218,
-      1219,
+      1217
+    ]
+  },
+  {
+    "teal": 850,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1218
+    ]
+  },
+  {
+    "teal": 853,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "errorMessage": "box value does not exist: this.identities(user).value",
+    "pc": [
+      1219
+    ]
+  },
+  {
+    "teal": 854,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:304",
+    "pc": [
       1220,
       1221
     ]
   },
   {
-    "teal": 1190,
-    "source": 133,
+    "teal": 855,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:304",
     "pc": [
       1222,
-      1223,
+      1223
+    ]
+  },
+  {
+    "teal": 856,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:304",
+    "pc": [
       1224,
       1225,
-      1226,
+      1226
+    ]
+  },
+  {
+    "teal": 857,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:304",
+    "pc": [
       1227
     ]
   },
   {
-    "teal": 1191,
-    "source": 133,
+    "teal": 858,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:304",
     "pc": [
-      1228,
-      1229,
+      1228
+    ]
+  },
+  {
+    "teal": 859,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:304",
+    "pc": [
+      1229
+    ]
+  },
+  {
+    "teal": 860,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
       1230,
-      1231,
-      1232,
+      1231
+    ]
+  },
+  {
+    "teal": 861,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1232
+    ]
+  },
+  {
+    "teal": 864,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "errorMessage": "box value does not exist: this.identities(user).value",
+    "pc": [
       1233
     ]
   },
   {
-    "teal": 1192,
-    "source": 133,
+    "teal": 865,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:305",
     "pc": [
       1234,
-      1235,
-      1236,
-      1237,
-      1238,
-      1239
+      1235
     ]
   },
   {
-    "teal": 1193,
-    "source": 133,
+    "teal": 866,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:305",
     "pc": [
-      1240,
-      1241,
-      1242,
-      1243,
+      1236,
+      1237
+    ]
+  },
+  {
+    "teal": 867,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:305",
+    "pc": [
+      1238,
+      1239,
+      1240
+    ]
+  },
+  {
+    "teal": 868,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:305",
+    "pc": [
+      1241
+    ]
+  },
+  {
+    "teal": 869,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:305",
+    "pc": [
+      1242
+    ]
+  },
+  {
+    "teal": 870,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:305",
+    "pc": [
+      1243
+    ]
+  },
+  {
+    "teal": 871,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
       1244,
       1245
     ]
   },
   {
-    "teal": 1194,
-    "source": 133,
+    "teal": 872,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
     "pc": [
-      1246,
-      1247,
-      1248
+      1246
     ]
   },
   {
-    "teal": 1195,
-    "source": 133,
+    "teal": 875,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "errorMessage": "box value does not exist: this.identities(user).value",
     "pc": [
-      1249,
+      1247
+    ]
+  },
+  {
+    "teal": 876,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:306",
+    "pc": [
+      1248,
+      1249
+    ]
+  },
+  {
+    "teal": 877,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:306",
+    "pc": [
       1250,
-      1251,
+      1251
+    ]
+  },
+  {
+    "teal": 878,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:306",
+    "pc": [
       1252,
       1253,
-      1254,
-      1255,
-      1256,
-      1257,
-      1258,
-      1259,
-      1260,
-      1261,
-      1262
+      1254
     ]
   },
   {
-    "teal": 1198,
-    "source": 133,
-    "errorMessage": "this contract does not implement the given ABI method for call NoOp",
+    "teal": 879,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:306",
     "pc": [
+      1255
+    ]
+  },
+  {
+    "teal": 880,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:306",
+    "pc": [
+      1256
+    ]
+  },
+  {
+    "teal": 881,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:306",
+    "pc": [
+      1257
+    ]
+  },
+  {
+    "teal": 882,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1258,
+      1259
+    ]
+  },
+  {
+    "teal": 883,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1260
+    ]
+  },
+  {
+    "teal": 886,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "errorMessage": "box value does not exist: this.identities(user).value",
+    "pc": [
+      1261
+    ]
+  },
+  {
+    "teal": 887,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:307",
+    "pc": [
+      1262,
       1263
     ]
   },
   {
-    "teal": 1201,
-    "source": 133,
+    "teal": 888,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:307",
     "pc": [
       1264,
-      1265,
+      1265
+    ]
+  },
+  {
+    "teal": 889,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:307",
+    "pc": [
       1266,
       1267,
-      1268,
+      1268
+    ]
+  },
+  {
+    "teal": 890,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:307",
+    "pc": [
       1269
     ]
   },
   {
-    "teal": 1202,
-    "source": 133,
+    "teal": 891,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:307",
     "pc": [
-      1270,
-      1271,
-      1272
+      1270
+    ]
+  },
+  {
+    "teal": 892,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:307",
+    "pc": [
+      1271
+    ]
+  },
+  {
+    "teal": 893,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1272,
+      1273
+    ]
+  },
+  {
+    "teal": 894,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1274
+    ]
+  },
+  {
+    "teal": 897,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "errorMessage": "box value does not exist: this.identities(user).value",
+    "pc": [
+      1275
+    ]
+  },
+  {
+    "teal": 898,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:308",
+    "pc": [
+      1276,
+      1277
+    ]
+  },
+  {
+    "teal": 899,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:308",
+    "pc": [
+      1278,
+      1279
+    ]
+  },
+  {
+    "teal": 900,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:308",
+    "pc": [
+      1280,
+      1281,
+      1282
+    ]
+  },
+  {
+    "teal": 901,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:308",
+    "pc": [
+      1283
+    ]
+  },
+  {
+    "teal": 902,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:308",
+    "pc": [
+      1284
+    ]
+  },
+  {
+    "teal": 903,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:308",
+    "pc": [
+      1285
+    ]
+  },
+  {
+    "teal": 904,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1286,
+      1287,
+      1288,
+      1289,
+      1290,
+      1291,
+      1292,
+      1293,
+      1294,
+      1295
+    ]
+  },
+  {
+    "teal": 905,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1296
+    ]
+  },
+  {
+    "teal": 906,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1297
+    ]
+  },
+  {
+    "teal": 907,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1298,
+      1299,
+      1300
+    ]
+  },
+  {
+    "teal": 908,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1301
+    ]
+  },
+  {
+    "teal": 911,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "errorMessage": "(1 * SCALE) as uint256 overflowed 256 bits",
+    "pc": [
+      1302
+    ]
+  },
+  {
+    "teal": 912,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1303,
+      1304,
+      1305,
+      1306,
+      1307,
+      1308,
+      1309,
+      1310,
+      1311,
+      1312,
+      1313,
+      1314,
+      1315,
+      1316,
+      1317,
+      1318,
+      1319,
+      1320,
+      1321,
+      1322,
+      1323,
+      1324,
+      1325,
+      1326,
+      1327,
+      1328,
+      1329,
+      1330,
+      1331,
+      1332,
+      1333,
+      1334,
+      1335,
+      1336
+    ]
+  },
+  {
+    "teal": 913,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1337
+    ]
+  },
+  {
+    "teal": 914,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1338
+    ]
+  },
+  {
+    "teal": 915,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1339
+    ]
+  },
+  {
+    "teal": 916,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1340
+    ]
+  },
+  {
+    "teal": 917,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1341,
+      1342
+    ]
+  },
+  {
+    "teal": 918,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1343
+    ]
+  },
+  {
+    "teal": 919,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1344
+    ]
+  },
+  {
+    "teal": 920,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1345
+    ]
+  },
+  {
+    "teal": 921,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:299",
+    "pc": [
+      1346
+    ]
+  },
+  {
+    "teal": 922,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:298",
+    "pc": [
+      1347,
+      1348,
+      1349,
+      1350,
+      1351,
+      1352,
+      1353,
+      1354,
+      1355,
+      1356,
+      1357,
+      1358,
+      1359,
+      1360,
+      1361,
+      1362,
+      1363,
+      1364,
+      1365,
+      1366,
+      1367,
+      1368,
+      1369,
+      1370,
+      1371,
+      1372,
+      1373,
+      1374,
+      1375,
+      1376,
+      1377,
+      1378,
+      1379,
+      1380
+    ]
+  },
+  {
+    "teal": 923,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:298",
+    "pc": [
+      1381
+    ]
+  },
+  {
+    "teal": 924,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:300",
+    "pc": [
+      1382,
+      1383,
+      1384
+    ]
+  },
+  {
+    "teal": 925,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:300",
+    "pc": [
+      1385,
+      1386
+    ]
+  },
+  {
+    "teal": 926,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1387,
+      1388
+    ]
+  },
+  {
+    "teal": 927,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1389
+    ]
+  },
+  {
+    "teal": 930,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "errorMessage": "box value does not exist: this.identities(user).value",
+    "pc": [
+      1390
+    ]
+  },
+  {
+    "teal": 931,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:300",
+    "pc": [
+      1391,
+      1392
+    ]
+  },
+  {
+    "teal": 932,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:300",
+    "pc": [
+      1393,
+      1394
+    ]
+  },
+  {
+    "teal": 933,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:300",
+    "pc": [
+      1395,
+      1396,
+      1397
+    ]
+  },
+  {
+    "teal": 934,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:300",
+    "pc": [
+      1398
+    ]
+  },
+  {
+    "teal": 935,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:300",
+    "pc": [
+      1399
+    ]
+  },
+  {
+    "teal": 936,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:309",
+    "pc": [
+      1400
+    ]
+  },
+  {
+    "teal": 937,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1401,
+      1402
+    ]
+  },
+  {
+    "teal": 938,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1403
+    ]
+  },
+  {
+    "teal": 941,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "errorMessage": "box value does not exist: this.identities(user).value",
+    "pc": [
+      1404
+    ]
+  },
+  {
+    "teal": 942,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:309",
+    "pc": [
+      1405,
+      1406
+    ]
+  },
+  {
+    "teal": 943,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:309",
+    "pc": [
+      1407,
+      1408
+    ]
+  },
+  {
+    "teal": 944,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:309",
+    "pc": [
+      1409,
+      1410,
+      1411
+    ]
+  },
+  {
+    "teal": 945,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:309",
+    "pc": [
+      1412
+    ]
+  },
+  {
+    "teal": 946,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:309",
+    "pc": [
+      1413
+    ]
+  },
+  {
+    "teal": 947,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:309",
+    "pc": [
+      1414
+    ]
+  },
+  {
+    "teal": 948,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1415,
+      1416
+    ]
+  },
+  {
+    "teal": 949,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1417
+    ]
+  },
+  {
+    "teal": 952,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "errorMessage": "box value does not exist: this.identities(user).value",
+    "pc": [
+      1418
+    ]
+  },
+  {
+    "teal": 953,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:310",
+    "pc": [
+      1419,
+      1420
+    ]
+  },
+  {
+    "teal": 954,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:310",
+    "pc": [
+      1421,
+      1422
+    ]
+  },
+  {
+    "teal": 955,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:310",
+    "pc": [
+      1423,
+      1424,
+      1425
+    ]
+  },
+  {
+    "teal": 956,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:310",
+    "pc": [
+      1426
+    ]
+  },
+  {
+    "teal": 957,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:310",
+    "pc": [
+      1427
+    ]
+  },
+  {
+    "teal": 958,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:310",
+    "pc": [
+      1428
+    ]
+  },
+  {
+    "teal": 959,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:311",
+    "pc": [
+      1429,
+      1430,
+      1431
+    ]
+  },
+  {
+    "teal": 960,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:311",
+    "pc": [
+      1432,
+      1433
+    ]
+  },
+  {
+    "teal": 961,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1434,
+      1435
+    ]
+  },
+  {
+    "teal": 962,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "pc": [
+      1436
+    ]
+  },
+  {
+    "teal": 965,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:294",
+    "errorMessage": "box value does not exist: this.identities(user).value",
+    "pc": [
+      1437
+    ]
+  },
+  {
+    "teal": 966,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:311",
+    "pc": [
+      1438,
+      1439
+    ]
+  },
+  {
+    "teal": 967,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:311",
+    "pc": [
+      1440,
+      1441
+    ]
+  },
+  {
+    "teal": 968,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:311",
+    "pc": [
+      1442,
+      1443,
+      1444
+    ]
+  },
+  {
+    "teal": 969,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:311",
+    "pc": [
+      1445
+    ]
+  },
+  {
+    "teal": 970,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:311",
+    "pc": [
+      1446
+    ]
+  },
+  {
+    "teal": 971,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:296",
+    "pc": [
+      1447
+    ]
+  },
+  {
+    "teal": 972,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:296",
+    "pc": [
+      1448,
+      1449
+    ]
+  },
+  {
+    "teal": 976,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:313",
+    "pc": [
+      1450,
+      1451
+    ]
+  },
+  {
+    "teal": 980,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:271",
+    "pc": [
+      1452,
+      1453
+    ]
+  },
+  {
+    "teal": 983,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:271",
+    "pc": [
+      1454,
+      1455
+    ]
+  },
+  {
+    "teal": 984,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:271",
+    "pc": [
+      1456
+    ]
+  },
+  {
+    "teal": 989,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1457,
+      1458,
+      1459,
+      1460,
+      1461,
+      1462
+    ]
+  },
+  {
+    "teal": 992,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1463,
+      1464,
+      1465
+    ]
+  },
+  {
+    "teal": 993,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1466
+    ]
+  },
+  {
+    "teal": 996,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1467,
+      1468,
+      1469
+    ]
+  },
+  {
+    "teal": 997,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1470
+    ]
+  },
+  {
+    "teal": 1000,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1471,
+      1472,
+      1473
+    ]
+  },
+  {
+    "teal": 1001,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1474
+    ]
+  },
+  {
+    "teal": 1004,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1475,
+      1476,
+      1477
+    ]
+  },
+  {
+    "teal": 1005,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1478
+    ]
+  },
+  {
+    "teal": 1006,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1479
+    ]
+  },
+  {
+    "teal": 1007,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1480
+    ]
+  },
+  {
+    "teal": 1008,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1481,
+      1482
+    ]
+  },
+  {
+    "teal": 1009,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1483
+    ]
+  },
+  {
+    "teal": 1021,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1484,
+      1485,
+      1486
+    ]
+  },
+  {
+    "teal": 1024,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1487,
+      1488
+    ]
+  },
+  {
+    "teal": 1025,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1489
+    ]
+  },
+  {
+    "teal": 1029,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:326",
+    "pc": [
+      1490,
+      1491
+    ]
+  },
+  {
+    "teal": 1030,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:326",
+    "pc": [
+      1492,
+      1493,
+      1494
+    ]
+  },
+  {
+    "teal": 1031,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:326",
+    "pc": [
+      1495
+    ]
+  },
+  {
+    "teal": 1032,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:326",
+    "pc": [
+      1496
+    ]
+  },
+  {
+    "teal": 1035,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:326",
+    "errorMessage": "Configuration app does not match",
+    "pc": [
+      1497
+    ]
+  },
+  {
+    "teal": 1039,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:327",
+    "pc": [
+      1498,
+      1499
+    ]
+  },
+  {
+    "teal": 1040,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:327",
+    "pc": [
+      1500,
+      1501,
+      1502,
+      1503
+    ]
+  },
+  {
+    "teal": 1041,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:327",
+    "pc": [
+      1504
+    ]
+  },
+  {
+    "teal": 1044,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:327",
+    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('ef')",
+    "pc": [
+      1505
+    ]
+  },
+  {
+    "teal": 1045,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:327",
+    "pc": [
+      1506,
+      1507
+    ]
+  },
+  {
+    "teal": 1049,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:328",
+    "pc": [
+      1508,
+      1509
+    ]
+  },
+  {
+    "teal": 1050,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:328",
+    "pc": [
+      1510,
+      1511,
+      1512
+    ]
+  },
+  {
+    "teal": 1051,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:328",
+    "pc": [
+      1513
+    ]
+  },
+  {
+    "teal": 1054,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:328",
+    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('s')",
+    "pc": [
+      1514
+    ]
+  },
+  {
+    "teal": 1055,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:328",
+    "pc": [
+      1515,
+      1516
+    ]
+  },
+  {
+    "teal": 1059,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:329",
+    "pc": [
+      1517,
+      1518
+    ]
+  },
+  {
+    "teal": 1060,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:329",
+    "pc": [
+      1519,
+      1520
+    ]
+  },
+  {
+    "teal": 1061,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:329",
+    "pc": [
+      1521
+    ]
+  },
+  {
+    "teal": 1064,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:329",
+    "errorMessage": "ERR_PAUSED",
+    "pc": [
+      1522
+    ]
+  },
+  {
+    "teal": 1071,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:331",
+    "pc": [
+      1523,
+      1524
+    ]
+  },
+  {
+    "teal": 1072,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:331",
+    "pc": [
+      1525,
+      1526
+    ]
+  },
+  {
+    "teal": 1073,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:331",
+    "pc": [
+      1527
+    ]
+  },
+  {
+    "teal": 1076,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:330",
+    "errorMessage": "Only fee executor setup in the config can take the collected fees",
+    "pc": [
+      1528
+    ]
+  },
+  {
+    "teal": 1080,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:335",
+    "pc": [
+      1529,
+      1530
+    ]
+  },
+  {
+    "teal": 1081,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:335",
+    "pc": [
+      1531,
+      1532
+    ]
+  },
+  {
+    "teal": 1082,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:335",
+    "pc": [
+      1533,
+      1534
+    ]
+  },
+  {
+    "teal": 1083,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:335",
+    "pc": [
+      1535,
+      1536,
+      1537
+    ]
+  },
+  {
+    "teal": 1087,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:337",
+    "pc": [
+      1538,
+      1539
+    ]
+  },
+  {
+    "teal": 1090,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1540,
+      1541
+    ]
+  },
+  {
+    "teal": 1093,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1542,
+      1543
+    ]
+  },
+  {
+    "teal": 1094,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:325",
+    "pc": [
+      1544
+    ]
+  },
+  {
+    "teal": 1103,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:346",
+    "pc": [
+      1545,
+      1546,
+      1547
+    ]
+  },
+  {
+    "teal": 1108,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:347",
+    "pc": [
+      1548,
+      1549
+    ]
+  },
+  {
+    "teal": 1109,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:347",
+    "pc": [
+      1550,
+      1551
+    ]
+  },
+  {
+    "teal": 1110,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:347",
+    "pc": [
+      1552
+    ]
+  },
+  {
+    "teal": 1111,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:347",
+    "pc": [
+      1553,
+      1554,
+      1555
+    ]
+  },
+  {
+    "teal": 1120,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:348",
+    "pc": [
+      1556
+    ]
+  },
+  {
+    "teal": 1121,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:348",
+    "pc": [
+      1557,
+      1558
+    ]
+  },
+  {
+    "teal": 1122,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:348",
+    "pc": [
+      1559,
+      1560
+    ]
+  },
+  {
+    "teal": 1126,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:349",
+    "pc": [
+      1561,
+      1562
+    ]
+  },
+  {
+    "teal": 1127,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:349",
+    "pc": [
+      1563,
+      1564
+    ]
+  },
+  {
+    "teal": 1131,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:350",
+    "pc": [
+      1565,
+      1566
+    ]
+  },
+  {
+    "teal": 1132,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:350",
+    "pc": [
+      1567,
+      1568
+    ]
+  },
+  {
+    "teal": 1136,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:351",
+    "pc": [
+      1569,
+      1570
+    ]
+  },
+  {
+    "teal": 1137,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:351",
+    "pc": [
+      1571,
+      1572
+    ]
+  },
+  {
+    "teal": 1140,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:348",
+    "pc": [
+      1573
+    ]
+  },
+  {
+    "teal": 1141,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:347",
+    "pc": [
+      1574,
+      1575,
+      1576
+    ]
+  },
+  {
+    "teal": 1151,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:354",
+    "pc": [
+      1577
+    ]
+  },
+  {
+    "teal": 1152,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:354",
+    "pc": [
+      1578,
+      1579
+    ]
+  },
+  {
+    "teal": 1153,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:354",
+    "pc": [
+      1580,
+      1581
+    ]
+  },
+  {
+    "teal": 1157,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:355",
+    "pc": [
+      1582,
+      1583
+    ]
+  },
+  {
+    "teal": 1158,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:355",
+    "pc": [
+      1584,
+      1585
+    ]
+  },
+  {
+    "teal": 1162,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:356",
+    "pc": [
+      1586,
+      1587
+    ]
+  },
+  {
+    "teal": 1163,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:356",
+    "pc": [
+      1588,
+      1589
+    ]
+  },
+  {
+    "teal": 1167,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:357",
+    "pc": [
+      1590,
+      1591
+    ]
+  },
+  {
+    "teal": 1168,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:357",
+    "pc": [
+      1592,
+      1593
+    ]
+  },
+  {
+    "teal": 1172,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:358",
+    "pc": [
+      1594,
+      1595
+    ]
+  },
+  {
+    "teal": 1173,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:358",
+    "pc": [
+      1596,
+      1597
+    ]
+  },
+  {
+    "teal": 1176,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:354",
+    "pc": [
+      1598
+    ]
+  },
+  {
+    "teal": 1179,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:346",
+    "pc": [
+      1599
+    ]
+  },
+  {
+    "teal": 1182,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      1600,
+      1601,
+      1602,
+      1603,
+      1604,
+      1605
+    ]
+  },
+  {
+    "teal": 1183,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      1606,
+      1607,
+      1608
+    ]
+  },
+  {
+    "teal": 1184,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      1609,
+      1610,
+      1611,
+      1612
+    ]
+  },
+  {
+    "teal": 1187,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "errorMessage": "this contract does not implement the given ABI method for create NoOp",
+    "pc": [
+      1613
+    ]
+  },
+  {
+    "teal": 1190,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      1614,
+      1615,
+      1616,
+      1617,
+      1618,
+      1619
+    ]
+  },
+  {
+    "teal": 1191,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      1620,
+      1621,
+      1622,
+      1623,
+      1624,
+      1625
+    ]
+  },
+  {
+    "teal": 1192,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      1626,
+      1627,
+      1628,
+      1629,
+      1630,
+      1631
+    ]
+  },
+  {
+    "teal": 1193,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      1632,
+      1633,
+      1634,
+      1635,
+      1636,
+      1637
+    ]
+  },
+  {
+    "teal": 1194,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      1638,
+      1639,
+      1640,
+      1641,
+      1642,
+      1643
+    ]
+  },
+  {
+    "teal": 1195,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      1644,
+      1645,
+      1646,
+      1647,
+      1648,
+      1649
+    ]
+  },
+  {
+    "teal": 1196,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      1650,
+      1651,
+      1652
+    ]
+  },
+  {
+    "teal": 1197,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      1653,
+      1654,
+      1655,
+      1656,
+      1657,
+      1658,
+      1659,
+      1660,
+      1661,
+      1662,
+      1663,
+      1664,
+      1665,
+      1666
+    ]
+  },
+  {
+    "teal": 1200,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "errorMessage": "this contract does not implement the given ABI method for call NoOp",
+    "pc": [
+      1667
     ]
   },
   {
     "teal": 1203,
-    "source": 133,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
     "pc": [
-      1273,
-      1274,
-      1275,
-      1276
+      1668,
+      1669,
+      1670,
+      1671,
+      1672,
+      1673
     ]
   },
   {
-    "teal": 1206,
-    "source": 133,
+    "teal": 1204,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      1674,
+      1675,
+      1676
+    ]
+  },
+  {
+    "teal": 1205,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
+    "pc": [
+      1677,
+      1678,
+      1679,
+      1680
+    ]
+  },
+  {
+    "teal": 1208,
+    "source": "contracts\\BiatecIdentityProvider.algo.ts:133",
     "errorMessage": "this contract does not implement the given ABI method for call UpdateApplication",
     "pc": [
-      1277
+      1681
     ]
   }
 ]
