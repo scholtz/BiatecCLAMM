@@ -20,7 +20,7 @@ interface IClammSwapInput {
 /**
  * Swap asset a or asset b at the biatec concentrated liquidity amm
  *
- * @returns txId
+ * @returns txid
  */
 const clammSwapSender = async (input: IClammSwapInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
@@ -32,7 +32,7 @@ const clammSwapSender = async (input: IClammSwapInput): Promise<string> => {
     txs,
     Array.from(Array(txs.length), (_, i) => i)
   );
-  const { txId } = await input.algod.sendRawTransaction(signed).do();
-  return txId;
+  const { txid } = await input.algod.sendRawTransaction(signed).do();
+  return txid;
 };
 export default clammSwapSender;

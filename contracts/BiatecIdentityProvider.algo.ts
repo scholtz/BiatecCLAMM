@@ -1,7 +1,7 @@
 import { Contract } from '@algorandfoundation/tealscript';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-IDENT-01-01-01';
+const version = 'BIATEC-IDENT-01-02-01';
 const SCALE = 1_000_000_000;
 
 type IdentityInfo = {

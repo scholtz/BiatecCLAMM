@@ -1,4 +1,4 @@
-import algosdk, { AtomicTransactionComposer, SuggestedParams } from 'algosdk';
+import algosdk, { SuggestedParams } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
@@ -23,9 +23,8 @@ const clammSendOnlineKeyRegistrationTxs = async (
   const { clientBiatecClammPool, account, appBiatecConfigProvider, keyregParams } = input;
   // [Uint8Array, Uint8Array, Uint8Array, number | bigint, number | bigint, number | bigint]
   // [Uint8Array, Uint8Array, Uint8Array, number | bigint, number | bigint, number | bigint]
-  const atc = new AtomicTransactionComposer();
-  await clientBiatecClammPool.sendOnlineKeyRegistration(
-    {
+  const tx = await clientBiatecClammPool.createTransaction.sendOnlineKeyRegistration({
+    args: {
       appBiatecConfigProvider,
       votePk: keyregParams.votePk,
       selectionPk: keyregParams.selectionPk,
@@ -34,15 +33,11 @@ const clammSendOnlineKeyRegistrationTxs = async (
       voteLast: keyregParams.voteLast,
       voteKeyDilution: keyregParams.voteKeyDilution,
     },
-    {
-      sender: account,
-      sendParams: {
-        fee: algokit.microAlgos(2000),
-      },
-      apps: [Number(appBiatecConfigProvider)],
-      accounts: [],
-    }
-  );
-  return atc.buildGroup().map((tx) => tx.txn);
+    sender: account.addr,
+    staticFee: algokit.microAlgos(2000),
+    appReferences: [BigInt(appBiatecConfigProvider)],
+    accountReferences: [],
+  });
+  return tx.transactions;
 };
 export default clammSendOnlineKeyRegistrationTxs;

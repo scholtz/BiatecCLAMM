@@ -23,27 +23,21 @@ const clammWithdrawExcessAssetsTxs = async (
   input: IClammWithdrawExcessAssetsTxsInput
 ): Promise<algosdk.Transaction[]> => {
   const { clientBiatecClammPool, account, appBiatecConfigProvider, assetA, assetB, amountA, amountB } = input;
-  const atc = new AtomicTransactionComposer();
 
-  await clientBiatecClammPool.withdrawExcessAssets(
-    {
+  const tx = await clientBiatecClammPool.createTransaction.withdrawExcessAssets({
+    args: {
       appBiatecConfigProvider,
       assetA,
       assetB,
       amountA,
       amountB,
     },
-    {
-      sender: account,
-      sendParams: {
-        fee: algokit.microAlgos(12000),
-        atc,
-      },
-      apps: [Number(appBiatecConfigProvider)],
-      assets: [Number(assetA), Number(assetB)],
-      accounts: [],
-    }
-  );
-  return atc.buildGroup().map((tx) => tx.txn);
+    sender: account.addr,
+    staticFee: algokit.microAlgos(12000),
+    appReferences: [BigInt(appBiatecConfigProvider)],
+    assetReferences: [BigInt(assetA), BigInt(assetB)],
+    accountReferences: [],
+  });
+  return tx.transactions;
 };
 export default clammWithdrawExcessAssetsTxs;

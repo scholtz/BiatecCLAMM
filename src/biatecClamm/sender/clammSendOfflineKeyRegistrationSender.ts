@@ -13,7 +13,7 @@ interface IClammRemoveLiquidityInput {
 /**
  * Biatec can execute the offline key registration
  *
- * @returns txId
+ * @returns txid
  */
 const clammSendOfflineKeyRegistrationSender = async (input: IClammRemoveLiquidityInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
@@ -25,7 +25,7 @@ const clammSendOfflineKeyRegistrationSender = async (input: IClammRemoveLiquidit
     txs,
     Array.from(Array(txs.length), (_, i) => i)
   );
-  const { txId } = await input.algod.sendRawTransaction(signed).do();
-  return txId;
+  const { txid } = await input.algod.sendRawTransaction(signed).do();
+  return txid;
 };
 export default clammSendOfflineKeyRegistrationSender;

@@ -17,7 +17,7 @@ interface IClammDistributeExcessAssetsInput {
 /**
  * Distributes excess assets to the pool owners
  *
- * @returns txId
+ * @returns txid
  */
 const clammDistributeExcessAssetsSender = async (input: IClammDistributeExcessAssetsInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
@@ -29,7 +29,7 @@ const clammDistributeExcessAssetsSender = async (input: IClammDistributeExcessAs
     txs,
     Array.from(Array(txs.length), (_, i) => i)
   );
-  const { txId } = await input.algod.sendRawTransaction(signed).do();
-  return txId;
+  const { txid } = await input.algod.sendRawTransaction(signed).do();
+  return txid;
 };
 export default clammDistributeExcessAssetsSender;

@@ -1,7 +1,7 @@
 import { Contract } from '@algorandfoundation/tealscript';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-01-01';
+const version = 'BIATEC-CLAMM-01-02-01';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
@@ -456,6 +456,12 @@ class BiatecClammPool extends Contract {
       });
     } else {
       assert(false, 'Unsupported tx type of the asset A');
+    }
+
+    if (assetB.id > 0) {
+      assert(txAssetBDeposit.typeEnum === TransactionType.AssetTransfer);
+    } else {
+      assert(txAssetBDeposit.typeEnum === TransactionType.Payment);
     }
 
     if (txAssetBDeposit.typeEnum === TransactionType.AssetTransfer) {

@@ -1,6 +1,6 @@
 import { Contract } from '@algorandfoundation/tealscript';
 
-const version = 'BIATEC-CONFIG-01-01-01';
+const version = 'BIATEC-CONFIG-01-02-01';
 const SCALE = 1_000_000_000;
 // eslint-disable-next-line no-unused-vars
 class BiatecConfigProvider extends Contract {
@@ -159,7 +159,7 @@ class BiatecConfigProvider extends Contract {
     this.appBiatecPoolProvider.value = a;
   }
 
-  /** 
+  /**
    * Fees in 9 decimals. 1_000_000_000 = 100%
    * Fees in 9 decimals. 10_000_000 = 1%
    * Fees in 9 decimals. 100_000 = 0,01%

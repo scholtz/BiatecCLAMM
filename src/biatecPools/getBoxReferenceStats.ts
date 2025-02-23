@@ -1,3 +1,4 @@
+import { BoxReference } from '@algorandfoundation/algokit-utils/types/app-manager';
 import algosdk from 'algosdk';
 
 interface IGetBoxReferenceInput {
@@ -8,18 +9,18 @@ interface IGetBoxReferenceInput {
   includingAssetBoxes: boolean;
 }
 
-const getBoxReferenceStats = (input: IGetBoxReferenceInput) => {
-  const ret = [
+const getBoxReferenceStats = (input: IGetBoxReferenceInput): BoxReference[] => {
+  const ret: BoxReference[] = [
     {
       // single lp price feed
-      appIndex: Number(input.appBiatecPoolProvider),
+      appId: BigInt(input.appBiatecPoolProvider),
       name: new Uint8Array(
         Buffer.concat([Buffer.from('p', 'ascii'), algosdk.bigIntToBytes(input.appBiatecCLAMMPool, 8)])
       ), // data box
     },
     {
       // aggregated price feed
-      appIndex: Number(input.appBiatecPoolProvider),
+      appId: BigInt(input.appBiatecPoolProvider),
       name: new Uint8Array(
         Buffer.concat([
           Buffer.from('s', 'ascii'),
@@ -31,11 +32,11 @@ const getBoxReferenceStats = (input: IGetBoxReferenceInput) => {
   ];
   if (input.includingAssetBoxes) {
     ret.push({
-      appIndex: Number(input.appBiatecPoolProvider),
+      appId: BigInt(input.appBiatecPoolProvider),
       name: new Uint8Array(Buffer.concat([Buffer.from('a', 'ascii'), algosdk.bigIntToBytes(input.assetA, 8)])), // data box
     });
     ret.push({
-      appIndex: Number(input.appBiatecPoolProvider),
+      appId: BigInt(input.appBiatecPoolProvider),
       name: new Uint8Array(Buffer.concat([Buffer.from('a', 'ascii'), algosdk.bigIntToBytes(input.assetB, 8)])), // data box
     });
   }

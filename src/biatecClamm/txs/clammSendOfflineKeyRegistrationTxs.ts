@@ -19,21 +19,15 @@ const clammSendOfflineKeyRegistrationTxs = async (
   input: IClammSendOnlineKeyRegistrationTxsInput
 ): Promise<algosdk.Transaction[]> => {
   const { clientBiatecClammPool, account, appBiatecConfigProvider } = input;
-  const atc = new AtomicTransactionComposer();
-  await clientBiatecClammPool.sendOfflineKeyRegistration(
-    {
+  const tx = await clientBiatecClammPool.createTransaction.sendOfflineKeyRegistration({
+    args: {
       appBiatecConfigProvider,
     },
-    {
-      sender: account,
-      sendParams: {
-        fee: algokit.microAlgos(2000),
-        atc,
-      },
-      apps: [Number(appBiatecConfigProvider)],
-      accounts: [],
-    }
-  );
-  return atc.buildGroup().map((tx) => tx.txn);
+    sender: account.addr,
+    staticFee: algokit.microAlgos(2000),
+    appReferences: [BigInt(appBiatecConfigProvider)],
+    accountReferences: [],
+  });
+  return tx.transactions;
 };
 export default clammSendOfflineKeyRegistrationTxs;

@@ -36,38 +36,35 @@ const clammSwapTxs = async (input: IClammSwapTxsInput): Promise<algosdk.Transact
     fromAsset,
     fromAmount,
   } = input;
-  const atc = new AtomicTransactionComposer();
 
-  const clammRef = await clientBiatecClammPool.appClient.getAppReference();
   let txSwap: algosdk.Transaction;
 
   if (fromAsset === 0n) {
     txSwap = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       amount: fromAmount,
-      from: account.addr,
+      sender: account.addr,
       suggestedParams: params,
-      to: clammRef.appAddress,
+      receiver: clientBiatecClammPool.appClient.appAddress,
     });
   } else {
     txSwap = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
       amount: fromAmount,
       assetIndex: Number(fromAsset),
-      from: account.addr,
+      sender: account.addr,
       suggestedParams: params,
-      to: clammRef.appAddress,
+      receiver: clientBiatecClammPool.appClient.appAddress,
     });
   }
-  const ammRef = await clientBiatecClammPool.appClient.getAppReference();
   const boxes = getBoxReferenceStats({
-    appBiatecCLAMMPool: ammRef.appId,
+    appBiatecCLAMMPool: clientBiatecClammPool.appClient.appId,
     appBiatecPoolProvider,
     assetA,
     assetB,
     includingAssetBoxes: false,
   });
 
-  await clientBiatecClammPool.swap(
-    {
+  const tx = await clientBiatecClammPool.createTransaction.swap({
+    args: {
       appBiatecConfigProvider,
       appBiatecIdentityProvider,
       appBiatecPoolProvider,
@@ -76,17 +73,13 @@ const clammSwapTxs = async (input: IClammSwapTxsInput): Promise<algosdk.Transact
       txSwap,
       minimumToReceive,
     },
-    {
-      sender: account,
-      sendParams: {
-        fee: algokit.microAlgos(12000),
-        atc,
-      },
-      boxes,
-      assets: [Number(assetA), Number(assetB)],
-      accounts: [],
-    }
-  );
-  return atc.buildGroup().map((tx) => tx.txn);
+
+    sender: account.addr,
+    staticFee: algokit.microAlgos(12000),
+    boxReferences: boxes,
+    assetReferences: [BigInt(assetA), BigInt(assetB)],
+    accountReferences: [],
+  });
+  return tx.transactions;
 };
 export default clammSwapTxs;

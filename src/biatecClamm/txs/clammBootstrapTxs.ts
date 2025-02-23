@@ -40,31 +40,28 @@ const clammBootstrapTxs = async (input: IClammBootstrapTxsInput): Promise<algosd
     currentPrice,
   } = input;
 
-  const clammRef = await clientBiatecClammPool.appClient.getAppReference();
   const fillInPoolProviderMBR = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
     amount: 666800,
-    from: account.addr,
+    sender: account.addr,
     suggestedParams: params,
-    to: algosdk.getApplicationAddress(appBiatecPoolProvider),
+    receiver: algosdk.getApplicationAddress(appBiatecPoolProvider),
   });
   const purchaseAssetDepositTx = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
     amount: 400000,
-    from: account.addr,
+    sender: account.addr,
     suggestedParams: params,
-    to: clammRef.appAddress,
+    receiver: clientBiatecClammPool.appAddress,
   });
-  const ammRef = await clientBiatecClammPool.appClient.getAppReference();
   const boxes = getBoxReferenceStats({
-    appBiatecCLAMMPool: ammRef.appId,
+    appBiatecCLAMMPool: clientBiatecClammPool.appId,
     appBiatecPoolProvider,
     assetA,
     assetB,
     includingAssetBoxes: true,
   });
   // console.debug('boxes', boxes, Buffer.from(boxes[0].name).toString('hex'), Buffer.from(boxes[1].name).toString('hex'));
-  const atc = new AtomicTransactionComposer();
-  await clientBiatecClammPool.bootstrap(
-    {
+  const tx = await clientBiatecClammPool.createTransaction.bootstrap({
+    args: {
       assetA,
       assetB,
       appBiatecPoolProvider,
@@ -76,21 +73,16 @@ const clammBootstrapTxs = async (input: IClammBootstrapTxsInput): Promise<algosd
       priceMax,
       currentPrice,
     },
-    {
-      sender: account,
-      sendParams: {
-        fee: algokit.microAlgos(5000),
-        atc,
-      },
-      boxes,
-      apps: [Number(appBiatecConfigProvider), Number(appBiatecPoolProvider)],
-      assets: [Number(assetA), Number(assetB)],
-      accounts: [],
-    }
-  );
-
-  const ret = [fillInPoolProviderMBR, ...atc.buildGroup().map((tx) => tx.txn)].map((tx: algosdk.Transaction) => {
-    // eslint-disable-next-line no-param-reassign
+    sender: account.addr,
+    extraFee: algokit.microAlgos(5000),
+    boxReferences: boxes,
+    appReferences: [BigInt(appBiatecConfigProvider), BigInt(appBiatecPoolProvider)],
+    assetReferences: [BigInt(assetA), BigInt(assetB)],
+    accountReferences: [],
+  });
+  const txsToGroup = [fillInPoolProviderMBR];
+  tx.transactions.map((tx) => txsToGroup.push(tx));
+  const ret = txsToGroup.map((tx: algosdk.Transaction) => {
     tx.group = undefined;
     return tx;
   });

@@ -13,25 +13,18 @@ interface IConfigBootstrapTxsInput {
 }
 const bootstrapTxs = async (input: IConfigBootstrapTxsInput): Promise<algosdk.Transaction[]> => {
   const { clientBiatecConfigProvider, account, appBiatecIdentityProvider, appBiatecPoolProvider, biatecFee } = input;
-  const atc = new AtomicTransactionComposer();
-
-  await clientBiatecConfigProvider.bootstrap(
-    {
+  const tx = await clientBiatecConfigProvider.createTransaction.bootstrap({
+    args: {
       biatecFee,
       appBiatecIdentityProvider,
       appBiatecPoolProvider,
     },
-    {
-      sender: account,
-      sendParams: {
-        fee: algokit.microAlgos(4000),
-        atc,
-      },
-      boxes: [],
-      assets: [],
-      accounts: [],
-    }
-  );
-  return atc.buildGroup().map((tx) => tx.txn);
+    sender: account.addr,
+    maxFee: algokit.microAlgos(4000),
+    boxReferences: [],
+    assetReferences: [],
+    accountReferences: [],
+  });
+  return tx.transactions;
 };
 export default bootstrapTxs;
