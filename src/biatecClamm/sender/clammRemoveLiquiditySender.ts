@@ -12,13 +12,13 @@ interface IClammRemoveLiquidityInput {
   appBiatecIdentityProvider: bigint;
   assetA: bigint;
   assetB: bigint;
-  assetLP: bigint;
+  assetLp: bigint;
   lpToSend: bigint;
 }
 /**
  * User can remove the liqudity including fee rewards
  *
- * @returns txId
+ * @returns txid
  */
 const clammRemoveLiquiditySender = async (input: IClammRemoveLiquidityInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
@@ -30,7 +30,7 @@ const clammRemoveLiquiditySender = async (input: IClammRemoveLiquidityInput): Pr
     txs,
     Array.from(Array(txs.length), (_, i) => i)
   );
-  const { txId } = await input.algod.sendRawTransaction(signed).do();
-  return txId;
+  const { txid } = await input.algod.sendRawTransaction(signed).do();
+  return txid;
 };
 export default clammRemoveLiquiditySender;

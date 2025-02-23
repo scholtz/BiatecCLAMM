@@ -17,7 +17,7 @@ interface IClammRemoveLiquidityInput {
 /**
  * Biatec can withdraw excess assets from the pool
  *
- * @returns txId
+ * @returns txid
  */
 const clammWithdrawExcessAssetsSender = async (input: IClammRemoveLiquidityInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
@@ -29,7 +29,7 @@ const clammWithdrawExcessAssetsSender = async (input: IClammRemoveLiquidityInput
     txs,
     Array.from(Array(txs.length), (_, i) => i)
   );
-  const { txId } = await input.algod.sendRawTransaction(signed).do();
-  return txId;
+  const { txid } = await input.algod.sendRawTransaction(signed).do();
+  return txid;
 };
 export default clammWithdrawExcessAssetsSender;

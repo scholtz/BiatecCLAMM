@@ -31,19 +31,17 @@ const clammRemoveLiquidityTxs = async (input: IClammRemoveLiquidityTxsInput): Pr
     assetLp,
     lpToSend,
   } = input;
-  const atc = new AtomicTransactionComposer();
 
-  const clammRef = await clientBiatecClammPool.appClient.getAppReference();
   const txLpXfer = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
     amount: lpToSend,
     assetIndex: Number(assetLp),
-    from: account.addr,
+    sender: account.addr,
     suggestedParams: params,
-    to: clammRef.appAddress,
+    receiver: clientBiatecClammPool.appClient.appAddress,
   });
 
-  await clientBiatecClammPool.removeLiquidity(
-    {
+  const tx = await clientBiatecClammPool.createTransaction.removeLiquidity({
+    args: {
       appBiatecConfigProvider,
       appBiatecIdentityProvider,
       assetA,
@@ -51,17 +49,12 @@ const clammRemoveLiquidityTxs = async (input: IClammRemoveLiquidityTxsInput): Pr
       assetLp,
       txLpXfer,
     },
-    {
-      sender: account,
-      sendParams: {
-        fee: algokit.microAlgos(12000),
-        atc,
-      },
-      apps: [Number(appBiatecConfigProvider), Number(appBiatecIdentityProvider)],
-      assets: [Number(assetA), Number(assetB)],
-      accounts: [],
-    }
-  );
-  return atc.buildGroup().map((tx) => tx.txn);
+    sender: account.addr,
+    staticFee: algokit.microAlgos(12000),
+    appReferences: [BigInt(appBiatecConfigProvider), BigInt(appBiatecIdentityProvider)],
+    assetReferences: [BigInt(assetA), BigInt(assetB)],
+    accountReferences: [],
+  });
+  return tx.transactions;
 };
 export default clammRemoveLiquidityTxs;

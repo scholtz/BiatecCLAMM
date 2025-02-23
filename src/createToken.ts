@@ -10,7 +10,7 @@ interface ICreateGoldTokenInput {
 const createToken = async (input: ICreateGoldTokenInput) => {
   const params = await input.algod.getTransactionParams().do();
   const goldTokenTx = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
-    from: input.account.addr,
+    sender: input.account.addr,
     reserve: input.account.addr,
     decimals: input.decimals,
     defaultFrozen: false,
@@ -22,8 +22,9 @@ const createToken = async (input: ICreateGoldTokenInput) => {
   });
 
   const tx = await input.algod.sendRawTransaction(goldTokenTx.signTxn(input.account.sk)).do();
-  const tx2 = await algokit.waitForConfirmation(tx.txId, 3, input.algod);
-  const goldToken = Number(tx2.assetIndex);
+  const tx2 = await algokit.waitForConfirmation(tx.txid, 3, input.algod);
+  if (!tx2.assetIndex) throw Error('Asset not created');
+  const goldToken = tx2.assetIndex;
   return goldToken;
 };
 export default createToken;

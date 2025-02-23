@@ -1,11 +1,11 @@
 import algosdk, { AtomicTransactionComposer, SuggestedParams } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
-import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
+import { BiatecClammPoolFactory } from '../../../contracts/clients/BiatecClammPoolClient';
 
 interface IClammBootstrapTxsInput {
   params: SuggestedParams;
-  clientBiatecClammPool: BiatecClammPoolClient;
+  biatecClammPoolFactory: BiatecClammPoolFactory;
   account: TransactionSignerAccount;
 }
 /**
@@ -13,20 +13,12 @@ interface IClammBootstrapTxsInput {
  * @returns List of transactions to sign
  */
 const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.Transaction[]> => {
-  const { clientBiatecClammPool, account } = input;
-
-  const atc = new AtomicTransactionComposer();
-  await clientBiatecClammPool.create.createApplication(
-    {},
-    {
-      sender: account,
-      updatable: true,
-      sendParams: {
-        fee: algokit.microAlgos(1000),
-        atc,
-      },
-    }
-  );
-  return atc.buildGroup().map((tx) => tx.txn);
+  const { biatecClammPoolFactory, account } = input;
+  const tx = await biatecClammPoolFactory.createTransaction.create.createApplication({
+    args: {},
+    sender: account.addr,
+    updatable: true,
+  });
+  return tx.transactions;
 };
 export default clammCreateTxs;

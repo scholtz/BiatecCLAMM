@@ -1,21 +1,15 @@
-import { Algodv2 } from 'algosdk';
-import { SendTransactionFrom } from '@algorandfoundation/algokit-utils/types/transaction';
-import { BiatecClammPoolClient } from '../../contracts/clients/BiatecClammPoolClient';
+import { BiatecClammPoolClient, BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
+import { AlgorandClient } from '@algorandfoundation/algokit-utils/types/algorand-client';
 
 interface IGetClientInput {
-  appId: number | bigint;
-  account: SendTransactionFrom | undefined;
-  algod: Algodv2;
+  appId: bigint;
+  algorand: AlgorandClient;
 }
 
 const clientBiatecClammPool = (input: IGetClientInput) => {
-  return new BiatecClammPoolClient(
-    {
-      sender: input.account,
-      resolveBy: 'id',
-      id: input.appId,
-    },
-    input.algod
-  );
+  return new BiatecClammPoolClient({
+    algorand: input.algorand,
+    appId: input.appId,
+  });
 };
 export default clientBiatecClammPool;

@@ -19,7 +19,7 @@ interface IClammBootstrapSkInput {
 /**
  * Add the liqudity to the concentrated liquidity AMM
  *
- * @returns txId
+ * @returns txid
  */
 const clammAddLiquiditySender = async (input: IClammBootstrapSkInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
@@ -31,7 +31,7 @@ const clammAddLiquiditySender = async (input: IClammBootstrapSkInput): Promise<s
     txs,
     Array.from(Array(txs.length), (_, i) => i)
   );
-  const { txId } = await input.algod.sendRawTransaction(signed).do();
-  return txId;
+  const { txid } = await input.algod.sendRawTransaction(signed).do();
+  return txid;
 };
 export default clammAddLiquiditySender;

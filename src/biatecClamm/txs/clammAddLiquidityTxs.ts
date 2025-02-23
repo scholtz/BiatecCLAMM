@@ -34,46 +34,44 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
     assetBDeposit,
   } = input;
 
-  const clammRef = await clientBiatecClammPool.appClient.getAppReference();
   let txAssetADeposit: algosdk.Transaction;
   let txAssetBDeposit: algosdk.Transaction;
   if (assetA === 0n) {
     txAssetADeposit = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       amount: assetADeposit,
-      from: account.addr,
+      sender: account.addr,
       suggestedParams: params,
-      to: clammRef.appAddress,
+      receiver: clientBiatecClammPool.appClient.appAddress,
     });
   } else {
     txAssetADeposit = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
       amount: assetADeposit,
       assetIndex: Number(assetA),
-      from: account.addr,
+      sender: account.addr,
       suggestedParams: params,
-      to: clammRef.appAddress,
+      receiver: clientBiatecClammPool.appClient.appAddress,
     });
   }
 
   if (assetB === 0n) {
     txAssetBDeposit = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       amount: assetBDeposit,
-      from: account.addr,
+      sender: account.addr,
       suggestedParams: params,
-      to: clammRef.appAddress,
+      receiver: clientBiatecClammPool.appClient.appAddress,
     });
   } else {
     txAssetBDeposit = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
       amount: assetBDeposit,
       assetIndex: Number(assetB),
-      from: account.addr,
+      sender: account.addr,
       suggestedParams: params,
-      to: clammRef.appAddress,
+      receiver: clientBiatecClammPool.appClient.appAddress,
     });
   }
-  const atc = new AtomicTransactionComposer();
 
-  await clientBiatecClammPool.addLiquidity(
-    {
+  const tx = await clientBiatecClammPool.createTransaction.addLiquidity({
+    args: {
       appBiatecConfigProvider,
       appBiatecIdentityProvider,
       txAssetADeposit,
@@ -82,17 +80,12 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
       assetB,
       assetLp,
     },
-    {
-      sender: account,
-      sendParams: {
-        fee: algokit.microAlgos(4000),
-        atc,
-      },
-      boxes: [],
-      assets: [Number(assetA), Number(assetB)],
-      accounts: [],
-    }
-  );
-  return atc.buildGroup().map((tx) => tx.txn);
+    sender: account.addr,
+    staticFee: algokit.microAlgos(4000),
+    boxReferences: [],
+    assetReferences: [BigInt(assetA), BigInt(assetB)],
+    accountReferences: [],
+  });
+  return tx.transactions;
 };
 export default clammAddLiquidityTxs;

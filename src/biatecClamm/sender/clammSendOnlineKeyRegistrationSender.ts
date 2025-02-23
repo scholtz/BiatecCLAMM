@@ -15,7 +15,7 @@ interface IClammRemoveLiquidityInput {
 /**
  * Biatec can execute the online key registration to protect algorand network with algos deposited in the lp pool
  *
- * @returns txId
+ * @returns txid
  */
 const clammSendOnlineKeyRegistrationSender = async (input: IClammRemoveLiquidityInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
@@ -27,7 +27,7 @@ const clammSendOnlineKeyRegistrationSender = async (input: IClammRemoveLiquidity
     txs,
     Array.from(Array(txs.length), (_, i) => i)
   );
-  const { txId } = await input.algod.sendRawTransaction(signed).do();
-  return txId;
+  const { txid } = await input.algod.sendRawTransaction(signed).do();
+  return txid;
 };
 export default clammSendOnlineKeyRegistrationSender;

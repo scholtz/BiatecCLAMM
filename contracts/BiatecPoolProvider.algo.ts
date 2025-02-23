@@ -1,7 +1,7 @@
 import { Contract } from '@algorandfoundation/tealscript';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-PP-01-01-01';
+const version = 'BIATEC-PP-01-02-01';
 const SCALE = 1_000_000_000;
 
 type AppPoolInfo = {
@@ -197,7 +197,7 @@ class BiatecPoolProvider extends Contract {
    */
   updateApplication(appBiatecConfigProvider: AppID, newVersion: bytes): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
-    const addressUdpater = appBiatecConfigProvider.globalState('u');
+    const addressUdpater = appBiatecConfigProvider.globalState('u') as Address;
     assert(this.txn.sender === addressUdpater, 'Only addressUdpater setup in the config can update application');
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
@@ -838,7 +838,7 @@ class BiatecPoolProvider extends Contract {
     voteKeyDilution: uint64
   ): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
-    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
     assert(
@@ -867,7 +867,7 @@ class BiatecPoolProvider extends Contract {
    */
   withdrawExcessAssets(appBiatecConfigProvider: AppID, asset: AssetID, amount: uint64): uint64 {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
-    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
     assert(

@@ -25,7 +25,7 @@ const configBootstrapSender = async (input: IConfigBootstrapSkInput): Promise<st
     Array.from(Array(txs.length), (_, i) => i)
   );
 
-  const { txId } = await input.algod.sendRawTransaction(signed).do();
-  return txId;
+  const { txid } = await input.algod.sendRawTransaction(signed).do();
+  return txid;
 };
 export default configBootstrapSender;
