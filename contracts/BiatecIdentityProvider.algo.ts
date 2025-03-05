@@ -163,9 +163,18 @@ class BiatecIdentityProvider extends Contract {
    * Biatec deploys single identity provider smart contract
    * @param appBiatecConfigProvider Biatec amm provider
    */
-  bootstrap(appBiatecConfigProvider: AppID): void {
+  bootstrap(
+    appBiatecConfigProvider: AppID,
+    governor: Address,
+    verificationSetter: Address,
+    engagementSetter: Address
+  ): void {
     assert(this.txn.sender === this.app.creator, 'Only creator of the app can set it up');
     this.appBiatecConfigProvider.value = appBiatecConfigProvider;
+    this.governor.value = governor;
+    this.verificationSetter.value = verificationSetter;
+    this.engagementSetter.value = engagementSetter;
+
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
   }

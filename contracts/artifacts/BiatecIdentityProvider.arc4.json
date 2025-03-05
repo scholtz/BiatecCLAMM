@@ -18,6 +18,18 @@
           "name": "appBiatecConfigProvider",
           "type": "uint64",
           "desc": "Biatec amm provider"
+        },
+        {
+          "name": "governor",
+          "type": "address"
+        },
+        {
+          "name": "verificationSetter",
+          "type": "address"
+        },
+        {
+          "name": "engagementSetter",
+          "type": "address"
         }
       ],
       "returns": {
