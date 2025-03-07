@@ -5903,7 +5903,7 @@
   {
     "teal": 1252,
     "source": "contracts\\BiatecPoolProvider.algo.ts:389",
-    "errorMessage": "((period1NowVolumeBUint256 * period1NowVWAPUint256 + amountBUint256 * priceUint256) /\\n      (period1NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
+    "errorMessage": "((period1NowVolumeBUint256 * period1NowVWAPUint256 + amountBUint256 * priceUint256) /\r\\n      (period1NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
     "pc": [
       1316
     ]
@@ -7887,7 +7887,7 @@
   {
     "teal": 1644,
     "source": "contracts\\BiatecPoolProvider.algo.ts:422",
-    "errorMessage": "((period2NowVolumeBUint256 * period2NowVWAPUint256 + amountBUint256 * priceUint256) /\\n      (period2NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
+    "errorMessage": "((period2NowVolumeBUint256 * period2NowVWAPUint256 + amountBUint256 * priceUint256) /\r\\n      (period2NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
     "pc": [
       1697
     ]
@@ -9871,7 +9871,7 @@
   {
     "teal": 2036,
     "source": "contracts\\BiatecPoolProvider.algo.ts:455",
-    "errorMessage": "((period3NowVolumeBUint256 * period3NowVWAPUint256 + amountBUint256 * priceUint256) /\\n      (period3NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
+    "errorMessage": "((period3NowVolumeBUint256 * period3NowVWAPUint256 + amountBUint256 * priceUint256) /\r\\n      (period3NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
     "pc": [
       2078
     ]
@@ -11852,7 +11852,7 @@
   {
     "teal": 2428,
     "source": "contracts\\BiatecPoolProvider.algo.ts:487",
-    "errorMessage": "((period4NowVolumeBUint256 * period4NowVWAPUint256 + amountBUint256 * priceUint256) /\\n      (period4NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
+    "errorMessage": "((period4NowVolumeBUint256 * period4NowVWAPUint256 + amountBUint256 * priceUint256) /\r\\n      (period4NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
     "pc": [
       2456
     ]
@@ -13834,7 +13834,7 @@
   {
     "teal": 2820,
     "source": "contracts\\BiatecPoolProvider.algo.ts:519",
-    "errorMessage": "((period5NowVolumeBUint256 * period5NowVWAPUint256 + amountBUint256 * priceUint256) /\\n      (period5NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
+    "errorMessage": "((period5NowVolumeBUint256 * period5NowVWAPUint256 + amountBUint256 * priceUint256) /\r\\n      (period5NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
     "pc": [
       2835
     ]
@@ -15817,7 +15817,7 @@
   {
     "teal": 3212,
     "source": "contracts\\BiatecPoolProvider.algo.ts:551",
-    "errorMessage": "((period6NowVolumeBUint256 * period6NowVWAPUint256 + amountBUint256 * priceUint256) /\\n      (period6NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
+    "errorMessage": "((period6NowVolumeBUint256 * period6NowVWAPUint256 + amountBUint256 * priceUint256) /\r\\n      (period6NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
     "pc": [
       3215
     ]
@@ -18294,7 +18294,7 @@
   {
     "teal": 3679,
     "source": "contracts\\BiatecPoolProvider.algo.ts:608",
-    "errorMessage": "((period1NowVolumeBUint256 * period1NowVWAPUint256 + amountBUint256 * priceUint256) /\\n      (period1NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
+    "errorMessage": "((period1NowVolumeBUint256 * period1NowVWAPUint256 + amountBUint256 * priceUint256) /\r\\n      (period1NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
     "pc": [
       3698
     ]
@@ -20180,7 +20180,7 @@
   {
     "teal": 4012,
     "source": "contracts\\BiatecPoolProvider.algo.ts:641",
-    "errorMessage": "((period2NowVolumeBUint256 * period2NowVWAPUint256 + amountBUint256 * priceUint256) /\\n      (period2NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
+    "errorMessage": "((period2NowVolumeBUint256 * period2NowVWAPUint256 + amountBUint256 * priceUint256) /\r\\n      (period2NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
     "pc": [
       4065
     ]
@@ -22066,7 +22066,7 @@
   {
     "teal": 4345,
     "source": "contracts\\BiatecPoolProvider.algo.ts:674",
-    "errorMessage": "((period3NowVolumeBUint256 * period3NowVWAPUint256 + amountBUint256 * priceUint256) /\\n      (period3NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
+    "errorMessage": "((period3NowVolumeBUint256 * period3NowVWAPUint256 + amountBUint256 * priceUint256) /\r\\n      (period3NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
     "pc": [
       4432
     ]
@@ -23949,7 +23949,7 @@
   {
     "teal": 4678,
     "source": "contracts\\BiatecPoolProvider.algo.ts:706",
-    "errorMessage": "((period4NowVolumeBUint256 * period4NowVWAPUint256 + amountBUint256 * priceUint256) /\\n      (period4NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
+    "errorMessage": "((period4NowVolumeBUint256 * period4NowVWAPUint256 + amountBUint256 * priceUint256) /\r\\n      (period4NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
     "pc": [
       4796
     ]
@@ -25833,7 +25833,7 @@
   {
     "teal": 5011,
     "source": "contracts\\BiatecPoolProvider.algo.ts:738",
-    "errorMessage": "((period5NowVolumeBUint256 * period5NowVWAPUint256 + amountBUint256 * priceUint256) /\\n      (period5NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
+    "errorMessage": "((period5NowVolumeBUint256 * period5NowVWAPUint256 + amountBUint256 * priceUint256) /\r\\n      (period5NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
     "pc": [
       5161
     ]
@@ -27718,7 +27718,7 @@
   {
     "teal": 5344,
     "source": "contracts\\BiatecPoolProvider.algo.ts:770",
-    "errorMessage": "((period6NowVolumeBUint256 * period6NowVWAPUint256 + amountBUint256 * priceUint256) /\\n      (period6NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
+    "errorMessage": "((period6NowVolumeBUint256 * period6NowVWAPUint256 + amountBUint256 * priceUint256) /\r\\n      (period6NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits",
     "pc": [
       5527
     ]

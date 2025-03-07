@@ -293,6 +293,14 @@ describe('BiatecIdentity', () => {
         },
       });
       expect(txId).not.toBeNull();
+
+      const returnValue = await clientBiatecIdentityProvider.appClient.send.getUser({
+        args: {
+          user: algosdk.encodeAddress(deployer.addr.publicKey),
+          v: 1,
+        },
+      });
+      expect(returnValue.return?.legalEntityUuid).toBe('00000000-0000-0000-0000-000000000000');
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);

@@ -66,6 +66,18 @@ type UserInfoV1 = {
    */
   verificationClass: uint64;
   /**
+   * Information wheather the account was verified as legal entity
+   */
+  isCompany: boolean;
+  /**
+   * Biatec natural person identifier
+   */
+  personUUID: string[36];
+  /**
+   * Biatec legal person identifier
+   */
+  legalEntityUUID: string[36];
+  /**
    * Each user who interacts with Biatec services will receive engagement points
    */
   biatecEngagementPoints: uint64;
@@ -297,6 +309,9 @@ class BiatecIdentityProvider extends Contract {
         kycExpiration: 0,
         investorForExpiration: 0,
         isProfessionalInvestor: false,
+        isCompany: false,
+        personUUID: '',
+        legalEntityUUID: '',
       };
       return retNoIdentity;
     }
@@ -318,6 +333,9 @@ class BiatecIdentityProvider extends Contract {
       kycExpiration: identity.kycExpiration,
       investorForExpiration: identity.investorForExpiration,
       isProfessionalInvestor: identity.isProfessionalInvestor,
+      isCompany: identity.isCompany,
+      personUUID: identity.personUUID,
+      legalEntityUUID: identity.legalEntityUUID,
     };
     return ret;
   }

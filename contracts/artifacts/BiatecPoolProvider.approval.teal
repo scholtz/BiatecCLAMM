@@ -1248,7 +1248,7 @@ updatePriceBoxInfo:
 	intc 2 // 64
 	<=
 
-	// ((period1NowVolumeBUint256 * period1NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period1NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
+	// ((period1NowVolumeBUint256 * period1NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period1NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
 	assert
 	bytec 4 // 0xFFFFFFFFFFFFFFFF
 	b&
@@ -1640,7 +1640,7 @@ updatePriceBoxInfo:
 	intc 2 // 64
 	<=
 
-	// ((period2NowVolumeBUint256 * period2NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period2NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
+	// ((period2NowVolumeBUint256 * period2NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period2NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
 	assert
 	bytec 4 // 0xFFFFFFFFFFFFFFFF
 	b&
@@ -2032,7 +2032,7 @@ updatePriceBoxInfo:
 	intc 2 // 64
 	<=
 
-	// ((period3NowVolumeBUint256 * period3NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period3NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
+	// ((period3NowVolumeBUint256 * period3NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period3NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
 	assert
 	bytec 4 // 0xFFFFFFFFFFFFFFFF
 	b&
@@ -2424,7 +2424,7 @@ updatePriceBoxInfo:
 	intc 2 // 64
 	<=
 
-	// ((period4NowVolumeBUint256 * period4NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period4NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
+	// ((period4NowVolumeBUint256 * period4NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period4NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
 	assert
 	bytec 4 // 0xFFFFFFFFFFFFFFFF
 	b&
@@ -2816,7 +2816,7 @@ updatePriceBoxInfo:
 	intc 2 // 64
 	<=
 
-	// ((period5NowVolumeBUint256 * period5NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period5NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
+	// ((period5NowVolumeBUint256 * period5NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period5NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
 	assert
 	bytec 4 // 0xFFFFFFFFFFFFFFFF
 	b&
@@ -3208,7 +3208,7 @@ updatePriceBoxInfo:
 	intc 2 // 64
 	<=
 
-	// ((period6NowVolumeBUint256 * period6NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period6NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
+	// ((period6NowVolumeBUint256 * period6NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period6NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
 	assert
 	bytec 4 // 0xFFFFFFFFFFFFFFFF
 	b&
@@ -3675,7 +3675,7 @@ updatePriceBoxAggregated:
 	intc 2 // 64
 	<=
 
-	// ((period1NowVolumeBUint256 * period1NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period1NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
+	// ((period1NowVolumeBUint256 * period1NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period1NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
 	assert
 	bytec 4 // 0xFFFFFFFFFFFFFFFF
 	b&
@@ -4008,7 +4008,7 @@ updatePriceBoxAggregated:
 	intc 2 // 64
 	<=
 
-	// ((period2NowVolumeBUint256 * period2NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period2NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
+	// ((period2NowVolumeBUint256 * period2NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period2NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
 	assert
 	bytec 4 // 0xFFFFFFFFFFFFFFFF
 	b&
@@ -4341,7 +4341,7 @@ updatePriceBoxAggregated:
 	intc 2 // 64
 	<=
 
-	// ((period3NowVolumeBUint256 * period3NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period3NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
+	// ((period3NowVolumeBUint256 * period3NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period3NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
 	assert
 	bytec 4 // 0xFFFFFFFFFFFFFFFF
 	b&
@@ -4674,7 +4674,7 @@ updatePriceBoxAggregated:
 	intc 2 // 64
 	<=
 
-	// ((period4NowVolumeBUint256 * period4NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period4NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
+	// ((period4NowVolumeBUint256 * period4NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period4NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
 	assert
 	bytec 4 // 0xFFFFFFFFFFFFFFFF
 	b&
@@ -5007,7 +5007,7 @@ updatePriceBoxAggregated:
 	intc 2 // 64
 	<=
 
-	// ((period5NowVolumeBUint256 * period5NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period5NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
+	// ((period5NowVolumeBUint256 * period5NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period5NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
 	assert
 	bytec 4 // 0xFFFFFFFFFFFFFFFF
 	b&
@@ -5340,7 +5340,7 @@ updatePriceBoxAggregated:
 	intc 2 // 64
 	<=
 
-	// ((period6NowVolumeBUint256 * period6NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period6NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
+	// ((period6NowVolumeBUint256 * period6NowVWAPUint256 + amountBUint256 * priceUint256) /\n      (period6NowVolumeBUint256 + amountBUint256)) as uint64 overflowed 64 bits
 	assert
 	bytec 4 // 0xFFFFFFFFFFFFFFFF
 	b&
