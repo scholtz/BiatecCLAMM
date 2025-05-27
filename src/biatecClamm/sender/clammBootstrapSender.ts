@@ -5,8 +5,6 @@ import clammBootstrapTxs from '../txs/clammBootstrapTxs';
 
 interface IClammBootstrapSkInput {
   clientBiatecClammPool: BiatecClammPoolClient;
-  account: TransactionSignerAccount;
-  algod: algosdk.Algodv2;
 
   appBiatecPoolProvider: bigint;
   appBiatecConfigProvider: bigint;
@@ -14,9 +12,6 @@ interface IClammBootstrapSkInput {
   assetB: bigint;
   fee: bigint;
   verificationClass: number;
-  priceMin: bigint;
-  priceMax: bigint;
-  currentPrice: bigint;
 }
 /**
  * Setup the liqudity pool for concentrated liquidity AMM
@@ -24,13 +19,10 @@ interface IClammBootstrapSkInput {
  * @returns txId
  */
 const clammBootstrapSender = async (input: IClammBootstrapSkInput): Promise<string> => {
-  const params = await input.algod.getTransactionParams().do();
-  const txs = await clammBootstrapTxs({ ...input, params });
-  const signed = await input.account.signer(
-    txs,
-    Array.from(Array(txs.length), (_, i) => i)
-  );
-  const { txid } = await input.algod.sendRawTransaction(signed).do();
-  return txid;
+  const bootstrapResult = await input.clientBiatecClammPool.send.bootstrapStep2({
+    args: {},
+    assetReferences: [BigInt(input.assetA), BigInt(input.assetB)],
+  });
+  return bootstrapResult.txIds[0];
 };
 export default clammBootstrapSender;

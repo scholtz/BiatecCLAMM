@@ -1,0 +1,38 @@
+{
+  "name": "FakePool",
+  "desc": "",
+  "methods": [
+    {
+      "name": "bootstrapStep2",
+      "desc": "When we know the app id of this pool, we can register it properly at the pool provider",
+      "args": [
+        {
+          "name": "assetA",
+          "type": "uint64"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64"
+        },
+        {
+          "name": "verificationClass",
+          "type": "uint64"
+        },
+        {
+          "name": "appBiatecPoolProvider",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "createApplication",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    }
+  ]
+}

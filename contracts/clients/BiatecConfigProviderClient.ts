@@ -4,9 +4,13 @@
  * DO NOT MODIFY IT BY HAND.
  * requires: @algorandfoundation/algokit-utils: ^7
  */
-import { AlgorandClientInterface } from '@algorandfoundation/algokit-utils/types/algorand-client-interface'
-import { ABIReturn, AppReturn, SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app'
-import { Arc56Contract, getArc56ReturnValue, getABIStructFromABITuple } from '@algorandfoundation/algokit-utils/types/app-arc56'
+import { AlgorandClientInterface } from '@algorandfoundation/algokit-utils/types/algorand-client-interface';
+import { ABIReturn, AppReturn, SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app';
+import {
+  Arc56Contract,
+  getArc56ReturnValue,
+  getABIStructFromABITuple,
+} from '@algorandfoundation/algokit-utils/types/app-arc56';
 import {
   AppClient as _AppClient,
   AppClientMethodCallParams,
@@ -17,14 +21,678 @@ import {
   ResolveAppClientByCreatorAndName,
   ResolveAppClientByNetwork,
   CloneAppClientParams,
-} from '@algorandfoundation/algokit-utils/types/app-client'
-import { AppFactory as _AppFactory, AppFactoryAppClientParams, AppFactoryResolveAppClientByCreatorAndNameParams, AppFactoryDeployParams, AppFactoryParams, CreateSchema } from '@algorandfoundation/algokit-utils/types/app-factory'
-import { TransactionComposer, AppCallMethodCall, AppMethodCallTransactionArgument, SimulateOptions, RawSimulateOptions, SkipSignaturesSimulateOptions } from '@algorandfoundation/algokit-utils/types/composer'
-import { SendParams, SendSingleTransactionResult, SendAtomicTransactionComposerResults } from '@algorandfoundation/algokit-utils/types/transaction'
-import { Address, encodeAddress, modelsv2, OnApplicationComplete, Transaction, TransactionSigner } from 'algosdk'
-import SimulateResponse = modelsv2.SimulateResponse
+} from '@algorandfoundation/algokit-utils/types/app-client';
+import {
+  AppFactory as _AppFactory,
+  AppFactoryAppClientParams,
+  AppFactoryResolveAppClientByCreatorAndNameParams,
+  AppFactoryDeployParams,
+  AppFactoryParams,
+  CreateSchema,
+} from '@algorandfoundation/algokit-utils/types/app-factory';
+import {
+  TransactionComposer,
+  AppCallMethodCall,
+  AppMethodCallTransactionArgument,
+  SimulateOptions,
+  RawSimulateOptions,
+  SkipSignaturesSimulateOptions,
+} from '@algorandfoundation/algokit-utils/types/composer';
+import {
+  SendParams,
+  SendSingleTransactionResult,
+  SendAtomicTransactionComposerResults,
+} from '@algorandfoundation/algokit-utils/types/transaction';
+import { Address, encodeAddress, modelsv2, OnApplicationComplete, Transaction, TransactionSigner } from 'algosdk';
+import { SimulateResponse } from 'algosdk/dist/types/client/v2/algod/models/types';
 
-export const APP_SPEC: Arc56Contract = {"name":"BiatecConfigProvider","desc":"","methods":[{"name":"createApplication","desc":"Initial setup","args":[],"returns":{"type":"void"},"actions":{"create":["NoOp"],"call":[]}},{"name":"updateApplication","desc":"addressUdpater from global biatec configuration is allowed to update application","args":[{"name":"newVersion","type":"byte[]"}],"returns":{"type":"void"},"actions":{"create":[],"call":["UpdateApplication"]}},{"name":"bootstrap","desc":"Setup the contract","args":[{"name":"biatecFee","type":"uint256","desc":"Biatec fees"},{"name":"appBiatecIdentityProvider","type":"uint64"},{"name":"appBiatecPoolProvider","type":"uint64"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"setAddressUdpater","desc":"Top secret account with which it is possible update contracts or identity provider","args":[{"name":"a","type":"address","desc":"Address"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"setPaused","desc":"Kill switch. In the extreme case all services (deposit, trading, withdrawal, identity modifications and more) can be suspended.","args":[{"name":"a","type":"uint64","desc":"Address"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"setAddressGov","desc":"Execution address with which it is possible to opt in for governance","args":[{"name":"a","type":"address","desc":"Address"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"setAddressExecutive","desc":"Execution address with which it is possible to change global biatec fees","args":[{"name":"a","type":"address","desc":"Address"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"setAddressExecutiveFee","desc":"Execution fee address is address which can take fees from pools.","args":[{"name":"a","type":"address","desc":"Address"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"setBiatecIdentity","desc":"App identity setter","args":[{"name":"a","type":"uint64","desc":"Address"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"setBiatecPool","desc":"App identity setter","args":[{"name":"a","type":"uint64","desc":"Address"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"setBiatecFee","desc":"Fees in 9 decimals. 1_000_000_000 = 100%\nFees in 9 decimals. 10_000_000 = 1%\nFees in 9 decimals. 100_000 = 0,01%\n\n\nFees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee","args":[{"name":"biatecFee","type":"uint256","desc":"Fee"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"sendOnlineKeyRegistration","desc":"addressExecutiveFee can perfom key registration for this LP pool\n\n\nOnly addressExecutiveFee is allowed to execute this method.","args":[{"name":"votePK","type":"byte[]"},{"name":"selectionPK","type":"byte[]"},{"name":"stateProofPK","type":"byte[]"},{"name":"voteFirst","type":"uint64"},{"name":"voteLast","type":"uint64"},{"name":"voteKeyDilution","type":"uint64"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"withdrawExcessAssets","desc":"If someone deposits excess assets to this smart contract biatec can use them.\n\n\nOnly addressExecutiveFee is allowed to execute this method.","args":[{"name":"asset","type":"uint64","desc":"Asset to withdraw. If native token, then zero"},{"name":"amount","type":"uint64","desc":"Amount of the asset to be withdrawn"}],"returns":{"type":"uint64"},"actions":{"create":[],"call":["NoOp"]}}],"arcs":[4,56],"structs":{},"state":{"schema":{"global":{"bytes":6,"ints":3},"local":{"bytes":0,"ints":0}},"keys":{"global":{"addressUdpater":{"key":"dQ==","keyType":"AVMBytes","valueType":"address"},"addressGov":{"key":"Zw==","keyType":"AVMBytes","valueType":"address"},"addressExecutive":{"key":"ZQ==","keyType":"AVMBytes","valueType":"address"},"addressExecutiveFee":{"key":"ZWY=","keyType":"AVMBytes","valueType":"address"},"appBiatecIdentityProvider":{"key":"aQ==","keyType":"AVMBytes","valueType":"uint64"},"appBiatecPoolProvider":{"key":"cA==","keyType":"AVMBytes","valueType":"uint64"},"suspended":{"key":"cw==","keyType":"AVMBytes","valueType":"uint64"},"biatecFee":{"key":"Zg==","keyType":"AVMBytes","valueType":"uint256"},"version":{"key":"c2N2ZXI=","keyType":"AVMBytes","valueType":"AVMBytes"}},"local":{},"box":{}},"maps":{"global":{},"local":{},"box":{}}},"bareActions":{"create":[],"call":[]},"sourceInfo":{"approval":{"sourceInfo":[{"teal":1,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[0]},{"teal":2,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[1,2,3,4,5]},{"teal":3,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96]},{"teal":15,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[97,98]},{"teal":16,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[99]},{"teal":17,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[100,101]},{"teal":18,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[102]},{"teal":19,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[103,104]},{"teal":20,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[105]},{"teal":21,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131]},{"teal":25,"source":"contracts\\BiatecConfigProvider.algo.ts:6","errorMessage":"The requested action is not implemented in this contract. Are you using the correct OnComplete? Did you set your app ID?","pc":[132]},{"teal":30,"source":"contracts\\BiatecConfigProvider.algo.ts:60","pc":[133,134,135]},{"teal":31,"source":"contracts\\BiatecConfigProvider.algo.ts:60","pc":[136]},{"teal":32,"source":"contracts\\BiatecConfigProvider.algo.ts:60","pc":[137]},{"teal":38,"source":"contracts\\BiatecConfigProvider.algo.ts:60","pc":[138,139,140]},{"teal":42,"source":"contracts\\BiatecConfigProvider.algo.ts:61","pc":[141,142]},{"teal":43,"source":"contracts\\BiatecConfigProvider.algo.ts:61","pc":[143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166]},{"teal":44,"source":"contracts\\BiatecConfigProvider.algo.ts:61","pc":[167]},{"teal":48,"source":"contracts\\BiatecConfigProvider.algo.ts:62","pc":[168]},{"teal":49,"source":"contracts\\BiatecConfigProvider.algo.ts:62","pc":[169,170]},{"teal":50,"source":"contracts\\BiatecConfigProvider.algo.ts:62","pc":[171]},{"teal":54,"source":"contracts\\BiatecConfigProvider.algo.ts:63","pc":[172,173]},{"teal":55,"source":"contracts\\BiatecConfigProvider.algo.ts:63","pc":[174,175]},{"teal":56,"source":"contracts\\BiatecConfigProvider.algo.ts:63","pc":[176]},{"teal":60,"source":"contracts\\BiatecConfigProvider.algo.ts:64","pc":[177]},{"teal":61,"source":"contracts\\BiatecConfigProvider.algo.ts:64","pc":[178,179]},{"teal":62,"source":"contracts\\BiatecConfigProvider.algo.ts:64","pc":[180]},{"teal":66,"source":"contracts\\BiatecConfigProvider.algo.ts:65","pc":[181]},{"teal":67,"source":"contracts\\BiatecConfigProvider.algo.ts:65","pc":[182,183]},{"teal":68,"source":"contracts\\BiatecConfigProvider.algo.ts:65","pc":[184]},{"teal":72,"source":"contracts\\BiatecConfigProvider.algo.ts:66","pc":[185,186]},{"teal":73,"source":"contracts\\BiatecConfigProvider.algo.ts:66","pc":[187]},{"teal":74,"source":"contracts\\BiatecConfigProvider.algo.ts:66","pc":[188]},{"teal":75,"source":"contracts\\BiatecConfigProvider.algo.ts:60","pc":[189]},{"teal":80,"source":"contracts\\BiatecConfigProvider.algo.ts:72","pc":[190,191,192]},{"teal":81,"source":"contracts\\BiatecConfigProvider.algo.ts:72","pc":[193,194,195]},{"teal":84,"source":"contracts\\BiatecConfigProvider.algo.ts:72","pc":[196,197,198]},{"teal":85,"source":"contracts\\BiatecConfigProvider.algo.ts:72","pc":[199]},{"teal":86,"source":"contracts\\BiatecConfigProvider.algo.ts:72","pc":[200]},{"teal":92,"source":"contracts\\BiatecConfigProvider.algo.ts:72","pc":[201,202,203]},{"teal":99,"source":"contracts\\BiatecConfigProvider.algo.ts:74","pc":[204,205]},{"teal":100,"source":"contracts\\BiatecConfigProvider.algo.ts:74","pc":[206]},{"teal":101,"source":"contracts\\BiatecConfigProvider.algo.ts:74","pc":[207]},{"teal":102,"source":"contracts\\BiatecConfigProvider.algo.ts:74","pc":[208]},{"teal":105,"source":"contracts\\BiatecConfigProvider.algo.ts:73","errorMessage":"Only addressUdpater setup in the config can update application","pc":[209]},{"teal":109,"source":"contracts\\BiatecConfigProvider.algo.ts:77","pc":[210,211]},{"teal":110,"source":"contracts\\BiatecConfigProvider.algo.ts:77","pc":[212,213]},{"teal":111,"source":"contracts\\BiatecConfigProvider.algo.ts:77","pc":[214]},{"teal":112,"source":"contracts\\BiatecConfigProvider.algo.ts:72","pc":[215]},{"teal":117,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[216,217,218]},{"teal":118,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[219]},{"teal":121,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[220,221,222]},{"teal":122,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[223]},{"teal":125,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[224,225,226]},{"teal":126,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[227]},{"teal":127,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[228]},{"teal":128,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[229]},{"teal":129,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[230]},{"teal":132,"source":"contracts\\BiatecConfigProvider.algo.ts:84","errorMessage":"argument 2 (biatecFee) for bootstrap must be a uint256","pc":[231]},{"teal":135,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[232,233,234]},{"teal":136,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[235]},{"teal":137,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[236]},{"teal":144,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[237,238,239]},{"teal":148,"source":"contracts\\BiatecConfigProvider.algo.ts:85","pc":[240,241]},{"teal":149,"source":"contracts\\BiatecConfigProvider.algo.ts:85","pc":[242]},{"teal":150,"source":"contracts\\BiatecConfigProvider.algo.ts:85","pc":[243]},{"teal":151,"source":"contracts\\BiatecConfigProvider.algo.ts:85","pc":[244]},{"teal":154,"source":"contracts\\BiatecConfigProvider.algo.ts:85","errorMessage":"Only updater can call bootstrap method","pc":[245]},{"teal":158,"source":"contracts\\BiatecConfigProvider.algo.ts:86","pc":[246,247]},{"teal":159,"source":"contracts\\BiatecConfigProvider.algo.ts:86","pc":[248]},{"teal":160,"source":"contracts\\BiatecConfigProvider.algo.ts:86","pc":[249,250]},{"teal":161,"source":"contracts\\BiatecConfigProvider.algo.ts:86","pc":[251]},{"teal":162,"source":"contracts\\BiatecConfigProvider.algo.ts:86","pc":[252]},{"teal":165,"source":"contracts\\BiatecConfigProvider.algo.ts:86","errorMessage":"Biatec cannot set fees higher then 50% of lp fees","pc":[253]},{"teal":169,"source":"contracts\\BiatecConfigProvider.algo.ts:87","pc":[254,255]},{"teal":170,"source":"contracts\\BiatecConfigProvider.algo.ts:87","pc":[256,257]},{"teal":171,"source":"contracts\\BiatecConfigProvider.algo.ts:87","pc":[258]},{"teal":175,"source":"contracts\\BiatecConfigProvider.algo.ts:88","pc":[259,260]},{"teal":176,"source":"contracts\\BiatecConfigProvider.algo.ts:88","pc":[261,262]},{"teal":177,"source":"contracts\\BiatecConfigProvider.algo.ts:88","pc":[263]},{"teal":181,"source":"contracts\\BiatecConfigProvider.algo.ts:89","pc":[264,265]},{"teal":182,"source":"contracts\\BiatecConfigProvider.algo.ts:89","pc":[266,267]},{"teal":183,"source":"contracts\\BiatecConfigProvider.algo.ts:89","pc":[268]},{"teal":184,"source":"contracts\\BiatecConfigProvider.algo.ts:84","pc":[269]},{"teal":189,"source":"contracts\\BiatecConfigProvider.algo.ts:97","pc":[270,271,272]},{"teal":190,"source":"contracts\\BiatecConfigProvider.algo.ts:97","pc":[273]},{"teal":191,"source":"contracts\\BiatecConfigProvider.algo.ts:97","pc":[274]},{"teal":192,"source":"contracts\\BiatecConfigProvider.algo.ts:97","pc":[275]},{"teal":193,"source":"contracts\\BiatecConfigProvider.algo.ts:97","pc":[276]},{"teal":196,"source":"contracts\\BiatecConfigProvider.algo.ts:97","errorMessage":"argument 0 (a) for setAddressUdpater must be a address","pc":[277]},{"teal":199,"source":"contracts\\BiatecConfigProvider.algo.ts:97","pc":[278,279,280]},{"teal":200,"source":"contracts\\BiatecConfigProvider.algo.ts:97","pc":[281]},{"teal":201,"source":"contracts\\BiatecConfigProvider.algo.ts:97","pc":[282]},{"teal":209,"source":"contracts\\BiatecConfigProvider.algo.ts:97","pc":[283,284,285]},{"teal":213,"source":"contracts\\BiatecConfigProvider.algo.ts:98","pc":[286,287]},{"teal":214,"source":"contracts\\BiatecConfigProvider.algo.ts:98","pc":[288]},{"teal":215,"source":"contracts\\BiatecConfigProvider.algo.ts:98","pc":[289]},{"teal":216,"source":"contracts\\BiatecConfigProvider.algo.ts:98","pc":[290]},{"teal":219,"source":"contracts\\BiatecConfigProvider.algo.ts:98","errorMessage":"Only updater can change updater address","pc":[291]},{"teal":223,"source":"contracts\\BiatecConfigProvider.algo.ts:99","pc":[292]},{"teal":224,"source":"contracts\\BiatecConfigProvider.algo.ts:99","pc":[293,294]},{"teal":225,"source":"contracts\\BiatecConfigProvider.algo.ts:99","pc":[295]},{"teal":226,"source":"contracts\\BiatecConfigProvider.algo.ts:97","pc":[296]},{"teal":231,"source":"contracts\\BiatecConfigProvider.algo.ts:107","pc":[297,298,299]},{"teal":232,"source":"contracts\\BiatecConfigProvider.algo.ts:107","pc":[300]},{"teal":235,"source":"contracts\\BiatecConfigProvider.algo.ts:107","pc":[301,302,303]},{"teal":236,"source":"contracts\\BiatecConfigProvider.algo.ts:107","pc":[304]},{"teal":237,"source":"contracts\\BiatecConfigProvider.algo.ts:107","pc":[305]},{"teal":245,"source":"contracts\\BiatecConfigProvider.algo.ts:107","pc":[306,307,308]},{"teal":249,"source":"contracts\\BiatecConfigProvider.algo.ts:108","pc":[309,310]},{"teal":250,"source":"contracts\\BiatecConfigProvider.algo.ts:108","pc":[311]},{"teal":251,"source":"contracts\\BiatecConfigProvider.algo.ts:108","pc":[312]},{"teal":252,"source":"contracts\\BiatecConfigProvider.algo.ts:108","pc":[313]},{"teal":255,"source":"contracts\\BiatecConfigProvider.algo.ts:108","errorMessage":"Only updater can pause and unpause the biatec services","pc":[314]},{"teal":259,"source":"contracts\\BiatecConfigProvider.algo.ts:109","pc":[315,316]},{"teal":260,"source":"contracts\\BiatecConfigProvider.algo.ts:109","pc":[317,318]},{"teal":261,"source":"contracts\\BiatecConfigProvider.algo.ts:109","pc":[319]},{"teal":262,"source":"contracts\\BiatecConfigProvider.algo.ts:107","pc":[320]},{"teal":267,"source":"contracts\\BiatecConfigProvider.algo.ts:117","pc":[321,322,323]},{"teal":268,"source":"contracts\\BiatecConfigProvider.algo.ts:117","pc":[324]},{"teal":269,"source":"contracts\\BiatecConfigProvider.algo.ts:117","pc":[325]},{"teal":270,"source":"contracts\\BiatecConfigProvider.algo.ts:117","pc":[326]},{"teal":271,"source":"contracts\\BiatecConfigProvider.algo.ts:117","pc":[327]},{"teal":274,"source":"contracts\\BiatecConfigProvider.algo.ts:117","errorMessage":"argument 0 (a) for setAddressGov must be a address","pc":[328]},{"teal":277,"source":"contracts\\BiatecConfigProvider.algo.ts:117","pc":[329,330,331]},{"teal":278,"source":"contracts\\BiatecConfigProvider.algo.ts:117","pc":[332]},{"teal":279,"source":"contracts\\BiatecConfigProvider.algo.ts:117","pc":[333]},{"teal":287,"source":"contracts\\BiatecConfigProvider.algo.ts:117","pc":[334,335,336]},{"teal":291,"source":"contracts\\BiatecConfigProvider.algo.ts:118","pc":[337,338]},{"teal":292,"source":"contracts\\BiatecConfigProvider.algo.ts:118","pc":[339]},{"teal":293,"source":"contracts\\BiatecConfigProvider.algo.ts:118","pc":[340]},{"teal":294,"source":"contracts\\BiatecConfigProvider.algo.ts:118","pc":[341]},{"teal":297,"source":"contracts\\BiatecConfigProvider.algo.ts:118","errorMessage":"Only updater can change gov address","pc":[342]},{"teal":301,"source":"contracts\\BiatecConfigProvider.algo.ts:119","pc":[343,344]},{"teal":302,"source":"contracts\\BiatecConfigProvider.algo.ts:119","pc":[345,346]},{"teal":303,"source":"contracts\\BiatecConfigProvider.algo.ts:119","pc":[347]},{"teal":304,"source":"contracts\\BiatecConfigProvider.algo.ts:117","pc":[348]},{"teal":309,"source":"contracts\\BiatecConfigProvider.algo.ts:127","pc":[349,350,351]},{"teal":310,"source":"contracts\\BiatecConfigProvider.algo.ts:127","pc":[352]},{"teal":311,"source":"contracts\\BiatecConfigProvider.algo.ts:127","pc":[353]},{"teal":312,"source":"contracts\\BiatecConfigProvider.algo.ts:127","pc":[354]},{"teal":313,"source":"contracts\\BiatecConfigProvider.algo.ts:127","pc":[355]},{"teal":316,"source":"contracts\\BiatecConfigProvider.algo.ts:127","errorMessage":"argument 0 (a) for setAddressExecutive must be a address","pc":[356]},{"teal":319,"source":"contracts\\BiatecConfigProvider.algo.ts:127","pc":[357,358,359]},{"teal":320,"source":"contracts\\BiatecConfigProvider.algo.ts:127","pc":[360]},{"teal":321,"source":"contracts\\BiatecConfigProvider.algo.ts:127","pc":[361]},{"teal":329,"source":"contracts\\BiatecConfigProvider.algo.ts:127","pc":[362,363,364]},{"teal":333,"source":"contracts\\BiatecConfigProvider.algo.ts:128","pc":[365,366]},{"teal":334,"source":"contracts\\BiatecConfigProvider.algo.ts:128","pc":[367]},{"teal":335,"source":"contracts\\BiatecConfigProvider.algo.ts:128","pc":[368]},{"teal":336,"source":"contracts\\BiatecConfigProvider.algo.ts:128","pc":[369]},{"teal":339,"source":"contracts\\BiatecConfigProvider.algo.ts:128","errorMessage":"Only updater can change addressExecutive","pc":[370]},{"teal":343,"source":"contracts\\BiatecConfigProvider.algo.ts:129","pc":[371]},{"teal":344,"source":"contracts\\BiatecConfigProvider.algo.ts:129","pc":[372,373]},{"teal":345,"source":"contracts\\BiatecConfigProvider.algo.ts:129","pc":[374]},{"teal":346,"source":"contracts\\BiatecConfigProvider.algo.ts:127","pc":[375]},{"teal":351,"source":"contracts\\BiatecConfigProvider.algo.ts:137","pc":[376,377,378]},{"teal":352,"source":"contracts\\BiatecConfigProvider.algo.ts:137","pc":[379]},{"teal":353,"source":"contracts\\BiatecConfigProvider.algo.ts:137","pc":[380]},{"teal":354,"source":"contracts\\BiatecConfigProvider.algo.ts:137","pc":[381]},{"teal":355,"source":"contracts\\BiatecConfigProvider.algo.ts:137","pc":[382]},{"teal":358,"source":"contracts\\BiatecConfigProvider.algo.ts:137","errorMessage":"argument 0 (a) for setAddressExecutiveFee must be a address","pc":[383]},{"teal":361,"source":"contracts\\BiatecConfigProvider.algo.ts:137","pc":[384,385,386]},{"teal":362,"source":"contracts\\BiatecConfigProvider.algo.ts:137","pc":[387]},{"teal":363,"source":"contracts\\BiatecConfigProvider.algo.ts:137","pc":[388]},{"teal":371,"source":"contracts\\BiatecConfigProvider.algo.ts:137","pc":[389,390,391]},{"teal":375,"source":"contracts\\BiatecConfigProvider.algo.ts:138","pc":[392,393]},{"teal":376,"source":"contracts\\BiatecConfigProvider.algo.ts:138","pc":[394]},{"teal":377,"source":"contracts\\BiatecConfigProvider.algo.ts:138","pc":[395]},{"teal":378,"source":"contracts\\BiatecConfigProvider.algo.ts:138","pc":[396]},{"teal":381,"source":"contracts\\BiatecConfigProvider.algo.ts:138","errorMessage":"Only addressExecutive can change fee executor address","pc":[397]},{"teal":385,"source":"contracts\\BiatecConfigProvider.algo.ts:139","pc":[398]},{"teal":386,"source":"contracts\\BiatecConfigProvider.algo.ts:139","pc":[399,400]},{"teal":387,"source":"contracts\\BiatecConfigProvider.algo.ts:139","pc":[401]},{"teal":388,"source":"contracts\\BiatecConfigProvider.algo.ts:137","pc":[402]},{"teal":393,"source":"contracts\\BiatecConfigProvider.algo.ts:147","pc":[403,404,405]},{"teal":394,"source":"contracts\\BiatecConfigProvider.algo.ts:147","pc":[406]},{"teal":397,"source":"contracts\\BiatecConfigProvider.algo.ts:147","pc":[407,408,409]},{"teal":398,"source":"contracts\\BiatecConfigProvider.algo.ts:147","pc":[410]},{"teal":399,"source":"contracts\\BiatecConfigProvider.algo.ts:147","pc":[411]},{"teal":407,"source":"contracts\\BiatecConfigProvider.algo.ts:147","pc":[412,413,414]},{"teal":411,"source":"contracts\\BiatecConfigProvider.algo.ts:148","pc":[415,416]},{"teal":412,"source":"contracts\\BiatecConfigProvider.algo.ts:148","pc":[417]},{"teal":413,"source":"contracts\\BiatecConfigProvider.algo.ts:148","pc":[418]},{"teal":414,"source":"contracts\\BiatecConfigProvider.algo.ts:148","pc":[419]},{"teal":417,"source":"contracts\\BiatecConfigProvider.algo.ts:148","errorMessage":"Only updater can change appIdentityProvider","pc":[420]},{"teal":421,"source":"contracts\\BiatecConfigProvider.algo.ts:149","pc":[421,422]},{"teal":422,"source":"contracts\\BiatecConfigProvider.algo.ts:149","pc":[423,424]},{"teal":423,"source":"contracts\\BiatecConfigProvider.algo.ts:149","pc":[425]},{"teal":424,"source":"contracts\\BiatecConfigProvider.algo.ts:147","pc":[426]},{"teal":429,"source":"contracts\\BiatecConfigProvider.algo.ts:157","pc":[427,428,429]},{"teal":430,"source":"contracts\\BiatecConfigProvider.algo.ts:157","pc":[430]},{"teal":433,"source":"contracts\\BiatecConfigProvider.algo.ts:157","pc":[431,432,433]},{"teal":434,"source":"contracts\\BiatecConfigProvider.algo.ts:157","pc":[434]},{"teal":435,"source":"contracts\\BiatecConfigProvider.algo.ts:157","pc":[435]},{"teal":443,"source":"contracts\\BiatecConfigProvider.algo.ts:157","pc":[436,437,438]},{"teal":447,"source":"contracts\\BiatecConfigProvider.algo.ts:158","pc":[439,440]},{"teal":448,"source":"contracts\\BiatecConfigProvider.algo.ts:158","pc":[441]},{"teal":449,"source":"contracts\\BiatecConfigProvider.algo.ts:158","pc":[442]},{"teal":450,"source":"contracts\\BiatecConfigProvider.algo.ts:158","pc":[443]},{"teal":453,"source":"contracts\\BiatecConfigProvider.algo.ts:158","errorMessage":"Only updater can change appPoolProvider","pc":[444]},{"teal":457,"source":"contracts\\BiatecConfigProvider.algo.ts:159","pc":[445,446]},{"teal":458,"source":"contracts\\BiatecConfigProvider.algo.ts:159","pc":[447,448]},{"teal":459,"source":"contracts\\BiatecConfigProvider.algo.ts:159","pc":[449]},{"teal":460,"source":"contracts\\BiatecConfigProvider.algo.ts:157","pc":[450]},{"teal":465,"source":"contracts\\BiatecConfigProvider.algo.ts:171","pc":[451,452,453]},{"teal":466,"source":"contracts\\BiatecConfigProvider.algo.ts:171","pc":[454]},{"teal":467,"source":"contracts\\BiatecConfigProvider.algo.ts:171","pc":[455]},{"teal":468,"source":"contracts\\BiatecConfigProvider.algo.ts:171","pc":[456]},{"teal":469,"source":"contracts\\BiatecConfigProvider.algo.ts:171","pc":[457]},{"teal":472,"source":"contracts\\BiatecConfigProvider.algo.ts:171","errorMessage":"argument 0 (biatecFee) for setBiatecFee must be a uint256","pc":[458]},{"teal":475,"source":"contracts\\BiatecConfigProvider.algo.ts:171","pc":[459,460,461]},{"teal":476,"source":"contracts\\BiatecConfigProvider.algo.ts:171","pc":[462]},{"teal":477,"source":"contracts\\BiatecConfigProvider.algo.ts:171","pc":[463]},{"teal":489,"source":"contracts\\BiatecConfigProvider.algo.ts:171","pc":[464,465,466]},{"teal":493,"source":"contracts\\BiatecConfigProvider.algo.ts:172","pc":[467,468]},{"teal":494,"source":"contracts\\BiatecConfigProvider.algo.ts:172","pc":[469]},{"teal":495,"source":"contracts\\BiatecConfigProvider.algo.ts:172","pc":[470]},{"teal":496,"source":"contracts\\BiatecConfigProvider.algo.ts:172","pc":[471]},{"teal":499,"source":"contracts\\BiatecConfigProvider.algo.ts:172","errorMessage":"Only executive address can change fees","pc":[472]},{"teal":503,"source":"contracts\\BiatecConfigProvider.algo.ts:173","pc":[473,474]},{"teal":504,"source":"contracts\\BiatecConfigProvider.algo.ts:173","pc":[475]},{"teal":505,"source":"contracts\\BiatecConfigProvider.algo.ts:173","pc":[476,477]},{"teal":506,"source":"contracts\\BiatecConfigProvider.algo.ts:173","pc":[478]},{"teal":507,"source":"contracts\\BiatecConfigProvider.algo.ts:173","pc":[479]},{"teal":510,"source":"contracts\\BiatecConfigProvider.algo.ts:173","errorMessage":"Biatec cannot set fees higher then 50% of lp fees","pc":[480]},{"teal":514,"source":"contracts\\BiatecConfigProvider.algo.ts:174","pc":[481,482]},{"teal":515,"source":"contracts\\BiatecConfigProvider.algo.ts:174","pc":[483,484]},{"teal":516,"source":"contracts\\BiatecConfigProvider.algo.ts:174","pc":[485]},{"teal":517,"source":"contracts\\BiatecConfigProvider.algo.ts:171","pc":[486]},{"teal":522,"source":"contracts\\BiatecConfigProvider.algo.ts:188","pc":[487,488,489]},{"teal":523,"source":"contracts\\BiatecConfigProvider.algo.ts:188","pc":[490]},{"teal":526,"source":"contracts\\BiatecConfigProvider.algo.ts:187","pc":[491,492,493]},{"teal":527,"source":"contracts\\BiatecConfigProvider.algo.ts:187","pc":[494]},{"teal":530,"source":"contracts\\BiatecConfigProvider.algo.ts:186","pc":[495,496,497]},{"teal":531,"source":"contracts\\BiatecConfigProvider.algo.ts:186","pc":[498]},{"teal":534,"source":"contracts\\BiatecConfigProvider.algo.ts:185","pc":[499,500,501]},{"teal":535,"source":"contracts\\BiatecConfigProvider.algo.ts:185","pc":[502,503,504]},{"teal":538,"source":"contracts\\BiatecConfigProvider.algo.ts:184","pc":[505,506,507]},{"teal":539,"source":"contracts\\BiatecConfigProvider.algo.ts:184","pc":[508,509,510]},{"teal":542,"source":"contracts\\BiatecConfigProvider.algo.ts:183","pc":[511,512,513]},{"teal":543,"source":"contracts\\BiatecConfigProvider.algo.ts:183","pc":[514,515,516]},{"teal":546,"source":"contracts\\BiatecConfigProvider.algo.ts:182","pc":[517,518,519]},{"teal":547,"source":"contracts\\BiatecConfigProvider.algo.ts:182","pc":[520]},{"teal":548,"source":"contracts\\BiatecConfigProvider.algo.ts:182","pc":[521]},{"teal":556,"source":"contracts\\BiatecConfigProvider.algo.ts:182","pc":[522,523,524]},{"teal":563,"source":"contracts\\BiatecConfigProvider.algo.ts:191","pc":[525,526]},{"teal":564,"source":"contracts\\BiatecConfigProvider.algo.ts:191","pc":[527]},{"teal":565,"source":"contracts\\BiatecConfigProvider.algo.ts:191","pc":[528]},{"teal":566,"source":"contracts\\BiatecConfigProvider.algo.ts:191","pc":[529]},{"teal":569,"source":"contracts\\BiatecConfigProvider.algo.ts:190","errorMessage":"Only fee executor setup in the config can take the collected fees","pc":[530]},{"teal":581,"source":"contracts\\BiatecConfigProvider.algo.ts:194","pc":[531]},{"teal":582,"source":"contracts\\BiatecConfigProvider.algo.ts:194","pc":[532,533]},{"teal":583,"source":"contracts\\BiatecConfigProvider.algo.ts:194","pc":[534,535]},{"teal":587,"source":"contracts\\BiatecConfigProvider.algo.ts:195","pc":[536,537]},{"teal":588,"source":"contracts\\BiatecConfigProvider.algo.ts:195","pc":[538,539]},{"teal":592,"source":"contracts\\BiatecConfigProvider.algo.ts:196","pc":[540,541]},{"teal":593,"source":"contracts\\BiatecConfigProvider.algo.ts:196","pc":[542,543]},{"teal":597,"source":"contracts\\BiatecConfigProvider.algo.ts:197","pc":[544,545]},{"teal":598,"source":"contracts\\BiatecConfigProvider.algo.ts:197","pc":[546,547]},{"teal":602,"source":"contracts\\BiatecConfigProvider.algo.ts:198","pc":[548,549]},{"teal":603,"source":"contracts\\BiatecConfigProvider.algo.ts:198","pc":[550,551]},{"teal":607,"source":"contracts\\BiatecConfigProvider.algo.ts:199","pc":[552,553]},{"teal":608,"source":"contracts\\BiatecConfigProvider.algo.ts:199","pc":[554,555]},{"teal":612,"source":"contracts\\BiatecConfigProvider.algo.ts:200","pc":[556,557]},{"teal":613,"source":"contracts\\BiatecConfigProvider.algo.ts:200","pc":[558,559]},{"teal":617,"source":"contracts\\BiatecConfigProvider.algo.ts:201","pc":[560]},{"teal":618,"source":"contracts\\BiatecConfigProvider.algo.ts:201","pc":[561,562]},{"teal":621,"source":"contracts\\BiatecConfigProvider.algo.ts:194","pc":[563]},{"teal":622,"source":"contracts\\BiatecConfigProvider.algo.ts:182","pc":[564]},{"teal":627,"source":"contracts\\BiatecConfigProvider.algo.ts:213","pc":[565,566,567,568,569,570]},{"teal":630,"source":"contracts\\BiatecConfigProvider.algo.ts:213","pc":[571,572,573]},{"teal":631,"source":"contracts\\BiatecConfigProvider.algo.ts:213","pc":[574]},{"teal":634,"source":"contracts\\BiatecConfigProvider.algo.ts:213","pc":[575,576,577]},{"teal":635,"source":"contracts\\BiatecConfigProvider.algo.ts:213","pc":[578]},{"teal":638,"source":"contracts\\BiatecConfigProvider.algo.ts:213","pc":[579,580,581]},{"teal":639,"source":"contracts\\BiatecConfigProvider.algo.ts:213","pc":[582]},{"teal":640,"source":"contracts\\BiatecConfigProvider.algo.ts:213","pc":[583]},{"teal":641,"source":"contracts\\BiatecConfigProvider.algo.ts:213","pc":[584]},{"teal":642,"source":"contracts\\BiatecConfigProvider.algo.ts:213","pc":[585]},{"teal":643,"source":"contracts\\BiatecConfigProvider.algo.ts:213","pc":[586]},{"teal":654,"source":"contracts\\BiatecConfigProvider.algo.ts:213","pc":[587,588,589]},{"teal":661,"source":"contracts\\BiatecConfigProvider.algo.ts:215","pc":[590,591]},{"teal":662,"source":"contracts\\BiatecConfigProvider.algo.ts:215","pc":[592]},{"teal":663,"source":"contracts\\BiatecConfigProvider.algo.ts:215","pc":[593]},{"teal":664,"source":"contracts\\BiatecConfigProvider.algo.ts:215","pc":[594]},{"teal":667,"source":"contracts\\BiatecConfigProvider.algo.ts:214","errorMessage":"Only fee executor setup in the config can take the collected fees","pc":[595]},{"teal":671,"source":"contracts\\BiatecConfigProvider.algo.ts:219","pc":[596,597]},{"teal":672,"source":"contracts\\BiatecConfigProvider.algo.ts:219","pc":[598,599]},{"teal":673,"source":"contracts\\BiatecConfigProvider.algo.ts:219","pc":[600,601]},{"teal":674,"source":"contracts\\BiatecConfigProvider.algo.ts:219","pc":[602,603,604]},{"teal":678,"source":"contracts\\BiatecConfigProvider.algo.ts:221","pc":[605,606]},{"teal":679,"source":"contracts\\BiatecConfigProvider.algo.ts:213","pc":[607]},{"teal":688,"source":"contracts\\BiatecConfigProvider.algo.ts:230","pc":[608,609,610]},{"teal":693,"source":"contracts\\BiatecConfigProvider.algo.ts:231","pc":[611,612]},{"teal":694,"source":"contracts\\BiatecConfigProvider.algo.ts:231","pc":[613]},{"teal":695,"source":"contracts\\BiatecConfigProvider.algo.ts:231","pc":[614]},{"teal":696,"source":"contracts\\BiatecConfigProvider.algo.ts:231","pc":[615,616,617]},{"teal":705,"source":"contracts\\BiatecConfigProvider.algo.ts:232","pc":[618]},{"teal":706,"source":"contracts\\BiatecConfigProvider.algo.ts:232","pc":[619]},{"teal":707,"source":"contracts\\BiatecConfigProvider.algo.ts:232","pc":[620,621]},{"teal":711,"source":"contracts\\BiatecConfigProvider.algo.ts:233","pc":[622,623]},{"teal":712,"source":"contracts\\BiatecConfigProvider.algo.ts:233","pc":[624,625]},{"teal":716,"source":"contracts\\BiatecConfigProvider.algo.ts:234","pc":[626,627]},{"teal":717,"source":"contracts\\BiatecConfigProvider.algo.ts:234","pc":[628,629]},{"teal":721,"source":"contracts\\BiatecConfigProvider.algo.ts:235","pc":[630]},{"teal":722,"source":"contracts\\BiatecConfigProvider.algo.ts:235","pc":[631,632]},{"teal":725,"source":"contracts\\BiatecConfigProvider.algo.ts:232","pc":[633]},{"teal":726,"source":"contracts\\BiatecConfigProvider.algo.ts:231","pc":[634,635,636]},{"teal":736,"source":"contracts\\BiatecConfigProvider.algo.ts:238","pc":[637]},{"teal":737,"source":"contracts\\BiatecConfigProvider.algo.ts:238","pc":[638,639]},{"teal":738,"source":"contracts\\BiatecConfigProvider.algo.ts:238","pc":[640,641]},{"teal":742,"source":"contracts\\BiatecConfigProvider.algo.ts:239","pc":[642,643]},{"teal":743,"source":"contracts\\BiatecConfigProvider.algo.ts:239","pc":[644,645]},{"teal":747,"source":"contracts\\BiatecConfigProvider.algo.ts:240","pc":[646,647]},{"teal":748,"source":"contracts\\BiatecConfigProvider.algo.ts:240","pc":[648,649]},{"teal":752,"source":"contracts\\BiatecConfigProvider.algo.ts:241","pc":[650,651]},{"teal":753,"source":"contracts\\BiatecConfigProvider.algo.ts:241","pc":[652,653]},{"teal":757,"source":"contracts\\BiatecConfigProvider.algo.ts:242","pc":[654]},{"teal":758,"source":"contracts\\BiatecConfigProvider.algo.ts:242","pc":[655,656]},{"teal":761,"source":"contracts\\BiatecConfigProvider.algo.ts:238","pc":[657]},{"teal":764,"source":"contracts\\BiatecConfigProvider.algo.ts:230","pc":[658]},{"teal":767,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[659,660,661,662,663,664]},{"teal":768,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[665,666,667]},{"teal":769,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[668,669,670,671]},{"teal":772,"source":"contracts\\BiatecConfigProvider.algo.ts:6","errorMessage":"this contract does not implement the given ABI method for create NoOp","pc":[672]},{"teal":775,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[673,674,675,676,677,678]},{"teal":776,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[679,680,681,682,683,684]},{"teal":777,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[685,686,687,688,689,690]},{"teal":778,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[691,692,693,694,695,696]},{"teal":779,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[697,698,699,700,701,702]},{"teal":780,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[703,704,705,706,707,708]},{"teal":781,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[709,710,711,712,713,714]},{"teal":782,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[715,716,717,718,719,720]},{"teal":783,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[721,722,723,724,725,726]},{"teal":784,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[727,728,729,730,731,732]},{"teal":785,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[733,734,735,736,737,738]},{"teal":786,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[739,740,741]},{"teal":787,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[742,743,744,745,746,747,748,749,750,751,752,753,754,755,756,757,758,759,760,761,762,763,764,765]},{"teal":790,"source":"contracts\\BiatecConfigProvider.algo.ts:6","errorMessage":"this contract does not implement the given ABI method for call NoOp","pc":[766]},{"teal":793,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[767,768,769,770,771,772]},{"teal":794,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[773,774,775]},{"teal":795,"source":"contracts\\BiatecConfigProvider.algo.ts:6","pc":[776,777,778,779]},{"teal":798,"source":"contracts\\BiatecConfigProvider.algo.ts:6","errorMessage":"this contract does not implement the given ABI method for call UpdateApplication","pc":[780]}],"pcOffsetMethod":"none"},"clear":{"sourceInfo":[],"pcOffsetMethod":"none"}},"source":{"approval":"I3ByYWdtYSB2ZXJzaW9uIDEwCmludGNibG9jayAxIDMyIDAKYnl0ZWNibG9jayAweDc1IDB4NjU2NiAweDY1IDB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAzYjlhY2EwMCAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIgMHg3MzYzNzY2NTcyIDB4NjcgMHg3MyAweDY2IDB4NjkgMHg3MAoKLy8gVGhpcyBURUFMIHdhcyBnZW5lcmF0ZWQgYnkgVEVBTFNjcmlwdCB2MC4xMDYuMgovLyBodHRwczovL2dpdGh1Yi5jb20vYWxnb3JhbmRmb3VuZGF0aW9uL1RFQUxTY3JpcHQKCi8vIFRoaXMgY29udHJhY3QgaXMgY29tcGxpYW50IHdpdGggYW5kL29yIGltcGxlbWVudHMgdGhlIGZvbGxvd2luZyBBUkNzOiBbIEFSQzQgXQoKLy8gVGhlIGZvbGxvd2luZyB0ZW4gbGluZXMgb2YgVEVBTCBoYW5kbGUgaW5pdGlhbCBwcm9ncmFtIGZsb3cKLy8gVGhpcyBwYXR0ZXJuIGlzIHVzZWQgdG8gbWFrZSBpdCBlYXN5IGZvciBhbnlvbmUgdG8gcGFyc2UgdGhlIHN0YXJ0IG9mIHRoZSBwcm9ncmFtIGFuZCBkZXRlcm1pbmUgaWYgYSBzcGVjaWZpYyBhY3Rpb24gaXMgYWxsb3dlZAovLyBIZXJlLCBhY3Rpb24gcmVmZXJzIHRvIHRoZSBPbkNvbXBsZXRlIGluIGNvbWJpbmF0aW9uIHdpdGggd2hldGhlciB0aGUgYXBwIGlzIGJlaW5nIGNyZWF0ZWQgb3IgY2FsbGVkCi8vIEV2ZXJ5IHBvc3NpYmxlIGFjdGlvbiBmb3IgdGhpcyBjb250cmFjdCBpcyByZXByZXNlbnRlZCBpbiB0aGUgc3dpdGNoIHN0YXRlbWVudAovLyBJZiB0aGUgYWN0aW9uIGlzIG5vdCBpbXBsZW1lbnRlZCBpbiB0aGUgY29udHJhY3QsIGl0cyByZXNwZWN0aXZlIGJyYW5jaCB3aWxsIGJlICIqTk9UX0lNUExFTUVOVEVEIiB3aGljaCBqdXN0IGNvbnRhaW5zICJlcnIiCnR4biBBcHBsaWNhdGlvbklECiEKcHVzaGludCA2CioKdHhuIE9uQ29tcGxldGlvbgorCnN3aXRjaCAqY2FsbF9Ob09wICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpjYWxsX1VwZGF0ZUFwcGxpY2F0aW9uICpOT1RfSU1QTEVNRU5URUQgKmNyZWF0ZV9Ob09wICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRAoKKk5PVF9JTVBMRU1FTlRFRDoKCS8vIFRoZSByZXF1ZXN0ZWQgYWN0aW9uIGlzIG5vdCBpbXBsZW1lbnRlZCBpbiB0aGlzIGNvbnRyYWN0LiBBcmUgeW91IHVzaW5nIHRoZSBjb3JyZWN0IE9uQ29tcGxldGU/IERpZCB5b3Ugc2V0IHlvdXIgYXBwIElEPwoJZXJyCgovLyBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoqYWJpX3JvdXRlX2NyZWF0ZUFwcGxpY2F0aW9uOgoJLy8gZXhlY3V0ZSBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoJY2FsbHN1YiBjcmVhdGVBcHBsaWNhdGlvbgoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gY3JlYXRlQXBwbGljYXRpb24oKTogdm9pZAovLwovLyBJbml0aWFsIHNldHVwCmNyZWF0ZUFwcGxpY2F0aW9uOgoJcHJvdG8gMCAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NjEKCS8vIHRoaXMudmVyc2lvbi52YWx1ZSA9IHZlcnNpb24KCWJ5dGVjIDUgLy8gICJzY3ZlciIKCXB1c2hieXRlcyAiQklBVEVDLUNPTkZJRy0wMS0wMi0wMSIKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NjIKCS8vIHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZS52YWx1ZSA9IHRoaXMudHhuLnNlbmRlcgoJYnl0ZWMgMiAvLyAgImUiCgl0eG4gU2VuZGVyCglhcHBfZ2xvYmFsX3B1dAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjYzCgkvLyB0aGlzLmFkZHJlc3NHb3YudmFsdWUgPSB0aGlzLnR4bi5zZW5kZXIKCWJ5dGVjIDYgLy8gICJnIgoJdHhuIFNlbmRlcgoJYXBwX2dsb2JhbF9wdXQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo2NAoJLy8gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSA9IHRoaXMudHhuLnNlbmRlcgoJYnl0ZWMgMCAvLyAgInUiCgl0eG4gU2VuZGVyCglhcHBfZ2xvYmFsX3B1dAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjY1CgkvLyB0aGlzLmFkZHJlc3NFeGVjdXRpdmVGZWUudmFsdWUgPSB0aGlzLnR4bi5zZW5kZXIKCWJ5dGVjIDEgLy8gICJlZiIKCXR4biBTZW5kZXIKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NjYKCS8vIHRoaXMuc3VzcGVuZGVkLnZhbHVlID0gMAoJYnl0ZWMgNyAvLyAgInMiCglpbnRjIDIgLy8gMAoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gdXBkYXRlQXBwbGljYXRpb24oYnl0ZVtdKXZvaWQKKmFiaV9yb3V0ZV91cGRhdGVBcHBsaWNhdGlvbjoKCS8vIG5ld1ZlcnNpb246IGJ5dGVbXQoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZXh0cmFjdCAyIDAKCgkvLyBleGVjdXRlIHVwZGF0ZUFwcGxpY2F0aW9uKGJ5dGVbXSl2b2lkCgljYWxsc3ViIHVwZGF0ZUFwcGxpY2F0aW9uCglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyB1cGRhdGVBcHBsaWNhdGlvbihuZXdWZXJzaW9uOiBieXRlcyk6IHZvaWQKLy8KLy8gYWRkcmVzc1VkcGF0ZXIgZnJvbSBnbG9iYWwgYmlhdGVjIGNvbmZpZ3VyYXRpb24gaXMgYWxsb3dlZCB0byB1cGRhdGUgYXBwbGljYXRpb24KdXBkYXRlQXBwbGljYXRpb246Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo3MwoJLy8gYXNzZXJ0KAoJLy8gICAgICAgdGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLAoJLy8gICAgICAgJ09ubHkgYWRkcmVzc1VkcGF0ZXIgc2V0dXAgaW4gdGhlIGNvbmZpZyBjYW4gdXBkYXRlIGFwcGxpY2F0aW9uJwoJLy8gICAgICkKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSBhZGRyZXNzVWRwYXRlciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB1cGRhdGUgYXBwbGljYXRpb24KCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjc3CgkvLyB0aGlzLnZlcnNpb24udmFsdWUgPSBuZXdWZXJzaW9uCglieXRlYyA1IC8vICAic2N2ZXIiCglmcmFtZV9kaWcgLTEgLy8gbmV3VmVyc2lvbjogYnl0ZXMKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIGJvb3RzdHJhcCh1aW50MjU2LHVpbnQ2NCx1aW50NjQpdm9pZAoqYWJpX3JvdXRlX2Jvb3RzdHJhcDoKCS8vIGFwcEJpYXRlY1Bvb2xQcm92aWRlcjogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAzCglidG9pCgoJLy8gYXBwQmlhdGVjSWRlbnRpdHlQcm92aWRlcjogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAyCglidG9pCgoJLy8gYmlhdGVjRmVlOiB1aW50MjU2Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAxIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDIgKGJpYXRlY0ZlZSkgZm9yIGJvb3RzdHJhcCBtdXN0IGJlIGEgdWludDI1NgoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBib290c3RyYXAodWludDI1Nix1aW50NjQsdWludDY0KXZvaWQKCWNhbGxzdWIgYm9vdHN0cmFwCglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBib290c3RyYXAoYmlhdGVjRmVlOiB1aW50MjU2LCBhcHBCaWF0ZWNJZGVudGl0eVByb3ZpZGVyOiBBcHBJRCwgYXBwQmlhdGVjUG9vbFByb3ZpZGVyOiBBcHBJRCk6IHZvaWQKLy8KLy8gU2V0dXAgdGhlIGNvbnRyYWN0Ci8vIEBwYXJhbSBiaWF0ZWNGZWUgQmlhdGVjIGZlZXMKYm9vdHN0cmFwOgoJcHJvdG8gMyAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6ODUKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc1VkcGF0ZXIudmFsdWUsICdPbmx5IHVwZGF0ZXIgY2FuIGNhbGwgYm9vdHN0cmFwIG1ldGhvZCcpCgl0eG4gU2VuZGVyCglieXRlYyAwIC8vICAidSIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgdXBkYXRlciBjYW4gY2FsbCBib290c3RyYXAgbWV0aG9kCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo4NgoJLy8gYXNzZXJ0KGJpYXRlY0ZlZSA8PSAoU0NBTEUgYXMgdWludDI1NikgLyAyLCAnQmlhdGVjIGNhbm5vdCBzZXQgZmVlcyBoaWdoZXIgdGhlbiA1MCUgb2YgbHAgZmVlcycpCglmcmFtZV9kaWcgLTEgLy8gYmlhdGVjRmVlOiB1aW50MjU2CglieXRlYyAzIC8vIDB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAzYjlhY2EwMAoJYnl0ZWMgNCAvLyAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIKCWIvCgliPD0KCgkvLyBCaWF0ZWMgY2Fubm90IHNldCBmZWVzIGhpZ2hlciB0aGVuIDUwJSBvZiBscCBmZWVzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo4NwoJLy8gdGhpcy5iaWF0ZWNGZWUudmFsdWUgPSBiaWF0ZWNGZWUKCWJ5dGVjIDggLy8gICJmIgoJZnJhbWVfZGlnIC0xIC8vIGJpYXRlY0ZlZTogdWludDI1NgoJYXBwX2dsb2JhbF9wdXQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo4OAoJLy8gdGhpcy5hcHBCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLnZhbHVlID0gYXBwQmlhdGVjSWRlbnRpdHlQcm92aWRlcgoJYnl0ZWMgOSAvLyAgImkiCglmcmFtZV9kaWcgLTIgLy8gYXBwQmlhdGVjSWRlbnRpdHlQcm92aWRlcjogQXBwSUQKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6ODkKCS8vIHRoaXMuYXBwQmlhdGVjUG9vbFByb3ZpZGVyLnZhbHVlID0gYXBwQmlhdGVjUG9vbFByb3ZpZGVyCglieXRlYyAxMCAvLyAgInAiCglmcmFtZV9kaWcgLTMgLy8gYXBwQmlhdGVjUG9vbFByb3ZpZGVyOiBBcHBJRAoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QWRkcmVzc1VkcGF0ZXIoYWRkcmVzcyl2b2lkCiphYmlfcm91dGVfc2V0QWRkcmVzc1VkcGF0ZXI6CgkvLyBhOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAxIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDAgKGEpIGZvciBzZXRBZGRyZXNzVWRwYXRlciBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRBZGRyZXNzVWRwYXRlcihhZGRyZXNzKXZvaWQKCWNhbGxzdWIgc2V0QWRkcmVzc1VkcGF0ZXIKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNldEFkZHJlc3NVZHBhdGVyKGE6IEFkZHJlc3MpOiB2b2lkCi8vCi8vIFRvcCBzZWNyZXQgYWNjb3VudCB3aXRoIHdoaWNoIGl0IGlzIHBvc3NpYmxlIHVwZGF0ZSBjb250cmFjdHMgb3IgaWRlbnRpdHkgcHJvdmlkZXIKLy8KLy8gQHBhcmFtIGEgQWRkcmVzcwpzZXRBZGRyZXNzVWRwYXRlcjoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjk4CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgdXBkYXRlciBhZGRyZXNzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgdXBkYXRlciBhZGRyZXNzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo5OQoJLy8gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSA9IGEKCWJ5dGVjIDAgLy8gICJ1IgoJZnJhbWVfZGlnIC0xIC8vIGE6IEFkZHJlc3MKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNldFBhdXNlZCh1aW50NjQpdm9pZAoqYWJpX3JvdXRlX3NldFBhdXNlZDoKCS8vIGE6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJYnRvaQoKCS8vIGV4ZWN1dGUgc2V0UGF1c2VkKHVpbnQ2NCl2b2lkCgljYWxsc3ViIHNldFBhdXNlZAoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gc2V0UGF1c2VkKGE6IHVpbnQ2NCk6IHZvaWQKLy8KLy8gS2lsbCBzd2l0Y2guIEluIHRoZSBleHRyZW1lIGNhc2UgYWxsIHNlcnZpY2VzIChkZXBvc2l0LCB0cmFkaW5nLCB3aXRoZHJhd2FsLCBpZGVudGl0eSBtb2RpZmljYXRpb25zIGFuZCBtb3JlKSBjYW4gYmUgc3VzcGVuZGVkLgovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldFBhdXNlZDoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjEwOAoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSwgJ09ubHkgdXBkYXRlciBjYW4gcGF1c2UgYW5kIHVucGF1c2UgdGhlIGJpYXRlYyBzZXJ2aWNlcycpCgl0eG4gU2VuZGVyCglieXRlYyAwIC8vICAidSIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgdXBkYXRlciBjYW4gcGF1c2UgYW5kIHVucGF1c2UgdGhlIGJpYXRlYyBzZXJ2aWNlcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTA5CgkvLyB0aGlzLnN1c3BlbmRlZC52YWx1ZSA9IGEKCWJ5dGVjIDcgLy8gICJzIgoJZnJhbWVfZGlnIC0xIC8vIGE6IHVpbnQ2NAoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QWRkcmVzc0dvdihhZGRyZXNzKXZvaWQKKmFiaV9yb3V0ZV9zZXRBZGRyZXNzR292OgoJLy8gYTogYWRkcmVzcwoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZHVwCglsZW4KCWludGMgMSAvLyAzMgoJPT0KCgkvLyBhcmd1bWVudCAwIChhKSBmb3Igc2V0QWRkcmVzc0dvdiBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRBZGRyZXNzR292KGFkZHJlc3Mpdm9pZAoJY2FsbHN1YiBzZXRBZGRyZXNzR292CglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBzZXRBZGRyZXNzR292KGE6IEFkZHJlc3MpOiB2b2lkCi8vCi8vIEV4ZWN1dGlvbiBhZGRyZXNzIHdpdGggd2hpY2ggaXQgaXMgcG9zc2libGUgdG8gb3B0IGluIGZvciBnb3Zlcm5hbmNlCi8vCi8vIEBwYXJhbSBhIEFkZHJlc3MKc2V0QWRkcmVzc0dvdjoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjExOAoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSwgJ09ubHkgdXBkYXRlciBjYW4gY2hhbmdlIGdvdiBhZGRyZXNzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgZ292IGFkZHJlc3MKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjExOQoJLy8gdGhpcy5hZGRyZXNzR292LnZhbHVlID0gYQoJYnl0ZWMgNiAvLyAgImciCglmcmFtZV9kaWcgLTEgLy8gYTogQWRkcmVzcwoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QWRkcmVzc0V4ZWN1dGl2ZShhZGRyZXNzKXZvaWQKKmFiaV9yb3V0ZV9zZXRBZGRyZXNzRXhlY3V0aXZlOgoJLy8gYTogYWRkcmVzcwoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZHVwCglsZW4KCWludGMgMSAvLyAzMgoJPT0KCgkvLyBhcmd1bWVudCAwIChhKSBmb3Igc2V0QWRkcmVzc0V4ZWN1dGl2ZSBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRBZGRyZXNzRXhlY3V0aXZlKGFkZHJlc3Mpdm9pZAoJY2FsbHN1YiBzZXRBZGRyZXNzRXhlY3V0aXZlCglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBzZXRBZGRyZXNzRXhlY3V0aXZlKGE6IEFkZHJlc3MpOiB2b2lkCi8vCi8vIEV4ZWN1dGlvbiBhZGRyZXNzIHdpdGggd2hpY2ggaXQgaXMgcG9zc2libGUgdG8gY2hhbmdlIGdsb2JhbCBiaWF0ZWMgZmVlcwovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldEFkZHJlc3NFeGVjdXRpdmU6Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxMjgKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc1VkcGF0ZXIudmFsdWUsICdPbmx5IHVwZGF0ZXIgY2FuIGNoYW5nZSBhZGRyZXNzRXhlY3V0aXZlJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgYWRkcmVzc0V4ZWN1dGl2ZQoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTI5CgkvLyB0aGlzLmFkZHJlc3NFeGVjdXRpdmUudmFsdWUgPSBhCglieXRlYyAyIC8vICAiZSIKCWZyYW1lX2RpZyAtMSAvLyBhOiBBZGRyZXNzCglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRBZGRyZXNzRXhlY3V0aXZlRmVlKGFkZHJlc3Mpdm9pZAoqYWJpX3JvdXRlX3NldEFkZHJlc3NFeGVjdXRpdmVGZWU6CgkvLyBhOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAxIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDAgKGEpIGZvciBzZXRBZGRyZXNzRXhlY3V0aXZlRmVlIG11c3QgYmUgYSBhZGRyZXNzCglhc3NlcnQKCgkvLyBleGVjdXRlIHNldEFkZHJlc3NFeGVjdXRpdmVGZWUoYWRkcmVzcyl2b2lkCgljYWxsc3ViIHNldEFkZHJlc3NFeGVjdXRpdmVGZWUKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNldEFkZHJlc3NFeGVjdXRpdmVGZWUoYTogQWRkcmVzcyk6IHZvaWQKLy8KLy8gRXhlY3V0aW9uIGZlZSBhZGRyZXNzIGlzIGFkZHJlc3Mgd2hpY2ggY2FuIHRha2UgZmVlcyBmcm9tIHBvb2xzLgovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldEFkZHJlc3NFeGVjdXRpdmVGZWU6Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxMzgKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZS52YWx1ZSwgJ09ubHkgYWRkcmVzc0V4ZWN1dGl2ZSBjYW4gY2hhbmdlIGZlZSBleGVjdXRvciBhZGRyZXNzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDIgLy8gICJlIgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSBhZGRyZXNzRXhlY3V0aXZlIGNhbiBjaGFuZ2UgZmVlIGV4ZWN1dG9yIGFkZHJlc3MKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjEzOQoJLy8gdGhpcy5hZGRyZXNzRXhlY3V0aXZlRmVlLnZhbHVlID0gYQoJYnl0ZWMgMSAvLyAgImVmIgoJZnJhbWVfZGlnIC0xIC8vIGE6IEFkZHJlc3MKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNldEJpYXRlY0lkZW50aXR5KHVpbnQ2NCl2b2lkCiphYmlfcm91dGVfc2V0QmlhdGVjSWRlbnRpdHk6CgkvLyBhOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWJ0b2kKCgkvLyBleGVjdXRlIHNldEJpYXRlY0lkZW50aXR5KHVpbnQ2NCl2b2lkCgljYWxsc3ViIHNldEJpYXRlY0lkZW50aXR5CglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBzZXRCaWF0ZWNJZGVudGl0eShhOiBBcHBJRCk6IHZvaWQKLy8KLy8gQXBwIGlkZW50aXR5IHNldHRlcgovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldEJpYXRlY0lkZW50aXR5OgoJcHJvdG8gMSAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTQ4CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgYXBwSWRlbnRpdHlQcm92aWRlcicpCgl0eG4gU2VuZGVyCglieXRlYyAwIC8vICAidSIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgdXBkYXRlciBjYW4gY2hhbmdlIGFwcElkZW50aXR5UHJvdmlkZXIKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjE0OQoJLy8gdGhpcy5hcHBCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLnZhbHVlID0gYQoJYnl0ZWMgOSAvLyAgImkiCglmcmFtZV9kaWcgLTEgLy8gYTogQXBwSUQKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNldEJpYXRlY1Bvb2wodWludDY0KXZvaWQKKmFiaV9yb3V0ZV9zZXRCaWF0ZWNQb29sOgoJLy8gYTogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglidG9pCgoJLy8gZXhlY3V0ZSBzZXRCaWF0ZWNQb29sKHVpbnQ2NCl2b2lkCgljYWxsc3ViIHNldEJpYXRlY1Bvb2wKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNldEJpYXRlY1Bvb2woYTogQXBwSUQpOiB2b2lkCi8vCi8vIEFwcCBpZGVudGl0eSBzZXR0ZXIKLy8KLy8gQHBhcmFtIGEgQWRkcmVzcwpzZXRCaWF0ZWNQb29sOgoJcHJvdG8gMSAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTU4CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgYXBwUG9vbFByb3ZpZGVyJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgYXBwUG9vbFByb3ZpZGVyCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxNTkKCS8vIHRoaXMuYXBwQmlhdGVjUG9vbFByb3ZpZGVyLnZhbHVlID0gYQoJYnl0ZWMgMTAgLy8gICJwIgoJZnJhbWVfZGlnIC0xIC8vIGE6IEFwcElECglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRCaWF0ZWNGZWUodWludDI1Nil2b2lkCiphYmlfcm91dGVfc2V0QmlhdGVjRmVlOgoJLy8gYmlhdGVjRmVlOiB1aW50MjU2Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAxIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDAgKGJpYXRlY0ZlZSkgZm9yIHNldEJpYXRlY0ZlZSBtdXN0IGJlIGEgdWludDI1NgoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRCaWF0ZWNGZWUodWludDI1Nil2b2lkCgljYWxsc3ViIHNldEJpYXRlY0ZlZQoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gc2V0QmlhdGVjRmVlKGJpYXRlY0ZlZTogdWludDI1Nik6IHZvaWQKLy8KLy8gRmVlcyBpbiA5IGRlY2ltYWxzLiAxXzAwMF8wMDBfMDAwID0gMTAwJQovLyBGZWVzIGluIDkgZGVjaW1hbHMuIDEwXzAwMF8wMDAgPSAxJQovLyBGZWVzIGluIDkgZGVjaW1hbHMuIDEwMF8wMDAgPSAwLDAxJQovLwovLyBGZWVzIGFyZSByZXNwZWN0ZnVsIGZyb20gdGhlIGFsbCBmZWVzIHRha2VuIHRvIHRoZSBMUCBwcm92aWRlcnMuIElmIExQcyBjaGFyZ2UgMSUgZmVlLCBhbmQgYmlhdGVjIGNoYXJnZXMgMTAlIGZlZSwgTFAgd2lsbCByZWNlaXZlIDAuMDklIGZlZSBhbmQgYmlhdGVjIDAuMDElIGZlZQovLwovLyBAcGFyYW0gYmlhdGVjRmVlIEZlZQpzZXRCaWF0ZWNGZWU6Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxNzIKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZS52YWx1ZSwgJ09ubHkgZXhlY3V0aXZlIGFkZHJlc3MgY2FuIGNoYW5nZSBmZWVzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDIgLy8gICJlIgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSBleGVjdXRpdmUgYWRkcmVzcyBjYW4gY2hhbmdlIGZlZXMKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjE3MwoJLy8gYXNzZXJ0KGJpYXRlY0ZlZSA8PSAoU0NBTEUgYXMgdWludDI1NikgLyAyLCAnQmlhdGVjIGNhbm5vdCBzZXQgZmVlcyBoaWdoZXIgdGhlbiA1MCUgb2YgbHAgZmVlcycpCglmcmFtZV9kaWcgLTEgLy8gYmlhdGVjRmVlOiB1aW50MjU2CglieXRlYyAzIC8vIDB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAzYjlhY2EwMAoJYnl0ZWMgNCAvLyAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIKCWIvCgliPD0KCgkvLyBCaWF0ZWMgY2Fubm90IHNldCBmZWVzIGhpZ2hlciB0aGVuIDUwJSBvZiBscCBmZWVzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxNzQKCS8vIHRoaXMuYmlhdGVjRmVlLnZhbHVlID0gYmlhdGVjRmVlCglieXRlYyA4IC8vICAiZiIKCWZyYW1lX2RpZyAtMSAvLyBiaWF0ZWNGZWU6IHVpbnQyNTYKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24oYnl0ZVtdLGJ5dGVbXSxieXRlW10sdWludDY0LHVpbnQ2NCx1aW50NjQpdm9pZAoqYWJpX3JvdXRlX3NlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb246CgkvLyB2b3RlS2V5RGlsdXRpb246IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgNgoJYnRvaQoKCS8vIHZvdGVMYXN0OiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDUKCWJ0b2kKCgkvLyB2b3RlRmlyc3Q6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgNAoJYnRvaQoKCS8vIHN0YXRlUHJvb2ZQSzogYnl0ZVtdCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAzCglleHRyYWN0IDIgMAoKCS8vIHNlbGVjdGlvblBLOiBieXRlW10KCXR4bmEgQXBwbGljYXRpb25BcmdzIDIKCWV4dHJhY3QgMiAwCgoJLy8gdm90ZVBLOiBieXRlW10KCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWV4dHJhY3QgMiAwCgoJLy8gZXhlY3V0ZSBzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uKGJ5dGVbXSxieXRlW10sYnl0ZVtdLHVpbnQ2NCx1aW50NjQsdWludDY0KXZvaWQKCWNhbGxzdWIgc2VuZE9ubGluZUtleVJlZ2lzdHJhdGlvbgoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gc2VuZE9ubGluZUtleVJlZ2lzdHJhdGlvbih2b3RlUEs6IGJ5dGVzLCBzZWxlY3Rpb25QSzogYnl0ZXMsIHN0YXRlUHJvb2ZQSzogYnl0ZXMsIHZvdGVGaXJzdDogdWludDY0LCB2b3RlTGFzdDogdWludDY0LCB2b3RlS2V5RGlsdXRpb246IHVpbnQ2NCk6IHZvaWQKLy8KLy8gYWRkcmVzc0V4ZWN1dGl2ZUZlZSBjYW4gcGVyZm9tIGtleSByZWdpc3RyYXRpb24gZm9yIHRoaXMgTFAgcG9vbAovLwovLyBPbmx5IGFkZHJlc3NFeGVjdXRpdmVGZWUgaXMgYWxsb3dlZCB0byBleGVjdXRlIHRoaXMgbWV0aG9kLgpzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uOgoJcHJvdG8gNiAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTkwCgkvLyBhc3NlcnQoCgkvLyAgICAgICB0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZUZlZS52YWx1ZSwKCS8vICAgICAgICdPbmx5IGZlZSBleGVjdXRvciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB0YWtlIHRoZSBjb2xsZWN0ZWQgZmVlcycKCS8vICAgICApCgl0eG4gU2VuZGVyCglieXRlYyAxIC8vICAiZWYiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBPbmx5IGZlZSBleGVjdXRvciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB0YWtlIHRoZSBjb2xsZWN0ZWQgZmVlcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTk0CgkvLyBzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uKHsKCS8vICAgICAgIHNlbGVjdGlvblBLOiBzZWxlY3Rpb25QSywKCS8vICAgICAgIHN0YXRlUHJvb2ZQSzogc3RhdGVQcm9vZlBLLAoJLy8gICAgICAgdm90ZUZpcnN0OiB2b3RlRmlyc3QsCgkvLyAgICAgICB2b3RlS2V5RGlsdXRpb246IHZvdGVLZXlEaWx1dGlvbiwKCS8vICAgICAgIHZvdGVMYXN0OiB2b3RlTGFzdCwKCS8vICAgICAgIHZvdGVQSzogdm90ZVBLLAoJLy8gICAgICAgZmVlOiAwLAoJLy8gICAgIH0pCglpdHhuX2JlZ2luCglwdXNoaW50IDIgLy8ga2V5cmVnCglpdHhuX2ZpZWxkIFR5cGVFbnVtCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTk1CgkvLyBzZWxlY3Rpb25QSzogc2VsZWN0aW9uUEsKCWZyYW1lX2RpZyAtMiAvLyBzZWxlY3Rpb25QSzogYnl0ZXMKCWl0eG5fZmllbGQgU2VsZWN0aW9uUEsKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxOTYKCS8vIHN0YXRlUHJvb2ZQSzogc3RhdGVQcm9vZlBLCglmcmFtZV9kaWcgLTMgLy8gc3RhdGVQcm9vZlBLOiBieXRlcwoJaXR4bl9maWVsZCBTdGF0ZVByb29mUEsKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxOTcKCS8vIHZvdGVGaXJzdDogdm90ZUZpcnN0CglmcmFtZV9kaWcgLTQgLy8gdm90ZUZpcnN0OiB1aW50NjQKCWl0eG5fZmllbGQgVm90ZUZpcnN0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTk4CgkvLyB2b3RlS2V5RGlsdXRpb246IHZvdGVLZXlEaWx1dGlvbgoJZnJhbWVfZGlnIC02IC8vIHZvdGVLZXlEaWx1dGlvbjogdWludDY0CglpdHhuX2ZpZWxkIFZvdGVLZXlEaWx1dGlvbgoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjE5OQoJLy8gdm90ZUxhc3Q6IHZvdGVMYXN0CglmcmFtZV9kaWcgLTUgLy8gdm90ZUxhc3Q6IHVpbnQ2NAoJaXR4bl9maWVsZCBWb3RlTGFzdAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIwMAoJLy8gdm90ZVBLOiB2b3RlUEsKCWZyYW1lX2RpZyAtMSAvLyB2b3RlUEs6IGJ5dGVzCglpdHhuX2ZpZWxkIFZvdGVQSwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIwMQoJLy8gZmVlOiAwCglpbnRjIDIgLy8gMAoJaXR4bl9maWVsZCBGZWUKCgkvLyBTdWJtaXQgaW5uZXIgdHJhbnNhY3Rpb24KCWl0eG5fc3VibWl0CglyZXRzdWIKCi8vIHdpdGhkcmF3RXhjZXNzQXNzZXRzKHVpbnQ2NCx1aW50NjQpdWludDY0CiphYmlfcm91dGVfd2l0aGRyYXdFeGNlc3NBc3NldHM6CgkvLyBUaGUgQUJJIHJldHVybiBwcmVmaXgKCXB1c2hieXRlcyAweDE1MWY3Yzc1CgoJLy8gYW1vdW50OiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDIKCWJ0b2kKCgkvLyBhc3NldDogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglidG9pCgoJLy8gZXhlY3V0ZSB3aXRoZHJhd0V4Y2Vzc0Fzc2V0cyh1aW50NjQsdWludDY0KXVpbnQ2NAoJY2FsbHN1YiB3aXRoZHJhd0V4Y2Vzc0Fzc2V0cwoJaXRvYgoJY29uY2F0Cglsb2cKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHdpdGhkcmF3RXhjZXNzQXNzZXRzKGFzc2V0OiBBc3NldElELCBhbW91bnQ6IHVpbnQ2NCk6IHVpbnQ2NAovLwovLyBJZiBzb21lb25lIGRlcG9zaXRzIGV4Y2VzcyBhc3NldHMgdG8gdGhpcyBzbWFydCBjb250cmFjdCBiaWF0ZWMgY2FuIHVzZSB0aGVtLgovLwovLyBPbmx5IGFkZHJlc3NFeGVjdXRpdmVGZWUgaXMgYWxsb3dlZCB0byBleGVjdXRlIHRoaXMgbWV0aG9kLgovLwovLyBAcGFyYW0gYXNzZXQgQXNzZXQgdG8gd2l0aGRyYXcuIElmIG5hdGl2ZSB0b2tlbiwgdGhlbiB6ZXJvCi8vIEBwYXJhbSBhbW91bnQgQW1vdW50IG9mIHRoZSBhc3NldCB0byBiZSB3aXRoZHJhd24Kd2l0aGRyYXdFeGNlc3NBc3NldHM6Cglwcm90byAyIDEKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMTQKCS8vIGFzc2VydCgKCS8vICAgICAgIHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzRXhlY3V0aXZlRmVlLnZhbHVlLAoJLy8gICAgICAgJ09ubHkgZmVlIGV4ZWN1dG9yIHNldHVwIGluIHRoZSBjb25maWcgY2FuIHRha2UgdGhlIGNvbGxlY3RlZCBmZWVzJwoJLy8gICAgICkKCXR4biBTZW5kZXIKCWJ5dGVjIDEgLy8gICJlZiIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgZmVlIGV4ZWN1dG9yIHNldHVwIGluIHRoZSBjb25maWcgY2FuIHRha2UgdGhlIGNvbGxlY3RlZCBmZWVzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMTkKCS8vIHRoaXMuZG9BeGZlcih0aGlzLnR4bi5zZW5kZXIsIGFzc2V0LCBhbW91bnQpCglmcmFtZV9kaWcgLTIgLy8gYW1vdW50OiB1aW50NjQKCWZyYW1lX2RpZyAtMSAvLyBhc3NldDogQXNzZXRJRAoJdHhuIFNlbmRlcgoJY2FsbHN1YiBkb0F4ZmVyCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjIxCgkvLyByZXR1cm4gYW1vdW50OwoJZnJhbWVfZGlnIC0yIC8vIGFtb3VudDogdWludDY0CglyZXRzdWIKCi8vIGRvQXhmZXIocmVjZWl2ZXI6IEFkZHJlc3MsIGFzc2V0OiBBc3NldElELCBhbW91bnQ6IHVpbnQ2NCk6IHZvaWQKLy8KLy8gRXhlY3V0ZXMgeGZlciBvZiBwYXkgcGF5bWVudCBtZXRob2RzIHRvIHNwZWNpZmllZCByZWNlaXZlciBmcm9tIHNtYXJ0IGNvbnRyYWN0IGFnZ3JlZ2F0ZWQgYWNjb3VudCB3aXRoIHNwZWNpZmllZCBhc3NldCBhbmQgYW1vdW50IGluIHRva2VucyBkZWNpbWFscwovLyBAcGFyYW0gcmVjZWl2ZXIgUmVjZWl2ZXIKLy8gQHBhcmFtIGFzc2V0IEFzc2V0LiBaZXJvIGZvciBhbGdvCi8vIEBwYXJhbSBhbW91bnQgQW1vdW50IHRvIHRyYW5zZmVyCmRvQXhmZXI6Cglwcm90byAzIDAKCgkvLyAqaWYwX2NvbmRpdGlvbgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjMxCgkvLyBhc3NldC5pZCA9PT0gMAoJZnJhbWVfZGlnIC0yIC8vIGFzc2V0OiBBc3NldElECglpbnRjIDIgLy8gMAoJPT0KCWJ6ICppZjBfZWxzZQoKCS8vICppZjBfY29uc2VxdWVudAoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjMyCgkvLyBzZW5kUGF5bWVudCh7CgkvLyAgICAgICAgIHJlY2VpdmVyOiByZWNlaXZlciwKCS8vICAgICAgICAgYW1vdW50OiBhbW91bnQsCgkvLyAgICAgICAgIGZlZTogMCwKCS8vICAgICAgIH0pCglpdHhuX2JlZ2luCglpbnRjIDAgLy8gIHBheQoJaXR4bl9maWVsZCBUeXBlRW51bQoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIzMwoJLy8gcmVjZWl2ZXI6IHJlY2VpdmVyCglmcmFtZV9kaWcgLTEgLy8gcmVjZWl2ZXI6IEFkZHJlc3MKCWl0eG5fZmllbGQgUmVjZWl2ZXIKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMzQKCS8vIGFtb3VudDogYW1vdW50CglmcmFtZV9kaWcgLTMgLy8gYW1vdW50OiB1aW50NjQKCWl0eG5fZmllbGQgQW1vdW50CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjM1CgkvLyBmZWU6IDAKCWludGMgMiAvLyAwCglpdHhuX2ZpZWxkIEZlZQoKCS8vIFN1Ym1pdCBpbm5lciB0cmFuc2FjdGlvbgoJaXR4bl9zdWJtaXQKCWIgKmlmMF9lbmQKCippZjBfZWxzZToKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIzOAoJLy8gc2VuZEFzc2V0VHJhbnNmZXIoewoJLy8gICAgICAgICBhc3NldFJlY2VpdmVyOiByZWNlaXZlciwKCS8vICAgICAgICAgeGZlckFzc2V0OiBhc3NldCwKCS8vICAgICAgICAgYXNzZXRBbW91bnQ6IGFtb3VudCwKCS8vICAgICAgICAgZmVlOiAwLAoJLy8gICAgICAgfSkKCWl0eG5fYmVnaW4KCXB1c2hpbnQgNCAvLyBheGZlcgoJaXR4bl9maWVsZCBUeXBlRW51bQoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIzOQoJLy8gYXNzZXRSZWNlaXZlcjogcmVjZWl2ZXIKCWZyYW1lX2RpZyAtMSAvLyByZWNlaXZlcjogQWRkcmVzcwoJaXR4bl9maWVsZCBBc3NldFJlY2VpdmVyCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjQwCgkvLyB4ZmVyQXNzZXQ6IGFzc2V0CglmcmFtZV9kaWcgLTIgLy8gYXNzZXQ6IEFzc2V0SUQKCWl0eG5fZmllbGQgWGZlckFzc2V0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjQxCgkvLyBhc3NldEFtb3VudDogYW1vdW50CglmcmFtZV9kaWcgLTMgLy8gYW1vdW50OiB1aW50NjQKCWl0eG5fZmllbGQgQXNzZXRBbW91bnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyNDIKCS8vIGZlZTogMAoJaW50YyAyIC8vIDAKCWl0eG5fZmllbGQgRmVlCgoJLy8gU3VibWl0IGlubmVyIHRyYW5zYWN0aW9uCglpdHhuX3N1Ym1pdAoKKmlmMF9lbmQ6CglyZXRzdWIKCipjcmVhdGVfTm9PcDoKCXB1c2hieXRlcyAweGI4NDQ3YjM2IC8vIG1ldGhvZCAiY3JlYXRlQXBwbGljYXRpb24oKXZvaWQiCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAwCgltYXRjaCAqYWJpX3JvdXRlX2NyZWF0ZUFwcGxpY2F0aW9uCgoJLy8gdGhpcyBjb250cmFjdCBkb2VzIG5vdCBpbXBsZW1lbnQgdGhlIGdpdmVuIEFCSSBtZXRob2QgZm9yIGNyZWF0ZSBOb09wCgllcnIKCipjYWxsX05vT3A6CglwdXNoYnl0ZXMgMHg0OTVjZTdlZCAvLyBtZXRob2QgImJvb3RzdHJhcCh1aW50MjU2LHVpbnQ2NCx1aW50NjQpdm9pZCIKCXB1c2hieXRlcyAweGJmYzIwODYwIC8vIG1ldGhvZCAic2V0QWRkcmVzc1VkcGF0ZXIoYWRkcmVzcyl2b2lkIgoJcHVzaGJ5dGVzIDB4MGNkYzEwZmMgLy8gbWV0aG9kICJzZXRQYXVzZWQodWludDY0KXZvaWQiCglwdXNoYnl0ZXMgMHg2Yjk1NWY0YiAvLyBtZXRob2QgInNldEFkZHJlc3NHb3YoYWRkcmVzcyl2b2lkIgoJcHVzaGJ5dGVzIDB4OGIxODdiM2QgLy8gbWV0aG9kICJzZXRBZGRyZXNzRXhlY3V0aXZlKGFkZHJlc3Mpdm9pZCIKCXB1c2hieXRlcyAweDUwZTA3ZDg4IC8vIG1ldGhvZCAic2V0QWRkcmVzc0V4ZWN1dGl2ZUZlZShhZGRyZXNzKXZvaWQiCglwdXNoYnl0ZXMgMHhiYWJlMWUxMSAvLyBtZXRob2QgInNldEJpYXRlY0lkZW50aXR5KHVpbnQ2NCl2b2lkIgoJcHVzaGJ5dGVzIDB4YzU4YjlkYTQgLy8gbWV0aG9kICJzZXRCaWF0ZWNQb29sKHVpbnQ2NCl2b2lkIgoJcHVzaGJ5dGVzIDB4Y2EzNDRhMzQgLy8gbWV0aG9kICJzZXRCaWF0ZWNGZWUodWludDI1Nil2b2lkIgoJcHVzaGJ5dGVzIDB4NDlmM2ExN2YgLy8gbWV0aG9kICJzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uKGJ5dGVbXSxieXRlW10sYnl0ZVtdLHVpbnQ2NCx1aW50NjQsdWludDY0KXZvaWQiCglwdXNoYnl0ZXMgMHg4NzI4MzczMCAvLyBtZXRob2QgIndpdGhkcmF3RXhjZXNzQXNzZXRzKHVpbnQ2NCx1aW50NjQpdWludDY0IgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAoJbWF0Y2ggKmFiaV9yb3V0ZV9ib290c3RyYXAgKmFiaV9yb3V0ZV9zZXRBZGRyZXNzVWRwYXRlciAqYWJpX3JvdXRlX3NldFBhdXNlZCAqYWJpX3JvdXRlX3NldEFkZHJlc3NHb3YgKmFiaV9yb3V0ZV9zZXRBZGRyZXNzRXhlY3V0aXZlICphYmlfcm91dGVfc2V0QWRkcmVzc0V4ZWN1dGl2ZUZlZSAqYWJpX3JvdXRlX3NldEJpYXRlY0lkZW50aXR5ICphYmlfcm91dGVfc2V0QmlhdGVjUG9vbCAqYWJpX3JvdXRlX3NldEJpYXRlY0ZlZSAqYWJpX3JvdXRlX3NlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24gKmFiaV9yb3V0ZV93aXRoZHJhd0V4Y2Vzc0Fzc2V0cwoKCS8vIHRoaXMgY29udHJhY3QgZG9lcyBub3QgaW1wbGVtZW50IHRoZSBnaXZlbiBBQkkgbWV0aG9kIGZvciBjYWxsIE5vT3AKCWVycgoKKmNhbGxfVXBkYXRlQXBwbGljYXRpb246CglwdXNoYnl0ZXMgMHg2OTM2YzYyZiAvLyBtZXRob2QgInVwZGF0ZUFwcGxpY2F0aW9uKGJ5dGVbXSl2b2lkIgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAoJbWF0Y2ggKmFiaV9yb3V0ZV91cGRhdGVBcHBsaWNhdGlvbgoKCS8vIHRoaXMgY29udHJhY3QgZG9lcyBub3QgaW1wbGVtZW50IHRoZSBnaXZlbiBBQkkgbWV0aG9kIGZvciBjYWxsIFVwZGF0ZUFwcGxpY2F0aW9uCgllcnI=","clear":"I3ByYWdtYSB2ZXJzaW9uIDEw"},"byteCode":{"approval":"CiADASAAJgsBdQJlZgFlIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA7msoAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBXNjdmVyAWcBcwFmAWkBcDEYFIEGCzEZCI0MAh0AAAAAAAACewAAAg8AAAAAAAAAAAAAAIgAAiJDigAAJwWAFkJJQVRFQy1DT05GSUctMDEtMDItMDFnKjEAZycGMQBnKDEAZykxAGcnByRniTYaAVcCAIgAAiJDigEAMQAoZBJEJwWL/2eJNhoDFzYaAhc2GgFJFSMSRIgAAiJDigMAMQAoZBJEi/8rJwSipkQnCIv/ZycJi/5nJwqL/WeJNhoBSRUjEkSIAAIiQ4oBADEAKGQSRCiL/2eJNhoBF4gAAiJDigEAMQAoZBJEJweL/2eJNhoBSRUjEkSIAAIiQ4oBADEAKGQSRCcGi/9niTYaAUkVIxJEiAACIkOKAQAxAChkEkQqi/9niTYaAUkVIxJEiAACIkOKAQAxACpkEkQpi/9niTYaAReIAAIiQ4oBADEAKGQSRCcJi/9niTYaAReIAAIiQ4oBADEAKGQSRCcKi/9niTYaAUkVIxJEiAACIkOKAQAxACpkEkSL/ysnBKKmRCcIi/9niTYaBhc2GgUXNhoEFzYaA1cCADYaAlcCADYaAVcCAIgAAiJDigYAMQApZBJEsYECshCL/rILi/2yP4v8sgyL+rIOi/uyDYv/sgoksgGziYAEFR98dTYaAhc2GgEXiAAFFlCwIkOKAgExAClkEkSL/ov/MQCIAAOL/omKAwCL/iQSQQATsSKyEIv/sgeL/bIIJLIBs0IAFbGBBLIQi/+yFIv+shGL/bISJLIBs4mABLhEezY2GgCOAf3lAIAESVzn7YAEv8IIYIAEDNwQ/IAEa5VfS4AEixh7PYAEUOB9iIAEur4eEYAExYudpIAEyjRKNIAESfOhf4AEhyg3MDYaAI4L/dr+EP4r/kP+X/56/pX+rf7F/un/NwCABGk2xi82GgCOAf2yAA==","clear":"Cg=="},"compilerInfo":{"compiler":"algod","compilerVersion":{"major":4,"minor":0,"patch":2,"commitHash":"6b940281"}}} as unknown as Arc56Contract
+export const APP_SPEC: Arc56Contract = {
+  name: 'BiatecConfigProvider',
+  desc: '',
+  methods: [
+    {
+      name: 'createApplication',
+      desc: 'Initial setup',
+      args: [],
+      returns: { type: 'void' },
+      actions: { create: ['NoOp'], call: [] },
+    },
+    {
+      name: 'updateApplication',
+      desc: 'addressUdpater from global biatec configuration is allowed to update application',
+      args: [{ name: 'newVersion', type: 'byte[]' }],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['UpdateApplication'] },
+    },
+    {
+      name: 'bootstrap',
+      desc: 'Setup the contract',
+      args: [
+        { name: 'biatecFee', type: 'uint256', desc: 'Biatec fees' },
+        { name: 'appBiatecIdentityProvider', type: 'uint64' },
+        { name: 'appBiatecPoolProvider', type: 'uint64' },
+      ],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'setAddressUdpater',
+      desc: 'Top secret account with which it is possible update contracts or identity provider',
+      args: [{ name: 'a', type: 'address', desc: 'Address' }],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'setPaused',
+      desc: 'Kill switch. In the extreme case all services (deposit, trading, withdrawal, identity modifications and more) can be suspended.',
+      args: [{ name: 'a', type: 'uint64', desc: 'Address' }],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'setAddressGov',
+      desc: 'Execution address with which it is possible to opt in for governance',
+      args: [{ name: 'a', type: 'address', desc: 'Address' }],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'setAddressExecutive',
+      desc: 'Execution address with which it is possible to change global biatec fees',
+      args: [{ name: 'a', type: 'address', desc: 'Address' }],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'setAddressExecutiveFee',
+      desc: 'Execution fee address is address which can take fees from pools.',
+      args: [{ name: 'a', type: 'address', desc: 'Address' }],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'setBiatecIdentity',
+      desc: 'App identity setter',
+      args: [{ name: 'a', type: 'uint64', desc: 'Address' }],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'setBiatecPool',
+      desc: 'App identity setter',
+      args: [{ name: 'a', type: 'uint64', desc: 'Address' }],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'setBiatecFee',
+      desc: 'Fees in 9 decimals. 1_000_000_000 = 100%\nFees in 9 decimals. 10_000_000 = 1%\nFees in 9 decimals. 100_000 = 0,01%\n\n\nFees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee',
+      args: [{ name: 'biatecFee', type: 'uint256', desc: 'Fee' }],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'sendOnlineKeyRegistration',
+      desc: 'addressExecutiveFee can perfom key registration for this LP pool\n\n\nOnly addressExecutiveFee is allowed to execute this method.',
+      args: [
+        { name: 'votePK', type: 'byte[]' },
+        { name: 'selectionPK', type: 'byte[]' },
+        { name: 'stateProofPK', type: 'byte[]' },
+        { name: 'voteFirst', type: 'uint64' },
+        { name: 'voteLast', type: 'uint64' },
+        { name: 'voteKeyDilution', type: 'uint64' },
+      ],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'withdrawExcessAssets',
+      desc: 'If someone deposits excess assets to this smart contract biatec can use them.\n\n\nOnly addressExecutiveFee is allowed to execute this method.',
+      args: [
+        { name: 'asset', type: 'uint64', desc: 'Asset to withdraw. If native token, then zero' },
+        { name: 'amount', type: 'uint64', desc: 'Amount of the asset to be withdrawn' },
+      ],
+      returns: { type: 'uint64' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+  ],
+  arcs: [4, 56],
+  structs: {},
+  state: {
+    schema: { global: { bytes: 6, ints: 3 }, local: { bytes: 0, ints: 0 } },
+    keys: {
+      global: {
+        addressUdpater: { key: 'dQ==', keyType: 'AVMBytes', valueType: 'address' },
+        addressGov: { key: 'Zw==', keyType: 'AVMBytes', valueType: 'address' },
+        addressExecutive: { key: 'ZQ==', keyType: 'AVMBytes', valueType: 'address' },
+        addressExecutiveFee: { key: 'ZWY=', keyType: 'AVMBytes', valueType: 'address' },
+        appBiatecIdentityProvider: { key: 'aQ==', keyType: 'AVMBytes', valueType: 'uint64' },
+        appBiatecPoolProvider: { key: 'cA==', keyType: 'AVMBytes', valueType: 'uint64' },
+        suspended: { key: 'cw==', keyType: 'AVMBytes', valueType: 'uint64' },
+        biatecFee: { key: 'Zg==', keyType: 'AVMBytes', valueType: 'uint256' },
+        version: { key: 'c2N2ZXI=', keyType: 'AVMBytes', valueType: 'AVMBytes' },
+      },
+      local: {},
+      box: {},
+    },
+    maps: { global: {}, local: {}, box: {} },
+  },
+  bareActions: { create: [], call: [] },
+  sourceInfo: {
+    approval: {
+      sourceInfo: [
+        { teal: 1, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [0] },
+        { teal: 2, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [1, 2, 3, 4, 5] },
+        {
+          teal: 3,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:6',
+          pc: [
+            6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+            34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+            61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87,
+            88, 89, 90, 91, 92, 93, 94, 95, 96,
+          ],
+        },
+        { teal: 15, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [97, 98] },
+        { teal: 16, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [99] },
+        { teal: 17, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [100, 101] },
+        { teal: 18, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [102] },
+        { teal: 19, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [103, 104] },
+        { teal: 20, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [105] },
+        {
+          teal: 21,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:6',
+          pc: [
+            106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126,
+            127, 128, 129, 130, 131,
+          ],
+        },
+        {
+          teal: 25,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:6',
+          errorMessage:
+            'The requested action is not implemented in this contract. Are you using the correct OnComplete? Did you set your app ID?',
+          pc: [132],
+        },
+        { teal: 30, source: 'contracts\\BiatecConfigProvider.algo.ts:60', pc: [133, 134, 135] },
+        { teal: 31, source: 'contracts\\BiatecConfigProvider.algo.ts:60', pc: [136] },
+        { teal: 32, source: 'contracts\\BiatecConfigProvider.algo.ts:60', pc: [137] },
+        { teal: 38, source: 'contracts\\BiatecConfigProvider.algo.ts:60', pc: [138, 139, 140] },
+        { teal: 42, source: 'contracts\\BiatecConfigProvider.algo.ts:61', pc: [141, 142] },
+        {
+          teal: 43,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:61',
+          pc: [
+            143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163,
+            164, 165, 166,
+          ],
+        },
+        { teal: 44, source: 'contracts\\BiatecConfigProvider.algo.ts:61', pc: [167] },
+        { teal: 48, source: 'contracts\\BiatecConfigProvider.algo.ts:62', pc: [168] },
+        { teal: 49, source: 'contracts\\BiatecConfigProvider.algo.ts:62', pc: [169, 170] },
+        { teal: 50, source: 'contracts\\BiatecConfigProvider.algo.ts:62', pc: [171] },
+        { teal: 54, source: 'contracts\\BiatecConfigProvider.algo.ts:63', pc: [172, 173] },
+        { teal: 55, source: 'contracts\\BiatecConfigProvider.algo.ts:63', pc: [174, 175] },
+        { teal: 56, source: 'contracts\\BiatecConfigProvider.algo.ts:63', pc: [176] },
+        { teal: 60, source: 'contracts\\BiatecConfigProvider.algo.ts:64', pc: [177] },
+        { teal: 61, source: 'contracts\\BiatecConfigProvider.algo.ts:64', pc: [178, 179] },
+        { teal: 62, source: 'contracts\\BiatecConfigProvider.algo.ts:64', pc: [180] },
+        { teal: 66, source: 'contracts\\BiatecConfigProvider.algo.ts:65', pc: [181] },
+        { teal: 67, source: 'contracts\\BiatecConfigProvider.algo.ts:65', pc: [182, 183] },
+        { teal: 68, source: 'contracts\\BiatecConfigProvider.algo.ts:65', pc: [184] },
+        { teal: 72, source: 'contracts\\BiatecConfigProvider.algo.ts:66', pc: [185, 186] },
+        { teal: 73, source: 'contracts\\BiatecConfigProvider.algo.ts:66', pc: [187] },
+        { teal: 74, source: 'contracts\\BiatecConfigProvider.algo.ts:66', pc: [188] },
+        { teal: 75, source: 'contracts\\BiatecConfigProvider.algo.ts:60', pc: [189] },
+        { teal: 80, source: 'contracts\\BiatecConfigProvider.algo.ts:72', pc: [190, 191, 192] },
+        { teal: 81, source: 'contracts\\BiatecConfigProvider.algo.ts:72', pc: [193, 194, 195] },
+        { teal: 84, source: 'contracts\\BiatecConfigProvider.algo.ts:72', pc: [196, 197, 198] },
+        { teal: 85, source: 'contracts\\BiatecConfigProvider.algo.ts:72', pc: [199] },
+        { teal: 86, source: 'contracts\\BiatecConfigProvider.algo.ts:72', pc: [200] },
+        { teal: 92, source: 'contracts\\BiatecConfigProvider.algo.ts:72', pc: [201, 202, 203] },
+        { teal: 99, source: 'contracts\\BiatecConfigProvider.algo.ts:74', pc: [204, 205] },
+        { teal: 100, source: 'contracts\\BiatecConfigProvider.algo.ts:74', pc: [206] },
+        { teal: 101, source: 'contracts\\BiatecConfigProvider.algo.ts:74', pc: [207] },
+        { teal: 102, source: 'contracts\\BiatecConfigProvider.algo.ts:74', pc: [208] },
+        {
+          teal: 105,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:73',
+          errorMessage: 'Only addressUdpater setup in the config can update application',
+          pc: [209],
+        },
+        { teal: 109, source: 'contracts\\BiatecConfigProvider.algo.ts:77', pc: [210, 211] },
+        { teal: 110, source: 'contracts\\BiatecConfigProvider.algo.ts:77', pc: [212, 213] },
+        { teal: 111, source: 'contracts\\BiatecConfigProvider.algo.ts:77', pc: [214] },
+        { teal: 112, source: 'contracts\\BiatecConfigProvider.algo.ts:72', pc: [215] },
+        { teal: 117, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [216, 217, 218] },
+        { teal: 118, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [219] },
+        { teal: 121, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [220, 221, 222] },
+        { teal: 122, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [223] },
+        { teal: 125, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [224, 225, 226] },
+        { teal: 126, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [227] },
+        { teal: 127, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [228] },
+        { teal: 128, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [229] },
+        { teal: 129, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [230] },
+        {
+          teal: 132,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:84',
+          errorMessage: 'argument 2 (biatecFee) for bootstrap must be a uint256',
+          pc: [231],
+        },
+        { teal: 135, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [232, 233, 234] },
+        { teal: 136, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [235] },
+        { teal: 137, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [236] },
+        { teal: 144, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [237, 238, 239] },
+        { teal: 148, source: 'contracts\\BiatecConfigProvider.algo.ts:85', pc: [240, 241] },
+        { teal: 149, source: 'contracts\\BiatecConfigProvider.algo.ts:85', pc: [242] },
+        { teal: 150, source: 'contracts\\BiatecConfigProvider.algo.ts:85', pc: [243] },
+        { teal: 151, source: 'contracts\\BiatecConfigProvider.algo.ts:85', pc: [244] },
+        {
+          teal: 154,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:85',
+          errorMessage: 'Only updater can call bootstrap method',
+          pc: [245],
+        },
+        { teal: 158, source: 'contracts\\BiatecConfigProvider.algo.ts:86', pc: [246, 247] },
+        { teal: 159, source: 'contracts\\BiatecConfigProvider.algo.ts:86', pc: [248] },
+        { teal: 160, source: 'contracts\\BiatecConfigProvider.algo.ts:86', pc: [249, 250] },
+        { teal: 161, source: 'contracts\\BiatecConfigProvider.algo.ts:86', pc: [251] },
+        { teal: 162, source: 'contracts\\BiatecConfigProvider.algo.ts:86', pc: [252] },
+        {
+          teal: 165,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:86',
+          errorMessage: 'Biatec cannot set fees higher then 50% of lp fees',
+          pc: [253],
+        },
+        { teal: 169, source: 'contracts\\BiatecConfigProvider.algo.ts:87', pc: [254, 255] },
+        { teal: 170, source: 'contracts\\BiatecConfigProvider.algo.ts:87', pc: [256, 257] },
+        { teal: 171, source: 'contracts\\BiatecConfigProvider.algo.ts:87', pc: [258] },
+        { teal: 175, source: 'contracts\\BiatecConfigProvider.algo.ts:88', pc: [259, 260] },
+        { teal: 176, source: 'contracts\\BiatecConfigProvider.algo.ts:88', pc: [261, 262] },
+        { teal: 177, source: 'contracts\\BiatecConfigProvider.algo.ts:88', pc: [263] },
+        { teal: 181, source: 'contracts\\BiatecConfigProvider.algo.ts:89', pc: [264, 265] },
+        { teal: 182, source: 'contracts\\BiatecConfigProvider.algo.ts:89', pc: [266, 267] },
+        { teal: 183, source: 'contracts\\BiatecConfigProvider.algo.ts:89', pc: [268] },
+        { teal: 184, source: 'contracts\\BiatecConfigProvider.algo.ts:84', pc: [269] },
+        { teal: 189, source: 'contracts\\BiatecConfigProvider.algo.ts:97', pc: [270, 271, 272] },
+        { teal: 190, source: 'contracts\\BiatecConfigProvider.algo.ts:97', pc: [273] },
+        { teal: 191, source: 'contracts\\BiatecConfigProvider.algo.ts:97', pc: [274] },
+        { teal: 192, source: 'contracts\\BiatecConfigProvider.algo.ts:97', pc: [275] },
+        { teal: 193, source: 'contracts\\BiatecConfigProvider.algo.ts:97', pc: [276] },
+        {
+          teal: 196,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:97',
+          errorMessage: 'argument 0 (a) for setAddressUdpater must be a address',
+          pc: [277],
+        },
+        { teal: 199, source: 'contracts\\BiatecConfigProvider.algo.ts:97', pc: [278, 279, 280] },
+        { teal: 200, source: 'contracts\\BiatecConfigProvider.algo.ts:97', pc: [281] },
+        { teal: 201, source: 'contracts\\BiatecConfigProvider.algo.ts:97', pc: [282] },
+        { teal: 209, source: 'contracts\\BiatecConfigProvider.algo.ts:97', pc: [283, 284, 285] },
+        { teal: 213, source: 'contracts\\BiatecConfigProvider.algo.ts:98', pc: [286, 287] },
+        { teal: 214, source: 'contracts\\BiatecConfigProvider.algo.ts:98', pc: [288] },
+        { teal: 215, source: 'contracts\\BiatecConfigProvider.algo.ts:98', pc: [289] },
+        { teal: 216, source: 'contracts\\BiatecConfigProvider.algo.ts:98', pc: [290] },
+        {
+          teal: 219,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:98',
+          errorMessage: 'Only updater can change updater address',
+          pc: [291],
+        },
+        { teal: 223, source: 'contracts\\BiatecConfigProvider.algo.ts:99', pc: [292] },
+        { teal: 224, source: 'contracts\\BiatecConfigProvider.algo.ts:99', pc: [293, 294] },
+        { teal: 225, source: 'contracts\\BiatecConfigProvider.algo.ts:99', pc: [295] },
+        { teal: 226, source: 'contracts\\BiatecConfigProvider.algo.ts:97', pc: [296] },
+        { teal: 231, source: 'contracts\\BiatecConfigProvider.algo.ts:107', pc: [297, 298, 299] },
+        { teal: 232, source: 'contracts\\BiatecConfigProvider.algo.ts:107', pc: [300] },
+        { teal: 235, source: 'contracts\\BiatecConfigProvider.algo.ts:107', pc: [301, 302, 303] },
+        { teal: 236, source: 'contracts\\BiatecConfigProvider.algo.ts:107', pc: [304] },
+        { teal: 237, source: 'contracts\\BiatecConfigProvider.algo.ts:107', pc: [305] },
+        { teal: 245, source: 'contracts\\BiatecConfigProvider.algo.ts:107', pc: [306, 307, 308] },
+        { teal: 249, source: 'contracts\\BiatecConfigProvider.algo.ts:108', pc: [309, 310] },
+        { teal: 250, source: 'contracts\\BiatecConfigProvider.algo.ts:108', pc: [311] },
+        { teal: 251, source: 'contracts\\BiatecConfigProvider.algo.ts:108', pc: [312] },
+        { teal: 252, source: 'contracts\\BiatecConfigProvider.algo.ts:108', pc: [313] },
+        {
+          teal: 255,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:108',
+          errorMessage: 'Only updater can pause and unpause the biatec services',
+          pc: [314],
+        },
+        { teal: 259, source: 'contracts\\BiatecConfigProvider.algo.ts:109', pc: [315, 316] },
+        { teal: 260, source: 'contracts\\BiatecConfigProvider.algo.ts:109', pc: [317, 318] },
+        { teal: 261, source: 'contracts\\BiatecConfigProvider.algo.ts:109', pc: [319] },
+        { teal: 262, source: 'contracts\\BiatecConfigProvider.algo.ts:107', pc: [320] },
+        { teal: 267, source: 'contracts\\BiatecConfigProvider.algo.ts:117', pc: [321, 322, 323] },
+        { teal: 268, source: 'contracts\\BiatecConfigProvider.algo.ts:117', pc: [324] },
+        { teal: 269, source: 'contracts\\BiatecConfigProvider.algo.ts:117', pc: [325] },
+        { teal: 270, source: 'contracts\\BiatecConfigProvider.algo.ts:117', pc: [326] },
+        { teal: 271, source: 'contracts\\BiatecConfigProvider.algo.ts:117', pc: [327] },
+        {
+          teal: 274,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:117',
+          errorMessage: 'argument 0 (a) for setAddressGov must be a address',
+          pc: [328],
+        },
+        { teal: 277, source: 'contracts\\BiatecConfigProvider.algo.ts:117', pc: [329, 330, 331] },
+        { teal: 278, source: 'contracts\\BiatecConfigProvider.algo.ts:117', pc: [332] },
+        { teal: 279, source: 'contracts\\BiatecConfigProvider.algo.ts:117', pc: [333] },
+        { teal: 287, source: 'contracts\\BiatecConfigProvider.algo.ts:117', pc: [334, 335, 336] },
+        { teal: 291, source: 'contracts\\BiatecConfigProvider.algo.ts:118', pc: [337, 338] },
+        { teal: 292, source: 'contracts\\BiatecConfigProvider.algo.ts:118', pc: [339] },
+        { teal: 293, source: 'contracts\\BiatecConfigProvider.algo.ts:118', pc: [340] },
+        { teal: 294, source: 'contracts\\BiatecConfigProvider.algo.ts:118', pc: [341] },
+        {
+          teal: 297,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:118',
+          errorMessage: 'Only updater can change gov address',
+          pc: [342],
+        },
+        { teal: 301, source: 'contracts\\BiatecConfigProvider.algo.ts:119', pc: [343, 344] },
+        { teal: 302, source: 'contracts\\BiatecConfigProvider.algo.ts:119', pc: [345, 346] },
+        { teal: 303, source: 'contracts\\BiatecConfigProvider.algo.ts:119', pc: [347] },
+        { teal: 304, source: 'contracts\\BiatecConfigProvider.algo.ts:117', pc: [348] },
+        { teal: 309, source: 'contracts\\BiatecConfigProvider.algo.ts:127', pc: [349, 350, 351] },
+        { teal: 310, source: 'contracts\\BiatecConfigProvider.algo.ts:127', pc: [352] },
+        { teal: 311, source: 'contracts\\BiatecConfigProvider.algo.ts:127', pc: [353] },
+        { teal: 312, source: 'contracts\\BiatecConfigProvider.algo.ts:127', pc: [354] },
+        { teal: 313, source: 'contracts\\BiatecConfigProvider.algo.ts:127', pc: [355] },
+        {
+          teal: 316,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:127',
+          errorMessage: 'argument 0 (a) for setAddressExecutive must be a address',
+          pc: [356],
+        },
+        { teal: 319, source: 'contracts\\BiatecConfigProvider.algo.ts:127', pc: [357, 358, 359] },
+        { teal: 320, source: 'contracts\\BiatecConfigProvider.algo.ts:127', pc: [360] },
+        { teal: 321, source: 'contracts\\BiatecConfigProvider.algo.ts:127', pc: [361] },
+        { teal: 329, source: 'contracts\\BiatecConfigProvider.algo.ts:127', pc: [362, 363, 364] },
+        { teal: 333, source: 'contracts\\BiatecConfigProvider.algo.ts:128', pc: [365, 366] },
+        { teal: 334, source: 'contracts\\BiatecConfigProvider.algo.ts:128', pc: [367] },
+        { teal: 335, source: 'contracts\\BiatecConfigProvider.algo.ts:128', pc: [368] },
+        { teal: 336, source: 'contracts\\BiatecConfigProvider.algo.ts:128', pc: [369] },
+        {
+          teal: 339,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:128',
+          errorMessage: 'Only updater can change addressExecutive',
+          pc: [370],
+        },
+        { teal: 343, source: 'contracts\\BiatecConfigProvider.algo.ts:129', pc: [371] },
+        { teal: 344, source: 'contracts\\BiatecConfigProvider.algo.ts:129', pc: [372, 373] },
+        { teal: 345, source: 'contracts\\BiatecConfigProvider.algo.ts:129', pc: [374] },
+        { teal: 346, source: 'contracts\\BiatecConfigProvider.algo.ts:127', pc: [375] },
+        { teal: 351, source: 'contracts\\BiatecConfigProvider.algo.ts:137', pc: [376, 377, 378] },
+        { teal: 352, source: 'contracts\\BiatecConfigProvider.algo.ts:137', pc: [379] },
+        { teal: 353, source: 'contracts\\BiatecConfigProvider.algo.ts:137', pc: [380] },
+        { teal: 354, source: 'contracts\\BiatecConfigProvider.algo.ts:137', pc: [381] },
+        { teal: 355, source: 'contracts\\BiatecConfigProvider.algo.ts:137', pc: [382] },
+        {
+          teal: 358,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:137',
+          errorMessage: 'argument 0 (a) for setAddressExecutiveFee must be a address',
+          pc: [383],
+        },
+        { teal: 361, source: 'contracts\\BiatecConfigProvider.algo.ts:137', pc: [384, 385, 386] },
+        { teal: 362, source: 'contracts\\BiatecConfigProvider.algo.ts:137', pc: [387] },
+        { teal: 363, source: 'contracts\\BiatecConfigProvider.algo.ts:137', pc: [388] },
+        { teal: 371, source: 'contracts\\BiatecConfigProvider.algo.ts:137', pc: [389, 390, 391] },
+        { teal: 375, source: 'contracts\\BiatecConfigProvider.algo.ts:138', pc: [392, 393] },
+        { teal: 376, source: 'contracts\\BiatecConfigProvider.algo.ts:138', pc: [394] },
+        { teal: 377, source: 'contracts\\BiatecConfigProvider.algo.ts:138', pc: [395] },
+        { teal: 378, source: 'contracts\\BiatecConfigProvider.algo.ts:138', pc: [396] },
+        {
+          teal: 381,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:138',
+          errorMessage: 'Only addressExecutive can change fee executor address',
+          pc: [397],
+        },
+        { teal: 385, source: 'contracts\\BiatecConfigProvider.algo.ts:139', pc: [398] },
+        { teal: 386, source: 'contracts\\BiatecConfigProvider.algo.ts:139', pc: [399, 400] },
+        { teal: 387, source: 'contracts\\BiatecConfigProvider.algo.ts:139', pc: [401] },
+        { teal: 388, source: 'contracts\\BiatecConfigProvider.algo.ts:137', pc: [402] },
+        { teal: 393, source: 'contracts\\BiatecConfigProvider.algo.ts:147', pc: [403, 404, 405] },
+        { teal: 394, source: 'contracts\\BiatecConfigProvider.algo.ts:147', pc: [406] },
+        { teal: 397, source: 'contracts\\BiatecConfigProvider.algo.ts:147', pc: [407, 408, 409] },
+        { teal: 398, source: 'contracts\\BiatecConfigProvider.algo.ts:147', pc: [410] },
+        { teal: 399, source: 'contracts\\BiatecConfigProvider.algo.ts:147', pc: [411] },
+        { teal: 407, source: 'contracts\\BiatecConfigProvider.algo.ts:147', pc: [412, 413, 414] },
+        { teal: 411, source: 'contracts\\BiatecConfigProvider.algo.ts:148', pc: [415, 416] },
+        { teal: 412, source: 'contracts\\BiatecConfigProvider.algo.ts:148', pc: [417] },
+        { teal: 413, source: 'contracts\\BiatecConfigProvider.algo.ts:148', pc: [418] },
+        { teal: 414, source: 'contracts\\BiatecConfigProvider.algo.ts:148', pc: [419] },
+        {
+          teal: 417,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:148',
+          errorMessage: 'Only updater can change appIdentityProvider',
+          pc: [420],
+        },
+        { teal: 421, source: 'contracts\\BiatecConfigProvider.algo.ts:149', pc: [421, 422] },
+        { teal: 422, source: 'contracts\\BiatecConfigProvider.algo.ts:149', pc: [423, 424] },
+        { teal: 423, source: 'contracts\\BiatecConfigProvider.algo.ts:149', pc: [425] },
+        { teal: 424, source: 'contracts\\BiatecConfigProvider.algo.ts:147', pc: [426] },
+        { teal: 429, source: 'contracts\\BiatecConfigProvider.algo.ts:157', pc: [427, 428, 429] },
+        { teal: 430, source: 'contracts\\BiatecConfigProvider.algo.ts:157', pc: [430] },
+        { teal: 433, source: 'contracts\\BiatecConfigProvider.algo.ts:157', pc: [431, 432, 433] },
+        { teal: 434, source: 'contracts\\BiatecConfigProvider.algo.ts:157', pc: [434] },
+        { teal: 435, source: 'contracts\\BiatecConfigProvider.algo.ts:157', pc: [435] },
+        { teal: 443, source: 'contracts\\BiatecConfigProvider.algo.ts:157', pc: [436, 437, 438] },
+        { teal: 447, source: 'contracts\\BiatecConfigProvider.algo.ts:158', pc: [439, 440] },
+        { teal: 448, source: 'contracts\\BiatecConfigProvider.algo.ts:158', pc: [441] },
+        { teal: 449, source: 'contracts\\BiatecConfigProvider.algo.ts:158', pc: [442] },
+        { teal: 450, source: 'contracts\\BiatecConfigProvider.algo.ts:158', pc: [443] },
+        {
+          teal: 453,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:158',
+          errorMessage: 'Only updater can change appPoolProvider',
+          pc: [444],
+        },
+        { teal: 457, source: 'contracts\\BiatecConfigProvider.algo.ts:159', pc: [445, 446] },
+        { teal: 458, source: 'contracts\\BiatecConfigProvider.algo.ts:159', pc: [447, 448] },
+        { teal: 459, source: 'contracts\\BiatecConfigProvider.algo.ts:159', pc: [449] },
+        { teal: 460, source: 'contracts\\BiatecConfigProvider.algo.ts:157', pc: [450] },
+        { teal: 465, source: 'contracts\\BiatecConfigProvider.algo.ts:171', pc: [451, 452, 453] },
+        { teal: 466, source: 'contracts\\BiatecConfigProvider.algo.ts:171', pc: [454] },
+        { teal: 467, source: 'contracts\\BiatecConfigProvider.algo.ts:171', pc: [455] },
+        { teal: 468, source: 'contracts\\BiatecConfigProvider.algo.ts:171', pc: [456] },
+        { teal: 469, source: 'contracts\\BiatecConfigProvider.algo.ts:171', pc: [457] },
+        {
+          teal: 472,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:171',
+          errorMessage: 'argument 0 (biatecFee) for setBiatecFee must be a uint256',
+          pc: [458],
+        },
+        { teal: 475, source: 'contracts\\BiatecConfigProvider.algo.ts:171', pc: [459, 460, 461] },
+        { teal: 476, source: 'contracts\\BiatecConfigProvider.algo.ts:171', pc: [462] },
+        { teal: 477, source: 'contracts\\BiatecConfigProvider.algo.ts:171', pc: [463] },
+        { teal: 489, source: 'contracts\\BiatecConfigProvider.algo.ts:171', pc: [464, 465, 466] },
+        { teal: 493, source: 'contracts\\BiatecConfigProvider.algo.ts:172', pc: [467, 468] },
+        { teal: 494, source: 'contracts\\BiatecConfigProvider.algo.ts:172', pc: [469] },
+        { teal: 495, source: 'contracts\\BiatecConfigProvider.algo.ts:172', pc: [470] },
+        { teal: 496, source: 'contracts\\BiatecConfigProvider.algo.ts:172', pc: [471] },
+        {
+          teal: 499,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:172',
+          errorMessage: 'Only executive address can change fees',
+          pc: [472],
+        },
+        { teal: 503, source: 'contracts\\BiatecConfigProvider.algo.ts:173', pc: [473, 474] },
+        { teal: 504, source: 'contracts\\BiatecConfigProvider.algo.ts:173', pc: [475] },
+        { teal: 505, source: 'contracts\\BiatecConfigProvider.algo.ts:173', pc: [476, 477] },
+        { teal: 506, source: 'contracts\\BiatecConfigProvider.algo.ts:173', pc: [478] },
+        { teal: 507, source: 'contracts\\BiatecConfigProvider.algo.ts:173', pc: [479] },
+        {
+          teal: 510,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:173',
+          errorMessage: 'Biatec cannot set fees higher then 50% of lp fees',
+          pc: [480],
+        },
+        { teal: 514, source: 'contracts\\BiatecConfigProvider.algo.ts:174', pc: [481, 482] },
+        { teal: 515, source: 'contracts\\BiatecConfigProvider.algo.ts:174', pc: [483, 484] },
+        { teal: 516, source: 'contracts\\BiatecConfigProvider.algo.ts:174', pc: [485] },
+        { teal: 517, source: 'contracts\\BiatecConfigProvider.algo.ts:171', pc: [486] },
+        { teal: 522, source: 'contracts\\BiatecConfigProvider.algo.ts:188', pc: [487, 488, 489] },
+        { teal: 523, source: 'contracts\\BiatecConfigProvider.algo.ts:188', pc: [490] },
+        { teal: 526, source: 'contracts\\BiatecConfigProvider.algo.ts:187', pc: [491, 492, 493] },
+        { teal: 527, source: 'contracts\\BiatecConfigProvider.algo.ts:187', pc: [494] },
+        { teal: 530, source: 'contracts\\BiatecConfigProvider.algo.ts:186', pc: [495, 496, 497] },
+        { teal: 531, source: 'contracts\\BiatecConfigProvider.algo.ts:186', pc: [498] },
+        { teal: 534, source: 'contracts\\BiatecConfigProvider.algo.ts:185', pc: [499, 500, 501] },
+        { teal: 535, source: 'contracts\\BiatecConfigProvider.algo.ts:185', pc: [502, 503, 504] },
+        { teal: 538, source: 'contracts\\BiatecConfigProvider.algo.ts:184', pc: [505, 506, 507] },
+        { teal: 539, source: 'contracts\\BiatecConfigProvider.algo.ts:184', pc: [508, 509, 510] },
+        { teal: 542, source: 'contracts\\BiatecConfigProvider.algo.ts:183', pc: [511, 512, 513] },
+        { teal: 543, source: 'contracts\\BiatecConfigProvider.algo.ts:183', pc: [514, 515, 516] },
+        { teal: 546, source: 'contracts\\BiatecConfigProvider.algo.ts:182', pc: [517, 518, 519] },
+        { teal: 547, source: 'contracts\\BiatecConfigProvider.algo.ts:182', pc: [520] },
+        { teal: 548, source: 'contracts\\BiatecConfigProvider.algo.ts:182', pc: [521] },
+        { teal: 556, source: 'contracts\\BiatecConfigProvider.algo.ts:182', pc: [522, 523, 524] },
+        { teal: 563, source: 'contracts\\BiatecConfigProvider.algo.ts:191', pc: [525, 526] },
+        { teal: 564, source: 'contracts\\BiatecConfigProvider.algo.ts:191', pc: [527] },
+        { teal: 565, source: 'contracts\\BiatecConfigProvider.algo.ts:191', pc: [528] },
+        { teal: 566, source: 'contracts\\BiatecConfigProvider.algo.ts:191', pc: [529] },
+        {
+          teal: 569,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:190',
+          errorMessage: 'Only fee executor setup in the config can take the collected fees',
+          pc: [530],
+        },
+        { teal: 581, source: 'contracts\\BiatecConfigProvider.algo.ts:194', pc: [531] },
+        { teal: 582, source: 'contracts\\BiatecConfigProvider.algo.ts:194', pc: [532, 533] },
+        { teal: 583, source: 'contracts\\BiatecConfigProvider.algo.ts:194', pc: [534, 535] },
+        { teal: 587, source: 'contracts\\BiatecConfigProvider.algo.ts:195', pc: [536, 537] },
+        { teal: 588, source: 'contracts\\BiatecConfigProvider.algo.ts:195', pc: [538, 539] },
+        { teal: 592, source: 'contracts\\BiatecConfigProvider.algo.ts:196', pc: [540, 541] },
+        { teal: 593, source: 'contracts\\BiatecConfigProvider.algo.ts:196', pc: [542, 543] },
+        { teal: 597, source: 'contracts\\BiatecConfigProvider.algo.ts:197', pc: [544, 545] },
+        { teal: 598, source: 'contracts\\BiatecConfigProvider.algo.ts:197', pc: [546, 547] },
+        { teal: 602, source: 'contracts\\BiatecConfigProvider.algo.ts:198', pc: [548, 549] },
+        { teal: 603, source: 'contracts\\BiatecConfigProvider.algo.ts:198', pc: [550, 551] },
+        { teal: 607, source: 'contracts\\BiatecConfigProvider.algo.ts:199', pc: [552, 553] },
+        { teal: 608, source: 'contracts\\BiatecConfigProvider.algo.ts:199', pc: [554, 555] },
+        { teal: 612, source: 'contracts\\BiatecConfigProvider.algo.ts:200', pc: [556, 557] },
+        { teal: 613, source: 'contracts\\BiatecConfigProvider.algo.ts:200', pc: [558, 559] },
+        { teal: 617, source: 'contracts\\BiatecConfigProvider.algo.ts:201', pc: [560] },
+        { teal: 618, source: 'contracts\\BiatecConfigProvider.algo.ts:201', pc: [561, 562] },
+        { teal: 621, source: 'contracts\\BiatecConfigProvider.algo.ts:194', pc: [563] },
+        { teal: 622, source: 'contracts\\BiatecConfigProvider.algo.ts:182', pc: [564] },
+        { teal: 627, source: 'contracts\\BiatecConfigProvider.algo.ts:213', pc: [565, 566, 567, 568, 569, 570] },
+        { teal: 630, source: 'contracts\\BiatecConfigProvider.algo.ts:213', pc: [571, 572, 573] },
+        { teal: 631, source: 'contracts\\BiatecConfigProvider.algo.ts:213', pc: [574] },
+        { teal: 634, source: 'contracts\\BiatecConfigProvider.algo.ts:213', pc: [575, 576, 577] },
+        { teal: 635, source: 'contracts\\BiatecConfigProvider.algo.ts:213', pc: [578] },
+        { teal: 638, source: 'contracts\\BiatecConfigProvider.algo.ts:213', pc: [579, 580, 581] },
+        { teal: 639, source: 'contracts\\BiatecConfigProvider.algo.ts:213', pc: [582] },
+        { teal: 640, source: 'contracts\\BiatecConfigProvider.algo.ts:213', pc: [583] },
+        { teal: 641, source: 'contracts\\BiatecConfigProvider.algo.ts:213', pc: [584] },
+        { teal: 642, source: 'contracts\\BiatecConfigProvider.algo.ts:213', pc: [585] },
+        { teal: 643, source: 'contracts\\BiatecConfigProvider.algo.ts:213', pc: [586] },
+        { teal: 654, source: 'contracts\\BiatecConfigProvider.algo.ts:213', pc: [587, 588, 589] },
+        { teal: 661, source: 'contracts\\BiatecConfigProvider.algo.ts:215', pc: [590, 591] },
+        { teal: 662, source: 'contracts\\BiatecConfigProvider.algo.ts:215', pc: [592] },
+        { teal: 663, source: 'contracts\\BiatecConfigProvider.algo.ts:215', pc: [593] },
+        { teal: 664, source: 'contracts\\BiatecConfigProvider.algo.ts:215', pc: [594] },
+        {
+          teal: 667,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:214',
+          errorMessage: 'Only fee executor setup in the config can take the collected fees',
+          pc: [595],
+        },
+        { teal: 671, source: 'contracts\\BiatecConfigProvider.algo.ts:219', pc: [596, 597] },
+        { teal: 672, source: 'contracts\\BiatecConfigProvider.algo.ts:219', pc: [598, 599] },
+        { teal: 673, source: 'contracts\\BiatecConfigProvider.algo.ts:219', pc: [600, 601] },
+        { teal: 674, source: 'contracts\\BiatecConfigProvider.algo.ts:219', pc: [602, 603, 604] },
+        { teal: 678, source: 'contracts\\BiatecConfigProvider.algo.ts:221', pc: [605, 606] },
+        { teal: 679, source: 'contracts\\BiatecConfigProvider.algo.ts:213', pc: [607] },
+        { teal: 688, source: 'contracts\\BiatecConfigProvider.algo.ts:230', pc: [608, 609, 610] },
+        { teal: 693, source: 'contracts\\BiatecConfigProvider.algo.ts:231', pc: [611, 612] },
+        { teal: 694, source: 'contracts\\BiatecConfigProvider.algo.ts:231', pc: [613] },
+        { teal: 695, source: 'contracts\\BiatecConfigProvider.algo.ts:231', pc: [614] },
+        { teal: 696, source: 'contracts\\BiatecConfigProvider.algo.ts:231', pc: [615, 616, 617] },
+        { teal: 705, source: 'contracts\\BiatecConfigProvider.algo.ts:232', pc: [618] },
+        { teal: 706, source: 'contracts\\BiatecConfigProvider.algo.ts:232', pc: [619] },
+        { teal: 707, source: 'contracts\\BiatecConfigProvider.algo.ts:232', pc: [620, 621] },
+        { teal: 711, source: 'contracts\\BiatecConfigProvider.algo.ts:233', pc: [622, 623] },
+        { teal: 712, source: 'contracts\\BiatecConfigProvider.algo.ts:233', pc: [624, 625] },
+        { teal: 716, source: 'contracts\\BiatecConfigProvider.algo.ts:234', pc: [626, 627] },
+        { teal: 717, source: 'contracts\\BiatecConfigProvider.algo.ts:234', pc: [628, 629] },
+        { teal: 721, source: 'contracts\\BiatecConfigProvider.algo.ts:235', pc: [630] },
+        { teal: 722, source: 'contracts\\BiatecConfigProvider.algo.ts:235', pc: [631, 632] },
+        { teal: 725, source: 'contracts\\BiatecConfigProvider.algo.ts:232', pc: [633] },
+        { teal: 726, source: 'contracts\\BiatecConfigProvider.algo.ts:231', pc: [634, 635, 636] },
+        { teal: 736, source: 'contracts\\BiatecConfigProvider.algo.ts:238', pc: [637] },
+        { teal: 737, source: 'contracts\\BiatecConfigProvider.algo.ts:238', pc: [638, 639] },
+        { teal: 738, source: 'contracts\\BiatecConfigProvider.algo.ts:238', pc: [640, 641] },
+        { teal: 742, source: 'contracts\\BiatecConfigProvider.algo.ts:239', pc: [642, 643] },
+        { teal: 743, source: 'contracts\\BiatecConfigProvider.algo.ts:239', pc: [644, 645] },
+        { teal: 747, source: 'contracts\\BiatecConfigProvider.algo.ts:240', pc: [646, 647] },
+        { teal: 748, source: 'contracts\\BiatecConfigProvider.algo.ts:240', pc: [648, 649] },
+        { teal: 752, source: 'contracts\\BiatecConfigProvider.algo.ts:241', pc: [650, 651] },
+        { teal: 753, source: 'contracts\\BiatecConfigProvider.algo.ts:241', pc: [652, 653] },
+        { teal: 757, source: 'contracts\\BiatecConfigProvider.algo.ts:242', pc: [654] },
+        { teal: 758, source: 'contracts\\BiatecConfigProvider.algo.ts:242', pc: [655, 656] },
+        { teal: 761, source: 'contracts\\BiatecConfigProvider.algo.ts:238', pc: [657] },
+        { teal: 764, source: 'contracts\\BiatecConfigProvider.algo.ts:230', pc: [658] },
+        { teal: 767, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [659, 660, 661, 662, 663, 664] },
+        { teal: 768, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [665, 666, 667] },
+        { teal: 769, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [668, 669, 670, 671] },
+        {
+          teal: 772,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:6',
+          errorMessage: 'this contract does not implement the given ABI method for create NoOp',
+          pc: [672],
+        },
+        { teal: 775, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [673, 674, 675, 676, 677, 678] },
+        { teal: 776, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [679, 680, 681, 682, 683, 684] },
+        { teal: 777, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [685, 686, 687, 688, 689, 690] },
+        { teal: 778, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [691, 692, 693, 694, 695, 696] },
+        { teal: 779, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [697, 698, 699, 700, 701, 702] },
+        { teal: 780, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [703, 704, 705, 706, 707, 708] },
+        { teal: 781, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [709, 710, 711, 712, 713, 714] },
+        { teal: 782, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [715, 716, 717, 718, 719, 720] },
+        { teal: 783, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [721, 722, 723, 724, 725, 726] },
+        { teal: 784, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [727, 728, 729, 730, 731, 732] },
+        { teal: 785, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [733, 734, 735, 736, 737, 738] },
+        { teal: 786, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [739, 740, 741] },
+        {
+          teal: 787,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:6',
+          pc: [
+            742, 743, 744, 745, 746, 747, 748, 749, 750, 751, 752, 753, 754, 755, 756, 757, 758, 759, 760, 761, 762,
+            763, 764, 765,
+          ],
+        },
+        {
+          teal: 790,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:6',
+          errorMessage: 'this contract does not implement the given ABI method for call NoOp',
+          pc: [766],
+        },
+        { teal: 793, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [767, 768, 769, 770, 771, 772] },
+        { teal: 794, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [773, 774, 775] },
+        { teal: 795, source: 'contracts\\BiatecConfigProvider.algo.ts:6', pc: [776, 777, 778, 779] },
+        {
+          teal: 798,
+          source: 'contracts\\BiatecConfigProvider.algo.ts:6',
+          errorMessage: 'this contract does not implement the given ABI method for call UpdateApplication',
+          pc: [780],
+        },
+      ],
+      pcOffsetMethod: 'none',
+    },
+    clear: { sourceInfo: [], pcOffsetMethod: 'none' },
+  },
+  source: {
+    approval:
+      'I3ByYWdtYSB2ZXJzaW9uIDEwCmludGNibG9jayAxIDMyIDAKYnl0ZWNibG9jayAweDc1IDB4NjU2NiAweDY1IDB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAzYjlhY2EwMCAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIgMHg3MzYzNzY2NTcyIDB4NjcgMHg3MyAweDY2IDB4NjkgMHg3MAoKLy8gVGhpcyBURUFMIHdhcyBnZW5lcmF0ZWQgYnkgVEVBTFNjcmlwdCB2MC4xMDYuMwovLyBodHRwczovL2dpdGh1Yi5jb20vYWxnb3JhbmRmb3VuZGF0aW9uL1RFQUxTY3JpcHQKCi8vIFRoaXMgY29udHJhY3QgaXMgY29tcGxpYW50IHdpdGggYW5kL29yIGltcGxlbWVudHMgdGhlIGZvbGxvd2luZyBBUkNzOiBbIEFSQzQgXQoKLy8gVGhlIGZvbGxvd2luZyB0ZW4gbGluZXMgb2YgVEVBTCBoYW5kbGUgaW5pdGlhbCBwcm9ncmFtIGZsb3cKLy8gVGhpcyBwYXR0ZXJuIGlzIHVzZWQgdG8gbWFrZSBpdCBlYXN5IGZvciBhbnlvbmUgdG8gcGFyc2UgdGhlIHN0YXJ0IG9mIHRoZSBwcm9ncmFtIGFuZCBkZXRlcm1pbmUgaWYgYSBzcGVjaWZpYyBhY3Rpb24gaXMgYWxsb3dlZAovLyBIZXJlLCBhY3Rpb24gcmVmZXJzIHRvIHRoZSBPbkNvbXBsZXRlIGluIGNvbWJpbmF0aW9uIHdpdGggd2hldGhlciB0aGUgYXBwIGlzIGJlaW5nIGNyZWF0ZWQgb3IgY2FsbGVkCi8vIEV2ZXJ5IHBvc3NpYmxlIGFjdGlvbiBmb3IgdGhpcyBjb250cmFjdCBpcyByZXByZXNlbnRlZCBpbiB0aGUgc3dpdGNoIHN0YXRlbWVudAovLyBJZiB0aGUgYWN0aW9uIGlzIG5vdCBpbXBsZW1lbnRlZCBpbiB0aGUgY29udHJhY3QsIGl0cyByZXNwZWN0aXZlIGJyYW5jaCB3aWxsIGJlICIqTk9UX0lNUExFTUVOVEVEIiB3aGljaCBqdXN0IGNvbnRhaW5zICJlcnIiCnR4biBBcHBsaWNhdGlvbklECiEKcHVzaGludCA2CioKdHhuIE9uQ29tcGxldGlvbgorCnN3aXRjaCAqY2FsbF9Ob09wICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpjYWxsX1VwZGF0ZUFwcGxpY2F0aW9uICpOT1RfSU1QTEVNRU5URUQgKmNyZWF0ZV9Ob09wICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRAoKKk5PVF9JTVBMRU1FTlRFRDoKCS8vIFRoZSByZXF1ZXN0ZWQgYWN0aW9uIGlzIG5vdCBpbXBsZW1lbnRlZCBpbiB0aGlzIGNvbnRyYWN0LiBBcmUgeW91IHVzaW5nIHRoZSBjb3JyZWN0IE9uQ29tcGxldGU/IERpZCB5b3Ugc2V0IHlvdXIgYXBwIElEPwoJZXJyCgovLyBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoqYWJpX3JvdXRlX2NyZWF0ZUFwcGxpY2F0aW9uOgoJLy8gZXhlY3V0ZSBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoJY2FsbHN1YiBjcmVhdGVBcHBsaWNhdGlvbgoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gY3JlYXRlQXBwbGljYXRpb24oKTogdm9pZAovLwovLyBJbml0aWFsIHNldHVwCmNyZWF0ZUFwcGxpY2F0aW9uOgoJcHJvdG8gMCAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NjEKCS8vIHRoaXMudmVyc2lvbi52YWx1ZSA9IHZlcnNpb24KCWJ5dGVjIDUgLy8gICJzY3ZlciIKCXB1c2hieXRlcyAiQklBVEVDLUNPTkZJRy0wMS0wMi0wMSIKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NjIKCS8vIHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZS52YWx1ZSA9IHRoaXMudHhuLnNlbmRlcgoJYnl0ZWMgMiAvLyAgImUiCgl0eG4gU2VuZGVyCglhcHBfZ2xvYmFsX3B1dAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjYzCgkvLyB0aGlzLmFkZHJlc3NHb3YudmFsdWUgPSB0aGlzLnR4bi5zZW5kZXIKCWJ5dGVjIDYgLy8gICJnIgoJdHhuIFNlbmRlcgoJYXBwX2dsb2JhbF9wdXQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo2NAoJLy8gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSA9IHRoaXMudHhuLnNlbmRlcgoJYnl0ZWMgMCAvLyAgInUiCgl0eG4gU2VuZGVyCglhcHBfZ2xvYmFsX3B1dAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjY1CgkvLyB0aGlzLmFkZHJlc3NFeGVjdXRpdmVGZWUudmFsdWUgPSB0aGlzLnR4bi5zZW5kZXIKCWJ5dGVjIDEgLy8gICJlZiIKCXR4biBTZW5kZXIKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NjYKCS8vIHRoaXMuc3VzcGVuZGVkLnZhbHVlID0gMAoJYnl0ZWMgNyAvLyAgInMiCglpbnRjIDIgLy8gMAoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gdXBkYXRlQXBwbGljYXRpb24oYnl0ZVtdKXZvaWQKKmFiaV9yb3V0ZV91cGRhdGVBcHBsaWNhdGlvbjoKCS8vIG5ld1ZlcnNpb246IGJ5dGVbXQoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZXh0cmFjdCAyIDAKCgkvLyBleGVjdXRlIHVwZGF0ZUFwcGxpY2F0aW9uKGJ5dGVbXSl2b2lkCgljYWxsc3ViIHVwZGF0ZUFwcGxpY2F0aW9uCglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyB1cGRhdGVBcHBsaWNhdGlvbihuZXdWZXJzaW9uOiBieXRlcyk6IHZvaWQKLy8KLy8gYWRkcmVzc1VkcGF0ZXIgZnJvbSBnbG9iYWwgYmlhdGVjIGNvbmZpZ3VyYXRpb24gaXMgYWxsb3dlZCB0byB1cGRhdGUgYXBwbGljYXRpb24KdXBkYXRlQXBwbGljYXRpb246Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo3MwoJLy8gYXNzZXJ0KAoJLy8gICAgICAgdGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLAoJLy8gICAgICAgJ09ubHkgYWRkcmVzc1VkcGF0ZXIgc2V0dXAgaW4gdGhlIGNvbmZpZyBjYW4gdXBkYXRlIGFwcGxpY2F0aW9uJwoJLy8gICAgICkKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSBhZGRyZXNzVWRwYXRlciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB1cGRhdGUgYXBwbGljYXRpb24KCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjc3CgkvLyB0aGlzLnZlcnNpb24udmFsdWUgPSBuZXdWZXJzaW9uCglieXRlYyA1IC8vICAic2N2ZXIiCglmcmFtZV9kaWcgLTEgLy8gbmV3VmVyc2lvbjogYnl0ZXMKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIGJvb3RzdHJhcCh1aW50MjU2LHVpbnQ2NCx1aW50NjQpdm9pZAoqYWJpX3JvdXRlX2Jvb3RzdHJhcDoKCS8vIGFwcEJpYXRlY1Bvb2xQcm92aWRlcjogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAzCglidG9pCgoJLy8gYXBwQmlhdGVjSWRlbnRpdHlQcm92aWRlcjogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAyCglidG9pCgoJLy8gYmlhdGVjRmVlOiB1aW50MjU2Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAxIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDIgKGJpYXRlY0ZlZSkgZm9yIGJvb3RzdHJhcCBtdXN0IGJlIGEgdWludDI1NgoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBib290c3RyYXAodWludDI1Nix1aW50NjQsdWludDY0KXZvaWQKCWNhbGxzdWIgYm9vdHN0cmFwCglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBib290c3RyYXAoYmlhdGVjRmVlOiB1aW50MjU2LCBhcHBCaWF0ZWNJZGVudGl0eVByb3ZpZGVyOiBBcHBJRCwgYXBwQmlhdGVjUG9vbFByb3ZpZGVyOiBBcHBJRCk6IHZvaWQKLy8KLy8gU2V0dXAgdGhlIGNvbnRyYWN0Ci8vIEBwYXJhbSBiaWF0ZWNGZWUgQmlhdGVjIGZlZXMKYm9vdHN0cmFwOgoJcHJvdG8gMyAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6ODUKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc1VkcGF0ZXIudmFsdWUsICdPbmx5IHVwZGF0ZXIgY2FuIGNhbGwgYm9vdHN0cmFwIG1ldGhvZCcpCgl0eG4gU2VuZGVyCglieXRlYyAwIC8vICAidSIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgdXBkYXRlciBjYW4gY2FsbCBib290c3RyYXAgbWV0aG9kCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo4NgoJLy8gYXNzZXJ0KGJpYXRlY0ZlZSA8PSAoU0NBTEUgYXMgdWludDI1NikgLyAyLCAnQmlhdGVjIGNhbm5vdCBzZXQgZmVlcyBoaWdoZXIgdGhlbiA1MCUgb2YgbHAgZmVlcycpCglmcmFtZV9kaWcgLTEgLy8gYmlhdGVjRmVlOiB1aW50MjU2CglieXRlYyAzIC8vIDB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAzYjlhY2EwMAoJYnl0ZWMgNCAvLyAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIKCWIvCgliPD0KCgkvLyBCaWF0ZWMgY2Fubm90IHNldCBmZWVzIGhpZ2hlciB0aGVuIDUwJSBvZiBscCBmZWVzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo4NwoJLy8gdGhpcy5iaWF0ZWNGZWUudmFsdWUgPSBiaWF0ZWNGZWUKCWJ5dGVjIDggLy8gICJmIgoJZnJhbWVfZGlnIC0xIC8vIGJpYXRlY0ZlZTogdWludDI1NgoJYXBwX2dsb2JhbF9wdXQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo4OAoJLy8gdGhpcy5hcHBCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLnZhbHVlID0gYXBwQmlhdGVjSWRlbnRpdHlQcm92aWRlcgoJYnl0ZWMgOSAvLyAgImkiCglmcmFtZV9kaWcgLTIgLy8gYXBwQmlhdGVjSWRlbnRpdHlQcm92aWRlcjogQXBwSUQKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6ODkKCS8vIHRoaXMuYXBwQmlhdGVjUG9vbFByb3ZpZGVyLnZhbHVlID0gYXBwQmlhdGVjUG9vbFByb3ZpZGVyCglieXRlYyAxMCAvLyAgInAiCglmcmFtZV9kaWcgLTMgLy8gYXBwQmlhdGVjUG9vbFByb3ZpZGVyOiBBcHBJRAoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QWRkcmVzc1VkcGF0ZXIoYWRkcmVzcyl2b2lkCiphYmlfcm91dGVfc2V0QWRkcmVzc1VkcGF0ZXI6CgkvLyBhOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAxIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDAgKGEpIGZvciBzZXRBZGRyZXNzVWRwYXRlciBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRBZGRyZXNzVWRwYXRlcihhZGRyZXNzKXZvaWQKCWNhbGxzdWIgc2V0QWRkcmVzc1VkcGF0ZXIKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNldEFkZHJlc3NVZHBhdGVyKGE6IEFkZHJlc3MpOiB2b2lkCi8vCi8vIFRvcCBzZWNyZXQgYWNjb3VudCB3aXRoIHdoaWNoIGl0IGlzIHBvc3NpYmxlIHVwZGF0ZSBjb250cmFjdHMgb3IgaWRlbnRpdHkgcHJvdmlkZXIKLy8KLy8gQHBhcmFtIGEgQWRkcmVzcwpzZXRBZGRyZXNzVWRwYXRlcjoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjk4CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgdXBkYXRlciBhZGRyZXNzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgdXBkYXRlciBhZGRyZXNzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo5OQoJLy8gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSA9IGEKCWJ5dGVjIDAgLy8gICJ1IgoJZnJhbWVfZGlnIC0xIC8vIGE6IEFkZHJlc3MKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNldFBhdXNlZCh1aW50NjQpdm9pZAoqYWJpX3JvdXRlX3NldFBhdXNlZDoKCS8vIGE6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJYnRvaQoKCS8vIGV4ZWN1dGUgc2V0UGF1c2VkKHVpbnQ2NCl2b2lkCgljYWxsc3ViIHNldFBhdXNlZAoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gc2V0UGF1c2VkKGE6IHVpbnQ2NCk6IHZvaWQKLy8KLy8gS2lsbCBzd2l0Y2guIEluIHRoZSBleHRyZW1lIGNhc2UgYWxsIHNlcnZpY2VzIChkZXBvc2l0LCB0cmFkaW5nLCB3aXRoZHJhd2FsLCBpZGVudGl0eSBtb2RpZmljYXRpb25zIGFuZCBtb3JlKSBjYW4gYmUgc3VzcGVuZGVkLgovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldFBhdXNlZDoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjEwOAoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSwgJ09ubHkgdXBkYXRlciBjYW4gcGF1c2UgYW5kIHVucGF1c2UgdGhlIGJpYXRlYyBzZXJ2aWNlcycpCgl0eG4gU2VuZGVyCglieXRlYyAwIC8vICAidSIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgdXBkYXRlciBjYW4gcGF1c2UgYW5kIHVucGF1c2UgdGhlIGJpYXRlYyBzZXJ2aWNlcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTA5CgkvLyB0aGlzLnN1c3BlbmRlZC52YWx1ZSA9IGEKCWJ5dGVjIDcgLy8gICJzIgoJZnJhbWVfZGlnIC0xIC8vIGE6IHVpbnQ2NAoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QWRkcmVzc0dvdihhZGRyZXNzKXZvaWQKKmFiaV9yb3V0ZV9zZXRBZGRyZXNzR292OgoJLy8gYTogYWRkcmVzcwoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZHVwCglsZW4KCWludGMgMSAvLyAzMgoJPT0KCgkvLyBhcmd1bWVudCAwIChhKSBmb3Igc2V0QWRkcmVzc0dvdiBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRBZGRyZXNzR292KGFkZHJlc3Mpdm9pZAoJY2FsbHN1YiBzZXRBZGRyZXNzR292CglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBzZXRBZGRyZXNzR292KGE6IEFkZHJlc3MpOiB2b2lkCi8vCi8vIEV4ZWN1dGlvbiBhZGRyZXNzIHdpdGggd2hpY2ggaXQgaXMgcG9zc2libGUgdG8gb3B0IGluIGZvciBnb3Zlcm5hbmNlCi8vCi8vIEBwYXJhbSBhIEFkZHJlc3MKc2V0QWRkcmVzc0dvdjoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjExOAoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSwgJ09ubHkgdXBkYXRlciBjYW4gY2hhbmdlIGdvdiBhZGRyZXNzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgZ292IGFkZHJlc3MKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjExOQoJLy8gdGhpcy5hZGRyZXNzR292LnZhbHVlID0gYQoJYnl0ZWMgNiAvLyAgImciCglmcmFtZV9kaWcgLTEgLy8gYTogQWRkcmVzcwoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QWRkcmVzc0V4ZWN1dGl2ZShhZGRyZXNzKXZvaWQKKmFiaV9yb3V0ZV9zZXRBZGRyZXNzRXhlY3V0aXZlOgoJLy8gYTogYWRkcmVzcwoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZHVwCglsZW4KCWludGMgMSAvLyAzMgoJPT0KCgkvLyBhcmd1bWVudCAwIChhKSBmb3Igc2V0QWRkcmVzc0V4ZWN1dGl2ZSBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRBZGRyZXNzRXhlY3V0aXZlKGFkZHJlc3Mpdm9pZAoJY2FsbHN1YiBzZXRBZGRyZXNzRXhlY3V0aXZlCglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBzZXRBZGRyZXNzRXhlY3V0aXZlKGE6IEFkZHJlc3MpOiB2b2lkCi8vCi8vIEV4ZWN1dGlvbiBhZGRyZXNzIHdpdGggd2hpY2ggaXQgaXMgcG9zc2libGUgdG8gY2hhbmdlIGdsb2JhbCBiaWF0ZWMgZmVlcwovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldEFkZHJlc3NFeGVjdXRpdmU6Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxMjgKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc1VkcGF0ZXIudmFsdWUsICdPbmx5IHVwZGF0ZXIgY2FuIGNoYW5nZSBhZGRyZXNzRXhlY3V0aXZlJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgYWRkcmVzc0V4ZWN1dGl2ZQoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTI5CgkvLyB0aGlzLmFkZHJlc3NFeGVjdXRpdmUudmFsdWUgPSBhCglieXRlYyAyIC8vICAiZSIKCWZyYW1lX2RpZyAtMSAvLyBhOiBBZGRyZXNzCglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRBZGRyZXNzRXhlY3V0aXZlRmVlKGFkZHJlc3Mpdm9pZAoqYWJpX3JvdXRlX3NldEFkZHJlc3NFeGVjdXRpdmVGZWU6CgkvLyBhOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAxIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDAgKGEpIGZvciBzZXRBZGRyZXNzRXhlY3V0aXZlRmVlIG11c3QgYmUgYSBhZGRyZXNzCglhc3NlcnQKCgkvLyBleGVjdXRlIHNldEFkZHJlc3NFeGVjdXRpdmVGZWUoYWRkcmVzcyl2b2lkCgljYWxsc3ViIHNldEFkZHJlc3NFeGVjdXRpdmVGZWUKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNldEFkZHJlc3NFeGVjdXRpdmVGZWUoYTogQWRkcmVzcyk6IHZvaWQKLy8KLy8gRXhlY3V0aW9uIGZlZSBhZGRyZXNzIGlzIGFkZHJlc3Mgd2hpY2ggY2FuIHRha2UgZmVlcyBmcm9tIHBvb2xzLgovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldEFkZHJlc3NFeGVjdXRpdmVGZWU6Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxMzgKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZS52YWx1ZSwgJ09ubHkgYWRkcmVzc0V4ZWN1dGl2ZSBjYW4gY2hhbmdlIGZlZSBleGVjdXRvciBhZGRyZXNzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDIgLy8gICJlIgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSBhZGRyZXNzRXhlY3V0aXZlIGNhbiBjaGFuZ2UgZmVlIGV4ZWN1dG9yIGFkZHJlc3MKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjEzOQoJLy8gdGhpcy5hZGRyZXNzRXhlY3V0aXZlRmVlLnZhbHVlID0gYQoJYnl0ZWMgMSAvLyAgImVmIgoJZnJhbWVfZGlnIC0xIC8vIGE6IEFkZHJlc3MKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNldEJpYXRlY0lkZW50aXR5KHVpbnQ2NCl2b2lkCiphYmlfcm91dGVfc2V0QmlhdGVjSWRlbnRpdHk6CgkvLyBhOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWJ0b2kKCgkvLyBleGVjdXRlIHNldEJpYXRlY0lkZW50aXR5KHVpbnQ2NCl2b2lkCgljYWxsc3ViIHNldEJpYXRlY0lkZW50aXR5CglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBzZXRCaWF0ZWNJZGVudGl0eShhOiBBcHBJRCk6IHZvaWQKLy8KLy8gQXBwIGlkZW50aXR5IHNldHRlcgovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldEJpYXRlY0lkZW50aXR5OgoJcHJvdG8gMSAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTQ4CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgYXBwSWRlbnRpdHlQcm92aWRlcicpCgl0eG4gU2VuZGVyCglieXRlYyAwIC8vICAidSIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgdXBkYXRlciBjYW4gY2hhbmdlIGFwcElkZW50aXR5UHJvdmlkZXIKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjE0OQoJLy8gdGhpcy5hcHBCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLnZhbHVlID0gYQoJYnl0ZWMgOSAvLyAgImkiCglmcmFtZV9kaWcgLTEgLy8gYTogQXBwSUQKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNldEJpYXRlY1Bvb2wodWludDY0KXZvaWQKKmFiaV9yb3V0ZV9zZXRCaWF0ZWNQb29sOgoJLy8gYTogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglidG9pCgoJLy8gZXhlY3V0ZSBzZXRCaWF0ZWNQb29sKHVpbnQ2NCl2b2lkCgljYWxsc3ViIHNldEJpYXRlY1Bvb2wKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNldEJpYXRlY1Bvb2woYTogQXBwSUQpOiB2b2lkCi8vCi8vIEFwcCBpZGVudGl0eSBzZXR0ZXIKLy8KLy8gQHBhcmFtIGEgQWRkcmVzcwpzZXRCaWF0ZWNQb29sOgoJcHJvdG8gMSAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTU4CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgYXBwUG9vbFByb3ZpZGVyJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgYXBwUG9vbFByb3ZpZGVyCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxNTkKCS8vIHRoaXMuYXBwQmlhdGVjUG9vbFByb3ZpZGVyLnZhbHVlID0gYQoJYnl0ZWMgMTAgLy8gICJwIgoJZnJhbWVfZGlnIC0xIC8vIGE6IEFwcElECglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRCaWF0ZWNGZWUodWludDI1Nil2b2lkCiphYmlfcm91dGVfc2V0QmlhdGVjRmVlOgoJLy8gYmlhdGVjRmVlOiB1aW50MjU2Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAxIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDAgKGJpYXRlY0ZlZSkgZm9yIHNldEJpYXRlY0ZlZSBtdXN0IGJlIGEgdWludDI1NgoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRCaWF0ZWNGZWUodWludDI1Nil2b2lkCgljYWxsc3ViIHNldEJpYXRlY0ZlZQoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gc2V0QmlhdGVjRmVlKGJpYXRlY0ZlZTogdWludDI1Nik6IHZvaWQKLy8KLy8gRmVlcyBpbiA5IGRlY2ltYWxzLiAxXzAwMF8wMDBfMDAwID0gMTAwJQovLyBGZWVzIGluIDkgZGVjaW1hbHMuIDEwXzAwMF8wMDAgPSAxJQovLyBGZWVzIGluIDkgZGVjaW1hbHMuIDEwMF8wMDAgPSAwLDAxJQovLwovLyBGZWVzIGFyZSByZXNwZWN0ZnVsIGZyb20gdGhlIGFsbCBmZWVzIHRha2VuIHRvIHRoZSBMUCBwcm92aWRlcnMuIElmIExQcyBjaGFyZ2UgMSUgZmVlLCBhbmQgYmlhdGVjIGNoYXJnZXMgMTAlIGZlZSwgTFAgd2lsbCByZWNlaXZlIDAuMDklIGZlZSBhbmQgYmlhdGVjIDAuMDElIGZlZQovLwovLyBAcGFyYW0gYmlhdGVjRmVlIEZlZQpzZXRCaWF0ZWNGZWU6Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxNzIKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZS52YWx1ZSwgJ09ubHkgZXhlY3V0aXZlIGFkZHJlc3MgY2FuIGNoYW5nZSBmZWVzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDIgLy8gICJlIgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSBleGVjdXRpdmUgYWRkcmVzcyBjYW4gY2hhbmdlIGZlZXMKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjE3MwoJLy8gYXNzZXJ0KGJpYXRlY0ZlZSA8PSAoU0NBTEUgYXMgdWludDI1NikgLyAyLCAnQmlhdGVjIGNhbm5vdCBzZXQgZmVlcyBoaWdoZXIgdGhlbiA1MCUgb2YgbHAgZmVlcycpCglmcmFtZV9kaWcgLTEgLy8gYmlhdGVjRmVlOiB1aW50MjU2CglieXRlYyAzIC8vIDB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAzYjlhY2EwMAoJYnl0ZWMgNCAvLyAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIKCWIvCgliPD0KCgkvLyBCaWF0ZWMgY2Fubm90IHNldCBmZWVzIGhpZ2hlciB0aGVuIDUwJSBvZiBscCBmZWVzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxNzQKCS8vIHRoaXMuYmlhdGVjRmVlLnZhbHVlID0gYmlhdGVjRmVlCglieXRlYyA4IC8vICAiZiIKCWZyYW1lX2RpZyAtMSAvLyBiaWF0ZWNGZWU6IHVpbnQyNTYKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24oYnl0ZVtdLGJ5dGVbXSxieXRlW10sdWludDY0LHVpbnQ2NCx1aW50NjQpdm9pZAoqYWJpX3JvdXRlX3NlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb246CgkvLyB2b3RlS2V5RGlsdXRpb246IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgNgoJYnRvaQoKCS8vIHZvdGVMYXN0OiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDUKCWJ0b2kKCgkvLyB2b3RlRmlyc3Q6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgNAoJYnRvaQoKCS8vIHN0YXRlUHJvb2ZQSzogYnl0ZVtdCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAzCglleHRyYWN0IDIgMAoKCS8vIHNlbGVjdGlvblBLOiBieXRlW10KCXR4bmEgQXBwbGljYXRpb25BcmdzIDIKCWV4dHJhY3QgMiAwCgoJLy8gdm90ZVBLOiBieXRlW10KCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWV4dHJhY3QgMiAwCgoJLy8gZXhlY3V0ZSBzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uKGJ5dGVbXSxieXRlW10sYnl0ZVtdLHVpbnQ2NCx1aW50NjQsdWludDY0KXZvaWQKCWNhbGxzdWIgc2VuZE9ubGluZUtleVJlZ2lzdHJhdGlvbgoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gc2VuZE9ubGluZUtleVJlZ2lzdHJhdGlvbih2b3RlUEs6IGJ5dGVzLCBzZWxlY3Rpb25QSzogYnl0ZXMsIHN0YXRlUHJvb2ZQSzogYnl0ZXMsIHZvdGVGaXJzdDogdWludDY0LCB2b3RlTGFzdDogdWludDY0LCB2b3RlS2V5RGlsdXRpb246IHVpbnQ2NCk6IHZvaWQKLy8KLy8gYWRkcmVzc0V4ZWN1dGl2ZUZlZSBjYW4gcGVyZm9tIGtleSByZWdpc3RyYXRpb24gZm9yIHRoaXMgTFAgcG9vbAovLwovLyBPbmx5IGFkZHJlc3NFeGVjdXRpdmVGZWUgaXMgYWxsb3dlZCB0byBleGVjdXRlIHRoaXMgbWV0aG9kLgpzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uOgoJcHJvdG8gNiAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTkwCgkvLyBhc3NlcnQoCgkvLyAgICAgICB0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZUZlZS52YWx1ZSwKCS8vICAgICAgICdPbmx5IGZlZSBleGVjdXRvciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB0YWtlIHRoZSBjb2xsZWN0ZWQgZmVlcycKCS8vICAgICApCgl0eG4gU2VuZGVyCglieXRlYyAxIC8vICAiZWYiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBPbmx5IGZlZSBleGVjdXRvciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB0YWtlIHRoZSBjb2xsZWN0ZWQgZmVlcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTk0CgkvLyBzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uKHsKCS8vICAgICAgIHNlbGVjdGlvblBLOiBzZWxlY3Rpb25QSywKCS8vICAgICAgIHN0YXRlUHJvb2ZQSzogc3RhdGVQcm9vZlBLLAoJLy8gICAgICAgdm90ZUZpcnN0OiB2b3RlRmlyc3QsCgkvLyAgICAgICB2b3RlS2V5RGlsdXRpb246IHZvdGVLZXlEaWx1dGlvbiwKCS8vICAgICAgIHZvdGVMYXN0OiB2b3RlTGFzdCwKCS8vICAgICAgIHZvdGVQSzogdm90ZVBLLAoJLy8gICAgICAgZmVlOiAwLAoJLy8gICAgIH0pCglpdHhuX2JlZ2luCglwdXNoaW50IDIgLy8ga2V5cmVnCglpdHhuX2ZpZWxkIFR5cGVFbnVtCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTk1CgkvLyBzZWxlY3Rpb25QSzogc2VsZWN0aW9uUEsKCWZyYW1lX2RpZyAtMiAvLyBzZWxlY3Rpb25QSzogYnl0ZXMKCWl0eG5fZmllbGQgU2VsZWN0aW9uUEsKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxOTYKCS8vIHN0YXRlUHJvb2ZQSzogc3RhdGVQcm9vZlBLCglmcmFtZV9kaWcgLTMgLy8gc3RhdGVQcm9vZlBLOiBieXRlcwoJaXR4bl9maWVsZCBTdGF0ZVByb29mUEsKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxOTcKCS8vIHZvdGVGaXJzdDogdm90ZUZpcnN0CglmcmFtZV9kaWcgLTQgLy8gdm90ZUZpcnN0OiB1aW50NjQKCWl0eG5fZmllbGQgVm90ZUZpcnN0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTk4CgkvLyB2b3RlS2V5RGlsdXRpb246IHZvdGVLZXlEaWx1dGlvbgoJZnJhbWVfZGlnIC02IC8vIHZvdGVLZXlEaWx1dGlvbjogdWludDY0CglpdHhuX2ZpZWxkIFZvdGVLZXlEaWx1dGlvbgoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjE5OQoJLy8gdm90ZUxhc3Q6IHZvdGVMYXN0CglmcmFtZV9kaWcgLTUgLy8gdm90ZUxhc3Q6IHVpbnQ2NAoJaXR4bl9maWVsZCBWb3RlTGFzdAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIwMAoJLy8gdm90ZVBLOiB2b3RlUEsKCWZyYW1lX2RpZyAtMSAvLyB2b3RlUEs6IGJ5dGVzCglpdHhuX2ZpZWxkIFZvdGVQSwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIwMQoJLy8gZmVlOiAwCglpbnRjIDIgLy8gMAoJaXR4bl9maWVsZCBGZWUKCgkvLyBTdWJtaXQgaW5uZXIgdHJhbnNhY3Rpb24KCWl0eG5fc3VibWl0CglyZXRzdWIKCi8vIHdpdGhkcmF3RXhjZXNzQXNzZXRzKHVpbnQ2NCx1aW50NjQpdWludDY0CiphYmlfcm91dGVfd2l0aGRyYXdFeGNlc3NBc3NldHM6CgkvLyBUaGUgQUJJIHJldHVybiBwcmVmaXgKCXB1c2hieXRlcyAweDE1MWY3Yzc1CgoJLy8gYW1vdW50OiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDIKCWJ0b2kKCgkvLyBhc3NldDogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglidG9pCgoJLy8gZXhlY3V0ZSB3aXRoZHJhd0V4Y2Vzc0Fzc2V0cyh1aW50NjQsdWludDY0KXVpbnQ2NAoJY2FsbHN1YiB3aXRoZHJhd0V4Y2Vzc0Fzc2V0cwoJaXRvYgoJY29uY2F0Cglsb2cKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHdpdGhkcmF3RXhjZXNzQXNzZXRzKGFzc2V0OiBBc3NldElELCBhbW91bnQ6IHVpbnQ2NCk6IHVpbnQ2NAovLwovLyBJZiBzb21lb25lIGRlcG9zaXRzIGV4Y2VzcyBhc3NldHMgdG8gdGhpcyBzbWFydCBjb250cmFjdCBiaWF0ZWMgY2FuIHVzZSB0aGVtLgovLwovLyBPbmx5IGFkZHJlc3NFeGVjdXRpdmVGZWUgaXMgYWxsb3dlZCB0byBleGVjdXRlIHRoaXMgbWV0aG9kLgovLwovLyBAcGFyYW0gYXNzZXQgQXNzZXQgdG8gd2l0aGRyYXcuIElmIG5hdGl2ZSB0b2tlbiwgdGhlbiB6ZXJvCi8vIEBwYXJhbSBhbW91bnQgQW1vdW50IG9mIHRoZSBhc3NldCB0byBiZSB3aXRoZHJhd24Kd2l0aGRyYXdFeGNlc3NBc3NldHM6Cglwcm90byAyIDEKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMTQKCS8vIGFzc2VydCgKCS8vICAgICAgIHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzRXhlY3V0aXZlRmVlLnZhbHVlLAoJLy8gICAgICAgJ09ubHkgZmVlIGV4ZWN1dG9yIHNldHVwIGluIHRoZSBjb25maWcgY2FuIHRha2UgdGhlIGNvbGxlY3RlZCBmZWVzJwoJLy8gICAgICkKCXR4biBTZW5kZXIKCWJ5dGVjIDEgLy8gICJlZiIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgZmVlIGV4ZWN1dG9yIHNldHVwIGluIHRoZSBjb25maWcgY2FuIHRha2UgdGhlIGNvbGxlY3RlZCBmZWVzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMTkKCS8vIHRoaXMuZG9BeGZlcih0aGlzLnR4bi5zZW5kZXIsIGFzc2V0LCBhbW91bnQpCglmcmFtZV9kaWcgLTIgLy8gYW1vdW50OiB1aW50NjQKCWZyYW1lX2RpZyAtMSAvLyBhc3NldDogQXNzZXRJRAoJdHhuIFNlbmRlcgoJY2FsbHN1YiBkb0F4ZmVyCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjIxCgkvLyByZXR1cm4gYW1vdW50OwoJZnJhbWVfZGlnIC0yIC8vIGFtb3VudDogdWludDY0CglyZXRzdWIKCi8vIGRvQXhmZXIocmVjZWl2ZXI6IEFkZHJlc3MsIGFzc2V0OiBBc3NldElELCBhbW91bnQ6IHVpbnQ2NCk6IHZvaWQKLy8KLy8gRXhlY3V0ZXMgeGZlciBvZiBwYXkgcGF5bWVudCBtZXRob2RzIHRvIHNwZWNpZmllZCByZWNlaXZlciBmcm9tIHNtYXJ0IGNvbnRyYWN0IGFnZ3JlZ2F0ZWQgYWNjb3VudCB3aXRoIHNwZWNpZmllZCBhc3NldCBhbmQgYW1vdW50IGluIHRva2VucyBkZWNpbWFscwovLyBAcGFyYW0gcmVjZWl2ZXIgUmVjZWl2ZXIKLy8gQHBhcmFtIGFzc2V0IEFzc2V0LiBaZXJvIGZvciBhbGdvCi8vIEBwYXJhbSBhbW91bnQgQW1vdW50IHRvIHRyYW5zZmVyCmRvQXhmZXI6Cglwcm90byAzIDAKCgkvLyAqaWYwX2NvbmRpdGlvbgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjMxCgkvLyBhc3NldC5pZCA9PT0gMAoJZnJhbWVfZGlnIC0yIC8vIGFzc2V0OiBBc3NldElECglpbnRjIDIgLy8gMAoJPT0KCWJ6ICppZjBfZWxzZQoKCS8vICppZjBfY29uc2VxdWVudAoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjMyCgkvLyBzZW5kUGF5bWVudCh7CgkvLyAgICAgICAgIHJlY2VpdmVyOiByZWNlaXZlciwKCS8vICAgICAgICAgYW1vdW50OiBhbW91bnQsCgkvLyAgICAgICAgIGZlZTogMCwKCS8vICAgICAgIH0pCglpdHhuX2JlZ2luCglpbnRjIDAgLy8gIHBheQoJaXR4bl9maWVsZCBUeXBlRW51bQoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIzMwoJLy8gcmVjZWl2ZXI6IHJlY2VpdmVyCglmcmFtZV9kaWcgLTEgLy8gcmVjZWl2ZXI6IEFkZHJlc3MKCWl0eG5fZmllbGQgUmVjZWl2ZXIKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMzQKCS8vIGFtb3VudDogYW1vdW50CglmcmFtZV9kaWcgLTMgLy8gYW1vdW50OiB1aW50NjQKCWl0eG5fZmllbGQgQW1vdW50CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjM1CgkvLyBmZWU6IDAKCWludGMgMiAvLyAwCglpdHhuX2ZpZWxkIEZlZQoKCS8vIFN1Ym1pdCBpbm5lciB0cmFuc2FjdGlvbgoJaXR4bl9zdWJtaXQKCWIgKmlmMF9lbmQKCippZjBfZWxzZToKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIzOAoJLy8gc2VuZEFzc2V0VHJhbnNmZXIoewoJLy8gICAgICAgICBhc3NldFJlY2VpdmVyOiByZWNlaXZlciwKCS8vICAgICAgICAgeGZlckFzc2V0OiBhc3NldCwKCS8vICAgICAgICAgYXNzZXRBbW91bnQ6IGFtb3VudCwKCS8vICAgICAgICAgZmVlOiAwLAoJLy8gICAgICAgfSkKCWl0eG5fYmVnaW4KCXB1c2hpbnQgNCAvLyBheGZlcgoJaXR4bl9maWVsZCBUeXBlRW51bQoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIzOQoJLy8gYXNzZXRSZWNlaXZlcjogcmVjZWl2ZXIKCWZyYW1lX2RpZyAtMSAvLyByZWNlaXZlcjogQWRkcmVzcwoJaXR4bl9maWVsZCBBc3NldFJlY2VpdmVyCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjQwCgkvLyB4ZmVyQXNzZXQ6IGFzc2V0CglmcmFtZV9kaWcgLTIgLy8gYXNzZXQ6IEFzc2V0SUQKCWl0eG5fZmllbGQgWGZlckFzc2V0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjQxCgkvLyBhc3NldEFtb3VudDogYW1vdW50CglmcmFtZV9kaWcgLTMgLy8gYW1vdW50OiB1aW50NjQKCWl0eG5fZmllbGQgQXNzZXRBbW91bnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyNDIKCS8vIGZlZTogMAoJaW50YyAyIC8vIDAKCWl0eG5fZmllbGQgRmVlCgoJLy8gU3VibWl0IGlubmVyIHRyYW5zYWN0aW9uCglpdHhuX3N1Ym1pdAoKKmlmMF9lbmQ6CglyZXRzdWIKCipjcmVhdGVfTm9PcDoKCXB1c2hieXRlcyAweGI4NDQ3YjM2IC8vIG1ldGhvZCAiY3JlYXRlQXBwbGljYXRpb24oKXZvaWQiCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAwCgltYXRjaCAqYWJpX3JvdXRlX2NyZWF0ZUFwcGxpY2F0aW9uCgoJLy8gdGhpcyBjb250cmFjdCBkb2VzIG5vdCBpbXBsZW1lbnQgdGhlIGdpdmVuIEFCSSBtZXRob2QgZm9yIGNyZWF0ZSBOb09wCgllcnIKCipjYWxsX05vT3A6CglwdXNoYnl0ZXMgMHg0OTVjZTdlZCAvLyBtZXRob2QgImJvb3RzdHJhcCh1aW50MjU2LHVpbnQ2NCx1aW50NjQpdm9pZCIKCXB1c2hieXRlcyAweGJmYzIwODYwIC8vIG1ldGhvZCAic2V0QWRkcmVzc1VkcGF0ZXIoYWRkcmVzcyl2b2lkIgoJcHVzaGJ5dGVzIDB4MGNkYzEwZmMgLy8gbWV0aG9kICJzZXRQYXVzZWQodWludDY0KXZvaWQiCglwdXNoYnl0ZXMgMHg2Yjk1NWY0YiAvLyBtZXRob2QgInNldEFkZHJlc3NHb3YoYWRkcmVzcyl2b2lkIgoJcHVzaGJ5dGVzIDB4OGIxODdiM2QgLy8gbWV0aG9kICJzZXRBZGRyZXNzRXhlY3V0aXZlKGFkZHJlc3Mpdm9pZCIKCXB1c2hieXRlcyAweDUwZTA3ZDg4IC8vIG1ldGhvZCAic2V0QWRkcmVzc0V4ZWN1dGl2ZUZlZShhZGRyZXNzKXZvaWQiCglwdXNoYnl0ZXMgMHhiYWJlMWUxMSAvLyBtZXRob2QgInNldEJpYXRlY0lkZW50aXR5KHVpbnQ2NCl2b2lkIgoJcHVzaGJ5dGVzIDB4YzU4YjlkYTQgLy8gbWV0aG9kICJzZXRCaWF0ZWNQb29sKHVpbnQ2NCl2b2lkIgoJcHVzaGJ5dGVzIDB4Y2EzNDRhMzQgLy8gbWV0aG9kICJzZXRCaWF0ZWNGZWUodWludDI1Nil2b2lkIgoJcHVzaGJ5dGVzIDB4NDlmM2ExN2YgLy8gbWV0aG9kICJzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uKGJ5dGVbXSxieXRlW10sYnl0ZVtdLHVpbnQ2NCx1aW50NjQsdWludDY0KXZvaWQiCglwdXNoYnl0ZXMgMHg4NzI4MzczMCAvLyBtZXRob2QgIndpdGhkcmF3RXhjZXNzQXNzZXRzKHVpbnQ2NCx1aW50NjQpdWludDY0IgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAoJbWF0Y2ggKmFiaV9yb3V0ZV9ib290c3RyYXAgKmFiaV9yb3V0ZV9zZXRBZGRyZXNzVWRwYXRlciAqYWJpX3JvdXRlX3NldFBhdXNlZCAqYWJpX3JvdXRlX3NldEFkZHJlc3NHb3YgKmFiaV9yb3V0ZV9zZXRBZGRyZXNzRXhlY3V0aXZlICphYmlfcm91dGVfc2V0QWRkcmVzc0V4ZWN1dGl2ZUZlZSAqYWJpX3JvdXRlX3NldEJpYXRlY0lkZW50aXR5ICphYmlfcm91dGVfc2V0QmlhdGVjUG9vbCAqYWJpX3JvdXRlX3NldEJpYXRlY0ZlZSAqYWJpX3JvdXRlX3NlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24gKmFiaV9yb3V0ZV93aXRoZHJhd0V4Y2Vzc0Fzc2V0cwoKCS8vIHRoaXMgY29udHJhY3QgZG9lcyBub3QgaW1wbGVtZW50IHRoZSBnaXZlbiBBQkkgbWV0aG9kIGZvciBjYWxsIE5vT3AKCWVycgoKKmNhbGxfVXBkYXRlQXBwbGljYXRpb246CglwdXNoYnl0ZXMgMHg2OTM2YzYyZiAvLyBtZXRob2QgInVwZGF0ZUFwcGxpY2F0aW9uKGJ5dGVbXSl2b2lkIgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAoJbWF0Y2ggKmFiaV9yb3V0ZV91cGRhdGVBcHBsaWNhdGlvbgoKCS8vIHRoaXMgY29udHJhY3QgZG9lcyBub3QgaW1wbGVtZW50IHRoZSBnaXZlbiBBQkkgbWV0aG9kIGZvciBjYWxsIFVwZGF0ZUFwcGxpY2F0aW9uCgllcnI=',
+    clear: 'I3ByYWdtYSB2ZXJzaW9uIDEw',
+  },
+  byteCode: {
+    approval:
+      'CiADASAAJgsBdQJlZgFlIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA7msoAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBXNjdmVyAWcBcwFmAWkBcDEYFIEGCzEZCI0MAh0AAAAAAAACewAAAg8AAAAAAAAAAAAAAIgAAiJDigAAJwWAFkJJQVRFQy1DT05GSUctMDEtMDItMDFnKjEAZycGMQBnKDEAZykxAGcnByRniTYaAVcCAIgAAiJDigEAMQAoZBJEJwWL/2eJNhoDFzYaAhc2GgFJFSMSRIgAAiJDigMAMQAoZBJEi/8rJwSipkQnCIv/ZycJi/5nJwqL/WeJNhoBSRUjEkSIAAIiQ4oBADEAKGQSRCiL/2eJNhoBF4gAAiJDigEAMQAoZBJEJweL/2eJNhoBSRUjEkSIAAIiQ4oBADEAKGQSRCcGi/9niTYaAUkVIxJEiAACIkOKAQAxAChkEkQqi/9niTYaAUkVIxJEiAACIkOKAQAxACpkEkQpi/9niTYaAReIAAIiQ4oBADEAKGQSRCcJi/9niTYaAReIAAIiQ4oBADEAKGQSRCcKi/9niTYaAUkVIxJEiAACIkOKAQAxACpkEkSL/ysnBKKmRCcIi/9niTYaBhc2GgUXNhoEFzYaA1cCADYaAlcCADYaAVcCAIgAAiJDigYAMQApZBJEsYECshCL/rILi/2yP4v8sgyL+rIOi/uyDYv/sgoksgGziYAEFR98dTYaAhc2GgEXiAAFFlCwIkOKAgExAClkEkSL/ov/MQCIAAOL/omKAwCL/iQSQQATsSKyEIv/sgeL/bIIJLIBs0IAFbGBBLIQi/+yFIv+shGL/bISJLIBs4mABLhEezY2GgCOAf3lAIAESVzn7YAEv8IIYIAEDNwQ/IAEa5VfS4AEixh7PYAEUOB9iIAEur4eEYAExYudpIAEyjRKNIAESfOhf4AEhyg3MDYaAI4L/dr+EP4r/kP+X/56/pX+rf7F/un/NwCABGk2xi82GgCOAf2yAA==',
+    clear: 'Cg==',
+  },
+  compilerInfo: { compiler: 'algod', compilerVersion: { major: 4, minor: 0, patch: 3, commitHash: 'f3be4a3b' } },
+} as unknown as Arc56Contract;
 
 /**
  * A state record containing binary data
@@ -33,22 +701,22 @@ export interface BinaryState {
   /**
    * Gets the state value as a Uint8Array
    */
-  asByteArray(): Uint8Array | undefined
+  asByteArray(): Uint8Array | undefined;
   /**
    * Gets the state value as a string
    */
-  asString(): string | undefined
+  asString(): string | undefined;
 }
 
 class BinaryStateValue implements BinaryState {
   constructor(private value: Uint8Array | undefined) {}
 
   asByteArray(): Uint8Array | undefined {
-    return this.value
+    return this.value;
   }
 
   asString(): string | undefined {
-    return this.value !== undefined ? Buffer.from(this.value).toString('utf-8') : undefined
+    return this.value !== undefined ? Buffer.from(this.value).toString('utf-8') : undefined;
   }
 }
 
@@ -60,8 +728,7 @@ export type Expand<T> = T extends (...args: infer A) => infer R
   ? (...args: Expand<A>) => Expand<R>
   : T extends infer O
     ? { [K in keyof O]: O[K] }
-    : never
-
+    : never;
 
 /**
  * The argument types for the BiatecConfigProvider contract
@@ -71,123 +738,134 @@ export type BiatecConfigProviderArgs = {
    * The object representation of the arguments for each method
    */
   obj: {
-    'createApplication()void': Record<string, never>
+    'createApplication()void': Record<string, never>;
     'updateApplication(byte[])void': {
-      newVersion: Uint8Array
-    }
+      newVersion: Uint8Array;
+    };
     'bootstrap(uint256,uint64,uint64)void': {
       /**
        * Biatec fees
        */
-      biatecFee: bigint | number
-      appBiatecIdentityProvider: bigint | number
-      appBiatecPoolProvider: bigint | number
-    }
+      biatecFee: bigint | number;
+      appBiatecIdentityProvider: bigint | number;
+      appBiatecPoolProvider: bigint | number;
+    };
     'setAddressUdpater(address)void': {
       /**
        * Address
        */
-      a: string
-    }
+      a: string;
+    };
     'setPaused(uint64)void': {
       /**
        * Address
        */
-      a: bigint | number
-    }
+      a: bigint | number;
+    };
     'setAddressGov(address)void': {
       /**
        * Address
        */
-      a: string
-    }
+      a: string;
+    };
     'setAddressExecutive(address)void': {
       /**
        * Address
        */
-      a: string
-    }
+      a: string;
+    };
     'setAddressExecutiveFee(address)void': {
       /**
        * Address
        */
-      a: string
-    }
+      a: string;
+    };
     'setBiatecIdentity(uint64)void': {
       /**
        * Address
        */
-      a: bigint | number
-    }
+      a: bigint | number;
+    };
     'setBiatecPool(uint64)void': {
       /**
        * Address
        */
-      a: bigint | number
-    }
+      a: bigint | number;
+    };
     'setBiatecFee(uint256)void': {
       /**
        * Fee
        */
-      biatecFee: bigint | number
-    }
+      biatecFee: bigint | number;
+    };
     'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void': {
-      votePk: Uint8Array
-      selectionPk: Uint8Array
-      stateProofPk: Uint8Array
-      voteFirst: bigint | number
-      voteLast: bigint | number
-      voteKeyDilution: bigint | number
-    }
+      votePk: Uint8Array;
+      selectionPk: Uint8Array;
+      stateProofPk: Uint8Array;
+      voteFirst: bigint | number;
+      voteLast: bigint | number;
+      voteKeyDilution: bigint | number;
+    };
     'withdrawExcessAssets(uint64,uint64)uint64': {
       /**
        * Asset to withdraw. If native token, then zero
        */
-      asset: bigint | number
+      asset: bigint | number;
       /**
        * Amount of the asset to be withdrawn
        */
-      amount: bigint | number
-    }
-  }
+      amount: bigint | number;
+    };
+  };
   /**
    * The tuple representation of the arguments for each method
    */
   tuple: {
-    'createApplication()void': []
-    'updateApplication(byte[])void': [newVersion: Uint8Array]
-    'bootstrap(uint256,uint64,uint64)void': [biatecFee: bigint | number, appBiatecIdentityProvider: bigint | number, appBiatecPoolProvider: bigint | number]
-    'setAddressUdpater(address)void': [a: string]
-    'setPaused(uint64)void': [a: bigint | number]
-    'setAddressGov(address)void': [a: string]
-    'setAddressExecutive(address)void': [a: string]
-    'setAddressExecutiveFee(address)void': [a: string]
-    'setBiatecIdentity(uint64)void': [a: bigint | number]
-    'setBiatecPool(uint64)void': [a: bigint | number]
-    'setBiatecFee(uint256)void': [biatecFee: bigint | number]
-    'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void': [votePk: Uint8Array, selectionPk: Uint8Array, stateProofPk: Uint8Array, voteFirst: bigint | number, voteLast: bigint | number, voteKeyDilution: bigint | number]
-    'withdrawExcessAssets(uint64,uint64)uint64': [asset: bigint | number, amount: bigint | number]
-  }
-}
+    'createApplication()void': [];
+    'updateApplication(byte[])void': [newVersion: Uint8Array];
+    'bootstrap(uint256,uint64,uint64)void': [
+      biatecFee: bigint | number,
+      appBiatecIdentityProvider: bigint | number,
+      appBiatecPoolProvider: bigint | number,
+    ];
+    'setAddressUdpater(address)void': [a: string];
+    'setPaused(uint64)void': [a: bigint | number];
+    'setAddressGov(address)void': [a: string];
+    'setAddressExecutive(address)void': [a: string];
+    'setAddressExecutiveFee(address)void': [a: string];
+    'setBiatecIdentity(uint64)void': [a: bigint | number];
+    'setBiatecPool(uint64)void': [a: bigint | number];
+    'setBiatecFee(uint256)void': [biatecFee: bigint | number];
+    'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void': [
+      votePk: Uint8Array,
+      selectionPk: Uint8Array,
+      stateProofPk: Uint8Array,
+      voteFirst: bigint | number,
+      voteLast: bigint | number,
+      voteKeyDilution: bigint | number,
+    ];
+    'withdrawExcessAssets(uint64,uint64)uint64': [asset: bigint | number, amount: bigint | number];
+  };
+};
 
 /**
  * The return type for each method
  */
 export type BiatecConfigProviderReturns = {
-  'createApplication()void': void
-  'updateApplication(byte[])void': void
-  'bootstrap(uint256,uint64,uint64)void': void
-  'setAddressUdpater(address)void': void
-  'setPaused(uint64)void': void
-  'setAddressGov(address)void': void
-  'setAddressExecutive(address)void': void
-  'setAddressExecutiveFee(address)void': void
-  'setBiatecIdentity(uint64)void': void
-  'setBiatecPool(uint64)void': void
-  'setBiatecFee(uint256)void': void
-  'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void': void
-  'withdrawExcessAssets(uint64,uint64)uint64': bigint
-}
+  'createApplication()void': void;
+  'updateApplication(byte[])void': void;
+  'bootstrap(uint256,uint64,uint64)void': void;
+  'setAddressUdpater(address)void': void;
+  'setPaused(uint64)void': void;
+  'setAddressGov(address)void': void;
+  'setAddressExecutive(address)void': void;
+  'setAddressExecutiveFee(address)void': void;
+  'setBiatecIdentity(uint64)void': void;
+  'setBiatecPool(uint64)void': void;
+  'setBiatecFee(uint256)void': void;
+  'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void': void;
+  'withdrawExcessAssets(uint64,uint64)uint64': bigint;
+};
 
 /**
  * Defines the types of available calls and state of the BiatecConfigProvider smart contract.
@@ -196,152 +874,217 @@ export type BiatecConfigProviderTypes = {
   /**
    * Maps method signatures / names to their argument and return types.
    */
-  methods:
-    & Record<'createApplication()void' | 'createApplication', {
-      argsObj: BiatecConfigProviderArgs['obj']['createApplication()void']
-      argsTuple: BiatecConfigProviderArgs['tuple']['createApplication()void']
-      returns: BiatecConfigProviderReturns['createApplication()void']
-    }>
-    & Record<'updateApplication(byte[])void' | 'updateApplication', {
-      argsObj: BiatecConfigProviderArgs['obj']['updateApplication(byte[])void']
-      argsTuple: BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']
-      returns: BiatecConfigProviderReturns['updateApplication(byte[])void']
-    }>
-    & Record<'bootstrap(uint256,uint64,uint64)void' | 'bootstrap', {
-      argsObj: BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void']
-      argsTuple: BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void']
-      returns: BiatecConfigProviderReturns['bootstrap(uint256,uint64,uint64)void']
-    }>
-    & Record<'setAddressUdpater(address)void' | 'setAddressUdpater', {
-      argsObj: BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void']
-      argsTuple: BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void']
-      returns: BiatecConfigProviderReturns['setAddressUdpater(address)void']
-    }>
-    & Record<'setPaused(uint64)void' | 'setPaused', {
-      argsObj: BiatecConfigProviderArgs['obj']['setPaused(uint64)void']
-      argsTuple: BiatecConfigProviderArgs['tuple']['setPaused(uint64)void']
-      returns: BiatecConfigProviderReturns['setPaused(uint64)void']
-    }>
-    & Record<'setAddressGov(address)void' | 'setAddressGov', {
-      argsObj: BiatecConfigProviderArgs['obj']['setAddressGov(address)void']
-      argsTuple: BiatecConfigProviderArgs['tuple']['setAddressGov(address)void']
-      returns: BiatecConfigProviderReturns['setAddressGov(address)void']
-    }>
-    & Record<'setAddressExecutive(address)void' | 'setAddressExecutive', {
-      argsObj: BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void']
-      argsTuple: BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void']
-      returns: BiatecConfigProviderReturns['setAddressExecutive(address)void']
-    }>
-    & Record<'setAddressExecutiveFee(address)void' | 'setAddressExecutiveFee', {
-      argsObj: BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void']
-      argsTuple: BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void']
-      returns: BiatecConfigProviderReturns['setAddressExecutiveFee(address)void']
-    }>
-    & Record<'setBiatecIdentity(uint64)void' | 'setBiatecIdentity', {
-      argsObj: BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void']
-      argsTuple: BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void']
-      returns: BiatecConfigProviderReturns['setBiatecIdentity(uint64)void']
-    }>
-    & Record<'setBiatecPool(uint64)void' | 'setBiatecPool', {
-      argsObj: BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void']
-      argsTuple: BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void']
-      returns: BiatecConfigProviderReturns['setBiatecPool(uint64)void']
-    }>
-    & Record<'setBiatecFee(uint256)void' | 'setBiatecFee', {
-      argsObj: BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void']
-      argsTuple: BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void']
-      returns: BiatecConfigProviderReturns['setBiatecFee(uint256)void']
-    }>
-    & Record<'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void' | 'sendOnlineKeyRegistration', {
-      argsObj: BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
-      argsTuple: BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
-      returns: BiatecConfigProviderReturns['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
-    }>
-    & Record<'withdrawExcessAssets(uint64,uint64)uint64' | 'withdrawExcessAssets', {
-      argsObj: BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64']
-      argsTuple: BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64']
-      returns: BiatecConfigProviderReturns['withdrawExcessAssets(uint64,uint64)uint64']
-    }>
+  methods: Record<
+    'createApplication()void' | 'createApplication',
+    {
+      argsObj: BiatecConfigProviderArgs['obj']['createApplication()void'];
+      argsTuple: BiatecConfigProviderArgs['tuple']['createApplication()void'];
+      returns: BiatecConfigProviderReturns['createApplication()void'];
+    }
+  > &
+    Record<
+      'updateApplication(byte[])void' | 'updateApplication',
+      {
+        argsObj: BiatecConfigProviderArgs['obj']['updateApplication(byte[])void'];
+        argsTuple: BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void'];
+        returns: BiatecConfigProviderReturns['updateApplication(byte[])void'];
+      }
+    > &
+    Record<
+      'bootstrap(uint256,uint64,uint64)void' | 'bootstrap',
+      {
+        argsObj: BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void'];
+        argsTuple: BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void'];
+        returns: BiatecConfigProviderReturns['bootstrap(uint256,uint64,uint64)void'];
+      }
+    > &
+    Record<
+      'setAddressUdpater(address)void' | 'setAddressUdpater',
+      {
+        argsObj: BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void'];
+        argsTuple: BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void'];
+        returns: BiatecConfigProviderReturns['setAddressUdpater(address)void'];
+      }
+    > &
+    Record<
+      'setPaused(uint64)void' | 'setPaused',
+      {
+        argsObj: BiatecConfigProviderArgs['obj']['setPaused(uint64)void'];
+        argsTuple: BiatecConfigProviderArgs['tuple']['setPaused(uint64)void'];
+        returns: BiatecConfigProviderReturns['setPaused(uint64)void'];
+      }
+    > &
+    Record<
+      'setAddressGov(address)void' | 'setAddressGov',
+      {
+        argsObj: BiatecConfigProviderArgs['obj']['setAddressGov(address)void'];
+        argsTuple: BiatecConfigProviderArgs['tuple']['setAddressGov(address)void'];
+        returns: BiatecConfigProviderReturns['setAddressGov(address)void'];
+      }
+    > &
+    Record<
+      'setAddressExecutive(address)void' | 'setAddressExecutive',
+      {
+        argsObj: BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void'];
+        argsTuple: BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void'];
+        returns: BiatecConfigProviderReturns['setAddressExecutive(address)void'];
+      }
+    > &
+    Record<
+      'setAddressExecutiveFee(address)void' | 'setAddressExecutiveFee',
+      {
+        argsObj: BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void'];
+        argsTuple: BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void'];
+        returns: BiatecConfigProviderReturns['setAddressExecutiveFee(address)void'];
+      }
+    > &
+    Record<
+      'setBiatecIdentity(uint64)void' | 'setBiatecIdentity',
+      {
+        argsObj: BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void'];
+        argsTuple: BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void'];
+        returns: BiatecConfigProviderReturns['setBiatecIdentity(uint64)void'];
+      }
+    > &
+    Record<
+      'setBiatecPool(uint64)void' | 'setBiatecPool',
+      {
+        argsObj: BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void'];
+        argsTuple: BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void'];
+        returns: BiatecConfigProviderReturns['setBiatecPool(uint64)void'];
+      }
+    > &
+    Record<
+      'setBiatecFee(uint256)void' | 'setBiatecFee',
+      {
+        argsObj: BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void'];
+        argsTuple: BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void'];
+        returns: BiatecConfigProviderReturns['setBiatecFee(uint256)void'];
+      }
+    > &
+    Record<
+      'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void' | 'sendOnlineKeyRegistration',
+      {
+        argsObj: BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'];
+        argsTuple: BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'];
+        returns: BiatecConfigProviderReturns['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'];
+      }
+    > &
+    Record<
+      'withdrawExcessAssets(uint64,uint64)uint64' | 'withdrawExcessAssets',
+      {
+        argsObj: BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64'];
+        argsTuple: BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64'];
+        returns: BiatecConfigProviderReturns['withdrawExcessAssets(uint64,uint64)uint64'];
+      }
+    >;
   /**
    * Defines the shape of the state of the application.
    */
   state: {
     global: {
       keys: {
-        addressUdpater: string
-        addressGov: string
-        addressExecutive: string
-        addressExecutiveFee: string
-        appBiatecIdentityProvider: bigint
-        appBiatecPoolProvider: bigint
-        suspended: bigint
-        biatecFee: bigint
-        version: BinaryState
-      }
-      maps: {}
-    }
-  }
-}
+        addressUdpater: string;
+        addressGov: string;
+        addressExecutive: string;
+        addressExecutiveFee: string;
+        appBiatecIdentityProvider: bigint;
+        appBiatecPoolProvider: bigint;
+        suspended: bigint;
+        biatecFee: bigint;
+        version: BinaryState;
+      };
+      maps: {};
+    };
+  };
+};
 
 /**
  * Defines the possible abi call signatures.
  */
-export type BiatecConfigProviderSignatures = keyof BiatecConfigProviderTypes['methods']
+export type BiatecConfigProviderSignatures = keyof BiatecConfigProviderTypes['methods'];
 /**
  * Defines the possible abi call signatures for methods that return a non-void value.
  */
-export type BiatecConfigProviderNonVoidMethodSignatures = keyof BiatecConfigProviderTypes['methods'] extends infer T ? T extends keyof BiatecConfigProviderTypes['methods'] ? MethodReturn<T> extends void ? never : T  : never : never
+export type BiatecConfigProviderNonVoidMethodSignatures = keyof BiatecConfigProviderTypes['methods'] extends infer T
+  ? T extends keyof BiatecConfigProviderTypes['methods']
+    ? MethodReturn<T> extends void
+      ? never
+      : T
+    : never
+  : never;
 /**
  * Defines an object containing all relevant parameters for a single call to the contract.
  */
 export type CallParams<TArgs> = Expand<
-  Omit<AppClientMethodCallParams, 'method' | 'args' | 'onComplete'> &
-    {
-      /** The args for the ABI method call, either as an ordered array or an object */
-      args: Expand<TArgs>
-    }
->
+  Omit<AppClientMethodCallParams, 'method' | 'args' | 'onComplete'> & {
+    /** The args for the ABI method call, either as an ordered array or an object */
+    args: Expand<TArgs>;
+  }
+>;
 /**
  * Maps a method signature from the BiatecConfigProvider smart contract to the method's arguments in either tuple or struct form
  */
-export type MethodArgs<TSignature extends BiatecConfigProviderSignatures> = BiatecConfigProviderTypes['methods'][TSignature]['argsObj' | 'argsTuple']
+export type MethodArgs<TSignature extends BiatecConfigProviderSignatures> =
+  BiatecConfigProviderTypes['methods'][TSignature]['argsObj' | 'argsTuple'];
 /**
  * Maps a method signature from the BiatecConfigProvider smart contract to the method's return type
  */
-export type MethodReturn<TSignature extends BiatecConfigProviderSignatures> = BiatecConfigProviderTypes['methods'][TSignature]['returns']
+export type MethodReturn<TSignature extends BiatecConfigProviderSignatures> =
+  BiatecConfigProviderTypes['methods'][TSignature]['returns'];
 
 /**
  * Defines the shape of the keyed global state of the application.
  */
-export type GlobalKeysState = BiatecConfigProviderTypes['state']['global']['keys']
-
+export type GlobalKeysState = BiatecConfigProviderTypes['state']['global']['keys'];
 
 /**
  * Defines supported create method params for this smart contract
  */
 export type BiatecConfigProviderCreateCallParams =
-  | Expand<CallParams<BiatecConfigProviderArgs['obj']['createApplication()void'] | BiatecConfigProviderArgs['tuple']['createApplication()void']> & {method: 'createApplication'} & {onComplete?: OnApplicationComplete.NoOpOC} & CreateSchema>
-  | Expand<CallParams<BiatecConfigProviderArgs['obj']['createApplication()void'] | BiatecConfigProviderArgs['tuple']['createApplication()void']> & {method: 'createApplication()void'} & {onComplete?: OnApplicationComplete.NoOpOC} & CreateSchema>
+  | Expand<
+      CallParams<
+        | BiatecConfigProviderArgs['obj']['createApplication()void']
+        | BiatecConfigProviderArgs['tuple']['createApplication()void']
+      > & { method: 'createApplication' } & { onComplete?: OnApplicationComplete.NoOpOC } & CreateSchema
+    >
+  | Expand<
+      CallParams<
+        | BiatecConfigProviderArgs['obj']['createApplication()void']
+        | BiatecConfigProviderArgs['tuple']['createApplication()void']
+      > & { method: 'createApplication()void' } & { onComplete?: OnApplicationComplete.NoOpOC } & CreateSchema
+    >;
 /**
  * Defines supported update method params for this smart contract
  */
 export type BiatecConfigProviderUpdateCallParams =
-  | Expand<CallParams<BiatecConfigProviderArgs['obj']['updateApplication(byte[])void'] | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']> & {method: 'updateApplication'}>
-  | Expand<CallParams<BiatecConfigProviderArgs['obj']['updateApplication(byte[])void'] | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']> & {method: 'updateApplication(byte[])void'}>
+  | Expand<
+      CallParams<
+        | BiatecConfigProviderArgs['obj']['updateApplication(byte[])void']
+        | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']
+      > & { method: 'updateApplication' }
+    >
+  | Expand<
+      CallParams<
+        | BiatecConfigProviderArgs['obj']['updateApplication(byte[])void']
+        | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']
+      > & { method: 'updateApplication(byte[])void' }
+    >;
 /**
  * Defines arguments required for the deploy method.
  */
-export type BiatecConfigProviderDeployParams = Expand<Omit<AppFactoryDeployParams, 'createParams' | 'updateParams' | 'deleteParams'> & {
-  /**
-   * Create transaction parameters to use if a create needs to be issued as part of deployment; use `method` to define ABI call (if available) or leave out for a bare call (if available)
-   */
-  createParams?: BiatecConfigProviderCreateCallParams
-  /**
-   * Update transaction parameters to use if a create needs to be issued as part of deployment; use `method` to define ABI call (if available) or leave out for a bare call (if available)
-   */
-  updateParams?: BiatecConfigProviderUpdateCallParams
-}>
-
+export type BiatecConfigProviderDeployParams = Expand<
+  Omit<AppFactoryDeployParams, 'createParams' | 'updateParams' | 'deleteParams'> & {
+    /**
+     * Create transaction parameters to use if a create needs to be issued as part of deployment; use `method` to define ABI call (if available) or leave out for a bare call (if available)
+     */
+    createParams?: BiatecConfigProviderCreateCallParams;
+    /**
+     * Update transaction parameters to use if a create needs to be issued as part of deployment; use `method` to define ABI call (if available) or leave out for a bare call (if available)
+     */
+    updateParams?: BiatecConfigProviderUpdateCallParams;
+  }
+>;
 
 /**
  * Exposes methods for constructing `AppClient` params objects for ABI calls to the BiatecConfigProvider smart contract
@@ -352,13 +1095,12 @@ export abstract class BiatecConfigProviderParamsFactory {
    */
   static get create() {
     return {
-      _resolveByMethod<TParams extends BiatecConfigProviderCreateCallParams & {method: string}>(params: TParams) {
-        switch(params.method) {
+      _resolveByMethod<TParams extends BiatecConfigProviderCreateCallParams & { method: string }>(params: TParams) {
+        switch (params.method) {
           case 'createApplication':
           case 'createApplication()void':
-            return BiatecConfigProviderParamsFactory.create.createApplication(params)
+            return BiatecConfigProviderParamsFactory.create.createApplication(params);
         }
-        throw new Error(`Unknown ' + verb + ' method`)
       },
 
       /**
@@ -367,14 +1109,20 @@ export abstract class BiatecConfigProviderParamsFactory {
        * @param params Parameters for the call
        * @returns An `AppClientMethodCallParams` object for the call
        */
-      createApplication(params: CallParams<BiatecConfigProviderArgs['obj']['createApplication()void'] | BiatecConfigProviderArgs['tuple']['createApplication()void']> & AppClientCompilationParams & {onComplete?: OnApplicationComplete.NoOpOC}): AppClientMethodCallParams & AppClientCompilationParams & {onComplete?: OnApplicationComplete.NoOpOC} {
+      createApplication(
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['createApplication()void']
+          | BiatecConfigProviderArgs['tuple']['createApplication()void']
+        > &
+          AppClientCompilationParams & { onComplete?: OnApplicationComplete.NoOpOC }
+      ): AppClientMethodCallParams & AppClientCompilationParams & { onComplete?: OnApplicationComplete.NoOpOC } {
         return {
           ...params,
           method: 'createApplication()void' as const,
           args: Array.isArray(params.args) ? params.args : [],
-        }
+        };
       },
-    }
+    };
   }
 
   /**
@@ -382,13 +1130,12 @@ export abstract class BiatecConfigProviderParamsFactory {
    */
   static get update() {
     return {
-      _resolveByMethod<TParams extends BiatecConfigProviderUpdateCallParams & {method: string}>(params: TParams) {
-        switch(params.method) {
+      _resolveByMethod<TParams extends BiatecConfigProviderUpdateCallParams & { method: string }>(params: TParams) {
+        switch (params.method) {
           case 'updateApplication':
           case 'updateApplication(byte[])void':
-            return BiatecConfigProviderParamsFactory.update.updateApplication(params)
+            return BiatecConfigProviderParamsFactory.update.updateApplication(params);
         }
-        throw new Error(`Unknown ' + verb + ' method`)
       },
 
       /**
@@ -397,14 +1144,20 @@ export abstract class BiatecConfigProviderParamsFactory {
        * @param params Parameters for the call
        * @returns An `AppClientMethodCallParams` object for the call
        */
-      updateApplication(params: CallParams<BiatecConfigProviderArgs['obj']['updateApplication(byte[])void'] | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']> & AppClientCompilationParams): AppClientMethodCallParams & AppClientCompilationParams {
+      updateApplication(
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['updateApplication(byte[])void']
+          | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']
+        > &
+          AppClientCompilationParams
+      ): AppClientMethodCallParams & AppClientCompilationParams {
         return {
           ...params,
           method: 'updateApplication(byte[])void' as const,
           args: Array.isArray(params.args) ? params.args : [params.args.newVersion],
-        }
+        };
       },
-    }
+    };
   }
 
   /**
@@ -415,12 +1168,20 @@ export abstract class BiatecConfigProviderParamsFactory {
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static bootstrap(params: CallParams<BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void'] | BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static bootstrap(
+    params: CallParams<
+      | BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void']
+      | BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'bootstrap(uint256,uint64,uint64)void' as const,
-      args: Array.isArray(params.args) ? params.args : [params.args.biatecFee, params.args.appBiatecIdentityProvider, params.args.appBiatecPoolProvider],
-    }
+      args: Array.isArray(params.args)
+        ? params.args
+        : [params.args.biatecFee, params.args.appBiatecIdentityProvider, params.args.appBiatecPoolProvider],
+    };
   }
   /**
    * Constructs a no op call for the setAddressUdpater(address)void ABI method
@@ -430,12 +1191,18 @@ export abstract class BiatecConfigProviderParamsFactory {
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static setAddressUdpater(params: CallParams<BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static setAddressUdpater(
+    params: CallParams<
+      | BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void']
+      | BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'setAddressUdpater(address)void' as const,
       args: Array.isArray(params.args) ? params.args : [params.args.a],
-    }
+    };
   }
   /**
    * Constructs a no op call for the setPaused(uint64)void ABI method
@@ -445,12 +1212,18 @@ export abstract class BiatecConfigProviderParamsFactory {
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static setPaused(params: CallParams<BiatecConfigProviderArgs['obj']['setPaused(uint64)void'] | BiatecConfigProviderArgs['tuple']['setPaused(uint64)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static setPaused(
+    params: CallParams<
+      | BiatecConfigProviderArgs['obj']['setPaused(uint64)void']
+      | BiatecConfigProviderArgs['tuple']['setPaused(uint64)void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'setPaused(uint64)void' as const,
       args: Array.isArray(params.args) ? params.args : [params.args.a],
-    }
+    };
   }
   /**
    * Constructs a no op call for the setAddressGov(address)void ABI method
@@ -460,12 +1233,18 @@ export abstract class BiatecConfigProviderParamsFactory {
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static setAddressGov(params: CallParams<BiatecConfigProviderArgs['obj']['setAddressGov(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressGov(address)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static setAddressGov(
+    params: CallParams<
+      | BiatecConfigProviderArgs['obj']['setAddressGov(address)void']
+      | BiatecConfigProviderArgs['tuple']['setAddressGov(address)void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'setAddressGov(address)void' as const,
       args: Array.isArray(params.args) ? params.args : [params.args.a],
-    }
+    };
   }
   /**
    * Constructs a no op call for the setAddressExecutive(address)void ABI method
@@ -475,12 +1254,18 @@ export abstract class BiatecConfigProviderParamsFactory {
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static setAddressExecutive(params: CallParams<BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static setAddressExecutive(
+    params: CallParams<
+      | BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void']
+      | BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'setAddressExecutive(address)void' as const,
       args: Array.isArray(params.args) ? params.args : [params.args.a],
-    }
+    };
   }
   /**
    * Constructs a no op call for the setAddressExecutiveFee(address)void ABI method
@@ -490,12 +1275,18 @@ export abstract class BiatecConfigProviderParamsFactory {
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static setAddressExecutiveFee(params: CallParams<BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static setAddressExecutiveFee(
+    params: CallParams<
+      | BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void']
+      | BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'setAddressExecutiveFee(address)void' as const,
       args: Array.isArray(params.args) ? params.args : [params.args.a],
-    }
+    };
   }
   /**
    * Constructs a no op call for the setBiatecIdentity(uint64)void ABI method
@@ -505,12 +1296,18 @@ export abstract class BiatecConfigProviderParamsFactory {
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static setBiatecIdentity(params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void'] | BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static setBiatecIdentity(
+    params: CallParams<
+      | BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void']
+      | BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'setBiatecIdentity(uint64)void' as const,
       args: Array.isArray(params.args) ? params.args : [params.args.a],
-    }
+    };
   }
   /**
    * Constructs a no op call for the setBiatecPool(uint64)void ABI method
@@ -520,12 +1317,18 @@ export abstract class BiatecConfigProviderParamsFactory {
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static setBiatecPool(params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void'] | BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static setBiatecPool(
+    params: CallParams<
+      | BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void']
+      | BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'setBiatecPool(uint64)void' as const,
       args: Array.isArray(params.args) ? params.args : [params.args.a],
-    }
+    };
   }
   /**
    * Constructs a no op call for the setBiatecFee(uint256)void ABI method
@@ -533,58 +1336,85 @@ export abstract class BiatecConfigProviderParamsFactory {
   * Fees in 9 decimals. 1_000_000_000 = 100%
   Fees in 9 decimals. 10_000_000 = 1%
   Fees in 9 decimals. 100_000 = 0,01%
-  
-  
+
+
   Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
 
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static setBiatecFee(params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void'] | BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static setBiatecFee(
+    params: CallParams<
+      | BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void']
+      | BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'setBiatecFee(uint256)void' as const,
       args: Array.isArray(params.args) ? params.args : [params.args.biatecFee],
-    }
+    };
   }
   /**
    * Constructs a no op call for the sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void ABI method
    *
   * addressExecutiveFee can perfom key registration for this LP pool
-  
-  
+
+
   Only addressExecutiveFee is allowed to execute this method.
 
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static sendOnlineKeyRegistration(params: CallParams<BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'] | BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static sendOnlineKeyRegistration(
+    params: CallParams<
+      | BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
+      | BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void' as const,
-      args: Array.isArray(params.args) ? params.args : [params.args.votePk, params.args.selectionPk, params.args.stateProofPk, params.args.voteFirst, params.args.voteLast, params.args.voteKeyDilution],
-    }
+      args: Array.isArray(params.args)
+        ? params.args
+        : [
+            params.args.votePk,
+            params.args.selectionPk,
+            params.args.stateProofPk,
+            params.args.voteFirst,
+            params.args.voteLast,
+            params.args.voteKeyDilution,
+          ],
+    };
   }
   /**
    * Constructs a no op call for the withdrawExcessAssets(uint64,uint64)uint64 ABI method
    *
   * If someone deposits excess assets to this smart contract biatec can use them.
-  
-  
+
+
   Only addressExecutiveFee is allowed to execute this method.
 
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static withdrawExcessAssets(params: CallParams<BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64'] | BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static withdrawExcessAssets(
+    params: CallParams<
+      | BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64']
+      | BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'withdrawExcessAssets(uint64,uint64)uint64' as const,
       args: Array.isArray(params.args) ? params.args : [params.args.asset, params.args.amount],
-    }
+    };
   }
 }
 
@@ -595,7 +1425,7 @@ export class BiatecConfigProviderFactory {
   /**
    * The underlying `AppFactory` for when you want to have more flexibility
    */
-  public readonly appFactory: _AppFactory
+  public readonly appFactory: _AppFactory;
 
   /**
    * Creates a new instance of `BiatecConfigProviderFactory`
@@ -606,24 +1436,24 @@ export class BiatecConfigProviderFactory {
     this.appFactory = new _AppFactory({
       ...params,
       appSpec: APP_SPEC,
-    })
+    });
   }
-  
+
   /** The name of the app (from the ARC-32 / ARC-56 app spec or override). */
   public get appName() {
-    return this.appFactory.appName
+    return this.appFactory.appName;
   }
-  
+
   /** The ARC-56 app spec being used */
   get appSpec() {
-    return APP_SPEC
+    return APP_SPEC;
   }
-  
+
   /** A reference to the underlying `AlgorandClient` this app factory is using. */
   public get algorand(): AlgorandClientInterface {
-    return this.appFactory.algorand
+    return this.appFactory.algorand;
   }
-  
+
   /**
    * Returns a new `AppClient` client for an app instance of the given ID.
    *
@@ -633,9 +1463,9 @@ export class BiatecConfigProviderFactory {
    * @returns The `AppClient`
    */
   public getAppClientById(params: AppFactoryAppClientParams) {
-    return new BiatecConfigProviderClient(this.appFactory.getAppClientById(params))
+    return new BiatecConfigProviderClient(this.appFactory.getAppClientById(params));
   }
-  
+
   /**
    * Returns a new `AppClient` client, resolving the app by creator address and name
    * using AlgoKit app deployment semantics (i.e. looking for the app creation transaction note).
@@ -645,10 +1475,8 @@ export class BiatecConfigProviderFactory {
    * @param params The parameters to create the app client
    * @returns The `AppClient`
    */
-  public async getAppClientByCreatorAndName(
-    params: AppFactoryResolveAppClientByCreatorAndNameParams,
-  ) {
-    return new BiatecConfigProviderClient(await this.appFactory.getAppClientByCreatorAndName(params))
+  public async getAppClientByCreatorAndName(params: AppFactoryResolveAppClientByCreatorAndNameParams) {
+    return new BiatecConfigProviderClient(await this.appFactory.getAppClientByCreatorAndName(params));
   }
 
   /**
@@ -660,10 +1488,18 @@ export class BiatecConfigProviderFactory {
   public async deploy(params: BiatecConfigProviderDeployParams = {}) {
     const result = await this.appFactory.deploy({
       ...params,
-      createParams: params.createParams?.method ? BiatecConfigProviderParamsFactory.create._resolveByMethod(params.createParams) : params.createParams ? params.createParams as (BiatecConfigProviderCreateCallParams & { args: Uint8Array[] }) : undefined,
-      updateParams: params.updateParams?.method ? BiatecConfigProviderParamsFactory.update._resolveByMethod(params.updateParams) : params.updateParams ? params.updateParams as (BiatecConfigProviderUpdateCallParams & { args: Uint8Array[] }) : undefined,
-    })
-    return { result: result.result, appClient: new BiatecConfigProviderClient(result.appClient) }
+      createParams: params.createParams?.method
+        ? BiatecConfigProviderParamsFactory.create._resolveByMethod(params.createParams)
+        : params.createParams
+          ? (params.createParams as BiatecConfigProviderCreateCallParams & { args: Uint8Array[] })
+          : undefined,
+      updateParams: params.updateParams?.method
+        ? BiatecConfigProviderParamsFactory.update._resolveByMethod(params.updateParams)
+        : params.updateParams
+          ? (params.updateParams as BiatecConfigProviderUpdateCallParams & { args: Uint8Array[] })
+          : undefined,
+    });
+    return { result: result.result, appClient: new BiatecConfigProviderClient(result.appClient) };
   }
 
   /**
@@ -682,8 +1518,15 @@ export class BiatecConfigProviderFactory {
        * @param params The params for the smart contract call
        * @returns The create params
        */
-      createApplication: (params: CallParams<BiatecConfigProviderArgs['obj']['createApplication()void'] | BiatecConfigProviderArgs['tuple']['createApplication()void']> & AppClientCompilationParams & CreateSchema & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
-        return this.appFactory.params.create(BiatecConfigProviderParamsFactory.create.createApplication(params))
+      createApplication: (
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['createApplication()void']
+          | BiatecConfigProviderArgs['tuple']['createApplication()void']
+        > &
+          AppClientCompilationParams &
+          CreateSchema & { onComplete?: OnApplicationComplete.NoOpOC } = { args: [] }
+      ) => {
+        return this.appFactory.params.create(BiatecConfigProviderParamsFactory.create.createApplication(params));
       },
     },
 
@@ -699,12 +1542,17 @@ export class BiatecConfigProviderFactory {
        * @param params The params for the smart contract call
        * @returns The deployUpdate params
        */
-      updateApplication: (params: CallParams<BiatecConfigProviderArgs['obj']['updateApplication(byte[])void'] | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']> & AppClientCompilationParams) => {
-        return this.appFactory.params.deployUpdate(BiatecConfigProviderParamsFactory.update.updateApplication(params))
+      updateApplication: (
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['updateApplication(byte[])void']
+          | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']
+        > &
+          AppClientCompilationParams
+      ) => {
+        return this.appFactory.params.deployUpdate(BiatecConfigProviderParamsFactory.update.updateApplication(params));
       },
     },
-
-  }
+  };
 
   /**
    * Create transactions for the current app
@@ -722,12 +1570,20 @@ export class BiatecConfigProviderFactory {
        * @param params The params for the smart contract call
        * @returns The create transaction
        */
-      createApplication: (params: CallParams<BiatecConfigProviderArgs['obj']['createApplication()void'] | BiatecConfigProviderArgs['tuple']['createApplication()void']> & AppClientCompilationParams & CreateSchema & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
-        return this.appFactory.createTransaction.create(BiatecConfigProviderParamsFactory.create.createApplication(params))
+      createApplication: (
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['createApplication()void']
+          | BiatecConfigProviderArgs['tuple']['createApplication()void']
+        > &
+          AppClientCompilationParams &
+          CreateSchema & { onComplete?: OnApplicationComplete.NoOpOC } = { args: [] }
+      ) => {
+        return this.appFactory.createTransaction.create(
+          BiatecConfigProviderParamsFactory.create.createApplication(params)
+        );
       },
     },
-
-  }
+  };
 
   /**
    * Send calls to the current app
@@ -745,14 +1601,30 @@ export class BiatecConfigProviderFactory {
        * @param params The params for the smart contract call
        * @returns The create result
        */
-      createApplication: async (params: CallParams<BiatecConfigProviderArgs['obj']['createApplication()void'] | BiatecConfigProviderArgs['tuple']['createApplication()void']> & AppClientCompilationParams & CreateSchema & SendParams & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
-        const result = await this.appFactory.send.create(BiatecConfigProviderParamsFactory.create.createApplication(params))
-        return { result: { ...result.result, return: result.result.return as unknown as (undefined | BiatecConfigProviderReturns['createApplication()void']) }, appClient: new BiatecConfigProviderClient(result.appClient) }
+      createApplication: async (
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['createApplication()void']
+          | BiatecConfigProviderArgs['tuple']['createApplication()void']
+        > &
+          AppClientCompilationParams &
+          CreateSchema &
+          SendParams & { onComplete?: OnApplicationComplete.NoOpOC } = { args: [] }
+      ) => {
+        const result = await this.appFactory.send.create(
+          BiatecConfigProviderParamsFactory.create.createApplication(params)
+        );
+        return {
+          result: {
+            ...result.result,
+            return: result.result.return as unknown as
+              | undefined
+              | BiatecConfigProviderReturns['createApplication()void'],
+          },
+          appClient: new BiatecConfigProviderClient(result.appClient),
+        };
       },
     },
-
-  }
-
+  };
 }
 /**
  * A client to make calls to the BiatecConfigProvider smart contract
@@ -761,44 +1633,58 @@ export class BiatecConfigProviderClient {
   /**
    * The underlying `AppClient` for when you want to have more flexibility
    */
-  public readonly appClient: _AppClient
+  public readonly appClient: _AppClient;
 
   /**
    * Creates a new instance of `BiatecConfigProviderClient`
    *
    * @param appClient An `AppClient` instance which has been created with the BiatecConfigProvider app spec
    */
-  constructor(appClient: _AppClient)
+  constructor(appClient: _AppClient);
   /**
    * Creates a new instance of `BiatecConfigProviderClient`
    *
    * @param params The parameters to initialise the app client with
    */
-  constructor(params: Omit<AppClientParams, 'appSpec'>)
+  constructor(params: Omit<AppClientParams, 'appSpec'>);
   constructor(appClientOrParams: _AppClient | Omit<AppClientParams, 'appSpec'>) {
-    this.appClient = appClientOrParams instanceof _AppClient ? appClientOrParams : new _AppClient({
-      ...appClientOrParams,
-      appSpec: APP_SPEC,
-    })
+    this.appClient =
+      appClientOrParams instanceof _AppClient
+        ? appClientOrParams
+        : new _AppClient({
+            ...appClientOrParams,
+            appSpec: APP_SPEC,
+          });
   }
-  
+
   /**
    * Checks for decode errors on the given return value and maps the return value to the return type for the given method
    * @returns The typed return value or undefined if there was no value
    */
-  decodeReturnValue<TSignature extends BiatecConfigProviderNonVoidMethodSignatures>(method: TSignature, returnValue: ABIReturn | undefined) {
-    return returnValue !== undefined ? getArc56ReturnValue<MethodReturn<TSignature>>(returnValue, this.appClient.getABIMethod(method), APP_SPEC.structs) : undefined
+  decodeReturnValue<TSignature extends BiatecConfigProviderNonVoidMethodSignatures>(
+    method: TSignature,
+    returnValue: ABIReturn | undefined
+  ) {
+    return returnValue !== undefined
+      ? getArc56ReturnValue<MethodReturn<TSignature>>(
+          returnValue,
+          this.appClient.getABIMethod(method),
+          APP_SPEC.structs
+        )
+      : undefined;
   }
-  
+
   /**
    * Returns a new `BiatecConfigProviderClient` client, resolving the app by creator address and name
    * using AlgoKit app deployment semantics (i.e. looking for the app creation transaction note).
    * @param params The parameters to create the app client
    */
-  public static async fromCreatorAndName(params: Omit<ResolveAppClientByCreatorAndName, 'appSpec'>): Promise<BiatecConfigProviderClient> {
-    return new BiatecConfigProviderClient(await _AppClient.fromCreatorAndName({...params, appSpec: APP_SPEC}))
+  public static async fromCreatorAndName(
+    params: Omit<ResolveAppClientByCreatorAndName, 'appSpec'>
+  ): Promise<BiatecConfigProviderClient> {
+    return new BiatecConfigProviderClient(await _AppClient.fromCreatorAndName({ ...params, appSpec: APP_SPEC }));
   }
-  
+
   /**
    * Returns an `BiatecConfigProviderClient` instance for the current network based on
    * pre-determined network-specific app IDs specified in the ARC-56 app spec.
@@ -806,35 +1692,33 @@ export class BiatecConfigProviderClient {
    * If no IDs are in the app spec or the network isn't recognised, an error is thrown.
    * @param params The parameters to create the app client
    */
-  static async fromNetwork(
-    params: Omit<ResolveAppClientByNetwork, 'appSpec'>
-  ): Promise<BiatecConfigProviderClient> {
-    return new BiatecConfigProviderClient(await _AppClient.fromNetwork({...params, appSpec: APP_SPEC}))
+  static async fromNetwork(params: Omit<ResolveAppClientByNetwork, 'appSpec'>): Promise<BiatecConfigProviderClient> {
+    return new BiatecConfigProviderClient(await _AppClient.fromNetwork({ ...params, appSpec: APP_SPEC }));
   }
-  
+
   /** The ID of the app instance this client is linked to. */
   public get appId() {
-    return this.appClient.appId
+    return this.appClient.appId;
   }
-  
+
   /** The app address of the app instance this client is linked to. */
   public get appAddress() {
-    return this.appClient.appAddress
+    return this.appClient.appAddress;
   }
-  
+
   /** The name of the app. */
   public get appName() {
-    return this.appClient.appName
+    return this.appClient.appName;
   }
-  
+
   /** The ARC-56 app spec being used */
   public get appSpec() {
-    return this.appClient.appSpec
+    return this.appClient.appSpec;
   }
-  
+
   /** A reference to the underlying `AlgorandClient` this app client is using. */
   public get algorand(): AlgorandClientInterface {
-    return this.appClient.algorand
+    return this.appClient.algorand;
   }
 
   /**
@@ -853,10 +1737,15 @@ export class BiatecConfigProviderClient {
        * @param params The params for the smart contract call
        * @returns The update params
        */
-      updateApplication: (params: CallParams<BiatecConfigProviderArgs['obj']['updateApplication(byte[])void'] | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']> & AppClientCompilationParams) => {
-        return this.appClient.params.update(BiatecConfigProviderParamsFactory.update.updateApplication(params))
+      updateApplication: (
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['updateApplication(byte[])void']
+          | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']
+        > &
+          AppClientCompilationParams
+      ) => {
+        return this.appClient.params.update(BiatecConfigProviderParamsFactory.update.updateApplication(params));
       },
-
     },
 
     /**
@@ -866,7 +1755,7 @@ export class BiatecConfigProviderClient {
      * @returns The clearState result
      */
     clearState: (params?: Expand<AppClientBareCallParams>) => {
-      return this.appClient.params.bare.clearState(params)
+      return this.appClient.params.bare.clearState(params);
     },
 
     /**
@@ -877,8 +1766,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    bootstrap: (params: CallParams<BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void'] | BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecConfigProviderParamsFactory.bootstrap(params))
+    bootstrap: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void']
+        | BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecConfigProviderParamsFactory.bootstrap(params));
     },
 
     /**
@@ -889,8 +1783,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    setAddressUdpater: (params: CallParams<BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setAddressUdpater(params))
+    setAddressUdpater: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void']
+        | BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setAddressUdpater(params));
     },
 
     /**
@@ -901,8 +1800,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    setPaused: (params: CallParams<BiatecConfigProviderArgs['obj']['setPaused(uint64)void'] | BiatecConfigProviderArgs['tuple']['setPaused(uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setPaused(params))
+    setPaused: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setPaused(uint64)void']
+        | BiatecConfigProviderArgs['tuple']['setPaused(uint64)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setPaused(params));
     },
 
     /**
@@ -913,8 +1817,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    setAddressGov: (params: CallParams<BiatecConfigProviderArgs['obj']['setAddressGov(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressGov(address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setAddressGov(params))
+    setAddressGov: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setAddressGov(address)void']
+        | BiatecConfigProviderArgs['tuple']['setAddressGov(address)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setAddressGov(params));
     },
 
     /**
@@ -925,8 +1834,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    setAddressExecutive: (params: CallParams<BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setAddressExecutive(params))
+    setAddressExecutive: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void']
+        | BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setAddressExecutive(params));
     },
 
     /**
@@ -937,8 +1851,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    setAddressExecutiveFee: (params: CallParams<BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setAddressExecutiveFee(params))
+    setAddressExecutiveFee: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void']
+        | BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setAddressExecutiveFee(params));
     },
 
     /**
@@ -949,8 +1868,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    setBiatecIdentity: (params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void'] | BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setBiatecIdentity(params))
+    setBiatecIdentity: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void']
+        | BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setBiatecIdentity(params));
     },
 
     /**
@@ -961,8 +1885,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    setBiatecPool: (params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void'] | BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setBiatecPool(params))
+    setBiatecPool: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void']
+        | BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setBiatecPool(params));
     },
 
     /**
@@ -971,51 +1900,65 @@ export class BiatecConfigProviderClient {
     * Fees in 9 decimals. 1_000_000_000 = 100%
     Fees in 9 decimals. 10_000_000 = 1%
     Fees in 9 decimals. 100_000 = 0,01%
-    
-    
+
+
     Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
 
      *
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    setBiatecFee: (params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void'] | BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setBiatecFee(params))
+    setBiatecFee: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void']
+        | BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecConfigProviderParamsFactory.setBiatecFee(params));
     },
 
     /**
      * Makes a call to the BiatecConfigProvider smart contract using the `sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-    
-    
+
+
     Only addressExecutiveFee is allowed to execute this method.
 
      *
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    sendOnlineKeyRegistration: (params: CallParams<BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'] | BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecConfigProviderParamsFactory.sendOnlineKeyRegistration(params))
+    sendOnlineKeyRegistration: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
+        | BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecConfigProviderParamsFactory.sendOnlineKeyRegistration(params));
     },
 
     /**
      * Makes a call to the BiatecConfigProvider smart contract using the `withdrawExcessAssets(uint64,uint64)uint64` ABI method.
      *
     * If someone deposits excess assets to this smart contract biatec can use them.
-    
-    
+
+
     Only addressExecutiveFee is allowed to execute this method.
 
      *
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    withdrawExcessAssets: (params: CallParams<BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64'] | BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecConfigProviderParamsFactory.withdrawExcessAssets(params))
+    withdrawExcessAssets: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64']
+        | BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecConfigProviderParamsFactory.withdrawExcessAssets(params));
     },
-
-  }
+  };
 
   /**
    * Create transactions for the current app
@@ -1033,10 +1976,17 @@ export class BiatecConfigProviderClient {
        * @param params The params for the smart contract call
        * @returns The update transaction
        */
-      updateApplication: (params: CallParams<BiatecConfigProviderArgs['obj']['updateApplication(byte[])void'] | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']> & AppClientCompilationParams) => {
-        return this.appClient.createTransaction.update(BiatecConfigProviderParamsFactory.update.updateApplication(params))
+      updateApplication: (
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['updateApplication(byte[])void']
+          | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']
+        > &
+          AppClientCompilationParams
+      ) => {
+        return this.appClient.createTransaction.update(
+          BiatecConfigProviderParamsFactory.update.updateApplication(params)
+        );
       },
-
     },
 
     /**
@@ -1046,7 +1996,7 @@ export class BiatecConfigProviderClient {
      * @returns The clearState result
      */
     clearState: (params?: Expand<AppClientBareCallParams>) => {
-      return this.appClient.createTransaction.bare.clearState(params)
+      return this.appClient.createTransaction.bare.clearState(params);
     },
 
     /**
@@ -1057,8 +2007,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    bootstrap: (params: CallParams<BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void'] | BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.bootstrap(params))
+    bootstrap: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void']
+        | BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.bootstrap(params));
     },
 
     /**
@@ -1069,8 +2024,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    setAddressUdpater: (params: CallParams<BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setAddressUdpater(params))
+    setAddressUdpater: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void']
+        | BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setAddressUdpater(params));
     },
 
     /**
@@ -1081,8 +2041,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    setPaused: (params: CallParams<BiatecConfigProviderArgs['obj']['setPaused(uint64)void'] | BiatecConfigProviderArgs['tuple']['setPaused(uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setPaused(params))
+    setPaused: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setPaused(uint64)void']
+        | BiatecConfigProviderArgs['tuple']['setPaused(uint64)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setPaused(params));
     },
 
     /**
@@ -1093,8 +2058,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    setAddressGov: (params: CallParams<BiatecConfigProviderArgs['obj']['setAddressGov(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressGov(address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setAddressGov(params))
+    setAddressGov: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setAddressGov(address)void']
+        | BiatecConfigProviderArgs['tuple']['setAddressGov(address)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setAddressGov(params));
     },
 
     /**
@@ -1105,8 +2075,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    setAddressExecutive: (params: CallParams<BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setAddressExecutive(params))
+    setAddressExecutive: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void']
+        | BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setAddressExecutive(params));
     },
 
     /**
@@ -1117,8 +2092,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    setAddressExecutiveFee: (params: CallParams<BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setAddressExecutiveFee(params))
+    setAddressExecutiveFee: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void']
+        | BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setAddressExecutiveFee(params));
     },
 
     /**
@@ -1129,8 +2109,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    setBiatecIdentity: (params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void'] | BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setBiatecIdentity(params))
+    setBiatecIdentity: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void']
+        | BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setBiatecIdentity(params));
     },
 
     /**
@@ -1141,8 +2126,13 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    setBiatecPool: (params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void'] | BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setBiatecPool(params))
+    setBiatecPool: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void']
+        | BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setBiatecPool(params));
     },
 
     /**
@@ -1151,51 +2141,65 @@ export class BiatecConfigProviderClient {
     * Fees in 9 decimals. 1_000_000_000 = 100%
     Fees in 9 decimals. 10_000_000 = 1%
     Fees in 9 decimals. 100_000 = 0,01%
-    
-    
+
+
     Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
 
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    setBiatecFee: (params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void'] | BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setBiatecFee(params))
+    setBiatecFee: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void']
+        | BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.setBiatecFee(params));
     },
 
     /**
      * Makes a call to the BiatecConfigProvider smart contract using the `sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-    
-    
+
+
     Only addressExecutiveFee is allowed to execute this method.
 
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    sendOnlineKeyRegistration: (params: CallParams<BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'] | BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.sendOnlineKeyRegistration(params))
+    sendOnlineKeyRegistration: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
+        | BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.sendOnlineKeyRegistration(params));
     },
 
     /**
      * Makes a call to the BiatecConfigProvider smart contract using the `withdrawExcessAssets(uint64,uint64)uint64` ABI method.
      *
     * If someone deposits excess assets to this smart contract biatec can use them.
-    
-    
+
+
     Only addressExecutiveFee is allowed to execute this method.
 
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    withdrawExcessAssets: (params: CallParams<BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64'] | BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.withdrawExcessAssets(params))
+    withdrawExcessAssets: (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64']
+        | BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecConfigProviderParamsFactory.withdrawExcessAssets(params));
     },
-
-  }
+  };
 
   /**
    * Send calls to the current app
@@ -1213,11 +2217,22 @@ export class BiatecConfigProviderClient {
        * @param params The params for the smart contract call
        * @returns The update result
        */
-      updateApplication: async (params: CallParams<BiatecConfigProviderArgs['obj']['updateApplication(byte[])void'] | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']> & AppClientCompilationParams & SendParams) => {
-        const result = await this.appClient.send.update(BiatecConfigProviderParamsFactory.update.updateApplication(params))
-        return {...result, return: result.return as unknown as (undefined | BiatecConfigProviderReturns['updateApplication(byte[])void'])}
+      updateApplication: async (
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['updateApplication(byte[])void']
+          | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']
+        > &
+          AppClientCompilationParams &
+          SendParams
+      ) => {
+        const result = await this.appClient.send.update(
+          BiatecConfigProviderParamsFactory.update.updateApplication(params)
+        );
+        return {
+          ...result,
+          return: result.return as unknown as undefined | BiatecConfigProviderReturns['updateApplication(byte[])void'],
+        };
       },
-
     },
 
     /**
@@ -1227,7 +2242,7 @@ export class BiatecConfigProviderClient {
      * @returns The clearState result
      */
     clearState: (params?: Expand<AppClientBareCallParams & SendParams>) => {
-      return this.appClient.send.bare.clearState(params)
+      return this.appClient.send.bare.clearState(params);
     },
 
     /**
@@ -1238,9 +2253,20 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    bootstrap: async (params: CallParams<BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void'] | BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.bootstrap(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecConfigProviderReturns['bootstrap(uint256,uint64,uint64)void'])}
+    bootstrap: async (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void']
+        | BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.bootstrap(params));
+      return {
+        ...result,
+        return: result.return as unknown as
+          | undefined
+          | BiatecConfigProviderReturns['bootstrap(uint256,uint64,uint64)void'],
+      };
     },
 
     /**
@@ -1251,9 +2277,18 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    setAddressUdpater: async (params: CallParams<BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setAddressUdpater(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecConfigProviderReturns['setAddressUdpater(address)void'])}
+    setAddressUdpater: async (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void']
+        | BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setAddressUdpater(params));
+      return {
+        ...result,
+        return: result.return as unknown as undefined | BiatecConfigProviderReturns['setAddressUdpater(address)void'],
+      };
     },
 
     /**
@@ -1264,9 +2299,18 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    setPaused: async (params: CallParams<BiatecConfigProviderArgs['obj']['setPaused(uint64)void'] | BiatecConfigProviderArgs['tuple']['setPaused(uint64)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setPaused(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecConfigProviderReturns['setPaused(uint64)void'])}
+    setPaused: async (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setPaused(uint64)void']
+        | BiatecConfigProviderArgs['tuple']['setPaused(uint64)void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setPaused(params));
+      return {
+        ...result,
+        return: result.return as unknown as undefined | BiatecConfigProviderReturns['setPaused(uint64)void'],
+      };
     },
 
     /**
@@ -1277,9 +2321,18 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    setAddressGov: async (params: CallParams<BiatecConfigProviderArgs['obj']['setAddressGov(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressGov(address)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setAddressGov(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecConfigProviderReturns['setAddressGov(address)void'])}
+    setAddressGov: async (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setAddressGov(address)void']
+        | BiatecConfigProviderArgs['tuple']['setAddressGov(address)void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setAddressGov(params));
+      return {
+        ...result,
+        return: result.return as unknown as undefined | BiatecConfigProviderReturns['setAddressGov(address)void'],
+      };
     },
 
     /**
@@ -1290,9 +2343,18 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    setAddressExecutive: async (params: CallParams<BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setAddressExecutive(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecConfigProviderReturns['setAddressExecutive(address)void'])}
+    setAddressExecutive: async (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void']
+        | BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setAddressExecutive(params));
+      return {
+        ...result,
+        return: result.return as unknown as undefined | BiatecConfigProviderReturns['setAddressExecutive(address)void'],
+      };
     },
 
     /**
@@ -1303,9 +2365,20 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    setAddressExecutiveFee: async (params: CallParams<BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setAddressExecutiveFee(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecConfigProviderReturns['setAddressExecutiveFee(address)void'])}
+    setAddressExecutiveFee: async (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void']
+        | BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setAddressExecutiveFee(params));
+      return {
+        ...result,
+        return: result.return as unknown as
+          | undefined
+          | BiatecConfigProviderReturns['setAddressExecutiveFee(address)void'],
+      };
     },
 
     /**
@@ -1316,9 +2389,18 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    setBiatecIdentity: async (params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void'] | BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setBiatecIdentity(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecConfigProviderReturns['setBiatecIdentity(uint64)void'])}
+    setBiatecIdentity: async (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void']
+        | BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setBiatecIdentity(params));
+      return {
+        ...result,
+        return: result.return as unknown as undefined | BiatecConfigProviderReturns['setBiatecIdentity(uint64)void'],
+      };
     },
 
     /**
@@ -1329,9 +2411,18 @@ export class BiatecConfigProviderClient {
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    setBiatecPool: async (params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void'] | BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setBiatecPool(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecConfigProviderReturns['setBiatecPool(uint64)void'])}
+    setBiatecPool: async (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void']
+        | BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setBiatecPool(params));
+      return {
+        ...result,
+        return: result.return as unknown as undefined | BiatecConfigProviderReturns['setBiatecPool(uint64)void'],
+      };
     },
 
     /**
@@ -1340,54 +2431,86 @@ export class BiatecConfigProviderClient {
     * Fees in 9 decimals. 1_000_000_000 = 100%
     Fees in 9 decimals. 10_000_000 = 1%
     Fees in 9 decimals. 100_000 = 0,01%
-    
-    
+
+
     Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
 
      *
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    setBiatecFee: async (params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void'] | BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setBiatecFee(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecConfigProviderReturns['setBiatecFee(uint256)void'])}
+    setBiatecFee: async (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void']
+        | BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.setBiatecFee(params));
+      return {
+        ...result,
+        return: result.return as unknown as undefined | BiatecConfigProviderReturns['setBiatecFee(uint256)void'],
+      };
     },
 
     /**
      * Makes a call to the BiatecConfigProvider smart contract using the `sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-    
-    
+
+
     Only addressExecutiveFee is allowed to execute this method.
 
      *
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    sendOnlineKeyRegistration: async (params: CallParams<BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'] | BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.sendOnlineKeyRegistration(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecConfigProviderReturns['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'])}
+    sendOnlineKeyRegistration: async (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
+        | BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(
+        BiatecConfigProviderParamsFactory.sendOnlineKeyRegistration(params)
+      );
+      return {
+        ...result,
+        return: result.return as unknown as
+          | undefined
+          | BiatecConfigProviderReturns['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'],
+      };
     },
 
     /**
      * Makes a call to the BiatecConfigProvider smart contract using the `withdrawExcessAssets(uint64,uint64)uint64` ABI method.
      *
     * If someone deposits excess assets to this smart contract biatec can use them.
-    
-    
+
+
     Only addressExecutiveFee is allowed to execute this method.
 
      *
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    withdrawExcessAssets: async (params: CallParams<BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64'] | BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.withdrawExcessAssets(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecConfigProviderReturns['withdrawExcessAssets(uint64,uint64)uint64'])}
+    withdrawExcessAssets: async (
+      params: CallParams<
+        | BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64']
+        | BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecConfigProviderParamsFactory.withdrawExcessAssets(params));
+      return {
+        ...result,
+        return: result.return as unknown as
+          | undefined
+          | BiatecConfigProviderReturns['withdrawExcessAssets(uint64,uint64)uint64'],
+      };
     },
-
-  }
+  };
 
   /**
    * Clone this app client with different params
@@ -1396,7 +2519,7 @@ export class BiatecConfigProviderClient {
    * @returns A new app client with the altered params
    */
   public clone(params: CloneAppClientParams) {
-    return new BiatecConfigProviderClient(this.appClient.clone(params))
+    return new BiatecConfigProviderClient(this.appClient.clone(params));
   }
 
   /**
@@ -1411,7 +2534,7 @@ export class BiatecConfigProviderClient {
        * Get all current keyed values from global state
        */
       getAll: async (): Promise<Partial<Expand<GlobalKeysState>>> => {
-        const result = await this.appClient.state.global.getAll()
+        const result = await this.appClient.state.global.getAll();
         return {
           addressUdpater: result.addressUdpater,
           addressGov: result.addressGov,
@@ -1422,182 +2545,289 @@ export class BiatecConfigProviderClient {
           suspended: result.suspended,
           biatecFee: result.biatecFee,
           version: new BinaryStateValue(result.version),
-        }
+        };
       },
       /**
        * Get the current value of the addressUdpater key in global state
        */
-      addressUdpater: async (): Promise<string | undefined> => { return (await this.appClient.state.global.getValue("addressUdpater")) as string | undefined },
+      addressUdpater: async (): Promise<string | undefined> => {
+        return (await this.appClient.state.global.getValue('addressUdpater')) as string | undefined;
+      },
       /**
        * Get the current value of the addressGov key in global state
        */
-      addressGov: async (): Promise<string | undefined> => { return (await this.appClient.state.global.getValue("addressGov")) as string | undefined },
+      addressGov: async (): Promise<string | undefined> => {
+        return (await this.appClient.state.global.getValue('addressGov')) as string | undefined;
+      },
       /**
        * Get the current value of the addressExecutive key in global state
        */
-      addressExecutive: async (): Promise<string | undefined> => { return (await this.appClient.state.global.getValue("addressExecutive")) as string | undefined },
+      addressExecutive: async (): Promise<string | undefined> => {
+        return (await this.appClient.state.global.getValue('addressExecutive')) as string | undefined;
+      },
       /**
        * Get the current value of the addressExecutiveFee key in global state
        */
-      addressExecutiveFee: async (): Promise<string | undefined> => { return (await this.appClient.state.global.getValue("addressExecutiveFee")) as string | undefined },
+      addressExecutiveFee: async (): Promise<string | undefined> => {
+        return (await this.appClient.state.global.getValue('addressExecutiveFee')) as string | undefined;
+      },
       /**
        * Get the current value of the appBiatecIdentityProvider key in global state
        */
-      appBiatecIdentityProvider: async (): Promise<bigint | undefined> => { return (await this.appClient.state.global.getValue("appBiatecIdentityProvider")) as bigint | undefined },
+      appBiatecIdentityProvider: async (): Promise<bigint | undefined> => {
+        return (await this.appClient.state.global.getValue('appBiatecIdentityProvider')) as bigint | undefined;
+      },
       /**
        * Get the current value of the appBiatecPoolProvider key in global state
        */
-      appBiatecPoolProvider: async (): Promise<bigint | undefined> => { return (await this.appClient.state.global.getValue("appBiatecPoolProvider")) as bigint | undefined },
+      appBiatecPoolProvider: async (): Promise<bigint | undefined> => {
+        return (await this.appClient.state.global.getValue('appBiatecPoolProvider')) as bigint | undefined;
+      },
       /**
        * Get the current value of the suspended key in global state
        */
-      suspended: async (): Promise<bigint | undefined> => { return (await this.appClient.state.global.getValue("suspended")) as bigint | undefined },
+      suspended: async (): Promise<bigint | undefined> => {
+        return (await this.appClient.state.global.getValue('suspended')) as bigint | undefined;
+      },
       /**
        * Get the current value of the biatecFee key in global state
        */
-      biatecFee: async (): Promise<bigint | undefined> => { return (await this.appClient.state.global.getValue("biatecFee")) as bigint | undefined },
+      biatecFee: async (): Promise<bigint | undefined> => {
+        return (await this.appClient.state.global.getValue('biatecFee')) as bigint | undefined;
+      },
       /**
        * Get the current value of the version key in global state
        */
-      version: async (): Promise<BinaryState> => { return new BinaryStateValue((await this.appClient.state.global.getValue("version")) as Uint8Array | undefined) },
+      version: async (): Promise<BinaryState> => {
+        return new BinaryStateValue((await this.appClient.state.global.getValue('version')) as Uint8Array | undefined);
+      },
     },
-  }
+  };
 
   public newGroup(): BiatecConfigProviderComposer {
-    const client = this
-    const composer = this.algorand.newGroup()
-    let promiseChain:Promise<unknown> = Promise.resolve()
-    const resultMappers: Array<undefined | ((x: ABIReturn | undefined) => any)> = []
+    const client = this;
+    const composer = this.algorand.newGroup();
+    let promiseChain: Promise<unknown> = Promise.resolve();
+    const resultMappers: Array<undefined | ((x: ABIReturn | undefined) => any)> = [];
     return {
       /**
        * Add a bootstrap(uint256,uint64,uint64)void method call against the BiatecConfigProvider contract
        */
-      bootstrap(params: CallParams<BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void'] | BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.bootstrap(params)))
-        resultMappers.push(undefined)
-        return this
+      bootstrap(
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void']
+          | BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.bootstrap(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
        * Add a setAddressUdpater(address)void method call against the BiatecConfigProvider contract
        */
-      setAddressUdpater(params: CallParams<BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.setAddressUdpater(params)))
-        resultMappers.push(undefined)
-        return this
+      setAddressUdpater(
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void']
+          | BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.setAddressUdpater(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
        * Add a setPaused(uint64)void method call against the BiatecConfigProvider contract
        */
-      setPaused(params: CallParams<BiatecConfigProviderArgs['obj']['setPaused(uint64)void'] | BiatecConfigProviderArgs['tuple']['setPaused(uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.setPaused(params)))
-        resultMappers.push(undefined)
-        return this
+      setPaused(
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['setPaused(uint64)void']
+          | BiatecConfigProviderArgs['tuple']['setPaused(uint64)void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.setPaused(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
        * Add a setAddressGov(address)void method call against the BiatecConfigProvider contract
        */
-      setAddressGov(params: CallParams<BiatecConfigProviderArgs['obj']['setAddressGov(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressGov(address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.setAddressGov(params)))
-        resultMappers.push(undefined)
-        return this
+      setAddressGov(
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['setAddressGov(address)void']
+          | BiatecConfigProviderArgs['tuple']['setAddressGov(address)void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.setAddressGov(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
        * Add a setAddressExecutive(address)void method call against the BiatecConfigProvider contract
        */
-      setAddressExecutive(params: CallParams<BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.setAddressExecutive(params)))
-        resultMappers.push(undefined)
-        return this
+      setAddressExecutive(
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void']
+          | BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.setAddressExecutive(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
        * Add a setAddressExecutiveFee(address)void method call against the BiatecConfigProvider contract
        */
-      setAddressExecutiveFee(params: CallParams<BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.setAddressExecutiveFee(params)))
-        resultMappers.push(undefined)
-        return this
+      setAddressExecutiveFee(
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void']
+          | BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.setAddressExecutiveFee(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
        * Add a setBiatecIdentity(uint64)void method call against the BiatecConfigProvider contract
        */
-      setBiatecIdentity(params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void'] | BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.setBiatecIdentity(params)))
-        resultMappers.push(undefined)
-        return this
+      setBiatecIdentity(
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void']
+          | BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.setBiatecIdentity(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
        * Add a setBiatecPool(uint64)void method call against the BiatecConfigProvider contract
        */
-      setBiatecPool(params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void'] | BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.setBiatecPool(params)))
-        resultMappers.push(undefined)
-        return this
+      setBiatecPool(
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void']
+          | BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.setBiatecPool(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
        * Add a setBiatecFee(uint256)void method call against the BiatecConfigProvider contract
        */
-      setBiatecFee(params: CallParams<BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void'] | BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.setBiatecFee(params)))
-        resultMappers.push(undefined)
-        return this
+      setBiatecFee(
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void']
+          | BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.setBiatecFee(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
        * Add a sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void method call against the BiatecConfigProvider contract
        */
-      sendOnlineKeyRegistration(params: CallParams<BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'] | BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.sendOnlineKeyRegistration(params)))
-        resultMappers.push(undefined)
-        return this
+      sendOnlineKeyRegistration(
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
+          | BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.sendOnlineKeyRegistration(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
        * Add a withdrawExcessAssets(uint64,uint64)uint64 method call against the BiatecConfigProvider contract
        */
-      withdrawExcessAssets(params: CallParams<BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64'] | BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.withdrawExcessAssets(params)))
-        resultMappers.push((v) => client.decodeReturnValue('withdrawExcessAssets(uint64,uint64)uint64', v))
-        return this
+      withdrawExcessAssets(
+        params: CallParams<
+          | BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64']
+          | BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.withdrawExcessAssets(params))
+        );
+        resultMappers.push((v) => client.decodeReturnValue('withdrawExcessAssets(uint64,uint64)uint64', v));
+        return this;
       },
       get update() {
         return {
-          updateApplication: (params: CallParams<BiatecConfigProviderArgs['obj']['updateApplication(byte[])void'] | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']> & AppClientCompilationParams) => {
-            promiseChain = promiseChain.then(async () => composer.addAppUpdateMethodCall(await client.params.update.updateApplication(params)))
-            resultMappers.push(undefined)
-            return this
+          updateApplication: (
+            params: CallParams<
+              | BiatecConfigProviderArgs['obj']['updateApplication(byte[])void']
+              | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']
+            > &
+              AppClientCompilationParams
+          ) => {
+            promiseChain = promiseChain.then(async () =>
+              composer.addAppUpdateMethodCall(await client.params.update.updateApplication(params))
+            );
+            resultMappers.push(undefined);
+            return this;
           },
-        }
+        };
       },
       /**
        * Add a clear state call to the BiatecConfigProvider contract
        */
       clearState(params: AppClientBareCallParams) {
-        promiseChain = promiseChain.then(() => composer.addAppCall(client.params.clearState(params)))
-        return this
+        promiseChain = promiseChain.then(() => composer.addAppCall(client.params.clearState(params)));
+        return this;
       },
       addTransaction(txn: Transaction, signer?: TransactionSigner) {
-        promiseChain = promiseChain.then(() => composer.addTransaction(txn, signer))
-        return this
+        promiseChain = promiseChain.then(() => composer.addTransaction(txn, signer));
+        return this;
       },
       async composer() {
-        await promiseChain
-        return composer
+        await promiseChain;
+        return composer;
       },
       async simulate(options?: SimulateOptions) {
-        await promiseChain
-        const result = await (!options ? composer.simulate() : composer.simulate(options))
+        await promiseChain;
+        const result = await (!options ? composer.simulate() : composer.simulate(options));
         return {
           ...result,
-          returns: result.returns?.map((val, i) => resultMappers[i] !== undefined ? resultMappers[i]!(val) : val.returnValue)
-        }
+          returns: result.returns?.map((val, i) =>
+            resultMappers[i] !== undefined ? resultMappers[i]!(val) : val.returnValue
+          ),
+        };
       },
       async send(params?: SendParams) {
-        await promiseChain
-        const result = await composer.send(params)
+        await promiseChain;
+        const result = await composer.send(params);
         return {
           ...result,
-          returns: result.returns?.map((val, i) => resultMappers[i] !== undefined ? resultMappers[i]!(val) : val.returnValue)
-        }
-      }
-    } as unknown as BiatecConfigProviderComposer
+          returns: result.returns?.map((val, i) =>
+            resultMappers[i] !== undefined ? resultMappers[i]!(val) : val.returnValue
+          ),
+        };
+      },
+    } as unknown as BiatecConfigProviderComposer;
   }
 }
 export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
@@ -1610,7 +2840,14 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  bootstrap(params?: CallParams<BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void'] | BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void']>): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['bootstrap(uint256,uint64,uint64)void'] | undefined]>
+  bootstrap(
+    params?: CallParams<
+      | BiatecConfigProviderArgs['obj']['bootstrap(uint256,uint64,uint64)void']
+      | BiatecConfigProviderArgs['tuple']['bootstrap(uint256,uint64,uint64)void']
+    >
+  ): BiatecConfigProviderComposer<
+    [...TReturns, BiatecConfigProviderReturns['bootstrap(uint256,uint64,uint64)void'] | undefined]
+  >;
 
   /**
    * Calls the setAddressUdpater(address)void ABI method.
@@ -1621,7 +2858,14 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setAddressUdpater(params?: CallParams<BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void']>): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['setAddressUdpater(address)void'] | undefined]>
+  setAddressUdpater(
+    params?: CallParams<
+      | BiatecConfigProviderArgs['obj']['setAddressUdpater(address)void']
+      | BiatecConfigProviderArgs['tuple']['setAddressUdpater(address)void']
+    >
+  ): BiatecConfigProviderComposer<
+    [...TReturns, BiatecConfigProviderReturns['setAddressUdpater(address)void'] | undefined]
+  >;
 
   /**
    * Calls the setPaused(uint64)void ABI method.
@@ -1632,7 +2876,12 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setPaused(params?: CallParams<BiatecConfigProviderArgs['obj']['setPaused(uint64)void'] | BiatecConfigProviderArgs['tuple']['setPaused(uint64)void']>): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['setPaused(uint64)void'] | undefined]>
+  setPaused(
+    params?: CallParams<
+      | BiatecConfigProviderArgs['obj']['setPaused(uint64)void']
+      | BiatecConfigProviderArgs['tuple']['setPaused(uint64)void']
+    >
+  ): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['setPaused(uint64)void'] | undefined]>;
 
   /**
    * Calls the setAddressGov(address)void ABI method.
@@ -1643,7 +2892,12 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setAddressGov(params?: CallParams<BiatecConfigProviderArgs['obj']['setAddressGov(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressGov(address)void']>): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['setAddressGov(address)void'] | undefined]>
+  setAddressGov(
+    params?: CallParams<
+      | BiatecConfigProviderArgs['obj']['setAddressGov(address)void']
+      | BiatecConfigProviderArgs['tuple']['setAddressGov(address)void']
+    >
+  ): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['setAddressGov(address)void'] | undefined]>;
 
   /**
    * Calls the setAddressExecutive(address)void ABI method.
@@ -1654,7 +2908,14 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setAddressExecutive(params?: CallParams<BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void']>): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['setAddressExecutive(address)void'] | undefined]>
+  setAddressExecutive(
+    params?: CallParams<
+      | BiatecConfigProviderArgs['obj']['setAddressExecutive(address)void']
+      | BiatecConfigProviderArgs['tuple']['setAddressExecutive(address)void']
+    >
+  ): BiatecConfigProviderComposer<
+    [...TReturns, BiatecConfigProviderReturns['setAddressExecutive(address)void'] | undefined]
+  >;
 
   /**
    * Calls the setAddressExecutiveFee(address)void ABI method.
@@ -1665,7 +2926,14 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setAddressExecutiveFee(params?: CallParams<BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void'] | BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void']>): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['setAddressExecutiveFee(address)void'] | undefined]>
+  setAddressExecutiveFee(
+    params?: CallParams<
+      | BiatecConfigProviderArgs['obj']['setAddressExecutiveFee(address)void']
+      | BiatecConfigProviderArgs['tuple']['setAddressExecutiveFee(address)void']
+    >
+  ): BiatecConfigProviderComposer<
+    [...TReturns, BiatecConfigProviderReturns['setAddressExecutiveFee(address)void'] | undefined]
+  >;
 
   /**
    * Calls the setBiatecIdentity(uint64)void ABI method.
@@ -1676,7 +2944,14 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setBiatecIdentity(params?: CallParams<BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void'] | BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void']>): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['setBiatecIdentity(uint64)void'] | undefined]>
+  setBiatecIdentity(
+    params?: CallParams<
+      | BiatecConfigProviderArgs['obj']['setBiatecIdentity(uint64)void']
+      | BiatecConfigProviderArgs['tuple']['setBiatecIdentity(uint64)void']
+    >
+  ): BiatecConfigProviderComposer<
+    [...TReturns, BiatecConfigProviderReturns['setBiatecIdentity(uint64)void'] | undefined]
+  >;
 
   /**
    * Calls the setBiatecPool(uint64)void ABI method.
@@ -1687,7 +2962,12 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setBiatecPool(params?: CallParams<BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void'] | BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void']>): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['setBiatecPool(uint64)void'] | undefined]>
+  setBiatecPool(
+    params?: CallParams<
+      | BiatecConfigProviderArgs['obj']['setBiatecPool(uint64)void']
+      | BiatecConfigProviderArgs['tuple']['setBiatecPool(uint64)void']
+    >
+  ): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['setBiatecPool(uint64)void'] | undefined]>;
 
   /**
    * Calls the setBiatecFee(uint256)void ABI method.
@@ -1695,8 +2975,8 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
   * Fees in 9 decimals. 1_000_000_000 = 100%
   Fees in 9 decimals. 10_000_000 = 1%
   Fees in 9 decimals. 100_000 = 0,01%
-  
-  
+
+
   Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
 
    *
@@ -1704,14 +2984,19 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setBiatecFee(params?: CallParams<BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void'] | BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void']>): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['setBiatecFee(uint256)void'] | undefined]>
+  setBiatecFee(
+    params?: CallParams<
+      | BiatecConfigProviderArgs['obj']['setBiatecFee(uint256)void']
+      | BiatecConfigProviderArgs['tuple']['setBiatecFee(uint256)void']
+    >
+  ): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['setBiatecFee(uint256)void'] | undefined]>;
 
   /**
    * Calls the sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void ABI method.
    *
   * addressExecutiveFee can perfom key registration for this LP pool
-  
-  
+
+
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -1719,14 +3004,27 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  sendOnlineKeyRegistration(params?: CallParams<BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'] | BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']>): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void'] | undefined]>
+  sendOnlineKeyRegistration(
+    params?: CallParams<
+      | BiatecConfigProviderArgs['obj']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
+      | BiatecConfigProviderArgs['tuple']['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
+    >
+  ): BiatecConfigProviderComposer<
+    [
+      ...TReturns,
+      (
+        | BiatecConfigProviderReturns['sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void']
+        | undefined
+      ),
+    ]
+  >;
 
   /**
    * Calls the withdrawExcessAssets(uint64,uint64)uint64 ABI method.
    *
   * If someone deposits excess assets to this smart contract biatec can use them.
-  
-  
+
+
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -1734,7 +3032,35 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  withdrawExcessAssets(params?: CallParams<BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64'] | BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64']>): BiatecConfigProviderComposer<[...TReturns, BiatecConfigProviderReturns['withdrawExcessAssets(uint64,uint64)uint64'] | undefined]>
+  withdrawExcessAssets(
+    params?: CallParams<
+      | BiatecConfigProviderArgs['obj']['withdrawExcessAssets(uint64,uint64)uint64']
+      | BiatecConfigProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64)uint64']
+    >
+  ): BiatecConfigProviderComposer<
+    [...TReturns, BiatecConfigProviderReturns['withdrawExcessAssets(uint64,uint64)uint64'] | undefined]
+  >;
+
+  /**
+   * Gets available update methods
+   */
+  readonly update: {
+    /**
+     * Updates an existing instance of the BiatecConfigProvider smart contract using the updateApplication(byte[])void ABI method.
+     *
+     * @param args The arguments for the smart contract call
+     * @param params Any additional parameters for the call
+     * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
+     */
+    updateApplication(
+      params?: CallParams<
+        | BiatecConfigProviderArgs['obj']['updateApplication(byte[])void']
+        | BiatecConfigProviderArgs['tuple']['updateApplication(byte[])void']
+      >
+    ): BiatecConfigProviderComposer<
+      [...TReturns, BiatecConfigProviderReturns['updateApplication(byte[])void'] | undefined]
+    >;
+  };
 
   /**
    * Makes a clear_state call to an existing instance of the BiatecConfigProvider smart contract.
@@ -1742,7 +3068,7 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param args The arguments for the bare call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  clearState(params?: AppClientBareCallParams): BiatecConfigProviderComposer<[...TReturns, undefined]>
+  clearState(params?: AppClientBareCallParams): BiatecConfigProviderComposer<[...TReturns, undefined]>;
 
   /**
    * Adds a transaction to the composer
@@ -1750,23 +3076,28 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * @param txn A transaction to add to the transaction group
    * @param signer The optional signer to use when signing this transaction.
    */
-  addTransaction(txn: Transaction, signer?: TransactionSigner): BiatecConfigProviderComposer<TReturns>
+  addTransaction(txn: Transaction, signer?: TransactionSigner): BiatecConfigProviderComposer<TReturns>;
   /**
    * Returns the underlying AtomicTransactionComposer instance
    */
-  composer(): Promise<TransactionComposer>
+  composer(): Promise<TransactionComposer>;
   /**
    * Simulates the transaction group and returns the result
    */
-  simulate(): Promise<BiatecConfigProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>
-  simulate(options: SkipSignaturesSimulateOptions): Promise<BiatecConfigProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>
-  simulate(options: RawSimulateOptions): Promise<BiatecConfigProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>
+  simulate(): Promise<BiatecConfigProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  simulate(
+    options: SkipSignaturesSimulateOptions
+  ): Promise<BiatecConfigProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  simulate(
+    options: RawSimulateOptions
+  ): Promise<BiatecConfigProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
   /**
    * Sends the transaction group to the network and returns the results
    */
-  send(params?: SendParams): Promise<BiatecConfigProviderComposerResults<TReturns>>
-}
-export type BiatecConfigProviderComposerResults<TReturns extends [...any[]]> = Expand<SendAtomicTransactionComposerResults & {
-  returns: TReturns
-}>
-
+  send(params?: SendParams): Promise<BiatecConfigProviderComposerResults<TReturns>>;
+};
+export type BiatecConfigProviderComposerResults<TReturns extends [...any[]]> = Expand<
+  SendAtomicTransactionComposerResults & {
+    returns: TReturns;
+  }
+>;

@@ -1,6 +1,6 @@
 {
   "name": "biatec-concentrated-liquidity-amm",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "license": "AGPL-3.0",
   "categories": [
     "Algorand",
@@ -18,8 +18,8 @@
     "generate-components": "algokit-generate-component contracts/artifacts/Biatecclamm.arc32.json contracts/artifacts/components",
     "build": "npm run compile-contract && npm run generate-client",
     "test": "npm run build && jest",
-    "test:1:build": "npm run build && jest -t \"I can setInfo\"",
-    "test:1:nobuild": "jest -t \"I can setInfo\"",
+    "test:1:build": "npm run build && npm run test:1:nobuild",
+    "test:1:nobuild": "jest -t \"Extreme-No-Fees - ASASR EURUSD - 0.9 - 1.1, LP fee 0, Biatec fee 0%\"",
     "test:nobuild": "jest",
     "lint": "eslint . --ext .ts",
     "fix": "eslint . --ext .ts --fix",
@@ -34,12 +34,12 @@
     "dist"
   ],
   "dependencies": {
-    "@algorandfoundation/algokit-utils": "^8.2.1",
-    "algosdk": "^3.2.0"
+    "@algorandfoundation/algokit-utils": "^9.1.0",
+    "algosdk": "^3.3.0"
   },
   "devDependencies": {
-    "@algorandfoundation/algokit-client-generator": "^4.0.8",
-    "@algorandfoundation/tealscript": "^0.106.2",
+    "@algorandfoundation/algokit-client-generator": "^5.0.0",
+    "@algorandfoundation/tealscript": "^0.106.3",
     "@jest/globals": "^29.7.0",
     "@joe-p/algokit-generate-component": "^0.2.1",
     "@typescript-eslint/eslint-plugin": "^7.18.0",

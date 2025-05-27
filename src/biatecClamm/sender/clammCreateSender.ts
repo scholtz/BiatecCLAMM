@@ -1,14 +1,22 @@
 import algosdk from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
-import { BiatecClammPoolClient, BiatecClammPoolFactory } from '../../../contracts/clients/BiatecClammPoolClient';
 import clammCreateTxs from '../txs/clammCreateTxs';
-import { AlgorandClient } from '@algorandfoundation/algokit-utils';
+import { BiatecPoolProviderClient } from '../../../contracts/clients/BiatecPoolProviderClient';
 
 interface IClammBootstrapSkInput {
-  clientBiatecClammPool: BiatecClammPoolClient;
   account: TransactionSignerAccount;
   algod: algosdk.Algodv2;
-  algorand: AlgorandClient;
+  clientBiatecPoolProvider: BiatecPoolProviderClient;
+  sender: string;
+
+  appBiatecConfigProvider: bigint;
+  assetA: bigint;
+  assetB: bigint;
+  fee: bigint;
+  verificationClass: number;
+  priceMin: bigint;
+  priceMax: bigint;
+  currentPrice: bigint;
 }
 /**
  * Add the liqudity to the concentrated liquidity AMM
@@ -17,12 +25,17 @@ interface IClammBootstrapSkInput {
  */
 const clammCreateSender = async (input: IClammBootstrapSkInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
-  const factory = new BiatecClammPoolFactory({
-    algorand: input.algorand,
-  });
   const txs = await clammCreateTxs({
-    account: input.account,
-    biatecClammPoolFactory: factory,
+    appBiatecConfigProvider: input.appBiatecConfigProvider,
+    assetA: input.assetA,
+    assetB: input.assetB,
+    clientBiatecPoolProvider: input.clientBiatecPoolProvider,
+    currentPrice: input.currentPrice,
+    fee: input.fee,
+    priceMax: input.priceMax,
+    priceMin: input.priceMin,
+    sender: input.sender,
+    verificationClass: input.verificationClass,
     params,
   });
   const signed = await input.account.signer(

@@ -3,7 +3,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 const version = 'BIATEC-CONFIG-01-02-01';
 const SCALE = 1_000_000_000;
 // eslint-disable-next-line no-unused-vars
-class BiatecConfigProvider extends Contract {
+export class BiatecConfigProvider extends Contract {
   /**
    * Top secret multisig account with which it is possible update user contracts or biatec contracts.
    */

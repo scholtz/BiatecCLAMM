@@ -4,9 +4,13 @@
  * DO NOT MODIFY IT BY HAND.
  * requires: @algorandfoundation/algokit-utils: ^7
  */
-import { AlgorandClientInterface } from '@algorandfoundation/algokit-utils/types/algorand-client-interface'
-import { ABIReturn, AppReturn, SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app'
-import { Arc56Contract, getArc56ReturnValue, getABIStructFromABITuple } from '@algorandfoundation/algokit-utils/types/app-arc56'
+import { AlgorandClientInterface } from '@algorandfoundation/algokit-utils/types/algorand-client-interface';
+import { ABIReturn, AppReturn, SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app';
+import {
+  Arc56Contract,
+  getArc56ReturnValue,
+  getABIStructFromABITuple,
+} from '@algorandfoundation/algokit-utils/types/app-arc56';
 import {
   AppClient as _AppClient,
   AppClientMethodCallParams,
@@ -17,14 +21,1551 @@ import {
   ResolveAppClientByCreatorAndName,
   ResolveAppClientByNetwork,
   CloneAppClientParams,
-} from '@algorandfoundation/algokit-utils/types/app-client'
-import { AppFactory as _AppFactory, AppFactoryAppClientParams, AppFactoryResolveAppClientByCreatorAndNameParams, AppFactoryDeployParams, AppFactoryParams, CreateSchema } from '@algorandfoundation/algokit-utils/types/app-factory'
-import { TransactionComposer, AppCallMethodCall, AppMethodCallTransactionArgument, SimulateOptions, RawSimulateOptions, SkipSignaturesSimulateOptions } from '@algorandfoundation/algokit-utils/types/composer'
-import { SendParams, SendSingleTransactionResult, SendAtomicTransactionComposerResults } from '@algorandfoundation/algokit-utils/types/transaction'
-import { Address, encodeAddress, modelsv2, OnApplicationComplete, Transaction, TransactionSigner } from 'algosdk'
-import SimulateResponse = modelsv2.SimulateResponse
+} from '@algorandfoundation/algokit-utils/types/app-client';
+import {
+  AppFactory as _AppFactory,
+  AppFactoryAppClientParams,
+  AppFactoryResolveAppClientByCreatorAndNameParams,
+  AppFactoryDeployParams,
+  AppFactoryParams,
+  CreateSchema,
+} from '@algorandfoundation/algokit-utils/types/app-factory';
+import {
+  TransactionComposer,
+  AppCallMethodCall,
+  AppMethodCallTransactionArgument,
+  SimulateOptions,
+  RawSimulateOptions,
+  SkipSignaturesSimulateOptions,
+} from '@algorandfoundation/algokit-utils/types/composer';
+import {
+  SendParams,
+  SendSingleTransactionResult,
+  SendAtomicTransactionComposerResults,
+} from '@algorandfoundation/algokit-utils/types/transaction';
+import { Address, encodeAddress, modelsv2, OnApplicationComplete, Transaction, TransactionSigner } from 'algosdk';
+import { SimulateResponse } from 'algosdk/dist/types/client/v2/algod/models/types';
 
-export const APP_SPEC: Arc56Contract = {"name":"BiatecIdentityProvider","desc":"","methods":[{"name":"createApplication","desc":"Initial setup","args":[],"returns":{"type":"void"},"actions":{"create":["NoOp"],"call":[]}},{"name":"bootstrap","desc":"Biatec deploys single identity provider smart contract","args":[{"name":"appBiatecConfigProvider","type":"uint64","desc":"Biatec amm provider"},{"name":"governor","type":"address"},{"name":"verificationSetter","type":"address"},{"name":"engagementSetter","type":"address"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"updateApplication","desc":"addressUdpater from global biatec configuration is allowed to update application","args":[{"name":"appBiatecConfigProvider","type":"uint64"},{"name":"newVersion","type":"byte[]"}],"returns":{"type":"void"},"actions":{"create":[],"call":["UpdateApplication"]}},{"name":"selfRegistration","args":[{"name":"user","type":"address"},{"name":"info","type":"(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)","struct":"IdentityInfo"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"setInfo","args":[{"name":"user","type":"address"},{"name":"info","type":"(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)","struct":"IdentityInfo"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"sendOnlineKeyRegistration","desc":"addressExecutiveFee can perfom key registration for this LP pool\n\n\nOnly addressExecutiveFee is allowed to execute this method.","args":[{"name":"appBiatecConfigProvider","type":"uint64"},{"name":"votePK","type":"byte[]"},{"name":"selectionPK","type":"byte[]"},{"name":"stateProofPK","type":"byte[]"},{"name":"voteFirst","type":"uint64"},{"name":"voteLast","type":"uint64"},{"name":"voteKeyDilution","type":"uint64"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]}},{"name":"getUser","desc":"Returns user information - fee multiplier, verification class, engagement class ..","readonly":true,"args":[{"name":"user","type":"address","desc":"Get info for specific user address"},{"name":"v","type":"uint8","desc":"Version of the data structure to return"}],"returns":{"type":"(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)","struct":"UserInfoV1"},"actions":{"create":[],"call":["NoOp"]}},{"name":"withdrawExcessAssets","desc":"If someone deposits excess assets to this smart contract biatec can use them.\n\n\nOnly addressExecutiveFee is allowed to execute this method.","args":[{"name":"appBiatecConfigProvider","type":"uint64","desc":"Biatec config app. Only addressExecutiveFee is allowed to execute this method."},{"name":"asset","type":"uint64","desc":"Asset to withdraw. If native token, then zero"},{"name":"amount","type":"uint64","desc":"Amount of the asset to be withdrawn"}],"returns":{"type":"uint64"},"actions":{"create":[],"call":["NoOp"]}}],"arcs":[4,56],"structs":{"IdentityInfo":[{"name":"verificationStatus","type":"uint64"},{"name":"verificationClass","type":"uint64"},{"name":"isCompany","type":"bool"},{"name":"personUuid","type":"string"},{"name":"legalEntityUuid","type":"string"},{"name":"biatecEngagementPoints","type":"uint64"},{"name":"biatecEngagementRank","type":"uint64"},{"name":"avmEngagementPoints","type":"uint64"},{"name":"avmEngagementRank","type":"uint64"},{"name":"tradingEngagementPoints","type":"uint64"},{"name":"tradingEngagementRank","type":"uint64"},{"name":"isLocked","type":"bool"},{"name":"kycExpiration","type":"uint64"},{"name":"investorForExpiration","type":"uint64"},{"name":"isProfessionalInvestor","type":"bool"}],"UserInfoV1":[{"name":"version","type":"uint8"},{"name":"verificationStatus","type":"uint64"},{"name":"verificationClass","type":"uint64"},{"name":"isCompany","type":"bool"},{"name":"personUuid","type":"string"},{"name":"legalEntityUuid","type":"string"},{"name":"biatecEngagementPoints","type":"uint64"},{"name":"biatecEngagementRank","type":"uint64"},{"name":"avmEngagementPoints","type":"uint64"},{"name":"avmEngagementRank","type":"uint64"},{"name":"tradingEngagementPoints","type":"uint64"},{"name":"tradingEngagementRank","type":"uint64"},{"name":"feeMultiplier","type":"uint256"},{"name":"base","type":"uint256"},{"name":"isLocked","type":"bool"},{"name":"kycExpiration","type":"uint64"},{"name":"investorForExpiration","type":"uint64"},{"name":"isProfessionalInvestor","type":"bool"}]},"state":{"schema":{"global":{"bytes":4,"ints":1},"local":{"bytes":0,"ints":0}},"keys":{"global":{"governor":{"key":"Zw==","keyType":"AVMBytes","valueType":"address"},"verificationSetter":{"key":"dg==","keyType":"AVMBytes","valueType":"address"},"engagementSetter":{"key":"ZQ==","keyType":"AVMBytes","valueType":"address"},"appBiatecConfigProvider":{"key":"Qg==","keyType":"AVMBytes","valueType":"uint64"},"version":{"key":"c2N2ZXI=","keyType":"AVMBytes","valueType":"AVMBytes"}},"local":{},"box":{}},"maps":{"global":{},"local":{},"box":{"identities":{"keyType":"address","valueType":"IdentityInfo","prefix":"i"}}}},"bareActions":{"create":[],"call":[]},"sourceInfo":{"approval":{"sourceInfo":[{"teal":1,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[0]},{"teal":2,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1,2,3,4,5,6,7,8,9,10,11,12,13,14]},{"teal":3,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177]},{"teal":15,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[178,179]},{"teal":16,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[180]},{"teal":17,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[181,182]},{"teal":18,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[183]},{"teal":19,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[184,185]},{"teal":20,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[186]},{"teal":21,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212]},{"teal":25,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","errorMessage":"The requested action is not implemented in this contract. Are you using the correct OnComplete? Did you set your app ID?","pc":[213]},{"teal":30,"source":"contracts\\BiatecIdentityProvider.algo.ts:170","pc":[214,215,216]},{"teal":31,"source":"contracts\\BiatecIdentityProvider.algo.ts:170","pc":[217]},{"teal":32,"source":"contracts\\BiatecIdentityProvider.algo.ts:170","pc":[218]},{"teal":38,"source":"contracts\\BiatecIdentityProvider.algo.ts:170","pc":[219,220,221]},{"teal":42,"source":"contracts\\BiatecIdentityProvider.algo.ts:171","pc":[222,223]},{"teal":43,"source":"contracts\\BiatecIdentityProvider.algo.ts:171","pc":[224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246]},{"teal":44,"source":"contracts\\BiatecIdentityProvider.algo.ts:171","pc":[247]},{"teal":45,"source":"contracts\\BiatecIdentityProvider.algo.ts:170","pc":[248]},{"teal":50,"source":"contracts\\BiatecIdentityProvider.algo.ts:182","pc":[249,250,251]},{"teal":51,"source":"contracts\\BiatecIdentityProvider.algo.ts:182","pc":[252]},{"teal":52,"source":"contracts\\BiatecIdentityProvider.algo.ts:182","pc":[253]},{"teal":53,"source":"contracts\\BiatecIdentityProvider.algo.ts:182","pc":[254]},{"teal":54,"source":"contracts\\BiatecIdentityProvider.algo.ts:182","pc":[255]},{"teal":57,"source":"contracts\\BiatecIdentityProvider.algo.ts:182","errorMessage":"argument 0 (engagementSetter) for bootstrap must be a address","pc":[256]},{"teal":60,"source":"contracts\\BiatecIdentityProvider.algo.ts:181","pc":[257,258,259]},{"teal":61,"source":"contracts\\BiatecIdentityProvider.algo.ts:181","pc":[260]},{"teal":62,"source":"contracts\\BiatecIdentityProvider.algo.ts:181","pc":[261]},{"teal":63,"source":"contracts\\BiatecIdentityProvider.algo.ts:181","pc":[262]},{"teal":64,"source":"contracts\\BiatecIdentityProvider.algo.ts:181","pc":[263]},{"teal":67,"source":"contracts\\BiatecIdentityProvider.algo.ts:181","errorMessage":"argument 1 (verificationSetter) for bootstrap must be a address","pc":[264]},{"teal":70,"source":"contracts\\BiatecIdentityProvider.algo.ts:180","pc":[265,266,267]},{"teal":71,"source":"contracts\\BiatecIdentityProvider.algo.ts:180","pc":[268]},{"teal":72,"source":"contracts\\BiatecIdentityProvider.algo.ts:180","pc":[269]},{"teal":73,"source":"contracts\\BiatecIdentityProvider.algo.ts:180","pc":[270]},{"teal":74,"source":"contracts\\BiatecIdentityProvider.algo.ts:180","pc":[271]},{"teal":77,"source":"contracts\\BiatecIdentityProvider.algo.ts:180","errorMessage":"argument 2 (governor) for bootstrap must be a address","pc":[272]},{"teal":80,"source":"contracts\\BiatecIdentityProvider.algo.ts:179","pc":[273,274,275]},{"teal":81,"source":"contracts\\BiatecIdentityProvider.algo.ts:179","pc":[276]},{"teal":84,"source":"contracts\\BiatecIdentityProvider.algo.ts:178","pc":[277,278,279]},{"teal":85,"source":"contracts\\BiatecIdentityProvider.algo.ts:178","pc":[280]},{"teal":86,"source":"contracts\\BiatecIdentityProvider.algo.ts:178","pc":[281]},{"teal":93,"source":"contracts\\BiatecIdentityProvider.algo.ts:178","pc":[282,283,284]},{"teal":96,"source":"contracts\\BiatecIdentityProvider.algo.ts:178","pc":[285]},{"teal":100,"source":"contracts\\BiatecIdentityProvider.algo.ts:184","pc":[286,287]},{"teal":101,"source":"contracts\\BiatecIdentityProvider.algo.ts:184","pc":[288,289,290]},{"teal":102,"source":"contracts\\BiatecIdentityProvider.algo.ts:184","pc":[291,292]},{"teal":103,"source":"contracts\\BiatecIdentityProvider.algo.ts:184","pc":[293]},{"teal":104,"source":"contracts\\BiatecIdentityProvider.algo.ts:184","pc":[294]},{"teal":107,"source":"contracts\\BiatecIdentityProvider.algo.ts:184","errorMessage":"Only creator of the app can set it up","pc":[295]},{"teal":111,"source":"contracts\\BiatecIdentityProvider.algo.ts:185","pc":[296,297]},{"teal":112,"source":"contracts\\BiatecIdentityProvider.algo.ts:185","pc":[298,299]},{"teal":113,"source":"contracts\\BiatecIdentityProvider.algo.ts:185","pc":[300]},{"teal":117,"source":"contracts\\BiatecIdentityProvider.algo.ts:186","pc":[301,302,303]},{"teal":118,"source":"contracts\\BiatecIdentityProvider.algo.ts:186","pc":[304,305]},{"teal":119,"source":"contracts\\BiatecIdentityProvider.algo.ts:186","pc":[306]},{"teal":123,"source":"contracts\\BiatecIdentityProvider.algo.ts:187","pc":[307,308,309]},{"teal":124,"source":"contracts\\BiatecIdentityProvider.algo.ts:187","pc":[310,311]},{"teal":125,"source":"contracts\\BiatecIdentityProvider.algo.ts:187","pc":[312]},{"teal":129,"source":"contracts\\BiatecIdentityProvider.algo.ts:188","pc":[313,314]},{"teal":130,"source":"contracts\\BiatecIdentityProvider.algo.ts:188","pc":[315,316]},{"teal":131,"source":"contracts\\BiatecIdentityProvider.algo.ts:188","pc":[317]},{"teal":135,"source":"contracts\\BiatecIdentityProvider.algo.ts:190","pc":[318,319]},{"teal":136,"source":"contracts\\BiatecIdentityProvider.algo.ts:190","pc":[320,321]},{"teal":137,"source":"contracts\\BiatecIdentityProvider.algo.ts:190","pc":[322]},{"teal":140,"source":"contracts\\BiatecIdentityProvider.algo.ts:190","errorMessage":"global state value does not exist: appBiatecConfigProvider.globalState('s')","pc":[323]},{"teal":141,"source":"contracts\\BiatecIdentityProvider.algo.ts:190","pc":[324,325]},{"teal":145,"source":"contracts\\BiatecIdentityProvider.algo.ts:191","pc":[326,327]},{"teal":146,"source":"contracts\\BiatecIdentityProvider.algo.ts:191","pc":[328]},{"teal":147,"source":"contracts\\BiatecIdentityProvider.algo.ts:191","pc":[329]},{"teal":150,"source":"contracts\\BiatecIdentityProvider.algo.ts:191","errorMessage":"ERR_PAUSED","pc":[330]},{"teal":151,"source":"contracts\\BiatecIdentityProvider.algo.ts:178","pc":[331]},{"teal":156,"source":"contracts\\BiatecIdentityProvider.algo.ts:197","pc":[332,333,334]},{"teal":157,"source":"contracts\\BiatecIdentityProvider.algo.ts:197","pc":[335,336,337]},{"teal":160,"source":"contracts\\BiatecIdentityProvider.algo.ts:197","pc":[338,339,340]},{"teal":161,"source":"contracts\\BiatecIdentityProvider.algo.ts:197","pc":[341]},{"teal":164,"source":"contracts\\BiatecIdentityProvider.algo.ts:197","pc":[342,343,344]},{"teal":165,"source":"contracts\\BiatecIdentityProvider.algo.ts:197","pc":[345]},{"teal":166,"source":"contracts\\BiatecIdentityProvider.algo.ts:197","pc":[346]},{"teal":172,"source":"contracts\\BiatecIdentityProvider.algo.ts:197","pc":[347,348,349]},{"teal":175,"source":"contracts\\BiatecIdentityProvider.algo.ts:197","pc":[350]},{"teal":176,"source":"contracts\\BiatecIdentityProvider.algo.ts:197","pc":[351]},{"teal":180,"source":"contracts\\BiatecIdentityProvider.algo.ts:198","pc":[352,353]},{"teal":181,"source":"contracts\\BiatecIdentityProvider.algo.ts:198","pc":[354,355]},{"teal":182,"source":"contracts\\BiatecIdentityProvider.algo.ts:198","pc":[356]},{"teal":183,"source":"contracts\\BiatecIdentityProvider.algo.ts:198","pc":[357]},{"teal":186,"source":"contracts\\BiatecIdentityProvider.algo.ts:198","errorMessage":"Configuration app does not match","pc":[358]},{"teal":190,"source":"contracts\\BiatecIdentityProvider.algo.ts:199","pc":[359,360]},{"teal":191,"source":"contracts\\BiatecIdentityProvider.algo.ts:199","pc":[361,362,363]},{"teal":192,"source":"contracts\\BiatecIdentityProvider.algo.ts:199","pc":[364]},{"teal":195,"source":"contracts\\BiatecIdentityProvider.algo.ts:199","errorMessage":"global state value does not exist: appBiatecConfigProvider.globalState('u')","pc":[365]},{"teal":196,"source":"contracts\\BiatecIdentityProvider.algo.ts:199","pc":[366,367]},{"teal":200,"source":"contracts\\BiatecIdentityProvider.algo.ts:200","pc":[368,369]},{"teal":201,"source":"contracts\\BiatecIdentityProvider.algo.ts:200","pc":[370,371]},{"teal":202,"source":"contracts\\BiatecIdentityProvider.algo.ts:200","pc":[372]},{"teal":205,"source":"contracts\\BiatecIdentityProvider.algo.ts:200","errorMessage":"Only addressUdpater setup in the config can update application","pc":[373]},{"teal":209,"source":"contracts\\BiatecIdentityProvider.algo.ts:201","pc":[374,375]},{"teal":210,"source":"contracts\\BiatecIdentityProvider.algo.ts:201","pc":[376,377]},{"teal":211,"source":"contracts\\BiatecIdentityProvider.algo.ts:201","pc":[378]},{"teal":214,"source":"contracts\\BiatecIdentityProvider.algo.ts:201","errorMessage":"global state value does not exist: appBiatecConfigProvider.globalState('s')","pc":[379]},{"teal":215,"source":"contracts\\BiatecIdentityProvider.algo.ts:201","pc":[380,381]},{"teal":219,"source":"contracts\\BiatecIdentityProvider.algo.ts:202","pc":[382,383]},{"teal":220,"source":"contracts\\BiatecIdentityProvider.algo.ts:202","pc":[384]},{"teal":221,"source":"contracts\\BiatecIdentityProvider.algo.ts:202","pc":[385]},{"teal":224,"source":"contracts\\BiatecIdentityProvider.algo.ts:202","errorMessage":"ERR_PAUSED","pc":[386]},{"teal":228,"source":"contracts\\BiatecIdentityProvider.algo.ts:203","pc":[387,388]},{"teal":229,"source":"contracts\\BiatecIdentityProvider.algo.ts:203","pc":[389,390]},{"teal":230,"source":"contracts\\BiatecIdentityProvider.algo.ts:203","pc":[391]},{"teal":231,"source":"contracts\\BiatecIdentityProvider.algo.ts:197","pc":[392]},{"teal":236,"source":"contracts\\BiatecIdentityProvider.algo.ts:206","pc":[393,394,395]},{"teal":239,"source":"contracts\\BiatecIdentityProvider.algo.ts:206","pc":[396,397,398]},{"teal":240,"source":"contracts\\BiatecIdentityProvider.algo.ts:206","pc":[399]},{"teal":241,"source":"contracts\\BiatecIdentityProvider.algo.ts:206","pc":[400]},{"teal":242,"source":"contracts\\BiatecIdentityProvider.algo.ts:206","pc":[401]},{"teal":243,"source":"contracts\\BiatecIdentityProvider.algo.ts:206","pc":[402]},{"teal":246,"source":"contracts\\BiatecIdentityProvider.algo.ts:206","errorMessage":"argument 1 (user) for selfRegistration must be a address","pc":[403]},{"teal":249,"source":"contracts\\BiatecIdentityProvider.algo.ts:206","pc":[404,405,406]},{"teal":250,"source":"contracts\\BiatecIdentityProvider.algo.ts:206","pc":[407]},{"teal":251,"source":"contracts\\BiatecIdentityProvider.algo.ts:206","pc":[408]},{"teal":255,"source":"contracts\\BiatecIdentityProvider.algo.ts:206","pc":[409,410,411]},{"teal":259,"source":"contracts\\BiatecIdentityProvider.algo.ts:207","pc":[412]},{"teal":260,"source":"contracts\\BiatecIdentityProvider.algo.ts:207","pc":[413,414]},{"teal":261,"source":"contracts\\BiatecIdentityProvider.algo.ts:207","pc":[415]},{"teal":262,"source":"contracts\\BiatecIdentityProvider.algo.ts:207","pc":[416]},{"teal":263,"source":"contracts\\BiatecIdentityProvider.algo.ts:207","pc":[417]},{"teal":264,"source":"contracts\\BiatecIdentityProvider.algo.ts:207","pc":[418]},{"teal":265,"source":"contracts\\BiatecIdentityProvider.algo.ts:207","pc":[419]},{"teal":268,"source":"contracts\\BiatecIdentityProvider.algo.ts:207","errorMessage":"Self registration cannot be executed if address is already registered","pc":[420]},{"teal":272,"source":"contracts\\BiatecIdentityProvider.algo.ts:210","pc":[421,422]},{"teal":273,"source":"contracts\\BiatecIdentityProvider.algo.ts:210","pc":[423,424]},{"teal":274,"source":"contracts\\BiatecIdentityProvider.algo.ts:210","pc":[425,426]},{"teal":275,"source":"contracts\\BiatecIdentityProvider.algo.ts:210","pc":[427,428,429]},{"teal":276,"source":"contracts\\BiatecIdentityProvider.algo.ts:210","pc":[430]},{"teal":277,"source":"contracts\\BiatecIdentityProvider.algo.ts:210","pc":[431]},{"teal":278,"source":"contracts\\BiatecIdentityProvider.algo.ts:210","pc":[432]},{"teal":281,"source":"contracts\\BiatecIdentityProvider.algo.ts:210","errorMessage":"Verification status must be empty","pc":[433]},{"teal":285,"source":"contracts\\BiatecIdentityProvider.algo.ts:212","pc":[434,435]},{"teal":286,"source":"contracts\\BiatecIdentityProvider.algo.ts:212","pc":[436,437]},{"teal":287,"source":"contracts\\BiatecIdentityProvider.algo.ts:212","pc":[438,439]},{"teal":288,"source":"contracts\\BiatecIdentityProvider.algo.ts:212","pc":[440,441,442]},{"teal":289,"source":"contracts\\BiatecIdentityProvider.algo.ts:212","pc":[443]},{"teal":290,"source":"contracts\\BiatecIdentityProvider.algo.ts:212","pc":[444]},{"teal":291,"source":"contracts\\BiatecIdentityProvider.algo.ts:212","pc":[445]},{"teal":294,"source":"contracts\\BiatecIdentityProvider.algo.ts:212","errorMessage":"verificationClass must equal to 0","pc":[446]},{"teal":301,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[447,448]},{"teal":302,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[449,450]},{"teal":303,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[451,452]},{"teal":304,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[453,454]},{"teal":305,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[455,456]},{"teal":306,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[457,458]},{"teal":307,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[459]},{"teal":308,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[460]},{"teal":309,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[461,462]},{"teal":310,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[463]},{"teal":311,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[464]},{"teal":312,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[465]},{"teal":313,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[466]},{"teal":314,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[467]},{"teal":315,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[468]},{"teal":316,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[469]},{"teal":317,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[470,471,472]},{"teal":318,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[473,474]},{"teal":319,"source":"contracts\\BiatecIdentityProvider.algo.ts:216","pc":[475]},{"teal":322,"source":"contracts\\BiatecIdentityProvider.algo.ts:215","errorMessage":"personUUID must equal to 00000000-0000-0000-0000-000000000000","pc":[476]},{"teal":329,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[477,478]},{"teal":330,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[479,480]},{"teal":331,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[481,482]},{"teal":332,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[483,484]},{"teal":333,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[485,486]},{"teal":334,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[487,488]},{"teal":335,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[489]},{"teal":336,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[490]},{"teal":337,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[491,492]},{"teal":338,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[493]},{"teal":339,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[494]},{"teal":340,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[495]},{"teal":341,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[496]},{"teal":342,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[497]},{"teal":343,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[498]},{"teal":344,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[499]},{"teal":345,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[500,501,502]},{"teal":346,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[503,504]},{"teal":347,"source":"contracts\\BiatecIdentityProvider.algo.ts:221","pc":[505]},{"teal":350,"source":"contracts\\BiatecIdentityProvider.algo.ts:220","errorMessage":"legalEntityUUID must equal to 00000000-0000-0000-0000-000000000000","pc":[506]},{"teal":354,"source":"contracts\\BiatecIdentityProvider.algo.ts:225","pc":[507,508]},{"teal":355,"source":"contracts\\BiatecIdentityProvider.algo.ts:225","pc":[509,510]},{"teal":356,"source":"contracts\\BiatecIdentityProvider.algo.ts:225","pc":[511,512]},{"teal":357,"source":"contracts\\BiatecIdentityProvider.algo.ts:225","pc":[513,514,515]},{"teal":358,"source":"contracts\\BiatecIdentityProvider.algo.ts:225","pc":[516]},{"teal":359,"source":"contracts\\BiatecIdentityProvider.algo.ts:225","pc":[517]},{"teal":360,"source":"contracts\\BiatecIdentityProvider.algo.ts:225","pc":[518]},{"teal":363,"source":"contracts\\BiatecIdentityProvider.algo.ts:225","errorMessage":"biatecEngagementPoints must equal to 0","pc":[519]},{"teal":367,"source":"contracts\\BiatecIdentityProvider.algo.ts:227","pc":[520,521]},{"teal":368,"source":"contracts\\BiatecIdentityProvider.algo.ts:227","pc":[522,523]},{"teal":369,"source":"contracts\\BiatecIdentityProvider.algo.ts:227","pc":[524,525]},{"teal":370,"source":"contracts\\BiatecIdentityProvider.algo.ts:227","pc":[526,527,528]},{"teal":371,"source":"contracts\\BiatecIdentityProvider.algo.ts:227","pc":[529]},{"teal":372,"source":"contracts\\BiatecIdentityProvider.algo.ts:227","pc":[530]},{"teal":373,"source":"contracts\\BiatecIdentityProvider.algo.ts:227","pc":[531]},{"teal":376,"source":"contracts\\BiatecIdentityProvider.algo.ts:227","errorMessage":"biatecEngagementRank must equal to 0","pc":[532]},{"teal":380,"source":"contracts\\BiatecIdentityProvider.algo.ts:229","pc":[533,534]},{"teal":381,"source":"contracts\\BiatecIdentityProvider.algo.ts:229","pc":[535,536]},{"teal":382,"source":"contracts\\BiatecIdentityProvider.algo.ts:229","pc":[537,538]},{"teal":383,"source":"contracts\\BiatecIdentityProvider.algo.ts:229","pc":[539,540,541]},{"teal":384,"source":"contracts\\BiatecIdentityProvider.algo.ts:229","pc":[542]},{"teal":385,"source":"contracts\\BiatecIdentityProvider.algo.ts:229","pc":[543]},{"teal":386,"source":"contracts\\BiatecIdentityProvider.algo.ts:229","pc":[544]},{"teal":389,"source":"contracts\\BiatecIdentityProvider.algo.ts:229","errorMessage":"avmEngagementPoints must equal to 0","pc":[545]},{"teal":393,"source":"contracts\\BiatecIdentityProvider.algo.ts:231","pc":[546,547]},{"teal":394,"source":"contracts\\BiatecIdentityProvider.algo.ts:231","pc":[548,549]},{"teal":395,"source":"contracts\\BiatecIdentityProvider.algo.ts:231","pc":[550,551]},{"teal":396,"source":"contracts\\BiatecIdentityProvider.algo.ts:231","pc":[552,553,554]},{"teal":397,"source":"contracts\\BiatecIdentityProvider.algo.ts:231","pc":[555]},{"teal":398,"source":"contracts\\BiatecIdentityProvider.algo.ts:231","pc":[556]},{"teal":399,"source":"contracts\\BiatecIdentityProvider.algo.ts:231","pc":[557]},{"teal":402,"source":"contracts\\BiatecIdentityProvider.algo.ts:231","errorMessage":"avmEngagementRank must equal to 0","pc":[558]},{"teal":406,"source":"contracts\\BiatecIdentityProvider.algo.ts:233","pc":[559,560]},{"teal":407,"source":"contracts\\BiatecIdentityProvider.algo.ts:233","pc":[561,562]},{"teal":408,"source":"contracts\\BiatecIdentityProvider.algo.ts:233","pc":[563,564]},{"teal":409,"source":"contracts\\BiatecIdentityProvider.algo.ts:233","pc":[565,566,567]},{"teal":410,"source":"contracts\\BiatecIdentityProvider.algo.ts:233","pc":[568]},{"teal":411,"source":"contracts\\BiatecIdentityProvider.algo.ts:233","pc":[569]},{"teal":412,"source":"contracts\\BiatecIdentityProvider.algo.ts:233","pc":[570]},{"teal":415,"source":"contracts\\BiatecIdentityProvider.algo.ts:233","errorMessage":"tradingEngagementPoints must equal to 0","pc":[571]},{"teal":419,"source":"contracts\\BiatecIdentityProvider.algo.ts:235","pc":[572,573]},{"teal":420,"source":"contracts\\BiatecIdentityProvider.algo.ts:235","pc":[574,575]},{"teal":421,"source":"contracts\\BiatecIdentityProvider.algo.ts:235","pc":[576,577]},{"teal":422,"source":"contracts\\BiatecIdentityProvider.algo.ts:235","pc":[578,579,580]},{"teal":423,"source":"contracts\\BiatecIdentityProvider.algo.ts:235","pc":[581]},{"teal":424,"source":"contracts\\BiatecIdentityProvider.algo.ts:235","pc":[582]},{"teal":425,"source":"contracts\\BiatecIdentityProvider.algo.ts:235","pc":[583]},{"teal":428,"source":"contracts\\BiatecIdentityProvider.algo.ts:235","errorMessage":"tradingEngagementRank must equal to 0","pc":[584]},{"teal":432,"source":"contracts\\BiatecIdentityProvider.algo.ts:237","pc":[585,586]},{"teal":433,"source":"contracts\\BiatecIdentityProvider.algo.ts:237","pc":[587,588]},{"teal":434,"source":"contracts\\BiatecIdentityProvider.algo.ts:237","pc":[589,590]},{"teal":435,"source":"contracts\\BiatecIdentityProvider.algo.ts:237","pc":[591,592]},{"teal":436,"source":"contracts\\BiatecIdentityProvider.algo.ts:237","pc":[593]},{"teal":437,"source":"contracts\\BiatecIdentityProvider.algo.ts:237","pc":[594]},{"teal":438,"source":"contracts\\BiatecIdentityProvider.algo.ts:237","pc":[595]},{"teal":441,"source":"contracts\\BiatecIdentityProvider.algo.ts:237","errorMessage":"isLocked must equal to false","pc":[596]},{"teal":445,"source":"contracts\\BiatecIdentityProvider.algo.ts:239","pc":[597,598]},{"teal":446,"source":"contracts\\BiatecIdentityProvider.algo.ts:239","pc":[599,600]},{"teal":447,"source":"contracts\\BiatecIdentityProvider.algo.ts:239","pc":[601,602]},{"teal":448,"source":"contracts\\BiatecIdentityProvider.algo.ts:239","pc":[603,604,605]},{"teal":449,"source":"contracts\\BiatecIdentityProvider.algo.ts:239","pc":[606]},{"teal":450,"source":"contracts\\BiatecIdentityProvider.algo.ts:239","pc":[607]},{"teal":451,"source":"contracts\\BiatecIdentityProvider.algo.ts:239","pc":[608]},{"teal":454,"source":"contracts\\BiatecIdentityProvider.algo.ts:239","errorMessage":"kycExpiration must equal to 0","pc":[609]},{"teal":458,"source":"contracts\\BiatecIdentityProvider.algo.ts:241","pc":[610,611]},{"teal":459,"source":"contracts\\BiatecIdentityProvider.algo.ts:241","pc":[612,613]},{"teal":460,"source":"contracts\\BiatecIdentityProvider.algo.ts:241","pc":[614,615]},{"teal":461,"source":"contracts\\BiatecIdentityProvider.algo.ts:241","pc":[616,617,618]},{"teal":462,"source":"contracts\\BiatecIdentityProvider.algo.ts:241","pc":[619]},{"teal":463,"source":"contracts\\BiatecIdentityProvider.algo.ts:241","pc":[620]},{"teal":464,"source":"contracts\\BiatecIdentityProvider.algo.ts:241","pc":[621]},{"teal":467,"source":"contracts\\BiatecIdentityProvider.algo.ts:241","errorMessage":"investorForExpiration must equal to 0","pc":[622]},{"teal":471,"source":"contracts\\BiatecIdentityProvider.algo.ts:243","pc":[623,624]},{"teal":472,"source":"contracts\\BiatecIdentityProvider.algo.ts:243","pc":[625,626]},{"teal":473,"source":"contracts\\BiatecIdentityProvider.algo.ts:243","pc":[627,628]},{"teal":474,"source":"contracts\\BiatecIdentityProvider.algo.ts:243","pc":[629,630]},{"teal":475,"source":"contracts\\BiatecIdentityProvider.algo.ts:243","pc":[631]},{"teal":476,"source":"contracts\\BiatecIdentityProvider.algo.ts:243","pc":[632]},{"teal":477,"source":"contracts\\BiatecIdentityProvider.algo.ts:243","pc":[633]},{"teal":480,"source":"contracts\\BiatecIdentityProvider.algo.ts:243","errorMessage":"isProfessionalInvestor must equal to false","pc":[634]},{"teal":484,"source":"contracts\\BiatecIdentityProvider.algo.ts:245","pc":[635]},{"teal":485,"source":"contracts\\BiatecIdentityProvider.algo.ts:245","pc":[636,637]},{"teal":486,"source":"contracts\\BiatecIdentityProvider.algo.ts:245","pc":[638]},{"teal":487,"source":"contracts\\BiatecIdentityProvider.algo.ts:245","pc":[639]},{"teal":488,"source":"contracts\\BiatecIdentityProvider.algo.ts:245","pc":[640]},{"teal":489,"source":"contracts\\BiatecIdentityProvider.algo.ts:245","pc":[641]},{"teal":490,"source":"contracts\\BiatecIdentityProvider.algo.ts:245","pc":[642,643]},{"teal":491,"source":"contracts\\BiatecIdentityProvider.algo.ts:245","pc":[644]},{"teal":492,"source":"contracts\\BiatecIdentityProvider.algo.ts:206","pc":[645]},{"teal":497,"source":"contracts\\BiatecIdentityProvider.algo.ts:248","pc":[646,647,648]},{"teal":500,"source":"contracts\\BiatecIdentityProvider.algo.ts:248","pc":[649,650,651]},{"teal":501,"source":"contracts\\BiatecIdentityProvider.algo.ts:248","pc":[652]},{"teal":502,"source":"contracts\\BiatecIdentityProvider.algo.ts:248","pc":[653]},{"teal":503,"source":"contracts\\BiatecIdentityProvider.algo.ts:248","pc":[654]},{"teal":504,"source":"contracts\\BiatecIdentityProvider.algo.ts:248","pc":[655]},{"teal":507,"source":"contracts\\BiatecIdentityProvider.algo.ts:248","errorMessage":"argument 1 (user) for setInfo must be a address","pc":[656]},{"teal":510,"source":"contracts\\BiatecIdentityProvider.algo.ts:248","pc":[657,658,659]},{"teal":511,"source":"contracts\\BiatecIdentityProvider.algo.ts:248","pc":[660]},{"teal":512,"source":"contracts\\BiatecIdentityProvider.algo.ts:248","pc":[661]},{"teal":516,"source":"contracts\\BiatecIdentityProvider.algo.ts:248","pc":[662,663,664]},{"teal":520,"source":"contracts\\BiatecIdentityProvider.algo.ts:249","pc":[665,666]},{"teal":521,"source":"contracts\\BiatecIdentityProvider.algo.ts:249","pc":[667,668]},{"teal":522,"source":"contracts\\BiatecIdentityProvider.algo.ts:249","pc":[669]},{"teal":523,"source":"contracts\\BiatecIdentityProvider.algo.ts:249","pc":[670]},{"teal":524,"source":"contracts\\BiatecIdentityProvider.algo.ts:249","pc":[671]},{"teal":528,"source":"contracts\\BiatecIdentityProvider.algo.ts:250","pc":[672]},{"teal":529,"source":"contracts\\BiatecIdentityProvider.algo.ts:250","pc":[673,674]},{"teal":530,"source":"contracts\\BiatecIdentityProvider.algo.ts:250","pc":[675]},{"teal":531,"source":"contracts\\BiatecIdentityProvider.algo.ts:250","pc":[676]},{"teal":532,"source":"contracts\\BiatecIdentityProvider.algo.ts:250","pc":[677]},{"teal":533,"source":"contracts\\BiatecIdentityProvider.algo.ts:250","pc":[678]},{"teal":534,"source":"contracts\\BiatecIdentityProvider.algo.ts:250","pc":[679,680]},{"teal":535,"source":"contracts\\BiatecIdentityProvider.algo.ts:250","pc":[681]},{"teal":536,"source":"contracts\\BiatecIdentityProvider.algo.ts:248","pc":[682]},{"teal":541,"source":"contracts\\BiatecIdentityProvider.algo.ts:265","pc":[683,684,685]},{"teal":542,"source":"contracts\\BiatecIdentityProvider.algo.ts:265","pc":[686]},{"teal":545,"source":"contracts\\BiatecIdentityProvider.algo.ts:264","pc":[687,688,689]},{"teal":546,"source":"contracts\\BiatecIdentityProvider.algo.ts:264","pc":[690]},{"teal":549,"source":"contracts\\BiatecIdentityProvider.algo.ts:263","pc":[691,692,693]},{"teal":550,"source":"contracts\\BiatecIdentityProvider.algo.ts:263","pc":[694]},{"teal":553,"source":"contracts\\BiatecIdentityProvider.algo.ts:262","pc":[695,696,697]},{"teal":554,"source":"contracts\\BiatecIdentityProvider.algo.ts:262","pc":[698,699,700]},{"teal":557,"source":"contracts\\BiatecIdentityProvider.algo.ts:261","pc":[701,702,703]},{"teal":558,"source":"contracts\\BiatecIdentityProvider.algo.ts:261","pc":[704,705,706]},{"teal":561,"source":"contracts\\BiatecIdentityProvider.algo.ts:260","pc":[707,708,709]},{"teal":562,"source":"contracts\\BiatecIdentityProvider.algo.ts:260","pc":[710,711,712]},{"teal":565,"source":"contracts\\BiatecIdentityProvider.algo.ts:259","pc":[713,714,715]},{"teal":566,"source":"contracts\\BiatecIdentityProvider.algo.ts:259","pc":[716]},{"teal":569,"source":"contracts\\BiatecIdentityProvider.algo.ts:258","pc":[717,718,719]},{"teal":570,"source":"contracts\\BiatecIdentityProvider.algo.ts:258","pc":[720]},{"teal":571,"source":"contracts\\BiatecIdentityProvider.algo.ts:258","pc":[721]},{"teal":579,"source":"contracts\\BiatecIdentityProvider.algo.ts:258","pc":[722,723,724]},{"teal":582,"source":"contracts\\BiatecIdentityProvider.algo.ts:258","pc":[725]},{"teal":583,"source":"contracts\\BiatecIdentityProvider.algo.ts:258","pc":[726]},{"teal":587,"source":"contracts\\BiatecIdentityProvider.algo.ts:267","pc":[727,728]},{"teal":588,"source":"contracts\\BiatecIdentityProvider.algo.ts:267","pc":[729,730]},{"teal":589,"source":"contracts\\BiatecIdentityProvider.algo.ts:267","pc":[731]},{"teal":590,"source":"contracts\\BiatecIdentityProvider.algo.ts:267","pc":[732]},{"teal":593,"source":"contracts\\BiatecIdentityProvider.algo.ts:267","errorMessage":"Configuration app does not match","pc":[733]},{"teal":597,"source":"contracts\\BiatecIdentityProvider.algo.ts:268","pc":[734,735]},{"teal":598,"source":"contracts\\BiatecIdentityProvider.algo.ts:268","pc":[736,737]},{"teal":599,"source":"contracts\\BiatecIdentityProvider.algo.ts:268","pc":[738]},{"teal":602,"source":"contracts\\BiatecIdentityProvider.algo.ts:268","errorMessage":"global state value does not exist: appBiatecConfigProvider.globalState('ef')","pc":[739]},{"teal":603,"source":"contracts\\BiatecIdentityProvider.algo.ts:268","pc":[740,741]},{"teal":610,"source":"contracts\\BiatecIdentityProvider.algo.ts:270","pc":[742,743]},{"teal":611,"source":"contracts\\BiatecIdentityProvider.algo.ts:270","pc":[744,745]},{"teal":612,"source":"contracts\\BiatecIdentityProvider.algo.ts:270","pc":[746]},{"teal":615,"source":"contracts\\BiatecIdentityProvider.algo.ts:269","errorMessage":"Only fee executor setup in the config can take the collected fees","pc":[747]},{"teal":619,"source":"contracts\\BiatecIdentityProvider.algo.ts:273","pc":[748,749]},{"teal":620,"source":"contracts\\BiatecIdentityProvider.algo.ts:273","pc":[750,751]},{"teal":621,"source":"contracts\\BiatecIdentityProvider.algo.ts:273","pc":[752]},{"teal":624,"source":"contracts\\BiatecIdentityProvider.algo.ts:273","errorMessage":"global state value does not exist: appBiatecConfigProvider.globalState('s')","pc":[753]},{"teal":625,"source":"contracts\\BiatecIdentityProvider.algo.ts:273","pc":[754,755]},{"teal":629,"source":"contracts\\BiatecIdentityProvider.algo.ts:274","pc":[756,757]},{"teal":630,"source":"contracts\\BiatecIdentityProvider.algo.ts:274","pc":[758]},{"teal":631,"source":"contracts\\BiatecIdentityProvider.algo.ts:274","pc":[759]},{"teal":634,"source":"contracts\\BiatecIdentityProvider.algo.ts:274","errorMessage":"ERR_PAUSED","pc":[760]},{"teal":646,"source":"contracts\\BiatecIdentityProvider.algo.ts:275","pc":[761]},{"teal":647,"source":"contracts\\BiatecIdentityProvider.algo.ts:275","pc":[762]},{"teal":648,"source":"contracts\\BiatecIdentityProvider.algo.ts:275","pc":[763,764]},{"teal":652,"source":"contracts\\BiatecIdentityProvider.algo.ts:276","pc":[765,766]},{"teal":653,"source":"contracts\\BiatecIdentityProvider.algo.ts:276","pc":[767,768]},{"teal":657,"source":"contracts\\BiatecIdentityProvider.algo.ts:277","pc":[769,770]},{"teal":658,"source":"contracts\\BiatecIdentityProvider.algo.ts:277","pc":[771,772]},{"teal":662,"source":"contracts\\BiatecIdentityProvider.algo.ts:278","pc":[773,774]},{"teal":663,"source":"contracts\\BiatecIdentityProvider.algo.ts:278","pc":[775,776]},{"teal":667,"source":"contracts\\BiatecIdentityProvider.algo.ts:279","pc":[777,778]},{"teal":668,"source":"contracts\\BiatecIdentityProvider.algo.ts:279","pc":[779,780]},{"teal":672,"source":"contracts\\BiatecIdentityProvider.algo.ts:280","pc":[781,782]},{"teal":673,"source":"contracts\\BiatecIdentityProvider.algo.ts:280","pc":[783,784]},{"teal":677,"source":"contracts\\BiatecIdentityProvider.algo.ts:281","pc":[785,786]},{"teal":678,"source":"contracts\\BiatecIdentityProvider.algo.ts:281","pc":[787,788]},{"teal":682,"source":"contracts\\BiatecIdentityProvider.algo.ts:282","pc":[789]},{"teal":683,"source":"contracts\\BiatecIdentityProvider.algo.ts:282","pc":[790,791]},{"teal":686,"source":"contracts\\BiatecIdentityProvider.algo.ts:275","pc":[792]},{"teal":687,"source":"contracts\\BiatecIdentityProvider.algo.ts:258","pc":[793]},{"teal":692,"source":"contracts\\BiatecIdentityProvider.algo.ts:292","pc":[794,795]},{"teal":695,"source":"contracts\\BiatecIdentityProvider.algo.ts:293","pc":[796,797,798]},{"teal":696,"source":"contracts\\BiatecIdentityProvider.algo.ts:293","pc":[799]},{"teal":697,"source":"contracts\\BiatecIdentityProvider.algo.ts:293","pc":[800]},{"teal":698,"source":"contracts\\BiatecIdentityProvider.algo.ts:293","pc":[801]},{"teal":699,"source":"contracts\\BiatecIdentityProvider.algo.ts:293","pc":[802]},{"teal":702,"source":"contracts\\BiatecIdentityProvider.algo.ts:293","errorMessage":"argument 0 (v) for getUser must be a uint8","pc":[803]},{"teal":703,"source":"contracts\\BiatecIdentityProvider.algo.ts:293","pc":[804]},{"teal":706,"source":"contracts\\BiatecIdentityProvider.algo.ts:293","pc":[805,806,807]},{"teal":707,"source":"contracts\\BiatecIdentityProvider.algo.ts:293","pc":[808]},{"teal":708,"source":"contracts\\BiatecIdentityProvider.algo.ts:293","pc":[809]},{"teal":709,"source":"contracts\\BiatecIdentityProvider.algo.ts:293","pc":[810]},{"teal":710,"source":"contracts\\BiatecIdentityProvider.algo.ts:293","pc":[811]},{"teal":713,"source":"contracts\\BiatecIdentityProvider.algo.ts:293","errorMessage":"argument 1 (user) for getUser must be a address","pc":[812]},{"teal":716,"source":"contracts\\BiatecIdentityProvider.algo.ts:292","pc":[813,814,815]},{"teal":717,"source":"contracts\\BiatecIdentityProvider.algo.ts:292","pc":[816]},{"teal":718,"source":"contracts\\BiatecIdentityProvider.algo.ts:292","pc":[817]},{"teal":719,"source":"contracts\\BiatecIdentityProvider.algo.ts:292","pc":[818]},{"teal":720,"source":"contracts\\BiatecIdentityProvider.algo.ts:292","pc":[819]},{"teal":729,"source":"contracts\\BiatecIdentityProvider.algo.ts:292","pc":[820,821,822]},{"teal":732,"source":"contracts\\BiatecIdentityProvider.algo.ts:292","pc":[823]},{"teal":733,"source":"contracts\\BiatecIdentityProvider.algo.ts:292","pc":[824,825]},{"teal":737,"source":"contracts\\BiatecIdentityProvider.algo.ts:294","pc":[826,827]},{"teal":738,"source":"contracts\\BiatecIdentityProvider.algo.ts:294","pc":[828]},{"teal":739,"source":"contracts\\BiatecIdentityProvider.algo.ts:294","pc":[829]},{"teal":742,"source":"contracts\\BiatecIdentityProvider.algo.ts:294","errorMessage":"Currently supported version of the data structure is '1'","pc":[830]},{"teal":747,"source":"contracts\\BiatecIdentityProvider.algo.ts:295","pc":[831]},{"teal":748,"source":"contracts\\BiatecIdentityProvider.algo.ts:295","pc":[832,833]},{"teal":749,"source":"contracts\\BiatecIdentityProvider.algo.ts:295","pc":[834]},{"teal":750,"source":"contracts\\BiatecIdentityProvider.algo.ts:295","pc":[835]},{"teal":751,"source":"contracts\\BiatecIdentityProvider.algo.ts:295","pc":[836]},{"teal":752,"source":"contracts\\BiatecIdentityProvider.algo.ts:295","pc":[837]},{"teal":753,"source":"contracts\\BiatecIdentityProvider.algo.ts:295","pc":[838]},{"teal":754,"source":"contracts\\BiatecIdentityProvider.algo.ts:295","pc":[839,840,841]},{"teal":778,"source":"contracts\\BiatecIdentityProvider.algo.ts:296","pc":[842]},{"teal":779,"source":"contracts\\BiatecIdentityProvider.algo.ts:296","pc":[843]},{"teal":780,"source":"contracts\\BiatecIdentityProvider.algo.ts:296","pc":[844,845]},{"teal":781,"source":"contracts\\BiatecIdentityProvider.algo.ts:297","pc":[846,847]},{"teal":782,"source":"contracts\\BiatecIdentityProvider.algo.ts:297","pc":[848]},{"teal":783,"source":"contracts\\BiatecIdentityProvider.algo.ts:297","pc":[849,850,851]},{"teal":784,"source":"contracts\\BiatecIdentityProvider.algo.ts:297","pc":[852,853,854]},{"teal":785,"source":"contracts\\BiatecIdentityProvider.algo.ts:302","pc":[855]},{"teal":786,"source":"contracts\\BiatecIdentityProvider.algo.ts:302","pc":[856,857,858]},{"teal":787,"source":"contracts\\BiatecIdentityProvider.algo.ts:301","pc":[859]},{"teal":788,"source":"contracts\\BiatecIdentityProvider.algo.ts:301","pc":[860,861,862]},{"teal":789,"source":"contracts\\BiatecIdentityProvider.algo.ts:312","pc":[863]},{"teal":790,"source":"contracts\\BiatecIdentityProvider.algo.ts:312","pc":[864]},{"teal":791,"source":"contracts\\BiatecIdentityProvider.algo.ts:312","pc":[865]},{"teal":792,"source":"contracts\\BiatecIdentityProvider.algo.ts:312","pc":[866]},{"teal":793,"source":"contracts\\BiatecIdentityProvider.algo.ts:313","pc":[867,868,869]},{"teal":794,"source":"contracts\\BiatecIdentityProvider.algo.ts:313","pc":[870,871]},{"teal":795,"source":"contracts\\BiatecIdentityProvider.algo.ts:313","pc":[872,873,874]},{"teal":796,"source":"contracts\\BiatecIdentityProvider.algo.ts:314","pc":[875,876]},{"teal":797,"source":"contracts\\BiatecIdentityProvider.algo.ts:314","pc":[877,878,879]},{"teal":798,"source":"contracts\\BiatecIdentityProvider.algo.ts:303","pc":[880]},{"teal":799,"source":"contracts\\BiatecIdentityProvider.algo.ts:303","pc":[881,882,883]},{"teal":800,"source":"contracts\\BiatecIdentityProvider.algo.ts:304","pc":[884]},{"teal":801,"source":"contracts\\BiatecIdentityProvider.algo.ts:304","pc":[885,886,887]},{"teal":802,"source":"contracts\\BiatecIdentityProvider.algo.ts:305","pc":[888]},{"teal":803,"source":"contracts\\BiatecIdentityProvider.algo.ts:305","pc":[889,890,891]},{"teal":804,"source":"contracts\\BiatecIdentityProvider.algo.ts:306","pc":[892]},{"teal":805,"source":"contracts\\BiatecIdentityProvider.algo.ts:306","pc":[893,894,895]},{"teal":806,"source":"contracts\\BiatecIdentityProvider.algo.ts:307","pc":[896]},{"teal":807,"source":"contracts\\BiatecIdentityProvider.algo.ts:307","pc":[897,898,899]},{"teal":808,"source":"contracts\\BiatecIdentityProvider.algo.ts:308","pc":[900]},{"teal":809,"source":"contracts\\BiatecIdentityProvider.algo.ts:308","pc":[901,902,903]},{"teal":810,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[904,905]},{"teal":811,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[906]},{"teal":812,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[907]},{"teal":813,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[908,909]},{"teal":814,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[910]},{"teal":817,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","errorMessage":"(2 * SCALE) as uint256 overflowed 256 bits","pc":[911]},{"teal":818,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[912,913]},{"teal":819,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[914]},{"teal":820,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[915]},{"teal":821,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[916]},{"teal":822,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[917]},{"teal":823,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[918]},{"teal":824,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[919]},{"teal":825,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[920]},{"teal":826,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[921]},{"teal":827,"source":"contracts\\BiatecIdentityProvider.algo.ts:299","pc":[922,923,924]},{"teal":828,"source":"contracts\\BiatecIdentityProvider.algo.ts:298","pc":[925,926]},{"teal":829,"source":"contracts\\BiatecIdentityProvider.algo.ts:298","pc":[927,928,929]},{"teal":830,"source":"contracts\\BiatecIdentityProvider.algo.ts:300","pc":[930]},{"teal":831,"source":"contracts\\BiatecIdentityProvider.algo.ts:300","pc":[931]},{"teal":832,"source":"contracts\\BiatecIdentityProvider.algo.ts:300","pc":[932]},{"teal":833,"source":"contracts\\BiatecIdentityProvider.algo.ts:300","pc":[933]},{"teal":834,"source":"contracts\\BiatecIdentityProvider.algo.ts:309","pc":[934,935,936]},{"teal":835,"source":"contracts\\BiatecIdentityProvider.algo.ts:309","pc":[937]},{"teal":836,"source":"contracts\\BiatecIdentityProvider.algo.ts:309","pc":[938,939,940]},{"teal":837,"source":"contracts\\BiatecIdentityProvider.algo.ts:310","pc":[941]},{"teal":838,"source":"contracts\\BiatecIdentityProvider.algo.ts:310","pc":[942,943,944]},{"teal":839,"source":"contracts\\BiatecIdentityProvider.algo.ts:311","pc":[945]},{"teal":840,"source":"contracts\\BiatecIdentityProvider.algo.ts:311","pc":[946]},{"teal":841,"source":"contracts\\BiatecIdentityProvider.algo.ts:311","pc":[947]},{"teal":842,"source":"contracts\\BiatecIdentityProvider.algo.ts:311","pc":[948]},{"teal":843,"source":"contracts\\BiatecIdentityProvider.algo.ts:296","pc":[949,950,951]},{"teal":844,"source":"contracts\\BiatecIdentityProvider.algo.ts:296","pc":[952]},{"teal":845,"source":"contracts\\BiatecIdentityProvider.algo.ts:296","pc":[953]},{"teal":846,"source":"contracts\\BiatecIdentityProvider.algo.ts:296","pc":[954,955]},{"teal":850,"source":"contracts\\BiatecIdentityProvider.algo.ts:316","pc":[956,957]},{"teal":851,"source":"contracts\\BiatecIdentityProvider.algo.ts:316","pc":[958,959,960]},{"teal":856,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[961]},{"teal":857,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[962,963]},{"teal":858,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[964]},{"teal":859,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[965,966]},{"teal":882,"source":"contracts\\BiatecIdentityProvider.algo.ts:320","pc":[967]},{"teal":883,"source":"contracts\\BiatecIdentityProvider.algo.ts:320","pc":[968]},{"teal":884,"source":"contracts\\BiatecIdentityProvider.algo.ts:320","pc":[969,970]},{"teal":885,"source":"contracts\\BiatecIdentityProvider.algo.ts:321","pc":[971,972]},{"teal":886,"source":"contracts\\BiatecIdentityProvider.algo.ts:321","pc":[973]},{"teal":887,"source":"contracts\\BiatecIdentityProvider.algo.ts:321","pc":[974,975,976]},{"teal":888,"source":"contracts\\BiatecIdentityProvider.algo.ts:321","pc":[977,978,979]},{"teal":889,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[980,981]},{"teal":890,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[982]},{"teal":893,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[983]},{"teal":894,"source":"contracts\\BiatecIdentityProvider.algo.ts:326","pc":[984,985]},{"teal":895,"source":"contracts\\BiatecIdentityProvider.algo.ts:326","pc":[986,987]},{"teal":896,"source":"contracts\\BiatecIdentityProvider.algo.ts:326","pc":[988,989,990]},{"teal":897,"source":"contracts\\BiatecIdentityProvider.algo.ts:326","pc":[991]},{"teal":898,"source":"contracts\\BiatecIdentityProvider.algo.ts:326","pc":[992]},{"teal":899,"source":"contracts\\BiatecIdentityProvider.algo.ts:326","pc":[993,994,995]},{"teal":900,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[996,997]},{"teal":901,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[998]},{"teal":904,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[999]},{"teal":905,"source":"contracts\\BiatecIdentityProvider.algo.ts:325","pc":[1000,1001]},{"teal":906,"source":"contracts\\BiatecIdentityProvider.algo.ts:325","pc":[1002,1003]},{"teal":907,"source":"contracts\\BiatecIdentityProvider.algo.ts:325","pc":[1004,1005,1006]},{"teal":908,"source":"contracts\\BiatecIdentityProvider.algo.ts:325","pc":[1007]},{"teal":909,"source":"contracts\\BiatecIdentityProvider.algo.ts:325","pc":[1008]},{"teal":910,"source":"contracts\\BiatecIdentityProvider.algo.ts:325","pc":[1009,1010,1011]},{"teal":911,"source":"contracts\\BiatecIdentityProvider.algo.ts:336","pc":[1012]},{"teal":912,"source":"contracts\\BiatecIdentityProvider.algo.ts:336","pc":[1013]},{"teal":913,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1014,1015]},{"teal":914,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1016]},{"teal":917,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[1017]},{"teal":918,"source":"contracts\\BiatecIdentityProvider.algo.ts:336","pc":[1018,1019]},{"teal":919,"source":"contracts\\BiatecIdentityProvider.algo.ts:336","pc":[1020,1021]},{"teal":920,"source":"contracts\\BiatecIdentityProvider.algo.ts:336","pc":[1022,1023,1024]},{"teal":921,"source":"contracts\\BiatecIdentityProvider.algo.ts:336","pc":[1025]},{"teal":922,"source":"contracts\\BiatecIdentityProvider.algo.ts:336","pc":[1026]},{"teal":923,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1027,1028,1029]},{"teal":924,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1030,1031]},{"teal":925,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1032]},{"teal":928,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[1033]},{"teal":929,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1034,1035]},{"teal":930,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1036,1037]},{"teal":931,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1038,1039]},{"teal":932,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1040,1041]},{"teal":933,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1042,1043]},{"teal":934,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1044]},{"teal":935,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1045]},{"teal":936,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1046,1047]},{"teal":937,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1048]},{"teal":938,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1049]},{"teal":939,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1050]},{"teal":940,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1051]},{"teal":941,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1052]},{"teal":942,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1053]},{"teal":943,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1054]},{"teal":944,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1055,1056,1057]},{"teal":945,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1058]},{"teal":946,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1059]},{"teal":947,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1060]},{"teal":948,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1061,1062,1063]},{"teal":949,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1064]},{"teal":950,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1065]},{"teal":951,"source":"contracts\\BiatecIdentityProvider.algo.ts:337","pc":[1066,1067,1068]},{"teal":952,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1069,1070]},{"teal":953,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1071]},{"teal":956,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[1072]},{"teal":957,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1073,1074]},{"teal":958,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1075,1076]},{"teal":959,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1077,1078]},{"teal":960,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1079,1080]},{"teal":961,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1081,1082]},{"teal":962,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1083]},{"teal":963,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1084]},{"teal":964,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1085,1086]},{"teal":965,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1087]},{"teal":966,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1088]},{"teal":967,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1089]},{"teal":968,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1090]},{"teal":969,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1091]},{"teal":970,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1092]},{"teal":971,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1093]},{"teal":972,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1094,1095,1096]},{"teal":973,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1097]},{"teal":974,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1098]},{"teal":975,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1099]},{"teal":976,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1100,1101,1102]},{"teal":977,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1103]},{"teal":978,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1104]},{"teal":979,"source":"contracts\\BiatecIdentityProvider.algo.ts:338","pc":[1105,1106,1107]},{"teal":980,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1108,1109]},{"teal":981,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1110]},{"teal":984,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[1111]},{"teal":985,"source":"contracts\\BiatecIdentityProvider.algo.ts:327","pc":[1112,1113]},{"teal":986,"source":"contracts\\BiatecIdentityProvider.algo.ts:327","pc":[1114,1115]},{"teal":987,"source":"contracts\\BiatecIdentityProvider.algo.ts:327","pc":[1116,1117,1118]},{"teal":988,"source":"contracts\\BiatecIdentityProvider.algo.ts:327","pc":[1119]},{"teal":989,"source":"contracts\\BiatecIdentityProvider.algo.ts:327","pc":[1120]},{"teal":990,"source":"contracts\\BiatecIdentityProvider.algo.ts:327","pc":[1121,1122,1123]},{"teal":991,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1124,1125]},{"teal":992,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1126]},{"teal":995,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[1127]},{"teal":996,"source":"contracts\\BiatecIdentityProvider.algo.ts:328","pc":[1128,1129]},{"teal":997,"source":"contracts\\BiatecIdentityProvider.algo.ts:328","pc":[1130,1131]},{"teal":998,"source":"contracts\\BiatecIdentityProvider.algo.ts:328","pc":[1132,1133,1134]},{"teal":999,"source":"contracts\\BiatecIdentityProvider.algo.ts:328","pc":[1135]},{"teal":1000,"source":"contracts\\BiatecIdentityProvider.algo.ts:328","pc":[1136]},{"teal":1001,"source":"contracts\\BiatecIdentityProvider.algo.ts:328","pc":[1137,1138,1139]},{"teal":1002,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1140,1141]},{"teal":1003,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1142]},{"teal":1006,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[1143]},{"teal":1007,"source":"contracts\\BiatecIdentityProvider.algo.ts:329","pc":[1144,1145]},{"teal":1008,"source":"contracts\\BiatecIdentityProvider.algo.ts:329","pc":[1146,1147]},{"teal":1009,"source":"contracts\\BiatecIdentityProvider.algo.ts:329","pc":[1148,1149,1150]},{"teal":1010,"source":"contracts\\BiatecIdentityProvider.algo.ts:329","pc":[1151]},{"teal":1011,"source":"contracts\\BiatecIdentityProvider.algo.ts:329","pc":[1152]},{"teal":1012,"source":"contracts\\BiatecIdentityProvider.algo.ts:329","pc":[1153,1154,1155]},{"teal":1013,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1156,1157]},{"teal":1014,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1158]},{"teal":1017,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[1159]},{"teal":1018,"source":"contracts\\BiatecIdentityProvider.algo.ts:330","pc":[1160,1161]},{"teal":1019,"source":"contracts\\BiatecIdentityProvider.algo.ts:330","pc":[1162,1163]},{"teal":1020,"source":"contracts\\BiatecIdentityProvider.algo.ts:330","pc":[1164,1165,1166]},{"teal":1021,"source":"contracts\\BiatecIdentityProvider.algo.ts:330","pc":[1167]},{"teal":1022,"source":"contracts\\BiatecIdentityProvider.algo.ts:330","pc":[1168]},{"teal":1023,"source":"contracts\\BiatecIdentityProvider.algo.ts:330","pc":[1169,1170,1171]},{"teal":1024,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1172,1173]},{"teal":1025,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1174]},{"teal":1028,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[1175]},{"teal":1029,"source":"contracts\\BiatecIdentityProvider.algo.ts:331","pc":[1176,1177]},{"teal":1030,"source":"contracts\\BiatecIdentityProvider.algo.ts:331","pc":[1178,1179]},{"teal":1031,"source":"contracts\\BiatecIdentityProvider.algo.ts:331","pc":[1180,1181,1182]},{"teal":1032,"source":"contracts\\BiatecIdentityProvider.algo.ts:331","pc":[1183]},{"teal":1033,"source":"contracts\\BiatecIdentityProvider.algo.ts:331","pc":[1184]},{"teal":1034,"source":"contracts\\BiatecIdentityProvider.algo.ts:331","pc":[1185,1186,1187]},{"teal":1035,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1188,1189]},{"teal":1036,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1190]},{"teal":1039,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[1191]},{"teal":1040,"source":"contracts\\BiatecIdentityProvider.algo.ts:332","pc":[1192,1193]},{"teal":1041,"source":"contracts\\BiatecIdentityProvider.algo.ts:332","pc":[1194,1195]},{"teal":1042,"source":"contracts\\BiatecIdentityProvider.algo.ts:332","pc":[1196,1197,1198]},{"teal":1043,"source":"contracts\\BiatecIdentityProvider.algo.ts:332","pc":[1199]},{"teal":1044,"source":"contracts\\BiatecIdentityProvider.algo.ts:332","pc":[1200]},{"teal":1045,"source":"contracts\\BiatecIdentityProvider.algo.ts:332","pc":[1201,1202,1203]},{"teal":1046,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1204,1205]},{"teal":1047,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1206]},{"teal":1048,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1207]},{"teal":1049,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1208,1209]},{"teal":1050,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1210]},{"teal":1053,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","errorMessage":"(1 * SCALE) as uint256 overflowed 256 bits","pc":[1211]},{"teal":1054,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1212,1213]},{"teal":1055,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1214]},{"teal":1056,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1215]},{"teal":1057,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1216]},{"teal":1058,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1217]},{"teal":1059,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1218]},{"teal":1060,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1219]},{"teal":1061,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1220]},{"teal":1062,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1221]},{"teal":1063,"source":"contracts\\BiatecIdentityProvider.algo.ts:323","pc":[1222,1223,1224]},{"teal":1064,"source":"contracts\\BiatecIdentityProvider.algo.ts:322","pc":[1225,1226]},{"teal":1065,"source":"contracts\\BiatecIdentityProvider.algo.ts:322","pc":[1227,1228,1229]},{"teal":1066,"source":"contracts\\BiatecIdentityProvider.algo.ts:324","pc":[1230]},{"teal":1067,"source":"contracts\\BiatecIdentityProvider.algo.ts:324","pc":[1231]},{"teal":1068,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1232,1233]},{"teal":1069,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1234]},{"teal":1072,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[1235]},{"teal":1073,"source":"contracts\\BiatecIdentityProvider.algo.ts:324","pc":[1236,1237]},{"teal":1074,"source":"contracts\\BiatecIdentityProvider.algo.ts:324","pc":[1238,1239]},{"teal":1075,"source":"contracts\\BiatecIdentityProvider.algo.ts:324","pc":[1240,1241]},{"teal":1076,"source":"contracts\\BiatecIdentityProvider.algo.ts:324","pc":[1242]},{"teal":1077,"source":"contracts\\BiatecIdentityProvider.algo.ts:324","pc":[1243]},{"teal":1078,"source":"contracts\\BiatecIdentityProvider.algo.ts:333","pc":[1244,1245,1246]},{"teal":1079,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1247,1248]},{"teal":1080,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1249]},{"teal":1083,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[1250]},{"teal":1084,"source":"contracts\\BiatecIdentityProvider.algo.ts:333","pc":[1251,1252]},{"teal":1085,"source":"contracts\\BiatecIdentityProvider.algo.ts:333","pc":[1253,1254]},{"teal":1086,"source":"contracts\\BiatecIdentityProvider.algo.ts:333","pc":[1255,1256,1257]},{"teal":1087,"source":"contracts\\BiatecIdentityProvider.algo.ts:333","pc":[1258]},{"teal":1088,"source":"contracts\\BiatecIdentityProvider.algo.ts:333","pc":[1259]},{"teal":1089,"source":"contracts\\BiatecIdentityProvider.algo.ts:333","pc":[1260,1261,1262]},{"teal":1090,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1263,1264]},{"teal":1091,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1265]},{"teal":1094,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[1266]},{"teal":1095,"source":"contracts\\BiatecIdentityProvider.algo.ts:334","pc":[1267,1268]},{"teal":1096,"source":"contracts\\BiatecIdentityProvider.algo.ts:334","pc":[1269,1270]},{"teal":1097,"source":"contracts\\BiatecIdentityProvider.algo.ts:334","pc":[1271,1272,1273]},{"teal":1098,"source":"contracts\\BiatecIdentityProvider.algo.ts:334","pc":[1274]},{"teal":1099,"source":"contracts\\BiatecIdentityProvider.algo.ts:334","pc":[1275]},{"teal":1100,"source":"contracts\\BiatecIdentityProvider.algo.ts:334","pc":[1276,1277,1278]},{"teal":1101,"source":"contracts\\BiatecIdentityProvider.algo.ts:335","pc":[1279]},{"teal":1102,"source":"contracts\\BiatecIdentityProvider.algo.ts:335","pc":[1280]},{"teal":1103,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1281,1282]},{"teal":1104,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","pc":[1283]},{"teal":1107,"source":"contracts\\BiatecIdentityProvider.algo.ts:318","errorMessage":"box value does not exist: this.identities(user).value","pc":[1284]},{"teal":1108,"source":"contracts\\BiatecIdentityProvider.algo.ts:335","pc":[1285,1286]},{"teal":1109,"source":"contracts\\BiatecIdentityProvider.algo.ts:335","pc":[1287,1288]},{"teal":1110,"source":"contracts\\BiatecIdentityProvider.algo.ts:335","pc":[1289,1290]},{"teal":1111,"source":"contracts\\BiatecIdentityProvider.algo.ts:335","pc":[1291]},{"teal":1112,"source":"contracts\\BiatecIdentityProvider.algo.ts:335","pc":[1292]},{"teal":1113,"source":"contracts\\BiatecIdentityProvider.algo.ts:320","pc":[1293,1294,1295]},{"teal":1114,"source":"contracts\\BiatecIdentityProvider.algo.ts:320","pc":[1296]},{"teal":1115,"source":"contracts\\BiatecIdentityProvider.algo.ts:320","pc":[1297]},{"teal":1116,"source":"contracts\\BiatecIdentityProvider.algo.ts:320","pc":[1298,1299]},{"teal":1120,"source":"contracts\\BiatecIdentityProvider.algo.ts:340","pc":[1300,1301]},{"teal":1124,"source":"contracts\\BiatecIdentityProvider.algo.ts:292","pc":[1302,1303]},{"teal":1127,"source":"contracts\\BiatecIdentityProvider.algo.ts:292","pc":[1304,1305]},{"teal":1128,"source":"contracts\\BiatecIdentityProvider.algo.ts:292","pc":[1306]},{"teal":1133,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1307,1308]},{"teal":1136,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1309,1310,1311]},{"teal":1137,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1312]},{"teal":1140,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1313,1314,1315]},{"teal":1141,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1316]},{"teal":1144,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1317,1318,1319]},{"teal":1145,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1320]},{"teal":1148,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1321,1322,1323]},{"teal":1149,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1324]},{"teal":1150,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1325]},{"teal":1151,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1326]},{"teal":1152,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1327]},{"teal":1153,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1328]},{"teal":1165,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1329,1330,1331]},{"teal":1168,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1332]},{"teal":1169,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1333]},{"teal":1173,"source":"contracts\\BiatecIdentityProvider.algo.ts:353","pc":[1334,1335]},{"teal":1174,"source":"contracts\\BiatecIdentityProvider.algo.ts:353","pc":[1336,1337]},{"teal":1175,"source":"contracts\\BiatecIdentityProvider.algo.ts:353","pc":[1338]},{"teal":1176,"source":"contracts\\BiatecIdentityProvider.algo.ts:353","pc":[1339]},{"teal":1179,"source":"contracts\\BiatecIdentityProvider.algo.ts:353","errorMessage":"Configuration app does not match","pc":[1340]},{"teal":1183,"source":"contracts\\BiatecIdentityProvider.algo.ts:354","pc":[1341,1342]},{"teal":1184,"source":"contracts\\BiatecIdentityProvider.algo.ts:354","pc":[1343,1344]},{"teal":1185,"source":"contracts\\BiatecIdentityProvider.algo.ts:354","pc":[1345]},{"teal":1188,"source":"contracts\\BiatecIdentityProvider.algo.ts:354","errorMessage":"global state value does not exist: appBiatecConfigProvider.globalState('ef')","pc":[1346]},{"teal":1189,"source":"contracts\\BiatecIdentityProvider.algo.ts:354","pc":[1347,1348]},{"teal":1193,"source":"contracts\\BiatecIdentityProvider.algo.ts:355","pc":[1349,1350]},{"teal":1194,"source":"contracts\\BiatecIdentityProvider.algo.ts:355","pc":[1351,1352]},{"teal":1195,"source":"contracts\\BiatecIdentityProvider.algo.ts:355","pc":[1353]},{"teal":1198,"source":"contracts\\BiatecIdentityProvider.algo.ts:355","errorMessage":"global state value does not exist: appBiatecConfigProvider.globalState('s')","pc":[1354]},{"teal":1199,"source":"contracts\\BiatecIdentityProvider.algo.ts:355","pc":[1355,1356]},{"teal":1203,"source":"contracts\\BiatecIdentityProvider.algo.ts:356","pc":[1357,1358]},{"teal":1204,"source":"contracts\\BiatecIdentityProvider.algo.ts:356","pc":[1359]},{"teal":1205,"source":"contracts\\BiatecIdentityProvider.algo.ts:356","pc":[1360]},{"teal":1208,"source":"contracts\\BiatecIdentityProvider.algo.ts:356","errorMessage":"ERR_PAUSED","pc":[1361]},{"teal":1215,"source":"contracts\\BiatecIdentityProvider.algo.ts:358","pc":[1362,1363]},{"teal":1216,"source":"contracts\\BiatecIdentityProvider.algo.ts:358","pc":[1364,1365]},{"teal":1217,"source":"contracts\\BiatecIdentityProvider.algo.ts:358","pc":[1366]},{"teal":1220,"source":"contracts\\BiatecIdentityProvider.algo.ts:357","errorMessage":"Only fee executor setup in the config can take the collected fees","pc":[1367]},{"teal":1224,"source":"contracts\\BiatecIdentityProvider.algo.ts:362","pc":[1368,1369]},{"teal":1225,"source":"contracts\\BiatecIdentityProvider.algo.ts:362","pc":[1370,1371]},{"teal":1226,"source":"contracts\\BiatecIdentityProvider.algo.ts:362","pc":[1372,1373]},{"teal":1227,"source":"contracts\\BiatecIdentityProvider.algo.ts:362","pc":[1374,1375,1376]},{"teal":1231,"source":"contracts\\BiatecIdentityProvider.algo.ts:364","pc":[1377,1378]},{"teal":1234,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1379,1380]},{"teal":1237,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1381,1382]},{"teal":1238,"source":"contracts\\BiatecIdentityProvider.algo.ts:352","pc":[1383]},{"teal":1247,"source":"contracts\\BiatecIdentityProvider.algo.ts:373","pc":[1384,1385,1386]},{"teal":1252,"source":"contracts\\BiatecIdentityProvider.algo.ts:374","pc":[1387,1388]},{"teal":1253,"source":"contracts\\BiatecIdentityProvider.algo.ts:374","pc":[1389]},{"teal":1254,"source":"contracts\\BiatecIdentityProvider.algo.ts:374","pc":[1390]},{"teal":1255,"source":"contracts\\BiatecIdentityProvider.algo.ts:374","pc":[1391,1392,1393]},{"teal":1264,"source":"contracts\\BiatecIdentityProvider.algo.ts:375","pc":[1394]},{"teal":1265,"source":"contracts\\BiatecIdentityProvider.algo.ts:375","pc":[1395]},{"teal":1266,"source":"contracts\\BiatecIdentityProvider.algo.ts:375","pc":[1396,1397]},{"teal":1270,"source":"contracts\\BiatecIdentityProvider.algo.ts:376","pc":[1398,1399]},{"teal":1271,"source":"contracts\\BiatecIdentityProvider.algo.ts:376","pc":[1400,1401]},{"teal":1275,"source":"contracts\\BiatecIdentityProvider.algo.ts:377","pc":[1402,1403]},{"teal":1276,"source":"contracts\\BiatecIdentityProvider.algo.ts:377","pc":[1404,1405]},{"teal":1280,"source":"contracts\\BiatecIdentityProvider.algo.ts:378","pc":[1406]},{"teal":1281,"source":"contracts\\BiatecIdentityProvider.algo.ts:378","pc":[1407,1408]},{"teal":1284,"source":"contracts\\BiatecIdentityProvider.algo.ts:375","pc":[1409]},{"teal":1285,"source":"contracts\\BiatecIdentityProvider.algo.ts:374","pc":[1410,1411,1412]},{"teal":1295,"source":"contracts\\BiatecIdentityProvider.algo.ts:381","pc":[1413]},{"teal":1296,"source":"contracts\\BiatecIdentityProvider.algo.ts:381","pc":[1414,1415]},{"teal":1297,"source":"contracts\\BiatecIdentityProvider.algo.ts:381","pc":[1416,1417]},{"teal":1301,"source":"contracts\\BiatecIdentityProvider.algo.ts:382","pc":[1418,1419]},{"teal":1302,"source":"contracts\\BiatecIdentityProvider.algo.ts:382","pc":[1420,1421]},{"teal":1306,"source":"contracts\\BiatecIdentityProvider.algo.ts:383","pc":[1422,1423]},{"teal":1307,"source":"contracts\\BiatecIdentityProvider.algo.ts:383","pc":[1424,1425]},{"teal":1311,"source":"contracts\\BiatecIdentityProvider.algo.ts:384","pc":[1426,1427]},{"teal":1312,"source":"contracts\\BiatecIdentityProvider.algo.ts:384","pc":[1428,1429]},{"teal":1316,"source":"contracts\\BiatecIdentityProvider.algo.ts:385","pc":[1430]},{"teal":1317,"source":"contracts\\BiatecIdentityProvider.algo.ts:385","pc":[1431,1432]},{"teal":1320,"source":"contracts\\BiatecIdentityProvider.algo.ts:381","pc":[1433]},{"teal":1323,"source":"contracts\\BiatecIdentityProvider.algo.ts:373","pc":[1434]},{"teal":1326,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1435,1436,1437,1438,1439,1440]},{"teal":1327,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1441,1442,1443]},{"teal":1328,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1444,1445,1446,1447]},{"teal":1331,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","errorMessage":"this contract does not implement the given ABI method for create NoOp","pc":[1448]},{"teal":1334,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1449,1450,1451,1452,1453,1454]},{"teal":1335,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1455,1456,1457,1458,1459,1460]},{"teal":1336,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1461,1462,1463,1464,1465,1466]},{"teal":1337,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1467,1468,1469,1470,1471,1472]},{"teal":1338,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1473,1474,1475,1476,1477,1478]},{"teal":1339,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1479,1480,1481,1482,1483,1484]},{"teal":1340,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1485,1486,1487]},{"teal":1341,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1488,1489,1490,1491,1492,1493,1494,1495,1496,1497,1498,1499,1500,1501]},{"teal":1344,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","errorMessage":"this contract does not implement the given ABI method for call NoOp","pc":[1502]},{"teal":1347,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1503,1504,1505,1506,1507,1508]},{"teal":1348,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1509,1510,1511]},{"teal":1349,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1512,1513,1514,1515]},{"teal":1352,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","errorMessage":"this contract does not implement the given ABI method for call UpdateApplication","pc":[1516]},{"teal":1355,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1517,1518,1519]},{"teal":1356,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1520,1521]},{"teal":1357,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1522,1523]},{"teal":1358,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1524]},{"teal":1359,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1525,1526]},{"teal":1360,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1527,1528]},{"teal":1361,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1529]},{"teal":1364,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1530,1531,1532]},{"teal":1365,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1533,1534]},{"teal":1366,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1535,1536]},{"teal":1367,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1537]},{"teal":1368,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1538,1539]},{"teal":1369,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1540,1541]},{"teal":1370,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1542]},{"teal":1371,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1543]},{"teal":1372,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1544,1545]},{"teal":1373,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1546]},{"teal":1374,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1547]},{"teal":1375,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1548]},{"teal":1376,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1549,1550,1551]},{"teal":1377,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1552,1553]},{"teal":1378,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1554,1555]},{"teal":1379,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1556]},{"teal":1380,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1557]},{"teal":1381,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1558,1559]},{"teal":1382,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1560,1561]},{"teal":1383,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1562,1563]},{"teal":1384,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1564,1565]},{"teal":1385,"source":"contracts\\BiatecIdentityProvider.algo.ts:145","pc":[1566]}],"pcOffsetMethod":"none"},"clear":{"sourceInfo":[],"pcOffsetMethod":"none"}},"source":{"approval":"I3ByYWdtYSB2ZXJzaW9uIDEwCmludGNibG9jayAwIDEgMzIgMiAyNTYgNTUyIDY4OCAxNyAxOQpieXRlY2Jsb2NrIDB4IDB4MDAwMDAwMDAwMDAwMDAwMCAweDAwIDB4NjkgMHg0MiAweDczIDB4MzAzMDMwMzAzMDMwMzAzMDJkMzAzMDMwMzAyZDMwMzAzMDMwMmQzMDMwMzAzMDJkMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwIDB4RkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRiAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwM2I5YWNhMDAgMHgwMDAwMDAwMDc3MzU5NDAwIDB4MDAwMDAwMDAzYjlhY2EwMCAweDczNjM3NjY1NzIgMHgxNTFmN2M3NSAweDY1NjYgMHgwMDk4IDB4MDAwMCAweDY1CgovLyBUaGlzIFRFQUwgd2FzIGdlbmVyYXRlZCBieSBURUFMU2NyaXB0IHYwLjEwNi4yCi8vIGh0dHBzOi8vZ2l0aHViLmNvbS9hbGdvcmFuZGZvdW5kYXRpb24vVEVBTFNjcmlwdAoKLy8gVGhpcyBjb250cmFjdCBpcyBjb21wbGlhbnQgd2l0aCBhbmQvb3IgaW1wbGVtZW50cyB0aGUgZm9sbG93aW5nIEFSQ3M6IFsgQVJDNCBdCgovLyBUaGUgZm9sbG93aW5nIHRlbiBsaW5lcyBvZiBURUFMIGhhbmRsZSBpbml0aWFsIHByb2dyYW0gZmxvdwovLyBUaGlzIHBhdHRlcm4gaXMgdXNlZCB0byBtYWtlIGl0IGVhc3kgZm9yIGFueW9uZSB0byBwYXJzZSB0aGUgc3RhcnQgb2YgdGhlIHByb2dyYW0gYW5kIGRldGVybWluZSBpZiBhIHNwZWNpZmljIGFjdGlvbiBpcyBhbGxvd2VkCi8vIEhlcmUsIGFjdGlvbiByZWZlcnMgdG8gdGhlIE9uQ29tcGxldGUgaW4gY29tYmluYXRpb24gd2l0aCB3aGV0aGVyIHRoZSBhcHAgaXMgYmVpbmcgY3JlYXRlZCBvciBjYWxsZWQKLy8gRXZlcnkgcG9zc2libGUgYWN0aW9uIGZvciB0aGlzIGNvbnRyYWN0IGlzIHJlcHJlc2VudGVkIGluIHRoZSBzd2l0Y2ggc3RhdGVtZW50Ci8vIElmIHRoZSBhY3Rpb24gaXMgbm90IGltcGxlbWVudGVkIGluIHRoZSBjb250cmFjdCwgaXRzIHJlc3BlY3RpdmUgYnJhbmNoIHdpbGwgYmUgIipOT1RfSU1QTEVNRU5URUQiIHdoaWNoIGp1c3QgY29udGFpbnMgImVyciIKdHhuIEFwcGxpY2F0aW9uSUQKIQpwdXNoaW50IDYKKgp0eG4gT25Db21wbGV0aW9uCisKc3dpdGNoICpjYWxsX05vT3AgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKmNhbGxfVXBkYXRlQXBwbGljYXRpb24gKk5PVF9JTVBMRU1FTlRFRCAqY3JlYXRlX05vT3AgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVECgoqTk9UX0lNUExFTUVOVEVEOgoJLy8gVGhlIHJlcXVlc3RlZCBhY3Rpb24gaXMgbm90IGltcGxlbWVudGVkIGluIHRoaXMgY29udHJhY3QuIEFyZSB5b3UgdXNpbmcgdGhlIGNvcnJlY3QgT25Db21wbGV0ZT8gRGlkIHlvdSBzZXQgeW91ciBhcHAgSUQ/CgllcnIKCi8vIGNyZWF0ZUFwcGxpY2F0aW9uKCl2b2lkCiphYmlfcm91dGVfY3JlYXRlQXBwbGljYXRpb246CgkvLyBleGVjdXRlIGNyZWF0ZUFwcGxpY2F0aW9uKCl2b2lkCgljYWxsc3ViIGNyZWF0ZUFwcGxpY2F0aW9uCglpbnRjIDEgLy8gMQoJcmV0dXJuCgovLyBjcmVhdGVBcHBsaWNhdGlvbigpOiB2b2lkCi8vCi8vIEluaXRpYWwgc2V0dXAKY3JlYXRlQXBwbGljYXRpb246Cglwcm90byAwIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE3MQoJLy8gdGhpcy52ZXJzaW9uLnZhbHVlID0gdmVyc2lvbgoJYnl0ZWMgMTEgLy8gICJzY3ZlciIKCXB1c2hieXRlcyAiQklBVEVDLUlERU5ULTAxLTAyLTAxIgoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gYm9vdHN0cmFwKHVpbnQ2NCxhZGRyZXNzLGFkZHJlc3MsYWRkcmVzcyl2b2lkCiphYmlfcm91dGVfYm9vdHN0cmFwOgoJLy8gZW5nYWdlbWVudFNldHRlcjogYWRkcmVzcwoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgNAoJZHVwCglsZW4KCWludGMgMiAvLyAzMgoJPT0KCgkvLyBhcmd1bWVudCAwIChlbmdhZ2VtZW50U2V0dGVyKSBmb3IgYm9vdHN0cmFwIG11c3QgYmUgYSBhZGRyZXNzCglhc3NlcnQKCgkvLyB2ZXJpZmljYXRpb25TZXR0ZXI6IGFkZHJlc3MKCXR4bmEgQXBwbGljYXRpb25BcmdzIDMKCWR1cAoJbGVuCglpbnRjIDIgLy8gMzIKCT09CgoJLy8gYXJndW1lbnQgMSAodmVyaWZpY2F0aW9uU2V0dGVyKSBmb3IgYm9vdHN0cmFwIG11c3QgYmUgYSBhZGRyZXNzCglhc3NlcnQKCgkvLyBnb3Zlcm5vcjogYWRkcmVzcwoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgoJZHVwCglsZW4KCWludGMgMiAvLyAzMgoJPT0KCgkvLyBhcmd1bWVudCAyIChnb3Zlcm5vcikgZm9yIGJvb3RzdHJhcCBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXI6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJYnRvaQoKCS8vIGV4ZWN1dGUgYm9vdHN0cmFwKHVpbnQ2NCxhZGRyZXNzLGFkZHJlc3MsYWRkcmVzcyl2b2lkCgljYWxsc3ViIGJvb3RzdHJhcAoJaW50YyAxIC8vIDEKCXJldHVybgoKLy8gYm9vdHN0cmFwKGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyOiBBcHBJRCwgZ292ZXJub3I6IEFkZHJlc3MsIHZlcmlmaWNhdGlvblNldHRlcjogQWRkcmVzcywgZW5nYWdlbWVudFNldHRlcjogQWRkcmVzcyk6IHZvaWQKLy8KLy8gQmlhdGVjIGRlcGxveXMgc2luZ2xlIGlkZW50aXR5IHByb3ZpZGVyIHNtYXJ0IGNvbnRyYWN0Ci8vIEBwYXJhbSBhcHBCaWF0ZWNDb25maWdQcm92aWRlciBCaWF0ZWMgYW1tIHByb3ZpZGVyCmJvb3RzdHJhcDoKCXByb3RvIDQgMAoKCS8vIFB1c2ggZW1wdHkgYnl0ZXMgYWZ0ZXIgdGhlIGZyYW1lIHBvaW50ZXIgdG8gcmVzZXJ2ZSBzcGFjZSBmb3IgbG9jYWwgdmFyaWFibGVzCglieXRlYyAwIC8vIDB4CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoxODQKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYXBwLmNyZWF0b3IsICdPbmx5IGNyZWF0b3Igb2YgdGhlIGFwcCBjYW4gc2V0IGl0IHVwJykKCXR4biBTZW5kZXIKCXR4bmEgQXBwbGljYXRpb25zIDAKCWFwcF9wYXJhbXNfZ2V0IEFwcENyZWF0b3IKCXBvcAoJPT0KCgkvLyBPbmx5IGNyZWF0b3Igb2YgdGhlIGFwcCBjYW4gc2V0IGl0IHVwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE4NQoJLy8gdGhpcy5hcHBCaWF0ZWNDb25maWdQcm92aWRlci52YWx1ZSA9IGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyCglieXRlYyA0IC8vICAiQiIKCWZyYW1lX2RpZyAtMSAvLyBhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogQXBwSUQKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoxODYKCS8vIHRoaXMuZ292ZXJub3IudmFsdWUgPSBnb3Zlcm5vcgoJcHVzaGJ5dGVzIDB4NjcgLy8gImciCglmcmFtZV9kaWcgLTIgLy8gZ292ZXJub3I6IEFkZHJlc3MKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoxODcKCS8vIHRoaXMudmVyaWZpY2F0aW9uU2V0dGVyLnZhbHVlID0gdmVyaWZpY2F0aW9uU2V0dGVyCglwdXNoYnl0ZXMgMHg3NiAvLyAidiIKCWZyYW1lX2RpZyAtMyAvLyB2ZXJpZmljYXRpb25TZXR0ZXI6IEFkZHJlc3MKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoxODgKCS8vIHRoaXMuZW5nYWdlbWVudFNldHRlci52YWx1ZSA9IGVuZ2FnZW1lbnRTZXR0ZXIKCWJ5dGVjIDE2IC8vICAiZSIKCWZyYW1lX2RpZyAtNCAvLyBlbmdhZ2VtZW50U2V0dGVyOiBBZGRyZXNzCglhcHBfZ2xvYmFsX3B1dAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MTkwCgkvLyBwYXVzZWQgPSBhcHBCaWF0ZWNDb25maWdQcm92aWRlci5nbG9iYWxTdGF0ZSgncycpIGFzIHVpbnQ2NAoJZnJhbWVfZGlnIC0xIC8vIGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyOiBBcHBJRAoJYnl0ZWMgNSAvLyAgInMiCglhcHBfZ2xvYmFsX2dldF9leAoKCS8vIGdsb2JhbCBzdGF0ZSB2YWx1ZSBkb2VzIG5vdCBleGlzdDogYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIuZ2xvYmFsU3RhdGUoJ3MnKQoJYXNzZXJ0CglmcmFtZV9idXJ5IDAgLy8gcGF1c2VkOiB1aW50NjQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE5MQoJLy8gYXNzZXJ0KHBhdXNlZCA9PT0gMCwgJ0VSUl9QQVVTRUQnKQoJZnJhbWVfZGlnIDAgLy8gcGF1c2VkOiB1aW50NjQKCWludGMgMCAvLyAwCgk9PQoKCS8vIEVSUl9QQVVTRUQKCWFzc2VydAoJcmV0c3ViCgovLyB1cGRhdGVBcHBsaWNhdGlvbih1aW50NjQsYnl0ZVtdKXZvaWQKKmFiaV9yb3V0ZV91cGRhdGVBcHBsaWNhdGlvbjoKCS8vIG5ld1ZlcnNpb246IGJ5dGVbXQoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgoJZXh0cmFjdCAyIDAKCgkvLyBhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglidG9pCgoJLy8gZXhlY3V0ZSB1cGRhdGVBcHBsaWNhdGlvbih1aW50NjQsYnl0ZVtdKXZvaWQKCWNhbGxzdWIgdXBkYXRlQXBwbGljYXRpb24KCWludGMgMSAvLyAxCglyZXR1cm4KCi8vIHVwZGF0ZUFwcGxpY2F0aW9uKGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyOiBBcHBJRCwgbmV3VmVyc2lvbjogYnl0ZXMpOiB2b2lkCi8vCi8vIGFkZHJlc3NVZHBhdGVyIGZyb20gZ2xvYmFsIGJpYXRlYyBjb25maWd1cmF0aW9uIGlzIGFsbG93ZWQgdG8gdXBkYXRlIGFwcGxpY2F0aW9uCnVwZGF0ZUFwcGxpY2F0aW9uOgoJcHJvdG8gMiAwCgoJLy8gUHVzaCBlbXB0eSBieXRlcyBhZnRlciB0aGUgZnJhbWUgcG9pbnRlciB0byByZXNlcnZlIHNwYWNlIGZvciBsb2NhbCB2YXJpYWJsZXMKCWJ5dGVjIDAgLy8gMHgKCWR1cAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MTk4CgkvLyBhc3NlcnQoYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIgPT09IHRoaXMuYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIudmFsdWUsICdDb25maWd1cmF0aW9uIGFwcCBkb2VzIG5vdCBtYXRjaCcpCglmcmFtZV9kaWcgLTEgLy8gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXI6IEFwcElECglieXRlYyA0IC8vICAiQiIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIENvbmZpZ3VyYXRpb24gYXBwIGRvZXMgbm90IG1hdGNoCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjE5OQoJLy8gYWRkcmVzc1VkcGF0ZXIgPSBhcHBCaWF0ZWNDb25maWdQcm92aWRlci5nbG9iYWxTdGF0ZSgndScpIGFzIEFkZHJlc3MKCWZyYW1lX2RpZyAtMSAvLyBhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogQXBwSUQKCXB1c2hieXRlcyAweDc1IC8vICJ1IgoJYXBwX2dsb2JhbF9nZXRfZXgKCgkvLyBnbG9iYWwgc3RhdGUgdmFsdWUgZG9lcyBub3QgZXhpc3Q6IGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmdsb2JhbFN0YXRlKCd1JykKCWFzc2VydAoJZnJhbWVfYnVyeSAwIC8vIGFkZHJlc3NVZHBhdGVyOiBhZGRyZXNzCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyMDAKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IGFkZHJlc3NVZHBhdGVyLCAnT25seSBhZGRyZXNzVWRwYXRlciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB1cGRhdGUgYXBwbGljYXRpb24nKQoJdHhuIFNlbmRlcgoJZnJhbWVfZGlnIDAgLy8gYWRkcmVzc1VkcGF0ZXI6IGFkZHJlc3MKCT09CgoJLy8gT25seSBhZGRyZXNzVWRwYXRlciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB1cGRhdGUgYXBwbGljYXRpb24KCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjAxCgkvLyBwYXVzZWQgPSBhcHBCaWF0ZWNDb25maWdQcm92aWRlci5nbG9iYWxTdGF0ZSgncycpIGFzIHVpbnQ2NAoJZnJhbWVfZGlnIC0xIC8vIGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyOiBBcHBJRAoJYnl0ZWMgNSAvLyAgInMiCglhcHBfZ2xvYmFsX2dldF9leAoKCS8vIGdsb2JhbCBzdGF0ZSB2YWx1ZSBkb2VzIG5vdCBleGlzdDogYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIuZ2xvYmFsU3RhdGUoJ3MnKQoJYXNzZXJ0CglmcmFtZV9idXJ5IDEgLy8gcGF1c2VkOiB1aW50NjQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjIwMgoJLy8gYXNzZXJ0KHBhdXNlZCA9PT0gMCwgJ0VSUl9QQVVTRUQnKQoJZnJhbWVfZGlnIDEgLy8gcGF1c2VkOiB1aW50NjQKCWludGMgMCAvLyAwCgk9PQoKCS8vIEVSUl9QQVVTRUQKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjAzCgkvLyB0aGlzLnZlcnNpb24udmFsdWUgPSBuZXdWZXJzaW9uCglieXRlYyAxMSAvLyAgInNjdmVyIgoJZnJhbWVfZGlnIC0yIC8vIG5ld1ZlcnNpb246IGJ5dGVzCglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZWxmUmVnaXN0cmF0aW9uKGFkZHJlc3MsKHVpbnQ2NCx1aW50NjQsYm9vbCxzdHJpbmcsc3RyaW5nLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LGJvb2wsdWludDY0LHVpbnQ2NCxib29sKSl2b2lkCiphYmlfcm91dGVfc2VsZlJlZ2lzdHJhdGlvbjoKCS8vIGluZm86ICh1aW50NjQsdWludDY0LGJvb2wsc3RyaW5nLHN0cmluZyx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCxib29sLHVpbnQ2NCx1aW50NjQsYm9vbCkKCXR4bmEgQXBwbGljYXRpb25BcmdzIDIKCgkvLyB1c2VyOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAyIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDEgKHVzZXIpIGZvciBzZWxmUmVnaXN0cmF0aW9uIG11c3QgYmUgYSBhZGRyZXNzCglhc3NlcnQKCgkvLyBleGVjdXRlIHNlbGZSZWdpc3RyYXRpb24oYWRkcmVzcywodWludDY0LHVpbnQ2NCxib29sLHN0cmluZyxzdHJpbmcsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsYm9vbCx1aW50NjQsdWludDY0LGJvb2wpKXZvaWQKCWNhbGxzdWIgc2VsZlJlZ2lzdHJhdGlvbgoJaW50YyAxIC8vIDEKCXJldHVybgoKLy8gc2VsZlJlZ2lzdHJhdGlvbih1c2VyOiBBZGRyZXNzLCBpbmZvOiBJZGVudGl0eUluZm8pOiB2b2lkCnNlbGZSZWdpc3RyYXRpb246Cglwcm90byAyIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjIwNwoJLy8gYXNzZXJ0KCF0aGlzLmlkZW50aXRpZXModXNlcikuZXhpc3RzLCAnU2VsZiByZWdpc3RyYXRpb24gY2Fubm90IGJlIGV4ZWN1dGVkIGlmIGFkZHJlc3MgaXMgYWxyZWFkeSByZWdpc3RlcmVkJykKCWJ5dGVjIDMgLy8gICJpIgoJZnJhbWVfZGlnIC0xIC8vIHVzZXI6IEFkZHJlc3MKCWNvbmNhdAoJYm94X2xlbgoJc3dhcAoJcG9wCgkhCgoJLy8gU2VsZiByZWdpc3RyYXRpb24gY2Fubm90IGJlIGV4ZWN1dGVkIGlmIGFkZHJlc3MgaXMgYWxyZWFkeSByZWdpc3RlcmVkCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjIxMAoJLy8gYXNzZXJ0KGluZm8udmVyaWZpY2F0aW9uU3RhdHVzID09PSAxLCAnVmVyaWZpY2F0aW9uIHN0YXR1cyBtdXN0IGJlIGVtcHR5JykKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDAgOAoJYnRvaQoJaW50YyAxIC8vIDEKCT09CgoJLy8gVmVyaWZpY2F0aW9uIHN0YXR1cyBtdXN0IGJlIGVtcHR5Cglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjIxMgoJLy8gYXNzZXJ0KGluZm8udmVyaWZpY2F0aW9uQ2xhc3MgPT09IDAsICd2ZXJpZmljYXRpb25DbGFzcyBtdXN0IGVxdWFsIHRvIDAnKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgOCA4CglidG9pCglpbnRjIDAgLy8gMAoJPT0KCgkvLyB2ZXJpZmljYXRpb25DbGFzcyBtdXN0IGVxdWFsIHRvIDAKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjE1CgkvLyBhc3NlcnQoCgkvLyAgICAgICBpbmZvLnBlcnNvblVVSUQgPT09ICcwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAnLAoJLy8gICAgICAgJ3BlcnNvblVVSUQgbXVzdCBlcXVhbCB0byAwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAnCgkvLyAgICAgKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWludGMgNyAvLyAxNwoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJdW5jb3ZlciAyCglleHRyYWN0X3VpbnQxNgoJZHVwIC8vIGR1cGxpY2F0ZSBzdGFydCBvZiBlbGVtZW50Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5Cglzd2FwCglleHRyYWN0X3VpbnQxNiAvLyBnZXQgbnVtYmVyIG9mIGVsZW1lbnRzCglpbnRjIDEgLy8gIGdldCB0eXBlIGxlbmd0aAoJKiAvLyBtdWx0aXBseSBieSB0eXBlIGxlbmd0aAoJaW50YyAzIC8vIDIKCSsgLy8gYWRkIHR3byBmb3IgbGVuZ3RoCglleHRyYWN0MwoJZXh0cmFjdCAyIDAKCWJ5dGVjIDYgLy8gICIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAiCgk9PQoKCS8vIHBlcnNvblVVSUQgbXVzdCBlcXVhbCB0byAwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjIwCgkvLyBhc3NlcnQoCgkvLyAgICAgICBpbmZvLmxlZ2FsRW50aXR5VVVJRCA9PT0gJzAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCcsCgkvLyAgICAgICAnbGVnYWxFbnRpdHlVVUlEIG11c3QgZXF1YWwgdG8gMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwJwoJLy8gICAgICkKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5CglpbnRjIDggLy8gMTkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCXVuY292ZXIgMgoJZXh0cmFjdF91aW50MTYKCWR1cCAvLyBkdXBsaWNhdGUgc3RhcnQgb2YgZWxlbWVudAoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJc3dhcAoJZXh0cmFjdF91aW50MTYgLy8gZ2V0IG51bWJlciBvZiBlbGVtZW50cwoJaW50YyAxIC8vICBnZXQgdHlwZSBsZW5ndGgKCSogLy8gbXVsdGlwbHkgYnkgdHlwZSBsZW5ndGgKCWludGMgMyAvLyAyCgkrIC8vIGFkZCB0d28gZm9yIGxlbmd0aAoJZXh0cmFjdDMKCWV4dHJhY3QgMiAwCglieXRlYyA2IC8vICAiMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwIgoJPT0KCgkvLyBsZWdhbEVudGl0eVVVSUQgbXVzdCBlcXVhbCB0byAwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjI1CgkvLyBhc3NlcnQoaW5mby5iaWF0ZWNFbmdhZ2VtZW50UG9pbnRzID09PSAwLCAnYmlhdGVjRW5nYWdlbWVudFBvaW50cyBtdXN0IGVxdWFsIHRvIDAnKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgMjEgOAoJYnRvaQoJaW50YyAwIC8vIDAKCT09CgoJLy8gYmlhdGVjRW5nYWdlbWVudFBvaW50cyBtdXN0IGVxdWFsIHRvIDAKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjI3CgkvLyBhc3NlcnQoaW5mby5iaWF0ZWNFbmdhZ2VtZW50UmFuayA9PT0gMCwgJ2JpYXRlY0VuZ2FnZW1lbnRSYW5rIG11c3QgZXF1YWwgdG8gMCcpCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCAyOSA4CglidG9pCglpbnRjIDAgLy8gMAoJPT0KCgkvLyBiaWF0ZWNFbmdhZ2VtZW50UmFuayBtdXN0IGVxdWFsIHRvIDAKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjI5CgkvLyBhc3NlcnQoaW5mby5hdm1FbmdhZ2VtZW50UG9pbnRzID09PSAwLCAnYXZtRW5nYWdlbWVudFBvaW50cyBtdXN0IGVxdWFsIHRvIDAnKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgMzcgOAoJYnRvaQoJaW50YyAwIC8vIDAKCT09CgoJLy8gYXZtRW5nYWdlbWVudFBvaW50cyBtdXN0IGVxdWFsIHRvIDAKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjMxCgkvLyBhc3NlcnQoaW5mby5hdm1FbmdhZ2VtZW50UmFuayA9PT0gMCwgJ2F2bUVuZ2FnZW1lbnRSYW5rIG11c3QgZXF1YWwgdG8gMCcpCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA0NSA4CglidG9pCglpbnRjIDAgLy8gMAoJPT0KCgkvLyBhdm1FbmdhZ2VtZW50UmFuayBtdXN0IGVxdWFsIHRvIDAKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjMzCgkvLyBhc3NlcnQoaW5mby50cmFkaW5nRW5nYWdlbWVudFBvaW50cyA9PT0gMCwgJ3RyYWRpbmdFbmdhZ2VtZW50UG9pbnRzIG11c3QgZXF1YWwgdG8gMCcpCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA1MyA4CglidG9pCglpbnRjIDAgLy8gMAoJPT0KCgkvLyB0cmFkaW5nRW5nYWdlbWVudFBvaW50cyBtdXN0IGVxdWFsIHRvIDAKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjM1CgkvLyBhc3NlcnQoaW5mby50cmFkaW5nRW5nYWdlbWVudFJhbmsgPT09IDAsICd0cmFkaW5nRW5nYWdlbWVudFJhbmsgbXVzdCBlcXVhbCB0byAwJykKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDYxIDgKCWJ0b2kKCWludGMgMCAvLyAwCgk9PQoKCS8vIHRyYWRpbmdFbmdhZ2VtZW50UmFuayBtdXN0IGVxdWFsIHRvIDAKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjM3CgkvLyBhc3NlcnQoaW5mby5pc0xvY2tlZCA9PT0gZmFsc2UsICdpc0xvY2tlZCBtdXN0IGVxdWFsIHRvIGZhbHNlJykKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglpbnRjIDUgLy8gNTUyCglnZXRiaXQKCWludGMgMCAvLyAwCgk9PQoKCS8vIGlzTG9ja2VkIG11c3QgZXF1YWwgdG8gZmFsc2UKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjM5CgkvLyBhc3NlcnQoaW5mby5reWNFeHBpcmF0aW9uID09PSAwLCAna3ljRXhwaXJhdGlvbiBtdXN0IGVxdWFsIHRvIDAnKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgNzAgOAoJYnRvaQoJaW50YyAwIC8vIDAKCT09CgoJLy8ga3ljRXhwaXJhdGlvbiBtdXN0IGVxdWFsIHRvIDAKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjQxCgkvLyBhc3NlcnQoaW5mby5pbnZlc3RvckZvckV4cGlyYXRpb24gPT09IDAsICdpbnZlc3RvckZvckV4cGlyYXRpb24gbXVzdCBlcXVhbCB0byAwJykKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDc4IDgKCWJ0b2kKCWludGMgMCAvLyAwCgk9PQoKCS8vIGludmVzdG9yRm9yRXhwaXJhdGlvbiBtdXN0IGVxdWFsIHRvIDAKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjQzCgkvLyBhc3NlcnQoaW5mby5pc1Byb2Zlc3Npb25hbEludmVzdG9yID09PSBmYWxzZSwgJ2lzUHJvZmVzc2lvbmFsSW52ZXN0b3IgbXVzdCBlcXVhbCB0byBmYWxzZScpCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJaW50YyA2IC8vIDY4OAoJZ2V0Yml0CglpbnRjIDAgLy8gMAoJPT0KCgkvLyBpc1Byb2Zlc3Npb25hbEludmVzdG9yIG11c3QgZXF1YWwgdG8gZmFsc2UKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjQ1CgkvLyB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUgPSBpbmZvCglieXRlYyAzIC8vICAiaSIKCWZyYW1lX2RpZyAtMSAvLyB1c2VyOiBBZGRyZXNzCgljb25jYXQKCWR1cAoJYm94X2RlbAoJcG9wCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglib3hfcHV0CglyZXRzdWIKCi8vIHNldEluZm8oYWRkcmVzcywodWludDY0LHVpbnQ2NCxib29sLHN0cmluZyxzdHJpbmcsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsYm9vbCx1aW50NjQsdWludDY0LGJvb2wpKXZvaWQKKmFiaV9yb3V0ZV9zZXRJbmZvOgoJLy8gaW5mbzogKHVpbnQ2NCx1aW50NjQsYm9vbCxzdHJpbmcsc3RyaW5nLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LGJvb2wsdWludDY0LHVpbnQ2NCxib29sKQoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgoKCS8vIHVzZXI6IGFkZHJlc3MKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWR1cAoJbGVuCglpbnRjIDIgLy8gMzIKCT09CgoJLy8gYXJndW1lbnQgMSAodXNlcikgZm9yIHNldEluZm8gbXVzdCBiZSBhIGFkZHJlc3MKCWFzc2VydAoKCS8vIGV4ZWN1dGUgc2V0SW5mbyhhZGRyZXNzLCh1aW50NjQsdWludDY0LGJvb2wsc3RyaW5nLHN0cmluZyx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCxib29sLHVpbnQ2NCx1aW50NjQsYm9vbCkpdm9pZAoJY2FsbHN1YiBzZXRJbmZvCglpbnRjIDEgLy8gMQoJcmV0dXJuCgovLyBzZXRJbmZvKHVzZXI6IEFkZHJlc3MsIGluZm86IElkZW50aXR5SW5mbyk6IHZvaWQKc2V0SW5mbzoKCXByb3RvIDIgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjQ5CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmVuZ2FnZW1lbnRTZXR0ZXIudmFsdWUpCgl0eG4gU2VuZGVyCglieXRlYyAxNiAvLyAgImUiCglhcHBfZ2xvYmFsX2dldAoJPT0KCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjUwCgkvLyB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUgPSBpbmZvCglieXRlYyAzIC8vICAiaSIKCWZyYW1lX2RpZyAtMSAvLyB1c2VyOiBBZGRyZXNzCgljb25jYXQKCWR1cAoJYm94X2RlbAoJcG9wCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglib3hfcHV0CglyZXRzdWIKCi8vIHNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24odWludDY0LGJ5dGVbXSxieXRlW10sYnl0ZVtdLHVpbnQ2NCx1aW50NjQsdWludDY0KXZvaWQKKmFiaV9yb3V0ZV9zZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uOgoJLy8gdm90ZUtleURpbHV0aW9uOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDcKCWJ0b2kKCgkvLyB2b3RlTGFzdDogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyA2CglidG9pCgoJLy8gdm90ZUZpcnN0OiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDUKCWJ0b2kKCgkvLyBzdGF0ZVByb29mUEs6IGJ5dGVbXQoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgNAoJZXh0cmFjdCAyIDAKCgkvLyBzZWxlY3Rpb25QSzogYnl0ZVtdCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAzCglleHRyYWN0IDIgMAoKCS8vIHZvdGVQSzogYnl0ZVtdCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAyCglleHRyYWN0IDIgMAoKCS8vIGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWJ0b2kKCgkvLyBleGVjdXRlIHNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24odWludDY0LGJ5dGVbXSxieXRlW10sYnl0ZVtdLHVpbnQ2NCx1aW50NjQsdWludDY0KXZvaWQKCWNhbGxzdWIgc2VuZE9ubGluZUtleVJlZ2lzdHJhdGlvbgoJaW50YyAxIC8vIDEKCXJldHVybgoKLy8gc2VuZE9ubGluZUtleVJlZ2lzdHJhdGlvbihhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogQXBwSUQsIHZvdGVQSzogYnl0ZXMsIHNlbGVjdGlvblBLOiBieXRlcywgc3RhdGVQcm9vZlBLOiBieXRlcywgdm90ZUZpcnN0OiB1aW50NjQsIHZvdGVMYXN0OiB1aW50NjQsIHZvdGVLZXlEaWx1dGlvbjogdWludDY0KTogdm9pZAovLwovLyBhZGRyZXNzRXhlY3V0aXZlRmVlIGNhbiBwZXJmb20ga2V5IHJlZ2lzdHJhdGlvbiBmb3IgdGhpcyBMUCBwb29sCi8vCi8vIE9ubHkgYWRkcmVzc0V4ZWN1dGl2ZUZlZSBpcyBhbGxvd2VkIHRvIGV4ZWN1dGUgdGhpcyBtZXRob2QuCnNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb246Cglwcm90byA3IDAKCgkvLyBQdXNoIGVtcHR5IGJ5dGVzIGFmdGVyIHRoZSBmcmFtZSBwb2ludGVyIHRvIHJlc2VydmUgc3BhY2UgZm9yIGxvY2FsIHZhcmlhYmxlcwoJYnl0ZWMgMCAvLyAweAoJZHVwCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNjcKCS8vIGFzc2VydChhcHBCaWF0ZWNDb25maWdQcm92aWRlciA9PT0gdGhpcy5hcHBCaWF0ZWNDb25maWdQcm92aWRlci52YWx1ZSwgJ0NvbmZpZ3VyYXRpb24gYXBwIGRvZXMgbm90IG1hdGNoJykKCWZyYW1lX2RpZyAtMSAvLyBhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogQXBwSUQKCWJ5dGVjIDQgLy8gICJCIgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gQ29uZmlndXJhdGlvbiBhcHAgZG9lcyBub3QgbWF0Y2gKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjY4CgkvLyBhZGRyZXNzRXhlY3V0aXZlRmVlID0gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIuZ2xvYmFsU3RhdGUoJ2VmJykgYXMgQWRkcmVzcwoJZnJhbWVfZGlnIC0xIC8vIGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyOiBBcHBJRAoJYnl0ZWMgMTMgLy8gICJlZiIKCWFwcF9nbG9iYWxfZ2V0X2V4CgoJLy8gZ2xvYmFsIHN0YXRlIHZhbHVlIGRvZXMgbm90IGV4aXN0OiBhcHBCaWF0ZWNDb25maWdQcm92aWRlci5nbG9iYWxTdGF0ZSgnZWYnKQoJYXNzZXJ0CglmcmFtZV9idXJ5IDAgLy8gYWRkcmVzc0V4ZWN1dGl2ZUZlZTogYWRkcmVzcwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjY5CgkvLyBhc3NlcnQoCgkvLyAgICAgICB0aGlzLnR4bi5zZW5kZXIgPT09IGFkZHJlc3NFeGVjdXRpdmVGZWUsCgkvLyAgICAgICAnT25seSBmZWUgZXhlY3V0b3Igc2V0dXAgaW4gdGhlIGNvbmZpZyBjYW4gdGFrZSB0aGUgY29sbGVjdGVkIGZlZXMnCgkvLyAgICAgKQoJdHhuIFNlbmRlcgoJZnJhbWVfZGlnIDAgLy8gYWRkcmVzc0V4ZWN1dGl2ZUZlZTogYWRkcmVzcwoJPT0KCgkvLyBPbmx5IGZlZSBleGVjdXRvciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB0YWtlIHRoZSBjb2xsZWN0ZWQgZmVlcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNzMKCS8vIHBhdXNlZCA9IGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmdsb2JhbFN0YXRlKCdzJykgYXMgdWludDY0CglmcmFtZV9kaWcgLTEgLy8gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXI6IEFwcElECglieXRlYyA1IC8vICAicyIKCWFwcF9nbG9iYWxfZ2V0X2V4CgoJLy8gZ2xvYmFsIHN0YXRlIHZhbHVlIGRvZXMgbm90IGV4aXN0OiBhcHBCaWF0ZWNDb25maWdQcm92aWRlci5nbG9iYWxTdGF0ZSgncycpCglhc3NlcnQKCWZyYW1lX2J1cnkgMSAvLyBwYXVzZWQ6IHVpbnQ2NAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6Mjc0CgkvLyBhc3NlcnQocGF1c2VkID09PSAwLCAnRVJSX1BBVVNFRCcpCglmcmFtZV9kaWcgMSAvLyBwYXVzZWQ6IHVpbnQ2NAoJaW50YyAwIC8vIDAKCT09CgoJLy8gRVJSX1BBVVNFRAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNzUKCS8vIHNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24oewoJLy8gICAgICAgc2VsZWN0aW9uUEs6IHNlbGVjdGlvblBLLAoJLy8gICAgICAgc3RhdGVQcm9vZlBLOiBzdGF0ZVByb29mUEssCgkvLyAgICAgICB2b3RlRmlyc3Q6IHZvdGVGaXJzdCwKCS8vICAgICAgIHZvdGVLZXlEaWx1dGlvbjogdm90ZUtleURpbHV0aW9uLAoJLy8gICAgICAgdm90ZUxhc3Q6IHZvdGVMYXN0LAoJLy8gICAgICAgdm90ZVBLOiB2b3RlUEssCgkvLyAgICAgICBmZWU6IDAsCgkvLyAgICAgfSkKCWl0eG5fYmVnaW4KCWludGMgMyAvLyAga2V5cmVnCglpdHhuX2ZpZWxkIFR5cGVFbnVtCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNzYKCS8vIHNlbGVjdGlvblBLOiBzZWxlY3Rpb25QSwoJZnJhbWVfZGlnIC0zIC8vIHNlbGVjdGlvblBLOiBieXRlcwoJaXR4bl9maWVsZCBTZWxlY3Rpb25QSwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6Mjc3CgkvLyBzdGF0ZVByb29mUEs6IHN0YXRlUHJvb2ZQSwoJZnJhbWVfZGlnIC00IC8vIHN0YXRlUHJvb2ZQSzogYnl0ZXMKCWl0eG5fZmllbGQgU3RhdGVQcm9vZlBLCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNzgKCS8vIHZvdGVGaXJzdDogdm90ZUZpcnN0CglmcmFtZV9kaWcgLTUgLy8gdm90ZUZpcnN0OiB1aW50NjQKCWl0eG5fZmllbGQgVm90ZUZpcnN0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNzkKCS8vIHZvdGVLZXlEaWx1dGlvbjogdm90ZUtleURpbHV0aW9uCglmcmFtZV9kaWcgLTcgLy8gdm90ZUtleURpbHV0aW9uOiB1aW50NjQKCWl0eG5fZmllbGQgVm90ZUtleURpbHV0aW9uCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyODAKCS8vIHZvdGVMYXN0OiB2b3RlTGFzdAoJZnJhbWVfZGlnIC02IC8vIHZvdGVMYXN0OiB1aW50NjQKCWl0eG5fZmllbGQgVm90ZUxhc3QKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjI4MQoJLy8gdm90ZVBLOiB2b3RlUEsKCWZyYW1lX2RpZyAtMiAvLyB2b3RlUEs6IGJ5dGVzCglpdHhuX2ZpZWxkIFZvdGVQSwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjgyCgkvLyBmZWU6IDAKCWludGMgMCAvLyAwCglpdHhuX2ZpZWxkIEZlZQoKCS8vIFN1Ym1pdCBpbm5lciB0cmFuc2FjdGlvbgoJaXR4bl9zdWJtaXQKCXJldHN1YgoKLy8gZ2V0VXNlcihhZGRyZXNzLHVpbnQ4KSh1aW50OCx1aW50NjQsdWludDY0LGJvb2wsc3RyaW5nLHN0cmluZyx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50MjU2LHVpbnQyNTYsYm9vbCx1aW50NjQsdWludDY0LGJvb2wpCiphYmlfcm91dGVfZ2V0VXNlcjoKCS8vIFRoZSBBQkkgcmV0dXJuIHByZWZpeAoJYnl0ZWMgMTIgLy8gMHgxNTFmN2M3NQoKCS8vIHY6IHVpbnQ4Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAyCglkdXAKCWxlbgoJaW50YyAxIC8vIDEKCT09CgoJLy8gYXJndW1lbnQgMCAodikgZm9yIGdldFVzZXIgbXVzdCBiZSBhIHVpbnQ4Cglhc3NlcnQKCWJ0b2kKCgkvLyB1c2VyOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAyIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDEgKHVzZXIpIGZvciBnZXRVc2VyIG11c3QgYmUgYSBhZGRyZXNzCglhc3NlcnQKCgkvLyBleGVjdXRlIGdldFVzZXIoYWRkcmVzcyx1aW50OCkodWludDgsdWludDY0LHVpbnQ2NCxib29sLHN0cmluZyxzdHJpbmcsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDI1Nix1aW50MjU2LGJvb2wsdWludDY0LHVpbnQ2NCxib29sKQoJY2FsbHN1YiBnZXRVc2VyCgljb25jYXQKCWxvZwoJaW50YyAxIC8vIDEKCXJldHVybgoKLy8gZ2V0VXNlcih1c2VyOiBBZGRyZXNzLCB2OiB1aW50OCk6IFVzZXJJbmZvVjEKLy8KLy8gUmV0dXJucyB1c2VyIGluZm9ybWF0aW9uIC0gZmVlIG11bHRpcGxpZXIsIHZlcmlmaWNhdGlvbiBjbGFzcywgZW5nYWdlbWVudCBjbGFzcyAuLgovLwovLyBAcGFyYW0gdXNlciBHZXQgaW5mbyBmb3Igc3BlY2lmaWMgdXNlciBhZGRyZXNzCi8vIEBwYXJhbSB2IFZlcnNpb24gb2YgdGhlIGRhdGEgc3RydWN0dXJlIHRvIHJldHVybgpnZXRVc2VyOgoJcHJvdG8gMiAxCgoJLy8gUHVzaCBlbXB0eSBieXRlcyBhZnRlciB0aGUgZnJhbWUgcG9pbnRlciB0byByZXNlcnZlIHNwYWNlIGZvciBsb2NhbCB2YXJpYWJsZXMKCWJ5dGVjIDAgLy8gMHgKCWR1cG4gMgoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6Mjk0CgkvLyBhc3NlcnQodiA9PT0gMSwgIkN1cnJlbnRseSBzdXBwb3J0ZWQgdmVyc2lvbiBvZiB0aGUgZGF0YSBzdHJ1Y3R1cmUgaXMgJzEnIikKCWZyYW1lX2RpZyAtMiAvLyB2OiB1aW50OAoJaW50YyAxIC8vIDEKCT09CgoJLy8gQ3VycmVudGx5IHN1cHBvcnRlZCB2ZXJzaW9uIG9mIHRoZSBkYXRhIHN0cnVjdHVyZSBpcyAnMScKCWFzc2VydAoKCS8vICppZjBfY29uZGl0aW9uCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjI5NQoJLy8gIXRoaXMuaWRlbnRpdGllcyh1c2VyKS5leGlzdHMKCWJ5dGVjIDMgLy8gICJpIgoJZnJhbWVfZGlnIC0xIC8vIHVzZXI6IEFkZHJlc3MKCWNvbmNhdAoJYm94X2xlbgoJc3dhcAoJcG9wCgkhCglieiAqaWYwX2VuZAoKCS8vICppZjBfY29uc2VxdWVudAoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyOTYKCS8vIHJldE5vSWRlbnRpdHk6IFVzZXJJbmZvVjEgPSB7CgkvLyAgICAgICAgIHZlcnNpb246IHYsCgkvLyAgICAgICAgIGJhc2U6IFNDQUxFIGFzIHVpbnQyNTYsCgkvLyAgICAgICAgIGZlZU11bHRpcGxpZXI6ICgyICogU0NBTEUpIGFzIHVpbnQyNTYsCgkvLyAgICAgICAgIGlzTG9ja2VkOiBmYWxzZSwKCS8vICAgICAgICAgdmVyaWZpY2F0aW9uQ2xhc3M6IDAsCgkvLyAgICAgICAgIHZlcmlmaWNhdGlvblN0YXR1czogMCwKCS8vICAgICAgICAgYmlhdGVjRW5nYWdlbWVudFBvaW50czogMCwKCS8vICAgICAgICAgYmlhdGVjRW5nYWdlbWVudFJhbms6IDAsCgkvLyAgICAgICAgIGF2bUVuZ2FnZW1lbnRQb2ludHM6IDAsCgkvLyAgICAgICAgIGF2bUVuZ2FnZW1lbnRSYW5rOiAwLAoJLy8gICAgICAgICB0cmFkaW5nRW5nYWdlbWVudFBvaW50czogMCwKCS8vICAgICAgICAgdHJhZGluZ0VuZ2FnZW1lbnRSYW5rOiAwLAoJLy8gICAgICAgICBreWNFeHBpcmF0aW9uOiAwLAoJLy8gICAgICAgICBpbnZlc3RvckZvckV4cGlyYXRpb246IDAsCgkvLyAgICAgICAgIGlzUHJvZmVzc2lvbmFsSW52ZXN0b3I6IGZhbHNlLAoJLy8gICAgICAgICBpc0NvbXBhbnk6IGZhbHNlLAoJLy8gICAgICAgICBwZXJzb25VVUlEOiAnJywKCS8vICAgICAgICAgbGVnYWxFbnRpdHlVVUlEOiAnJywKCS8vICAgICAgIH0KCWJ5dGVjIDAgLy8gIGluaXRpYWwgaGVhZAoJYnl0ZWMgMCAvLyAgaW5pdGlhbCB0YWlsCglieXRlYyAxNCAvLyAgaW5pdGlhbCBoZWFkIG9mZnNldAoJZnJhbWVfZGlnIC0yIC8vIHY6IHVpbnQ4CglpdG9iCglleHRyYWN0IDcgMQoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgMSAvLyAweDAwMDAwMDAwMDAwMDAwMDAKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWJ5dGVjIDEgLy8gMHgwMDAwMDAwMDAwMDAwMDAwCgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglieXRlYyAyIC8vIDB4MDAKCWludGMgMCAvLyAwCglkdXAKCXNldGJpdAoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgMTUgLy8gMHgwMDAwCgljYWxsc3ViICpwcm9jZXNzX2R5bmFtaWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgMTUgLy8gMHgwMDAwCgljYWxsc3ViICpwcm9jZXNzX2R5bmFtaWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgMSAvLyAweDAwMDAwMDAwMDAwMDAwMDAKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWJ5dGVjIDEgLy8gMHgwMDAwMDAwMDAwMDAwMDAwCgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglieXRlYyAxIC8vIDB4MDAwMDAwMDAwMDAwMDAwMAoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgMSAvLyAweDAwMDAwMDAwMDAwMDAwMDAKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWJ5dGVjIDEgLy8gMHgwMDAwMDAwMDAwMDAwMDAwCgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglieXRlYyAxIC8vIDB4MDAwMDAwMDAwMDAwMDAwMAoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgOSAvLyAweDAwMDAwMDAwNzczNTk0MDAKCWR1cAoJYml0bGVuCglpbnRjIDQgLy8gMjU2Cgk8PQoKCS8vICgyICogU0NBTEUpIGFzIHVpbnQyNTYgb3ZlcmZsb3dlZCAyNTYgYml0cwoJYXNzZXJ0CglieXRlYyA3IC8vIDB4RkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRgoJYiYKCWR1cAoJbGVuCglkdXAKCWludGMgMiAvLyAzMgoJLQoJc3dhcAoJc3Vic3RyaW5nMwoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgOCAvLyAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwM2I5YWNhMDAKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWJ5dGVjIDIgLy8gMHgwMAoJaW50YyAwIC8vIDAKCWR1cAoJc2V0Yml0CgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglieXRlYyAxIC8vIDB4MDAwMDAwMDAwMDAwMDAwMAoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgMSAvLyAweDAwMDAwMDAwMDAwMDAwMDAKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWJ5dGVjIDIgLy8gMHgwMAoJaW50YyAwIC8vIDAKCWR1cAoJc2V0Yml0CgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50Cglwb3AgLy8gcG9wIGhlYWQgb2Zmc2V0Cgljb25jYXQgLy8gY29uY2F0IGhlYWQgYW5kIHRhaWwKCWZyYW1lX2J1cnkgMCAvLyByZXROb0lkZW50aXR5OiBVc2VySW5mb1YxCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozMTYKCS8vIHJldHVybiByZXROb0lkZW50aXR5OwoJZnJhbWVfZGlnIDAgLy8gcmV0Tm9JZGVudGl0eTogVXNlckluZm9WMQoJYiAqZ2V0VXNlcipyZXR1cm4KCippZjBfZW5kOgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozMTgKCS8vIGlkZW50aXR5ID0gdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglieXRlYyAzIC8vICAiaSIKCWZyYW1lX2RpZyAtMSAvLyB1c2VyOiBBZGRyZXNzCgljb25jYXQKCWZyYW1lX2J1cnkgMSAvLyBzdG9yYWdlIGtleS8vaWRlbnRpdHkKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjMyMAoJLy8gcmV0OiBVc2VySW5mb1YxID0gewoJLy8gICAgICAgdmVyc2lvbjogdiwKCS8vICAgICAgIGJhc2U6IFNDQUxFIGFzIHVpbnQyNTYsCgkvLyAgICAgICBmZWVNdWx0aXBsaWVyOiAoMSAqIFNDQUxFKSBhcyB1aW50MjU2LAoJLy8gICAgICAgaXNMb2NrZWQ6IGlkZW50aXR5LmlzTG9ja2VkLAoJLy8gICAgICAgdmVyaWZpY2F0aW9uQ2xhc3M6IGlkZW50aXR5LnZlcmlmaWNhdGlvbkNsYXNzLAoJLy8gICAgICAgdmVyaWZpY2F0aW9uU3RhdHVzOiBpZGVudGl0eS52ZXJpZmljYXRpb25TdGF0dXMsCgkvLyAgICAgICBiaWF0ZWNFbmdhZ2VtZW50UG9pbnRzOiBpZGVudGl0eS5iaWF0ZWNFbmdhZ2VtZW50UG9pbnRzLAoJLy8gICAgICAgYmlhdGVjRW5nYWdlbWVudFJhbms6IGlkZW50aXR5LmJpYXRlY0VuZ2FnZW1lbnRSYW5rLAoJLy8gICAgICAgYXZtRW5nYWdlbWVudFBvaW50czogaWRlbnRpdHkuYXZtRW5nYWdlbWVudFBvaW50cywKCS8vICAgICAgIGF2bUVuZ2FnZW1lbnRSYW5rOiBpZGVudGl0eS5hdm1FbmdhZ2VtZW50UmFuaywKCS8vICAgICAgIHRyYWRpbmdFbmdhZ2VtZW50UG9pbnRzOiBpZGVudGl0eS50cmFkaW5nRW5nYWdlbWVudFBvaW50cywKCS8vICAgICAgIHRyYWRpbmdFbmdhZ2VtZW50UmFuazogaWRlbnRpdHkudHJhZGluZ0VuZ2FnZW1lbnRSYW5rLAoJLy8gICAgICAga3ljRXhwaXJhdGlvbjogaWRlbnRpdHkua3ljRXhwaXJhdGlvbiwKCS8vICAgICAgIGludmVzdG9yRm9yRXhwaXJhdGlvbjogaWRlbnRpdHkuaW52ZXN0b3JGb3JFeHBpcmF0aW9uLAoJLy8gICAgICAgaXNQcm9mZXNzaW9uYWxJbnZlc3RvcjogaWRlbnRpdHkuaXNQcm9mZXNzaW9uYWxJbnZlc3RvciwKCS8vICAgICAgIGlzQ29tcGFueTogaWRlbnRpdHkuaXNDb21wYW55LAoJLy8gICAgICAgcGVyc29uVVVJRDogaWRlbnRpdHkucGVyc29uVVVJRCwKCS8vICAgICAgIGxlZ2FsRW50aXR5VVVJRDogaWRlbnRpdHkubGVnYWxFbnRpdHlVVUlELAoJLy8gICAgIH0KCWJ5dGVjIDAgLy8gIGluaXRpYWwgaGVhZAoJYnl0ZWMgMCAvLyAgaW5pdGlhbCB0YWlsCglieXRlYyAxNCAvLyAgaW5pdGlhbCBoZWFkIG9mZnNldAoJZnJhbWVfZGlnIC0yIC8vIHY6IHVpbnQ4CglpdG9iCglleHRyYWN0IDcgMQoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgMCA4CglidG9pCglpdG9iCgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglmcmFtZV9kaWcgMSAvLyBzdG9yYWdlIGtleS8vaWRlbnRpdHkKCWJveF9nZXQKCgkvLyBib3ggdmFsdWUgZG9lcyBub3QgZXhpc3Q6IHRoaXMuaWRlbnRpdGllcyh1c2VyKS52YWx1ZQoJYXNzZXJ0CglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA4IDgKCWJ0b2kKCWl0b2IKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWJ5dGVjIDIgLy8gMHgwMAoJaW50YyAwIC8vIDAKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoKCS8vIGJveCB2YWx1ZSBkb2VzIG5vdCBleGlzdDogdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglwdXNoaW50IDEyOAoJZ2V0Yml0CglzZXRiaXQKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoKCS8vIGJveCB2YWx1ZSBkb2VzIG5vdCBleGlzdDogdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5CglpbnRjIDcgLy8gMTcKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCXVuY292ZXIgMgoJZXh0cmFjdF91aW50MTYKCWR1cCAvLyBkdXBsaWNhdGUgc3RhcnQgb2YgZWxlbWVudAoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJc3dhcAoJZXh0cmFjdF91aW50MTYgLy8gZ2V0IG51bWJlciBvZiBlbGVtZW50cwoJaW50YyAxIC8vICBnZXQgdHlwZSBsZW5ndGgKCSogLy8gbXVsdGlwbHkgYnkgdHlwZSBsZW5ndGgKCWludGMgMyAvLyAyCgkrIC8vIGFkZCB0d28gZm9yIGxlbmd0aAoJZXh0cmFjdDMKCWV4dHJhY3QgMiAwCglkdXAKCWxlbgoJaXRvYgoJZXh0cmFjdCA2IDIKCXN3YXAKCWNvbmNhdAoJY2FsbHN1YiAqcHJvY2Vzc19keW5hbWljX3R1cGxlX2VsZW1lbnQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoKCS8vIGJveCB2YWx1ZSBkb2VzIG5vdCBleGlzdDogdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5CglpbnRjIDggLy8gMTkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCXVuY292ZXIgMgoJZXh0cmFjdF91aW50MTYKCWR1cCAvLyBkdXBsaWNhdGUgc3RhcnQgb2YgZWxlbWVudAoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJc3dhcAoJZXh0cmFjdF91aW50MTYgLy8gZ2V0IG51bWJlciBvZiBlbGVtZW50cwoJaW50YyAxIC8vICBnZXQgdHlwZSBsZW5ndGgKCSogLy8gbXVsdGlwbHkgYnkgdHlwZSBsZW5ndGgKCWludGMgMyAvLyAyCgkrIC8vIGFkZCB0d28gZm9yIGxlbmd0aAoJZXh0cmFjdDMKCWV4dHJhY3QgMiAwCglkdXAKCWxlbgoJaXRvYgoJZXh0cmFjdCA2IDIKCXN3YXAKCWNvbmNhdAoJY2FsbHN1YiAqcHJvY2Vzc19keW5hbWljX3R1cGxlX2VsZW1lbnQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoKCS8vIGJveCB2YWx1ZSBkb2VzIG5vdCBleGlzdDogdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDIxIDgKCWJ0b2kKCWl0b2IKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoKCS8vIGJveCB2YWx1ZSBkb2VzIG5vdCBleGlzdDogdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDI5IDgKCWJ0b2kKCWl0b2IKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoKCS8vIGJveCB2YWx1ZSBkb2VzIG5vdCBleGlzdDogdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDM3IDgKCWJ0b2kKCWl0b2IKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoKCS8vIGJveCB2YWx1ZSBkb2VzIG5vdCBleGlzdDogdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDQ1IDgKCWJ0b2kKCWl0b2IKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoKCS8vIGJveCB2YWx1ZSBkb2VzIG5vdCBleGlzdDogdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDUzIDgKCWJ0b2kKCWl0b2IKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoKCS8vIGJveCB2YWx1ZSBkb2VzIG5vdCBleGlzdDogdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDYxIDgKCWJ0b2kKCWl0b2IKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWJ5dGVjIDEwIC8vIDB4MDAwMDAwMDAzYjlhY2EwMAoJZHVwCgliaXRsZW4KCWludGMgNCAvLyAyNTYKCTw9CgoJLy8gKDEgKiBTQ0FMRSkgYXMgdWludDI1NiBvdmVyZmxvd2VkIDI1NiBiaXRzCglhc3NlcnQKCWJ5dGVjIDcgLy8gMHhGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGCgliJgoJZHVwCglsZW4KCWR1cAoJaW50YyAyIC8vIDMyCgktCglzd2FwCglzdWJzdHJpbmczCgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglieXRlYyA4IC8vIDB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAzYjlhY2EwMAoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgMiAvLyAweDAwCglpbnRjIDAgLy8gMAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWludGMgNSAvLyA1NTIKCWdldGJpdAoJc2V0Yml0CgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglmcmFtZV9kaWcgMSAvLyBzdG9yYWdlIGtleS8vaWRlbnRpdHkKCWJveF9nZXQKCgkvLyBib3ggdmFsdWUgZG9lcyBub3QgZXhpc3Q6IHRoaXMuaWRlbnRpdGllcyh1c2VyKS52YWx1ZQoJYXNzZXJ0CglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA3MCA4CglidG9pCglpdG9iCgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglmcmFtZV9kaWcgMSAvLyBzdG9yYWdlIGtleS8vaWRlbnRpdHkKCWJveF9nZXQKCgkvLyBib3ggdmFsdWUgZG9lcyBub3QgZXhpc3Q6IHRoaXMuaWRlbnRpdGllcyh1c2VyKS52YWx1ZQoJYXNzZXJ0CglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA3OCA4CglidG9pCglpdG9iCgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglieXRlYyAyIC8vIDB4MDAKCWludGMgMCAvLyAwCglmcmFtZV9kaWcgMSAvLyBzdG9yYWdlIGtleS8vaWRlbnRpdHkKCWJveF9nZXQKCgkvLyBib3ggdmFsdWUgZG9lcyBub3QgZXhpc3Q6IHRoaXMuaWRlbnRpdGllcyh1c2VyKS52YWx1ZQoJYXNzZXJ0CglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJaW50YyA2IC8vIDY4OAoJZ2V0Yml0CglzZXRiaXQKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCXBvcCAvLyBwb3AgaGVhZCBvZmZzZXQKCWNvbmNhdCAvLyBjb25jYXQgaGVhZCBhbmQgdGFpbAoJZnJhbWVfYnVyeSAyIC8vIHJldDogVXNlckluZm9WMQoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MzQwCgkvLyByZXR1cm4gcmV0OwoJZnJhbWVfZGlnIDIgLy8gcmV0OiBVc2VySW5mb1YxCgoqZ2V0VXNlcipyZXR1cm46CgkvLyBzZXQgdGhlIHN1YnJvdXRpbmUgcmV0dXJuIHZhbHVlCglmcmFtZV9idXJ5IDAKCgkvLyBwb3AgYWxsIGxvY2FsIHZhcmlhYmxlcyBmcm9tIHRoZSBzdGFjawoJcG9wbiAyCglyZXRzdWIKCi8vIHdpdGhkcmF3RXhjZXNzQXNzZXRzKHVpbnQ2NCx1aW50NjQsdWludDY0KXVpbnQ2NAoqYWJpX3JvdXRlX3dpdGhkcmF3RXhjZXNzQXNzZXRzOgoJLy8gVGhlIEFCSSByZXR1cm4gcHJlZml4CglieXRlYyAxMiAvLyAweDE1MWY3Yzc1CgoJLy8gYW1vdW50OiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDMKCWJ0b2kKCgkvLyBhc3NldDogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAyCglidG9pCgoJLy8gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXI6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJYnRvaQoKCS8vIGV4ZWN1dGUgd2l0aGRyYXdFeGNlc3NBc3NldHModWludDY0LHVpbnQ2NCx1aW50NjQpdWludDY0CgljYWxsc3ViIHdpdGhkcmF3RXhjZXNzQXNzZXRzCglpdG9iCgljb25jYXQKCWxvZwoJaW50YyAxIC8vIDEKCXJldHVybgoKLy8gd2l0aGRyYXdFeGNlc3NBc3NldHMoYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXI6IEFwcElELCBhc3NldDogQXNzZXRJRCwgYW1vdW50OiB1aW50NjQpOiB1aW50NjQKLy8KLy8gSWYgc29tZW9uZSBkZXBvc2l0cyBleGNlc3MgYXNzZXRzIHRvIHRoaXMgc21hcnQgY29udHJhY3QgYmlhdGVjIGNhbiB1c2UgdGhlbS4KLy8KLy8gT25seSBhZGRyZXNzRXhlY3V0aXZlRmVlIGlzIGFsbG93ZWQgdG8gZXhlY3V0ZSB0aGlzIG1ldGhvZC4KLy8KLy8gQHBhcmFtIGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyIEJpYXRlYyBjb25maWcgYXBwLiBPbmx5IGFkZHJlc3NFeGVjdXRpdmVGZWUgaXMgYWxsb3dlZCB0byBleGVjdXRlIHRoaXMgbWV0aG9kLgovLyBAcGFyYW0gYXNzZXQgQXNzZXQgdG8gd2l0aGRyYXcuIElmIG5hdGl2ZSB0b2tlbiwgdGhlbiB6ZXJvCi8vIEBwYXJhbSBhbW91bnQgQW1vdW50IG9mIHRoZSBhc3NldCB0byBiZSB3aXRoZHJhd24Kd2l0aGRyYXdFeGNlc3NBc3NldHM6Cglwcm90byAzIDEKCgkvLyBQdXNoIGVtcHR5IGJ5dGVzIGFmdGVyIHRoZSBmcmFtZSBwb2ludGVyIHRvIHJlc2VydmUgc3BhY2UgZm9yIGxvY2FsIHZhcmlhYmxlcwoJYnl0ZWMgMCAvLyAweAoJZHVwCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozNTMKCS8vIGFzc2VydChhcHBCaWF0ZWNDb25maWdQcm92aWRlciA9PT0gdGhpcy5hcHBCaWF0ZWNDb25maWdQcm92aWRlci52YWx1ZSwgJ0NvbmZpZ3VyYXRpb24gYXBwIGRvZXMgbm90IG1hdGNoJykKCWZyYW1lX2RpZyAtMSAvLyBhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogQXBwSUQKCWJ5dGVjIDQgLy8gICJCIgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gQ29uZmlndXJhdGlvbiBhcHAgZG9lcyBub3QgbWF0Y2gKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MzU0CgkvLyBhZGRyZXNzRXhlY3V0aXZlRmVlID0gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIuZ2xvYmFsU3RhdGUoJ2VmJykgYXMgQWRkcmVzcwoJZnJhbWVfZGlnIC0xIC8vIGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyOiBBcHBJRAoJYnl0ZWMgMTMgLy8gICJlZiIKCWFwcF9nbG9iYWxfZ2V0X2V4CgoJLy8gZ2xvYmFsIHN0YXRlIHZhbHVlIGRvZXMgbm90IGV4aXN0OiBhcHBCaWF0ZWNDb25maWdQcm92aWRlci5nbG9iYWxTdGF0ZSgnZWYnKQoJYXNzZXJ0CglmcmFtZV9idXJ5IDAgLy8gYWRkcmVzc0V4ZWN1dGl2ZUZlZTogYWRkcmVzcwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MzU1CgkvLyBwYXVzZWQgPSBhcHBCaWF0ZWNDb25maWdQcm92aWRlci5nbG9iYWxTdGF0ZSgncycpIGFzIHVpbnQ2NAoJZnJhbWVfZGlnIC0xIC8vIGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyOiBBcHBJRAoJYnl0ZWMgNSAvLyAgInMiCglhcHBfZ2xvYmFsX2dldF9leAoKCS8vIGdsb2JhbCBzdGF0ZSB2YWx1ZSBkb2VzIG5vdCBleGlzdDogYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIuZ2xvYmFsU3RhdGUoJ3MnKQoJYXNzZXJ0CglmcmFtZV9idXJ5IDEgLy8gcGF1c2VkOiB1aW50NjQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjM1NgoJLy8gYXNzZXJ0KHBhdXNlZCA9PT0gMCwgJ0VSUl9QQVVTRUQnKQoJZnJhbWVfZGlnIDEgLy8gcGF1c2VkOiB1aW50NjQKCWludGMgMCAvLyAwCgk9PQoKCS8vIEVSUl9QQVVTRUQKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MzU3CgkvLyBhc3NlcnQoCgkvLyAgICAgICB0aGlzLnR4bi5zZW5kZXIgPT09IGFkZHJlc3NFeGVjdXRpdmVGZWUsCgkvLyAgICAgICAnT25seSBmZWUgZXhlY3V0b3Igc2V0dXAgaW4gdGhlIGNvbmZpZyBjYW4gdGFrZSB0aGUgY29sbGVjdGVkIGZlZXMnCgkvLyAgICAgKQoJdHhuIFNlbmRlcgoJZnJhbWVfZGlnIDAgLy8gYWRkcmVzc0V4ZWN1dGl2ZUZlZTogYWRkcmVzcwoJPT0KCgkvLyBPbmx5IGZlZSBleGVjdXRvciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB0YWtlIHRoZSBjb2xsZWN0ZWQgZmVlcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozNjIKCS8vIHRoaXMuZG9BeGZlcih0aGlzLnR4bi5zZW5kZXIsIGFzc2V0LCBhbW91bnQpCglmcmFtZV9kaWcgLTMgLy8gYW1vdW50OiB1aW50NjQKCWZyYW1lX2RpZyAtMiAvLyBhc3NldDogQXNzZXRJRAoJdHhuIFNlbmRlcgoJY2FsbHN1YiBkb0F4ZmVyCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozNjQKCS8vIHJldHVybiBhbW91bnQ7CglmcmFtZV9kaWcgLTMgLy8gYW1vdW50OiB1aW50NjQKCgkvLyBzZXQgdGhlIHN1YnJvdXRpbmUgcmV0dXJuIHZhbHVlCglmcmFtZV9idXJ5IDAKCgkvLyBwb3AgYWxsIGxvY2FsIHZhcmlhYmxlcyBmcm9tIHRoZSBzdGFjawoJcG9wbiAxCglyZXRzdWIKCi8vIGRvQXhmZXIocmVjZWl2ZXI6IEFkZHJlc3MsIGFzc2V0OiBBc3NldElELCBhbW91bnQ6IHVpbnQ2NCk6IHZvaWQKLy8KLy8gRXhlY3V0ZXMgeGZlciBvZiBwYXkgcGF5bWVudCBtZXRob2RzIHRvIHNwZWNpZmllZCByZWNlaXZlciBmcm9tIHNtYXJ0IGNvbnRyYWN0IGFnZ3JlZ2F0ZWQgYWNjb3VudCB3aXRoIHNwZWNpZmllZCBhc3NldCBhbmQgYW1vdW50IGluIHRva2VucyBkZWNpbWFscwovLyBAcGFyYW0gcmVjZWl2ZXIgUmVjZWl2ZXIKLy8gQHBhcmFtIGFzc2V0IEFzc2V0LiBaZXJvIGZvciBhbGdvCi8vIEBwYXJhbSBhbW91bnQgQW1vdW50IHRvIHRyYW5zZmVyCmRvQXhmZXI6Cglwcm90byAzIDAKCgkvLyAqaWYxX2NvbmRpdGlvbgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozNzQKCS8vIGFzc2V0LmlkID09PSAwCglmcmFtZV9kaWcgLTIgLy8gYXNzZXQ6IEFzc2V0SUQKCWludGMgMCAvLyAwCgk9PQoJYnogKmlmMV9lbHNlCgoJLy8gKmlmMV9jb25zZXF1ZW50CgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjM3NQoJLy8gc2VuZFBheW1lbnQoewoJLy8gICAgICAgICByZWNlaXZlcjogcmVjZWl2ZXIsCgkvLyAgICAgICAgIGFtb3VudDogYW1vdW50LAoJLy8gICAgICAgICBmZWU6IDAsCgkvLyAgICAgICB9KQoJaXR4bl9iZWdpbgoJaW50YyAxIC8vICBwYXkKCWl0eG5fZmllbGQgVHlwZUVudW0KCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjM3NgoJLy8gcmVjZWl2ZXI6IHJlY2VpdmVyCglmcmFtZV9kaWcgLTEgLy8gcmVjZWl2ZXI6IEFkZHJlc3MKCWl0eG5fZmllbGQgUmVjZWl2ZXIKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjM3NwoJLy8gYW1vdW50OiBhbW91bnQKCWZyYW1lX2RpZyAtMyAvLyBhbW91bnQ6IHVpbnQ2NAoJaXR4bl9maWVsZCBBbW91bnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjM3OAoJLy8gZmVlOiAwCglpbnRjIDAgLy8gMAoJaXR4bl9maWVsZCBGZWUKCgkvLyBTdWJtaXQgaW5uZXIgdHJhbnNhY3Rpb24KCWl0eG5fc3VibWl0CgliICppZjFfZW5kCgoqaWYxX2Vsc2U6CgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjM4MQoJLy8gc2VuZEFzc2V0VHJhbnNmZXIoewoJLy8gICAgICAgICBhc3NldFJlY2VpdmVyOiByZWNlaXZlciwKCS8vICAgICAgICAgeGZlckFzc2V0OiBhc3NldCwKCS8vICAgICAgICAgYXNzZXRBbW91bnQ6IGFtb3VudCwKCS8vICAgICAgICAgZmVlOiAwLAoJLy8gICAgICAgfSkKCWl0eG5fYmVnaW4KCXB1c2hpbnQgNCAvLyBheGZlcgoJaXR4bl9maWVsZCBUeXBlRW51bQoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MzgyCgkvLyBhc3NldFJlY2VpdmVyOiByZWNlaXZlcgoJZnJhbWVfZGlnIC0xIC8vIHJlY2VpdmVyOiBBZGRyZXNzCglpdHhuX2ZpZWxkIEFzc2V0UmVjZWl2ZXIKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjM4MwoJLy8geGZlckFzc2V0OiBhc3NldAoJZnJhbWVfZGlnIC0yIC8vIGFzc2V0OiBBc3NldElECglpdHhuX2ZpZWxkIFhmZXJBc3NldAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6Mzg0CgkvLyBhc3NldEFtb3VudDogYW1vdW50CglmcmFtZV9kaWcgLTMgLy8gYW1vdW50OiB1aW50NjQKCWl0eG5fZmllbGQgQXNzZXRBbW91bnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjM4NQoJLy8gZmVlOiAwCglpbnRjIDAgLy8gMAoJaXR4bl9maWVsZCBGZWUKCgkvLyBTdWJtaXQgaW5uZXIgdHJhbnNhY3Rpb24KCWl0eG5fc3VibWl0CgoqaWYxX2VuZDoKCXJldHN1YgoKKmNyZWF0ZV9Ob09wOgoJcHVzaGJ5dGVzIDB4Yjg0NDdiMzYgLy8gbWV0aG9kICJjcmVhdGVBcHBsaWNhdGlvbigpdm9pZCIKCXR4bmEgQXBwbGljYXRpb25BcmdzIDAKCW1hdGNoICphYmlfcm91dGVfY3JlYXRlQXBwbGljYXRpb24KCgkvLyB0aGlzIGNvbnRyYWN0IGRvZXMgbm90IGltcGxlbWVudCB0aGUgZ2l2ZW4gQUJJIG1ldGhvZCBmb3IgY3JlYXRlIE5vT3AKCWVycgoKKmNhbGxfTm9PcDoKCXB1c2hieXRlcyAweGUzYmY1YzFmIC8vIG1ldGhvZCAiYm9vdHN0cmFwKHVpbnQ2NCxhZGRyZXNzLGFkZHJlc3MsYWRkcmVzcyl2b2lkIgoJcHVzaGJ5dGVzIDB4ZThjOGVlZDkgLy8gbWV0aG9kICJzZWxmUmVnaXN0cmF0aW9uKGFkZHJlc3MsKHVpbnQ2NCx1aW50NjQsYm9vbCxzdHJpbmcsc3RyaW5nLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LGJvb2wsdWludDY0LHVpbnQ2NCxib29sKSl2b2lkIgoJcHVzaGJ5dGVzIDB4ZDU4M2E3NTkgLy8gbWV0aG9kICJzZXRJbmZvKGFkZHJlc3MsKHVpbnQ2NCx1aW50NjQsYm9vbCxzdHJpbmcsc3RyaW5nLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LGJvb2wsdWludDY0LHVpbnQ2NCxib29sKSl2b2lkIgoJcHVzaGJ5dGVzIDB4ODM5MjVjMTcgLy8gbWV0aG9kICJzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uKHVpbnQ2NCxieXRlW10sYnl0ZVtdLGJ5dGVbXSx1aW50NjQsdWludDY0LHVpbnQ2NCl2b2lkIgoJcHVzaGJ5dGVzIDB4NmIxNmU4NjMgLy8gbWV0aG9kICJnZXRVc2VyKGFkZHJlc3MsdWludDgpKHVpbnQ4LHVpbnQ2NCx1aW50NjQsYm9vbCxzdHJpbmcsc3RyaW5nLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQyNTYsdWludDI1Nixib29sLHVpbnQ2NCx1aW50NjQsYm9vbCkiCglwdXNoYnl0ZXMgMHhjYmEyZTk1ZCAvLyBtZXRob2QgIndpdGhkcmF3RXhjZXNzQXNzZXRzKHVpbnQ2NCx1aW50NjQsdWludDY0KXVpbnQ2NCIKCXR4bmEgQXBwbGljYXRpb25BcmdzIDAKCW1hdGNoICphYmlfcm91dGVfYm9vdHN0cmFwICphYmlfcm91dGVfc2VsZlJlZ2lzdHJhdGlvbiAqYWJpX3JvdXRlX3NldEluZm8gKmFiaV9yb3V0ZV9zZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uICphYmlfcm91dGVfZ2V0VXNlciAqYWJpX3JvdXRlX3dpdGhkcmF3RXhjZXNzQXNzZXRzCgoJLy8gdGhpcyBjb250cmFjdCBkb2VzIG5vdCBpbXBsZW1lbnQgdGhlIGdpdmVuIEFCSSBtZXRob2QgZm9yIGNhbGwgTm9PcAoJZXJyCgoqY2FsbF9VcGRhdGVBcHBsaWNhdGlvbjoKCXB1c2hieXRlcyAweDVmYzg4NWEwIC8vIG1ldGhvZCAidXBkYXRlQXBwbGljYXRpb24odWludDY0LGJ5dGVbXSl2b2lkIgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAoJbWF0Y2ggKmFiaV9yb3V0ZV91cGRhdGVBcHBsaWNhdGlvbgoKCS8vIHRoaXMgY29udHJhY3QgZG9lcyBub3QgaW1wbGVtZW50IHRoZSBnaXZlbiBBQkkgbWV0aG9kIGZvciBjYWxsIFVwZGF0ZUFwcGxpY2F0aW9uCgllcnIKCipwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50OgoJcHJvdG8gNCAzCglmcmFtZV9kaWcgLTQgLy8gdHVwbGUgaGVhZAoJZnJhbWVfZGlnIC0xIC8vIGVsZW1lbnQKCWNvbmNhdAoJZnJhbWVfZGlnIC0zIC8vIHR1cGxlIHRhaWwKCWZyYW1lX2RpZyAtMiAvLyBoZWFkIG9mZnNldAoJcmV0c3ViCgoqcHJvY2Vzc19keW5hbWljX3R1cGxlX2VsZW1lbnQ6Cglwcm90byA0IDMKCWZyYW1lX2RpZyAtNCAvLyB0dXBsZSBoZWFkCglmcmFtZV9kaWcgLTIgLy8gaGVhZCBvZmZzZXQKCWNvbmNhdAoJZnJhbWVfYnVyeSAtNCAvLyB0dXBsZSBoZWFkCglmcmFtZV9kaWcgLTEgLy8gZWxlbWVudAoJZHVwCglsZW4KCWZyYW1lX2RpZyAtMiAvLyBoZWFkIG9mZnNldAoJYnRvaQoJKwoJaXRvYgoJZXh0cmFjdCA2IDIKCWZyYW1lX2J1cnkgLTIgLy8gaGVhZCBvZmZzZXQKCWZyYW1lX2RpZyAtMyAvLyB0dXBsZSB0YWlsCglzd2FwCgljb25jYXQKCWZyYW1lX2J1cnkgLTMgLy8gdHVwbGUgdGFpbAoJZnJhbWVfZGlnIC00IC8vIHR1cGxlIGhlYWQKCWZyYW1lX2RpZyAtMyAvLyB0dXBsZSB0YWlsCglmcmFtZV9kaWcgLTIgLy8gaGVhZCBvZmZzZXQKCXJldHN1Yg==","clear":"I3ByYWdtYSB2ZXJzaW9uIDEw"},"byteCode":{"approval":"CiAJAAEgAoACqASwBRETJhEACAAAAAAAAAAAAQABaQFCAXMkMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwIP//////////////////////////////////////////IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA7msoACAAAAAB3NZQACAAAAAA7msoABXNjdmVyBBUffHUCZWYCAJgCAAABZTEYFIEGCzEZCI0MBNQAAAAAAAAFCgAABMYAAAAAAAAAAAAAAIgAAiNDigAAJwuAFUJJQVRFQy1JREVOVC0wMS0wMi0wMWeJNhoESRUkEkQ2GgNJFSQSRDYaAkkVJBJENhoBF4gAAiNDigQAKDEANjIAcgdIEkQnBIv/Z4ABZ4v+Z4ABdov9ZycQi/xni/8nBWVEjACLACISRIk2GgJXAgA2GgEXiAACI0OKAgAoSYv/JwRkEkSL/4ABdWVEjAAxAIsAEkSL/ycFZUSMAYsBIhJEJwuL/meJNhoCNhoBSRUkEkSIAAIjQ4oCACuL/1C9TEgURIv+Nf80/1cACBcjEkSL/jX/NP9XCAgXIhJEi/41/yEHNP80/08CWUk0/0xZIwslCFhXAgAnBhJEi/41/yEINP80/08CWUk0/0xZIwslCFhXAgAnBhJEi/41/zT/VxUIFyISRIv+Nf80/1cdCBciEkSL/jX/NP9XJQgXIhJEi/41/zT/Vy0IFyISRIv+Nf80/1c1CBciEkSL/jX/NP9XPQgXIhJEi/41/zT/IQVTIhJEi/41/zT/V0YIFyISRIv+Nf80/1dOCBciEkSL/jX/NP8hBlMiEkQri/9QSbxIi/6/iTYaAjYaAUkVJBJEiAACI0OKAgAxACcQZBJEK4v/UEm8SIv+v4k2GgcXNhoGFzYaBRc2GgRXAgA2GgNXAgA2GgJXAgA2GgEXiAACI0OKBwAoSYv/JwRkEkSL/ycNZUSMADEAiwASRIv/JwVlRIwBiwEiEkSxJbIQi/2yC4v8sj+L+7IMi/myDov6sg2L/rIKIrIBs4knDDYaAkkVIxJEFzYaAUkVJBJEiAAEULAjQ4oCAShHAov+IxJEK4v/UL1MSBRBAHcoKCcOi/4WVwcBiAKWKYgCkimIAo4qIklUiAKHJw+IAo8nD4gCiimIAnkpiAJ1KYgCcSmIAm0piAJpKYgCZScJSZMhBA5EJwesSRVJJAlMUogCUCcIiAJLKiJJVIgCRCmIAkApiAI8KiJJVIgCNUhQjACLAEIBVSuL/1CMASgoJw6L/hZXBwGIAhmLAb5ENf80/1cACBcWiAIJiwG+RDX/NP9XCAgXFogB+SoiiwG+RDX/NP+BgAFTVIgB54sBvkQ1/yEHNP80/08CWUk0/0xZIwslCFhXAgBJFRZXBgJMUIgBzYsBvkQ1/yEINP80/08CWUk0/0xZIwslCFhXAgBJFRZXBgJMUIgBposBvkQ1/zT/VxUIFxaIAYmLAb5ENf80/1cdCBcWiAF5iwG+RDX/NP9XJQgXFogBaYsBvkQ1/zT/Vy0IFxaIAVmLAb5ENf80/1c1CBcWiAFJiwG+RDX/NP9XPQgXFogBOScKSZMhBA5EJwesSRVJJAlMUogBJCcIiAEfKiKLAb5ENf80/yEFU1SIAQ6LAb5ENf80/1dGCBcWiAD+iwG+RDX/NP9XTggXFogA7ioiiwG+RDX/NP8hBlNUiADdSFCMAosCjABGAoknDDYaAxc2GgIXNhoBF4gABRZQsCNDigMBKEmL/ycEZBJEi/8nDWVEjACL/ycFZUSMAYsBIhJEMQCLABJEi/2L/jEAiAAHi/2MAEYBiYoDAIv+IhJBABOxI7IQi/+yB4v9sggisgGzQgAVsYEEshCL/7IUi/6yEYv9shIisgGziYAEuER7NjYaAI4B+y4AgATjv1wfgAToyO7ZgATVg6dZgASDklwXgARrFuhjgATLouldNhoAjgb7G/ur/Kj8zf08/z0AgARfyIWgNhoAjgH7YACKBAOL/Iv/UIv9i/6JigQDi/yL/lCM/Iv/SRWL/hcIFlcGAoz+i/1MUIz9i/yL/Yv+iQ==","clear":"Cg=="},"compilerInfo":{"compiler":"algod","compilerVersion":{"major":4,"minor":0,"patch":2,"commitHash":"6b940281"}}} as unknown as Arc56Contract
+export const APP_SPEC: Arc56Contract = {
+  name: 'BiatecIdentityProvider',
+  desc: '',
+  methods: [
+    {
+      name: 'createApplication',
+      desc: 'Initial setup',
+      args: [],
+      returns: { type: 'void' },
+      actions: { create: ['NoOp'], call: [] },
+    },
+    {
+      name: 'bootstrap',
+      desc: 'Biatec deploys single identity provider smart contract',
+      args: [
+        { name: 'appBiatecConfigProvider', type: 'uint64', desc: 'Biatec amm provider' },
+        { name: 'governor', type: 'address' },
+        { name: 'verificationSetter', type: 'address' },
+        { name: 'engagementSetter', type: 'address' },
+      ],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'updateApplication',
+      desc: 'addressUdpater from global biatec configuration is allowed to update application',
+      args: [
+        { name: 'appBiatecConfigProvider', type: 'uint64' },
+        { name: 'newVersion', type: 'byte[]' },
+      ],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['UpdateApplication'] },
+    },
+    {
+      name: 'selfRegistration',
+      args: [
+        { name: 'user', type: 'address' },
+        {
+          name: 'info',
+          type: '(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool)',
+          struct: 'IdentityInfo',
+        },
+      ],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'setInfo',
+      args: [
+        { name: 'user', type: 'address' },
+        {
+          name: 'info',
+          type: '(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool)',
+          struct: 'IdentityInfo',
+        },
+      ],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'sendOnlineKeyRegistration',
+      desc: 'addressExecutiveFee can perfom key registration for this LP pool\n\n\nOnly addressExecutiveFee is allowed to execute this method.',
+      args: [
+        { name: 'appBiatecConfigProvider', type: 'uint64' },
+        { name: 'votePK', type: 'byte[]' },
+        { name: 'selectionPK', type: 'byte[]' },
+        { name: 'stateProofPK', type: 'byte[]' },
+        { name: 'voteFirst', type: 'uint64' },
+        { name: 'voteLast', type: 'uint64' },
+        { name: 'voteKeyDilution', type: 'uint64' },
+      ],
+      returns: { type: 'void' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'getUser',
+      desc: 'Returns user information - fee multiplier, verification class, engagement class ..',
+      readonly: true,
+      args: [
+        { name: 'user', type: 'address', desc: 'Get info for specific user address' },
+        { name: 'v', type: 'uint8', desc: 'Version of the data structure to return' },
+      ],
+      returns: {
+        type: '(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)',
+        struct: 'UserInfoV1',
+      },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'getUserShort',
+      desc: 'Returns short user information - fee multiplier, verification class, engagement class ..',
+      readonly: true,
+      args: [
+        { name: 'user', type: 'address', desc: 'Get info for specific user address' },
+        { name: 'v', type: 'uint8', desc: 'Version of the data structure to return' },
+      ],
+      returns: { type: '(uint8,uint64,uint64,uint64,bool)', struct: 'UserInfoShortV1' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+    {
+      name: 'withdrawExcessAssets',
+      desc: 'If someone deposits excess assets to this smart contract biatec can use them.\n\n\nOnly addressExecutiveFee is allowed to execute this method.',
+      args: [
+        {
+          name: 'appBiatecConfigProvider',
+          type: 'uint64',
+          desc: 'Biatec config app. Only addressExecutiveFee is allowed to execute this method.',
+        },
+        { name: 'asset', type: 'uint64', desc: 'Asset to withdraw. If native token, then zero' },
+        { name: 'amount', type: 'uint64', desc: 'Amount of the asset to be withdrawn' },
+      ],
+      returns: { type: 'uint64' },
+      actions: { create: [], call: ['NoOp'] },
+    },
+  ],
+  arcs: [4, 56],
+  structs: {
+    IdentityInfo: [
+      { name: 'verificationClass', type: 'uint64' },
+      { name: 'isLocked', type: 'bool' },
+      { name: 'feeMultiplier', type: 'uint64' },
+      { name: 'feeMultiplierBase', type: 'uint64' },
+      { name: 'kycExpiration', type: 'uint64' },
+      { name: 'investorForExpiration', type: 'uint64' },
+      { name: 'verificationStatus', type: 'uint64' },
+      { name: 'isCompany', type: 'bool' },
+      { name: 'personUuid', type: 'string' },
+      { name: 'legalEntityUuid', type: 'string' },
+      { name: 'biatecEngagementPoints', type: 'uint64' },
+      { name: 'biatecEngagementRank', type: 'uint64' },
+      { name: 'avmEngagementPoints', type: 'uint64' },
+      { name: 'avmEngagementRank', type: 'uint64' },
+      { name: 'tradingEngagementPoints', type: 'uint64' },
+      { name: 'tradingEngagementRank', type: 'uint64' },
+      { name: 'isProfessionalInvestor', type: 'bool' },
+    ],
+    UserInfoV1: [
+      { name: 'version', type: 'uint8' },
+      { name: 'verificationStatus', type: 'uint64' },
+      { name: 'verificationClass', type: 'uint64' },
+      { name: 'isCompany', type: 'bool' },
+      { name: 'personUuid', type: 'string' },
+      { name: 'legalEntityUuid', type: 'string' },
+      { name: 'biatecEngagementPoints', type: 'uint64' },
+      { name: 'biatecEngagementRank', type: 'uint64' },
+      { name: 'avmEngagementPoints', type: 'uint64' },
+      { name: 'avmEngagementRank', type: 'uint64' },
+      { name: 'tradingEngagementPoints', type: 'uint64' },
+      { name: 'tradingEngagementRank', type: 'uint64' },
+      { name: 'feeMultiplier', type: 'uint64' },
+      { name: 'base', type: 'uint64' },
+      { name: 'isLocked', type: 'bool' },
+      { name: 'kycExpiration', type: 'uint64' },
+      { name: 'investorForExpiration', type: 'uint64' },
+      { name: 'isProfessionalInvestor', type: 'bool' },
+    ],
+    UserInfoShortV1: [
+      { name: 'version', type: 'uint8' },
+      { name: 'verificationClass', type: 'uint64' },
+      { name: 'feeMultiplier', type: 'uint64' },
+      { name: 'base', type: 'uint64' },
+      { name: 'isLocked', type: 'bool' },
+    ],
+  },
+  state: {
+    schema: { global: { bytes: 4, ints: 1 }, local: { bytes: 0, ints: 0 } },
+    keys: {
+      global: {
+        governor: { key: 'Zw==', keyType: 'AVMBytes', valueType: 'address' },
+        verificationSetter: { key: 'dg==', keyType: 'AVMBytes', valueType: 'address' },
+        engagementSetter: { key: 'ZQ==', keyType: 'AVMBytes', valueType: 'address' },
+        appBiatecConfigProvider: { key: 'Qg==', keyType: 'AVMBytes', valueType: 'uint64' },
+        version: { key: 'c2N2ZXI=', keyType: 'AVMBytes', valueType: 'AVMBytes' },
+      },
+      local: {},
+      box: {},
+    },
+    maps: {
+      global: {},
+      local: {},
+      box: { identities: { keyType: 'address', valueType: 'IdentityInfo', prefix: 'aQ==' } },
+    },
+  },
+  bareActions: { create: [], call: [] },
+  sourceInfo: {
+    approval: {
+      sourceInfo: [
+        { teal: 1, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [0] },
+        {
+          teal: 2,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          pc: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+        },
+        {
+          teal: 3,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          pc: [
+            17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43,
+            44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70,
+            71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97,
+            98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113,
+          ],
+        },
+        { teal: 15, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [114, 115] },
+        { teal: 16, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [116] },
+        { teal: 17, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [117, 118] },
+        { teal: 18, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [119] },
+        { teal: 19, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [120, 121] },
+        { teal: 20, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [122] },
+        {
+          teal: 21,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          pc: [
+            123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+            144, 145, 146, 147, 148,
+          ],
+        },
+        {
+          teal: 25,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          errorMessage:
+            'The requested action is not implemented in this contract. Are you using the correct OnComplete? Did you set your app ID?',
+          pc: [149],
+        },
+        { teal: 30, source: 'contracts\\BiatecIdentityProvider.algo.ts:206', pc: [150, 151, 152] },
+        { teal: 31, source: 'contracts\\BiatecIdentityProvider.algo.ts:206', pc: [153] },
+        { teal: 32, source: 'contracts\\BiatecIdentityProvider.algo.ts:206', pc: [154] },
+        { teal: 38, source: 'contracts\\BiatecIdentityProvider.algo.ts:206', pc: [155, 156, 157] },
+        { teal: 42, source: 'contracts\\BiatecIdentityProvider.algo.ts:207', pc: [158, 159] },
+        {
+          teal: 43,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:207',
+          pc: [
+            160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180,
+            181, 182,
+          ],
+        },
+        { teal: 44, source: 'contracts\\BiatecIdentityProvider.algo.ts:207', pc: [183] },
+        { teal: 45, source: 'contracts\\BiatecIdentityProvider.algo.ts:206', pc: [184] },
+        { teal: 50, source: 'contracts\\BiatecIdentityProvider.algo.ts:218', pc: [185, 186, 187] },
+        { teal: 51, source: 'contracts\\BiatecIdentityProvider.algo.ts:218', pc: [188] },
+        { teal: 52, source: 'contracts\\BiatecIdentityProvider.algo.ts:218', pc: [189] },
+        { teal: 53, source: 'contracts\\BiatecIdentityProvider.algo.ts:218', pc: [190] },
+        { teal: 54, source: 'contracts\\BiatecIdentityProvider.algo.ts:218', pc: [191] },
+        {
+          teal: 57,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:218',
+          errorMessage: 'argument 0 (engagementSetter) for bootstrap must be a address',
+          pc: [192],
+        },
+        { teal: 60, source: 'contracts\\BiatecIdentityProvider.algo.ts:217', pc: [193, 194, 195] },
+        { teal: 61, source: 'contracts\\BiatecIdentityProvider.algo.ts:217', pc: [196] },
+        { teal: 62, source: 'contracts\\BiatecIdentityProvider.algo.ts:217', pc: [197] },
+        { teal: 63, source: 'contracts\\BiatecIdentityProvider.algo.ts:217', pc: [198] },
+        { teal: 64, source: 'contracts\\BiatecIdentityProvider.algo.ts:217', pc: [199] },
+        {
+          teal: 67,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:217',
+          errorMessage: 'argument 1 (verificationSetter) for bootstrap must be a address',
+          pc: [200],
+        },
+        { teal: 70, source: 'contracts\\BiatecIdentityProvider.algo.ts:216', pc: [201, 202, 203] },
+        { teal: 71, source: 'contracts\\BiatecIdentityProvider.algo.ts:216', pc: [204] },
+        { teal: 72, source: 'contracts\\BiatecIdentityProvider.algo.ts:216', pc: [205] },
+        { teal: 73, source: 'contracts\\BiatecIdentityProvider.algo.ts:216', pc: [206] },
+        { teal: 74, source: 'contracts\\BiatecIdentityProvider.algo.ts:216', pc: [207] },
+        {
+          teal: 77,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:216',
+          errorMessage: 'argument 2 (governor) for bootstrap must be a address',
+          pc: [208],
+        },
+        { teal: 80, source: 'contracts\\BiatecIdentityProvider.algo.ts:215', pc: [209, 210, 211] },
+        { teal: 81, source: 'contracts\\BiatecIdentityProvider.algo.ts:215', pc: [212] },
+        { teal: 84, source: 'contracts\\BiatecIdentityProvider.algo.ts:214', pc: [213, 214, 215] },
+        { teal: 85, source: 'contracts\\BiatecIdentityProvider.algo.ts:214', pc: [216] },
+        { teal: 86, source: 'contracts\\BiatecIdentityProvider.algo.ts:214', pc: [217] },
+        { teal: 93, source: 'contracts\\BiatecIdentityProvider.algo.ts:214', pc: [218, 219, 220] },
+        { teal: 96, source: 'contracts\\BiatecIdentityProvider.algo.ts:214', pc: [221] },
+        { teal: 100, source: 'contracts\\BiatecIdentityProvider.algo.ts:220', pc: [222, 223] },
+        { teal: 101, source: 'contracts\\BiatecIdentityProvider.algo.ts:220', pc: [224, 225, 226] },
+        { teal: 102, source: 'contracts\\BiatecIdentityProvider.algo.ts:220', pc: [227, 228] },
+        { teal: 103, source: 'contracts\\BiatecIdentityProvider.algo.ts:220', pc: [229] },
+        { teal: 104, source: 'contracts\\BiatecIdentityProvider.algo.ts:220', pc: [230] },
+        {
+          teal: 107,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:220',
+          errorMessage: 'Only creator of the app can set it up',
+          pc: [231],
+        },
+        { teal: 111, source: 'contracts\\BiatecIdentityProvider.algo.ts:221', pc: [232, 233] },
+        { teal: 112, source: 'contracts\\BiatecIdentityProvider.algo.ts:221', pc: [234, 235] },
+        { teal: 113, source: 'contracts\\BiatecIdentityProvider.algo.ts:221', pc: [236] },
+        { teal: 117, source: 'contracts\\BiatecIdentityProvider.algo.ts:222', pc: [237, 238, 239] },
+        { teal: 118, source: 'contracts\\BiatecIdentityProvider.algo.ts:222', pc: [240, 241] },
+        { teal: 119, source: 'contracts\\BiatecIdentityProvider.algo.ts:222', pc: [242] },
+        { teal: 123, source: 'contracts\\BiatecIdentityProvider.algo.ts:223', pc: [243, 244, 245] },
+        { teal: 124, source: 'contracts\\BiatecIdentityProvider.algo.ts:223', pc: [246, 247] },
+        { teal: 125, source: 'contracts\\BiatecIdentityProvider.algo.ts:223', pc: [248] },
+        { teal: 129, source: 'contracts\\BiatecIdentityProvider.algo.ts:224', pc: [249, 250] },
+        { teal: 130, source: 'contracts\\BiatecIdentityProvider.algo.ts:224', pc: [251, 252] },
+        { teal: 131, source: 'contracts\\BiatecIdentityProvider.algo.ts:224', pc: [253] },
+        { teal: 135, source: 'contracts\\BiatecIdentityProvider.algo.ts:226', pc: [254, 255] },
+        { teal: 136, source: 'contracts\\BiatecIdentityProvider.algo.ts:226', pc: [256, 257] },
+        { teal: 137, source: 'contracts\\BiatecIdentityProvider.algo.ts:226', pc: [258] },
+        {
+          teal: 140,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:226',
+          errorMessage: "global state value does not exist: appBiatecConfigProvider.globalState('s')",
+          pc: [259],
+        },
+        { teal: 141, source: 'contracts\\BiatecIdentityProvider.algo.ts:226', pc: [260, 261] },
+        { teal: 145, source: 'contracts\\BiatecIdentityProvider.algo.ts:227', pc: [262, 263] },
+        { teal: 146, source: 'contracts\\BiatecIdentityProvider.algo.ts:227', pc: [264] },
+        { teal: 147, source: 'contracts\\BiatecIdentityProvider.algo.ts:227', pc: [265] },
+        { teal: 150, source: 'contracts\\BiatecIdentityProvider.algo.ts:227', errorMessage: 'ERR_PAUSED', pc: [266] },
+        { teal: 151, source: 'contracts\\BiatecIdentityProvider.algo.ts:214', pc: [267] },
+        { teal: 156, source: 'contracts\\BiatecIdentityProvider.algo.ts:233', pc: [268, 269, 270] },
+        { teal: 157, source: 'contracts\\BiatecIdentityProvider.algo.ts:233', pc: [271, 272, 273] },
+        { teal: 160, source: 'contracts\\BiatecIdentityProvider.algo.ts:233', pc: [274, 275, 276] },
+        { teal: 161, source: 'contracts\\BiatecIdentityProvider.algo.ts:233', pc: [277] },
+        { teal: 164, source: 'contracts\\BiatecIdentityProvider.algo.ts:233', pc: [278, 279, 280] },
+        { teal: 165, source: 'contracts\\BiatecIdentityProvider.algo.ts:233', pc: [281] },
+        { teal: 166, source: 'contracts\\BiatecIdentityProvider.algo.ts:233', pc: [282] },
+        { teal: 172, source: 'contracts\\BiatecIdentityProvider.algo.ts:233', pc: [283, 284, 285] },
+        { teal: 175, source: 'contracts\\BiatecIdentityProvider.algo.ts:233', pc: [286] },
+        { teal: 176, source: 'contracts\\BiatecIdentityProvider.algo.ts:233', pc: [287] },
+        { teal: 180, source: 'contracts\\BiatecIdentityProvider.algo.ts:234', pc: [288, 289] },
+        { teal: 181, source: 'contracts\\BiatecIdentityProvider.algo.ts:234', pc: [290, 291] },
+        { teal: 182, source: 'contracts\\BiatecIdentityProvider.algo.ts:234', pc: [292] },
+        { teal: 183, source: 'contracts\\BiatecIdentityProvider.algo.ts:234', pc: [293] },
+        {
+          teal: 186,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:234',
+          errorMessage: 'Configuration app does not match',
+          pc: [294],
+        },
+        { teal: 190, source: 'contracts\\BiatecIdentityProvider.algo.ts:235', pc: [295, 296] },
+        { teal: 191, source: 'contracts\\BiatecIdentityProvider.algo.ts:235', pc: [297, 298, 299] },
+        { teal: 192, source: 'contracts\\BiatecIdentityProvider.algo.ts:235', pc: [300] },
+        {
+          teal: 195,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:235',
+          errorMessage: "global state value does not exist: appBiatecConfigProvider.globalState('u')",
+          pc: [301],
+        },
+        { teal: 196, source: 'contracts\\BiatecIdentityProvider.algo.ts:235', pc: [302, 303] },
+        { teal: 200, source: 'contracts\\BiatecIdentityProvider.algo.ts:236', pc: [304, 305] },
+        { teal: 201, source: 'contracts\\BiatecIdentityProvider.algo.ts:236', pc: [306, 307] },
+        { teal: 202, source: 'contracts\\BiatecIdentityProvider.algo.ts:236', pc: [308] },
+        {
+          teal: 205,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:236',
+          errorMessage: 'Only addressUdpater setup in the config can update application',
+          pc: [309],
+        },
+        { teal: 209, source: 'contracts\\BiatecIdentityProvider.algo.ts:237', pc: [310, 311] },
+        { teal: 210, source: 'contracts\\BiatecIdentityProvider.algo.ts:237', pc: [312, 313] },
+        { teal: 211, source: 'contracts\\BiatecIdentityProvider.algo.ts:237', pc: [314] },
+        {
+          teal: 214,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:237',
+          errorMessage: "global state value does not exist: appBiatecConfigProvider.globalState('s')",
+          pc: [315],
+        },
+        { teal: 215, source: 'contracts\\BiatecIdentityProvider.algo.ts:237', pc: [316, 317] },
+        { teal: 219, source: 'contracts\\BiatecIdentityProvider.algo.ts:238', pc: [318, 319] },
+        { teal: 220, source: 'contracts\\BiatecIdentityProvider.algo.ts:238', pc: [320] },
+        { teal: 221, source: 'contracts\\BiatecIdentityProvider.algo.ts:238', pc: [321] },
+        { teal: 224, source: 'contracts\\BiatecIdentityProvider.algo.ts:238', errorMessage: 'ERR_PAUSED', pc: [322] },
+        { teal: 228, source: 'contracts\\BiatecIdentityProvider.algo.ts:239', pc: [323, 324] },
+        { teal: 229, source: 'contracts\\BiatecIdentityProvider.algo.ts:239', pc: [325, 326] },
+        { teal: 230, source: 'contracts\\BiatecIdentityProvider.algo.ts:239', pc: [327] },
+        { teal: 231, source: 'contracts\\BiatecIdentityProvider.algo.ts:233', pc: [328] },
+        { teal: 236, source: 'contracts\\BiatecIdentityProvider.algo.ts:242', pc: [329, 330, 331] },
+        { teal: 239, source: 'contracts\\BiatecIdentityProvider.algo.ts:242', pc: [332, 333, 334] },
+        { teal: 240, source: 'contracts\\BiatecIdentityProvider.algo.ts:242', pc: [335] },
+        { teal: 241, source: 'contracts\\BiatecIdentityProvider.algo.ts:242', pc: [336] },
+        { teal: 242, source: 'contracts\\BiatecIdentityProvider.algo.ts:242', pc: [337] },
+        { teal: 243, source: 'contracts\\BiatecIdentityProvider.algo.ts:242', pc: [338] },
+        {
+          teal: 246,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:242',
+          errorMessage: 'argument 1 (user) for selfRegistration must be a address',
+          pc: [339],
+        },
+        { teal: 249, source: 'contracts\\BiatecIdentityProvider.algo.ts:242', pc: [340, 341, 342] },
+        { teal: 250, source: 'contracts\\BiatecIdentityProvider.algo.ts:242', pc: [343] },
+        { teal: 251, source: 'contracts\\BiatecIdentityProvider.algo.ts:242', pc: [344] },
+        { teal: 255, source: 'contracts\\BiatecIdentityProvider.algo.ts:242', pc: [345, 346, 347] },
+        { teal: 259, source: 'contracts\\BiatecIdentityProvider.algo.ts:243', pc: [348] },
+        { teal: 260, source: 'contracts\\BiatecIdentityProvider.algo.ts:243', pc: [349, 350] },
+        { teal: 261, source: 'contracts\\BiatecIdentityProvider.algo.ts:243', pc: [351] },
+        { teal: 262, source: 'contracts\\BiatecIdentityProvider.algo.ts:243', pc: [352] },
+        { teal: 263, source: 'contracts\\BiatecIdentityProvider.algo.ts:243', pc: [353] },
+        { teal: 264, source: 'contracts\\BiatecIdentityProvider.algo.ts:243', pc: [354] },
+        { teal: 265, source: 'contracts\\BiatecIdentityProvider.algo.ts:243', pc: [355] },
+        {
+          teal: 268,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:243',
+          errorMessage: 'Self registration cannot be executed if address is already registered',
+          pc: [356],
+        },
+        { teal: 272, source: 'contracts\\BiatecIdentityProvider.algo.ts:246', pc: [357, 358] },
+        { teal: 273, source: 'contracts\\BiatecIdentityProvider.algo.ts:246', pc: [359, 360] },
+        { teal: 274, source: 'contracts\\BiatecIdentityProvider.algo.ts:246', pc: [361, 362] },
+        { teal: 275, source: 'contracts\\BiatecIdentityProvider.algo.ts:246', pc: [363, 364, 365] },
+        { teal: 276, source: 'contracts\\BiatecIdentityProvider.algo.ts:246', pc: [366] },
+        { teal: 277, source: 'contracts\\BiatecIdentityProvider.algo.ts:246', pc: [367] },
+        { teal: 278, source: 'contracts\\BiatecIdentityProvider.algo.ts:246', pc: [368] },
+        {
+          teal: 281,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:246',
+          errorMessage: 'Verification status must be empty',
+          pc: [369],
+        },
+        { teal: 285, source: 'contracts\\BiatecIdentityProvider.algo.ts:248', pc: [370, 371] },
+        { teal: 286, source: 'contracts\\BiatecIdentityProvider.algo.ts:248', pc: [372, 373] },
+        { teal: 287, source: 'contracts\\BiatecIdentityProvider.algo.ts:248', pc: [374, 375] },
+        { teal: 288, source: 'contracts\\BiatecIdentityProvider.algo.ts:248', pc: [376, 377, 378] },
+        { teal: 289, source: 'contracts\\BiatecIdentityProvider.algo.ts:248', pc: [379] },
+        { teal: 290, source: 'contracts\\BiatecIdentityProvider.algo.ts:248', pc: [380] },
+        { teal: 291, source: 'contracts\\BiatecIdentityProvider.algo.ts:248', pc: [381] },
+        {
+          teal: 294,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:248',
+          errorMessage: 'verificationClass must equal to 0',
+          pc: [382],
+        },
+        { teal: 301, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [383, 384] },
+        { teal: 302, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [385, 386] },
+        { teal: 303, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [387, 388] },
+        { teal: 304, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [389, 390] },
+        { teal: 305, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [391, 392] },
+        { teal: 306, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [393, 394] },
+        { teal: 307, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [395] },
+        { teal: 308, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [396] },
+        { teal: 309, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [397, 398] },
+        { teal: 310, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [399] },
+        { teal: 311, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [400] },
+        { teal: 312, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [401] },
+        { teal: 313, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [402] },
+        { teal: 314, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [403] },
+        { teal: 315, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [404] },
+        { teal: 316, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [405] },
+        { teal: 317, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [406, 407, 408] },
+        { teal: 318, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [409, 410] },
+        { teal: 319, source: 'contracts\\BiatecIdentityProvider.algo.ts:252', pc: [411] },
+        {
+          teal: 322,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:251',
+          errorMessage: 'personUUID must equal to 00000000-0000-0000-0000-000000000000',
+          pc: [412],
+        },
+        { teal: 329, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [413, 414] },
+        { teal: 330, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [415, 416] },
+        { teal: 331, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [417, 418] },
+        { teal: 332, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [419, 420] },
+        { teal: 333, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [421, 422] },
+        { teal: 334, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [423, 424] },
+        { teal: 335, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [425] },
+        { teal: 336, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [426] },
+        { teal: 337, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [427, 428] },
+        { teal: 338, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [429] },
+        { teal: 339, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [430] },
+        { teal: 340, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [431] },
+        { teal: 341, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [432] },
+        { teal: 342, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [433] },
+        { teal: 343, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [434] },
+        { teal: 344, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [435] },
+        { teal: 345, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [436, 437, 438] },
+        { teal: 346, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [439, 440] },
+        { teal: 347, source: 'contracts\\BiatecIdentityProvider.algo.ts:257', pc: [441] },
+        {
+          teal: 350,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:256',
+          errorMessage: 'legalEntityUUID must equal to 00000000-0000-0000-0000-000000000000',
+          pc: [442],
+        },
+        { teal: 354, source: 'contracts\\BiatecIdentityProvider.algo.ts:261', pc: [443, 444] },
+        { teal: 355, source: 'contracts\\BiatecIdentityProvider.algo.ts:261', pc: [445, 446] },
+        { teal: 356, source: 'contracts\\BiatecIdentityProvider.algo.ts:261', pc: [447, 448] },
+        { teal: 357, source: 'contracts\\BiatecIdentityProvider.algo.ts:261', pc: [449, 450, 451] },
+        { teal: 358, source: 'contracts\\BiatecIdentityProvider.algo.ts:261', pc: [452] },
+        { teal: 359, source: 'contracts\\BiatecIdentityProvider.algo.ts:261', pc: [453] },
+        { teal: 360, source: 'contracts\\BiatecIdentityProvider.algo.ts:261', pc: [454] },
+        {
+          teal: 363,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:261',
+          errorMessage: 'biatecEngagementPoints must equal to 0',
+          pc: [455],
+        },
+        { teal: 367, source: 'contracts\\BiatecIdentityProvider.algo.ts:263', pc: [456, 457] },
+        { teal: 368, source: 'contracts\\BiatecIdentityProvider.algo.ts:263', pc: [458, 459] },
+        { teal: 369, source: 'contracts\\BiatecIdentityProvider.algo.ts:263', pc: [460, 461] },
+        { teal: 370, source: 'contracts\\BiatecIdentityProvider.algo.ts:263', pc: [462, 463, 464] },
+        { teal: 371, source: 'contracts\\BiatecIdentityProvider.algo.ts:263', pc: [465] },
+        { teal: 372, source: 'contracts\\BiatecIdentityProvider.algo.ts:263', pc: [466] },
+        { teal: 373, source: 'contracts\\BiatecIdentityProvider.algo.ts:263', pc: [467] },
+        {
+          teal: 376,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:263',
+          errorMessage: 'biatecEngagementRank must equal to 0',
+          pc: [468],
+        },
+        { teal: 380, source: 'contracts\\BiatecIdentityProvider.algo.ts:265', pc: [469, 470] },
+        { teal: 381, source: 'contracts\\BiatecIdentityProvider.algo.ts:265', pc: [471, 472] },
+        { teal: 382, source: 'contracts\\BiatecIdentityProvider.algo.ts:265', pc: [473, 474] },
+        { teal: 383, source: 'contracts\\BiatecIdentityProvider.algo.ts:265', pc: [475, 476, 477] },
+        { teal: 384, source: 'contracts\\BiatecIdentityProvider.algo.ts:265', pc: [478] },
+        { teal: 385, source: 'contracts\\BiatecIdentityProvider.algo.ts:265', pc: [479] },
+        { teal: 386, source: 'contracts\\BiatecIdentityProvider.algo.ts:265', pc: [480] },
+        {
+          teal: 389,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:265',
+          errorMessage: 'avmEngagementPoints must equal to 0',
+          pc: [481],
+        },
+        { teal: 393, source: 'contracts\\BiatecIdentityProvider.algo.ts:267', pc: [482, 483] },
+        { teal: 394, source: 'contracts\\BiatecIdentityProvider.algo.ts:267', pc: [484, 485] },
+        { teal: 395, source: 'contracts\\BiatecIdentityProvider.algo.ts:267', pc: [486, 487] },
+        { teal: 396, source: 'contracts\\BiatecIdentityProvider.algo.ts:267', pc: [488, 489, 490] },
+        { teal: 397, source: 'contracts\\BiatecIdentityProvider.algo.ts:267', pc: [491] },
+        { teal: 398, source: 'contracts\\BiatecIdentityProvider.algo.ts:267', pc: [492] },
+        { teal: 399, source: 'contracts\\BiatecIdentityProvider.algo.ts:267', pc: [493] },
+        {
+          teal: 402,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:267',
+          errorMessage: 'avmEngagementRank must equal to 0',
+          pc: [494],
+        },
+        { teal: 406, source: 'contracts\\BiatecIdentityProvider.algo.ts:269', pc: [495, 496] },
+        { teal: 407, source: 'contracts\\BiatecIdentityProvider.algo.ts:269', pc: [497, 498] },
+        { teal: 408, source: 'contracts\\BiatecIdentityProvider.algo.ts:269', pc: [499, 500] },
+        { teal: 409, source: 'contracts\\BiatecIdentityProvider.algo.ts:269', pc: [501, 502, 503] },
+        { teal: 410, source: 'contracts\\BiatecIdentityProvider.algo.ts:269', pc: [504] },
+        { teal: 411, source: 'contracts\\BiatecIdentityProvider.algo.ts:269', pc: [505] },
+        { teal: 412, source: 'contracts\\BiatecIdentityProvider.algo.ts:269', pc: [506] },
+        {
+          teal: 415,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:269',
+          errorMessage: 'tradingEngagementPoints must equal to 0',
+          pc: [507],
+        },
+        { teal: 419, source: 'contracts\\BiatecIdentityProvider.algo.ts:271', pc: [508, 509] },
+        { teal: 420, source: 'contracts\\BiatecIdentityProvider.algo.ts:271', pc: [510, 511] },
+        { teal: 421, source: 'contracts\\BiatecIdentityProvider.algo.ts:271', pc: [512, 513] },
+        { teal: 422, source: 'contracts\\BiatecIdentityProvider.algo.ts:271', pc: [514, 515, 516] },
+        { teal: 423, source: 'contracts\\BiatecIdentityProvider.algo.ts:271', pc: [517] },
+        { teal: 424, source: 'contracts\\BiatecIdentityProvider.algo.ts:271', pc: [518] },
+        { teal: 425, source: 'contracts\\BiatecIdentityProvider.algo.ts:271', pc: [519] },
+        {
+          teal: 428,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:271',
+          errorMessage: 'tradingEngagementRank must equal to 0',
+          pc: [520],
+        },
+        { teal: 432, source: 'contracts\\BiatecIdentityProvider.algo.ts:273', pc: [521, 522] },
+        { teal: 433, source: 'contracts\\BiatecIdentityProvider.algo.ts:273', pc: [523, 524] },
+        { teal: 434, source: 'contracts\\BiatecIdentityProvider.algo.ts:273', pc: [525, 526] },
+        { teal: 435, source: 'contracts\\BiatecIdentityProvider.algo.ts:273', pc: [527, 528] },
+        { teal: 436, source: 'contracts\\BiatecIdentityProvider.algo.ts:273', pc: [529] },
+        { teal: 437, source: 'contracts\\BiatecIdentityProvider.algo.ts:273', pc: [530] },
+        { teal: 438, source: 'contracts\\BiatecIdentityProvider.algo.ts:273', pc: [531] },
+        {
+          teal: 441,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:273',
+          errorMessage: 'isLocked must equal to false',
+          pc: [532],
+        },
+        { teal: 445, source: 'contracts\\BiatecIdentityProvider.algo.ts:275', pc: [533, 534] },
+        { teal: 446, source: 'contracts\\BiatecIdentityProvider.algo.ts:275', pc: [535, 536] },
+        { teal: 447, source: 'contracts\\BiatecIdentityProvider.algo.ts:275', pc: [537, 538] },
+        { teal: 448, source: 'contracts\\BiatecIdentityProvider.algo.ts:275', pc: [539, 540, 541] },
+        { teal: 449, source: 'contracts\\BiatecIdentityProvider.algo.ts:275', pc: [542] },
+        { teal: 450, source: 'contracts\\BiatecIdentityProvider.algo.ts:275', pc: [543] },
+        { teal: 451, source: 'contracts\\BiatecIdentityProvider.algo.ts:275', pc: [544] },
+        {
+          teal: 454,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:275',
+          errorMessage: 'kycExpiration must equal to 0',
+          pc: [545],
+        },
+        { teal: 458, source: 'contracts\\BiatecIdentityProvider.algo.ts:277', pc: [546, 547] },
+        { teal: 459, source: 'contracts\\BiatecIdentityProvider.algo.ts:277', pc: [548, 549] },
+        { teal: 460, source: 'contracts\\BiatecIdentityProvider.algo.ts:277', pc: [550, 551] },
+        { teal: 461, source: 'contracts\\BiatecIdentityProvider.algo.ts:277', pc: [552, 553, 554] },
+        { teal: 462, source: 'contracts\\BiatecIdentityProvider.algo.ts:277', pc: [555] },
+        { teal: 463, source: 'contracts\\BiatecIdentityProvider.algo.ts:277', pc: [556] },
+        { teal: 464, source: 'contracts\\BiatecIdentityProvider.algo.ts:277', pc: [557] },
+        {
+          teal: 467,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:277',
+          errorMessage: 'investorForExpiration must equal to 0',
+          pc: [558],
+        },
+        { teal: 471, source: 'contracts\\BiatecIdentityProvider.algo.ts:279', pc: [559, 560] },
+        { teal: 472, source: 'contracts\\BiatecIdentityProvider.algo.ts:279', pc: [561, 562] },
+        { teal: 473, source: 'contracts\\BiatecIdentityProvider.algo.ts:279', pc: [563, 564] },
+        { teal: 474, source: 'contracts\\BiatecIdentityProvider.algo.ts:279', pc: [565, 566] },
+        { teal: 475, source: 'contracts\\BiatecIdentityProvider.algo.ts:279', pc: [567] },
+        { teal: 476, source: 'contracts\\BiatecIdentityProvider.algo.ts:279', pc: [568] },
+        { teal: 477, source: 'contracts\\BiatecIdentityProvider.algo.ts:279', pc: [569] },
+        {
+          teal: 480,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:279',
+          errorMessage: 'isProfessionalInvestor must equal to false',
+          pc: [570],
+        },
+        { teal: 484, source: 'contracts\\BiatecIdentityProvider.algo.ts:281', pc: [571, 572] },
+        { teal: 485, source: 'contracts\\BiatecIdentityProvider.algo.ts:281', pc: [573, 574] },
+        { teal: 486, source: 'contracts\\BiatecIdentityProvider.algo.ts:281', pc: [575, 576] },
+        { teal: 487, source: 'contracts\\BiatecIdentityProvider.algo.ts:281', pc: [577, 578, 579] },
+        { teal: 488, source: 'contracts\\BiatecIdentityProvider.algo.ts:281', pc: [580] },
+        { teal: 489, source: 'contracts\\BiatecIdentityProvider.algo.ts:281', pc: [581, 582] },
+        { teal: 490, source: 'contracts\\BiatecIdentityProvider.algo.ts:281', pc: [583] },
+        {
+          teal: 493,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:281',
+          errorMessage: 'FeeMultiplierBase must be set properly',
+          pc: [584],
+        },
+        { teal: 497, source: 'contracts\\BiatecIdentityProvider.algo.ts:282', pc: [585, 586] },
+        { teal: 498, source: 'contracts\\BiatecIdentityProvider.algo.ts:282', pc: [587, 588] },
+        { teal: 499, source: 'contracts\\BiatecIdentityProvider.algo.ts:282', pc: [589, 590] },
+        { teal: 500, source: 'contracts\\BiatecIdentityProvider.algo.ts:282', pc: [591, 592, 593] },
+        { teal: 501, source: 'contracts\\BiatecIdentityProvider.algo.ts:282', pc: [594] },
+        { teal: 502, source: 'contracts\\BiatecIdentityProvider.algo.ts:282', pc: [595, 596, 597, 598, 599, 600] },
+        { teal: 503, source: 'contracts\\BiatecIdentityProvider.algo.ts:282', pc: [601] },
+        {
+          teal: 506,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:282',
+          errorMessage: 'Initial fee multiplier must be set to 2 * SCALE',
+          pc: [602],
+        },
+        { teal: 510, source: 'contracts\\BiatecIdentityProvider.algo.ts:283', pc: [603] },
+        { teal: 511, source: 'contracts\\BiatecIdentityProvider.algo.ts:283', pc: [604, 605] },
+        { teal: 512, source: 'contracts\\BiatecIdentityProvider.algo.ts:283', pc: [606] },
+        { teal: 513, source: 'contracts\\BiatecIdentityProvider.algo.ts:283', pc: [607] },
+        { teal: 514, source: 'contracts\\BiatecIdentityProvider.algo.ts:283', pc: [608] },
+        { teal: 515, source: 'contracts\\BiatecIdentityProvider.algo.ts:283', pc: [609] },
+        { teal: 516, source: 'contracts\\BiatecIdentityProvider.algo.ts:283', pc: [610, 611] },
+        { teal: 517, source: 'contracts\\BiatecIdentityProvider.algo.ts:283', pc: [612] },
+        { teal: 518, source: 'contracts\\BiatecIdentityProvider.algo.ts:242', pc: [613] },
+        { teal: 523, source: 'contracts\\BiatecIdentityProvider.algo.ts:286', pc: [614, 615, 616] },
+        { teal: 526, source: 'contracts\\BiatecIdentityProvider.algo.ts:286', pc: [617, 618, 619] },
+        { teal: 527, source: 'contracts\\BiatecIdentityProvider.algo.ts:286', pc: [620] },
+        { teal: 528, source: 'contracts\\BiatecIdentityProvider.algo.ts:286', pc: [621] },
+        { teal: 529, source: 'contracts\\BiatecIdentityProvider.algo.ts:286', pc: [622] },
+        { teal: 530, source: 'contracts\\BiatecIdentityProvider.algo.ts:286', pc: [623] },
+        {
+          teal: 533,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:286',
+          errorMessage: 'argument 1 (user) for setInfo must be a address',
+          pc: [624],
+        },
+        { teal: 536, source: 'contracts\\BiatecIdentityProvider.algo.ts:286', pc: [625, 626, 627] },
+        { teal: 537, source: 'contracts\\BiatecIdentityProvider.algo.ts:286', pc: [628] },
+        { teal: 538, source: 'contracts\\BiatecIdentityProvider.algo.ts:286', pc: [629] },
+        { teal: 542, source: 'contracts\\BiatecIdentityProvider.algo.ts:286', pc: [630, 631, 632] },
+        { teal: 546, source: 'contracts\\BiatecIdentityProvider.algo.ts:287', pc: [633, 634] },
+        { teal: 547, source: 'contracts\\BiatecIdentityProvider.algo.ts:287', pc: [635, 636] },
+        { teal: 548, source: 'contracts\\BiatecIdentityProvider.algo.ts:287', pc: [637] },
+        { teal: 549, source: 'contracts\\BiatecIdentityProvider.algo.ts:287', pc: [638] },
+        { teal: 550, source: 'contracts\\BiatecIdentityProvider.algo.ts:287', pc: [639] },
+        { teal: 554, source: 'contracts\\BiatecIdentityProvider.algo.ts:288', pc: [640, 641] },
+        { teal: 555, source: 'contracts\\BiatecIdentityProvider.algo.ts:288', pc: [642, 643] },
+        { teal: 556, source: 'contracts\\BiatecIdentityProvider.algo.ts:288', pc: [644, 645] },
+        { teal: 557, source: 'contracts\\BiatecIdentityProvider.algo.ts:288', pc: [646, 647, 648] },
+        { teal: 558, source: 'contracts\\BiatecIdentityProvider.algo.ts:288', pc: [649] },
+        { teal: 559, source: 'contracts\\BiatecIdentityProvider.algo.ts:288', pc: [650, 651] },
+        { teal: 560, source: 'contracts\\BiatecIdentityProvider.algo.ts:288', pc: [652] },
+        {
+          teal: 563,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:288',
+          errorMessage: 'FeeMultiplierBase must be set properly',
+          pc: [653],
+        },
+        { teal: 567, source: 'contracts\\BiatecIdentityProvider.algo.ts:289', pc: [654] },
+        { teal: 568, source: 'contracts\\BiatecIdentityProvider.algo.ts:289', pc: [655, 656] },
+        { teal: 569, source: 'contracts\\BiatecIdentityProvider.algo.ts:289', pc: [657] },
+        { teal: 570, source: 'contracts\\BiatecIdentityProvider.algo.ts:289', pc: [658] },
+        { teal: 571, source: 'contracts\\BiatecIdentityProvider.algo.ts:289', pc: [659] },
+        { teal: 572, source: 'contracts\\BiatecIdentityProvider.algo.ts:289', pc: [660] },
+        { teal: 573, source: 'contracts\\BiatecIdentityProvider.algo.ts:289', pc: [661, 662] },
+        { teal: 574, source: 'contracts\\BiatecIdentityProvider.algo.ts:289', pc: [663] },
+        { teal: 575, source: 'contracts\\BiatecIdentityProvider.algo.ts:286', pc: [664] },
+        { teal: 580, source: 'contracts\\BiatecIdentityProvider.algo.ts:304', pc: [665, 666, 667] },
+        { teal: 581, source: 'contracts\\BiatecIdentityProvider.algo.ts:304', pc: [668] },
+        { teal: 584, source: 'contracts\\BiatecIdentityProvider.algo.ts:303', pc: [669, 670, 671] },
+        { teal: 585, source: 'contracts\\BiatecIdentityProvider.algo.ts:303', pc: [672] },
+        { teal: 588, source: 'contracts\\BiatecIdentityProvider.algo.ts:302', pc: [673, 674, 675] },
+        { teal: 589, source: 'contracts\\BiatecIdentityProvider.algo.ts:302', pc: [676] },
+        { teal: 592, source: 'contracts\\BiatecIdentityProvider.algo.ts:301', pc: [677, 678, 679] },
+        { teal: 593, source: 'contracts\\BiatecIdentityProvider.algo.ts:301', pc: [680, 681, 682] },
+        { teal: 596, source: 'contracts\\BiatecIdentityProvider.algo.ts:300', pc: [683, 684, 685] },
+        { teal: 597, source: 'contracts\\BiatecIdentityProvider.algo.ts:300', pc: [686, 687, 688] },
+        { teal: 600, source: 'contracts\\BiatecIdentityProvider.algo.ts:299', pc: [689, 690, 691] },
+        { teal: 601, source: 'contracts\\BiatecIdentityProvider.algo.ts:299', pc: [692, 693, 694] },
+        { teal: 604, source: 'contracts\\BiatecIdentityProvider.algo.ts:298', pc: [695, 696, 697] },
+        { teal: 605, source: 'contracts\\BiatecIdentityProvider.algo.ts:298', pc: [698] },
+        { teal: 608, source: 'contracts\\BiatecIdentityProvider.algo.ts:297', pc: [699, 700, 701] },
+        { teal: 609, source: 'contracts\\BiatecIdentityProvider.algo.ts:297', pc: [702] },
+        { teal: 610, source: 'contracts\\BiatecIdentityProvider.algo.ts:297', pc: [703] },
+        { teal: 618, source: 'contracts\\BiatecIdentityProvider.algo.ts:297', pc: [704, 705, 706] },
+        { teal: 621, source: 'contracts\\BiatecIdentityProvider.algo.ts:297', pc: [707] },
+        { teal: 622, source: 'contracts\\BiatecIdentityProvider.algo.ts:297', pc: [708] },
+        { teal: 626, source: 'contracts\\BiatecIdentityProvider.algo.ts:306', pc: [709, 710] },
+        { teal: 627, source: 'contracts\\BiatecIdentityProvider.algo.ts:306', pc: [711, 712] },
+        { teal: 628, source: 'contracts\\BiatecIdentityProvider.algo.ts:306', pc: [713] },
+        { teal: 629, source: 'contracts\\BiatecIdentityProvider.algo.ts:306', pc: [714] },
+        {
+          teal: 632,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:306',
+          errorMessage: 'Configuration app does not match',
+          pc: [715],
+        },
+        { teal: 636, source: 'contracts\\BiatecIdentityProvider.algo.ts:307', pc: [716, 717] },
+        { teal: 637, source: 'contracts\\BiatecIdentityProvider.algo.ts:307', pc: [718, 719] },
+        { teal: 638, source: 'contracts\\BiatecIdentityProvider.algo.ts:307', pc: [720] },
+        {
+          teal: 641,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:307',
+          errorMessage: "global state value does not exist: appBiatecConfigProvider.globalState('ef')",
+          pc: [721],
+        },
+        { teal: 642, source: 'contracts\\BiatecIdentityProvider.algo.ts:307', pc: [722, 723] },
+        { teal: 649, source: 'contracts\\BiatecIdentityProvider.algo.ts:309', pc: [724, 725] },
+        { teal: 650, source: 'contracts\\BiatecIdentityProvider.algo.ts:309', pc: [726, 727] },
+        { teal: 651, source: 'contracts\\BiatecIdentityProvider.algo.ts:309', pc: [728] },
+        {
+          teal: 654,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:308',
+          errorMessage: 'Only fee executor setup in the config can take the collected fees',
+          pc: [729],
+        },
+        { teal: 658, source: 'contracts\\BiatecIdentityProvider.algo.ts:312', pc: [730, 731] },
+        { teal: 659, source: 'contracts\\BiatecIdentityProvider.algo.ts:312', pc: [732, 733] },
+        { teal: 660, source: 'contracts\\BiatecIdentityProvider.algo.ts:312', pc: [734] },
+        {
+          teal: 663,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:312',
+          errorMessage: "global state value does not exist: appBiatecConfigProvider.globalState('s')",
+          pc: [735],
+        },
+        { teal: 664, source: 'contracts\\BiatecIdentityProvider.algo.ts:312', pc: [736, 737] },
+        { teal: 668, source: 'contracts\\BiatecIdentityProvider.algo.ts:313', pc: [738, 739] },
+        { teal: 669, source: 'contracts\\BiatecIdentityProvider.algo.ts:313', pc: [740] },
+        { teal: 670, source: 'contracts\\BiatecIdentityProvider.algo.ts:313', pc: [741] },
+        { teal: 673, source: 'contracts\\BiatecIdentityProvider.algo.ts:313', errorMessage: 'ERR_PAUSED', pc: [742] },
+        { teal: 685, source: 'contracts\\BiatecIdentityProvider.algo.ts:314', pc: [743] },
+        { teal: 686, source: 'contracts\\BiatecIdentityProvider.algo.ts:314', pc: [744] },
+        { teal: 687, source: 'contracts\\BiatecIdentityProvider.algo.ts:314', pc: [745, 746] },
+        { teal: 691, source: 'contracts\\BiatecIdentityProvider.algo.ts:315', pc: [747, 748] },
+        { teal: 692, source: 'contracts\\BiatecIdentityProvider.algo.ts:315', pc: [749, 750] },
+        { teal: 696, source: 'contracts\\BiatecIdentityProvider.algo.ts:316', pc: [751, 752] },
+        { teal: 697, source: 'contracts\\BiatecIdentityProvider.algo.ts:316', pc: [753, 754] },
+        { teal: 701, source: 'contracts\\BiatecIdentityProvider.algo.ts:317', pc: [755, 756] },
+        { teal: 702, source: 'contracts\\BiatecIdentityProvider.algo.ts:317', pc: [757, 758] },
+        { teal: 706, source: 'contracts\\BiatecIdentityProvider.algo.ts:318', pc: [759, 760] },
+        { teal: 707, source: 'contracts\\BiatecIdentityProvider.algo.ts:318', pc: [761, 762] },
+        { teal: 711, source: 'contracts\\BiatecIdentityProvider.algo.ts:319', pc: [763, 764] },
+        { teal: 712, source: 'contracts\\BiatecIdentityProvider.algo.ts:319', pc: [765, 766] },
+        { teal: 716, source: 'contracts\\BiatecIdentityProvider.algo.ts:320', pc: [767, 768] },
+        { teal: 717, source: 'contracts\\BiatecIdentityProvider.algo.ts:320', pc: [769, 770] },
+        { teal: 721, source: 'contracts\\BiatecIdentityProvider.algo.ts:321', pc: [771] },
+        { teal: 722, source: 'contracts\\BiatecIdentityProvider.algo.ts:321', pc: [772, 773] },
+        { teal: 725, source: 'contracts\\BiatecIdentityProvider.algo.ts:314', pc: [774] },
+        { teal: 726, source: 'contracts\\BiatecIdentityProvider.algo.ts:297', pc: [775] },
+        { teal: 731, source: 'contracts\\BiatecIdentityProvider.algo.ts:331', pc: [776, 777] },
+        { teal: 734, source: 'contracts\\BiatecIdentityProvider.algo.ts:332', pc: [778, 779, 780] },
+        { teal: 735, source: 'contracts\\BiatecIdentityProvider.algo.ts:332', pc: [781] },
+        { teal: 736, source: 'contracts\\BiatecIdentityProvider.algo.ts:332', pc: [782] },
+        { teal: 737, source: 'contracts\\BiatecIdentityProvider.algo.ts:332', pc: [783] },
+        { teal: 738, source: 'contracts\\BiatecIdentityProvider.algo.ts:332', pc: [784] },
+        {
+          teal: 741,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:332',
+          errorMessage: 'argument 0 (v) for getUser must be a uint8',
+          pc: [785],
+        },
+        { teal: 742, source: 'contracts\\BiatecIdentityProvider.algo.ts:332', pc: [786] },
+        { teal: 745, source: 'contracts\\BiatecIdentityProvider.algo.ts:332', pc: [787, 788, 789] },
+        { teal: 746, source: 'contracts\\BiatecIdentityProvider.algo.ts:332', pc: [790] },
+        { teal: 747, source: 'contracts\\BiatecIdentityProvider.algo.ts:332', pc: [791] },
+        { teal: 748, source: 'contracts\\BiatecIdentityProvider.algo.ts:332', pc: [792] },
+        { teal: 749, source: 'contracts\\BiatecIdentityProvider.algo.ts:332', pc: [793] },
+        {
+          teal: 752,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:332',
+          errorMessage: 'argument 1 (user) for getUser must be a address',
+          pc: [794],
+        },
+        { teal: 755, source: 'contracts\\BiatecIdentityProvider.algo.ts:331', pc: [795, 796, 797] },
+        { teal: 756, source: 'contracts\\BiatecIdentityProvider.algo.ts:331', pc: [798] },
+        { teal: 757, source: 'contracts\\BiatecIdentityProvider.algo.ts:331', pc: [799] },
+        { teal: 758, source: 'contracts\\BiatecIdentityProvider.algo.ts:331', pc: [800] },
+        { teal: 759, source: 'contracts\\BiatecIdentityProvider.algo.ts:331', pc: [801] },
+        { teal: 768, source: 'contracts\\BiatecIdentityProvider.algo.ts:331', pc: [802, 803, 804] },
+        { teal: 771, source: 'contracts\\BiatecIdentityProvider.algo.ts:331', pc: [805] },
+        { teal: 772, source: 'contracts\\BiatecIdentityProvider.algo.ts:331', pc: [806, 807] },
+        { teal: 776, source: 'contracts\\BiatecIdentityProvider.algo.ts:333', pc: [808, 809] },
+        { teal: 777, source: 'contracts\\BiatecIdentityProvider.algo.ts:333', pc: [810] },
+        { teal: 778, source: 'contracts\\BiatecIdentityProvider.algo.ts:333', pc: [811] },
+        {
+          teal: 781,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:333',
+          errorMessage: "Currently supported version of the data structure is '1'",
+          pc: [812],
+        },
+        { teal: 786, source: 'contracts\\BiatecIdentityProvider.algo.ts:334', pc: [813] },
+        { teal: 787, source: 'contracts\\BiatecIdentityProvider.algo.ts:334', pc: [814, 815] },
+        { teal: 788, source: 'contracts\\BiatecIdentityProvider.algo.ts:334', pc: [816] },
+        { teal: 789, source: 'contracts\\BiatecIdentityProvider.algo.ts:334', pc: [817] },
+        { teal: 790, source: 'contracts\\BiatecIdentityProvider.algo.ts:334', pc: [818] },
+        { teal: 791, source: 'contracts\\BiatecIdentityProvider.algo.ts:334', pc: [819] },
+        { teal: 792, source: 'contracts\\BiatecIdentityProvider.algo.ts:334', pc: [820] },
+        { teal: 793, source: 'contracts\\BiatecIdentityProvider.algo.ts:334', pc: [821, 822, 823] },
+        { teal: 817, source: 'contracts\\BiatecIdentityProvider.algo.ts:335', pc: [824] },
+        { teal: 818, source: 'contracts\\BiatecIdentityProvider.algo.ts:335', pc: [825] },
+        { teal: 819, source: 'contracts\\BiatecIdentityProvider.algo.ts:335', pc: [826, 827] },
+        { teal: 820, source: 'contracts\\BiatecIdentityProvider.algo.ts:336', pc: [828, 829] },
+        { teal: 821, source: 'contracts\\BiatecIdentityProvider.algo.ts:336', pc: [830] },
+        { teal: 822, source: 'contracts\\BiatecIdentityProvider.algo.ts:336', pc: [831, 832, 833] },
+        { teal: 823, source: 'contracts\\BiatecIdentityProvider.algo.ts:336', pc: [834, 835, 836] },
+        { teal: 824, source: 'contracts\\BiatecIdentityProvider.algo.ts:341', pc: [837] },
+        { teal: 825, source: 'contracts\\BiatecIdentityProvider.algo.ts:341', pc: [838, 839, 840] },
+        { teal: 826, source: 'contracts\\BiatecIdentityProvider.algo.ts:340', pc: [841] },
+        { teal: 827, source: 'contracts\\BiatecIdentityProvider.algo.ts:340', pc: [842, 843, 844] },
+        { teal: 828, source: 'contracts\\BiatecIdentityProvider.algo.ts:351', pc: [845] },
+        { teal: 829, source: 'contracts\\BiatecIdentityProvider.algo.ts:351', pc: [846] },
+        { teal: 830, source: 'contracts\\BiatecIdentityProvider.algo.ts:351', pc: [847] },
+        { teal: 831, source: 'contracts\\BiatecIdentityProvider.algo.ts:351', pc: [848] },
+        { teal: 832, source: 'contracts\\BiatecIdentityProvider.algo.ts:352', pc: [849, 850, 851] },
+        { teal: 833, source: 'contracts\\BiatecIdentityProvider.algo.ts:352', pc: [852, 853] },
+        { teal: 834, source: 'contracts\\BiatecIdentityProvider.algo.ts:352', pc: [854, 855, 856] },
+        { teal: 835, source: 'contracts\\BiatecIdentityProvider.algo.ts:353', pc: [857, 858] },
+        { teal: 836, source: 'contracts\\BiatecIdentityProvider.algo.ts:353', pc: [859, 860, 861] },
+        { teal: 837, source: 'contracts\\BiatecIdentityProvider.algo.ts:342', pc: [862] },
+        { teal: 838, source: 'contracts\\BiatecIdentityProvider.algo.ts:342', pc: [863, 864, 865] },
+        { teal: 839, source: 'contracts\\BiatecIdentityProvider.algo.ts:343', pc: [866] },
+        { teal: 840, source: 'contracts\\BiatecIdentityProvider.algo.ts:343', pc: [867, 868, 869] },
+        { teal: 841, source: 'contracts\\BiatecIdentityProvider.algo.ts:344', pc: [870] },
+        { teal: 842, source: 'contracts\\BiatecIdentityProvider.algo.ts:344', pc: [871, 872, 873] },
+        { teal: 843, source: 'contracts\\BiatecIdentityProvider.algo.ts:345', pc: [874] },
+        { teal: 844, source: 'contracts\\BiatecIdentityProvider.algo.ts:345', pc: [875, 876, 877] },
+        { teal: 845, source: 'contracts\\BiatecIdentityProvider.algo.ts:346', pc: [878] },
+        { teal: 846, source: 'contracts\\BiatecIdentityProvider.algo.ts:346', pc: [879, 880, 881] },
+        { teal: 847, source: 'contracts\\BiatecIdentityProvider.algo.ts:347', pc: [882] },
+        { teal: 848, source: 'contracts\\BiatecIdentityProvider.algo.ts:347', pc: [883, 884, 885] },
+        { teal: 849, source: 'contracts\\BiatecIdentityProvider.algo.ts:338', pc: [886, 887] },
+        { teal: 850, source: 'contracts\\BiatecIdentityProvider.algo.ts:338', pc: [888, 889, 890] },
+        { teal: 851, source: 'contracts\\BiatecIdentityProvider.algo.ts:337', pc: [891, 892] },
+        { teal: 852, source: 'contracts\\BiatecIdentityProvider.algo.ts:337', pc: [893, 894, 895] },
+        { teal: 853, source: 'contracts\\BiatecIdentityProvider.algo.ts:339', pc: [896] },
+        { teal: 854, source: 'contracts\\BiatecIdentityProvider.algo.ts:339', pc: [897] },
+        { teal: 855, source: 'contracts\\BiatecIdentityProvider.algo.ts:339', pc: [898] },
+        { teal: 856, source: 'contracts\\BiatecIdentityProvider.algo.ts:339', pc: [899] },
+        { teal: 857, source: 'contracts\\BiatecIdentityProvider.algo.ts:348', pc: [900, 901, 902] },
+        { teal: 858, source: 'contracts\\BiatecIdentityProvider.algo.ts:348', pc: [903] },
+        { teal: 859, source: 'contracts\\BiatecIdentityProvider.algo.ts:348', pc: [904, 905, 906] },
+        { teal: 860, source: 'contracts\\BiatecIdentityProvider.algo.ts:349', pc: [907] },
+        { teal: 861, source: 'contracts\\BiatecIdentityProvider.algo.ts:349', pc: [908, 909, 910] },
+        { teal: 862, source: 'contracts\\BiatecIdentityProvider.algo.ts:350', pc: [911] },
+        { teal: 863, source: 'contracts\\BiatecIdentityProvider.algo.ts:350', pc: [912] },
+        { teal: 864, source: 'contracts\\BiatecIdentityProvider.algo.ts:350', pc: [913] },
+        { teal: 865, source: 'contracts\\BiatecIdentityProvider.algo.ts:350', pc: [914] },
+        { teal: 866, source: 'contracts\\BiatecIdentityProvider.algo.ts:335', pc: [915, 916, 917] },
+        { teal: 867, source: 'contracts\\BiatecIdentityProvider.algo.ts:335', pc: [918] },
+        { teal: 868, source: 'contracts\\BiatecIdentityProvider.algo.ts:335', pc: [919] },
+        { teal: 869, source: 'contracts\\BiatecIdentityProvider.algo.ts:335', pc: [920, 921] },
+        { teal: 873, source: 'contracts\\BiatecIdentityProvider.algo.ts:355', pc: [922, 923] },
+        { teal: 874, source: 'contracts\\BiatecIdentityProvider.algo.ts:355', pc: [924, 925, 926] },
+        { teal: 879, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [927] },
+        { teal: 880, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [928, 929] },
+        { teal: 881, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [930] },
+        { teal: 882, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [931, 932] },
+        { teal: 905, source: 'contracts\\BiatecIdentityProvider.algo.ts:359', pc: [933] },
+        { teal: 906, source: 'contracts\\BiatecIdentityProvider.algo.ts:359', pc: [934] },
+        { teal: 907, source: 'contracts\\BiatecIdentityProvider.algo.ts:359', pc: [935, 936] },
+        { teal: 908, source: 'contracts\\BiatecIdentityProvider.algo.ts:360', pc: [937, 938] },
+        { teal: 909, source: 'contracts\\BiatecIdentityProvider.algo.ts:360', pc: [939] },
+        { teal: 910, source: 'contracts\\BiatecIdentityProvider.algo.ts:360', pc: [940, 941, 942] },
+        { teal: 911, source: 'contracts\\BiatecIdentityProvider.algo.ts:360', pc: [943, 944, 945] },
+        { teal: 912, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [946, 947] },
+        { teal: 913, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [948] },
+        {
+          teal: 916,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [949],
+        },
+        { teal: 917, source: 'contracts\\BiatecIdentityProvider.algo.ts:365', pc: [950, 951] },
+        { teal: 918, source: 'contracts\\BiatecIdentityProvider.algo.ts:365', pc: [952, 953] },
+        { teal: 919, source: 'contracts\\BiatecIdentityProvider.algo.ts:365', pc: [954, 955, 956] },
+        { teal: 920, source: 'contracts\\BiatecIdentityProvider.algo.ts:365', pc: [957] },
+        { teal: 921, source: 'contracts\\BiatecIdentityProvider.algo.ts:365', pc: [958] },
+        { teal: 922, source: 'contracts\\BiatecIdentityProvider.algo.ts:365', pc: [959, 960, 961] },
+        { teal: 923, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [962, 963] },
+        { teal: 924, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [964] },
+        {
+          teal: 927,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [965],
+        },
+        { teal: 928, source: 'contracts\\BiatecIdentityProvider.algo.ts:364', pc: [966, 967] },
+        { teal: 929, source: 'contracts\\BiatecIdentityProvider.algo.ts:364', pc: [968, 969] },
+        { teal: 930, source: 'contracts\\BiatecIdentityProvider.algo.ts:364', pc: [970, 971, 972] },
+        { teal: 931, source: 'contracts\\BiatecIdentityProvider.algo.ts:364', pc: [973] },
+        { teal: 932, source: 'contracts\\BiatecIdentityProvider.algo.ts:364', pc: [974] },
+        { teal: 933, source: 'contracts\\BiatecIdentityProvider.algo.ts:364', pc: [975, 976, 977] },
+        { teal: 934, source: 'contracts\\BiatecIdentityProvider.algo.ts:375', pc: [978] },
+        { teal: 935, source: 'contracts\\BiatecIdentityProvider.algo.ts:375', pc: [979] },
+        { teal: 936, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [980, 981] },
+        { teal: 937, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [982] },
+        {
+          teal: 940,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [983],
+        },
+        { teal: 941, source: 'contracts\\BiatecIdentityProvider.algo.ts:375', pc: [984, 985] },
+        { teal: 942, source: 'contracts\\BiatecIdentityProvider.algo.ts:375', pc: [986, 987] },
+        { teal: 943, source: 'contracts\\BiatecIdentityProvider.algo.ts:375', pc: [988, 989, 990] },
+        { teal: 944, source: 'contracts\\BiatecIdentityProvider.algo.ts:375', pc: [991] },
+        { teal: 945, source: 'contracts\\BiatecIdentityProvider.algo.ts:375', pc: [992] },
+        { teal: 946, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [993, 994, 995] },
+        { teal: 947, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [996, 997] },
+        { teal: 948, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [998] },
+        {
+          teal: 951,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [999],
+        },
+        { teal: 952, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1000, 1001] },
+        { teal: 953, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1002, 1003] },
+        { teal: 954, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1004, 1005] },
+        { teal: 955, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1006, 1007] },
+        { teal: 956, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1008, 1009] },
+        { teal: 957, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1010] },
+        { teal: 958, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1011] },
+        { teal: 959, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1012, 1013] },
+        { teal: 960, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1014] },
+        { teal: 961, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1015] },
+        { teal: 962, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1016] },
+        { teal: 963, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1017] },
+        { teal: 964, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1018] },
+        { teal: 965, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1019] },
+        { teal: 966, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1020] },
+        { teal: 967, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1021, 1022, 1023] },
+        { teal: 968, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1024] },
+        { teal: 969, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1025] },
+        { teal: 970, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1026] },
+        { teal: 971, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1027, 1028, 1029] },
+        { teal: 972, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1030] },
+        { teal: 973, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1031] },
+        { teal: 974, source: 'contracts\\BiatecIdentityProvider.algo.ts:376', pc: [1032, 1033, 1034] },
+        { teal: 975, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1035, 1036] },
+        { teal: 976, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1037] },
+        {
+          teal: 979,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1038],
+        },
+        { teal: 980, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1039, 1040] },
+        { teal: 981, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1041, 1042] },
+        { teal: 982, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1043, 1044] },
+        { teal: 983, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1045, 1046] },
+        { teal: 984, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1047, 1048] },
+        { teal: 985, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1049] },
+        { teal: 986, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1050] },
+        { teal: 987, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1051, 1052] },
+        { teal: 988, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1053] },
+        { teal: 989, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1054] },
+        { teal: 990, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1055] },
+        { teal: 991, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1056] },
+        { teal: 992, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1057] },
+        { teal: 993, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1058] },
+        { teal: 994, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1059] },
+        { teal: 995, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1060, 1061, 1062] },
+        { teal: 996, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1063] },
+        { teal: 997, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1064] },
+        { teal: 998, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1065] },
+        { teal: 999, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1066, 1067, 1068] },
+        { teal: 1000, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1069] },
+        { teal: 1001, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1070] },
+        { teal: 1002, source: 'contracts\\BiatecIdentityProvider.algo.ts:377', pc: [1071, 1072, 1073] },
+        { teal: 1003, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1074, 1075] },
+        { teal: 1004, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1076] },
+        {
+          teal: 1007,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1077],
+        },
+        { teal: 1008, source: 'contracts\\BiatecIdentityProvider.algo.ts:366', pc: [1078, 1079] },
+        { teal: 1009, source: 'contracts\\BiatecIdentityProvider.algo.ts:366', pc: [1080, 1081] },
+        { teal: 1010, source: 'contracts\\BiatecIdentityProvider.algo.ts:366', pc: [1082, 1083, 1084] },
+        { teal: 1011, source: 'contracts\\BiatecIdentityProvider.algo.ts:366', pc: [1085] },
+        { teal: 1012, source: 'contracts\\BiatecIdentityProvider.algo.ts:366', pc: [1086] },
+        { teal: 1013, source: 'contracts\\BiatecIdentityProvider.algo.ts:366', pc: [1087, 1088, 1089] },
+        { teal: 1014, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1090, 1091] },
+        { teal: 1015, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1092] },
+        {
+          teal: 1018,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1093],
+        },
+        { teal: 1019, source: 'contracts\\BiatecIdentityProvider.algo.ts:367', pc: [1094, 1095] },
+        { teal: 1020, source: 'contracts\\BiatecIdentityProvider.algo.ts:367', pc: [1096, 1097] },
+        { teal: 1021, source: 'contracts\\BiatecIdentityProvider.algo.ts:367', pc: [1098, 1099, 1100] },
+        { teal: 1022, source: 'contracts\\BiatecIdentityProvider.algo.ts:367', pc: [1101] },
+        { teal: 1023, source: 'contracts\\BiatecIdentityProvider.algo.ts:367', pc: [1102] },
+        { teal: 1024, source: 'contracts\\BiatecIdentityProvider.algo.ts:367', pc: [1103, 1104, 1105] },
+        { teal: 1025, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1106, 1107] },
+        { teal: 1026, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1108] },
+        {
+          teal: 1029,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1109],
+        },
+        { teal: 1030, source: 'contracts\\BiatecIdentityProvider.algo.ts:368', pc: [1110, 1111] },
+        { teal: 1031, source: 'contracts\\BiatecIdentityProvider.algo.ts:368', pc: [1112, 1113] },
+        { teal: 1032, source: 'contracts\\BiatecIdentityProvider.algo.ts:368', pc: [1114, 1115, 1116] },
+        { teal: 1033, source: 'contracts\\BiatecIdentityProvider.algo.ts:368', pc: [1117] },
+        { teal: 1034, source: 'contracts\\BiatecIdentityProvider.algo.ts:368', pc: [1118] },
+        { teal: 1035, source: 'contracts\\BiatecIdentityProvider.algo.ts:368', pc: [1119, 1120, 1121] },
+        { teal: 1036, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1122, 1123] },
+        { teal: 1037, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1124] },
+        {
+          teal: 1040,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1125],
+        },
+        { teal: 1041, source: 'contracts\\BiatecIdentityProvider.algo.ts:369', pc: [1126, 1127] },
+        { teal: 1042, source: 'contracts\\BiatecIdentityProvider.algo.ts:369', pc: [1128, 1129] },
+        { teal: 1043, source: 'contracts\\BiatecIdentityProvider.algo.ts:369', pc: [1130, 1131, 1132] },
+        { teal: 1044, source: 'contracts\\BiatecIdentityProvider.algo.ts:369', pc: [1133] },
+        { teal: 1045, source: 'contracts\\BiatecIdentityProvider.algo.ts:369', pc: [1134] },
+        { teal: 1046, source: 'contracts\\BiatecIdentityProvider.algo.ts:369', pc: [1135, 1136, 1137] },
+        { teal: 1047, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1138, 1139] },
+        { teal: 1048, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1140] },
+        {
+          teal: 1051,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1141],
+        },
+        { teal: 1052, source: 'contracts\\BiatecIdentityProvider.algo.ts:370', pc: [1142, 1143] },
+        { teal: 1053, source: 'contracts\\BiatecIdentityProvider.algo.ts:370', pc: [1144, 1145] },
+        { teal: 1054, source: 'contracts\\BiatecIdentityProvider.algo.ts:370', pc: [1146, 1147, 1148] },
+        { teal: 1055, source: 'contracts\\BiatecIdentityProvider.algo.ts:370', pc: [1149] },
+        { teal: 1056, source: 'contracts\\BiatecIdentityProvider.algo.ts:370', pc: [1150] },
+        { teal: 1057, source: 'contracts\\BiatecIdentityProvider.algo.ts:370', pc: [1151, 1152, 1153] },
+        { teal: 1058, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1154, 1155] },
+        { teal: 1059, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1156] },
+        {
+          teal: 1062,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1157],
+        },
+        { teal: 1063, source: 'contracts\\BiatecIdentityProvider.algo.ts:371', pc: [1158, 1159] },
+        { teal: 1064, source: 'contracts\\BiatecIdentityProvider.algo.ts:371', pc: [1160, 1161] },
+        { teal: 1065, source: 'contracts\\BiatecIdentityProvider.algo.ts:371', pc: [1162, 1163, 1164] },
+        { teal: 1066, source: 'contracts\\BiatecIdentityProvider.algo.ts:371', pc: [1165] },
+        { teal: 1067, source: 'contracts\\BiatecIdentityProvider.algo.ts:371', pc: [1166] },
+        { teal: 1068, source: 'contracts\\BiatecIdentityProvider.algo.ts:371', pc: [1167, 1168, 1169] },
+        { teal: 1069, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1170, 1171] },
+        { teal: 1070, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1172] },
+        {
+          teal: 1073,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1173],
+        },
+        { teal: 1074, source: 'contracts\\BiatecIdentityProvider.algo.ts:362', pc: [1174, 1175] },
+        { teal: 1075, source: 'contracts\\BiatecIdentityProvider.algo.ts:362', pc: [1176, 1177] },
+        { teal: 1076, source: 'contracts\\BiatecIdentityProvider.algo.ts:362', pc: [1178, 1179, 1180] },
+        { teal: 1077, source: 'contracts\\BiatecIdentityProvider.algo.ts:362', pc: [1181] },
+        { teal: 1078, source: 'contracts\\BiatecIdentityProvider.algo.ts:362', pc: [1182] },
+        { teal: 1079, source: 'contracts\\BiatecIdentityProvider.algo.ts:362', pc: [1183, 1184, 1185] },
+        { teal: 1080, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1186, 1187] },
+        { teal: 1081, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1188] },
+        {
+          teal: 1084,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1189],
+        },
+        { teal: 1085, source: 'contracts\\BiatecIdentityProvider.algo.ts:361', pc: [1190, 1191] },
+        { teal: 1086, source: 'contracts\\BiatecIdentityProvider.algo.ts:361', pc: [1192, 1193] },
+        { teal: 1087, source: 'contracts\\BiatecIdentityProvider.algo.ts:361', pc: [1194, 1195, 1196] },
+        { teal: 1088, source: 'contracts\\BiatecIdentityProvider.algo.ts:361', pc: [1197] },
+        { teal: 1089, source: 'contracts\\BiatecIdentityProvider.algo.ts:361', pc: [1198] },
+        { teal: 1090, source: 'contracts\\BiatecIdentityProvider.algo.ts:361', pc: [1199, 1200, 1201] },
+        { teal: 1091, source: 'contracts\\BiatecIdentityProvider.algo.ts:363', pc: [1202] },
+        { teal: 1092, source: 'contracts\\BiatecIdentityProvider.algo.ts:363', pc: [1203] },
+        { teal: 1093, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1204, 1205] },
+        { teal: 1094, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1206] },
+        {
+          teal: 1097,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1207],
+        },
+        { teal: 1098, source: 'contracts\\BiatecIdentityProvider.algo.ts:363', pc: [1208, 1209] },
+        { teal: 1099, source: 'contracts\\BiatecIdentityProvider.algo.ts:363', pc: [1210, 1211] },
+        { teal: 1100, source: 'contracts\\BiatecIdentityProvider.algo.ts:363', pc: [1212, 1213] },
+        { teal: 1101, source: 'contracts\\BiatecIdentityProvider.algo.ts:363', pc: [1214] },
+        { teal: 1102, source: 'contracts\\BiatecIdentityProvider.algo.ts:363', pc: [1215] },
+        { teal: 1103, source: 'contracts\\BiatecIdentityProvider.algo.ts:372', pc: [1216, 1217, 1218] },
+        { teal: 1104, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1219, 1220] },
+        { teal: 1105, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1221] },
+        {
+          teal: 1108,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1222],
+        },
+        { teal: 1109, source: 'contracts\\BiatecIdentityProvider.algo.ts:372', pc: [1223, 1224] },
+        { teal: 1110, source: 'contracts\\BiatecIdentityProvider.algo.ts:372', pc: [1225, 1226] },
+        { teal: 1111, source: 'contracts\\BiatecIdentityProvider.algo.ts:372', pc: [1227, 1228, 1229] },
+        { teal: 1112, source: 'contracts\\BiatecIdentityProvider.algo.ts:372', pc: [1230] },
+        { teal: 1113, source: 'contracts\\BiatecIdentityProvider.algo.ts:372', pc: [1231] },
+        { teal: 1114, source: 'contracts\\BiatecIdentityProvider.algo.ts:372', pc: [1232, 1233, 1234] },
+        { teal: 1115, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1235, 1236] },
+        { teal: 1116, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1237] },
+        {
+          teal: 1119,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1238],
+        },
+        { teal: 1120, source: 'contracts\\BiatecIdentityProvider.algo.ts:373', pc: [1239, 1240] },
+        { teal: 1121, source: 'contracts\\BiatecIdentityProvider.algo.ts:373', pc: [1241, 1242] },
+        { teal: 1122, source: 'contracts\\BiatecIdentityProvider.algo.ts:373', pc: [1243, 1244, 1245] },
+        { teal: 1123, source: 'contracts\\BiatecIdentityProvider.algo.ts:373', pc: [1246] },
+        { teal: 1124, source: 'contracts\\BiatecIdentityProvider.algo.ts:373', pc: [1247] },
+        { teal: 1125, source: 'contracts\\BiatecIdentityProvider.algo.ts:373', pc: [1248, 1249, 1250] },
+        { teal: 1126, source: 'contracts\\BiatecIdentityProvider.algo.ts:374', pc: [1251] },
+        { teal: 1127, source: 'contracts\\BiatecIdentityProvider.algo.ts:374', pc: [1252] },
+        { teal: 1128, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1253, 1254] },
+        { teal: 1129, source: 'contracts\\BiatecIdentityProvider.algo.ts:357', pc: [1255] },
+        {
+          teal: 1132,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:357',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1256],
+        },
+        { teal: 1133, source: 'contracts\\BiatecIdentityProvider.algo.ts:374', pc: [1257, 1258] },
+        { teal: 1134, source: 'contracts\\BiatecIdentityProvider.algo.ts:374', pc: [1259, 1260] },
+        { teal: 1135, source: 'contracts\\BiatecIdentityProvider.algo.ts:374', pc: [1261, 1262] },
+        { teal: 1136, source: 'contracts\\BiatecIdentityProvider.algo.ts:374', pc: [1263] },
+        { teal: 1137, source: 'contracts\\BiatecIdentityProvider.algo.ts:374', pc: [1264] },
+        { teal: 1138, source: 'contracts\\BiatecIdentityProvider.algo.ts:359', pc: [1265, 1266, 1267] },
+        { teal: 1139, source: 'contracts\\BiatecIdentityProvider.algo.ts:359', pc: [1268] },
+        { teal: 1140, source: 'contracts\\BiatecIdentityProvider.algo.ts:359', pc: [1269] },
+        { teal: 1141, source: 'contracts\\BiatecIdentityProvider.algo.ts:359', pc: [1270, 1271] },
+        { teal: 1145, source: 'contracts\\BiatecIdentityProvider.algo.ts:379', pc: [1272, 1273] },
+        { teal: 1149, source: 'contracts\\BiatecIdentityProvider.algo.ts:331', pc: [1274, 1275] },
+        { teal: 1152, source: 'contracts\\BiatecIdentityProvider.algo.ts:331', pc: [1276, 1277] },
+        { teal: 1153, source: 'contracts\\BiatecIdentityProvider.algo.ts:331', pc: [1278] },
+        { teal: 1158, source: 'contracts\\BiatecIdentityProvider.algo.ts:388', pc: [1279, 1280] },
+        { teal: 1161, source: 'contracts\\BiatecIdentityProvider.algo.ts:389', pc: [1281, 1282, 1283] },
+        { teal: 1162, source: 'contracts\\BiatecIdentityProvider.algo.ts:389', pc: [1284] },
+        { teal: 1163, source: 'contracts\\BiatecIdentityProvider.algo.ts:389', pc: [1285] },
+        { teal: 1164, source: 'contracts\\BiatecIdentityProvider.algo.ts:389', pc: [1286] },
+        { teal: 1165, source: 'contracts\\BiatecIdentityProvider.algo.ts:389', pc: [1287] },
+        {
+          teal: 1168,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:389',
+          errorMessage: 'argument 0 (v) for getUserShort must be a uint8',
+          pc: [1288],
+        },
+        { teal: 1169, source: 'contracts\\BiatecIdentityProvider.algo.ts:389', pc: [1289] },
+        { teal: 1172, source: 'contracts\\BiatecIdentityProvider.algo.ts:389', pc: [1290, 1291, 1292] },
+        { teal: 1173, source: 'contracts\\BiatecIdentityProvider.algo.ts:389', pc: [1293] },
+        { teal: 1174, source: 'contracts\\BiatecIdentityProvider.algo.ts:389', pc: [1294] },
+        { teal: 1175, source: 'contracts\\BiatecIdentityProvider.algo.ts:389', pc: [1295] },
+        { teal: 1176, source: 'contracts\\BiatecIdentityProvider.algo.ts:389', pc: [1296] },
+        {
+          teal: 1179,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:389',
+          errorMessage: 'argument 1 (user) for getUserShort must be a address',
+          pc: [1297],
+        },
+        { teal: 1182, source: 'contracts\\BiatecIdentityProvider.algo.ts:388', pc: [1298, 1299, 1300] },
+        { teal: 1183, source: 'contracts\\BiatecIdentityProvider.algo.ts:388', pc: [1301] },
+        { teal: 1184, source: 'contracts\\BiatecIdentityProvider.algo.ts:388', pc: [1302] },
+        { teal: 1185, source: 'contracts\\BiatecIdentityProvider.algo.ts:388', pc: [1303] },
+        { teal: 1186, source: 'contracts\\BiatecIdentityProvider.algo.ts:388', pc: [1304] },
+        { teal: 1195, source: 'contracts\\BiatecIdentityProvider.algo.ts:388', pc: [1305, 1306, 1307] },
+        { teal: 1198, source: 'contracts\\BiatecIdentityProvider.algo.ts:388', pc: [1308] },
+        { teal: 1199, source: 'contracts\\BiatecIdentityProvider.algo.ts:388', pc: [1309, 1310] },
+        { teal: 1203, source: 'contracts\\BiatecIdentityProvider.algo.ts:390', pc: [1311, 1312] },
+        { teal: 1204, source: 'contracts\\BiatecIdentityProvider.algo.ts:390', pc: [1313] },
+        { teal: 1205, source: 'contracts\\BiatecIdentityProvider.algo.ts:390', pc: [1314] },
+        {
+          teal: 1208,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:390',
+          errorMessage: "Currently supported version of the data structure is '1'",
+          pc: [1315],
+        },
+        { teal: 1213, source: 'contracts\\BiatecIdentityProvider.algo.ts:391', pc: [1316] },
+        { teal: 1214, source: 'contracts\\BiatecIdentityProvider.algo.ts:391', pc: [1317, 1318] },
+        { teal: 1215, source: 'contracts\\BiatecIdentityProvider.algo.ts:391', pc: [1319] },
+        { teal: 1216, source: 'contracts\\BiatecIdentityProvider.algo.ts:391', pc: [1320] },
+        { teal: 1217, source: 'contracts\\BiatecIdentityProvider.algo.ts:391', pc: [1321] },
+        { teal: 1218, source: 'contracts\\BiatecIdentityProvider.algo.ts:391', pc: [1322] },
+        { teal: 1219, source: 'contracts\\BiatecIdentityProvider.algo.ts:391', pc: [1323] },
+        { teal: 1220, source: 'contracts\\BiatecIdentityProvider.algo.ts:391', pc: [1324, 1325, 1326] },
+        { teal: 1231, source: 'contracts\\BiatecIdentityProvider.algo.ts:393', pc: [1327, 1328] },
+        { teal: 1232, source: 'contracts\\BiatecIdentityProvider.algo.ts:393', pc: [1329] },
+        { teal: 1233, source: 'contracts\\BiatecIdentityProvider.algo.ts:393', pc: [1330, 1331, 1332] },
+        { teal: 1234, source: 'contracts\\BiatecIdentityProvider.algo.ts:397', pc: [1333] },
+        { teal: 1235, source: 'contracts\\BiatecIdentityProvider.algo.ts:397', pc: [1334] },
+        { teal: 1236, source: 'contracts\\BiatecIdentityProvider.algo.ts:395', pc: [1335, 1336] },
+        { teal: 1237, source: 'contracts\\BiatecIdentityProvider.algo.ts:395', pc: [1337] },
+        { teal: 1238, source: 'contracts\\BiatecIdentityProvider.algo.ts:394', pc: [1338, 1339] },
+        { teal: 1239, source: 'contracts\\BiatecIdentityProvider.algo.ts:394', pc: [1340] },
+        { teal: 1240, source: 'contracts\\BiatecIdentityProvider.algo.ts:396', pc: [1341] },
+        { teal: 1241, source: 'contracts\\BiatecIdentityProvider.algo.ts:396', pc: [1342] },
+        { teal: 1242, source: 'contracts\\BiatecIdentityProvider.algo.ts:396', pc: [1343] },
+        { teal: 1243, source: 'contracts\\BiatecIdentityProvider.algo.ts:396', pc: [1344] },
+        { teal: 1244, source: 'contracts\\BiatecIdentityProvider.algo.ts:392', pc: [1345] },
+        { teal: 1245, source: 'contracts\\BiatecIdentityProvider.algo.ts:392', pc: [1346, 1347] },
+        { teal: 1249, source: 'contracts\\BiatecIdentityProvider.algo.ts:399', pc: [1348, 1349] },
+        { teal: 1250, source: 'contracts\\BiatecIdentityProvider.algo.ts:399', pc: [1350, 1351, 1352] },
+        { teal: 1255, source: 'contracts\\BiatecIdentityProvider.algo.ts:401', pc: [1353] },
+        { teal: 1256, source: 'contracts\\BiatecIdentityProvider.algo.ts:401', pc: [1354, 1355] },
+        { teal: 1257, source: 'contracts\\BiatecIdentityProvider.algo.ts:401', pc: [1356] },
+        { teal: 1258, source: 'contracts\\BiatecIdentityProvider.algo.ts:401', pc: [1357, 1358] },
+        { teal: 1268, source: 'contracts\\BiatecIdentityProvider.algo.ts:404', pc: [1359, 1360] },
+        { teal: 1269, source: 'contracts\\BiatecIdentityProvider.algo.ts:404', pc: [1361] },
+        { teal: 1270, source: 'contracts\\BiatecIdentityProvider.algo.ts:404', pc: [1362, 1363, 1364] },
+        { teal: 1271, source: 'contracts\\BiatecIdentityProvider.algo.ts:401', pc: [1365, 1366] },
+        { teal: 1272, source: 'contracts\\BiatecIdentityProvider.algo.ts:401', pc: [1367] },
+        {
+          teal: 1275,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:401',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1368],
+        },
+        { teal: 1276, source: 'contracts\\BiatecIdentityProvider.algo.ts:408', pc: [1369, 1370] },
+        { teal: 1277, source: 'contracts\\BiatecIdentityProvider.algo.ts:408', pc: [1371, 1372] },
+        { teal: 1278, source: 'contracts\\BiatecIdentityProvider.algo.ts:408', pc: [1373, 1374, 1375] },
+        { teal: 1279, source: 'contracts\\BiatecIdentityProvider.algo.ts:408', pc: [1376] },
+        { teal: 1280, source: 'contracts\\BiatecIdentityProvider.algo.ts:408', pc: [1377] },
+        { teal: 1281, source: 'contracts\\BiatecIdentityProvider.algo.ts:408', pc: [1378] },
+        { teal: 1282, source: 'contracts\\BiatecIdentityProvider.algo.ts:401', pc: [1379, 1380] },
+        { teal: 1283, source: 'contracts\\BiatecIdentityProvider.algo.ts:401', pc: [1381] },
+        {
+          teal: 1286,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:401',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1382],
+        },
+        { teal: 1287, source: 'contracts\\BiatecIdentityProvider.algo.ts:406', pc: [1383, 1384] },
+        { teal: 1288, source: 'contracts\\BiatecIdentityProvider.algo.ts:406', pc: [1385, 1386] },
+        { teal: 1289, source: 'contracts\\BiatecIdentityProvider.algo.ts:406', pc: [1387, 1388, 1389] },
+        { teal: 1290, source: 'contracts\\BiatecIdentityProvider.algo.ts:406', pc: [1390] },
+        { teal: 1291, source: 'contracts\\BiatecIdentityProvider.algo.ts:406', pc: [1391] },
+        { teal: 1292, source: 'contracts\\BiatecIdentityProvider.algo.ts:406', pc: [1392] },
+        { teal: 1293, source: 'contracts\\BiatecIdentityProvider.algo.ts:401', pc: [1393, 1394] },
+        { teal: 1294, source: 'contracts\\BiatecIdentityProvider.algo.ts:401', pc: [1395] },
+        {
+          teal: 1297,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:401',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1396],
+        },
+        { teal: 1298, source: 'contracts\\BiatecIdentityProvider.algo.ts:405', pc: [1397, 1398] },
+        { teal: 1299, source: 'contracts\\BiatecIdentityProvider.algo.ts:405', pc: [1399, 1400] },
+        { teal: 1300, source: 'contracts\\BiatecIdentityProvider.algo.ts:405', pc: [1401, 1402, 1403] },
+        { teal: 1301, source: 'contracts\\BiatecIdentityProvider.algo.ts:405', pc: [1404] },
+        { teal: 1302, source: 'contracts\\BiatecIdentityProvider.algo.ts:405', pc: [1405] },
+        { teal: 1303, source: 'contracts\\BiatecIdentityProvider.algo.ts:405', pc: [1406] },
+        { teal: 1304, source: 'contracts\\BiatecIdentityProvider.algo.ts:407', pc: [1407] },
+        { teal: 1305, source: 'contracts\\BiatecIdentityProvider.algo.ts:407', pc: [1408] },
+        { teal: 1306, source: 'contracts\\BiatecIdentityProvider.algo.ts:401', pc: [1409, 1410] },
+        { teal: 1307, source: 'contracts\\BiatecIdentityProvider.algo.ts:401', pc: [1411] },
+        {
+          teal: 1310,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:401',
+          errorMessage: 'box value does not exist: this.identities(user).value',
+          pc: [1412],
+        },
+        { teal: 1311, source: 'contracts\\BiatecIdentityProvider.algo.ts:407', pc: [1413, 1414] },
+        { teal: 1312, source: 'contracts\\BiatecIdentityProvider.algo.ts:407', pc: [1415, 1416] },
+        { teal: 1313, source: 'contracts\\BiatecIdentityProvider.algo.ts:407', pc: [1417, 1418] },
+        { teal: 1314, source: 'contracts\\BiatecIdentityProvider.algo.ts:407', pc: [1419] },
+        { teal: 1315, source: 'contracts\\BiatecIdentityProvider.algo.ts:407', pc: [1420] },
+        { teal: 1316, source: 'contracts\\BiatecIdentityProvider.algo.ts:403', pc: [1421] },
+        { teal: 1317, source: 'contracts\\BiatecIdentityProvider.algo.ts:403', pc: [1422, 1423] },
+        { teal: 1321, source: 'contracts\\BiatecIdentityProvider.algo.ts:410', pc: [1424, 1425] },
+        { teal: 1325, source: 'contracts\\BiatecIdentityProvider.algo.ts:388', pc: [1426, 1427] },
+        { teal: 1328, source: 'contracts\\BiatecIdentityProvider.algo.ts:388', pc: [1428, 1429] },
+        { teal: 1329, source: 'contracts\\BiatecIdentityProvider.algo.ts:388', pc: [1430] },
+        { teal: 1334, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1431, 1432] },
+        { teal: 1337, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1433, 1434, 1435] },
+        { teal: 1338, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1436] },
+        { teal: 1341, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1437, 1438, 1439] },
+        { teal: 1342, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1440] },
+        { teal: 1345, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1441, 1442, 1443] },
+        { teal: 1346, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1444] },
+        { teal: 1349, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1445, 1446, 1447] },
+        { teal: 1350, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1448] },
+        { teal: 1351, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1449] },
+        { teal: 1352, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1450] },
+        { teal: 1353, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1451] },
+        { teal: 1354, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1452] },
+        { teal: 1366, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1453, 1454, 1455] },
+        { teal: 1369, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1456] },
+        { teal: 1370, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1457] },
+        { teal: 1374, source: 'contracts\\BiatecIdentityProvider.algo.ts:422', pc: [1458, 1459] },
+        { teal: 1375, source: 'contracts\\BiatecIdentityProvider.algo.ts:422', pc: [1460, 1461] },
+        { teal: 1376, source: 'contracts\\BiatecIdentityProvider.algo.ts:422', pc: [1462] },
+        { teal: 1377, source: 'contracts\\BiatecIdentityProvider.algo.ts:422', pc: [1463] },
+        {
+          teal: 1380,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:422',
+          errorMessage: 'Configuration app does not match',
+          pc: [1464],
+        },
+        { teal: 1384, source: 'contracts\\BiatecIdentityProvider.algo.ts:423', pc: [1465, 1466] },
+        { teal: 1385, source: 'contracts\\BiatecIdentityProvider.algo.ts:423', pc: [1467, 1468] },
+        { teal: 1386, source: 'contracts\\BiatecIdentityProvider.algo.ts:423', pc: [1469] },
+        {
+          teal: 1389,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:423',
+          errorMessage: "global state value does not exist: appBiatecConfigProvider.globalState('ef')",
+          pc: [1470],
+        },
+        { teal: 1390, source: 'contracts\\BiatecIdentityProvider.algo.ts:423', pc: [1471, 1472] },
+        { teal: 1394, source: 'contracts\\BiatecIdentityProvider.algo.ts:424', pc: [1473, 1474] },
+        { teal: 1395, source: 'contracts\\BiatecIdentityProvider.algo.ts:424', pc: [1475, 1476] },
+        { teal: 1396, source: 'contracts\\BiatecIdentityProvider.algo.ts:424', pc: [1477] },
+        {
+          teal: 1399,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:424',
+          errorMessage: "global state value does not exist: appBiatecConfigProvider.globalState('s')",
+          pc: [1478],
+        },
+        { teal: 1400, source: 'contracts\\BiatecIdentityProvider.algo.ts:424', pc: [1479, 1480] },
+        { teal: 1404, source: 'contracts\\BiatecIdentityProvider.algo.ts:425', pc: [1481, 1482] },
+        { teal: 1405, source: 'contracts\\BiatecIdentityProvider.algo.ts:425', pc: [1483] },
+        { teal: 1406, source: 'contracts\\BiatecIdentityProvider.algo.ts:425', pc: [1484] },
+        { teal: 1409, source: 'contracts\\BiatecIdentityProvider.algo.ts:425', errorMessage: 'ERR_PAUSED', pc: [1485] },
+        { teal: 1416, source: 'contracts\\BiatecIdentityProvider.algo.ts:427', pc: [1486, 1487] },
+        { teal: 1417, source: 'contracts\\BiatecIdentityProvider.algo.ts:427', pc: [1488, 1489] },
+        { teal: 1418, source: 'contracts\\BiatecIdentityProvider.algo.ts:427', pc: [1490] },
+        {
+          teal: 1421,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:426',
+          errorMessage: 'Only fee executor setup in the config can take the collected fees',
+          pc: [1491],
+        },
+        { teal: 1425, source: 'contracts\\BiatecIdentityProvider.algo.ts:431', pc: [1492, 1493] },
+        { teal: 1426, source: 'contracts\\BiatecIdentityProvider.algo.ts:431', pc: [1494, 1495] },
+        { teal: 1427, source: 'contracts\\BiatecIdentityProvider.algo.ts:431', pc: [1496, 1497] },
+        { teal: 1428, source: 'contracts\\BiatecIdentityProvider.algo.ts:431', pc: [1498, 1499, 1500] },
+        { teal: 1432, source: 'contracts\\BiatecIdentityProvider.algo.ts:433', pc: [1501, 1502] },
+        { teal: 1435, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1503, 1504] },
+        { teal: 1438, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1505, 1506] },
+        { teal: 1439, source: 'contracts\\BiatecIdentityProvider.algo.ts:421', pc: [1507] },
+        { teal: 1448, source: 'contracts\\BiatecIdentityProvider.algo.ts:442', pc: [1508, 1509, 1510] },
+        { teal: 1453, source: 'contracts\\BiatecIdentityProvider.algo.ts:443', pc: [1511, 1512] },
+        { teal: 1454, source: 'contracts\\BiatecIdentityProvider.algo.ts:443', pc: [1513] },
+        { teal: 1455, source: 'contracts\\BiatecIdentityProvider.algo.ts:443', pc: [1514] },
+        { teal: 1456, source: 'contracts\\BiatecIdentityProvider.algo.ts:443', pc: [1515, 1516, 1517] },
+        { teal: 1465, source: 'contracts\\BiatecIdentityProvider.algo.ts:444', pc: [1518] },
+        { teal: 1466, source: 'contracts\\BiatecIdentityProvider.algo.ts:444', pc: [1519] },
+        { teal: 1467, source: 'contracts\\BiatecIdentityProvider.algo.ts:444', pc: [1520, 1521] },
+        { teal: 1471, source: 'contracts\\BiatecIdentityProvider.algo.ts:445', pc: [1522, 1523] },
+        { teal: 1472, source: 'contracts\\BiatecIdentityProvider.algo.ts:445', pc: [1524, 1525] },
+        { teal: 1476, source: 'contracts\\BiatecIdentityProvider.algo.ts:446', pc: [1526, 1527] },
+        { teal: 1477, source: 'contracts\\BiatecIdentityProvider.algo.ts:446', pc: [1528, 1529] },
+        { teal: 1481, source: 'contracts\\BiatecIdentityProvider.algo.ts:447', pc: [1530] },
+        { teal: 1482, source: 'contracts\\BiatecIdentityProvider.algo.ts:447', pc: [1531, 1532] },
+        { teal: 1485, source: 'contracts\\BiatecIdentityProvider.algo.ts:444', pc: [1533] },
+        { teal: 1486, source: 'contracts\\BiatecIdentityProvider.algo.ts:443', pc: [1534, 1535, 1536] },
+        { teal: 1496, source: 'contracts\\BiatecIdentityProvider.algo.ts:450', pc: [1537] },
+        { teal: 1497, source: 'contracts\\BiatecIdentityProvider.algo.ts:450', pc: [1538, 1539] },
+        { teal: 1498, source: 'contracts\\BiatecIdentityProvider.algo.ts:450', pc: [1540, 1541] },
+        { teal: 1502, source: 'contracts\\BiatecIdentityProvider.algo.ts:451', pc: [1542, 1543] },
+        { teal: 1503, source: 'contracts\\BiatecIdentityProvider.algo.ts:451', pc: [1544, 1545] },
+        { teal: 1507, source: 'contracts\\BiatecIdentityProvider.algo.ts:452', pc: [1546, 1547] },
+        { teal: 1508, source: 'contracts\\BiatecIdentityProvider.algo.ts:452', pc: [1548, 1549] },
+        { teal: 1512, source: 'contracts\\BiatecIdentityProvider.algo.ts:453', pc: [1550, 1551] },
+        { teal: 1513, source: 'contracts\\BiatecIdentityProvider.algo.ts:453', pc: [1552, 1553] },
+        { teal: 1517, source: 'contracts\\BiatecIdentityProvider.algo.ts:454', pc: [1554] },
+        { teal: 1518, source: 'contracts\\BiatecIdentityProvider.algo.ts:454', pc: [1555, 1556] },
+        { teal: 1521, source: 'contracts\\BiatecIdentityProvider.algo.ts:450', pc: [1557] },
+        { teal: 1524, source: 'contracts\\BiatecIdentityProvider.algo.ts:442', pc: [1558] },
+        {
+          teal: 1527,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          pc: [1559, 1560, 1561, 1562, 1563, 1564],
+        },
+        { teal: 1528, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1565, 1566, 1567] },
+        { teal: 1529, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1568, 1569, 1570, 1571] },
+        {
+          teal: 1532,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          errorMessage: 'this contract does not implement the given ABI method for create NoOp',
+          pc: [1572],
+        },
+        {
+          teal: 1535,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          pc: [1573, 1574, 1575, 1576, 1577, 1578],
+        },
+        {
+          teal: 1536,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          pc: [1579, 1580, 1581, 1582, 1583, 1584],
+        },
+        {
+          teal: 1537,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          pc: [1585, 1586, 1587, 1588, 1589, 1590],
+        },
+        {
+          teal: 1538,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          pc: [1591, 1592, 1593, 1594, 1595, 1596],
+        },
+        {
+          teal: 1539,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          pc: [1597, 1598, 1599, 1600, 1601, 1602],
+        },
+        {
+          teal: 1540,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          pc: [1603, 1604, 1605, 1606, 1607, 1608],
+        },
+        {
+          teal: 1541,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          pc: [1609, 1610, 1611, 1612, 1613, 1614],
+        },
+        { teal: 1542, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1615, 1616, 1617] },
+        {
+          teal: 1543,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          pc: [1618, 1619, 1620, 1621, 1622, 1623, 1624, 1625, 1626, 1627, 1628, 1629, 1630, 1631, 1632, 1633],
+        },
+        {
+          teal: 1546,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          errorMessage: 'this contract does not implement the given ABI method for call NoOp',
+          pc: [1634],
+        },
+        {
+          teal: 1549,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          pc: [1635, 1636, 1637, 1638, 1639, 1640],
+        },
+        { teal: 1550, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1641, 1642, 1643] },
+        { teal: 1551, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1644, 1645, 1646, 1647] },
+        {
+          teal: 1554,
+          source: 'contracts\\BiatecIdentityProvider.algo.ts:181',
+          errorMessage: 'this contract does not implement the given ABI method for call UpdateApplication',
+          pc: [1648],
+        },
+        { teal: 1557, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1649, 1650, 1651] },
+        { teal: 1558, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1652, 1653] },
+        { teal: 1559, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1654, 1655] },
+        { teal: 1560, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1656] },
+        { teal: 1561, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1657, 1658] },
+        { teal: 1562, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1659, 1660] },
+        { teal: 1563, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1661] },
+        { teal: 1566, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1662, 1663, 1664] },
+        { teal: 1567, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1665, 1666] },
+        { teal: 1568, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1667, 1668] },
+        { teal: 1569, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1669] },
+        { teal: 1570, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1670, 1671] },
+        { teal: 1571, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1672, 1673] },
+        { teal: 1572, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1674] },
+        { teal: 1573, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1675] },
+        { teal: 1574, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1676, 1677] },
+        { teal: 1575, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1678] },
+        { teal: 1576, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1679] },
+        { teal: 1577, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1680] },
+        { teal: 1578, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1681, 1682, 1683] },
+        { teal: 1579, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1684, 1685] },
+        { teal: 1580, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1686, 1687] },
+        { teal: 1581, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1688] },
+        { teal: 1582, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1689] },
+        { teal: 1583, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1690, 1691] },
+        { teal: 1584, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1692, 1693] },
+        { teal: 1585, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1694, 1695] },
+        { teal: 1586, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1696, 1697] },
+        { teal: 1587, source: 'contracts\\BiatecIdentityProvider.algo.ts:181', pc: [1698] },
+      ],
+      pcOffsetMethod: 'none',
+    },
+    clear: { sourceInfo: [], pcOffsetMethod: 'none' },
+  },
+  source: {
+    approval:
+      'I3ByYWdtYSB2ZXJzaW9uIDEwCmludGNibG9jayAwIDEgMzIgMiA2NCAxMDAwMDAwMDAwIDgxNiA1MCA1MgpieXRlY2Jsb2NrIDB4IDB4MDAwMDAwMDAwMDAwMDAwMCAweDAwIDB4NjkgMHg0MiAweDczIDB4MTUxZjdjNzUgMHgzMDMwMzAzMDMwMzAzMDMwMmQzMDMwMzAzMDJkMzAzMDMwMzAyZDMwMzAzMDMwMmQzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAgMHgwMDAwMDAwMDc3MzU5NDAwIDB4MDAwMDAwMDAzYjlhY2EwMCAweDczNjM3NjY1NzIgMHg2NTY2IDB4MDA2OCAweDAwMDAgMHg2NQoKLy8gVGhpcyBURUFMIHdhcyBnZW5lcmF0ZWQgYnkgVEVBTFNjcmlwdCB2MC4xMDYuMwovLyBodHRwczovL2dpdGh1Yi5jb20vYWxnb3JhbmRmb3VuZGF0aW9uL1RFQUxTY3JpcHQKCi8vIFRoaXMgY29udHJhY3QgaXMgY29tcGxpYW50IHdpdGggYW5kL29yIGltcGxlbWVudHMgdGhlIGZvbGxvd2luZyBBUkNzOiBbIEFSQzQgXQoKLy8gVGhlIGZvbGxvd2luZyB0ZW4gbGluZXMgb2YgVEVBTCBoYW5kbGUgaW5pdGlhbCBwcm9ncmFtIGZsb3cKLy8gVGhpcyBwYXR0ZXJuIGlzIHVzZWQgdG8gbWFrZSBpdCBlYXN5IGZvciBhbnlvbmUgdG8gcGFyc2UgdGhlIHN0YXJ0IG9mIHRoZSBwcm9ncmFtIGFuZCBkZXRlcm1pbmUgaWYgYSBzcGVjaWZpYyBhY3Rpb24gaXMgYWxsb3dlZAovLyBIZXJlLCBhY3Rpb24gcmVmZXJzIHRvIHRoZSBPbkNvbXBsZXRlIGluIGNvbWJpbmF0aW9uIHdpdGggd2hldGhlciB0aGUgYXBwIGlzIGJlaW5nIGNyZWF0ZWQgb3IgY2FsbGVkCi8vIEV2ZXJ5IHBvc3NpYmxlIGFjdGlvbiBmb3IgdGhpcyBjb250cmFjdCBpcyByZXByZXNlbnRlZCBpbiB0aGUgc3dpdGNoIHN0YXRlbWVudAovLyBJZiB0aGUgYWN0aW9uIGlzIG5vdCBpbXBsZW1lbnRlZCBpbiB0aGUgY29udHJhY3QsIGl0cyByZXNwZWN0aXZlIGJyYW5jaCB3aWxsIGJlICIqTk9UX0lNUExFTUVOVEVEIiB3aGljaCBqdXN0IGNvbnRhaW5zICJlcnIiCnR4biBBcHBsaWNhdGlvbklECiEKcHVzaGludCA2CioKdHhuIE9uQ29tcGxldGlvbgorCnN3aXRjaCAqY2FsbF9Ob09wICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpjYWxsX1VwZGF0ZUFwcGxpY2F0aW9uICpOT1RfSU1QTEVNRU5URUQgKmNyZWF0ZV9Ob09wICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRAoKKk5PVF9JTVBMRU1FTlRFRDoKCS8vIFRoZSByZXF1ZXN0ZWQgYWN0aW9uIGlzIG5vdCBpbXBsZW1lbnRlZCBpbiB0aGlzIGNvbnRyYWN0LiBBcmUgeW91IHVzaW5nIHRoZSBjb3JyZWN0IE9uQ29tcGxldGU/IERpZCB5b3Ugc2V0IHlvdXIgYXBwIElEPwoJZXJyCgovLyBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoqYWJpX3JvdXRlX2NyZWF0ZUFwcGxpY2F0aW9uOgoJLy8gZXhlY3V0ZSBjcmVhdGVBcHBsaWNhdGlvbigpdm9pZAoJY2FsbHN1YiBjcmVhdGVBcHBsaWNhdGlvbgoJaW50YyAxIC8vIDEKCXJldHVybgoKLy8gY3JlYXRlQXBwbGljYXRpb24oKTogdm9pZAovLwovLyBJbml0aWFsIHNldHVwCmNyZWF0ZUFwcGxpY2F0aW9uOgoJcHJvdG8gMCAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyMDcKCS8vIHRoaXMudmVyc2lvbi52YWx1ZSA9IHZlcnNpb24KCWJ5dGVjIDEwIC8vICAic2N2ZXIiCglwdXNoYnl0ZXMgIkJJQVRFQy1JREVOVC0wMS0wMy0wMSIKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIGJvb3RzdHJhcCh1aW50NjQsYWRkcmVzcyxhZGRyZXNzLGFkZHJlc3Mpdm9pZAoqYWJpX3JvdXRlX2Jvb3RzdHJhcDoKCS8vIGVuZ2FnZW1lbnRTZXR0ZXI6IGFkZHJlc3MKCXR4bmEgQXBwbGljYXRpb25BcmdzIDQKCWR1cAoJbGVuCglpbnRjIDIgLy8gMzIKCT09CgoJLy8gYXJndW1lbnQgMCAoZW5nYWdlbWVudFNldHRlcikgZm9yIGJvb3RzdHJhcCBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gdmVyaWZpY2F0aW9uU2V0dGVyOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAzCglkdXAKCWxlbgoJaW50YyAyIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDEgKHZlcmlmaWNhdGlvblNldHRlcikgZm9yIGJvb3RzdHJhcCBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gZ292ZXJub3I6IGFkZHJlc3MKCXR4bmEgQXBwbGljYXRpb25BcmdzIDIKCWR1cAoJbGVuCglpbnRjIDIgLy8gMzIKCT09CgoJLy8gYXJndW1lbnQgMiAoZ292ZXJub3IpIGZvciBib290c3RyYXAgbXVzdCBiZSBhIGFkZHJlc3MKCWFzc2VydAoKCS8vIGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWJ0b2kKCgkvLyBleGVjdXRlIGJvb3RzdHJhcCh1aW50NjQsYWRkcmVzcyxhZGRyZXNzLGFkZHJlc3Mpdm9pZAoJY2FsbHN1YiBib290c3RyYXAKCWludGMgMSAvLyAxCglyZXR1cm4KCi8vIGJvb3RzdHJhcChhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogQXBwSUQsIGdvdmVybm9yOiBBZGRyZXNzLCB2ZXJpZmljYXRpb25TZXR0ZXI6IEFkZHJlc3MsIGVuZ2FnZW1lbnRTZXR0ZXI6IEFkZHJlc3MpOiB2b2lkCi8vCi8vIEJpYXRlYyBkZXBsb3lzIHNpbmdsZSBpZGVudGl0eSBwcm92aWRlciBzbWFydCBjb250cmFjdAovLyBAcGFyYW0gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIgQmlhdGVjIGFtbSBwcm92aWRlcgpib290c3RyYXA6Cglwcm90byA0IDAKCgkvLyBQdXNoIGVtcHR5IGJ5dGVzIGFmdGVyIHRoZSBmcmFtZSBwb2ludGVyIHRvIHJlc2VydmUgc3BhY2UgZm9yIGxvY2FsIHZhcmlhYmxlcwoJYnl0ZWMgMCAvLyAweAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjIwCgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFwcC5jcmVhdG9yLCAnT25seSBjcmVhdG9yIG9mIHRoZSBhcHAgY2FuIHNldCBpdCB1cCcpCgl0eG4gU2VuZGVyCgl0eG5hIEFwcGxpY2F0aW9ucyAwCglhcHBfcGFyYW1zX2dldCBBcHBDcmVhdG9yCglwb3AKCT09CgoJLy8gT25seSBjcmVhdG9yIG9mIHRoZSBhcHAgY2FuIHNldCBpdCB1cAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyMjEKCS8vIHRoaXMuYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIudmFsdWUgPSBhcHBCaWF0ZWNDb25maWdQcm92aWRlcgoJYnl0ZWMgNCAvLyAgIkIiCglmcmFtZV9kaWcgLTEgLy8gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXI6IEFwcElECglhcHBfZ2xvYmFsX3B1dAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjIyCgkvLyB0aGlzLmdvdmVybm9yLnZhbHVlID0gZ292ZXJub3IKCXB1c2hieXRlcyAweDY3IC8vICJnIgoJZnJhbWVfZGlnIC0yIC8vIGdvdmVybm9yOiBBZGRyZXNzCglhcHBfZ2xvYmFsX3B1dAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjIzCgkvLyB0aGlzLnZlcmlmaWNhdGlvblNldHRlci52YWx1ZSA9IHZlcmlmaWNhdGlvblNldHRlcgoJcHVzaGJ5dGVzIDB4NzYgLy8gInYiCglmcmFtZV9kaWcgLTMgLy8gdmVyaWZpY2F0aW9uU2V0dGVyOiBBZGRyZXNzCglhcHBfZ2xvYmFsX3B1dAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjI0CgkvLyB0aGlzLmVuZ2FnZW1lbnRTZXR0ZXIudmFsdWUgPSBlbmdhZ2VtZW50U2V0dGVyCglieXRlYyAxNCAvLyAgImUiCglmcmFtZV9kaWcgLTQgLy8gZW5nYWdlbWVudFNldHRlcjogQWRkcmVzcwoJYXBwX2dsb2JhbF9wdXQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjIyNgoJLy8gcGF1c2VkID0gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIuZ2xvYmFsU3RhdGUoJ3MnKSBhcyB1aW50NjQKCWZyYW1lX2RpZyAtMSAvLyBhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogQXBwSUQKCWJ5dGVjIDUgLy8gICJzIgoJYXBwX2dsb2JhbF9nZXRfZXgKCgkvLyBnbG9iYWwgc3RhdGUgdmFsdWUgZG9lcyBub3QgZXhpc3Q6IGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmdsb2JhbFN0YXRlKCdzJykKCWFzc2VydAoJZnJhbWVfYnVyeSAwIC8vIHBhdXNlZDogdWludDY0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyMjcKCS8vIGFzc2VydChwYXVzZWQgPT09IDAsICdFUlJfUEFVU0VEJykKCWZyYW1lX2RpZyAwIC8vIHBhdXNlZDogdWludDY0CglpbnRjIDAgLy8gMAoJPT0KCgkvLyBFUlJfUEFVU0VECglhc3NlcnQKCXJldHN1YgoKLy8gdXBkYXRlQXBwbGljYXRpb24odWludDY0LGJ5dGVbXSl2b2lkCiphYmlfcm91dGVfdXBkYXRlQXBwbGljYXRpb246CgkvLyBuZXdWZXJzaW9uOiBieXRlW10KCXR4bmEgQXBwbGljYXRpb25BcmdzIDIKCWV4dHJhY3QgMiAwCgoJLy8gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXI6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJYnRvaQoKCS8vIGV4ZWN1dGUgdXBkYXRlQXBwbGljYXRpb24odWludDY0LGJ5dGVbXSl2b2lkCgljYWxsc3ViIHVwZGF0ZUFwcGxpY2F0aW9uCglpbnRjIDEgLy8gMQoJcmV0dXJuCgovLyB1cGRhdGVBcHBsaWNhdGlvbihhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogQXBwSUQsIG5ld1ZlcnNpb246IGJ5dGVzKTogdm9pZAovLwovLyBhZGRyZXNzVWRwYXRlciBmcm9tIGdsb2JhbCBiaWF0ZWMgY29uZmlndXJhdGlvbiBpcyBhbGxvd2VkIHRvIHVwZGF0ZSBhcHBsaWNhdGlvbgp1cGRhdGVBcHBsaWNhdGlvbjoKCXByb3RvIDIgMAoKCS8vIFB1c2ggZW1wdHkgYnl0ZXMgYWZ0ZXIgdGhlIGZyYW1lIHBvaW50ZXIgdG8gcmVzZXJ2ZSBzcGFjZSBmb3IgbG9jYWwgdmFyaWFibGVzCglieXRlYyAwIC8vIDB4CglkdXAKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjIzNAoJLy8gYXNzZXJ0KGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyID09PSB0aGlzLmFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLnZhbHVlLCAnQ29uZmlndXJhdGlvbiBhcHAgZG9lcyBub3QgbWF0Y2gnKQoJZnJhbWVfZGlnIC0xIC8vIGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyOiBBcHBJRAoJYnl0ZWMgNCAvLyAgIkIiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBDb25maWd1cmF0aW9uIGFwcCBkb2VzIG5vdCBtYXRjaAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyMzUKCS8vIGFkZHJlc3NVZHBhdGVyID0gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIuZ2xvYmFsU3RhdGUoJ3UnKSBhcyBBZGRyZXNzCglmcmFtZV9kaWcgLTEgLy8gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXI6IEFwcElECglwdXNoYnl0ZXMgMHg3NSAvLyAidSIKCWFwcF9nbG9iYWxfZ2V0X2V4CgoJLy8gZ2xvYmFsIHN0YXRlIHZhbHVlIGRvZXMgbm90IGV4aXN0OiBhcHBCaWF0ZWNDb25maWdQcm92aWRlci5nbG9iYWxTdGF0ZSgndScpCglhc3NlcnQKCWZyYW1lX2J1cnkgMCAvLyBhZGRyZXNzVWRwYXRlcjogYWRkcmVzcwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjM2CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSBhZGRyZXNzVWRwYXRlciwgJ09ubHkgYWRkcmVzc1VkcGF0ZXIgc2V0dXAgaW4gdGhlIGNvbmZpZyBjYW4gdXBkYXRlIGFwcGxpY2F0aW9uJykKCXR4biBTZW5kZXIKCWZyYW1lX2RpZyAwIC8vIGFkZHJlc3NVZHBhdGVyOiBhZGRyZXNzCgk9PQoKCS8vIE9ubHkgYWRkcmVzc1VkcGF0ZXIgc2V0dXAgaW4gdGhlIGNvbmZpZyBjYW4gdXBkYXRlIGFwcGxpY2F0aW9uCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjIzNwoJLy8gcGF1c2VkID0gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIuZ2xvYmFsU3RhdGUoJ3MnKSBhcyB1aW50NjQKCWZyYW1lX2RpZyAtMSAvLyBhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogQXBwSUQKCWJ5dGVjIDUgLy8gICJzIgoJYXBwX2dsb2JhbF9nZXRfZXgKCgkvLyBnbG9iYWwgc3RhdGUgdmFsdWUgZG9lcyBub3QgZXhpc3Q6IGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmdsb2JhbFN0YXRlKCdzJykKCWFzc2VydAoJZnJhbWVfYnVyeSAxIC8vIHBhdXNlZDogdWludDY0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyMzgKCS8vIGFzc2VydChwYXVzZWQgPT09IDAsICdFUlJfUEFVU0VEJykKCWZyYW1lX2RpZyAxIC8vIHBhdXNlZDogdWludDY0CglpbnRjIDAgLy8gMAoJPT0KCgkvLyBFUlJfUEFVU0VECglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjIzOQoJLy8gdGhpcy52ZXJzaW9uLnZhbHVlID0gbmV3VmVyc2lvbgoJYnl0ZWMgMTAgLy8gICJzY3ZlciIKCWZyYW1lX2RpZyAtMiAvLyBuZXdWZXJzaW9uOiBieXRlcwoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2VsZlJlZ2lzdHJhdGlvbihhZGRyZXNzLCh1aW50NjQsYm9vbCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LGJvb2wsc3RyaW5nLHN0cmluZyx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCxib29sKSl2b2lkCiphYmlfcm91dGVfc2VsZlJlZ2lzdHJhdGlvbjoKCS8vIGluZm86ICh1aW50NjQsYm9vbCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LGJvb2wsc3RyaW5nLHN0cmluZyx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCxib29sKQoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgoKCS8vIHVzZXI6IGFkZHJlc3MKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWR1cAoJbGVuCglpbnRjIDIgLy8gMzIKCT09CgoJLy8gYXJndW1lbnQgMSAodXNlcikgZm9yIHNlbGZSZWdpc3RyYXRpb24gbXVzdCBiZSBhIGFkZHJlc3MKCWFzc2VydAoKCS8vIGV4ZWN1dGUgc2VsZlJlZ2lzdHJhdGlvbihhZGRyZXNzLCh1aW50NjQsYm9vbCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LGJvb2wsc3RyaW5nLHN0cmluZyx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCxib29sKSl2b2lkCgljYWxsc3ViIHNlbGZSZWdpc3RyYXRpb24KCWludGMgMSAvLyAxCglyZXR1cm4KCi8vIHNlbGZSZWdpc3RyYXRpb24odXNlcjogQWRkcmVzcywgaW5mbzogSWRlbnRpdHlJbmZvKTogdm9pZApzZWxmUmVnaXN0cmF0aW9uOgoJcHJvdG8gMiAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNDMKCS8vIGFzc2VydCghdGhpcy5pZGVudGl0aWVzKHVzZXIpLmV4aXN0cywgJ1NlbGYgcmVnaXN0cmF0aW9uIGNhbm5vdCBiZSBleGVjdXRlZCBpZiBhZGRyZXNzIGlzIGFscmVhZHkgcmVnaXN0ZXJlZCcpCglieXRlYyAzIC8vICAiaSIKCWZyYW1lX2RpZyAtMSAvLyB1c2VyOiBBZGRyZXNzCgljb25jYXQKCWJveF9sZW4KCXN3YXAKCXBvcAoJIQoKCS8vIFNlbGYgcmVnaXN0cmF0aW9uIGNhbm5vdCBiZSBleGVjdXRlZCBpZiBhZGRyZXNzIGlzIGFscmVhZHkgcmVnaXN0ZXJlZAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNDYKCS8vIGFzc2VydChpbmZvLnZlcmlmaWNhdGlvblN0YXR1cyA9PT0gMSwgJ1ZlcmlmaWNhdGlvbiBzdGF0dXMgbXVzdCBiZSBlbXB0eScpCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA0MSA4CglidG9pCglpbnRjIDEgLy8gMQoJPT0KCgkvLyBWZXJpZmljYXRpb24gc3RhdHVzIG11c3QgYmUgZW1wdHkKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjQ4CgkvLyBhc3NlcnQoaW5mby52ZXJpZmljYXRpb25DbGFzcyA9PT0gMCwgJ3ZlcmlmaWNhdGlvbkNsYXNzIG11c3QgZXF1YWwgdG8gMCcpCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCAwIDgKCWJ0b2kKCWludGMgMCAvLyAwCgk9PQoKCS8vIHZlcmlmaWNhdGlvbkNsYXNzIG11c3QgZXF1YWwgdG8gMAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNTEKCS8vIGFzc2VydCgKCS8vICAgICAgIGluZm8ucGVyc29uVVVJRCA9PT0gJzAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCcsCgkvLyAgICAgICAncGVyc29uVVVJRCBtdXN0IGVxdWFsIHRvIDAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCcKCS8vICAgICApCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJaW50YyA3IC8vIDUwCglsb2FkIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5Cgl1bmNvdmVyIDIKCWV4dHJhY3RfdWludDE2CglkdXAgLy8gZHVwbGljYXRlIHN0YXJ0IG9mIGVsZW1lbnQKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCXN3YXAKCWV4dHJhY3RfdWludDE2IC8vIGdldCBudW1iZXIgb2YgZWxlbWVudHMKCWludGMgMSAvLyAgZ2V0IHR5cGUgbGVuZ3RoCgkqIC8vIG11bHRpcGx5IGJ5IHR5cGUgbGVuZ3RoCglpbnRjIDMgLy8gMgoJKyAvLyBhZGQgdHdvIGZvciBsZW5ndGgKCWV4dHJhY3QzCglleHRyYWN0IDIgMAoJYnl0ZWMgNyAvLyAgIjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIKCT09CgoJLy8gcGVyc29uVVVJRCBtdXN0IGVxdWFsIHRvIDAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNTYKCS8vIGFzc2VydCgKCS8vICAgICAgIGluZm8ubGVnYWxFbnRpdHlVVUlEID09PSAnMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwJywKCS8vICAgICAgICdsZWdhbEVudGl0eVVVSUQgbXVzdCBlcXVhbCB0byAwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAnCgkvLyAgICAgKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWludGMgOCAvLyA1MgoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJdW5jb3ZlciAyCglleHRyYWN0X3VpbnQxNgoJZHVwIC8vIGR1cGxpY2F0ZSBzdGFydCBvZiBlbGVtZW50Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5Cglzd2FwCglleHRyYWN0X3VpbnQxNiAvLyBnZXQgbnVtYmVyIG9mIGVsZW1lbnRzCglpbnRjIDEgLy8gIGdldCB0eXBlIGxlbmd0aAoJKiAvLyBtdWx0aXBseSBieSB0eXBlIGxlbmd0aAoJaW50YyAzIC8vIDIKCSsgLy8gYWRkIHR3byBmb3IgbGVuZ3RoCglleHRyYWN0MwoJZXh0cmFjdCAyIDAKCWJ5dGVjIDcgLy8gICIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAiCgk9PQoKCS8vIGxlZ2FsRW50aXR5VVVJRCBtdXN0IGVxdWFsIHRvIDAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNjEKCS8vIGFzc2VydChpbmZvLmJpYXRlY0VuZ2FnZW1lbnRQb2ludHMgPT09IDAsICdiaWF0ZWNFbmdhZ2VtZW50UG9pbnRzIG11c3QgZXF1YWwgdG8gMCcpCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA1NCA4CglidG9pCglpbnRjIDAgLy8gMAoJPT0KCgkvLyBiaWF0ZWNFbmdhZ2VtZW50UG9pbnRzIG11c3QgZXF1YWwgdG8gMAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNjMKCS8vIGFzc2VydChpbmZvLmJpYXRlY0VuZ2FnZW1lbnRSYW5rID09PSAwLCAnYmlhdGVjRW5nYWdlbWVudFJhbmsgbXVzdCBlcXVhbCB0byAwJykKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDYyIDgKCWJ0b2kKCWludGMgMCAvLyAwCgk9PQoKCS8vIGJpYXRlY0VuZ2FnZW1lbnRSYW5rIG11c3QgZXF1YWwgdG8gMAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNjUKCS8vIGFzc2VydChpbmZvLmF2bUVuZ2FnZW1lbnRQb2ludHMgPT09IDAsICdhdm1FbmdhZ2VtZW50UG9pbnRzIG11c3QgZXF1YWwgdG8gMCcpCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCA3MCA4CglidG9pCglpbnRjIDAgLy8gMAoJPT0KCgkvLyBhdm1FbmdhZ2VtZW50UG9pbnRzIG11c3QgZXF1YWwgdG8gMAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNjcKCS8vIGFzc2VydChpbmZvLmF2bUVuZ2FnZW1lbnRSYW5rID09PSAwLCAnYXZtRW5nYWdlbWVudFJhbmsgbXVzdCBlcXVhbCB0byAwJykKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDc4IDgKCWJ0b2kKCWludGMgMCAvLyAwCgk9PQoKCS8vIGF2bUVuZ2FnZW1lbnRSYW5rIG11c3QgZXF1YWwgdG8gMAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNjkKCS8vIGFzc2VydChpbmZvLnRyYWRpbmdFbmdhZ2VtZW50UG9pbnRzID09PSAwLCAndHJhZGluZ0VuZ2FnZW1lbnRQb2ludHMgbXVzdCBlcXVhbCB0byAwJykKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDg2IDgKCWJ0b2kKCWludGMgMCAvLyAwCgk9PQoKCS8vIHRyYWRpbmdFbmdhZ2VtZW50UG9pbnRzIG11c3QgZXF1YWwgdG8gMAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNzEKCS8vIGFzc2VydChpbmZvLnRyYWRpbmdFbmdhZ2VtZW50UmFuayA9PT0gMCwgJ3RyYWRpbmdFbmdhZ2VtZW50UmFuayBtdXN0IGVxdWFsIHRvIDAnKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgOTQgOAoJYnRvaQoJaW50YyAwIC8vIDAKCT09CgoJLy8gdHJhZGluZ0VuZ2FnZW1lbnRSYW5rIG11c3QgZXF1YWwgdG8gMAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czoyNzMKCS8vIGFzc2VydChpbmZvLmlzTG9ja2VkID09PSBmYWxzZSwgJ2lzTG9ja2VkIG11c3QgZXF1YWwgdG8gZmFsc2UnKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWludGMgNCAvLyA2NAoJZ2V0Yml0CglpbnRjIDAgLy8gMAoJPT0KCgkvLyBpc0xvY2tlZCBtdXN0IGVxdWFsIHRvIGZhbHNlCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjI3NQoJLy8gYXNzZXJ0KGluZm8ua3ljRXhwaXJhdGlvbiA9PT0gMCwgJ2t5Y0V4cGlyYXRpb24gbXVzdCBlcXVhbCB0byAwJykKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDI1IDgKCWJ0b2kKCWludGMgMCAvLyAwCgk9PQoKCS8vIGt5Y0V4cGlyYXRpb24gbXVzdCBlcXVhbCB0byAwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjI3NwoJLy8gYXNzZXJ0KGluZm8uaW52ZXN0b3JGb3JFeHBpcmF0aW9uID09PSAwLCAnaW52ZXN0b3JGb3JFeHBpcmF0aW9uIG11c3QgZXF1YWwgdG8gMCcpCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCAzMyA4CglidG9pCglpbnRjIDAgLy8gMAoJPT0KCgkvLyBpbnZlc3RvckZvckV4cGlyYXRpb24gbXVzdCBlcXVhbCB0byAwCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjI3OQoJLy8gYXNzZXJ0KGluZm8uaXNQcm9mZXNzaW9uYWxJbnZlc3RvciA9PT0gZmFsc2UsICdpc1Byb2Zlc3Npb25hbEludmVzdG9yIG11c3QgZXF1YWwgdG8gZmFsc2UnKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWludGMgNiAvLyA4MTYKCWdldGJpdAoJaW50YyAwIC8vIDAKCT09CgoJLy8gaXNQcm9mZXNzaW9uYWxJbnZlc3RvciBtdXN0IGVxdWFsIHRvIGZhbHNlCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjI4MQoJLy8gYXNzZXJ0KGluZm8uZmVlTXVsdGlwbGllckJhc2UgPT09IFNDQUxFLCAnRmVlTXVsdGlwbGllckJhc2UgbXVzdCBiZSBzZXQgcHJvcGVybHknKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgMTcgOAoJYnRvaQoJaW50YyA1IC8vIDEwMDAwMDAwMDAKCT09CgoJLy8gRmVlTXVsdGlwbGllckJhc2UgbXVzdCBiZSBzZXQgcHJvcGVybHkKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MjgyCgkvLyBhc3NlcnQoaW5mby5mZWVNdWx0aXBsaWVyID09PSAoKDIgKiBTQ0FMRSkgYXMgdWludDY0KSwgJ0luaXRpYWwgZmVlIG11bHRpcGxpZXIgbXVzdCBiZSBzZXQgdG8gMiAqIFNDQUxFJykKCWZyYW1lX2RpZyAtMiAvLyBpbmZvOiBJZGVudGl0eUluZm8KCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDkgOAoJYnRvaQoJcHVzaGludCAyMDAwMDAwMDAwCgk9PQoKCS8vIEluaXRpYWwgZmVlIG11bHRpcGxpZXIgbXVzdCBiZSBzZXQgdG8gMiAqIFNDQUxFCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjI4MwoJLy8gdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlID0gaW5mbwoJYnl0ZWMgMyAvLyAgImkiCglmcmFtZV9kaWcgLTEgLy8gdXNlcjogQWRkcmVzcwoJY29uY2F0CglkdXAKCWJveF9kZWwKCXBvcAoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJYm94X3B1dAoJcmV0c3ViCgovLyBzZXRJbmZvKGFkZHJlc3MsKHVpbnQ2NCxib29sLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsYm9vbCxzdHJpbmcsc3RyaW5nLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LGJvb2wpKXZvaWQKKmFiaV9yb3V0ZV9zZXRJbmZvOgoJLy8gaW5mbzogKHVpbnQ2NCxib29sLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsYm9vbCxzdHJpbmcsc3RyaW5nLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LGJvb2wpCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAyCgoJLy8gdXNlcjogYWRkcmVzcwoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZHVwCglsZW4KCWludGMgMiAvLyAzMgoJPT0KCgkvLyBhcmd1bWVudCAxICh1c2VyKSBmb3Igc2V0SW5mbyBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRJbmZvKGFkZHJlc3MsKHVpbnQ2NCxib29sLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsYm9vbCxzdHJpbmcsc3RyaW5nLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LGJvb2wpKXZvaWQKCWNhbGxzdWIgc2V0SW5mbwoJaW50YyAxIC8vIDEKCXJldHVybgoKLy8gc2V0SW5mbyh1c2VyOiBBZGRyZXNzLCBpbmZvOiBJZGVudGl0eUluZm8pOiB2b2lkCnNldEluZm86Cglwcm90byAyIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjI4NwoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5lbmdhZ2VtZW50U2V0dGVyLnZhbHVlKQoJdHhuIFNlbmRlcgoJYnl0ZWMgMTQgLy8gICJlIgoJYXBwX2dsb2JhbF9nZXQKCT09Cglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjI4OAoJLy8gYXNzZXJ0KGluZm8uZmVlTXVsdGlwbGllckJhc2UgPT09IFNDQUxFLCAnRmVlTXVsdGlwbGllckJhc2UgbXVzdCBiZSBzZXQgcHJvcGVybHknKQoJZnJhbWVfZGlnIC0yIC8vIGluZm86IElkZW50aXR5SW5mbwoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgMTcgOAoJYnRvaQoJaW50YyA1IC8vIDEwMDAwMDAwMDAKCT09CgoJLy8gRmVlTXVsdGlwbGllckJhc2UgbXVzdCBiZSBzZXQgcHJvcGVybHkKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6Mjg5CgkvLyB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUgPSBpbmZvCglieXRlYyAzIC8vICAiaSIKCWZyYW1lX2RpZyAtMSAvLyB1c2VyOiBBZGRyZXNzCgljb25jYXQKCWR1cAoJYm94X2RlbAoJcG9wCglmcmFtZV9kaWcgLTIgLy8gaW5mbzogSWRlbnRpdHlJbmZvCglib3hfcHV0CglyZXRzdWIKCi8vIHNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24odWludDY0LGJ5dGVbXSxieXRlW10sYnl0ZVtdLHVpbnQ2NCx1aW50NjQsdWludDY0KXZvaWQKKmFiaV9yb3V0ZV9zZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uOgoJLy8gdm90ZUtleURpbHV0aW9uOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDcKCWJ0b2kKCgkvLyB2b3RlTGFzdDogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyA2CglidG9pCgoJLy8gdm90ZUZpcnN0OiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDUKCWJ0b2kKCgkvLyBzdGF0ZVByb29mUEs6IGJ5dGVbXQoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgNAoJZXh0cmFjdCAyIDAKCgkvLyBzZWxlY3Rpb25QSzogYnl0ZVtdCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAzCglleHRyYWN0IDIgMAoKCS8vIHZvdGVQSzogYnl0ZVtdCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAyCglleHRyYWN0IDIgMAoKCS8vIGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWJ0b2kKCgkvLyBleGVjdXRlIHNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24odWludDY0LGJ5dGVbXSxieXRlW10sYnl0ZVtdLHVpbnQ2NCx1aW50NjQsdWludDY0KXZvaWQKCWNhbGxzdWIgc2VuZE9ubGluZUtleVJlZ2lzdHJhdGlvbgoJaW50YyAxIC8vIDEKCXJldHVybgoKLy8gc2VuZE9ubGluZUtleVJlZ2lzdHJhdGlvbihhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogQXBwSUQsIHZvdGVQSzogYnl0ZXMsIHNlbGVjdGlvblBLOiBieXRlcywgc3RhdGVQcm9vZlBLOiBieXRlcywgdm90ZUZpcnN0OiB1aW50NjQsIHZvdGVMYXN0OiB1aW50NjQsIHZvdGVLZXlEaWx1dGlvbjogdWludDY0KTogdm9pZAovLwovLyBhZGRyZXNzRXhlY3V0aXZlRmVlIGNhbiBwZXJmb20ga2V5IHJlZ2lzdHJhdGlvbiBmb3IgdGhpcyBMUCBwb29sCi8vCi8vIE9ubHkgYWRkcmVzc0V4ZWN1dGl2ZUZlZSBpcyBhbGxvd2VkIHRvIGV4ZWN1dGUgdGhpcyBtZXRob2QuCnNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb246Cglwcm90byA3IDAKCgkvLyBQdXNoIGVtcHR5IGJ5dGVzIGFmdGVyIHRoZSBmcmFtZSBwb2ludGVyIHRvIHJlc2VydmUgc3BhY2UgZm9yIGxvY2FsIHZhcmlhYmxlcwoJYnl0ZWMgMCAvLyAweAoJZHVwCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozMDYKCS8vIGFzc2VydChhcHBCaWF0ZWNDb25maWdQcm92aWRlciA9PT0gdGhpcy5hcHBCaWF0ZWNDb25maWdQcm92aWRlci52YWx1ZSwgJ0NvbmZpZ3VyYXRpb24gYXBwIGRvZXMgbm90IG1hdGNoJykKCWZyYW1lX2RpZyAtMSAvLyBhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogQXBwSUQKCWJ5dGVjIDQgLy8gICJCIgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gQ29uZmlndXJhdGlvbiBhcHAgZG9lcyBub3QgbWF0Y2gKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MzA3CgkvLyBhZGRyZXNzRXhlY3V0aXZlRmVlID0gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIuZ2xvYmFsU3RhdGUoJ2VmJykgYXMgQWRkcmVzcwoJZnJhbWVfZGlnIC0xIC8vIGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyOiBBcHBJRAoJYnl0ZWMgMTEgLy8gICJlZiIKCWFwcF9nbG9iYWxfZ2V0X2V4CgoJLy8gZ2xvYmFsIHN0YXRlIHZhbHVlIGRvZXMgbm90IGV4aXN0OiBhcHBCaWF0ZWNDb25maWdQcm92aWRlci5nbG9iYWxTdGF0ZSgnZWYnKQoJYXNzZXJ0CglmcmFtZV9idXJ5IDAgLy8gYWRkcmVzc0V4ZWN1dGl2ZUZlZTogYWRkcmVzcwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MzA4CgkvLyBhc3NlcnQoCgkvLyAgICAgICB0aGlzLnR4bi5zZW5kZXIgPT09IGFkZHJlc3NFeGVjdXRpdmVGZWUsCgkvLyAgICAgICAnT25seSBmZWUgZXhlY3V0b3Igc2V0dXAgaW4gdGhlIGNvbmZpZyBjYW4gdGFrZSB0aGUgY29sbGVjdGVkIGZlZXMnCgkvLyAgICAgKQoJdHhuIFNlbmRlcgoJZnJhbWVfZGlnIDAgLy8gYWRkcmVzc0V4ZWN1dGl2ZUZlZTogYWRkcmVzcwoJPT0KCgkvLyBPbmx5IGZlZSBleGVjdXRvciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB0YWtlIHRoZSBjb2xsZWN0ZWQgZmVlcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozMTIKCS8vIHBhdXNlZCA9IGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmdsb2JhbFN0YXRlKCdzJykgYXMgdWludDY0CglmcmFtZV9kaWcgLTEgLy8gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXI6IEFwcElECglieXRlYyA1IC8vICAicyIKCWFwcF9nbG9iYWxfZ2V0X2V4CgoJLy8gZ2xvYmFsIHN0YXRlIHZhbHVlIGRvZXMgbm90IGV4aXN0OiBhcHBCaWF0ZWNDb25maWdQcm92aWRlci5nbG9iYWxTdGF0ZSgncycpCglhc3NlcnQKCWZyYW1lX2J1cnkgMSAvLyBwYXVzZWQ6IHVpbnQ2NAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MzEzCgkvLyBhc3NlcnQocGF1c2VkID09PSAwLCAnRVJSX1BBVVNFRCcpCglmcmFtZV9kaWcgMSAvLyBwYXVzZWQ6IHVpbnQ2NAoJaW50YyAwIC8vIDAKCT09CgoJLy8gRVJSX1BBVVNFRAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozMTQKCS8vIHNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24oewoJLy8gICAgICAgc2VsZWN0aW9uUEs6IHNlbGVjdGlvblBLLAoJLy8gICAgICAgc3RhdGVQcm9vZlBLOiBzdGF0ZVByb29mUEssCgkvLyAgICAgICB2b3RlRmlyc3Q6IHZvdGVGaXJzdCwKCS8vICAgICAgIHZvdGVLZXlEaWx1dGlvbjogdm90ZUtleURpbHV0aW9uLAoJLy8gICAgICAgdm90ZUxhc3Q6IHZvdGVMYXN0LAoJLy8gICAgICAgdm90ZVBLOiB2b3RlUEssCgkvLyAgICAgICBmZWU6IDAsCgkvLyAgICAgfSkKCWl0eG5fYmVnaW4KCWludGMgMyAvLyAga2V5cmVnCglpdHhuX2ZpZWxkIFR5cGVFbnVtCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozMTUKCS8vIHNlbGVjdGlvblBLOiBzZWxlY3Rpb25QSwoJZnJhbWVfZGlnIC0zIC8vIHNlbGVjdGlvblBLOiBieXRlcwoJaXR4bl9maWVsZCBTZWxlY3Rpb25QSwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MzE2CgkvLyBzdGF0ZVByb29mUEs6IHN0YXRlUHJvb2ZQSwoJZnJhbWVfZGlnIC00IC8vIHN0YXRlUHJvb2ZQSzogYnl0ZXMKCWl0eG5fZmllbGQgU3RhdGVQcm9vZlBLCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozMTcKCS8vIHZvdGVGaXJzdDogdm90ZUZpcnN0CglmcmFtZV9kaWcgLTUgLy8gdm90ZUZpcnN0OiB1aW50NjQKCWl0eG5fZmllbGQgVm90ZUZpcnN0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozMTgKCS8vIHZvdGVLZXlEaWx1dGlvbjogdm90ZUtleURpbHV0aW9uCglmcmFtZV9kaWcgLTcgLy8gdm90ZUtleURpbHV0aW9uOiB1aW50NjQKCWl0eG5fZmllbGQgVm90ZUtleURpbHV0aW9uCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozMTkKCS8vIHZvdGVMYXN0OiB2b3RlTGFzdAoJZnJhbWVfZGlnIC02IC8vIHZvdGVMYXN0OiB1aW50NjQKCWl0eG5fZmllbGQgVm90ZUxhc3QKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjMyMAoJLy8gdm90ZVBLOiB2b3RlUEsKCWZyYW1lX2RpZyAtMiAvLyB2b3RlUEs6IGJ5dGVzCglpdHhuX2ZpZWxkIFZvdGVQSwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MzIxCgkvLyBmZWU6IDAKCWludGMgMCAvLyAwCglpdHhuX2ZpZWxkIEZlZQoKCS8vIFN1Ym1pdCBpbm5lciB0cmFuc2FjdGlvbgoJaXR4bl9zdWJtaXQKCXJldHN1YgoKLy8gZ2V0VXNlcihhZGRyZXNzLHVpbnQ4KSh1aW50OCx1aW50NjQsdWludDY0LGJvb2wsc3RyaW5nLHN0cmluZyx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LGJvb2wsdWludDY0LHVpbnQ2NCxib29sKQoqYWJpX3JvdXRlX2dldFVzZXI6CgkvLyBUaGUgQUJJIHJldHVybiBwcmVmaXgKCWJ5dGVjIDYgLy8gMHgxNTFmN2M3NQoKCS8vIHY6IHVpbnQ4Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAyCglkdXAKCWxlbgoJaW50YyAxIC8vIDEKCT09CgoJLy8gYXJndW1lbnQgMCAodikgZm9yIGdldFVzZXIgbXVzdCBiZSBhIHVpbnQ4Cglhc3NlcnQKCWJ0b2kKCgkvLyB1c2VyOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAyIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDEgKHVzZXIpIGZvciBnZXRVc2VyIG11c3QgYmUgYSBhZGRyZXNzCglhc3NlcnQKCgkvLyBleGVjdXRlIGdldFVzZXIoYWRkcmVzcyx1aW50OCkodWludDgsdWludDY0LHVpbnQ2NCxib29sLHN0cmluZyxzdHJpbmcsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCxib29sLHVpbnQ2NCx1aW50NjQsYm9vbCkKCWNhbGxzdWIgZ2V0VXNlcgoJY29uY2F0Cglsb2cKCWludGMgMSAvLyAxCglyZXR1cm4KCi8vIGdldFVzZXIodXNlcjogQWRkcmVzcywgdjogdWludDgpOiBVc2VySW5mb1YxCi8vCi8vIFJldHVybnMgdXNlciBpbmZvcm1hdGlvbiAtIGZlZSBtdWx0aXBsaWVyLCB2ZXJpZmljYXRpb24gY2xhc3MsIGVuZ2FnZW1lbnQgY2xhc3MgLi4KLy8KLy8gQHBhcmFtIHVzZXIgR2V0IGluZm8gZm9yIHNwZWNpZmljIHVzZXIgYWRkcmVzcwovLyBAcGFyYW0gdiBWZXJzaW9uIG9mIHRoZSBkYXRhIHN0cnVjdHVyZSB0byByZXR1cm4KZ2V0VXNlcjoKCXByb3RvIDIgMQoKCS8vIFB1c2ggZW1wdHkgYnl0ZXMgYWZ0ZXIgdGhlIGZyYW1lIHBvaW50ZXIgdG8gcmVzZXJ2ZSBzcGFjZSBmb3IgbG9jYWwgdmFyaWFibGVzCglieXRlYyAwIC8vIDB4CglkdXBuIDIKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjMzMwoJLy8gYXNzZXJ0KHYgPT09IDEsICJDdXJyZW50bHkgc3VwcG9ydGVkIHZlcnNpb24gb2YgdGhlIGRhdGEgc3RydWN0dXJlIGlzICcxJyIpCglmcmFtZV9kaWcgLTIgLy8gdjogdWludDgKCWludGMgMSAvLyAxCgk9PQoKCS8vIEN1cnJlbnRseSBzdXBwb3J0ZWQgdmVyc2lvbiBvZiB0aGUgZGF0YSBzdHJ1Y3R1cmUgaXMgJzEnCglhc3NlcnQKCgkvLyAqaWYwX2NvbmRpdGlvbgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozMzQKCS8vICF0aGlzLmlkZW50aXRpZXModXNlcikuZXhpc3RzCglieXRlYyAzIC8vICAiaSIKCWZyYW1lX2RpZyAtMSAvLyB1c2VyOiBBZGRyZXNzCgljb25jYXQKCWJveF9sZW4KCXN3YXAKCXBvcAoJIQoJYnogKmlmMF9lbmQKCgkvLyAqaWYwX2NvbnNlcXVlbnQKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MzM1CgkvLyByZXROb0lkZW50aXR5OiBVc2VySW5mb1YxID0gewoJLy8gICAgICAgICB2ZXJzaW9uOiB2LAoJLy8gICAgICAgICBiYXNlOiBTQ0FMRSBhcyB1aW50NjQsCgkvLyAgICAgICAgIGZlZU11bHRpcGxpZXI6ICgyICogU0NBTEUpIGFzIHVpbnQ2NCwKCS8vICAgICAgICAgaXNMb2NrZWQ6IGZhbHNlLAoJLy8gICAgICAgICB2ZXJpZmljYXRpb25DbGFzczogMCwKCS8vICAgICAgICAgdmVyaWZpY2F0aW9uU3RhdHVzOiAwLAoJLy8gICAgICAgICBiaWF0ZWNFbmdhZ2VtZW50UG9pbnRzOiAwLAoJLy8gICAgICAgICBiaWF0ZWNFbmdhZ2VtZW50UmFuazogMCwKCS8vICAgICAgICAgYXZtRW5nYWdlbWVudFBvaW50czogMCwKCS8vICAgICAgICAgYXZtRW5nYWdlbWVudFJhbms6IDAsCgkvLyAgICAgICAgIHRyYWRpbmdFbmdhZ2VtZW50UG9pbnRzOiAwLAoJLy8gICAgICAgICB0cmFkaW5nRW5nYWdlbWVudFJhbms6IDAsCgkvLyAgICAgICAgIGt5Y0V4cGlyYXRpb246IDAsCgkvLyAgICAgICAgIGludmVzdG9yRm9yRXhwaXJhdGlvbjogMCwKCS8vICAgICAgICAgaXNQcm9mZXNzaW9uYWxJbnZlc3RvcjogZmFsc2UsCgkvLyAgICAgICAgIGlzQ29tcGFueTogZmFsc2UsCgkvLyAgICAgICAgIHBlcnNvblVVSUQ6ICcnLAoJLy8gICAgICAgICBsZWdhbEVudGl0eVVVSUQ6ICcnLAoJLy8gICAgICAgfQoJYnl0ZWMgMCAvLyAgaW5pdGlhbCBoZWFkCglieXRlYyAwIC8vICBpbml0aWFsIHRhaWwKCWJ5dGVjIDEyIC8vICBpbml0aWFsIGhlYWQgb2Zmc2V0CglmcmFtZV9kaWcgLTIgLy8gdjogdWludDgKCWl0b2IKCWV4dHJhY3QgNyAxCgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglieXRlYyAxIC8vIDB4MDAwMDAwMDAwMDAwMDAwMAoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgMSAvLyAweDAwMDAwMDAwMDAwMDAwMDAKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWJ5dGVjIDIgLy8gMHgwMAoJaW50YyAwIC8vIDAKCWR1cAoJc2V0Yml0CgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglieXRlYyAxMyAvLyAweDAwMDAKCWNhbGxzdWIgKnByb2Nlc3NfZHluYW1pY190dXBsZV9lbGVtZW50CglieXRlYyAxMyAvLyAweDAwMDAKCWNhbGxzdWIgKnByb2Nlc3NfZHluYW1pY190dXBsZV9lbGVtZW50CglieXRlYyAxIC8vIDB4MDAwMDAwMDAwMDAwMDAwMAoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgMSAvLyAweDAwMDAwMDAwMDAwMDAwMDAKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWJ5dGVjIDEgLy8gMHgwMDAwMDAwMDAwMDAwMDAwCgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglieXRlYyAxIC8vIDB4MDAwMDAwMDAwMDAwMDAwMAoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgMSAvLyAweDAwMDAwMDAwMDAwMDAwMDAKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWJ5dGVjIDEgLy8gMHgwMDAwMDAwMDAwMDAwMDAwCgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglieXRlYyA4IC8vIDB4MDAwMDAwMDA3NzM1OTQwMAoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgOSAvLyAweDAwMDAwMDAwM2I5YWNhMDAKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWJ5dGVjIDIgLy8gMHgwMAoJaW50YyAwIC8vIDAKCWR1cAoJc2V0Yml0CgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglieXRlYyAxIC8vIDB4MDAwMDAwMDAwMDAwMDAwMAoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgMSAvLyAweDAwMDAwMDAwMDAwMDAwMDAKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWJ5dGVjIDIgLy8gMHgwMAoJaW50YyAwIC8vIDAKCWR1cAoJc2V0Yml0CgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50Cglwb3AgLy8gcG9wIGhlYWQgb2Zmc2V0Cgljb25jYXQgLy8gY29uY2F0IGhlYWQgYW5kIHRhaWwKCWZyYW1lX2J1cnkgMCAvLyByZXROb0lkZW50aXR5OiBVc2VySW5mb1YxCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozNTUKCS8vIHJldHVybiByZXROb0lkZW50aXR5OwoJZnJhbWVfZGlnIDAgLy8gcmV0Tm9JZGVudGl0eTogVXNlckluZm9WMQoJYiAqZ2V0VXNlcipyZXR1cm4KCippZjBfZW5kOgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozNTcKCS8vIGlkZW50aXR5ID0gdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglieXRlYyAzIC8vICAiaSIKCWZyYW1lX2RpZyAtMSAvLyB1c2VyOiBBZGRyZXNzCgljb25jYXQKCWZyYW1lX2J1cnkgMSAvLyBzdG9yYWdlIGtleS8vaWRlbnRpdHkKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjM1OQoJLy8gcmV0OiBVc2VySW5mb1YxID0gewoJLy8gICAgICAgdmVyc2lvbjogdiwKCS8vICAgICAgIGJhc2U6IGlkZW50aXR5LmZlZU11bHRpcGxpZXJCYXNlLAoJLy8gICAgICAgZmVlTXVsdGlwbGllcjogaWRlbnRpdHkuZmVlTXVsdGlwbGllciwKCS8vICAgICAgIGlzTG9ja2VkOiBpZGVudGl0eS5pc0xvY2tlZCwKCS8vICAgICAgIHZlcmlmaWNhdGlvbkNsYXNzOiBpZGVudGl0eS52ZXJpZmljYXRpb25DbGFzcywKCS8vICAgICAgIHZlcmlmaWNhdGlvblN0YXR1czogaWRlbnRpdHkudmVyaWZpY2F0aW9uU3RhdHVzLAoJLy8gICAgICAgYmlhdGVjRW5nYWdlbWVudFBvaW50czogaWRlbnRpdHkuYmlhdGVjRW5nYWdlbWVudFBvaW50cywKCS8vICAgICAgIGJpYXRlY0VuZ2FnZW1lbnRSYW5rOiBpZGVudGl0eS5iaWF0ZWNFbmdhZ2VtZW50UmFuaywKCS8vICAgICAgIGF2bUVuZ2FnZW1lbnRQb2ludHM6IGlkZW50aXR5LmF2bUVuZ2FnZW1lbnRQb2ludHMsCgkvLyAgICAgICBhdm1FbmdhZ2VtZW50UmFuazogaWRlbnRpdHkuYXZtRW5nYWdlbWVudFJhbmssCgkvLyAgICAgICB0cmFkaW5nRW5nYWdlbWVudFBvaW50czogaWRlbnRpdHkudHJhZGluZ0VuZ2FnZW1lbnRQb2ludHMsCgkvLyAgICAgICB0cmFkaW5nRW5nYWdlbWVudFJhbms6IGlkZW50aXR5LnRyYWRpbmdFbmdhZ2VtZW50UmFuaywKCS8vICAgICAgIGt5Y0V4cGlyYXRpb246IGlkZW50aXR5Lmt5Y0V4cGlyYXRpb24sCgkvLyAgICAgICBpbnZlc3RvckZvckV4cGlyYXRpb246IGlkZW50aXR5LmludmVzdG9yRm9yRXhwaXJhdGlvbiwKCS8vICAgICAgIGlzUHJvZmVzc2lvbmFsSW52ZXN0b3I6IGlkZW50aXR5LmlzUHJvZmVzc2lvbmFsSW52ZXN0b3IsCgkvLyAgICAgICBpc0NvbXBhbnk6IGlkZW50aXR5LmlzQ29tcGFueSwKCS8vICAgICAgIHBlcnNvblVVSUQ6IGlkZW50aXR5LnBlcnNvblVVSUQsCgkvLyAgICAgICBsZWdhbEVudGl0eVVVSUQ6IGlkZW50aXR5LmxlZ2FsRW50aXR5VVVJRCwKCS8vICAgICB9CglieXRlYyAwIC8vICBpbml0aWFsIGhlYWQKCWJ5dGVjIDAgLy8gIGluaXRpYWwgdGFpbAoJYnl0ZWMgMTIgLy8gIGluaXRpYWwgaGVhZCBvZmZzZXQKCWZyYW1lX2RpZyAtMiAvLyB2OiB1aW50OAoJaXRvYgoJZXh0cmFjdCA3IDEKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoKCS8vIGJveCB2YWx1ZSBkb2VzIG5vdCBleGlzdDogdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDQxIDgKCWJ0b2kKCWl0b2IKCWNhbGxzdWIgKnByb2Nlc3Nfc3RhdGljX3R1cGxlX2VsZW1lbnQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoKCS8vIGJveCB2YWx1ZSBkb2VzIG5vdCBleGlzdDogdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDAgOAoJYnRvaQoJaXRvYgoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgMiAvLyAweDAwCglpbnRjIDAgLy8gMAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCXB1c2hpbnQgMzkyCglnZXRiaXQKCXNldGJpdAoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWludGMgNyAvLyA1MAoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJdW5jb3ZlciAyCglleHRyYWN0X3VpbnQxNgoJZHVwIC8vIGR1cGxpY2F0ZSBzdGFydCBvZiBlbGVtZW50Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5Cglzd2FwCglleHRyYWN0X3VpbnQxNiAvLyBnZXQgbnVtYmVyIG9mIGVsZW1lbnRzCglpbnRjIDEgLy8gIGdldCB0eXBlIGxlbmd0aAoJKiAvLyBtdWx0aXBseSBieSB0eXBlIGxlbmd0aAoJaW50YyAzIC8vIDIKCSsgLy8gYWRkIHR3byBmb3IgbGVuZ3RoCglleHRyYWN0MwoJZXh0cmFjdCAyIDAKCWR1cAoJbGVuCglpdG9iCglleHRyYWN0IDYgMgoJc3dhcAoJY29uY2F0CgljYWxsc3ViICpwcm9jZXNzX2R5bmFtaWNfdHVwbGVfZWxlbWVudAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWludGMgOCAvLyA1MgoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJdW5jb3ZlciAyCglleHRyYWN0X3VpbnQxNgoJZHVwIC8vIGR1cGxpY2F0ZSBzdGFydCBvZiBlbGVtZW50Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5Cglzd2FwCglleHRyYWN0X3VpbnQxNiAvLyBnZXQgbnVtYmVyIG9mIGVsZW1lbnRzCglpbnRjIDEgLy8gIGdldCB0eXBlIGxlbmd0aAoJKiAvLyBtdWx0aXBseSBieSB0eXBlIGxlbmd0aAoJaW50YyAzIC8vIDIKCSsgLy8gYWRkIHR3byBmb3IgbGVuZ3RoCglleHRyYWN0MwoJZXh0cmFjdCAyIDAKCWR1cAoJbGVuCglpdG9iCglleHRyYWN0IDYgMgoJc3dhcAoJY29uY2F0CgljYWxsc3ViICpwcm9jZXNzX2R5bmFtaWNfdHVwbGVfZWxlbWVudAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgNTQgOAoJYnRvaQoJaXRvYgoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgNjIgOAoJYnRvaQoJaXRvYgoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgNzAgOAoJYnRvaQoJaXRvYgoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgNzggOAoJYnRvaQoJaXRvYgoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgODYgOAoJYnRvaQoJaXRvYgoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgOTQgOAoJYnRvaQoJaXRvYgoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgOSA4CglidG9pCglpdG9iCgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglmcmFtZV9kaWcgMSAvLyBzdG9yYWdlIGtleS8vaWRlbnRpdHkKCWJveF9nZXQKCgkvLyBib3ggdmFsdWUgZG9lcyBub3QgZXhpc3Q6IHRoaXMuaWRlbnRpdGllcyh1c2VyKS52YWx1ZQoJYXNzZXJ0CglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCAxNyA4CglidG9pCglpdG9iCgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50CglieXRlYyAyIC8vIDB4MDAKCWludGMgMCAvLyAwCglmcmFtZV9kaWcgMSAvLyBzdG9yYWdlIGtleS8vaWRlbnRpdHkKCWJveF9nZXQKCgkvLyBib3ggdmFsdWUgZG9lcyBub3QgZXhpc3Q6IHRoaXMuaWRlbnRpdGllcyh1c2VyKS52YWx1ZQoJYXNzZXJ0CglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJaW50YyA0IC8vIDY0CglnZXRiaXQKCXNldGJpdAoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgMjUgOAoJYnRvaQoJaXRvYgoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgMzMgOAoJYnRvaQoJaXRvYgoJY2FsbHN1YiAqcHJvY2Vzc19zdGF0aWNfdHVwbGVfZWxlbWVudAoJYnl0ZWMgMiAvLyAweDAwCglpbnRjIDAgLy8gMAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWludGMgNiAvLyA4MTYKCWdldGJpdAoJc2V0Yml0CgljYWxsc3ViICpwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50Cglwb3AgLy8gcG9wIGhlYWQgb2Zmc2V0Cgljb25jYXQgLy8gY29uY2F0IGhlYWQgYW5kIHRhaWwKCWZyYW1lX2J1cnkgMiAvLyByZXQ6IFVzZXJJbmZvVjEKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjM3OQoJLy8gcmV0dXJuIHJldDsKCWZyYW1lX2RpZyAyIC8vIHJldDogVXNlckluZm9WMQoKKmdldFVzZXIqcmV0dXJuOgoJLy8gc2V0IHRoZSBzdWJyb3V0aW5lIHJldHVybiB2YWx1ZQoJZnJhbWVfYnVyeSAwCgoJLy8gcG9wIGFsbCBsb2NhbCB2YXJpYWJsZXMgZnJvbSB0aGUgc3RhY2sKCXBvcG4gMgoJcmV0c3ViCgovLyBnZXRVc2VyU2hvcnQoYWRkcmVzcyx1aW50OCkodWludDgsdWludDY0LHVpbnQ2NCx1aW50NjQsYm9vbCkKKmFiaV9yb3V0ZV9nZXRVc2VyU2hvcnQ6CgkvLyBUaGUgQUJJIHJldHVybiBwcmVmaXgKCWJ5dGVjIDYgLy8gMHgxNTFmN2M3NQoKCS8vIHY6IHVpbnQ4Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAyCglkdXAKCWxlbgoJaW50YyAxIC8vIDEKCT09CgoJLy8gYXJndW1lbnQgMCAodikgZm9yIGdldFVzZXJTaG9ydCBtdXN0IGJlIGEgdWludDgKCWFzc2VydAoJYnRvaQoKCS8vIHVzZXI6IGFkZHJlc3MKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWR1cAoJbGVuCglpbnRjIDIgLy8gMzIKCT09CgoJLy8gYXJndW1lbnQgMSAodXNlcikgZm9yIGdldFVzZXJTaG9ydCBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBnZXRVc2VyU2hvcnQoYWRkcmVzcyx1aW50OCkodWludDgsdWludDY0LHVpbnQ2NCx1aW50NjQsYm9vbCkKCWNhbGxzdWIgZ2V0VXNlclNob3J0Cgljb25jYXQKCWxvZwoJaW50YyAxIC8vIDEKCXJldHVybgoKLy8gZ2V0VXNlclNob3J0KHVzZXI6IEFkZHJlc3MsIHY6IHVpbnQ4KTogVXNlckluZm9TaG9ydFYxCi8vCi8vIFJldHVybnMgc2hvcnQgdXNlciBpbmZvcm1hdGlvbiAtIGZlZSBtdWx0aXBsaWVyLCB2ZXJpZmljYXRpb24gY2xhc3MsIGVuZ2FnZW1lbnQgY2xhc3MgLi4KLy8KLy8gQHBhcmFtIHVzZXIgR2V0IGluZm8gZm9yIHNwZWNpZmljIHVzZXIgYWRkcmVzcwovLyBAcGFyYW0gdiBWZXJzaW9uIG9mIHRoZSBkYXRhIHN0cnVjdHVyZSB0byByZXR1cm4KZ2V0VXNlclNob3J0OgoJcHJvdG8gMiAxCgoJLy8gUHVzaCBlbXB0eSBieXRlcyBhZnRlciB0aGUgZnJhbWUgcG9pbnRlciB0byByZXNlcnZlIHNwYWNlIGZvciBsb2NhbCB2YXJpYWJsZXMKCWJ5dGVjIDAgLy8gMHgKCWR1cG4gMgoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6MzkwCgkvLyBhc3NlcnQodiA9PT0gMSwgIkN1cnJlbnRseSBzdXBwb3J0ZWQgdmVyc2lvbiBvZiB0aGUgZGF0YSBzdHJ1Y3R1cmUgaXMgJzEnIikKCWZyYW1lX2RpZyAtMiAvLyB2OiB1aW50OAoJaW50YyAxIC8vIDEKCT09CgoJLy8gQ3VycmVudGx5IHN1cHBvcnRlZCB2ZXJzaW9uIG9mIHRoZSBkYXRhIHN0cnVjdHVyZSBpcyAnMScKCWFzc2VydAoKCS8vICppZjFfY29uZGl0aW9uCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjM5MQoJLy8gIXRoaXMuaWRlbnRpdGllcyh1c2VyKS5leGlzdHMKCWJ5dGVjIDMgLy8gICJpIgoJZnJhbWVfZGlnIC0xIC8vIHVzZXI6IEFkZHJlc3MKCWNvbmNhdAoJYm94X2xlbgoJc3dhcAoJcG9wCgkhCglieiAqaWYxX2VuZAoKCS8vICppZjFfY29uc2VxdWVudAoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozOTIKCS8vIHJldE5vSWRlbnRpdHk6IFVzZXJJbmZvU2hvcnRWMSA9IHsKCS8vICAgICAgICAgdmVyc2lvbjogdiwKCS8vICAgICAgICAgYmFzZTogU0NBTEUgYXMgdWludDY0LAoJLy8gICAgICAgICBmZWVNdWx0aXBsaWVyOiAoMiAqIFNDQUxFKSBhcyB1aW50NjQsCgkvLyAgICAgICAgIGlzTG9ja2VkOiBmYWxzZSwKCS8vICAgICAgICAgdmVyaWZpY2F0aW9uQ2xhc3M6IDAsCgkvLyAgICAgICB9CglmcmFtZV9kaWcgLTIgLy8gdjogdWludDgKCWl0b2IKCWV4dHJhY3QgNyAxCglieXRlYyAxIC8vIDB4MDAwMDAwMDAwMDAwMDAwMAoJY29uY2F0CglieXRlYyA4IC8vIDB4MDAwMDAwMDA3NzM1OTQwMAoJY29uY2F0CglieXRlYyA5IC8vIDB4MDAwMDAwMDAzYjlhY2EwMAoJY29uY2F0CglieXRlYyAyIC8vIDB4MDAKCWludGMgMCAvLyAwCglkdXAKCXNldGJpdAoJY29uY2F0CglmcmFtZV9idXJ5IDAgLy8gcmV0Tm9JZGVudGl0eTogVXNlckluZm9TaG9ydFYxCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czozOTkKCS8vIHJldHVybiByZXROb0lkZW50aXR5OwoJZnJhbWVfZGlnIDAgLy8gcmV0Tm9JZGVudGl0eTogVXNlckluZm9TaG9ydFYxCgliICpnZXRVc2VyU2hvcnQqcmV0dXJuCgoqaWYxX2VuZDoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6NDAxCgkvLyBpZGVudGl0eSA9IHRoaXMuaWRlbnRpdGllcyh1c2VyKS52YWx1ZQoJYnl0ZWMgMyAvLyAgImkiCglmcmFtZV9kaWcgLTEgLy8gdXNlcjogQWRkcmVzcwoJY29uY2F0CglmcmFtZV9idXJ5IDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czo0MDMKCS8vIHJldDogVXNlckluZm9TaG9ydFYxID0gewoJLy8gICAgICAgdmVyc2lvbjogdiwKCS8vICAgICAgIGJhc2U6IGlkZW50aXR5LmZlZU11bHRpcGxpZXJCYXNlLAoJLy8gICAgICAgZmVlTXVsdGlwbGllcjogaWRlbnRpdHkuZmVlTXVsdGlwbGllciwKCS8vICAgICAgIGlzTG9ja2VkOiBpZGVudGl0eS5pc0xvY2tlZCwKCS8vICAgICAgIHZlcmlmaWNhdGlvbkNsYXNzOiBpZGVudGl0eS52ZXJpZmljYXRpb25DbGFzcywKCS8vICAgICB9CglmcmFtZV9kaWcgLTIgLy8gdjogdWludDgKCWl0b2IKCWV4dHJhY3QgNyAxCglmcmFtZV9kaWcgMSAvLyBzdG9yYWdlIGtleS8vaWRlbnRpdHkKCWJveF9nZXQKCgkvLyBib3ggdmFsdWUgZG9lcyBub3QgZXhpc3Q6IHRoaXMuaWRlbnRpdGllcyh1c2VyKS52YWx1ZQoJYXNzZXJ0CglzdG9yZSAyNTUgLy8gZnVsbCBhcnJheQoJbG9hZCAyNTUgLy8gZnVsbCBhcnJheQoJZXh0cmFjdCAwIDgKCWJ0b2kKCWl0b2IKCWNvbmNhdAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWV4dHJhY3QgOSA4CglidG9pCglpdG9iCgljb25jYXQKCWZyYW1lX2RpZyAxIC8vIHN0b3JhZ2Uga2V5Ly9pZGVudGl0eQoJYm94X2dldAoKCS8vIGJveCB2YWx1ZSBkb2VzIG5vdCBleGlzdDogdGhpcy5pZGVudGl0aWVzKHVzZXIpLnZhbHVlCglhc3NlcnQKCXN0b3JlIDI1NSAvLyBmdWxsIGFycmF5Cglsb2FkIDI1NSAvLyBmdWxsIGFycmF5CglleHRyYWN0IDE3IDgKCWJ0b2kKCWl0b2IKCWNvbmNhdAoJYnl0ZWMgMiAvLyAweDAwCglpbnRjIDAgLy8gMAoJZnJhbWVfZGlnIDEgLy8gc3RvcmFnZSBrZXkvL2lkZW50aXR5Cglib3hfZ2V0CgoJLy8gYm94IHZhbHVlIGRvZXMgbm90IGV4aXN0OiB0aGlzLmlkZW50aXRpZXModXNlcikudmFsdWUKCWFzc2VydAoJc3RvcmUgMjU1IC8vIGZ1bGwgYXJyYXkKCWxvYWQgMjU1IC8vIGZ1bGwgYXJyYXkKCWludGMgNCAvLyA2NAoJZ2V0Yml0CglzZXRiaXQKCWNvbmNhdAoJZnJhbWVfYnVyeSAyIC8vIHJldDogVXNlckluZm9TaG9ydFYxCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czo0MTAKCS8vIHJldHVybiByZXQ7CglmcmFtZV9kaWcgMiAvLyByZXQ6IFVzZXJJbmZvU2hvcnRWMQoKKmdldFVzZXJTaG9ydCpyZXR1cm46CgkvLyBzZXQgdGhlIHN1YnJvdXRpbmUgcmV0dXJuIHZhbHVlCglmcmFtZV9idXJ5IDAKCgkvLyBwb3AgYWxsIGxvY2FsIHZhcmlhYmxlcyBmcm9tIHRoZSBzdGFjawoJcG9wbiAyCglyZXRzdWIKCi8vIHdpdGhkcmF3RXhjZXNzQXNzZXRzKHVpbnQ2NCx1aW50NjQsdWludDY0KXVpbnQ2NAoqYWJpX3JvdXRlX3dpdGhkcmF3RXhjZXNzQXNzZXRzOgoJLy8gVGhlIEFCSSByZXR1cm4gcHJlZml4CglieXRlYyA2IC8vIDB4MTUxZjdjNzUKCgkvLyBhbW91bnQ6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMwoJYnRvaQoKCS8vIGFzc2V0OiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDIKCWJ0b2kKCgkvLyBhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglidG9pCgoJLy8gZXhlY3V0ZSB3aXRoZHJhd0V4Y2Vzc0Fzc2V0cyh1aW50NjQsdWludDY0LHVpbnQ2NCl1aW50NjQKCWNhbGxzdWIgd2l0aGRyYXdFeGNlc3NBc3NldHMKCWl0b2IKCWNvbmNhdAoJbG9nCglpbnRjIDEgLy8gMQoJcmV0dXJuCgovLyB3aXRoZHJhd0V4Y2Vzc0Fzc2V0cyhhcHBCaWF0ZWNDb25maWdQcm92aWRlcjogQXBwSUQsIGFzc2V0OiBBc3NldElELCBhbW91bnQ6IHVpbnQ2NCk6IHVpbnQ2NAovLwovLyBJZiBzb21lb25lIGRlcG9zaXRzIGV4Y2VzcyBhc3NldHMgdG8gdGhpcyBzbWFydCBjb250cmFjdCBiaWF0ZWMgY2FuIHVzZSB0aGVtLgovLwovLyBPbmx5IGFkZHJlc3NFeGVjdXRpdmVGZWUgaXMgYWxsb3dlZCB0byBleGVjdXRlIHRoaXMgbWV0aG9kLgovLwovLyBAcGFyYW0gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXIgQmlhdGVjIGNvbmZpZyBhcHAuIE9ubHkgYWRkcmVzc0V4ZWN1dGl2ZUZlZSBpcyBhbGxvd2VkIHRvIGV4ZWN1dGUgdGhpcyBtZXRob2QuCi8vIEBwYXJhbSBhc3NldCBBc3NldCB0byB3aXRoZHJhdy4gSWYgbmF0aXZlIHRva2VuLCB0aGVuIHplcm8KLy8gQHBhcmFtIGFtb3VudCBBbW91bnQgb2YgdGhlIGFzc2V0IHRvIGJlIHdpdGhkcmF3bgp3aXRoZHJhd0V4Y2Vzc0Fzc2V0czoKCXByb3RvIDMgMQoKCS8vIFB1c2ggZW1wdHkgYnl0ZXMgYWZ0ZXIgdGhlIGZyYW1lIHBvaW50ZXIgdG8gcmVzZXJ2ZSBzcGFjZSBmb3IgbG9jYWwgdmFyaWFibGVzCglieXRlYyAwIC8vIDB4CglkdXAKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjQyMgoJLy8gYXNzZXJ0KGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyID09PSB0aGlzLmFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLnZhbHVlLCAnQ29uZmlndXJhdGlvbiBhcHAgZG9lcyBub3QgbWF0Y2gnKQoJZnJhbWVfZGlnIC0xIC8vIGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyOiBBcHBJRAoJYnl0ZWMgNCAvLyAgIkIiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBDb25maWd1cmF0aW9uIGFwcCBkb2VzIG5vdCBtYXRjaAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czo0MjMKCS8vIGFkZHJlc3NFeGVjdXRpdmVGZWUgPSBhcHBCaWF0ZWNDb25maWdQcm92aWRlci5nbG9iYWxTdGF0ZSgnZWYnKSBhcyBBZGRyZXNzCglmcmFtZV9kaWcgLTEgLy8gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXI6IEFwcElECglieXRlYyAxMSAvLyAgImVmIgoJYXBwX2dsb2JhbF9nZXRfZXgKCgkvLyBnbG9iYWwgc3RhdGUgdmFsdWUgZG9lcyBub3QgZXhpc3Q6IGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmdsb2JhbFN0YXRlKCdlZicpCglhc3NlcnQKCWZyYW1lX2J1cnkgMCAvLyBhZGRyZXNzRXhlY3V0aXZlRmVlOiBhZGRyZXNzCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czo0MjQKCS8vIHBhdXNlZCA9IGFwcEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmdsb2JhbFN0YXRlKCdzJykgYXMgdWludDY0CglmcmFtZV9kaWcgLTEgLy8gYXBwQmlhdGVjQ29uZmlnUHJvdmlkZXI6IEFwcElECglieXRlYyA1IC8vICAicyIKCWFwcF9nbG9iYWxfZ2V0X2V4CgoJLy8gZ2xvYmFsIHN0YXRlIHZhbHVlIGRvZXMgbm90IGV4aXN0OiBhcHBCaWF0ZWNDb25maWdQcm92aWRlci5nbG9iYWxTdGF0ZSgncycpCglhc3NlcnQKCWZyYW1lX2J1cnkgMSAvLyBwYXVzZWQ6IHVpbnQ2NAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6NDI1CgkvLyBhc3NlcnQocGF1c2VkID09PSAwLCAnRVJSX1BBVVNFRCcpCglmcmFtZV9kaWcgMSAvLyBwYXVzZWQ6IHVpbnQ2NAoJaW50YyAwIC8vIDAKCT09CgoJLy8gRVJSX1BBVVNFRAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czo0MjYKCS8vIGFzc2VydCgKCS8vICAgICAgIHRoaXMudHhuLnNlbmRlciA9PT0gYWRkcmVzc0V4ZWN1dGl2ZUZlZSwKCS8vICAgICAgICdPbmx5IGZlZSBleGVjdXRvciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB0YWtlIHRoZSBjb2xsZWN0ZWQgZmVlcycKCS8vICAgICApCgl0eG4gU2VuZGVyCglmcmFtZV9kaWcgMCAvLyBhZGRyZXNzRXhlY3V0aXZlRmVlOiBhZGRyZXNzCgk9PQoKCS8vIE9ubHkgZmVlIGV4ZWN1dG9yIHNldHVwIGluIHRoZSBjb25maWcgY2FuIHRha2UgdGhlIGNvbGxlY3RlZCBmZWVzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjQzMQoJLy8gdGhpcy5kb0F4ZmVyKHRoaXMudHhuLnNlbmRlciwgYXNzZXQsIGFtb3VudCkKCWZyYW1lX2RpZyAtMyAvLyBhbW91bnQ6IHVpbnQ2NAoJZnJhbWVfZGlnIC0yIC8vIGFzc2V0OiBBc3NldElECgl0eG4gU2VuZGVyCgljYWxsc3ViIGRvQXhmZXIKCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjQzMwoJLy8gcmV0dXJuIGFtb3VudDsKCWZyYW1lX2RpZyAtMyAvLyBhbW91bnQ6IHVpbnQ2NAoKCS8vIHNldCB0aGUgc3Vicm91dGluZSByZXR1cm4gdmFsdWUKCWZyYW1lX2J1cnkgMAoKCS8vIHBvcCBhbGwgbG9jYWwgdmFyaWFibGVzIGZyb20gdGhlIHN0YWNrCglwb3BuIDEKCXJldHN1YgoKLy8gZG9BeGZlcihyZWNlaXZlcjogQWRkcmVzcywgYXNzZXQ6IEFzc2V0SUQsIGFtb3VudDogdWludDY0KTogdm9pZAovLwovLyBFeGVjdXRlcyB4ZmVyIG9mIHBheSBwYXltZW50IG1ldGhvZHMgdG8gc3BlY2lmaWVkIHJlY2VpdmVyIGZyb20gc21hcnQgY29udHJhY3QgYWdncmVnYXRlZCBhY2NvdW50IHdpdGggc3BlY2lmaWVkIGFzc2V0IGFuZCBhbW91bnQgaW4gdG9rZW5zIGRlY2ltYWxzCi8vIEBwYXJhbSByZWNlaXZlciBSZWNlaXZlcgovLyBAcGFyYW0gYXNzZXQgQXNzZXQuIFplcm8gZm9yIGFsZ28KLy8gQHBhcmFtIGFtb3VudCBBbW91bnQgdG8gdHJhbnNmZXIKZG9BeGZlcjoKCXByb3RvIDMgMAoKCS8vICppZjJfY29uZGl0aW9uCgkvLyBjb250cmFjdHNcQmlhdGVjSWRlbnRpdHlQcm92aWRlci5hbGdvLnRzOjQ0MwoJLy8gYXNzZXQuaWQgPT09IDAKCWZyYW1lX2RpZyAtMiAvLyBhc3NldDogQXNzZXRJRAoJaW50YyAwIC8vIDAKCT09CglieiAqaWYyX2Vsc2UKCgkvLyAqaWYyX2NvbnNlcXVlbnQKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6NDQ0CgkvLyBzZW5kUGF5bWVudCh7CgkvLyAgICAgICAgIHJlY2VpdmVyOiByZWNlaXZlciwKCS8vICAgICAgICAgYW1vdW50OiBhbW91bnQsCgkvLyAgICAgICAgIGZlZTogMCwKCS8vICAgICAgIH0pCglpdHhuX2JlZ2luCglpbnRjIDEgLy8gIHBheQoJaXR4bl9maWVsZCBUeXBlRW51bQoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6NDQ1CgkvLyByZWNlaXZlcjogcmVjZWl2ZXIKCWZyYW1lX2RpZyAtMSAvLyByZWNlaXZlcjogQWRkcmVzcwoJaXR4bl9maWVsZCBSZWNlaXZlcgoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6NDQ2CgkvLyBhbW91bnQ6IGFtb3VudAoJZnJhbWVfZGlnIC0zIC8vIGFtb3VudDogdWludDY0CglpdHhuX2ZpZWxkIEFtb3VudAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6NDQ3CgkvLyBmZWU6IDAKCWludGMgMCAvLyAwCglpdHhuX2ZpZWxkIEZlZQoKCS8vIFN1Ym1pdCBpbm5lciB0cmFuc2FjdGlvbgoJaXR4bl9zdWJtaXQKCWIgKmlmMl9lbmQKCippZjJfZWxzZToKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6NDUwCgkvLyBzZW5kQXNzZXRUcmFuc2Zlcih7CgkvLyAgICAgICAgIGFzc2V0UmVjZWl2ZXI6IHJlY2VpdmVyLAoJLy8gICAgICAgICB4ZmVyQXNzZXQ6IGFzc2V0LAoJLy8gICAgICAgICBhc3NldEFtb3VudDogYW1vdW50LAoJLy8gICAgICAgICBmZWU6IDAsCgkvLyAgICAgICB9KQoJaXR4bl9iZWdpbgoJcHVzaGludCA0IC8vIGF4ZmVyCglpdHhuX2ZpZWxkIFR5cGVFbnVtCgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czo0NTEKCS8vIGFzc2V0UmVjZWl2ZXI6IHJlY2VpdmVyCglmcmFtZV9kaWcgLTEgLy8gcmVjZWl2ZXI6IEFkZHJlc3MKCWl0eG5fZmllbGQgQXNzZXRSZWNlaXZlcgoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6NDUyCgkvLyB4ZmVyQXNzZXQ6IGFzc2V0CglmcmFtZV9kaWcgLTIgLy8gYXNzZXQ6IEFzc2V0SUQKCWl0eG5fZmllbGQgWGZlckFzc2V0CgoJLy8gY29udHJhY3RzXEJpYXRlY0lkZW50aXR5UHJvdmlkZXIuYWxnby50czo0NTMKCS8vIGFzc2V0QW1vdW50OiBhbW91bnQKCWZyYW1lX2RpZyAtMyAvLyBhbW91bnQ6IHVpbnQ2NAoJaXR4bl9maWVsZCBBc3NldEFtb3VudAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLmFsZ28udHM6NDU0CgkvLyBmZWU6IDAKCWludGMgMCAvLyAwCglpdHhuX2ZpZWxkIEZlZQoKCS8vIFN1Ym1pdCBpbm5lciB0cmFuc2FjdGlvbgoJaXR4bl9zdWJtaXQKCippZjJfZW5kOgoJcmV0c3ViCgoqY3JlYXRlX05vT3A6CglwdXNoYnl0ZXMgMHhiODQ0N2IzNiAvLyBtZXRob2QgImNyZWF0ZUFwcGxpY2F0aW9uKCl2b2lkIgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAoJbWF0Y2ggKmFiaV9yb3V0ZV9jcmVhdGVBcHBsaWNhdGlvbgoKCS8vIHRoaXMgY29udHJhY3QgZG9lcyBub3QgaW1wbGVtZW50IHRoZSBnaXZlbiBBQkkgbWV0aG9kIGZvciBjcmVhdGUgTm9PcAoJZXJyCgoqY2FsbF9Ob09wOgoJcHVzaGJ5dGVzIDB4ZTNiZjVjMWYgLy8gbWV0aG9kICJib290c3RyYXAodWludDY0LGFkZHJlc3MsYWRkcmVzcyxhZGRyZXNzKXZvaWQiCglwdXNoYnl0ZXMgMHhhZTY0YzE2NyAvLyBtZXRob2QgInNlbGZSZWdpc3RyYXRpb24oYWRkcmVzcywodWludDY0LGJvb2wsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCxib29sLHN0cmluZyxzdHJpbmcsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsYm9vbCkpdm9pZCIKCXB1c2hieXRlcyAweGE0OGNmYmJjIC8vIG1ldGhvZCAic2V0SW5mbyhhZGRyZXNzLCh1aW50NjQsYm9vbCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LGJvb2wsc3RyaW5nLHN0cmluZyx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCxib29sKSl2b2lkIgoJcHVzaGJ5dGVzIDB4ODM5MjVjMTcgLy8gbWV0aG9kICJzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uKHVpbnQ2NCxieXRlW10sYnl0ZVtdLGJ5dGVbXSx1aW50NjQsdWludDY0LHVpbnQ2NCl2b2lkIgoJcHVzaGJ5dGVzIDB4ZThhZDE4OTIgLy8gbWV0aG9kICJnZXRVc2VyKGFkZHJlc3MsdWludDgpKHVpbnQ4LHVpbnQ2NCx1aW50NjQsYm9vbCxzdHJpbmcsc3RyaW5nLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsYm9vbCx1aW50NjQsdWludDY0LGJvb2wpIgoJcHVzaGJ5dGVzIDB4MTI3ZmZiN2IgLy8gbWV0aG9kICJnZXRVc2VyU2hvcnQoYWRkcmVzcyx1aW50OCkodWludDgsdWludDY0LHVpbnQ2NCx1aW50NjQsYm9vbCkiCglwdXNoYnl0ZXMgMHhjYmEyZTk1ZCAvLyBtZXRob2QgIndpdGhkcmF3RXhjZXNzQXNzZXRzKHVpbnQ2NCx1aW50NjQsdWludDY0KXVpbnQ2NCIKCXR4bmEgQXBwbGljYXRpb25BcmdzIDAKCW1hdGNoICphYmlfcm91dGVfYm9vdHN0cmFwICphYmlfcm91dGVfc2VsZlJlZ2lzdHJhdGlvbiAqYWJpX3JvdXRlX3NldEluZm8gKmFiaV9yb3V0ZV9zZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uICphYmlfcm91dGVfZ2V0VXNlciAqYWJpX3JvdXRlX2dldFVzZXJTaG9ydCAqYWJpX3JvdXRlX3dpdGhkcmF3RXhjZXNzQXNzZXRzCgoJLy8gdGhpcyBjb250cmFjdCBkb2VzIG5vdCBpbXBsZW1lbnQgdGhlIGdpdmVuIEFCSSBtZXRob2QgZm9yIGNhbGwgTm9PcAoJZXJyCgoqY2FsbF9VcGRhdGVBcHBsaWNhdGlvbjoKCXB1c2hieXRlcyAweDVmYzg4NWEwIC8vIG1ldGhvZCAidXBkYXRlQXBwbGljYXRpb24odWludDY0LGJ5dGVbXSl2b2lkIgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAoJbWF0Y2ggKmFiaV9yb3V0ZV91cGRhdGVBcHBsaWNhdGlvbgoKCS8vIHRoaXMgY29udHJhY3QgZG9lcyBub3QgaW1wbGVtZW50IHRoZSBnaXZlbiBBQkkgbWV0aG9kIGZvciBjYWxsIFVwZGF0ZUFwcGxpY2F0aW9uCgllcnIKCipwcm9jZXNzX3N0YXRpY190dXBsZV9lbGVtZW50OgoJcHJvdG8gNCAzCglmcmFtZV9kaWcgLTQgLy8gdHVwbGUgaGVhZAoJZnJhbWVfZGlnIC0xIC8vIGVsZW1lbnQKCWNvbmNhdAoJZnJhbWVfZGlnIC0zIC8vIHR1cGxlIHRhaWwKCWZyYW1lX2RpZyAtMiAvLyBoZWFkIG9mZnNldAoJcmV0c3ViCgoqcHJvY2Vzc19keW5hbWljX3R1cGxlX2VsZW1lbnQ6Cglwcm90byA0IDMKCWZyYW1lX2RpZyAtNCAvLyB0dXBsZSBoZWFkCglmcmFtZV9kaWcgLTIgLy8gaGVhZCBvZmZzZXQKCWNvbmNhdAoJZnJhbWVfYnVyeSAtNCAvLyB0dXBsZSBoZWFkCglmcmFtZV9kaWcgLTEgLy8gZWxlbWVudAoJZHVwCglsZW4KCWZyYW1lX2RpZyAtMiAvLyBoZWFkIG9mZnNldAoJYnRvaQoJKwoJaXRvYgoJZXh0cmFjdCA2IDIKCWZyYW1lX2J1cnkgLTIgLy8gaGVhZCBvZmZzZXQKCWZyYW1lX2RpZyAtMyAvLyB0dXBsZSB0YWlsCglzd2FwCgljb25jYXQKCWZyYW1lX2J1cnkgLTMgLy8gdHVwbGUgdGFpbAoJZnJhbWVfZGlnIC00IC8vIHR1cGxlIGhlYWQKCWZyYW1lX2RpZyAtMyAvLyB0dXBsZSB0YWlsCglmcmFtZV9kaWcgLTIgLy8gaGVhZCBvZmZzZXQKCXJldHN1Yg==',
+    clear: 'I3ByYWdtYSB2ZXJzaW9uIDEw',
+  },
+  byteCode: {
+    approval:
+      'CiAJAAEgAkCAlOvcA7AGMjQmDwAIAAAAAAAAAAABAAFpAUIBcwQVH3x1JDAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMAgAAAAAdzWUAAgAAAAAO5rKAAVzY3ZlcgJlZgIAaAIAAAFlMRgUgQYLMRkIjQwFkAAAAAAAAAXOAAAFggAAAAAAAAAAAAAAiAACI0OKAAAnCoAVQklBVEVDLUlERU5ULTAxLTAzLTAxZ4k2GgRJFSQSRDYaA0kVJBJENhoCSRUkEkQ2GgEXiAACI0OKBAAoMQA2MgByB0gSRCcEi/9ngAFni/5ngAF2i/1nJw6L/GeL/ycFZUSMAIsAIhJEiTYaAlcCADYaAReIAAIjQ4oCAChJi/8nBGQSRIv/gAF1ZUSMADEAiwASRIv/JwVlRIwBiwEiEkQnCov+Z4k2GgI2GgFJFSQSRIgAAiNDigIAK4v/UL1MSBREi/41/zT/VykIFyMSRIv+Nf80/1cACBciEkSL/jX/IQc0/zT/TwJZSTT/TFkjCyUIWFcCACcHEkSL/jX/IQg0/zT/TwJZSTT/TFkjCyUIWFcCACcHEkSL/jX/NP9XNggXIhJEi/41/zT/Vz4IFyISRIv+Nf80/1dGCBciEkSL/jX/NP9XTggXIhJEi/41/zT/V1YIFyISRIv+Nf80/1deCBciEkSL/jX/NP8hBFMiEkSL/jX/NP9XGQgXIhJEi/41/zT/VyEIFyISRIv+Nf80/yEGUyISRIv+Nf80/1cRCBchBRJEi/41/zT/VwkIF4GAqNa5BxJEK4v/UEm8SIv+v4k2GgI2GgFJFSQSRIgAAiNDigIAMQAnDmQSRIv+Nf80/1cRCBchBRJEK4v/UEm8SIv+v4k2GgcXNhoGFzYaBRc2GgRXAgA2GgNXAgA2GgJXAgA2GgEXiAACI0OKBwAoSYv/JwRkEkSL/ycLZUSMADEAiwASRIv/JwVlRIwBiwEiEkSxJbIQi/2yC4v8sj+L+7IMi/myDov6sg2L/rIKIrIBs4knBjYaAkkVIxJEFzYaAUkVJBJEiAAEULAjQ4oCAShHAov+IxJEK4v/UL1MSBRBAGcoKCcMi/4WVwcBiAMsKYgDKCmIAyQqIklUiAMdJw2IAyUnDYgDICmIAw8piAMLKYgDBymIAwMpiAL/KYgC+ycIiAL2JwmIAvEqIklUiALqKYgC5imIAuIqIklUiALbSFCMAIsAQgFbK4v/UIwBKCgnDIv+FlcHAYgCv4sBvkQ1/zT/VykIFxaIAq+LAb5ENf80/1cACBcWiAKfKiKLAb5ENf80/4GIA1NUiAKNiwG+RDX/IQc0/zT/TwJZSTT/TFkjCyUIWFcCAEkVFlcGAkxQiAJziwG+RDX/IQg0/zT/TwJZSTT/TFkjCyUIWFcCAEkVFlcGAkxQiAJMiwG+RDX/NP9XNggXFogCL4sBvkQ1/zT/Vz4IFxaIAh+LAb5ENf80/1dGCBcWiAIPiwG+RDX/NP9XTggXFogB/4sBvkQ1/zT/V1YIFxaIAe+LAb5ENf80/1deCBcWiAHfiwG+RDX/NP9XCQgXFogBz4sBvkQ1/zT/VxEIFxaIAb8qIosBvkQ1/zT/IQRTVIgBrosBvkQ1/zT/VxkIFxaIAZ6LAb5ENf80/1chCBcWiAGOKiKLAb5ENf80/yEGU1SIAX1IUIwCiwKMAEYCiScGNhoCSRUjEkQXNhoBSRUkEkSIAARQsCNDigIBKEcCi/4jEkQri/9QvUxIFEEAGov+FlcHASlQJwhQJwlQKiJJVFCMAIsAQgBJK4v/UIwBi/4WVwcBiwG+RDX/NP9XAAgXFlCLAb5ENf80/1cJCBcWUIsBvkQ1/zT/VxEIFxZQKiKLAb5ENf80/yEEU1RQjAKLAowARgKJJwY2GgMXNhoCFzYaAReIAAUWULAjQ4oDAShJi/8nBGQSRIv/JwtlRIwAi/8nBWVEjAGLASISRDEAiwASRIv9i/4xAIgAB4v9jABGAYmKAwCL/iISQQATsSOyEIv/sgeL/bIIIrIBs0IAFbGBBLIQi/+yFIv+shGL/bISIrIBs4mABLhEezY2GgCOAfpyAIAE479cH4AErmTBZ4AEpIz7vIAEg5JcF4AE6K0YkoAEEn/7e4AEy6LpXTYaAI4H+lf65/wE/Df8pv6d/zUAgARfyIWgNhoAjgH6nACKBAOL/Iv/UIv9i/6JigQDi/yL/lCM/Iv/SRWL/hcIFlcGAoz+i/1MUIz9i/yL/Yv+iQ==',
+    clear: 'Cg==',
+  },
+  compilerInfo: { compiler: 'algod', compilerVersion: { major: 4, minor: 0, patch: 3, commitHash: 'f3be4a3b' } },
+} as unknown as Arc56Contract;
 
 /**
  * A state record containing binary data
@@ -33,22 +1574,22 @@ export interface BinaryState {
   /**
    * Gets the state value as a Uint8Array
    */
-  asByteArray(): Uint8Array | undefined
+  asByteArray(): Uint8Array | undefined;
   /**
    * Gets the state value as a string
    */
-  asString(): string | undefined
+  asString(): string | undefined;
 }
 
 class BinaryStateValue implements BinaryState {
   constructor(private value: Uint8Array | undefined) {}
 
   asByteArray(): Uint8Array | undefined {
-    return this.value
+    return this.value;
   }
 
   asString(): string | undefined {
-    return this.value !== undefined ? Buffer.from(this.value).toString('utf-8') : undefined
+    return this.value !== undefined ? Buffer.from(this.value).toString('utf-8') : undefined;
   }
 }
 
@@ -60,64 +1601,119 @@ export type Expand<T> = T extends (...args: infer A) => infer R
   ? (...args: Expand<A>) => Expand<R>
   : T extends infer O
     ? { [K in keyof O]: O[K] }
-    : never
-
+    : never;
 
 // Type definitions for ARC-56 structs
 
 export type IdentityInfo = {
-  verificationStatus: bigint,
-  verificationClass: bigint,
-  isCompany: boolean,
-  personUuid: string,
-  legalEntityUuid: string,
-  biatecEngagementPoints: bigint,
-  biatecEngagementRank: bigint,
-  avmEngagementPoints: bigint,
-  avmEngagementRank: bigint,
-  tradingEngagementPoints: bigint,
-  tradingEngagementRank: bigint,
-  isLocked: boolean,
-  kycExpiration: bigint,
-  investorForExpiration: bigint,
-  isProfessionalInvestor: boolean
-}
-
+  verificationClass: bigint;
+  isLocked: boolean;
+  feeMultiplier: bigint;
+  feeMultiplierBase: bigint;
+  kycExpiration: bigint;
+  investorForExpiration: bigint;
+  verificationStatus: bigint;
+  isCompany: boolean;
+  personUuid: string;
+  legalEntityUuid: string;
+  biatecEngagementPoints: bigint;
+  biatecEngagementRank: bigint;
+  avmEngagementPoints: bigint;
+  avmEngagementRank: bigint;
+  tradingEngagementPoints: bigint;
+  tradingEngagementRank: bigint;
+  isProfessionalInvestor: boolean;
+};
 
 /**
  * Converts the ABI tuple representation of a IdentityInfo to the struct representation
  */
-export function IdentityInfoFromTuple(abiTuple: [bigint, bigint, boolean, string, string, bigint, bigint, bigint, bigint, bigint, bigint, boolean, bigint, bigint, boolean]) {
-  return getABIStructFromABITuple(abiTuple, APP_SPEC.structs.IdentityInfo, APP_SPEC.structs) as IdentityInfo
+export function IdentityInfoFromTuple(
+  abiTuple: [
+    bigint,
+    boolean,
+    bigint,
+    bigint,
+    bigint,
+    bigint,
+    bigint,
+    boolean,
+    string,
+    string,
+    bigint,
+    bigint,
+    bigint,
+    bigint,
+    bigint,
+    bigint,
+    boolean,
+  ]
+) {
+  return getABIStructFromABITuple(abiTuple, APP_SPEC.structs.IdentityInfo, APP_SPEC.structs) as IdentityInfo;
 }
 
 export type UserInfoV1 = {
-  version: number,
-  verificationStatus: bigint,
-  verificationClass: bigint,
-  isCompany: boolean,
-  personUuid: string,
-  legalEntityUuid: string,
-  biatecEngagementPoints: bigint,
-  biatecEngagementRank: bigint,
-  avmEngagementPoints: bigint,
-  avmEngagementRank: bigint,
-  tradingEngagementPoints: bigint,
-  tradingEngagementRank: bigint,
-  feeMultiplier: bigint,
-  base: bigint,
-  isLocked: boolean,
-  kycExpiration: bigint,
-  investorForExpiration: bigint,
-  isProfessionalInvestor: boolean
-}
-
+  version: number;
+  verificationStatus: bigint;
+  verificationClass: bigint;
+  isCompany: boolean;
+  personUuid: string;
+  legalEntityUuid: string;
+  biatecEngagementPoints: bigint;
+  biatecEngagementRank: bigint;
+  avmEngagementPoints: bigint;
+  avmEngagementRank: bigint;
+  tradingEngagementPoints: bigint;
+  tradingEngagementRank: bigint;
+  feeMultiplier: bigint;
+  base: bigint;
+  isLocked: boolean;
+  kycExpiration: bigint;
+  investorForExpiration: bigint;
+  isProfessionalInvestor: boolean;
+};
 
 /**
  * Converts the ABI tuple representation of a UserInfoV1 to the struct representation
  */
-export function UserInfoV1FromTuple(abiTuple: [number, bigint, bigint, boolean, string, string, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, boolean, bigint, bigint, boolean]) {
-  return getABIStructFromABITuple(abiTuple, APP_SPEC.structs.UserInfoV1, APP_SPEC.structs) as UserInfoV1
+export function UserInfoV1FromTuple(
+  abiTuple: [
+    number,
+    bigint,
+    bigint,
+    boolean,
+    string,
+    string,
+    bigint,
+    bigint,
+    bigint,
+    bigint,
+    bigint,
+    bigint,
+    bigint,
+    bigint,
+    boolean,
+    bigint,
+    bigint,
+    boolean,
+  ]
+) {
+  return getABIStructFromABITuple(abiTuple, APP_SPEC.structs.UserInfoV1, APP_SPEC.structs) as UserInfoV1;
+}
+
+export type UserInfoShortV1 = {
+  version: number;
+  verificationClass: bigint;
+  feeMultiplier: bigint;
+  base: bigint;
+  isLocked: boolean;
+};
+
+/**
+ * Converts the ABI tuple representation of a UserInfoShortV1 to the struct representation
+ */
+export function UserInfoShortV1FromTuple(abiTuple: [number, bigint, bigint, bigint, boolean]) {
+  return getABIStructFromABITuple(abiTuple, APP_SPEC.structs.UserInfoShortV1, APP_SPEC.structs) as UserInfoShortV1;
 }
 
 /**
@@ -128,90 +1724,128 @@ export type BiatecIdentityProviderArgs = {
    * The object representation of the arguments for each method
    */
   obj: {
-    'createApplication()void': Record<string, never>
+    'createApplication()void': Record<string, never>;
     'bootstrap(uint64,address,address,address)void': {
       /**
        * Biatec amm provider
        */
-      appBiatecConfigProvider: bigint | number
-      governor: string
-      verificationSetter: string
-      engagementSetter: string
-    }
+      appBiatecConfigProvider: bigint | number;
+      governor: string;
+      verificationSetter: string;
+      engagementSetter: string;
+    };
     'updateApplication(uint64,byte[])void': {
-      appBiatecConfigProvider: bigint | number
-      newVersion: Uint8Array
-    }
-    'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void': {
-      user: string
-      info: IdentityInfo
-    }
-    'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void': {
-      user: string
-      info: IdentityInfo
-    }
+      appBiatecConfigProvider: bigint | number;
+      newVersion: Uint8Array;
+    };
+    'selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void': {
+      user: string;
+      info: IdentityInfo;
+    };
+    'setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void': {
+      user: string;
+      info: IdentityInfo;
+    };
     'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void': {
-      appBiatecConfigProvider: bigint | number
-      votePk: Uint8Array
-      selectionPk: Uint8Array
-      stateProofPk: Uint8Array
-      voteFirst: bigint | number
-      voteLast: bigint | number
-      voteKeyDilution: bigint | number
-    }
-    'getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)': {
+      appBiatecConfigProvider: bigint | number;
+      votePk: Uint8Array;
+      selectionPk: Uint8Array;
+      stateProofPk: Uint8Array;
+      voteFirst: bigint | number;
+      voteLast: bigint | number;
+      voteKeyDilution: bigint | number;
+    };
+    'getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)': {
       /**
        * Get info for specific user address
        */
-      user: string
+      user: string;
       /**
        * Version of the data structure to return
        */
-      v: bigint | number
-    }
+      v: bigint | number;
+    };
+    'getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)': {
+      /**
+       * Get info for specific user address
+       */
+      user: string;
+      /**
+       * Version of the data structure to return
+       */
+      v: bigint | number;
+    };
     'withdrawExcessAssets(uint64,uint64,uint64)uint64': {
       /**
        * Biatec config app. Only addressExecutiveFee is allowed to execute this method.
        */
-      appBiatecConfigProvider: bigint | number
+      appBiatecConfigProvider: bigint | number;
       /**
        * Asset to withdraw. If native token, then zero
        */
-      asset: bigint | number
+      asset: bigint | number;
       /**
        * Amount of the asset to be withdrawn
        */
-      amount: bigint | number
-    }
-  }
+      amount: bigint | number;
+    };
+  };
   /**
    * The tuple representation of the arguments for each method
    */
   tuple: {
-    'createApplication()void': []
-    'bootstrap(uint64,address,address,address)void': [appBiatecConfigProvider: bigint | number, governor: string, verificationSetter: string, engagementSetter: string]
-    'updateApplication(uint64,byte[])void': [appBiatecConfigProvider: bigint | number, newVersion: Uint8Array]
-    'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void': [user: string, info: IdentityInfo]
-    'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void': [user: string, info: IdentityInfo]
-    'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void': [appBiatecConfigProvider: bigint | number, votePk: Uint8Array, selectionPk: Uint8Array, stateProofPk: Uint8Array, voteFirst: bigint | number, voteLast: bigint | number, voteKeyDilution: bigint | number]
-    'getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)': [user: string, v: bigint | number]
-    'withdrawExcessAssets(uint64,uint64,uint64)uint64': [appBiatecConfigProvider: bigint | number, asset: bigint | number, amount: bigint | number]
-  }
-}
+    'createApplication()void': [];
+    'bootstrap(uint64,address,address,address)void': [
+      appBiatecConfigProvider: bigint | number,
+      governor: string,
+      verificationSetter: string,
+      engagementSetter: string,
+    ];
+    'updateApplication(uint64,byte[])void': [appBiatecConfigProvider: bigint | number, newVersion: Uint8Array];
+    'selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void': [
+      user: string,
+      info: IdentityInfo,
+    ];
+    'setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void': [
+      user: string,
+      info: IdentityInfo,
+    ];
+    'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void': [
+      appBiatecConfigProvider: bigint | number,
+      votePk: Uint8Array,
+      selectionPk: Uint8Array,
+      stateProofPk: Uint8Array,
+      voteFirst: bigint | number,
+      voteLast: bigint | number,
+      voteKeyDilution: bigint | number,
+    ];
+    'getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)': [
+      user: string,
+      v: bigint | number,
+    ];
+    'getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)': [user: string, v: bigint | number];
+    'withdrawExcessAssets(uint64,uint64,uint64)uint64': [
+      appBiatecConfigProvider: bigint | number,
+      asset: bigint | number,
+      amount: bigint | number,
+    ];
+  };
+};
 
 /**
  * The return type for each method
  */
 export type BiatecIdentityProviderReturns = {
-  'createApplication()void': void
-  'bootstrap(uint64,address,address,address)void': void
-  'updateApplication(uint64,byte[])void': void
-  'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void': void
-  'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void': void
-  'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void': void
-  'getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)': UserInfoV1
-  'withdrawExcessAssets(uint64,uint64,uint64)uint64': bigint
-}
+  'createApplication()void': void;
+  'bootstrap(uint64,address,address,address)void': void;
+  'updateApplication(uint64,byte[])void': void;
+  'selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void': void;
+  'setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void': void;
+  'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void': void;
+  'getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)': UserInfoV1;
+  'getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)': UserInfoShortV1;
+  'withdrawExcessAssets(uint64,uint64,uint64)uint64': bigint;
+};
 
 /**
  * Defines the types of available calls and state of the BiatecIdentityProvider smart contract.
@@ -220,134 +1854,195 @@ export type BiatecIdentityProviderTypes = {
   /**
    * Maps method signatures / names to their argument and return types.
    */
-  methods:
-    & Record<'createApplication()void' | 'createApplication', {
-      argsObj: BiatecIdentityProviderArgs['obj']['createApplication()void']
-      argsTuple: BiatecIdentityProviderArgs['tuple']['createApplication()void']
-      returns: BiatecIdentityProviderReturns['createApplication()void']
-    }>
-    & Record<'bootstrap(uint64,address,address,address)void' | 'bootstrap', {
-      argsObj: BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void']
-      argsTuple: BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void']
-      returns: BiatecIdentityProviderReturns['bootstrap(uint64,address,address,address)void']
-    }>
-    & Record<'updateApplication(uint64,byte[])void' | 'updateApplication', {
-      argsObj: BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void']
-      argsTuple: BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']
-      returns: BiatecIdentityProviderReturns['updateApplication(uint64,byte[])void']
-    }>
-    & Record<'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void' | 'selfRegistration', {
-      argsObj: BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']
-      argsTuple: BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']
-      returns: BiatecIdentityProviderReturns['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']
-    }>
-    & Record<'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void' | 'setInfo', {
-      argsObj: BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']
-      argsTuple: BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']
-      returns: BiatecIdentityProviderReturns['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']
-    }>
-    & Record<'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void' | 'sendOnlineKeyRegistration', {
-      argsObj: BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
-      argsTuple: BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
-      returns: BiatecIdentityProviderReturns['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
-    }>
-    & Record<'getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)' | 'getUser', {
-      argsObj: BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)']
-      argsTuple: BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)']
-      returns: BiatecIdentityProviderReturns['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)']
-    }>
-    & Record<'withdrawExcessAssets(uint64,uint64,uint64)uint64' | 'withdrawExcessAssets', {
-      argsObj: BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
-      argsTuple: BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
-      returns: BiatecIdentityProviderReturns['withdrawExcessAssets(uint64,uint64,uint64)uint64']
-    }>
+  methods: Record<
+    'createApplication()void' | 'createApplication',
+    {
+      argsObj: BiatecIdentityProviderArgs['obj']['createApplication()void'];
+      argsTuple: BiatecIdentityProviderArgs['tuple']['createApplication()void'];
+      returns: BiatecIdentityProviderReturns['createApplication()void'];
+    }
+  > &
+    Record<
+      'bootstrap(uint64,address,address,address)void' | 'bootstrap',
+      {
+        argsObj: BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void'];
+        argsTuple: BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void'];
+        returns: BiatecIdentityProviderReturns['bootstrap(uint64,address,address,address)void'];
+      }
+    > &
+    Record<
+      'updateApplication(uint64,byte[])void' | 'updateApplication',
+      {
+        argsObj: BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void'];
+        argsTuple: BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void'];
+        returns: BiatecIdentityProviderReturns['updateApplication(uint64,byte[])void'];
+      }
+    > &
+    Record<
+      | 'selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void'
+      | 'selfRegistration',
+      {
+        argsObj: BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void'];
+        argsTuple: BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void'];
+        returns: BiatecIdentityProviderReturns['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void'];
+      }
+    > &
+    Record<
+      | 'setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void'
+      | 'setInfo',
+      {
+        argsObj: BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void'];
+        argsTuple: BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void'];
+        returns: BiatecIdentityProviderReturns['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void'];
+      }
+    > &
+    Record<
+      'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void' | 'sendOnlineKeyRegistration',
+      {
+        argsObj: BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'];
+        argsTuple: BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'];
+        returns: BiatecIdentityProviderReturns['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'];
+      }
+    > &
+    Record<
+      | 'getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)'
+      | 'getUser',
+      {
+        argsObj: BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)'];
+        argsTuple: BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)'];
+        returns: BiatecIdentityProviderReturns['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)'];
+      }
+    > &
+    Record<
+      'getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)' | 'getUserShort',
+      {
+        argsObj: BiatecIdentityProviderArgs['obj']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)'];
+        argsTuple: BiatecIdentityProviderArgs['tuple']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)'];
+        returns: BiatecIdentityProviderReturns['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)'];
+      }
+    > &
+    Record<
+      'withdrawExcessAssets(uint64,uint64,uint64)uint64' | 'withdrawExcessAssets',
+      {
+        argsObj: BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64'];
+        argsTuple: BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64'];
+        returns: BiatecIdentityProviderReturns['withdrawExcessAssets(uint64,uint64,uint64)uint64'];
+      }
+    >;
   /**
    * Defines the shape of the state of the application.
    */
   state: {
     global: {
       keys: {
-        governor: string
-        verificationSetter: string
-        engagementSetter: string
-        appBiatecConfigProvider: bigint
-        version: BinaryState
-      }
-      maps: {}
-    }
+        governor: string;
+        verificationSetter: string;
+        engagementSetter: string;
+        appBiatecConfigProvider: bigint;
+        version: BinaryState;
+      };
+      maps: {};
+    };
     box: {
-      keys: {}
+      keys: {};
       maps: {
-        identities: Map<string, IdentityInfo>
-      }
-    }
-  }
-}
+        identities: Map<string, IdentityInfo>;
+      };
+    };
+  };
+};
 
 /**
  * Defines the possible abi call signatures.
  */
-export type BiatecIdentityProviderSignatures = keyof BiatecIdentityProviderTypes['methods']
+export type BiatecIdentityProviderSignatures = keyof BiatecIdentityProviderTypes['methods'];
 /**
  * Defines the possible abi call signatures for methods that return a non-void value.
  */
-export type BiatecIdentityProviderNonVoidMethodSignatures = keyof BiatecIdentityProviderTypes['methods'] extends infer T ? T extends keyof BiatecIdentityProviderTypes['methods'] ? MethodReturn<T> extends void ? never : T  : never : never
+export type BiatecIdentityProviderNonVoidMethodSignatures = keyof BiatecIdentityProviderTypes['methods'] extends infer T
+  ? T extends keyof BiatecIdentityProviderTypes['methods']
+    ? MethodReturn<T> extends void
+      ? never
+      : T
+    : never
+  : never;
 /**
  * Defines an object containing all relevant parameters for a single call to the contract.
  */
 export type CallParams<TArgs> = Expand<
-  Omit<AppClientMethodCallParams, 'method' | 'args' | 'onComplete'> &
-    {
-      /** The args for the ABI method call, either as an ordered array or an object */
-      args: Expand<TArgs>
-    }
->
+  Omit<AppClientMethodCallParams, 'method' | 'args' | 'onComplete'> & {
+    /** The args for the ABI method call, either as an ordered array or an object */
+    args: Expand<TArgs>;
+  }
+>;
 /**
  * Maps a method signature from the BiatecIdentityProvider smart contract to the method's arguments in either tuple or struct form
  */
-export type MethodArgs<TSignature extends BiatecIdentityProviderSignatures> = BiatecIdentityProviderTypes['methods'][TSignature]['argsObj' | 'argsTuple']
+export type MethodArgs<TSignature extends BiatecIdentityProviderSignatures> =
+  BiatecIdentityProviderTypes['methods'][TSignature]['argsObj' | 'argsTuple'];
 /**
  * Maps a method signature from the BiatecIdentityProvider smart contract to the method's return type
  */
-export type MethodReturn<TSignature extends BiatecIdentityProviderSignatures> = BiatecIdentityProviderTypes['methods'][TSignature]['returns']
+export type MethodReturn<TSignature extends BiatecIdentityProviderSignatures> =
+  BiatecIdentityProviderTypes['methods'][TSignature]['returns'];
 
 /**
  * Defines the shape of the keyed global state of the application.
  */
-export type GlobalKeysState = BiatecIdentityProviderTypes['state']['global']['keys']
+export type GlobalKeysState = BiatecIdentityProviderTypes['state']['global']['keys'];
 
 /**
  * Defines the shape of the keyed box state of the application.
  */
-export type BoxKeysState = BiatecIdentityProviderTypes['state']['box']['keys']
-
+export type BoxKeysState = BiatecIdentityProviderTypes['state']['box']['keys'];
 
 /**
  * Defines supported create method params for this smart contract
  */
 export type BiatecIdentityProviderCreateCallParams =
-  | Expand<CallParams<BiatecIdentityProviderArgs['obj']['createApplication()void'] | BiatecIdentityProviderArgs['tuple']['createApplication()void']> & {method: 'createApplication'} & {onComplete?: OnApplicationComplete.NoOpOC} & CreateSchema>
-  | Expand<CallParams<BiatecIdentityProviderArgs['obj']['createApplication()void'] | BiatecIdentityProviderArgs['tuple']['createApplication()void']> & {method: 'createApplication()void'} & {onComplete?: OnApplicationComplete.NoOpOC} & CreateSchema>
+  | Expand<
+      CallParams<
+        | BiatecIdentityProviderArgs['obj']['createApplication()void']
+        | BiatecIdentityProviderArgs['tuple']['createApplication()void']
+      > & { method: 'createApplication' } & { onComplete?: OnApplicationComplete.NoOpOC } & CreateSchema
+    >
+  | Expand<
+      CallParams<
+        | BiatecIdentityProviderArgs['obj']['createApplication()void']
+        | BiatecIdentityProviderArgs['tuple']['createApplication()void']
+      > & { method: 'createApplication()void' } & { onComplete?: OnApplicationComplete.NoOpOC } & CreateSchema
+    >;
 /**
  * Defines supported update method params for this smart contract
  */
 export type BiatecIdentityProviderUpdateCallParams =
-  | Expand<CallParams<BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void'] | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']> & {method: 'updateApplication'}>
-  | Expand<CallParams<BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void'] | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']> & {method: 'updateApplication(uint64,byte[])void'}>
+  | Expand<
+      CallParams<
+        | BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void']
+        | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']
+      > & { method: 'updateApplication' }
+    >
+  | Expand<
+      CallParams<
+        | BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void']
+        | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']
+      > & { method: 'updateApplication(uint64,byte[])void' }
+    >;
 /**
  * Defines arguments required for the deploy method.
  */
-export type BiatecIdentityProviderDeployParams = Expand<Omit<AppFactoryDeployParams, 'createParams' | 'updateParams' | 'deleteParams'> & {
-  /**
-   * Create transaction parameters to use if a create needs to be issued as part of deployment; use `method` to define ABI call (if available) or leave out for a bare call (if available)
-   */
-  createParams?: BiatecIdentityProviderCreateCallParams
-  /**
-   * Update transaction parameters to use if a create needs to be issued as part of deployment; use `method` to define ABI call (if available) or leave out for a bare call (if available)
-   */
-  updateParams?: BiatecIdentityProviderUpdateCallParams
-}>
-
+export type BiatecIdentityProviderDeployParams = Expand<
+  Omit<AppFactoryDeployParams, 'createParams' | 'updateParams' | 'deleteParams'> & {
+    /**
+     * Create transaction parameters to use if a create needs to be issued as part of deployment; use `method` to define ABI call (if available) or leave out for a bare call (if available)
+     */
+    createParams?: BiatecIdentityProviderCreateCallParams;
+    /**
+     * Update transaction parameters to use if a create needs to be issued as part of deployment; use `method` to define ABI call (if available) or leave out for a bare call (if available)
+     */
+    updateParams?: BiatecIdentityProviderUpdateCallParams;
+  }
+>;
 
 /**
  * Exposes methods for constructing `AppClient` params objects for ABI calls to the BiatecIdentityProvider smart contract
@@ -358,13 +2053,12 @@ export abstract class BiatecIdentityProviderParamsFactory {
    */
   static get create() {
     return {
-      _resolveByMethod<TParams extends BiatecIdentityProviderCreateCallParams & {method: string}>(params: TParams) {
-        switch(params.method) {
+      _resolveByMethod<TParams extends BiatecIdentityProviderCreateCallParams & { method: string }>(params: TParams) {
+        switch (params.method) {
           case 'createApplication':
           case 'createApplication()void':
-            return BiatecIdentityProviderParamsFactory.create.createApplication(params)
+            return BiatecIdentityProviderParamsFactory.create.createApplication(params);
         }
-        throw new Error(`Unknown ' + verb + ' method`)
       },
 
       /**
@@ -373,14 +2067,20 @@ export abstract class BiatecIdentityProviderParamsFactory {
        * @param params Parameters for the call
        * @returns An `AppClientMethodCallParams` object for the call
        */
-      createApplication(params: CallParams<BiatecIdentityProviderArgs['obj']['createApplication()void'] | BiatecIdentityProviderArgs['tuple']['createApplication()void']> & AppClientCompilationParams & {onComplete?: OnApplicationComplete.NoOpOC}): AppClientMethodCallParams & AppClientCompilationParams & {onComplete?: OnApplicationComplete.NoOpOC} {
+      createApplication(
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['createApplication()void']
+          | BiatecIdentityProviderArgs['tuple']['createApplication()void']
+        > &
+          AppClientCompilationParams & { onComplete?: OnApplicationComplete.NoOpOC }
+      ): AppClientMethodCallParams & AppClientCompilationParams & { onComplete?: OnApplicationComplete.NoOpOC } {
         return {
           ...params,
           method: 'createApplication()void' as const,
           args: Array.isArray(params.args) ? params.args : [],
-        }
+        };
       },
-    }
+    };
   }
 
   /**
@@ -388,13 +2088,12 @@ export abstract class BiatecIdentityProviderParamsFactory {
    */
   static get update() {
     return {
-      _resolveByMethod<TParams extends BiatecIdentityProviderUpdateCallParams & {method: string}>(params: TParams) {
-        switch(params.method) {
+      _resolveByMethod<TParams extends BiatecIdentityProviderUpdateCallParams & { method: string }>(params: TParams) {
+        switch (params.method) {
           case 'updateApplication':
           case 'updateApplication(uint64,byte[])void':
-            return BiatecIdentityProviderParamsFactory.update.updateApplication(params)
+            return BiatecIdentityProviderParamsFactory.update.updateApplication(params);
         }
-        throw new Error(`Unknown ' + verb + ' method`)
       },
 
       /**
@@ -403,14 +2102,22 @@ export abstract class BiatecIdentityProviderParamsFactory {
        * @param params Parameters for the call
        * @returns An `AppClientMethodCallParams` object for the call
        */
-      updateApplication(params: CallParams<BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void'] | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']> & AppClientCompilationParams): AppClientMethodCallParams & AppClientCompilationParams {
+      updateApplication(
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void']
+          | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']
+        > &
+          AppClientCompilationParams
+      ): AppClientMethodCallParams & AppClientCompilationParams {
         return {
           ...params,
           method: 'updateApplication(uint64,byte[])void' as const,
-          args: Array.isArray(params.args) ? params.args : [params.args.appBiatecConfigProvider, params.args.newVersion],
-        }
+          args: Array.isArray(params.args)
+            ? params.args
+            : [params.args.appBiatecConfigProvider, params.args.newVersion],
+        };
       },
-    }
+    };
   }
 
   /**
@@ -421,91 +2128,170 @@ export abstract class BiatecIdentityProviderParamsFactory {
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static bootstrap(params: CallParams<BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void'] | BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static bootstrap(
+    params: CallParams<
+      | BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void']
+      | BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'bootstrap(uint64,address,address,address)void' as const,
-      args: Array.isArray(params.args) ? params.args : [params.args.appBiatecConfigProvider, params.args.governor, params.args.verificationSetter, params.args.engagementSetter],
-    }
+      args: Array.isArray(params.args)
+        ? params.args
+        : [
+            params.args.appBiatecConfigProvider,
+            params.args.governor,
+            params.args.verificationSetter,
+            params.args.engagementSetter,
+          ],
+    };
   }
   /**
-   * Constructs a no op call for the selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void ABI method
+   * Constructs a no op call for the selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void ABI method
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static selfRegistration(params: CallParams<BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static selfRegistration(
+    params: CallParams<
+      | BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+      | BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
-      method: 'selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void' as const,
+      method:
+        'selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void' as const,
       args: Array.isArray(params.args) ? params.args : [params.args.user, params.args.info],
-    }
+    };
   }
   /**
-   * Constructs a no op call for the setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void ABI method
+   * Constructs a no op call for the setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void ABI method
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static setInfo(params: CallParams<BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static setInfo(
+    params: CallParams<
+      | BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+      | BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
-      method: 'setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void' as const,
+      method:
+        'setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void' as const,
       args: Array.isArray(params.args) ? params.args : [params.args.user, params.args.info],
-    }
+    };
   }
   /**
    * Constructs a no op call for the sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void ABI method
    *
   * addressExecutiveFee can perfom key registration for this LP pool
-  
-  
+
+
   Only addressExecutiveFee is allowed to execute this method.
 
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static sendOnlineKeyRegistration(params: CallParams<BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'] | BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static sendOnlineKeyRegistration(
+    params: CallParams<
+      | BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
+      | BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void' as const,
-      args: Array.isArray(params.args) ? params.args : [params.args.appBiatecConfigProvider, params.args.votePk, params.args.selectionPk, params.args.stateProofPk, params.args.voteFirst, params.args.voteLast, params.args.voteKeyDilution],
-    }
+      args: Array.isArray(params.args)
+        ? params.args
+        : [
+            params.args.appBiatecConfigProvider,
+            params.args.votePk,
+            params.args.selectionPk,
+            params.args.stateProofPk,
+            params.args.voteFirst,
+            params.args.voteLast,
+            params.args.voteKeyDilution,
+          ],
+    };
   }
   /**
-   * Constructs a no op call for the getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool) ABI method
+   * Constructs a no op call for the getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool) ABI method
    *
    * Returns user information - fee multiplier, verification class, engagement class ..
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static getUser(params: CallParams<BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'] | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static getUser(
+    params: CallParams<
+      | BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+      | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
-      method: 'getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)' as const,
+      method:
+        'getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)' as const,
       args: Array.isArray(params.args) ? params.args : [params.args.user, params.args.v],
-    }
+    };
+  }
+  /**
+   * Constructs a no op call for the getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool) ABI method
+   *
+   * Returns short user information - fee multiplier, verification class, engagement class ..
+   *
+   * @param params Parameters for the call
+   * @returns An `AppClientMethodCallParams` object for the call
+   */
+  static getUserShort(
+    params: CallParams<
+      | BiatecIdentityProviderArgs['obj']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+      | BiatecIdentityProviderArgs['tuple']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
+    return {
+      ...params,
+      method: 'getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)' as const,
+      args: Array.isArray(params.args) ? params.args : [params.args.user, params.args.v],
+    };
   }
   /**
    * Constructs a no op call for the withdrawExcessAssets(uint64,uint64,uint64)uint64 ABI method
    *
   * If someone deposits excess assets to this smart contract biatec can use them.
-  
-  
+
+
   Only addressExecutiveFee is allowed to execute this method.
 
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static withdrawExcessAssets(params: CallParams<BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64'] | BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static withdrawExcessAssets(
+    params: CallParams<
+      | BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
+      | BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
+    > &
+      CallOnComplete
+  ): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
       method: 'withdrawExcessAssets(uint64,uint64,uint64)uint64' as const,
-      args: Array.isArray(params.args) ? params.args : [params.args.appBiatecConfigProvider, params.args.asset, params.args.amount],
-    }
+      args: Array.isArray(params.args)
+        ? params.args
+        : [params.args.appBiatecConfigProvider, params.args.asset, params.args.amount],
+    };
   }
 }
 
@@ -516,7 +2302,7 @@ export class BiatecIdentityProviderFactory {
   /**
    * The underlying `AppFactory` for when you want to have more flexibility
    */
-  public readonly appFactory: _AppFactory
+  public readonly appFactory: _AppFactory;
 
   /**
    * Creates a new instance of `BiatecIdentityProviderFactory`
@@ -527,24 +2313,24 @@ export class BiatecIdentityProviderFactory {
     this.appFactory = new _AppFactory({
       ...params,
       appSpec: APP_SPEC,
-    })
+    });
   }
-  
+
   /** The name of the app (from the ARC-32 / ARC-56 app spec or override). */
   public get appName() {
-    return this.appFactory.appName
+    return this.appFactory.appName;
   }
-  
+
   /** The ARC-56 app spec being used */
   get appSpec() {
-    return APP_SPEC
+    return APP_SPEC;
   }
-  
+
   /** A reference to the underlying `AlgorandClient` this app factory is using. */
   public get algorand(): AlgorandClientInterface {
-    return this.appFactory.algorand
+    return this.appFactory.algorand;
   }
-  
+
   /**
    * Returns a new `AppClient` client for an app instance of the given ID.
    *
@@ -554,9 +2340,9 @@ export class BiatecIdentityProviderFactory {
    * @returns The `AppClient`
    */
   public getAppClientById(params: AppFactoryAppClientParams) {
-    return new BiatecIdentityProviderClient(this.appFactory.getAppClientById(params))
+    return new BiatecIdentityProviderClient(this.appFactory.getAppClientById(params));
   }
-  
+
   /**
    * Returns a new `AppClient` client, resolving the app by creator address and name
    * using AlgoKit app deployment semantics (i.e. looking for the app creation transaction note).
@@ -566,10 +2352,8 @@ export class BiatecIdentityProviderFactory {
    * @param params The parameters to create the app client
    * @returns The `AppClient`
    */
-  public async getAppClientByCreatorAndName(
-    params: AppFactoryResolveAppClientByCreatorAndNameParams,
-  ) {
-    return new BiatecIdentityProviderClient(await this.appFactory.getAppClientByCreatorAndName(params))
+  public async getAppClientByCreatorAndName(params: AppFactoryResolveAppClientByCreatorAndNameParams) {
+    return new BiatecIdentityProviderClient(await this.appFactory.getAppClientByCreatorAndName(params));
   }
 
   /**
@@ -581,10 +2365,18 @@ export class BiatecIdentityProviderFactory {
   public async deploy(params: BiatecIdentityProviderDeployParams = {}) {
     const result = await this.appFactory.deploy({
       ...params,
-      createParams: params.createParams?.method ? BiatecIdentityProviderParamsFactory.create._resolveByMethod(params.createParams) : params.createParams ? params.createParams as (BiatecIdentityProviderCreateCallParams & { args: Uint8Array[] }) : undefined,
-      updateParams: params.updateParams?.method ? BiatecIdentityProviderParamsFactory.update._resolveByMethod(params.updateParams) : params.updateParams ? params.updateParams as (BiatecIdentityProviderUpdateCallParams & { args: Uint8Array[] }) : undefined,
-    })
-    return { result: result.result, appClient: new BiatecIdentityProviderClient(result.appClient) }
+      createParams: params.createParams?.method
+        ? BiatecIdentityProviderParamsFactory.create._resolveByMethod(params.createParams)
+        : params.createParams
+          ? (params.createParams as BiatecIdentityProviderCreateCallParams & { args: Uint8Array[] })
+          : undefined,
+      updateParams: params.updateParams?.method
+        ? BiatecIdentityProviderParamsFactory.update._resolveByMethod(params.updateParams)
+        : params.updateParams
+          ? (params.updateParams as BiatecIdentityProviderUpdateCallParams & { args: Uint8Array[] })
+          : undefined,
+    });
+    return { result: result.result, appClient: new BiatecIdentityProviderClient(result.appClient) };
   }
 
   /**
@@ -603,8 +2395,15 @@ export class BiatecIdentityProviderFactory {
        * @param params The params for the smart contract call
        * @returns The create params
        */
-      createApplication: (params: CallParams<BiatecIdentityProviderArgs['obj']['createApplication()void'] | BiatecIdentityProviderArgs['tuple']['createApplication()void']> & AppClientCompilationParams & CreateSchema & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
-        return this.appFactory.params.create(BiatecIdentityProviderParamsFactory.create.createApplication(params))
+      createApplication: (
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['createApplication()void']
+          | BiatecIdentityProviderArgs['tuple']['createApplication()void']
+        > &
+          AppClientCompilationParams &
+          CreateSchema & { onComplete?: OnApplicationComplete.NoOpOC } = { args: [] }
+      ) => {
+        return this.appFactory.params.create(BiatecIdentityProviderParamsFactory.create.createApplication(params));
       },
     },
 
@@ -620,12 +2419,19 @@ export class BiatecIdentityProviderFactory {
        * @param params The params for the smart contract call
        * @returns The deployUpdate params
        */
-      updateApplication: (params: CallParams<BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void'] | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']> & AppClientCompilationParams) => {
-        return this.appFactory.params.deployUpdate(BiatecIdentityProviderParamsFactory.update.updateApplication(params))
+      updateApplication: (
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void']
+          | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']
+        > &
+          AppClientCompilationParams
+      ) => {
+        return this.appFactory.params.deployUpdate(
+          BiatecIdentityProviderParamsFactory.update.updateApplication(params)
+        );
       },
     },
-
-  }
+  };
 
   /**
    * Create transactions for the current app
@@ -643,12 +2449,20 @@ export class BiatecIdentityProviderFactory {
        * @param params The params for the smart contract call
        * @returns The create transaction
        */
-      createApplication: (params: CallParams<BiatecIdentityProviderArgs['obj']['createApplication()void'] | BiatecIdentityProviderArgs['tuple']['createApplication()void']> & AppClientCompilationParams & CreateSchema & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
-        return this.appFactory.createTransaction.create(BiatecIdentityProviderParamsFactory.create.createApplication(params))
+      createApplication: (
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['createApplication()void']
+          | BiatecIdentityProviderArgs['tuple']['createApplication()void']
+        > &
+          AppClientCompilationParams &
+          CreateSchema & { onComplete?: OnApplicationComplete.NoOpOC } = { args: [] }
+      ) => {
+        return this.appFactory.createTransaction.create(
+          BiatecIdentityProviderParamsFactory.create.createApplication(params)
+        );
       },
     },
-
-  }
+  };
 
   /**
    * Send calls to the current app
@@ -666,14 +2480,30 @@ export class BiatecIdentityProviderFactory {
        * @param params The params for the smart contract call
        * @returns The create result
        */
-      createApplication: async (params: CallParams<BiatecIdentityProviderArgs['obj']['createApplication()void'] | BiatecIdentityProviderArgs['tuple']['createApplication()void']> & AppClientCompilationParams & CreateSchema & SendParams & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
-        const result = await this.appFactory.send.create(BiatecIdentityProviderParamsFactory.create.createApplication(params))
-        return { result: { ...result.result, return: result.result.return as unknown as (undefined | BiatecIdentityProviderReturns['createApplication()void']) }, appClient: new BiatecIdentityProviderClient(result.appClient) }
+      createApplication: async (
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['createApplication()void']
+          | BiatecIdentityProviderArgs['tuple']['createApplication()void']
+        > &
+          AppClientCompilationParams &
+          CreateSchema &
+          SendParams & { onComplete?: OnApplicationComplete.NoOpOC } = { args: [] }
+      ) => {
+        const result = await this.appFactory.send.create(
+          BiatecIdentityProviderParamsFactory.create.createApplication(params)
+        );
+        return {
+          result: {
+            ...result.result,
+            return: result.result.return as unknown as
+              | undefined
+              | BiatecIdentityProviderReturns['createApplication()void'],
+          },
+          appClient: new BiatecIdentityProviderClient(result.appClient),
+        };
       },
     },
-
-  }
-
+  };
 }
 /**
  * A client to make calls to the BiatecIdentityProvider smart contract
@@ -682,44 +2512,58 @@ export class BiatecIdentityProviderClient {
   /**
    * The underlying `AppClient` for when you want to have more flexibility
    */
-  public readonly appClient: _AppClient
+  public readonly appClient: _AppClient;
 
   /**
    * Creates a new instance of `BiatecIdentityProviderClient`
    *
    * @param appClient An `AppClient` instance which has been created with the BiatecIdentityProvider app spec
    */
-  constructor(appClient: _AppClient)
+  constructor(appClient: _AppClient);
   /**
    * Creates a new instance of `BiatecIdentityProviderClient`
    *
    * @param params The parameters to initialise the app client with
    */
-  constructor(params: Omit<AppClientParams, 'appSpec'>)
+  constructor(params: Omit<AppClientParams, 'appSpec'>);
   constructor(appClientOrParams: _AppClient | Omit<AppClientParams, 'appSpec'>) {
-    this.appClient = appClientOrParams instanceof _AppClient ? appClientOrParams : new _AppClient({
-      ...appClientOrParams,
-      appSpec: APP_SPEC,
-    })
+    this.appClient =
+      appClientOrParams instanceof _AppClient
+        ? appClientOrParams
+        : new _AppClient({
+            ...appClientOrParams,
+            appSpec: APP_SPEC,
+          });
   }
-  
+
   /**
    * Checks for decode errors on the given return value and maps the return value to the return type for the given method
    * @returns The typed return value or undefined if there was no value
    */
-  decodeReturnValue<TSignature extends BiatecIdentityProviderNonVoidMethodSignatures>(method: TSignature, returnValue: ABIReturn | undefined) {
-    return returnValue !== undefined ? getArc56ReturnValue<MethodReturn<TSignature>>(returnValue, this.appClient.getABIMethod(method), APP_SPEC.structs) : undefined
+  decodeReturnValue<TSignature extends BiatecIdentityProviderNonVoidMethodSignatures>(
+    method: TSignature,
+    returnValue: ABIReturn | undefined
+  ) {
+    return returnValue !== undefined
+      ? getArc56ReturnValue<MethodReturn<TSignature>>(
+          returnValue,
+          this.appClient.getABIMethod(method),
+          APP_SPEC.structs
+        )
+      : undefined;
   }
-  
+
   /**
    * Returns a new `BiatecIdentityProviderClient` client, resolving the app by creator address and name
    * using AlgoKit app deployment semantics (i.e. looking for the app creation transaction note).
    * @param params The parameters to create the app client
    */
-  public static async fromCreatorAndName(params: Omit<ResolveAppClientByCreatorAndName, 'appSpec'>): Promise<BiatecIdentityProviderClient> {
-    return new BiatecIdentityProviderClient(await _AppClient.fromCreatorAndName({...params, appSpec: APP_SPEC}))
+  public static async fromCreatorAndName(
+    params: Omit<ResolveAppClientByCreatorAndName, 'appSpec'>
+  ): Promise<BiatecIdentityProviderClient> {
+    return new BiatecIdentityProviderClient(await _AppClient.fromCreatorAndName({ ...params, appSpec: APP_SPEC }));
   }
-  
+
   /**
    * Returns an `BiatecIdentityProviderClient` instance for the current network based on
    * pre-determined network-specific app IDs specified in the ARC-56 app spec.
@@ -727,35 +2571,33 @@ export class BiatecIdentityProviderClient {
    * If no IDs are in the app spec or the network isn't recognised, an error is thrown.
    * @param params The parameters to create the app client
    */
-  static async fromNetwork(
-    params: Omit<ResolveAppClientByNetwork, 'appSpec'>
-  ): Promise<BiatecIdentityProviderClient> {
-    return new BiatecIdentityProviderClient(await _AppClient.fromNetwork({...params, appSpec: APP_SPEC}))
+  static async fromNetwork(params: Omit<ResolveAppClientByNetwork, 'appSpec'>): Promise<BiatecIdentityProviderClient> {
+    return new BiatecIdentityProviderClient(await _AppClient.fromNetwork({ ...params, appSpec: APP_SPEC }));
   }
-  
+
   /** The ID of the app instance this client is linked to. */
   public get appId() {
-    return this.appClient.appId
+    return this.appClient.appId;
   }
-  
+
   /** The app address of the app instance this client is linked to. */
   public get appAddress() {
-    return this.appClient.appAddress
+    return this.appClient.appAddress;
   }
-  
+
   /** The name of the app. */
   public get appName() {
-    return this.appClient.appName
+    return this.appClient.appName;
   }
-  
+
   /** The ARC-56 app spec being used */
   public get appSpec() {
-    return this.appClient.appSpec
+    return this.appClient.appSpec;
   }
-  
+
   /** A reference to the underlying `AlgorandClient` this app client is using. */
   public get algorand(): AlgorandClientInterface {
-    return this.appClient.algorand
+    return this.appClient.algorand;
   }
 
   /**
@@ -774,10 +2616,15 @@ export class BiatecIdentityProviderClient {
        * @param params The params for the smart contract call
        * @returns The update params
        */
-      updateApplication: (params: CallParams<BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void'] | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']> & AppClientCompilationParams) => {
-        return this.appClient.params.update(BiatecIdentityProviderParamsFactory.update.updateApplication(params))
+      updateApplication: (
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void']
+          | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']
+        > &
+          AppClientCompilationParams
+      ) => {
+        return this.appClient.params.update(BiatecIdentityProviderParamsFactory.update.updateApplication(params));
       },
-
     },
 
     /**
@@ -787,7 +2634,7 @@ export class BiatecIdentityProviderClient {
      * @returns The clearState result
      */
     clearState: (params?: Expand<AppClientBareCallParams>) => {
-      return this.appClient.params.bare.clearState(params)
+      return this.appClient.params.bare.clearState(params);
     },
 
     /**
@@ -798,49 +2645,69 @@ export class BiatecIdentityProviderClient {
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    bootstrap: (params: CallParams<BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void'] | BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecIdentityProviderParamsFactory.bootstrap(params))
+    bootstrap: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void']
+        | BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecIdentityProviderParamsFactory.bootstrap(params));
     },
 
     /**
-     * Makes a call to the BiatecIdentityProvider smart contract using the `selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void` ABI method.
+     * Makes a call to the BiatecIdentityProvider smart contract using the `selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void` ABI method.
      *
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    selfRegistration: (params: CallParams<BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecIdentityProviderParamsFactory.selfRegistration(params))
+    selfRegistration: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+        | BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecIdentityProviderParamsFactory.selfRegistration(params));
     },
 
     /**
-     * Makes a call to the BiatecIdentityProvider smart contract using the `setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void` ABI method.
+     * Makes a call to the BiatecIdentityProvider smart contract using the `setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void` ABI method.
      *
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    setInfo: (params: CallParams<BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecIdentityProviderParamsFactory.setInfo(params))
+    setInfo: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+        | BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecIdentityProviderParamsFactory.setInfo(params));
     },
 
     /**
      * Makes a call to the BiatecIdentityProvider smart contract using the `sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-    
-    
+
+
     Only addressExecutiveFee is allowed to execute this method.
 
      *
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    sendOnlineKeyRegistration: (params: CallParams<BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'] | BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecIdentityProviderParamsFactory.sendOnlineKeyRegistration(params))
+    sendOnlineKeyRegistration: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
+        | BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecIdentityProviderParamsFactory.sendOnlineKeyRegistration(params));
     },
 
     /**
-     * Makes a call to the BiatecIdentityProvider smart contract using the `getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)` ABI method.
-     * 
+     * Makes a call to the BiatecIdentityProvider smart contract using the `getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)` ABI method.
+     *
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
      * Returns user information - fee multiplier, verification class, engagement class ..
@@ -848,27 +2715,55 @@ export class BiatecIdentityProviderClient {
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    getUser: (params: CallParams<BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'] | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecIdentityProviderParamsFactory.getUser(params))
+    getUser: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+        | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecIdentityProviderParamsFactory.getUser(params));
+    },
+
+    /**
+     * Makes a call to the BiatecIdentityProvider smart contract using the `getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)` ABI method.
+     *
+     * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
+     *
+     * Returns short user information - fee multiplier, verification class, engagement class ..
+     *
+     * @param params The params for the smart contract call
+     * @returns The call params
+     */
+    getUserShort: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+        | BiatecIdentityProviderArgs['tuple']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecIdentityProviderParamsFactory.getUserShort(params));
     },
 
     /**
      * Makes a call to the BiatecIdentityProvider smart contract using the `withdrawExcessAssets(uint64,uint64,uint64)uint64` ABI method.
      *
     * If someone deposits excess assets to this smart contract biatec can use them.
-    
-    
+
+
     Only addressExecutiveFee is allowed to execute this method.
 
      *
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    withdrawExcessAssets: (params: CallParams<BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64'] | BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.params.call(BiatecIdentityProviderParamsFactory.withdrawExcessAssets(params))
+    withdrawExcessAssets: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
+        | BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.params.call(BiatecIdentityProviderParamsFactory.withdrawExcessAssets(params));
     },
-
-  }
+  };
 
   /**
    * Create transactions for the current app
@@ -886,10 +2781,17 @@ export class BiatecIdentityProviderClient {
        * @param params The params for the smart contract call
        * @returns The update transaction
        */
-      updateApplication: (params: CallParams<BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void'] | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']> & AppClientCompilationParams) => {
-        return this.appClient.createTransaction.update(BiatecIdentityProviderParamsFactory.update.updateApplication(params))
+      updateApplication: (
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void']
+          | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']
+        > &
+          AppClientCompilationParams
+      ) => {
+        return this.appClient.createTransaction.update(
+          BiatecIdentityProviderParamsFactory.update.updateApplication(params)
+        );
       },
-
     },
 
     /**
@@ -899,7 +2801,7 @@ export class BiatecIdentityProviderClient {
      * @returns The clearState result
      */
     clearState: (params?: Expand<AppClientBareCallParams>) => {
-      return this.appClient.createTransaction.bare.clearState(params)
+      return this.appClient.createTransaction.bare.clearState(params);
     },
 
     /**
@@ -910,49 +2812,71 @@ export class BiatecIdentityProviderClient {
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    bootstrap: (params: CallParams<BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void'] | BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecIdentityProviderParamsFactory.bootstrap(params))
+    bootstrap: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void']
+        | BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecIdentityProviderParamsFactory.bootstrap(params));
     },
 
     /**
-     * Makes a call to the BiatecIdentityProvider smart contract using the `selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void` ABI method.
+     * Makes a call to the BiatecIdentityProvider smart contract using the `selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void` ABI method.
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    selfRegistration: (params: CallParams<BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecIdentityProviderParamsFactory.selfRegistration(params))
+    selfRegistration: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+        | BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecIdentityProviderParamsFactory.selfRegistration(params));
     },
 
     /**
-     * Makes a call to the BiatecIdentityProvider smart contract using the `setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void` ABI method.
+     * Makes a call to the BiatecIdentityProvider smart contract using the `setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void` ABI method.
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    setInfo: (params: CallParams<BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecIdentityProviderParamsFactory.setInfo(params))
+    setInfo: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+        | BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecIdentityProviderParamsFactory.setInfo(params));
     },
 
     /**
      * Makes a call to the BiatecIdentityProvider smart contract using the `sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-    
-    
+
+
     Only addressExecutiveFee is allowed to execute this method.
 
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    sendOnlineKeyRegistration: (params: CallParams<BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'] | BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecIdentityProviderParamsFactory.sendOnlineKeyRegistration(params))
+    sendOnlineKeyRegistration: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
+        | BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(
+        BiatecIdentityProviderParamsFactory.sendOnlineKeyRegistration(params)
+      );
     },
 
     /**
-     * Makes a call to the BiatecIdentityProvider smart contract using the `getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)` ABI method.
-     * 
+     * Makes a call to the BiatecIdentityProvider smart contract using the `getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)` ABI method.
+     *
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
      * Returns user information - fee multiplier, verification class, engagement class ..
@@ -960,27 +2884,55 @@ export class BiatecIdentityProviderClient {
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    getUser: (params: CallParams<BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'] | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecIdentityProviderParamsFactory.getUser(params))
+    getUser: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+        | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecIdentityProviderParamsFactory.getUser(params));
+    },
+
+    /**
+     * Makes a call to the BiatecIdentityProvider smart contract using the `getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)` ABI method.
+     *
+     * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
+     *
+     * Returns short user information - fee multiplier, verification class, engagement class ..
+     *
+     * @param params The params for the smart contract call
+     * @returns The call transaction
+     */
+    getUserShort: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+        | BiatecIdentityProviderArgs['tuple']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecIdentityProviderParamsFactory.getUserShort(params));
     },
 
     /**
      * Makes a call to the BiatecIdentityProvider smart contract using the `withdrawExcessAssets(uint64,uint64,uint64)uint64` ABI method.
      *
     * If someone deposits excess assets to this smart contract biatec can use them.
-    
-    
+
+
     Only addressExecutiveFee is allowed to execute this method.
 
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    withdrawExcessAssets: (params: CallParams<BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64'] | BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      return this.appClient.createTransaction.call(BiatecIdentityProviderParamsFactory.withdrawExcessAssets(params))
+    withdrawExcessAssets: (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
+        | BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
+      > & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      return this.appClient.createTransaction.call(BiatecIdentityProviderParamsFactory.withdrawExcessAssets(params));
     },
-
-  }
+  };
 
   /**
    * Send calls to the current app
@@ -998,11 +2950,24 @@ export class BiatecIdentityProviderClient {
        * @param params The params for the smart contract call
        * @returns The update result
        */
-      updateApplication: async (params: CallParams<BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void'] | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']> & AppClientCompilationParams & SendParams) => {
-        const result = await this.appClient.send.update(BiatecIdentityProviderParamsFactory.update.updateApplication(params))
-        return {...result, return: result.return as unknown as (undefined | BiatecIdentityProviderReturns['updateApplication(uint64,byte[])void'])}
+      updateApplication: async (
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void']
+          | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']
+        > &
+          AppClientCompilationParams &
+          SendParams
+      ) => {
+        const result = await this.appClient.send.update(
+          BiatecIdentityProviderParamsFactory.update.updateApplication(params)
+        );
+        return {
+          ...result,
+          return: result.return as unknown as
+            | undefined
+            | BiatecIdentityProviderReturns['updateApplication(uint64,byte[])void'],
+        };
       },
-
     },
 
     /**
@@ -1012,7 +2977,7 @@ export class BiatecIdentityProviderClient {
      * @returns The clearState result
      */
     clearState: (params?: Expand<AppClientBareCallParams & SendParams>) => {
-      return this.appClient.send.bare.clearState(params)
+      return this.appClient.send.bare.clearState(params);
     },
 
     /**
@@ -1023,53 +2988,99 @@ export class BiatecIdentityProviderClient {
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    bootstrap: async (params: CallParams<BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void'] | BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.bootstrap(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecIdentityProviderReturns['bootstrap(uint64,address,address,address)void'])}
+    bootstrap: async (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void']
+        | BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.bootstrap(params));
+      return {
+        ...result,
+        return: result.return as unknown as
+          | undefined
+          | BiatecIdentityProviderReturns['bootstrap(uint64,address,address,address)void'],
+      };
     },
 
     /**
-     * Makes a call to the BiatecIdentityProvider smart contract using the `selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void` ABI method.
+     * Makes a call to the BiatecIdentityProvider smart contract using the `selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void` ABI method.
      *
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    selfRegistration: async (params: CallParams<BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.selfRegistration(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecIdentityProviderReturns['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'])}
+    selfRegistration: async (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+        | BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.selfRegistration(params));
+      return {
+        ...result,
+        return: result.return as unknown as
+          | undefined
+          | BiatecIdentityProviderReturns['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void'],
+      };
     },
 
     /**
-     * Makes a call to the BiatecIdentityProvider smart contract using the `setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void` ABI method.
+     * Makes a call to the BiatecIdentityProvider smart contract using the `setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void` ABI method.
      *
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    setInfo: async (params: CallParams<BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.setInfo(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecIdentityProviderReturns['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'])}
+    setInfo: async (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+        | BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.setInfo(params));
+      return {
+        ...result,
+        return: result.return as unknown as
+          | undefined
+          | BiatecIdentityProviderReturns['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void'],
+      };
     },
 
     /**
      * Makes a call to the BiatecIdentityProvider smart contract using the `sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-    
-    
+
+
     Only addressExecutiveFee is allowed to execute this method.
 
      *
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    sendOnlineKeyRegistration: async (params: CallParams<BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'] | BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.sendOnlineKeyRegistration(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecIdentityProviderReturns['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'])}
+    sendOnlineKeyRegistration: async (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
+        | BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(
+        BiatecIdentityProviderParamsFactory.sendOnlineKeyRegistration(params)
+      );
+      return {
+        ...result,
+        return: result.return as unknown as
+          | undefined
+          | BiatecIdentityProviderReturns['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'],
+      };
     },
 
     /**
-     * Makes a call to the BiatecIdentityProvider smart contract using the `getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)` ABI method.
-     * 
+     * Makes a call to the BiatecIdentityProvider smart contract using the `getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)` ABI method.
+     *
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
      * Returns user information - fee multiplier, verification class, engagement class ..
@@ -1077,29 +3088,76 @@ export class BiatecIdentityProviderClient {
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    getUser: async (params: CallParams<BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'] | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.getUser(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecIdentityProviderReturns['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'])}
+    getUser: async (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+        | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.getUser(params));
+      return {
+        ...result,
+        return: result.return as unknown as
+          | undefined
+          | BiatecIdentityProviderReturns['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)'],
+      };
+    },
+
+    /**
+     * Makes a call to the BiatecIdentityProvider smart contract using the `getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)` ABI method.
+     *
+     * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
+     *
+     * Returns short user information - fee multiplier, verification class, engagement class ..
+     *
+     * @param params The params for the smart contract call
+     * @returns The call result
+     */
+    getUserShort: async (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+        | BiatecIdentityProviderArgs['tuple']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.getUserShort(params));
+      return {
+        ...result,
+        return: result.return as unknown as
+          | undefined
+          | BiatecIdentityProviderReturns['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)'],
+      };
     },
 
     /**
      * Makes a call to the BiatecIdentityProvider smart contract using the `withdrawExcessAssets(uint64,uint64,uint64)uint64` ABI method.
      *
     * If someone deposits excess assets to this smart contract biatec can use them.
-    
-    
+
+
     Only addressExecutiveFee is allowed to execute this method.
 
      *
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    withdrawExcessAssets: async (params: CallParams<BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64'] | BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
-      const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.withdrawExcessAssets(params))
-      return {...result, return: result.return as unknown as (undefined | BiatecIdentityProviderReturns['withdrawExcessAssets(uint64,uint64,uint64)uint64'])}
+    withdrawExcessAssets: async (
+      params: CallParams<
+        | BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
+        | BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
+      > &
+        SendParams & { onComplete?: OnApplicationComplete.NoOpOC }
+    ) => {
+      const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.withdrawExcessAssets(params));
+      return {
+        ...result,
+        return: result.return as unknown as
+          | undefined
+          | BiatecIdentityProviderReturns['withdrawExcessAssets(uint64,uint64,uint64)uint64'],
+      };
     },
-
-  }
+  };
 
   /**
    * Clone this app client with different params
@@ -1108,12 +3166,12 @@ export class BiatecIdentityProviderClient {
    * @returns A new app client with the altered params
    */
   public clone(params: CloneAppClientParams) {
-    return new BiatecIdentityProviderClient(this.appClient.clone(params))
+    return new BiatecIdentityProviderClient(this.appClient.clone(params));
   }
 
   /**
-   * Makes a readonly (simulated) call to the BiatecIdentityProvider smart contract using the `getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)` ABI method.
-   * 
+   * Makes a readonly (simulated) call to the BiatecIdentityProvider smart contract using the `getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)` ABI method.
+   *
    * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
    *
    * Returns user information - fee multiplier, verification class, engagement class ..
@@ -1121,9 +3179,34 @@ export class BiatecIdentityProviderClient {
    * @param params The params for the smart contract call
    * @returns The call result
    */
-  async getUser(params: CallParams<BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'] | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)']>) {
-    const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.getUser(params))
-    return result.return as unknown as BiatecIdentityProviderReturns['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)']
+  async getUser(
+    params: CallParams<
+      | BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+      | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+    >
+  ) {
+    const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.getUser(params));
+    return result.return as unknown as BiatecIdentityProviderReturns['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)'];
+  }
+
+  /**
+   * Makes a readonly (simulated) call to the BiatecIdentityProvider smart contract using the `getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)` ABI method.
+   *
+   * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
+   *
+   * Returns short user information - fee multiplier, verification class, engagement class ..
+   *
+   * @param params The params for the smart contract call
+   * @returns The call result
+   */
+  async getUserShort(
+    params: CallParams<
+      | BiatecIdentityProviderArgs['obj']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+      | BiatecIdentityProviderArgs['tuple']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+    >
+  ) {
+    const result = await this.appClient.send.call(BiatecIdentityProviderParamsFactory.getUserShort(params));
+    return result.return as unknown as BiatecIdentityProviderReturns['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)'];
   }
 
   /**
@@ -1138,35 +3221,45 @@ export class BiatecIdentityProviderClient {
        * Get all current keyed values from global state
        */
       getAll: async (): Promise<Partial<Expand<GlobalKeysState>>> => {
-        const result = await this.appClient.state.global.getAll()
+        const result = await this.appClient.state.global.getAll();
         return {
           governor: result.governor,
           verificationSetter: result.verificationSetter,
           engagementSetter: result.engagementSetter,
           appBiatecConfigProvider: result.appBiatecConfigProvider,
           version: new BinaryStateValue(result.version),
-        }
+        };
       },
       /**
        * Get the current value of the governor key in global state
        */
-      governor: async (): Promise<string | undefined> => { return (await this.appClient.state.global.getValue("governor")) as string | undefined },
+      governor: async (): Promise<string | undefined> => {
+        return (await this.appClient.state.global.getValue('governor')) as string | undefined;
+      },
       /**
        * Get the current value of the verificationSetter key in global state
        */
-      verificationSetter: async (): Promise<string | undefined> => { return (await this.appClient.state.global.getValue("verificationSetter")) as string | undefined },
+      verificationSetter: async (): Promise<string | undefined> => {
+        return (await this.appClient.state.global.getValue('verificationSetter')) as string | undefined;
+      },
       /**
        * Get the current value of the engagementSetter key in global state
        */
-      engagementSetter: async (): Promise<string | undefined> => { return (await this.appClient.state.global.getValue("engagementSetter")) as string | undefined },
+      engagementSetter: async (): Promise<string | undefined> => {
+        return (await this.appClient.state.global.getValue('engagementSetter')) as string | undefined;
+      },
       /**
        * Get the current value of the appBiatecConfigProvider key in global state
        */
-      appBiatecConfigProvider: async (): Promise<bigint | undefined> => { return (await this.appClient.state.global.getValue("appBiatecConfigProvider")) as bigint | undefined },
+      appBiatecConfigProvider: async (): Promise<bigint | undefined> => {
+        return (await this.appClient.state.global.getValue('appBiatecConfigProvider')) as bigint | undefined;
+      },
       /**
        * Get the current value of the version key in global state
        */
-      version: async (): Promise<BinaryState> => { return new BinaryStateValue((await this.appClient.state.global.getValue("version")) as Uint8Array | undefined) },
+      version: async (): Promise<BinaryState> => {
+        return new BinaryStateValue((await this.appClient.state.global.getValue('version')) as Uint8Array | undefined);
+      },
     },
     /**
      * Methods to access box state for the current BiatecIdentityProvider app
@@ -1176,9 +3269,8 @@ export class BiatecIdentityProviderClient {
        * Get all current keyed values from box state
        */
       getAll: async (): Promise<Partial<Expand<BoxKeysState>>> => {
-        const result = await this.appClient.state.box.getAll()
-        return {
-        }
+        const result = await this.appClient.state.box.getAll();
+        return {};
       },
       /**
        * Get values from the identities map in box state
@@ -1187,110 +3279,190 @@ export class BiatecIdentityProviderClient {
         /**
          * Get all current values of the identities map in box state
          */
-        getMap: async (): Promise<Map<string, IdentityInfo>> => { return (await this.appClient.state.box.getMap("identities")) as Map<string, IdentityInfo> },
+        getMap: async (): Promise<Map<string, IdentityInfo>> => {
+          return (await this.appClient.state.box.getMap('identities')) as Map<string, IdentityInfo>;
+        },
         /**
          * Get a current value of the identities map by key from box state
          */
-        value: async (key: string): Promise<IdentityInfo | undefined> => { return await this.appClient.state.box.getMapValue("identities", key) as IdentityInfo | undefined },
+        value: async (key: string): Promise<IdentityInfo | undefined> => {
+          return (await this.appClient.state.box.getMapValue('identities', key)) as IdentityInfo | undefined;
+        },
       },
     },
-  }
+  };
 
   public newGroup(): BiatecIdentityProviderComposer {
-    const client = this
-    const composer = this.algorand.newGroup()
-    let promiseChain:Promise<unknown> = Promise.resolve()
-    const resultMappers: Array<undefined | ((x: ABIReturn | undefined) => any)> = []
+    const client = this;
+    const composer = this.algorand.newGroup();
+    let promiseChain: Promise<unknown> = Promise.resolve();
+    const resultMappers: Array<undefined | ((x: ABIReturn | undefined) => any)> = [];
     return {
       /**
        * Add a bootstrap(uint64,address,address,address)void method call against the BiatecIdentityProvider contract
        */
-      bootstrap(params: CallParams<BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void'] | BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.bootstrap(params)))
-        resultMappers.push(undefined)
-        return this
+      bootstrap(
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void']
+          | BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.bootstrap(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
-       * Add a selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void method call against the BiatecIdentityProvider contract
+       * Add a selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void method call against the BiatecIdentityProvider contract
        */
-      selfRegistration(params: CallParams<BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.selfRegistration(params)))
-        resultMappers.push(undefined)
-        return this
+      selfRegistration(
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+          | BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.selfRegistration(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
-       * Add a setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void method call against the BiatecIdentityProvider contract
+       * Add a setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void method call against the BiatecIdentityProvider contract
        */
-      setInfo(params: CallParams<BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.setInfo(params)))
-        resultMappers.push(undefined)
-        return this
+      setInfo(
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+          | BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.setInfo(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
        * Add a sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void method call against the BiatecIdentityProvider contract
        */
-      sendOnlineKeyRegistration(params: CallParams<BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'] | BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.sendOnlineKeyRegistration(params)))
-        resultMappers.push(undefined)
-        return this
+      sendOnlineKeyRegistration(
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
+          | BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.sendOnlineKeyRegistration(params))
+        );
+        resultMappers.push(undefined);
+        return this;
       },
       /**
-       * Add a getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool) method call against the BiatecIdentityProvider contract
+       * Add a getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool) method call against the BiatecIdentityProvider contract
        */
-      getUser(params: CallParams<BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'] | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.getUser(params)))
-        resultMappers.push((v) => client.decodeReturnValue('getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)', v))
-        return this
+      getUser(
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+          | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.getUser(params))
+        );
+        resultMappers.push((v) =>
+          client.decodeReturnValue(
+            'getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)',
+            v
+          )
+        );
+        return this;
+      },
+      /**
+       * Add a getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool) method call against the BiatecIdentityProvider contract
+       */
+      getUserShort(
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+          | BiatecIdentityProviderArgs['tuple']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.getUserShort(params))
+        );
+        resultMappers.push((v) =>
+          client.decodeReturnValue('getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)', v)
+        );
+        return this;
       },
       /**
        * Add a withdrawExcessAssets(uint64,uint64,uint64)uint64 method call against the BiatecIdentityProvider contract
        */
-      withdrawExcessAssets(params: CallParams<BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64'] | BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
-        promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.withdrawExcessAssets(params)))
-        resultMappers.push((v) => client.decodeReturnValue('withdrawExcessAssets(uint64,uint64,uint64)uint64', v))
-        return this
+      withdrawExcessAssets(
+        params: CallParams<
+          | BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
+          | BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
+        > & { onComplete?: OnApplicationComplete.NoOpOC }
+      ) {
+        promiseChain = promiseChain.then(async () =>
+          composer.addAppCallMethodCall(await client.params.withdrawExcessAssets(params))
+        );
+        resultMappers.push((v) => client.decodeReturnValue('withdrawExcessAssets(uint64,uint64,uint64)uint64', v));
+        return this;
       },
       get update() {
         return {
-          updateApplication: (params: CallParams<BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void'] | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']> & AppClientCompilationParams) => {
-            promiseChain = promiseChain.then(async () => composer.addAppUpdateMethodCall(await client.params.update.updateApplication(params)))
-            resultMappers.push(undefined)
-            return this
+          updateApplication: (
+            params: CallParams<
+              | BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void']
+              | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']
+            > &
+              AppClientCompilationParams
+          ) => {
+            promiseChain = promiseChain.then(async () =>
+              composer.addAppUpdateMethodCall(await client.params.update.updateApplication(params))
+            );
+            resultMappers.push(undefined);
+            return this;
           },
-        }
+        };
       },
       /**
        * Add a clear state call to the BiatecIdentityProvider contract
        */
       clearState(params: AppClientBareCallParams) {
-        promiseChain = promiseChain.then(() => composer.addAppCall(client.params.clearState(params)))
-        return this
+        promiseChain = promiseChain.then(() => composer.addAppCall(client.params.clearState(params)));
+        return this;
       },
       addTransaction(txn: Transaction, signer?: TransactionSigner) {
-        promiseChain = promiseChain.then(() => composer.addTransaction(txn, signer))
-        return this
+        promiseChain = promiseChain.then(() => composer.addTransaction(txn, signer));
+        return this;
       },
       async composer() {
-        await promiseChain
-        return composer
+        await promiseChain;
+        return composer;
       },
       async simulate(options?: SimulateOptions) {
-        await promiseChain
-        const result = await (!options ? composer.simulate() : composer.simulate(options))
+        await promiseChain;
+        const result = await (!options ? composer.simulate() : composer.simulate(options));
         return {
           ...result,
-          returns: result.returns?.map((val, i) => resultMappers[i] !== undefined ? resultMappers[i]!(val) : val.returnValue)
-        }
+          returns: result.returns?.map((val, i) =>
+            resultMappers[i] !== undefined ? resultMappers[i]!(val) : val.returnValue
+          ),
+        };
       },
       async send(params?: SendParams) {
-        await promiseChain
-        const result = await composer.send(params)
+        await promiseChain;
+        const result = await composer.send(params);
         return {
           ...result,
-          returns: result.returns?.map((val, i) => resultMappers[i] !== undefined ? resultMappers[i]!(val) : val.returnValue)
-        }
-      }
-    } as unknown as BiatecIdentityProviderComposer
+          returns: result.returns?.map((val, i) =>
+            resultMappers[i] !== undefined ? resultMappers[i]!(val) : val.returnValue
+          ),
+        };
+      },
+    } as unknown as BiatecIdentityProviderComposer;
   }
 }
 export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
@@ -1303,32 +3475,65 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  bootstrap(params?: CallParams<BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void'] | BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void']>): BiatecIdentityProviderComposer<[...TReturns, BiatecIdentityProviderReturns['bootstrap(uint64,address,address,address)void'] | undefined]>
+  bootstrap(
+    params?: CallParams<
+      | BiatecIdentityProviderArgs['obj']['bootstrap(uint64,address,address,address)void']
+      | BiatecIdentityProviderArgs['tuple']['bootstrap(uint64,address,address,address)void']
+    >
+  ): BiatecIdentityProviderComposer<
+    [...TReturns, BiatecIdentityProviderReturns['bootstrap(uint64,address,address,address)void'] | undefined]
+  >;
 
   /**
-   * Calls the selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void ABI method.
+   * Calls the selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void ABI method.
    *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  selfRegistration(params?: CallParams<BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']>): BiatecIdentityProviderComposer<[...TReturns, BiatecIdentityProviderReturns['selfRegistration(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | undefined]>
+  selfRegistration(
+    params?: CallParams<
+      | BiatecIdentityProviderArgs['obj']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+      | BiatecIdentityProviderArgs['tuple']['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+    >
+  ): BiatecIdentityProviderComposer<
+    [
+      ...TReturns,
+      (
+        | BiatecIdentityProviderReturns['selfRegistration(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+        | undefined
+      ),
+    ]
+  >;
 
   /**
-   * Calls the setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void ABI method.
+   * Calls the setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void ABI method.
    *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  setInfo(params?: CallParams<BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void']>): BiatecIdentityProviderComposer<[...TReturns, BiatecIdentityProviderReturns['setInfo(address,(uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool))void'] | undefined]>
+  setInfo(
+    params?: CallParams<
+      | BiatecIdentityProviderArgs['obj']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+      | BiatecIdentityProviderArgs['tuple']['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+    >
+  ): BiatecIdentityProviderComposer<
+    [
+      ...TReturns,
+      (
+        | BiatecIdentityProviderReturns['setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void']
+        | undefined
+      ),
+    ]
+  >;
 
   /**
    * Calls the sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void ABI method.
    *
   * addressExecutiveFee can perfom key registration for this LP pool
-  
-  
+
+
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -1336,10 +3541,23 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  sendOnlineKeyRegistration(params?: CallParams<BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'] | BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']>): BiatecIdentityProviderComposer<[...TReturns, BiatecIdentityProviderReturns['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void'] | undefined]>
+  sendOnlineKeyRegistration(
+    params?: CallParams<
+      | BiatecIdentityProviderArgs['obj']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
+      | BiatecIdentityProviderArgs['tuple']['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
+    >
+  ): BiatecIdentityProviderComposer<
+    [
+      ...TReturns,
+      (
+        | BiatecIdentityProviderReturns['sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void']
+        | undefined
+      ),
+    ]
+  >;
 
   /**
-   * Calls the getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool) ABI method.
+   * Calls the getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool) ABI method.
    *
    * Returns user information - fee multiplier, verification class, engagement class ..
    *
@@ -1347,14 +3565,48 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  getUser(params?: CallParams<BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'] | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)']>): BiatecIdentityProviderComposer<[...TReturns, BiatecIdentityProviderReturns['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint256,uint256,bool,uint64,uint64,bool)'] | undefined]>
+  getUser(
+    params?: CallParams<
+      | BiatecIdentityProviderArgs['obj']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+      | BiatecIdentityProviderArgs['tuple']['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+    >
+  ): BiatecIdentityProviderComposer<
+    [
+      ...TReturns,
+      (
+        | BiatecIdentityProviderReturns['getUser(address,uint8)(uint8,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,bool,uint64,uint64,bool)']
+        | undefined
+      ),
+    ]
+  >;
+
+  /**
+   * Calls the getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool) ABI method.
+   *
+   * Returns short user information - fee multiplier, verification class, engagement class ..
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
+   */
+  getUserShort(
+    params?: CallParams<
+      | BiatecIdentityProviderArgs['obj']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+      | BiatecIdentityProviderArgs['tuple']['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)']
+    >
+  ): BiatecIdentityProviderComposer<
+    [
+      ...TReturns,
+      BiatecIdentityProviderReturns['getUserShort(address,uint8)(uint8,uint64,uint64,uint64,bool)'] | undefined,
+    ]
+  >;
 
   /**
    * Calls the withdrawExcessAssets(uint64,uint64,uint64)uint64 ABI method.
    *
   * If someone deposits excess assets to this smart contract biatec can use them.
-  
-  
+
+
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -1362,7 +3614,35 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  withdrawExcessAssets(params?: CallParams<BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64'] | BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64']>): BiatecIdentityProviderComposer<[...TReturns, BiatecIdentityProviderReturns['withdrawExcessAssets(uint64,uint64,uint64)uint64'] | undefined]>
+  withdrawExcessAssets(
+    params?: CallParams<
+      | BiatecIdentityProviderArgs['obj']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
+      | BiatecIdentityProviderArgs['tuple']['withdrawExcessAssets(uint64,uint64,uint64)uint64']
+    >
+  ): BiatecIdentityProviderComposer<
+    [...TReturns, BiatecIdentityProviderReturns['withdrawExcessAssets(uint64,uint64,uint64)uint64'] | undefined]
+  >;
+
+  /**
+   * Gets available update methods
+   */
+  readonly update: {
+    /**
+     * Updates an existing instance of the BiatecIdentityProvider smart contract using the updateApplication(uint64,byte[])void ABI method.
+     *
+     * @param args The arguments for the smart contract call
+     * @param params Any additional parameters for the call
+     * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
+     */
+    updateApplication(
+      params?: CallParams<
+        | BiatecIdentityProviderArgs['obj']['updateApplication(uint64,byte[])void']
+        | BiatecIdentityProviderArgs['tuple']['updateApplication(uint64,byte[])void']
+      >
+    ): BiatecIdentityProviderComposer<
+      [...TReturns, BiatecIdentityProviderReturns['updateApplication(uint64,byte[])void'] | undefined]
+    >;
+  };
 
   /**
    * Makes a clear_state call to an existing instance of the BiatecIdentityProvider smart contract.
@@ -1370,7 +3650,7 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * @param args The arguments for the bare call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  clearState(params?: AppClientBareCallParams): BiatecIdentityProviderComposer<[...TReturns, undefined]>
+  clearState(params?: AppClientBareCallParams): BiatecIdentityProviderComposer<[...TReturns, undefined]>;
 
   /**
    * Adds a transaction to the composer
@@ -1378,23 +3658,28 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * @param txn A transaction to add to the transaction group
    * @param signer The optional signer to use when signing this transaction.
    */
-  addTransaction(txn: Transaction, signer?: TransactionSigner): BiatecIdentityProviderComposer<TReturns>
+  addTransaction(txn: Transaction, signer?: TransactionSigner): BiatecIdentityProviderComposer<TReturns>;
   /**
    * Returns the underlying AtomicTransactionComposer instance
    */
-  composer(): Promise<TransactionComposer>
+  composer(): Promise<TransactionComposer>;
   /**
    * Simulates the transaction group and returns the result
    */
-  simulate(): Promise<BiatecIdentityProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>
-  simulate(options: SkipSignaturesSimulateOptions): Promise<BiatecIdentityProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>
-  simulate(options: RawSimulateOptions): Promise<BiatecIdentityProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>
+  simulate(): Promise<BiatecIdentityProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  simulate(
+    options: SkipSignaturesSimulateOptions
+  ): Promise<BiatecIdentityProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  simulate(
+    options: RawSimulateOptions
+  ): Promise<BiatecIdentityProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
   /**
    * Sends the transaction group to the network and returns the results
    */
-  send(params?: SendParams): Promise<BiatecIdentityProviderComposerResults<TReturns>>
-}
-export type BiatecIdentityProviderComposerResults<TReturns extends [...any[]]> = Expand<SendAtomicTransactionComposerResults & {
-  returns: TReturns
-}>
-
+  send(params?: SendParams): Promise<BiatecIdentityProviderComposerResults<TReturns>>;
+};
+export type BiatecIdentityProviderComposerResults<TReturns extends [...any[]]> = Expand<
+  SendAtomicTransactionComposerResults & {
+    returns: TReturns;
+  }
+>;

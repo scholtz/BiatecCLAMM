@@ -53,7 +53,7 @@
     },
     {
       "name": "bootstrap",
-      "desc": "Anybody can deploy the clamm smart contract",
+      "desc": "Only Biatec Pool Provider can deploy and bootsrap this smart contract",
       "args": [
         {
           "name": "assetA",
@@ -102,13 +102,21 @@
         },
         {
           "name": "verificationClass",
-          "type": "uint8",
+          "type": "uint64",
           "desc": "Minimum verification level from the biatec identity. Level 0 means no kyc."
         }
       ],
       "returns": {
         "type": "uint64",
         "desc": "LP token ID"
+      }
+    },
+    {
+      "name": "bootstrapStep2",
+      "desc": "When we know the app id of this pool, we can register it properly at the pool provider",
+      "args": [],
+      "returns": {
+        "type": "void"
       }
     },
     {
@@ -377,21 +385,8 @@
       }
     },
     {
-      "name": "sendOfflineKeyRegistration",
-      "desc": "addressExecutiveFee can perfom key unregistration for this LP pool\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
-      "args": [
-        {
-          "name": "appBiatecConfigProvider",
-          "type": "uint64"
-        }
-      ],
-      "returns": {
-        "type": "void"
-      }
-    },
-    {
       "name": "calculateDistributedLiquidity",
-      "desc": "Calculates the number of LP tokens issued to users",
+      "desc": "addressExecutiveFee can perfom key unregistration for this LP pool\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
       "readonly": true,
       "args": [
         {

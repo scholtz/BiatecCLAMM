@@ -18,16 +18,17 @@ interface IClammSendOnlineKeyRegistrationTxsInput {
 const clammSendOfflineKeyRegistrationTxs = async (
   input: IClammSendOnlineKeyRegistrationTxsInput
 ): Promise<algosdk.Transaction[]> => {
-  const { clientBiatecClammPool, account, appBiatecConfigProvider } = input;
-  const tx = await clientBiatecClammPool.createTransaction.sendOfflineKeyRegistration({
-    args: {
-      appBiatecConfigProvider,
-    },
-    sender: account.addr,
-    staticFee: algokit.microAlgos(2000),
-    appReferences: [BigInt(appBiatecConfigProvider)],
-    accountReferences: [],
-  });
-  return tx.transactions;
+  throw new Error('Offline key registration is disabled atm');
+  // const { clientBiatecClammPool, account, appBiatecConfigProvider } = input;
+  // const tx = await clientBiatecClammPool.createTransaction.sendOfflineKeyRegistration({
+  //   args: {
+  //     appBiatecConfigProvider,
+  //   },
+  //   sender: account.addr,
+  //   staticFee: algokit.microAlgos(2000),
+  //   appReferences: [BigInt(appBiatecConfigProvider)],
+  //   accountReferences: [],
+  // });
+  // return tx.transactions;
 };
 export default clammSendOfflineKeyRegistrationTxs;

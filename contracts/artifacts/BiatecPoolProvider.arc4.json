@@ -28,7 +28,7 @@
         }
       ],
       "returns": {
-        "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
+        "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
         "desc": "Pool info statistics"
       }
     },
@@ -58,18 +58,50 @@
       }
     },
     {
-      "name": "registerPool",
-      "desc": "This method is called by constructor of the luquidity pool",
+      "name": "loadCLAMMContractData",
       "args": [
         {
-          "name": "appPoolId",
-          "type": "uint64",
-          "desc": "Luquidity pool id"
+          "name": "appBiatecConfigProvider",
+          "type": "uint64"
         },
+        {
+          "name": "approvalProgramSize",
+          "type": "uint64"
+        },
+        {
+          "name": "offset",
+          "type": "uint64"
+        },
+        {
+          "name": "data",
+          "type": "byte[]"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "noop",
+      "desc": "No op tx to increase the app call and box size limits",
+      "args": [
+        {
+          "name": "i",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "deployPool",
+      "desc": "Anybody can call this method to bootstrap new clamm pool",
+      "args": [
         {
           "name": "assetA",
           "type": "uint64",
-          "desc": "Asset A"
+          "desc": "Asset A ID must be lower then Asset B ID"
         },
         {
           "name": "assetB",
@@ -77,11 +109,55 @@
           "desc": "Asset B"
         },
         {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64",
+          "desc": "Biatec amm provider"
+        },
+        {
+          "name": "appBiatecPoolProvider",
+          "type": "uint64",
+          "desc": "Pool provider"
+        },
+        {
+          "name": "txSeed",
+          "type": "pay",
+          "desc": "Seed transaction so that smart contract can opt in to the assets"
+        },
+        {
+          "name": "fee",
+          "type": "uint64",
+          "desc": "Fee in base level (9 decimals). value 1_000_000_000 = 1 = 100%. 10_000_000 = 1%. 1_000_000 = 0.1%"
+        },
+        {
+          "name": "priceMin",
+          "type": "uint64",
+          "desc": "Min price range. At this point all assets are in asset A."
+        },
+        {
+          "name": "priceMax",
+          "type": "uint64",
+          "desc": "Max price range. At this point all assets are in asset B."
+        },
+        {
+          "name": "currentPrice",
+          "type": "uint64",
+          "desc": "Deployer can specify the current price for easier deployemnt."
+        },
+        {
           "name": "verificationClass",
-          "type": "uint8",
-          "desc": "Verification class"
+          "type": "uint64",
+          "desc": "Minimum verification level from the biatec identity. Level 0 means no kyc."
         }
       ],
+      "returns": {
+        "type": "uint64",
+        "desc": "LP token ID"
+      }
+    },
+    {
+      "name": "registerPool",
+      "desc": "This method is called by constructor of the luquidity pool",
+      "args": [],
       "returns": {
         "type": "void"
       }
@@ -139,22 +215,6 @@
           "name": "s",
           "type": "uint64",
           "desc": "Scale multiplier"
-        }
-      ],
-      "returns": {
-        "type": "void"
-      }
-    },
-    {
-      "name": "setGlobalVerifiedValues",
-      "args": [
-        {
-          "name": "defaultVerified",
-          "type": "uint64"
-        },
-        {
-          "name": "requirement",
-          "type": "uint64"
         }
       ],
       "returns": {

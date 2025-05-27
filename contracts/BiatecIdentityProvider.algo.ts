@@ -1,12 +1,18 @@
 import { Contract } from '@algorandfoundation/tealscript';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-IDENT-01-02-01';
+const version = 'BIATEC-IDENT-01-03-01';
 const SCALE = 1_000_000_000;
 
 type IdentityInfo = {
-  verificationStatus: uint64;
   verificationClass: uint64;
+  isLocked: boolean;
+  feeMultiplier: uint64;
+  feeMultiplierBase: uint64;
+  kycExpiration: uint64;
+  investorForExpiration: uint64;
+
+  verificationStatus: uint64;
   isCompany: boolean;
   personUUID: string[36];
   legalEntityUUID: string[36];
@@ -16,16 +22,13 @@ type IdentityInfo = {
   avmEngagementRank: uint64;
   tradingEngagementPoints: uint64;
   tradingEngagementRank: uint64;
-  isLocked: boolean;
-  kycExpiration: uint64;
-  investorForExpiration: uint64;
   isProfessionalInvestor: boolean;
 };
 /**
  * Object returned by getUser(user: Address): UserInfo
  * Holds information about the user registered to Biatec Identity.
  */
-type UserInfoV1 = {
+export type UserInfoV1 = {
   /**
    * Version of this structure.
    */
@@ -118,11 +121,11 @@ type UserInfoV1 = {
   /**
    * Depending on verification class, biatecEngagementRank, avmEngagementRank and trading history
    */
-  feeMultiplier: uint256;
+  feeMultiplier: uint64;
   /**
    * Scale multiplier for decimal numbers. 1_000_000_000 means that number 10 is expressed as 10_000_000_000
    */
-  base: uint256;
+  base: uint64;
   /**
    * In case of account is suspicious of theft, malicious activity, not renewing the kyc or investor form, or other legal actions enforces us to lock the account, the account cannot perform any trade or liqudity removal
    */
@@ -140,9 +143,42 @@ type UserInfoV1 = {
    */
   isProfessionalInvestor: boolean;
 };
+/**
+ * Object returned by getUser(user: Address): UserInfo
+ * Holds information about the user registered to Biatec Identity.
+ */
+export type UserInfoShortV1 = {
+  /**
+   * Version of this structure.
+   */
+  version: uint8;
+  /**
+   * Verification class of the user.
+   *
+   * 0 - No information about user
+   * 1 - KYC filled in
+   * 2 - KYC checked by online process
+   * 3 - In person verification
+   * 4 - Professional investor verified
+   *
+   */
+  verificationClass: uint64;
+  /**
+   * Depending on verification class, biatecEngagementRank, avmEngagementRank and trading history
+   */
+  feeMultiplier: uint64;
+  /**
+   * Scale multiplier for decimal numbers. 1_000_000_000 means that number 10 is expressed as 10_000_000_000
+   */
+  base: uint64;
+  /**
+   * In case of account is suspicious of theft, malicious activity, not renewing the kyc or investor form, or other legal actions enforces us to lock the account, the account cannot perform any trade or liqudity removal
+   */
+  isLocked: boolean;
+};
 
 // eslint-disable-next-line no-unused-vars
-class BiatecIdentityProvider extends Contract {
+export class BiatecIdentityProvider extends Contract {
   /**
    * Each account on the
    */
@@ -242,11 +278,14 @@ class BiatecIdentityProvider extends Contract {
     // isProfessionalInvestor: boolean;
     assert(info.isProfessionalInvestor === false, 'isProfessionalInvestor must equal to false');
 
+    assert(info.feeMultiplierBase === SCALE, 'FeeMultiplierBase must be set properly');
+    assert(info.feeMultiplier === ((2 * SCALE) as uint64), 'Initial fee multiplier must be set to 2 * SCALE');
     this.identities(user).value = info;
   }
 
   setInfo(user: Address, info: IdentityInfo) {
     assert(this.txn.sender === this.engagementSetter.value);
+    assert(info.feeMultiplierBase === SCALE, 'FeeMultiplierBase must be set properly');
     this.identities(user).value = info;
   }
 
@@ -295,8 +334,8 @@ class BiatecIdentityProvider extends Contract {
     if (!this.identities(user).exists) {
       const retNoIdentity: UserInfoV1 = {
         version: v,
-        base: SCALE as uint256,
-        feeMultiplier: (2 * SCALE) as uint256,
+        base: SCALE as uint64,
+        feeMultiplier: (2 * SCALE) as uint64,
         isLocked: false,
         verificationClass: 0,
         verificationStatus: 0,
@@ -319,8 +358,8 @@ class BiatecIdentityProvider extends Contract {
 
     const ret: UserInfoV1 = {
       version: v,
-      base: SCALE as uint256,
-      feeMultiplier: (1 * SCALE) as uint256,
+      base: identity.feeMultiplierBase,
+      feeMultiplier: identity.feeMultiplier,
       isLocked: identity.isLocked,
       verificationClass: identity.verificationClass,
       verificationStatus: identity.verificationStatus,
@@ -340,6 +379,36 @@ class BiatecIdentityProvider extends Contract {
     return ret;
   }
 
+  /**
+   * Returns short user information - fee multiplier, verification class, engagement class ..
+   *
+   * @param user Get info for specific user address
+   * @param v Version of the data structure to return
+   */
+  @abi.readonly
+  getUserShort(user: Address, v: uint8): UserInfoShortV1 {
+    assert(v === 1, "Currently supported version of the data structure is '1'");
+    if (!this.identities(user).exists) {
+      const retNoIdentity: UserInfoShortV1 = {
+        version: v,
+        base: SCALE as uint64,
+        feeMultiplier: (2 * SCALE) as uint64,
+        isLocked: false,
+        verificationClass: 0,
+      };
+      return retNoIdentity;
+    }
+    const identity = this.identities(user).value;
+
+    const ret: UserInfoShortV1 = {
+      version: v,
+      base: identity.feeMultiplierBase,
+      feeMultiplier: identity.feeMultiplier,
+      isLocked: identity.isLocked,
+      verificationClass: identity.verificationClass,
+    };
+    return ret;
+  }
   /**
    * If someone deposits excess assets to this smart contract biatec can use them.
    *

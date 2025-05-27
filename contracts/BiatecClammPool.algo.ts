@@ -1,7 +1,8 @@
 import { Contract } from '@algorandfoundation/tealscript';
+import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-02-01';
+const version = 'BIATEC-CLAMM-01-03-01';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
@@ -9,114 +10,6 @@ const SCALE = 1_000_000_000;
 const s = <uint256>1_000_000_000;
 // const SCALEUINT256 = <uint256>1_000_000_000;
 const SCALE_DECIMALS = 9;
-
-/**
- * Object returned by getUser(user: Address): UserInfo
- * Holds information about the user registered to Biatec Identity.
- */
-type UserInfoV1 = {
-  /**
-   * Version of this structure.
-   */
-  version: uint8;
-  /**
-   * Verification class of the user. Uses bits system - 7 = 1 + 2 + 4 = Email and mobile verified
-   *
-   * 0 - No information about user
-   * 1 - Box created for address
-   * 2 - Email verified
-   * 4 - Mobile Phone verified
-   * 8 - Address verified
-   * 16 - Address verified
-   * 32 - X account verified
-   * 64 - Discord account verified
-   * 128 - Telegram account verified
-   * 256 - First government document with gov id stored in secure storage
-   * 512 - Second government document with gov id stored in secure storage
-   * 1024 - Corporation government documents stored in secure storage
-   * 2048 - First government document verified by online verification process
-   * 4096 - Second government document verified by online verification process
-   * 8192 - Corporation government documents verified by online verification process
-   * 16384 - First government document verified by in person verification process
-   * 32768 - Second government document verified by in person verification process
-   * 65536 - Corporation government documents verified by in person verification process
-   *
-   */
-  verificationStatus: uint64;
-  /**
-   * Verification class of the user.
-   *
-   * 0 - No information about user
-   * 1 - KYC filled in
-   * 2 - KYC checked by online process
-   * 3 - In person verification
-   * 4 - Professional investor verified
-   *
-   */
-  verificationClass: uint64;
-  /**
-   * Each user who interacts with Biatec services will receive engagement points
-   */
-  biatecEngagementPoints: uint64;
-  /**
-   * All accounts are sorted by points and rank expresses their percentil in the total biatec population
-   *
-   * Rank 0 means no interaction
-   * Rank 10000 means highest interaction
-   * Rank 5000 means median interaction level
-   *
-   */
-  biatecEngagementRank: uint64;
-  /**
-   * Each user who interacts with AVM services - Algorand network,Voi network,Aramid network,... will receive engagement points
-   */
-  avmEngagementPoints: uint64;
-  /**
-   * All accounts are sorted by points and rank expresses their percentil in the total avm population
-   *
-   * Rank 0 means no interaction
-   * Rank 10000 means highest interaction
-   * Rank 5000 means median interaction level
-   */
-  avmEngagementRank: uint64;
-  /**
-   * Each user who is trading through biatec services will receive point according to fees in dollar nomination paid to biatec
-   */
-  tradingEngagementPoints: uint64;
-  /**
-   * All accounts are sorted by trading points and rank expresses their percentil in the total traders population
-   *
-   * Rank 0 means no interaction
-   * Rank 10000 means highest interaction
-   * Rank 5000 means median interaction level
-   *
-   */
-  tradingEngagementRank: uint64;
-  /**
-   * Depending on verification class, biatecEngagementRank, avmEngagementRank and trading history
-   */
-  feeMultiplier: uint256;
-  /**
-   * Scale multiplier for decimal numbers. 1_000_000_000 means that number 10 is expressed as 10_000_000_000
-   */
-  base: uint256;
-  /**
-   * In case of account is suspicious of theft, malicious activity, not renewing the kyc or investor form, or other legal actions enforces us to lock the account, the account cannot perform any trade or liqudity removal
-   */
-  isLocked: boolean;
-  /**
-   * unix time in seconds when kyc form expires. If no kyc provided, equals to zero.
-   */
-  kycExpiration: uint64;
-  /**
-   * unix time in seconds when investor form expires. If no form provided, equals to zero.
-   */
-  investorForExpiration: uint64;
-  /**
-   * information weather the account belongs to professional investor or to MiFID regulated instutution like bank or securities trader
-   */
-  isProfessionalInvestor: boolean;
-};
 
 type AmmStatus = {
   scale: uint64;
@@ -138,8 +31,11 @@ type AmmStatus = {
   biatecFee: uint64;
   verificationClass: uint64;
 };
+
 // eslint-disable-next-line no-unused-vars
-class BiatecClammPool extends Contract {
+export class BiatecClammPool extends Contract {
+  // bootstrapped
+  setupFinished = GlobalStateKey<boolean>({ key: 's' });
   // asset A id
   assetA = GlobalStateKey<uint64>({ key: 'a' });
 
@@ -220,15 +116,16 @@ class BiatecClammPool extends Contract {
     this.LiqudityUsersFromFees.value = <uint256>0;
     this.priceMax.value = 0;
     this.version.value = version;
+    this.setupFinished.value = false;
   }
 
   /**
    * addressUdpater from global biatec configuration is allowed to update application
    */
   updateApplication(appBiatecConfigProvider: AppID, newVersion: bytes): void {
-    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressUdpater = appBiatecConfigProvider.globalState('u') as Address;
-    assert(this.txn.sender === addressUdpater, 'ERR_UPDATER'); // 'Only addressUdpater setup in the config can update application');
+    assert(this.txn.sender === addressUdpater, 'E_UPDATER'); // 'Only addressUdpater setup in the config can update application');
     this.version.value = newVersion;
   }
 
@@ -248,7 +145,7 @@ class BiatecClammPool extends Contract {
   }
 
   /**
-   * Anybody can deploy the clamm smart contract
+   * Only Biatec Pool Provider can deploy and bootsrap this smart contract
    * @param assetA Asset A ID must be lower then Asset B ID
    * @param assetB Asset B
    * @param appBiatecConfigProvider Biatec amm provider
@@ -271,30 +168,31 @@ class BiatecClammPool extends Contract {
     priceMin: uint64,
     priceMax: uint64,
     currentPrice: uint64,
-    verificationClass: uint8
+    verificationClass: uint64
   ): uint64 {
-    verifyPayTxn(txSeed, { receiver: this.app.address, amount: { greaterThanEqualTo: 300_000 } });
-    assert(this.priceMax.value === 0, 'ERR_PRICE_MAX'); // It is not possible to call bootrap twice
-    assert(this.txn.sender === this.app.creator, 'ERR_SENDER'); // 'Only creator of the app can set it up'
-    assert(priceMax > 0, 'ERR_PRICE'); // 'You must set price'
+    assert(globals.callerApplicationID == appBiatecPoolProvider, 'Only the pool provider can init this contract');
+    verifyPayTxn(txSeed, { receiver: this.app.address, amount: { greaterThanEqualTo: 400_000 } });
+    assert(this.priceMax.value === 0, 'E_PRICE_MAX'); // It is not possible to call bootrap twice
+    assert(this.txn.sender === this.app.creator, 'E_SENDER'); // 'Only creator of the app can set it up'
+    assert(priceMax > 0, 'E_PRICE'); // 'You must set price'
     assert(assetA < assetB);
     assert(fee <= SCALE / 10); // fee must be lower then 10%
-    assert(verificationClass <= 4); // verificationClass
+    // assert(verificationClass <= 4); // verificationClass  // SHORTENED_APP
     assert(!this.currentPrice.exists);
     if (assetA.id > 0) {
       assert(assetA.decimals <= SCALE_DECIMALS); // asset A can be algo
     }
     assert(assetB.decimals <= SCALE_DECIMALS);
 
-    assert(this.fee.value <= 0, 'ERR_FEE'); // , 'You can bootstrap contract only once'); // check that this contract deployment was not yet initialized
+    assert(this.fee.value <= 0, 'E_FEE'); // , 'You can bootstrap contract only once'); // check that this contract deployment was not yet initialized
 
     const poolProviderFromConfig = appBiatecConfigProvider.globalState('p') as AppID;
     assert(
       appBiatecPoolProvider === poolProviderFromConfig,
-      'ERR_CONFIG' // 'appBiatecPoolProvider must match to the config in appBiatecConfigProvider'
+      'E_CONFIG' // 'appBiatecPoolProvider must match to the config in appBiatecConfigProvider'
     );
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
-    assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
+    assert(paused === 0, 'E_PAUSED'); // services are paused at the moment
 
     this.appBiatecConfigProvider.value = appBiatecConfigProvider;
 
@@ -312,17 +210,25 @@ class BiatecClammPool extends Contract {
     this.fee.value = fee;
     this.doOptIn(assetA);
     this.doOptIn(assetB);
-
-    sendMethodCall<[AppID, AssetID, AssetID, uint8], void>({
-      name: 'registerPool',
-      methodArgs: [globals.currentApplicationID, assetA, assetB, verificationClass],
-      fee: 0,
-      applicationID: appBiatecPoolProvider,
-    });
+    this.verificationClass.value = verificationClass;
 
     return this.assetLp.value;
   }
-
+  /**
+   * When we know the app id of this pool, we can register it properly at the pool provider
+   */
+  bootstrapStep2(): void {
+    assert(!this.setupFinished.value);
+    const appBiatecConfigProvider = this.appBiatecConfigProvider.value as AppID;
+    const appBiatecPoolProvider = appBiatecConfigProvider.globalState('p') as AppID;
+    sendMethodCall<[], void>({
+      name: 'registerPool',
+      methodArgs: [],
+      fee: 0,
+      applicationID: appBiatecPoolProvider,
+    });
+    this.setupFinished.value = true;
+  }
   /**
    * Executes xfer of pay payment methods to specified receiver from smart contract aggregated account with specified asset and amount in tokens decimals
    * @param receiver Receiver
@@ -779,7 +685,7 @@ class BiatecClammPool extends Contract {
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
 
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
-    assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
+    assert(paused === 0, 'E_PAUSED'); // services are paused at the moment
 
     // assert(
     //   this.txn.sender === addressExecutiveFee,
@@ -869,7 +775,7 @@ class BiatecClammPool extends Contract {
    * @param appBiatecIdentityProvider Biatec identity provider
    * @returns User info object
    */
-  private verifyIdentity(appBiatecConfigProvider: AppID, appBiatecIdentityProvider: AppID): UserInfoV1 {
+  private verifyIdentity(appBiatecConfigProvider: AppID, appBiatecIdentityProvider: AppID): UserInfoShortV1 {
     assert(
       appBiatecConfigProvider === this.appBiatecConfigProvider.value,
       'ERR-INVALID-CONFIG' // 'Configuration app does not match'
@@ -880,8 +786,8 @@ class BiatecClammPool extends Contract {
       'ERR-WRONG-IDENT' // appBiatecIdentityProvider must match to the config in appBiatecConfigProvider'
     );
 
-    const user = sendMethodCall<[Address, uint8], UserInfoV1>({
-      name: 'getUser',
+    const user = sendMethodCall<[Address, uint8], UserInfoShortV1>({
+      name: 'getUserShort',
       methodArgs: [this.txn.sender, <uint8>1],
       fee: 0,
       applicationID: appBiatecIdentityProvider,
@@ -896,7 +802,7 @@ class BiatecClammPool extends Contract {
     );
 
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
-    assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
+    assert(paused === 0, 'E_PAUSED'); // services are paused at the moment
 
     return user;
   }
@@ -956,7 +862,8 @@ class BiatecClammPool extends Contract {
     // if assetA.decimals == 6 then assetADelicmalScale2Scale = 1000
     const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256;
 
-    const feesMultiplier = (s - ((this.fee.value as uint256) * user.feeMultiplier) / user.base) as uint256;
+    const feesMultiplier = (s -
+      ((this.fee.value as uint256) * (user.feeMultiplier as uint256)) / (user.base as uint256)) as uint256;
     let ret: uint64 = 0;
     let amountAForStats = 0;
     let amountBForStats = 0;
@@ -1173,15 +1080,15 @@ class BiatecClammPool extends Contract {
     increaseOpcodeBudget();
     this.checkAssetsAB(assetA, assetB);
 
-    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
 
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
-    assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
+    assert(paused === 0, 'E_PAUSED'); // services are paused at the moment
 
     assert(
       this.txn.sender === addressExecutiveFee,
-      'ERR_SENDER' // 'Only fee executor setup in the config can take the collected fees'
+      'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
     );
 
     let assetADecimals = 6;
@@ -1196,17 +1103,17 @@ class BiatecClammPool extends Contract {
     if (assetA.id === 0) {
       assert(
         ((this.app.address.balance - 1_000_000) as uint256) * assetADelicmalScale2Scale >= this.assetABalance.value,
-        'ERR_A0_B' // 'It is not possible to set higher assetABalance in algos then is in the app balance'
+        'E_A0_B' // 'It is not possible to set higher assetABalance in algos then is in the app balance'
       );
     } else {
       assert(
         (this.app.address.assetBalance(assetA) as uint256) * assetADelicmalScale2Scale >= this.assetABalance.value,
-        'ERR_A_B' // 'It is not possible to set higher assetABalance then is in the app balance'
+        'E_A_B' // 'It is not possible to set higher assetABalance then is in the app balance'
       );
     }
     assert(
       (this.app.address.assetBalance(assetB) as uint256) * assetBDelicmalScale2Scale >= this.assetBBalance.value,
-      'ERR_B_B' // 'It is not possible to set higher assetBBalance then is in the app balance'
+      'E_B_B' // 'It is not possible to set higher assetBBalance then is in the app balance'
     );
     let newL = <uint256>0;
     if (this.priceMin.value === this.priceMax.value) {
@@ -1281,15 +1188,15 @@ class BiatecClammPool extends Contract {
   ): uint64 {
     this.checkAssetsAB(assetA, assetB);
 
-    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
 
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
-    assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
+    assert(paused === 0, 'E_PAUSED'); // services are paused at the moment
 
     assert(
       this.txn.sender === addressExecutiveFee,
-      'ERR_SENDER' // 'Only fee executor setup in the config can take the collected fees'
+      'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
     );
     let assetADecimals = 6;
     if (assetA.id > 0) assetADecimals = assetA.decimals;
@@ -1308,17 +1215,17 @@ class BiatecClammPool extends Contract {
     if (assetA.id === 0) {
       assert(
         ((this.app.address.balance - 1_000_000) as uint256) * assetADelicmalScale2Scale >= this.assetABalance.value,
-        'ERR_A0_B' // 'It is not possible to set higher assetABalance in algos then is in the app balance'
+        'E_A0_B' // 'It is not possible to set higher assetABalance in algos then is in the app balance'
       );
     } else {
       assert(
         (this.app.address.assetBalance(assetA) as uint256) * assetADelicmalScale2Scale >= this.assetABalance.value,
-        'ERR_A_B' // 'It is not possible to set higher assetABalance then is in the app balance'
+        'E_A_B' // 'It is not possible to set higher assetABalance then is in the app balance'
       );
     }
     assert(
       (this.app.address.assetBalance(assetB) as uint256) * assetBDelicmalScale2Scale >= this.assetBBalance.value,
-      'ERR_B_B' // 'It is not possible to set higher assetBBalance then is in the app balance'
+      'E_B_B' // 'It is not possible to set higher assetBBalance then is in the app balance'
     );
 
     return amountA + amountB;
@@ -1338,11 +1245,11 @@ class BiatecClammPool extends Contract {
     voteLast: uint64,
     voteKeyDilution: uint64
   ): void {
-    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
     assert(
       this.txn.sender === addressExecutiveFee,
-      'ERR_SENDER' // 'Only fee executor setup in the config can take the collected fees'
+      'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
     );
     sendOnlineKeyRegistration({
       selectionPK: selectionPk,
@@ -1360,19 +1267,19 @@ class BiatecClammPool extends Contract {
    *
    * Only addressExecutiveFee is allowed to execute this method.
    */
-  sendOfflineKeyRegistration(appBiatecConfigProvider: AppID): void {
-    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'ERR_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
-    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
+  // sendOfflineKeyRegistration(appBiatecConfigProvider: AppID): void {
+  //   assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+  //   const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
 
-    const paused = appBiatecConfigProvider.globalState('s') as uint64;
-    assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
+  //   const paused = appBiatecConfigProvider.globalState('s') as uint64;
+  //   assert(paused === 0, 'E_PAUSED'); // services are paused at the moment
 
-    assert(
-      this.txn.sender === addressExecutiveFee,
-      'ERR_SENDER' // 'Only fee executor setup in the config can take the collected fees'
-    );
-    sendOfflineKeyRegistration({ fee: 0 });
-  }
+  //   assert(
+  //     this.txn.sender === addressExecutiveFee,
+  //     'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
+  //   );
+  //   sendOfflineKeyRegistration({ fee: 0 });
+  // }
 
   /**
    * Calculates the number of LP tokens issued to users
@@ -1796,11 +1703,11 @@ class BiatecClammPool extends Contract {
   status(appBiatecConfigProvider: AppID, assetA: AssetID, assetB: AssetID, assetLp: AssetID): AmmStatus {
     assert(
       appBiatecConfigProvider === this.appBiatecConfigProvider.value,
-      'ERR_CONFIG' // 'appBiatecConfigProvider must match to the global variable app id'
+      'E_CONFIG' // 'appBiatecConfigProvider must match to the global variable app id'
     );
     assert(assetA.id === this.assetA.value);
     assert(assetB.id === this.assetB.value);
-    assert(this.assetLp.value === assetLp.id, 'ERR_LP'); // 'LP asset does not match');
+    assert(this.assetLp.value === assetLp.id, 'E_LP'); // 'LP asset does not match');
     const biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256;
     const realBalanceA =
       assetA.id === 0

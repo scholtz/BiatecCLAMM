@@ -1,11 +1,11 @@
 import { Contract } from '@algorandfoundation/tealscript';
+import { BiatecClammPool } from './BiatecClammPool.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-PP-01-02-01';
+const version = 'BIATEC-PP-01-03-01';
 const SCALE = 1_000_000_000;
 
 type AppPoolInfo = {
-  isVerified: uint64;
   assetA: uint64;
   assetB: uint64;
   verificationClass: uint64;
@@ -76,58 +76,67 @@ type AppPoolInfo = {
   period4PrevVWAP: uint64;
   period4PrevTime: uint64;
 
-  period5Duration: uint64;
+  // period5Duration: uint64;
 
-  period5NowVolumeA: uint64;
-  period5NowVolumeB: uint64;
-  period5NowFeeA: uint64;
-  period5NowFeeB: uint64;
-  period5NowVWAP: uint64;
-  period5NowTime: uint64;
+  // period5NowVolumeA: uint64;
+  // period5NowVolumeB: uint64;
+  // period5NowFeeA: uint64;
+  // period5NowFeeB: uint64;
+  // period5NowVWAP: uint64;
+  // period5NowTime: uint64;
 
-  period5PrevVolumeA: uint64;
-  period5PrevVolumeB: uint64;
-  period5PrevFeeA: uint64;
-  period5PrevFeeB: uint64;
-  period5PrevVWAP: uint64;
-  period5PrevTime: uint64;
+  // period5PrevVolumeA: uint64;
+  // period5PrevVolumeB: uint64;
+  // period5PrevFeeA: uint64;
+  // period5PrevFeeB: uint64;
+  // period5PrevVWAP: uint64;
+  // period5PrevTime: uint64;
 
-  period6Duration: uint64;
+  // period6Duration: uint64;
 
-  period6NowVolumeA: uint64;
-  period6NowVolumeB: uint64;
-  period6NowFeeA: uint64;
-  period6NowFeeB: uint64;
-  period6NowVWAP: uint64;
-  period6NowTime: uint64;
+  // period6NowVolumeA: uint64;
+  // period6NowVolumeB: uint64;
+  // period6NowFeeA: uint64;
+  // period6NowFeeB: uint64;
+  // period6NowVWAP: uint64;
+  // period6NowTime: uint64;
 
-  period6PrevVolumeA: uint64;
-  period6PrevVolumeB: uint64;
-  period6PrevFeeA: uint64;
-  period6PrevFeeB: uint64;
-  period6PrevVWAP: uint64;
-  period6PrevTime: uint64;
+  // period6PrevVolumeA: uint64;
+  // period6PrevVolumeB: uint64;
+  // period6PrevFeeA: uint64;
+  // period6PrevFeeB: uint64;
+  // period6PrevVWAP: uint64;
+  // period6PrevTime: uint64;
 };
 type AssetsCombined = {
   assetA: uint64;
   assetB: uint64;
 };
-// eslint-disable-next-line no-unused-vars
-class BiatecPoolProvider extends Contract {
+type PoolConfig = {
+  assetA: uint64;
+  assetB: uint64;
+  min: uint64;
+  max: uint64;
+  fee: uint64;
+  verificationClass: uint64;
+};
+
+type PoolRetVal = {
+  appId: AppID;
+  lpAssetId: AssetID;
+};
+
+export class BiatecPoolProvider extends Contract {
   /**
    * Each LP pool is registered in this contract. Each pool has custom box and stores there the trading stats.
    */
   pools = BoxMap<uint64, AppPoolInfo>({ prefix: 'p' });
+  poolsByConfig = BoxMap<PoolConfig, uint64>({ prefix: 'pc' });
+  lpTokens2Pool = BoxMap<uint64, uint64>({ prefix: 'lp' });
 
   poolsAggregated = BoxMap<AssetsCombined, AppPoolInfo>({ prefix: 's' });
 
   assets = BoxMap<uint64, AppID[]>({ prefix: 'a' });
-
-  governor = GlobalStateKey<Address>({ key: 'g' });
-
-  verificationClassSetter = GlobalStateKey<Address>({ key: 'v' });
-
-  engagementClassSetter = GlobalStateKey<Address>({ key: 'e' });
 
   period1 = GlobalStateKey<uint64>({ key: 'p1' });
 
@@ -137,19 +146,37 @@ class BiatecPoolProvider extends Contract {
 
   period4 = GlobalStateKey<uint64>({ key: 'p4' });
 
-  period5 = GlobalStateKey<uint64>({ key: 'p5' });
+  // period5 = GlobalStateKey<uint64>({ key: 'p5' });
 
-  period6 = GlobalStateKey<uint64>({ key: 'p6' });
+  // period6 = GlobalStateKey<uint64>({ key: 'p6' });
 
-  defaultVerified = GlobalStateKey<uint64>({ key: 'ver' });
-
-  verifyRequirement = GlobalStateKey<uint64>({ key: 'verr' });
+  /**
+   * We cannot create application and store the appid to the chain in one app call, therefore we need to store it to the blobal storage of currently created apps. When we register the pool with the proper box id from the pool we can create infinite number of boxes, but we can create only 10 pools by any users at once.
+   */
+  recentPools1 = GlobalStateKey<uint64>({ key: 'rp1' });
+  recentPools2 = GlobalStateKey<uint64>({ key: 'rp2' });
+  recentPools3 = GlobalStateKey<uint64>({ key: 'rp3' });
+  recentPools4 = GlobalStateKey<uint64>({ key: 'rp4' });
+  recentPools5 = GlobalStateKey<uint64>({ key: 'rp5' });
+  recentPools6 = GlobalStateKey<uint64>({ key: 'rp6' });
+  recentPools7 = GlobalStateKey<uint64>({ key: 'rp7' });
+  recentPools8 = GlobalStateKey<uint64>({ key: 'rp8' });
+  recentPools9 = GlobalStateKey<uint64>({ key: 'rp9' });
+  recentPools10 = GlobalStateKey<uint64>({ key: 'rp10' });
+  recentPoolsIndex = GlobalStateKey<uint64>({ key: 'rpi' });
 
   /**
    * Biatec config provider
    */
   appBiatecConfigProvider = GlobalStateKey<AppID>({ key: 'B' });
 
+  /**
+   * Anyone can deploy the CLAMM pool through this contract. When its done this way, we can be sure that the smart contract communicating with this contract to store the price feed is legit
+   */
+  clammApprovalProgram1 = BoxKey<bytes>({ key: 'capb1' });
+  clammApprovalProgram2 = BoxKey<bytes>({ key: 'capb2' });
+  clammApprovalProgram3 = BoxKey<bytes>({ key: 'capb3' });
+  // clammApprovalProgram4 = BoxKey<bytes>({ key: 'capb4' });
   /**
    * Version of the smart contract
    */
@@ -183,13 +210,22 @@ class BiatecPoolProvider extends Contract {
   createApplication(): void {
     log(version);
     this.period1.value = 60;
-    this.period2.value = 3600;
-    this.period3.value = 3600 * 24;
-    this.period4.value = 3600 * 24 * 7;
-    this.period5.value = 3600 * 24 * 30;
-    this.period6.value = 3600 * 24 * 365;
-    this.defaultVerified.value = 0;
-    this.verifyRequirement.value = 0;
+    //this.period2.value = 3600;
+    this.period2.value = 3600 * 24;
+    this.period3.value = 3600 * 24 * 7;
+    //this.period5.value = 3600 * 24 * 30;
+    this.period4.value = 3600 * 24 * 365;
+    this.recentPoolsIndex.value = 1;
+    this.recentPools1.value = 0;
+    this.recentPools2.value = 0;
+    this.recentPools3.value = 0;
+    this.recentPools4.value = 0;
+    this.recentPools5.value = 0;
+    this.recentPools6.value = 0;
+    this.recentPools7.value = 0;
+    this.recentPools8.value = 0;
+    this.recentPools9.value = 0;
+    this.recentPools10.value = 0;
   }
 
   /**
@@ -204,6 +240,156 @@ class BiatecPoolProvider extends Contract {
     this.version.value = newVersion;
   }
 
+  loadCLAMMContractData(
+    appBiatecConfigProvider: AppID,
+    approvalProgramSize: uint64,
+    offset: uint64,
+    data: bytes
+  ): void {
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+    const addressUdpater = appBiatecConfigProvider.globalState('u') as Address;
+    assert(
+      this.txn.sender === addressUdpater,
+      'Only addressUdpater setup in the config can update the AMM application'
+    );
+    if (this.clammApprovalProgram1.exists && offset == 0) {
+      this.clammApprovalProgram1.delete();
+      this.clammApprovalProgram2.delete();
+      this.clammApprovalProgram3.delete();
+      // this.clammApprovalProgram4.delete();
+    }
+    if (!this.clammApprovalProgram1.exists) {
+      this.clammApprovalProgram1.create(approvalProgramSize < 4096 ? approvalProgramSize : 4096);
+      this.clammApprovalProgram2.create(
+        approvalProgramSize < 4096 ? 0 : approvalProgramSize < 8192 ? approvalProgramSize - 4096 : 4096
+      );
+      this.clammApprovalProgram3.create(
+        approvalProgramSize < 8192 ? 0 : approvalProgramSize < 12288 ? approvalProgramSize - 8192 : 4096
+      );
+      // this.clammApprovalProgram4.create(approvalProgramSize < 16384 ? approvalProgramSize - 12288 : 4096);
+    }
+    if (offset < 4096) {
+      this.clammApprovalProgram1.replace(offset, data);
+    } else if (offset < 8192) {
+      this.clammApprovalProgram2.replace(offset - 4096, data);
+    } else if (offset < 12288) {
+      this.clammApprovalProgram3.replace(offset - 8192, data);
+    }
+    //  else {
+    //   this.clammApprovalProgram4.replace(offset - 12288, data);
+    // }
+  }
+  /**
+   * No op tx to increase the app call and box size limits
+   */
+  noop(i: uint64): void {}
+  /**
+   * Anybody can call this method to bootstrap new clamm pool
+   *
+   * @param assetA Asset A ID must be lower then Asset B ID
+   * @param assetB Asset B
+   * @param appBiatecConfigProvider Biatec amm provider
+   * @param appBiatecPoolProvider Pool provider
+   * @param txSeed Seed transaction so that smart contract can opt in to the assets
+   * @param fee Fee in base level (9 decimals). value 1_000_000_000 = 1 = 100%. 10_000_000 = 1%. 1_000_000 = 0.1%
+   * @param priceMin Min price range. At this point all assets are in asset A.
+   * @param priceMax Max price range. At this point all assets are in asset B.
+   * @param currentPrice Deployer can specify the current price for easier deployemnt.
+   * @param verificationClass Minimum verification level from the biatec identity. Level 0 means no kyc.
+   * @returns LP token ID
+   */
+  deployPool(
+    assetA: AssetID,
+    assetB: AssetID,
+    appBiatecConfigProvider: AppID,
+    appBiatecPoolProvider: AppID,
+    txSeed: PayTxn,
+    fee: uint64,
+    priceMin: uint64,
+    priceMax: uint64,
+    currentPrice: uint64,
+    verificationClass: uint64
+  ): uint64 {
+    verifyPayTxn(txSeed, { receiver: this.app.address, amount: { greaterThanEqualTo: 1_000_000 } });
+    assert(verificationClass <= 4); // verificationClass
+
+    // Create the actual staker pool contract instance
+    this.pendingGroup.addAppCall({
+      onCompletion: OnCompletion.NoOp,
+      approvalProgram: [
+        this.clammApprovalProgram1.value,
+        this.clammApprovalProgram2.value,
+        // this.clammApprovalProgram3.value,
+        // this.clammApprovalProgram4.value,
+      ],
+      clearStateProgram: BiatecClammPool.clearProgram(),
+      globalNumUint: BiatecClammPool.schema.global.numUint,
+      globalNumByteSlice: BiatecClammPool.schema.global.numByteSlice,
+      extraProgramPages: 3,
+      applicationArgs: [
+        // no args
+        method('createApplication()void'),
+      ],
+      isFirstTxn: true,
+    });
+
+    this.pendingGroup.submit();
+    const appId = this.itxn.createdApplicationID.id;
+    this.pendingGroup.addPayment({
+      receiver: AppID.fromUint64(appId).address,
+      amount: 400_000,
+      fee: 0,
+      isFirstTxn: true,
+    });
+    // Create the actual staker pool contract instance
+    this.pendingGroup.addAppCall({
+      applicationID: AppID.fromUint64(appId),
+      applicationArgs: [
+        // assetA, assetB, appBiatecConfigProvider, appBiatecPoolProvider, txSeed, fee, priceMin, priceMax, currentPrice, verificationClass
+        method('bootstrap(uint64,uint64,uint64,uint64,pay,uint64,uint64,uint64,uint64,uint64)uint64'),
+        itob(assetA.id),
+        itob(assetB.id),
+        itob(appBiatecConfigProvider.id),
+        itob(appBiatecPoolProvider.id),
+        itob(fee as uint64),
+        itob(priceMin as uint64),
+        itob(priceMax as uint64),
+        itob(currentPrice as uint64),
+        itob(verificationClass as uint64),
+      ],
+      assets: [assetA, assetB],
+      applications: [appBiatecConfigProvider, appBiatecPoolProvider],
+      fee: 0,
+    });
+    this.pendingGroup.submit();
+    //this.registerPool(AppID.fromUint64(appId), assetA, assetB, verificationClass);
+
+    this.recentPoolsIndex.value = this.recentPoolsIndex.value + 1;
+    if (this.recentPoolsIndex.value > 10) this.recentPoolsIndex.value = 1;
+    const storeTo = this.recentPoolsIndex.value;
+    if (storeTo == 1) {
+      this.recentPools1.value = appId;
+    } else if (storeTo == 2) {
+      this.recentPools2.value = appId;
+    } else if (storeTo == 3) {
+      this.recentPools1.value = appId;
+    } else if (storeTo == 4) {
+      this.recentPools1.value = appId;
+    } else if (storeTo == 5) {
+      this.recentPools1.value = appId;
+    } else if (storeTo == 6) {
+      this.recentPools1.value = appId;
+    } else if (storeTo == 7) {
+      this.recentPools1.value = appId;
+    } else if (storeTo == 8) {
+      this.recentPools1.value = appId;
+    } else if (storeTo == 9) {
+      this.recentPools1.value = appId;
+    } else if (storeTo == 10) {
+      this.recentPools1.value = appId;
+    }
+    return appId;
+  }
   /**
    * This method is called by constructor of the luquidity pool
    *
@@ -212,26 +398,59 @@ class BiatecPoolProvider extends Contract {
    * @param assetB Asset B
    * @param verificationClass Verification class
    */
-  registerPool(appPoolId: AppID, assetA: AssetID, assetB: AssetID, verificationClass: uint8): void {
-    assert(!this.pools(appPoolId.id).exists);
-    assert(globals.callerApplicationID === appPoolId);
+  registerPool(): void {
+    const appClammPool = globals.callerApplicationID as AppID;
+    const assetA = AssetID.fromUint64(appClammPool.globalState('a') as uint64);
+    const assetB = AssetID.fromUint64(appClammPool.globalState('b') as uint64);
+    const verificationClass = appClammPool.globalState('c') as uint64;
+    const pMin = appClammPool.globalState('pMin') as uint64;
+    const pMax = appClammPool.globalState('pMax') as uint64;
+    const fee = appClammPool.globalState('f') as uint64;
+    const lpToken = appClammPool.globalState('lp') as uint64;
+    assert(!this.pools(appClammPool.id).exists);
+    const config: PoolConfig = {
+      assetA: assetA.id,
+      assetB: assetB.id,
+      min: pMin,
+      max: pMax,
+      fee: fee,
+      verificationClass: verificationClass,
+    };
+    assert(!this.poolsByConfig(config).exists, 'Pool with the same configuration is already registered');
+    this.poolsByConfig(config).value = appClammPool.id;
+    this.lpTokens2Pool(lpToken).value = appClammPool.id;
+    const appPoolUintId = appClammPool.id;
+    if (
+      appPoolUintId != this.recentPools1.value &&
+      appPoolUintId != this.recentPools2.value &&
+      appPoolUintId != this.recentPools3.value &&
+      appPoolUintId != this.recentPools4.value &&
+      appPoolUintId != this.recentPools5.value &&
+      appPoolUintId != this.recentPools6.value &&
+      appPoolUintId != this.recentPools7.value &&
+      appPoolUintId != this.recentPools8.value &&
+      appPoolUintId != this.recentPools9.value &&
+      appPoolUintId != this.recentPools10.value
+    ) {
+      assert(false, 'App not in recently created apps');
+    }
+
     if (this.assets(assetA.id).exists) {
-      this.assets(assetA.id).value.push(appPoolId);
+      this.assets(assetA.id).value.push(appClammPool);
     } else {
-      const newWhitelist: AppID[] = [appPoolId];
+      const newWhitelist: AppID[] = [appClammPool];
       this.assets(assetA.id).value = newWhitelist;
     }
 
     if (this.assets(assetB.id).exists) {
-      this.assets(assetB.id).value.push(appPoolId);
+      this.assets(assetB.id).value.push(appClammPool);
     } else {
-      const newWhitelist: AppID[] = [appPoolId];
+      const newWhitelist: AppID[] = [appClammPool];
       this.assets(assetB.id).value = newWhitelist;
     }
     const data: AppPoolInfo = {
       assetA: assetA.id,
       assetB: assetB.id,
-      isVerified: this.defaultVerified.value,
       verificationClass: verificationClass as uint64,
 
       latestPrice: 0,
@@ -296,37 +515,37 @@ class BiatecPoolProvider extends Contract {
       period4PrevVolumeB: <uint64>0,
       period4PrevVWAP: <uint64>0,
 
-      period5Duration: this.period5.value,
+      // period5Duration: this.period5.value,
 
-      period5NowFeeA: <uint64>0,
-      period5NowFeeB: <uint64>0,
-      period5NowTime: 0,
-      period5NowVolumeA: <uint64>0,
-      period5NowVolumeB: <uint64>0,
-      period5NowVWAP: <uint64>0,
-      period5PrevFeeA: <uint64>0,
-      period5PrevFeeB: <uint64>0,
-      period5PrevTime: 0,
-      period5PrevVolumeA: <uint64>0,
-      period5PrevVolumeB: <uint64>0,
-      period5PrevVWAP: <uint64>0,
+      // period5NowFeeA: <uint64>0,
+      // period5NowFeeB: <uint64>0,
+      // period5NowTime: 0,
+      // period5NowVolumeA: <uint64>0,
+      // period5NowVolumeB: <uint64>0,
+      // period5NowVWAP: <uint64>0,
+      // period5PrevFeeA: <uint64>0,
+      // period5PrevFeeB: <uint64>0,
+      // period5PrevTime: 0,
+      // period5PrevVolumeA: <uint64>0,
+      // period5PrevVolumeB: <uint64>0,
+      // period5PrevVWAP: <uint64>0,
 
-      period6Duration: this.period6.value,
+      // period6Duration: this.period6.value,
 
-      period6NowFeeA: <uint64>0,
-      period6NowFeeB: <uint64>0,
-      period6NowTime: 0,
-      period6NowVolumeA: <uint64>0,
-      period6NowVolumeB: <uint64>0,
-      period6NowVWAP: <uint64>0,
-      period6PrevFeeA: <uint64>0,
-      period6PrevFeeB: <uint64>0,
-      period6PrevTime: 0,
-      period6PrevVolumeA: <uint64>0,
-      period6PrevVolumeB: <uint64>0,
-      period6PrevVWAP: <uint64>0,
+      // period6NowFeeA: <uint64>0,
+      // period6NowFeeB: <uint64>0,
+      // period6NowTime: 0,
+      // period6NowVolumeA: <uint64>0,
+      // period6NowVolumeB: <uint64>0,
+      // period6NowVWAP: <uint64>0,
+      // period6PrevFeeA: <uint64>0,
+      // period6PrevFeeB: <uint64>0,
+      // period6PrevTime: 0,
+      // period6PrevVolumeA: <uint64>0,
+      // period6PrevVolumeB: <uint64>0,
+      // period6PrevVWAP: <uint64>0,
     };
-    this.pools(appPoolId.id).value = data;
+    this.pools(appClammPool.id).value = data;
     const aggregatedIndex: AssetsCombined = {
       assetA: assetA.id,
       assetB: assetB.id,
@@ -489,69 +708,69 @@ class BiatecPoolProvider extends Contract {
     info.period4NowVolumeA = info.period4NowVolumeA + netAmountA;
     info.period4NowVolumeB = info.period4NowVolumeB + netAmountB;
     // 5
-    const period5IterFromNowObj = info.period5NowTime / this.period5.value;
-    const period5IterFromCurrTime = globals.latestTimestamp / this.period5.value;
-    // 1710960395 / 86400 = 19802
-    // 19802 * 86400 = 1710892800
-    if (period5IterFromNowObj !== period5IterFromCurrTime) {
-      // update prev object
-      info.period5PrevFeeA = info.period5NowFeeA;
-      info.period5NowFeeA = 0;
-      info.period5PrevFeeB = info.period5NowFeeB;
-      info.period5NowFeeB = 0;
-      info.period5PrevVWAP = info.period5NowVWAP;
-      info.period5PrevVolumeA = info.period5NowVolumeA;
-      info.period5NowVolumeA = 0;
-      info.period5PrevVolumeB = info.period5NowVolumeB;
-      info.period5NowVolumeB = 0;
-      info.period5PrevTime = info.period5NowTime;
-      if (info.period5NowTime === 0) {
-        info.period5NowTime = globals.latestTimestamp;
-      } else {
-        info.period5NowTime = period5IterFromCurrTime * this.period5.value;
-      }
-    }
-    // update current object
-    info.period5NowFeeA = info.period5NowFeeA + feeAmountA;
-    info.period5NowFeeB = info.period5NowFeeB + feeAmountB;
-    const period5NowVolumeBUint256 = info.period4NowVolumeB as uint256;
-    const period5NowVWAPUint256 = info.period4NowVWAP as uint256;
-    info.period5NowVWAP = ((period5NowVolumeBUint256 * period5NowVWAPUint256 + amountBUint256 * priceUint256) /
-      (period5NowVolumeBUint256 + amountBUint256)) as uint64;
-    info.period5NowVolumeA = info.period5NowVolumeA + netAmountA;
-    info.period5NowVolumeB = info.period5NowVolumeB + netAmountB;
+    // const period5IterFromNowObj = info.period5NowTime / this.period5.value;
+    // const period5IterFromCurrTime = globals.latestTimestamp / this.period5.value;
+    // // 1710960395 / 86400 = 19802
+    // // 19802 * 86400 = 1710892800
+    // if (period5IterFromNowObj !== period5IterFromCurrTime) {
+    //   // update prev object
+    //   info.period5PrevFeeA = info.period5NowFeeA;
+    //   info.period5NowFeeA = 0;
+    //   info.period5PrevFeeB = info.period5NowFeeB;
+    //   info.period5NowFeeB = 0;
+    //   info.period5PrevVWAP = info.period5NowVWAP;
+    //   info.period5PrevVolumeA = info.period5NowVolumeA;
+    //   info.period5NowVolumeA = 0;
+    //   info.period5PrevVolumeB = info.period5NowVolumeB;
+    //   info.period5NowVolumeB = 0;
+    //   info.period5PrevTime = info.period5NowTime;
+    //   if (info.period5NowTime === 0) {
+    //     info.period5NowTime = globals.latestTimestamp;
+    //   } else {
+    //     info.period5NowTime = period5IterFromCurrTime * this.period5.value;
+    //   }
+    // }
+    // // update current object
+    // info.period5NowFeeA = info.period5NowFeeA + feeAmountA;
+    // info.period5NowFeeB = info.period5NowFeeB + feeAmountB;
+    // const period5NowVolumeBUint256 = info.period5NowVolumeB as uint256;
+    // const period5NowVWAPUint256 = info.period5NowVWAP as uint256;
+    // info.period5NowVWAP = ((period5NowVolumeBUint256 * period5NowVWAPUint256 + amountBUint256 * priceUint256) /
+    //   (period5NowVolumeBUint256 + amountBUint256)) as uint64;
+    // info.period5NowVolumeA = info.period5NowVolumeA + netAmountA;
+    // info.period5NowVolumeB = info.period5NowVolumeB + netAmountB;
 
-    // 6
-    const period6IterFromNowObj = info.period6NowTime / this.period6.value;
-    const period6IterFromCurrTime = globals.latestTimestamp / this.period6.value;
+    // // 6
+    // const period6IterFromNowObj = info.period6NowTime / this.period6.value;
+    // const period6IterFromCurrTime = globals.latestTimestamp / this.period6.value;
 
-    if (period6IterFromNowObj !== period6IterFromCurrTime) {
-      // update prev object
-      info.period6PrevFeeA = info.period6NowFeeA;
-      info.period6NowFeeA = 0;
-      info.period6PrevFeeB = info.period6NowFeeB;
-      info.period6NowFeeB = 0;
-      info.period6PrevVWAP = info.period6NowVWAP;
-      info.period6PrevVolumeA = info.period6NowVolumeA;
-      info.period6NowVolumeA = 0;
-      info.period6PrevVolumeB = info.period6NowVolumeB;
-      info.period6NowVolumeB = 0;
-      info.period6PrevTime = info.period6NowTime;
-      if (info.period6NowTime === 0) {
-        info.period6NowTime = globals.latestTimestamp;
-      } else {
-        info.period6NowTime = period6IterFromCurrTime * this.period6.value;
-      }
-    }
-    // update current object
-    info.period6NowFeeA = info.period6NowFeeA + feeAmountA;
-    info.period6NowFeeB = info.period6NowFeeB + feeAmountB;
-    const period6NowVolumeBUint256 = info.period4NowVolumeB as uint256;
-    const period6NowVWAPUint256 = info.period4NowVWAP as uint256;
-    info.period6NowVWAP = ((period6NowVolumeBUint256 * period6NowVWAPUint256 + amountBUint256 * priceUint256) /
-      (period6NowVolumeBUint256 + amountBUint256)) as uint64;
-    info.period6NowVolumeA = info.period6NowVolumeA + netAmountA;
-    info.period6NowVolumeB = info.period6NowVolumeB + netAmountB;
+    // if (period6IterFromNowObj !== period6IterFromCurrTime) {
+    //   // update prev object
+    //   info.period6PrevFeeA = info.period6NowFeeA;
+    //   info.period6NowFeeA = 0;
+    //   info.period6PrevFeeB = info.period6NowFeeB;
+    //   info.period6NowFeeB = 0;
+    //   info.period6PrevVWAP = info.period6NowVWAP;
+    //   info.period6PrevVolumeA = info.period6NowVolumeA;
+    //   info.period6NowVolumeA = 0;
+    //   info.period6PrevVolumeB = info.period6NowVolumeB;
+    //   info.period6NowVolumeB = 0;
+    //   info.period6PrevTime = info.period6NowTime;
+    //   if (info.period6NowTime === 0) {
+    //     info.period6NowTime = globals.latestTimestamp;
+    //   } else {
+    //     info.period6NowTime = period6IterFromCurrTime * this.period6.value;
+    //   }
+    // }
+    // // update current object
+    // info.period6NowFeeA = info.period6NowFeeA + feeAmountA;
+    // info.period6NowFeeB = info.period6NowFeeB + feeAmountB;
+    // const period6NowVolumeBUint256 = info.period6NowVolumeB as uint256;
+    // const period6NowVWAPUint256 = info.period6NowVWAP as uint256;
+    // info.period6NowVWAP = ((period6NowVolumeBUint256 * period6NowVWAPUint256 + amountBUint256 * priceUint256) /
+    //   (period6NowVolumeBUint256 + amountBUint256)) as uint64;
+    // info.period6NowVolumeA = info.period6NowVolumeA + netAmountA;
+    // info.period6NowVolumeB = info.period6NowVolumeB + netAmountB;
     return info;
   }
 
@@ -708,69 +927,69 @@ class BiatecPoolProvider extends Contract {
     info.period4NowVolumeA = info.period4NowVolumeA + netAmountA;
     info.period4NowVolumeB = info.period4NowVolumeB + netAmountB;
     // 5
-    const period5IterFromNowObj = info.period5NowTime / this.period5.value;
-    const period5IterFromCurrTime = globals.latestTimestamp / this.period5.value;
-    // 1710960395 / 86400 = 19802
-    // 19802 * 86400 = 1710892800
-    if (period5IterFromNowObj !== period5IterFromCurrTime) {
-      // update prev object
-      info.period5PrevFeeA = info.period5NowFeeA;
-      info.period5NowFeeA = 0;
-      info.period5PrevFeeB = info.period5NowFeeB;
-      info.period5NowFeeB = 0;
-      info.period5PrevVWAP = info.period5NowVWAP;
-      info.period5PrevVolumeA = info.period5NowVolumeA;
-      info.period5NowVolumeA = 0;
-      info.period5PrevVolumeB = info.period5NowVolumeB;
-      info.period5NowVolumeB = 0;
-      info.period5PrevTime = info.period5NowTime;
-      if (info.period5NowTime === 0) {
-        info.period5NowTime = globals.latestTimestamp;
-      } else {
-        info.period5NowTime = period5IterFromCurrTime * this.period5.value;
-      }
-    }
-    // update current object
-    info.period5NowFeeA = info.period5NowFeeA + feeAmountA;
-    info.period5NowFeeB = info.period5NowFeeB + feeAmountB;
-    const period5NowVolumeBUint256 = info.period4NowVolumeB as uint256;
-    const period5NowVWAPUint256 = info.period4NowVWAP as uint256;
-    info.period5NowVWAP = ((period5NowVolumeBUint256 * period5NowVWAPUint256 + amountBUint256 * priceUint256) /
-      (period5NowVolumeBUint256 + amountBUint256)) as uint64;
-    info.period5NowVolumeA = info.period5NowVolumeA + netAmountA;
-    info.period5NowVolumeB = info.period5NowVolumeB + netAmountB;
+    // const period5IterFromNowObj = info.period5NowTime / this.period5.value;
+    // const period5IterFromCurrTime = globals.latestTimestamp / this.period5.value;
+    // // 1710960395 / 86400 = 19802
+    // // 19802 * 86400 = 1710892800
+    // if (period5IterFromNowObj !== period5IterFromCurrTime) {
+    //   // update prev object
+    //   info.period5PrevFeeA = info.period5NowFeeA;
+    //   info.period5NowFeeA = 0;
+    //   info.period5PrevFeeB = info.period5NowFeeB;
+    //   info.period5NowFeeB = 0;
+    //   info.period5PrevVWAP = info.period5NowVWAP;
+    //   info.period5PrevVolumeA = info.period5NowVolumeA;
+    //   info.period5NowVolumeA = 0;
+    //   info.period5PrevVolumeB = info.period5NowVolumeB;
+    //   info.period5NowVolumeB = 0;
+    //   info.period5PrevTime = info.period5NowTime;
+    //   if (info.period5NowTime === 0) {
+    //     info.period5NowTime = globals.latestTimestamp;
+    //   } else {
+    //     info.period5NowTime = period5IterFromCurrTime * this.period5.value;
+    //   }
+    // }
+    // // update current object
+    // info.period5NowFeeA = info.period5NowFeeA + feeAmountA;
+    // info.period5NowFeeB = info.period5NowFeeB + feeAmountB;
+    // const period5NowVolumeBUint256 = info.period5NowVolumeB as uint256;
+    // const period5NowVWAPUint256 = info.period5NowVWAP as uint256;
+    // info.period5NowVWAP = ((period5NowVolumeBUint256 * period5NowVWAPUint256 + amountBUint256 * priceUint256) /
+    //   (period5NowVolumeBUint256 + amountBUint256)) as uint64;
+    // info.period5NowVolumeA = info.period5NowVolumeA + netAmountA;
+    // info.period5NowVolumeB = info.period5NowVolumeB + netAmountB;
 
-    // 6
-    const period6IterFromNowObj = info.period6NowTime / this.period6.value;
-    const period6IterFromCurrTime = globals.latestTimestamp / this.period6.value;
+    // // 6
+    // const period6IterFromNowObj = info.period6NowTime / this.period6.value;
+    // const period6IterFromCurrTime = globals.latestTimestamp / this.period6.value;
 
-    if (period6IterFromNowObj !== period6IterFromCurrTime) {
-      // update prev object
-      info.period6PrevFeeA = info.period6NowFeeA;
-      info.period6NowFeeA = 0;
-      info.period6PrevFeeB = info.period6NowFeeB;
-      info.period6NowFeeB = 0;
-      info.period6PrevVWAP = info.period6NowVWAP;
-      info.period6PrevVolumeA = info.period6NowVolumeA;
-      info.period6NowVolumeA = 0;
-      info.period6PrevVolumeB = info.period6NowVolumeB;
-      info.period6NowVolumeB = 0;
-      info.period6PrevTime = info.period6NowTime;
-      if (info.period6NowTime === 0) {
-        info.period6NowTime = globals.latestTimestamp;
-      } else {
-        info.period6NowTime = period6IterFromCurrTime * this.period6.value;
-      }
-    }
-    // update current object
-    info.period6NowFeeA = info.period6NowFeeA + feeAmountA;
-    info.period6NowFeeB = info.period6NowFeeB + feeAmountB;
-    const period6NowVolumeBUint256 = info.period4NowVolumeB as uint256;
-    const period6NowVWAPUint256 = info.period4NowVWAP as uint256;
-    info.period6NowVWAP = ((period6NowVolumeBUint256 * period6NowVWAPUint256 + amountBUint256 * priceUint256) /
-      (period6NowVolumeBUint256 + amountBUint256)) as uint64;
-    info.period6NowVolumeA = info.period6NowVolumeA + netAmountA;
-    info.period6NowVolumeB = info.period6NowVolumeB + netAmountB;
+    // if (period6IterFromNowObj !== period6IterFromCurrTime) {
+    //   // update prev object
+    //   info.period6PrevFeeA = info.period6NowFeeA;
+    //   info.period6NowFeeA = 0;
+    //   info.period6PrevFeeB = info.period6NowFeeB;
+    //   info.period6NowFeeB = 0;
+    //   info.period6PrevVWAP = info.period6NowVWAP;
+    //   info.period6PrevVolumeA = info.period6NowVolumeA;
+    //   info.period6NowVolumeA = 0;
+    //   info.period6PrevVolumeB = info.period6NowVolumeB;
+    //   info.period6NowVolumeB = 0;
+    //   info.period6PrevTime = info.period6NowTime;
+    //   if (info.period6NowTime === 0) {
+    //     info.period6NowTime = globals.latestTimestamp;
+    //   } else {
+    //     info.period6NowTime = period6IterFromCurrTime * this.period6.value;
+    //   }
+    // }
+    // // update current object
+    // info.period6NowFeeA = info.period6NowFeeA + feeAmountA;
+    // info.period6NowFeeB = info.period6NowFeeB + feeAmountB;
+    // const period6NowVolumeBUint256 = info.period6NowVolumeB as uint256;
+    // const period6NowVWAPUint256 = info.period6NowVWAP as uint256;
+    // info.period6NowVWAP = ((period6NowVolumeBUint256 * period6NowVWAPUint256 + amountBUint256 * priceUint256) /
+    //   (period6NowVolumeBUint256 + amountBUint256)) as uint64;
+    // info.period6NowVolumeA = info.period6NowVolumeA + netAmountA;
+    // info.period6NowVolumeB = info.period6NowVolumeB + netAmountB;
     return info;
   }
 
@@ -800,27 +1019,16 @@ class BiatecPoolProvider extends Contract {
     feeAmountB: uint64,
     s: uint64
   ) {
-    increaseOpcodeBudget();
-    increaseOpcodeBudget();
-    increaseOpcodeBudget();
+    // increaseOpcodeBudget();
+    // increaseOpcodeBudget();
+    // increaseOpcodeBudget();
     increaseOpcodeBudget();
     increaseOpcodeBudget();
     assert(appPoolId === globals.callerApplicationID);
     assert(s === SCALE);
 
     this.updatePriceBoxInfo(appPoolId, assetA, assetB, priceFrom, priceTo, amountA, amountB, feeAmountA, feeAmountB);
-    const info = this.pools(appPoolId.id).value;
-
-    if (info.isVerified >= this.verifyRequirement.value) {
-      // allow aggregated stats to be updated only after the smart contract has been checked it is legit
-      this.updatePriceBoxAggregated(assetA, assetB, priceFrom, priceTo, amountA, amountB, feeAmountA, feeAmountB);
-    }
-  }
-
-  setGlobalVerifiedValues(defaultVerified: uint64, requirement: uint64) {
-    assert(this.txn.sender === this.governor.value, 'Only governor can run setup verification status');
-    this.verifyRequirement.value = requirement;
-    this.defaultVerified.value = defaultVerified;
+    this.updatePriceBoxAggregated(assetA, assetB, priceFrom, priceTo, amountA, amountB, feeAmountA, feeAmountB);
   }
 
   /**
