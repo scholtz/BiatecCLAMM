@@ -113,6 +113,14 @@ type AssetsCombined = {
   assetB: uint64;
 };
 type PoolConfig = {
+  assetA: uint64;
+  assetB: uint64;
+  min: uint64;
+  max: uint64;
+  fee: uint64;
+  verificationClass: uint64;
+};
+type FullConfig = {
   appId: uint64;
   assetA: uint64;
   assetB: uint64;
@@ -133,6 +141,7 @@ export class BiatecPoolProvider extends Contract {
    */
   pools = BoxMap<uint64, AppPoolInfo>({ prefix: 'ps' });
   poolsByConfig = BoxMap<PoolConfig, uint64>({ prefix: 'pc' });
+  poolsListByKey = BoxMap<FullConfig, uint64>({ prefix: 'pl' });
   lpTokens2Pool = BoxMap<uint64, uint64>({ prefix: 'lp' });
   poolsAggregated = BoxMap<AssetsCombined, AppPoolInfo>({ prefix: 'pa' });
 
@@ -407,7 +416,6 @@ export class BiatecPoolProvider extends Contract {
     const lpToken = appClammPool.globalState('lp') as uint64;
     assert(!this.pools(appClammPool.id).exists);
     const config: PoolConfig = {
-      appId: appClammPool.id,
       assetA: assetA.id,
       assetB: assetB.id,
       min: pMin,
@@ -417,6 +425,18 @@ export class BiatecPoolProvider extends Contract {
     };
     assert(!this.poolsByConfig(config).exists, 'Pool with the same configuration is already registered');
     this.poolsByConfig(config).value = appClammPool.id;
+
+    const configWithApp: FullConfig = {
+      appId: appClammPool.id,
+      assetA: assetA.id,
+      assetB: assetB.id,
+      min: pMin,
+      max: pMax,
+      fee: fee,
+      verificationClass: verificationClass,
+    };
+    this.poolsListByKey(configWithApp).value = appClammPool.id;
+
     this.lpTokens2Pool(lpToken).value = appClammPool.id;
     const appPoolUintId = appClammPool.id;
     if (

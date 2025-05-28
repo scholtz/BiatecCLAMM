@@ -22,14 +22,14 @@ import clammSwapTxs from './biatecClamm/txs/clammSwapTxs';
 import clammWithdrawExcessAssetsTxs from './biatecClamm/txs/clammWithdrawExcessAssetsTxs';
 
 import { BiatecPoolProviderClient } from '../contracts/clients/BiatecPoolProviderClient';
-import type { PoolConfig } from '../contracts/clients/BiatecPoolProviderClient';
+import type { PoolConfig, FullConfig } from '../contracts/clients/BiatecPoolProviderClient';
 import { BiatecClammPoolClient } from '../contracts/clients/BiatecClammPoolClient';
 import { BiatecIdentityProviderClient } from '../contracts/clients/BiatecIdentityProviderClient';
 import { BiatecConfigProviderClient } from '../contracts/clients/BiatecConfigProviderClient';
 import type { AppPoolInfo } from '../contracts/clients/BiatecPoolProviderClient';
 import getPools from './biatecClamm/getPools';
 
-export type { PoolConfig, AppPoolInfo };
+export type { PoolConfig, FullConfig, AppPoolInfo };
 export { BiatecPoolProviderClient, BiatecClammPoolClient, BiatecIdentityProviderClient, BiatecConfigProviderClient };
 export {
   getPools,

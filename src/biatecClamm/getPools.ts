@@ -1,5 +1,5 @@
 import algosdk from 'algosdk';
-import { BiatecPoolProviderClient, PoolConfig } from '../../contracts/clients/BiatecPoolProviderClient';
+import { BiatecPoolProviderClient, FullConfig } from '../../contracts/clients/BiatecPoolProviderClient';
 
 interface IGetPoolsInput {
   assetId: bigint;
@@ -7,8 +7,8 @@ interface IGetPoolsInput {
   fee?: bigint;
   clientPoolProvider: BiatecPoolProviderClient;
 }
-const getPools = async (input: IGetPoolsInput): Promise<PoolConfig[]> => {
-  var ret: PoolConfig[] = [];
+const getPools = async (input: IGetPoolsInput): Promise<FullConfig[]> => {
+  var ret: FullConfig[] = [];
   const keys = await input.clientPoolProvider.algorand.client.algod
     .getApplicationBoxes(input.clientPoolProvider.appId)
     .do();
@@ -19,10 +19,10 @@ const getPools = async (input: IGetPoolsInput): Promise<PoolConfig[]> => {
   for (const box of keys.boxes) {
     if (box.name) {
       if (box.name.length == 58) {
-        if (Buffer.from(box.name.subarray(0, 2)).toString('ascii') == 'pc') {
+        if (Buffer.from(box.name.subarray(0, 2)).toString('ascii') == 'pl') {
           // its pool config
 
-          // type PoolConfig = {
+          // type FullConfig = {
           //   appId: uint64;
           //   assetA: uint64;
           //   assetB: uint64;
