@@ -113,6 +113,7 @@ type AssetsCombined = {
   assetB: uint64;
 };
 type PoolConfig = {
+  appId: uint64;
   assetA: uint64;
   assetB: uint64;
   min: uint64;
@@ -130,13 +131,10 @@ export class BiatecPoolProvider extends Contract {
   /**
    * Each LP pool is registered in this contract. Each pool has custom box and stores there the trading stats.
    */
-  pools = BoxMap<uint64, AppPoolInfo>({ prefix: 'p' });
+  pools = BoxMap<uint64, AppPoolInfo>({ prefix: 'ps' });
   poolsByConfig = BoxMap<PoolConfig, uint64>({ prefix: 'pc' });
   lpTokens2Pool = BoxMap<uint64, uint64>({ prefix: 'lp' });
-
-  poolsAggregated = BoxMap<AssetsCombined, AppPoolInfo>({ prefix: 's' });
-
-  assets = BoxMap<uint64, AppID[]>({ prefix: 'a' });
+  poolsAggregated = BoxMap<AssetsCombined, AppPoolInfo>({ prefix: 'pa' });
 
   period1 = GlobalStateKey<uint64>({ key: 'p1' });
 
@@ -409,6 +407,7 @@ export class BiatecPoolProvider extends Contract {
     const lpToken = appClammPool.globalState('lp') as uint64;
     assert(!this.pools(appClammPool.id).exists);
     const config: PoolConfig = {
+      appId: appClammPool.id,
       assetA: assetA.id,
       assetB: assetB.id,
       min: pMin,
@@ -435,19 +434,6 @@ export class BiatecPoolProvider extends Contract {
       assert(false, 'App not in recently created apps');
     }
 
-    if (this.assets(assetA.id).exists) {
-      this.assets(assetA.id).value.push(appClammPool);
-    } else {
-      const newWhitelist: AppID[] = [appClammPool];
-      this.assets(assetA.id).value = newWhitelist;
-    }
-
-    if (this.assets(assetB.id).exists) {
-      this.assets(assetB.id).value.push(appClammPool);
-    } else {
-      const newWhitelist: AppID[] = [appClammPool];
-      this.assets(assetB.id).value = newWhitelist;
-    }
     const data: AppPoolInfo = {
       assetA: assetA.id,
       assetB: assetB.id,
