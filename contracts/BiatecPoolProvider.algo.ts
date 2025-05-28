@@ -118,16 +118,17 @@ type PoolConfig = {
   min: uint64;
   max: uint64;
   fee: uint64;
-  verificationClass: uint64;
+  verificationClass: uint8;
 };
 type FullConfig = {
   appId: uint64;
+  lpToken: uint64;
   assetA: uint64;
   assetB: uint64;
   min: uint64;
   max: uint64;
   fee: uint64;
-  verificationClass: uint64;
+  verificationClass: uint8;
 };
 
 type PoolRetVal = {
@@ -409,7 +410,7 @@ export class BiatecPoolProvider extends Contract {
     const appClammPool = globals.callerApplicationID as AppID;
     const assetA = AssetID.fromUint64(appClammPool.globalState('a') as uint64);
     const assetB = AssetID.fromUint64(appClammPool.globalState('b') as uint64);
-    const verificationClass = appClammPool.globalState('c') as uint64;
+    const verificationClass = appClammPool.globalState('c') as uint8;
     const pMin = appClammPool.globalState('pMin') as uint64;
     const pMax = appClammPool.globalState('pMax') as uint64;
     const fee = appClammPool.globalState('f') as uint64;
@@ -428,6 +429,7 @@ export class BiatecPoolProvider extends Contract {
 
     const configWithApp: FullConfig = {
       appId: appClammPool.id,
+      lpToken: lpToken,
       assetA: assetA.id,
       assetB: assetB.id,
       min: pMin,
