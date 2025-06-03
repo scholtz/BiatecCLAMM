@@ -4,7 +4,7 @@
  * DO NOT MODIFY IT BY HAND.
  * requires: @algorandfoundation/algokit-utils: ^7
  */
-import { AlgorandClientInterface } from '@algorandfoundation/algokit-utils/types/algorand-client-interface';
+import { type AlgorandClient } from '@algorandfoundation/algokit-utils/types/algorand-client';
 import { ABIReturn, AppReturn, SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app';
 import {
   Arc56Contract,
@@ -44,7 +44,6 @@ import {
   SendAtomicTransactionComposerResults,
 } from '@algorandfoundation/algokit-utils/types/transaction';
 import { Address, encodeAddress, modelsv2, OnApplicationComplete, Transaction, TransactionSigner } from 'algosdk';
-import { SimulateResponse } from 'algosdk/dist/types/client/v2/algod/models/types';
 
 export const APP_SPEC: Arc56Contract = {
   name: 'BiatecConfigProvider',
@@ -691,7 +690,7 @@ export const APP_SPEC: Arc56Contract = {
       'CiADASAAJgsBdQJlZgFlIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA7msoAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBXNjdmVyAWcBcwFmAWkBcDEYFIEGCzEZCI0MAh0AAAAAAAACewAAAg8AAAAAAAAAAAAAAIgAAiJDigAAJwWAFkJJQVRFQy1DT05GSUctMDEtMDItMDFnKjEAZycGMQBnKDEAZykxAGcnByRniTYaAVcCAIgAAiJDigEAMQAoZBJEJwWL/2eJNhoDFzYaAhc2GgFJFSMSRIgAAiJDigMAMQAoZBJEi/8rJwSipkQnCIv/ZycJi/5nJwqL/WeJNhoBSRUjEkSIAAIiQ4oBADEAKGQSRCiL/2eJNhoBF4gAAiJDigEAMQAoZBJEJweL/2eJNhoBSRUjEkSIAAIiQ4oBADEAKGQSRCcGi/9niTYaAUkVIxJEiAACIkOKAQAxAChkEkQqi/9niTYaAUkVIxJEiAACIkOKAQAxACpkEkQpi/9niTYaAReIAAIiQ4oBADEAKGQSRCcJi/9niTYaAReIAAIiQ4oBADEAKGQSRCcKi/9niTYaAUkVIxJEiAACIkOKAQAxACpkEkSL/ysnBKKmRCcIi/9niTYaBhc2GgUXNhoEFzYaA1cCADYaAlcCADYaAVcCAIgAAiJDigYAMQApZBJEsYECshCL/rILi/2yP4v8sgyL+rIOi/uyDYv/sgoksgGziYAEFR98dTYaAhc2GgEXiAAFFlCwIkOKAgExAClkEkSL/ov/MQCIAAOL/omKAwCL/iQSQQATsSKyEIv/sgeL/bIIJLIBs0IAFbGBBLIQi/+yFIv+shGL/bISJLIBs4mABLhEezY2GgCOAf3lAIAESVzn7YAEv8IIYIAEDNwQ/IAEa5VfS4AEixh7PYAEUOB9iIAEur4eEYAExYudpIAEyjRKNIAESfOhf4AEhyg3MDYaAI4L/dr+EP4r/kP+X/56/pX+rf7F/un/NwCABGk2xi82GgCOAf2yAA==',
     clear: 'Cg==',
   },
-  compilerInfo: { compiler: 'algod', compilerVersion: { major: 4, minor: 0, patch: 3, commitHash: 'f3be4a3b' } },
+  compilerInfo: { compiler: 'algod', compilerVersion: { major: 4, minor: 1, patch: 1, commitHash: 'd7a21824' } },
 } as unknown as Arc56Contract;
 
 /**
@@ -1336,8 +1335,8 @@ export abstract class BiatecConfigProviderParamsFactory {
   * Fees in 9 decimals. 1_000_000_000 = 100%
   Fees in 9 decimals. 10_000_000 = 1%
   Fees in 9 decimals. 100_000 = 0,01%
-
-
+  
+  
   Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
 
    *
@@ -1361,8 +1360,8 @@ export abstract class BiatecConfigProviderParamsFactory {
    * Constructs a no op call for the sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void ABI method
    *
   * addressExecutiveFee can perfom key registration for this LP pool
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -1395,8 +1394,8 @@ export abstract class BiatecConfigProviderParamsFactory {
    * Constructs a no op call for the withdrawExcessAssets(uint64,uint64)uint64 ABI method
    *
   * If someone deposits excess assets to this smart contract biatec can use them.
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -1450,7 +1449,7 @@ export class BiatecConfigProviderFactory {
   }
 
   /** A reference to the underlying `AlgorandClient` this app factory is using. */
-  public get algorand(): AlgorandClientInterface {
+  public get algorand(): AlgorandClient {
     return this.appFactory.algorand;
   }
 
@@ -1717,7 +1716,7 @@ export class BiatecConfigProviderClient {
   }
 
   /** A reference to the underlying `AlgorandClient` this app client is using. */
-  public get algorand(): AlgorandClientInterface {
+  public get algorand(): AlgorandClient {
     return this.appClient.algorand;
   }
 
@@ -1900,8 +1899,8 @@ export class BiatecConfigProviderClient {
     * Fees in 9 decimals. 1_000_000_000 = 100%
     Fees in 9 decimals. 10_000_000 = 1%
     Fees in 9 decimals. 100_000 = 0,01%
-
-
+    
+    
     Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
 
      *
@@ -1921,8 +1920,8 @@ export class BiatecConfigProviderClient {
      * Makes a call to the BiatecConfigProvider smart contract using the `sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -1942,8 +1941,8 @@ export class BiatecConfigProviderClient {
      * Makes a call to the BiatecConfigProvider smart contract using the `withdrawExcessAssets(uint64,uint64)uint64` ABI method.
      *
     * If someone deposits excess assets to this smart contract biatec can use them.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -2141,8 +2140,8 @@ export class BiatecConfigProviderClient {
     * Fees in 9 decimals. 1_000_000_000 = 100%
     Fees in 9 decimals. 10_000_000 = 1%
     Fees in 9 decimals. 100_000 = 0,01%
-
-
+    
+    
     Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
 
      *
@@ -2162,8 +2161,8 @@ export class BiatecConfigProviderClient {
      * Makes a call to the BiatecConfigProvider smart contract using the `sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -2183,8 +2182,8 @@ export class BiatecConfigProviderClient {
      * Makes a call to the BiatecConfigProvider smart contract using the `withdrawExcessAssets(uint64,uint64)uint64` ABI method.
      *
     * If someone deposits excess assets to this smart contract biatec can use them.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -2431,8 +2430,8 @@ export class BiatecConfigProviderClient {
     * Fees in 9 decimals. 1_000_000_000 = 100%
     Fees in 9 decimals. 10_000_000 = 1%
     Fees in 9 decimals. 100_000 = 0,01%
-
-
+    
+    
     Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
 
      *
@@ -2457,8 +2456,8 @@ export class BiatecConfigProviderClient {
      * Makes a call to the BiatecConfigProvider smart contract using the `sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -2487,8 +2486,8 @@ export class BiatecConfigProviderClient {
      * Makes a call to the BiatecConfigProvider smart contract using the `withdrawExcessAssets(uint64,uint64)uint64` ABI method.
      *
     * If someone deposits excess assets to this smart contract biatec can use them.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -2975,8 +2974,8 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
   * Fees in 9 decimals. 1_000_000_000 = 100%
   Fees in 9 decimals. 10_000_000 = 1%
   Fees in 9 decimals. 100_000 = 0,01%
-
-
+  
+  
   Fees are respectful from the all fees taken to the LP providers. If LPs charge 1% fee, and biatec charges 10% fee, LP will receive 0.09% fee and biatec 0.01% fee
 
    *
@@ -2995,8 +2994,8 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * Calls the sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void ABI method.
    *
   * addressExecutiveFee can perfom key registration for this LP pool
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -3023,8 +3022,8 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
    * Calls the withdrawExcessAssets(uint64,uint64)uint64 ABI method.
    *
   * If someone deposits excess assets to this smart contract biatec can use them.
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -3084,13 +3083,13 @@ export type BiatecConfigProviderComposer<TReturns extends [...any[]] = []> = {
   /**
    * Simulates the transaction group and returns the result
    */
-  simulate(): Promise<BiatecConfigProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  simulate(): Promise<BiatecConfigProviderComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>;
   simulate(
     options: SkipSignaturesSimulateOptions
-  ): Promise<BiatecConfigProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  ): Promise<BiatecConfigProviderComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>;
   simulate(
     options: RawSimulateOptions
-  ): Promise<BiatecConfigProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  ): Promise<BiatecConfigProviderComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>;
   /**
    * Sends the transaction group to the network and returns the results
    */

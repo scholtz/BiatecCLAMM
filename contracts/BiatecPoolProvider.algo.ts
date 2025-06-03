@@ -120,6 +120,16 @@ type PoolConfig = {
   fee: uint64;
   verificationClass: uint64;
 };
+type FullConfig = {
+  appId: uint64; // app id of the pool
+  assetA: uint64;
+  assetB: uint64;
+  min: uint64;
+  max: uint64;
+  fee: uint64;
+  lpTokenId: uint64; // LP token id
+  verificationClass: uint8;
+};
 
 type PoolRetVal = {
   appId: AppID;
@@ -132,11 +142,9 @@ export class BiatecPoolProvider extends Contract {
    */
   pools = BoxMap<uint64, AppPoolInfo>({ prefix: 'p' });
   poolsByConfig = BoxMap<PoolConfig, uint64>({ prefix: 'pc' });
-  lpTokens2Pool = BoxMap<uint64, uint64>({ prefix: 'lp' });
+  fullConfigs = BoxMap<FullConfig, uint64>({ prefix: 'fc' });
 
   poolsAggregated = BoxMap<AssetsCombined, AppPoolInfo>({ prefix: 's' });
-
-  assets = BoxMap<uint64, AppID[]>({ prefix: 'a' });
 
   period1 = GlobalStateKey<uint64>({ key: 'p1' });
 
@@ -418,7 +426,19 @@ export class BiatecPoolProvider extends Contract {
     };
     assert(!this.poolsByConfig(config).exists, 'Pool with the same configuration is already registered');
     this.poolsByConfig(config).value = appClammPool.id;
-    this.lpTokens2Pool(lpToken).value = appClammPool.id;
+
+    const fullConfig: FullConfig = {
+      appId: appClammPool.id,
+      assetA: assetA.id,
+      assetB: assetB.id,
+      lpTokenId: lpToken,
+      min: pMin,
+      max: pMax,
+      fee: fee,
+      verificationClass: verificationClass as uint8,
+    };
+    this.fullConfigs(fullConfig).value = appClammPool.id;
+
     const appPoolUintId = appClammPool.id;
     if (
       appPoolUintId != this.recentPools1.value &&
@@ -435,19 +455,6 @@ export class BiatecPoolProvider extends Contract {
       assert(false, 'App not in recently created apps');
     }
 
-    if (this.assets(assetA.id).exists) {
-      this.assets(assetA.id).value.push(appClammPool);
-    } else {
-      const newWhitelist: AppID[] = [appClammPool];
-      this.assets(assetA.id).value = newWhitelist;
-    }
-
-    if (this.assets(assetB.id).exists) {
-      this.assets(assetB.id).value.push(appClammPool);
-    } else {
-      const newWhitelist: AppID[] = [appClammPool];
-      this.assets(assetB.id).value = newWhitelist;
-    }
     const data: AppPoolInfo = {
       assetA: assetA.id,
       assetB: assetB.id,

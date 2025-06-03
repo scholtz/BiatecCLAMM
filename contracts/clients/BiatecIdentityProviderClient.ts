@@ -4,7 +4,7 @@
  * DO NOT MODIFY IT BY HAND.
  * requires: @algorandfoundation/algokit-utils: ^7
  */
-import { AlgorandClientInterface } from '@algorandfoundation/algokit-utils/types/algorand-client-interface';
+import { type AlgorandClient } from '@algorandfoundation/algokit-utils/types/algorand-client';
 import { ABIReturn, AppReturn, SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app';
 import {
   Arc56Contract,
@@ -44,7 +44,6 @@ import {
   SendAtomicTransactionComposerResults,
 } from '@algorandfoundation/algokit-utils/types/transaction';
 import { Address, encodeAddress, modelsv2, OnApplicationComplete, Transaction, TransactionSigner } from 'algosdk';
-import { SimulateResponse } from 'algosdk/dist/types/client/v2/algod/models/types';
 
 export const APP_SPEC: Arc56Contract = {
   name: 'BiatecIdentityProvider',
@@ -1564,7 +1563,7 @@ export const APP_SPEC: Arc56Contract = {
       'CiAJAAEgAkCAlOvcA7AGMjQmDwAIAAAAAAAAAAABAAFpAUIBcwQVH3x1JDAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMAgAAAAAdzWUAAgAAAAAO5rKAAVzY3ZlcgJlZgIAaAIAAAFlMRgUgQYLMRkIjQwFkAAAAAAAAAXOAAAFggAAAAAAAAAAAAAAiAACI0OKAAAnCoAVQklBVEVDLUlERU5ULTAxLTAzLTAxZ4k2GgRJFSQSRDYaA0kVJBJENhoCSRUkEkQ2GgEXiAACI0OKBAAoMQA2MgByB0gSRCcEi/9ngAFni/5ngAF2i/1nJw6L/GeL/ycFZUSMAIsAIhJEiTYaAlcCADYaAReIAAIjQ4oCAChJi/8nBGQSRIv/gAF1ZUSMADEAiwASRIv/JwVlRIwBiwEiEkQnCov+Z4k2GgI2GgFJFSQSRIgAAiNDigIAK4v/UL1MSBREi/41/zT/VykIFyMSRIv+Nf80/1cACBciEkSL/jX/IQc0/zT/TwJZSTT/TFkjCyUIWFcCACcHEkSL/jX/IQg0/zT/TwJZSTT/TFkjCyUIWFcCACcHEkSL/jX/NP9XNggXIhJEi/41/zT/Vz4IFyISRIv+Nf80/1dGCBciEkSL/jX/NP9XTggXIhJEi/41/zT/V1YIFyISRIv+Nf80/1deCBciEkSL/jX/NP8hBFMiEkSL/jX/NP9XGQgXIhJEi/41/zT/VyEIFyISRIv+Nf80/yEGUyISRIv+Nf80/1cRCBchBRJEi/41/zT/VwkIF4GAqNa5BxJEK4v/UEm8SIv+v4k2GgI2GgFJFSQSRIgAAiNDigIAMQAnDmQSRIv+Nf80/1cRCBchBRJEK4v/UEm8SIv+v4k2GgcXNhoGFzYaBRc2GgRXAgA2GgNXAgA2GgJXAgA2GgEXiAACI0OKBwAoSYv/JwRkEkSL/ycLZUSMADEAiwASRIv/JwVlRIwBiwEiEkSxJbIQi/2yC4v8sj+L+7IMi/myDov6sg2L/rIKIrIBs4knBjYaAkkVIxJEFzYaAUkVJBJEiAAEULAjQ4oCAShHAov+IxJEK4v/UL1MSBRBAGcoKCcMi/4WVwcBiAMsKYgDKCmIAyQqIklUiAMdJw2IAyUnDYgDICmIAw8piAMLKYgDBymIAwMpiAL/KYgC+ycIiAL2JwmIAvEqIklUiALqKYgC5imIAuIqIklUiALbSFCMAIsAQgFbK4v/UIwBKCgnDIv+FlcHAYgCv4sBvkQ1/zT/VykIFxaIAq+LAb5ENf80/1cACBcWiAKfKiKLAb5ENf80/4GIA1NUiAKNiwG+RDX/IQc0/zT/TwJZSTT/TFkjCyUIWFcCAEkVFlcGAkxQiAJziwG+RDX/IQg0/zT/TwJZSTT/TFkjCyUIWFcCAEkVFlcGAkxQiAJMiwG+RDX/NP9XNggXFogCL4sBvkQ1/zT/Vz4IFxaIAh+LAb5ENf80/1dGCBcWiAIPiwG+RDX/NP9XTggXFogB/4sBvkQ1/zT/V1YIFxaIAe+LAb5ENf80/1deCBcWiAHfiwG+RDX/NP9XCQgXFogBz4sBvkQ1/zT/VxEIFxaIAb8qIosBvkQ1/zT/IQRTVIgBrosBvkQ1/zT/VxkIFxaIAZ6LAb5ENf80/1chCBcWiAGOKiKLAb5ENf80/yEGU1SIAX1IUIwCiwKMAEYCiScGNhoCSRUjEkQXNhoBSRUkEkSIAARQsCNDigIBKEcCi/4jEkQri/9QvUxIFEEAGov+FlcHASlQJwhQJwlQKiJJVFCMAIsAQgBJK4v/UIwBi/4WVwcBiwG+RDX/NP9XAAgXFlCLAb5ENf80/1cJCBcWUIsBvkQ1/zT/VxEIFxZQKiKLAb5ENf80/yEEU1RQjAKLAowARgKJJwY2GgMXNhoCFzYaAReIAAUWULAjQ4oDAShJi/8nBGQSRIv/JwtlRIwAi/8nBWVEjAGLASISRDEAiwASRIv9i/4xAIgAB4v9jABGAYmKAwCL/iISQQATsSOyEIv/sgeL/bIIIrIBs0IAFbGBBLIQi/+yFIv+shGL/bISIrIBs4mABLhEezY2GgCOAfpyAIAE479cH4AErmTBZ4AEpIz7vIAEg5JcF4AE6K0YkoAEEn/7e4AEy6LpXTYaAI4H+lf65/wE/Df8pv6d/zUAgARfyIWgNhoAjgH6nACKBAOL/Iv/UIv9i/6JigQDi/yL/lCM/Iv/SRWL/hcIFlcGAoz+i/1MUIz9i/yL/Yv+iQ==',
     clear: 'Cg==',
   },
-  compilerInfo: { compiler: 'algod', compilerVersion: { major: 4, minor: 0, patch: 3, commitHash: 'f3be4a3b' } },
+  compilerInfo: { compiler: 'algod', compilerVersion: { major: 4, minor: 1, patch: 1, commitHash: 'd7a21824' } },
 } as unknown as Arc56Contract;
 
 /**
@@ -2192,8 +2191,8 @@ export abstract class BiatecIdentityProviderParamsFactory {
    * Constructs a no op call for the sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void ABI method
    *
   * addressExecutiveFee can perfom key registration for this LP pool
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -2270,8 +2269,8 @@ export abstract class BiatecIdentityProviderParamsFactory {
    * Constructs a no op call for the withdrawExcessAssets(uint64,uint64,uint64)uint64 ABI method
    *
   * If someone deposits excess assets to this smart contract biatec can use them.
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -2327,7 +2326,7 @@ export class BiatecIdentityProviderFactory {
   }
 
   /** A reference to the underlying `AlgorandClient` this app factory is using. */
-  public get algorand(): AlgorandClientInterface {
+  public get algorand(): AlgorandClient {
     return this.appFactory.algorand;
   }
 
@@ -2596,7 +2595,7 @@ export class BiatecIdentityProviderClient {
   }
 
   /** A reference to the underlying `AlgorandClient` this app client is using. */
-  public get algorand(): AlgorandClientInterface {
+  public get algorand(): AlgorandClient {
     return this.appClient.algorand;
   }
 
@@ -2688,8 +2687,8 @@ export class BiatecIdentityProviderClient {
      * Makes a call to the BiatecIdentityProvider smart contract using the `sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -2747,8 +2746,8 @@ export class BiatecIdentityProviderClient {
      * Makes a call to the BiatecIdentityProvider smart contract using the `withdrawExcessAssets(uint64,uint64,uint64)uint64` ABI method.
      *
     * If someone deposits excess assets to this smart contract biatec can use them.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -2855,8 +2854,8 @@ export class BiatecIdentityProviderClient {
      * Makes a call to the BiatecIdentityProvider smart contract using the `sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -2916,8 +2915,8 @@ export class BiatecIdentityProviderClient {
      * Makes a call to the BiatecIdentityProvider smart contract using the `withdrawExcessAssets(uint64,uint64,uint64)uint64` ABI method.
      *
     * If someone deposits excess assets to this smart contract biatec can use them.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -3052,8 +3051,8 @@ export class BiatecIdentityProviderClient {
      * Makes a call to the BiatecIdentityProvider smart contract using the `sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -3134,8 +3133,8 @@ export class BiatecIdentityProviderClient {
      * Makes a call to the BiatecIdentityProvider smart contract using the `withdrawExcessAssets(uint64,uint64,uint64)uint64` ABI method.
      *
     * If someone deposits excess assets to this smart contract biatec can use them.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -3532,8 +3531,8 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * Calls the sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void ABI method.
    *
   * addressExecutiveFee can perfom key registration for this LP pool
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -3605,8 +3604,8 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
    * Calls the withdrawExcessAssets(uint64,uint64,uint64)uint64 ABI method.
    *
   * If someone deposits excess assets to this smart contract biatec can use them.
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -3666,13 +3665,15 @@ export type BiatecIdentityProviderComposer<TReturns extends [...any[]] = []> = {
   /**
    * Simulates the transaction group and returns the result
    */
-  simulate(): Promise<BiatecIdentityProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  simulate(): Promise<
+    BiatecIdentityProviderComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }
+  >;
   simulate(
     options: SkipSignaturesSimulateOptions
-  ): Promise<BiatecIdentityProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  ): Promise<BiatecIdentityProviderComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>;
   simulate(
     options: RawSimulateOptions
-  ): Promise<BiatecIdentityProviderComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  ): Promise<BiatecIdentityProviderComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>;
   /**
    * Sends the transaction group to the network and returns the results
    */

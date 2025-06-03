@@ -4,7 +4,7 @@
  * DO NOT MODIFY IT BY HAND.
  * requires: @algorandfoundation/algokit-utils: ^7
  */
-import { AlgorandClientInterface } from '@algorandfoundation/algokit-utils/types/algorand-client-interface';
+import { type AlgorandClient } from '@algorandfoundation/algokit-utils/types/algorand-client';
 import { ABIReturn, AppReturn, SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app';
 import {
   Arc56Contract,
@@ -44,7 +44,6 @@ import {
   SendAtomicTransactionComposerResults,
 } from '@algorandfoundation/algokit-utils/types/transaction';
 import { Address, encodeAddress, modelsv2, OnApplicationComplete, Transaction, TransactionSigner } from 'algosdk';
-import { SimulateResponse } from 'algosdk/dist/types/client/v2/algod/models/types';
 
 export const APP_SPEC: Arc56Contract = {
   name: 'BiatecClammPool',
@@ -6945,7 +6944,7 @@ export const APP_SPEC: Arc56Contract = {
       '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',
     clear: 'Cg==',
   },
-  compilerInfo: { compiler: 'algod', compilerVersion: { major: 4, minor: 0, patch: 3, commitHash: 'f3be4a3b' } },
+  compilerInfo: { compiler: 'algod', compilerVersion: { major: 4, minor: 1, patch: 1, commitHash: 'd7a21824' } },
 } as unknown as Arc56Contract;
 
 /**
@@ -8252,8 +8251,8 @@ export abstract class BiatecClammPoolParamsFactory {
    * Constructs a no op call for the removeLiquidityAdmin(uint64,uint64,uint64,uint64,uint256)uint256 ABI method
    *
   * This method allows biatec admin to reduce the lp position created by lp fees allocation.
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -8317,11 +8316,11 @@ export abstract class BiatecClammPoolParamsFactory {
    *
   * If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.
   If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
-
-
+  
+  
   This method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -8354,11 +8353,11 @@ export abstract class BiatecClammPoolParamsFactory {
    *
   * If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.
   If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
-
-
+  
+  
   This method is used to distribute amount a and amount b of asset a and asset b to addressExecutiveFee account.
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -8390,8 +8389,8 @@ export abstract class BiatecClammPoolParamsFactory {
    * Constructs a no op call for the sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void ABI method
    *
   * addressExecutiveFee can perfom key registration for this LP pool
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -8425,8 +8424,8 @@ export abstract class BiatecClammPoolParamsFactory {
    * Constructs a no op call for the calculateDistributedLiquidity(uint64,uint256)uint256 ABI method
    *
   * addressExecutiveFee can perfom key unregistration for this LP pool
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -8660,8 +8659,8 @@ export abstract class BiatecClammPoolParamsFactory {
    * Constructs a no op call for the calculateAssetBDepositOnAssetADeposit(uint256,uint256,uint256,uint256)uint256 ABI method
    *
   * Calculates how much asset B should be deposited when user deposit asset a and b.
-
-
+  
+  
   On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
 
    *
@@ -8687,8 +8686,8 @@ export abstract class BiatecClammPoolParamsFactory {
    * Constructs a no op call for the calculateAssetADepositOnAssetBDeposit(uint256,uint256,uint256,uint256)uint256 ABI method
    *
   * Calculates how much asset A should be deposited when user deposit asset a and b
-
-
+  
+  
   On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
 
    *
@@ -8766,7 +8765,7 @@ export class BiatecClammPoolFactory {
   }
 
   /** A reference to the underlying `AlgorandClient` this app factory is using. */
-  public get algorand(): AlgorandClientInterface {
+  public get algorand(): AlgorandClient {
     return this.appFactory.algorand;
   }
 
@@ -9027,7 +9026,7 @@ export class BiatecClammPoolClient {
   }
 
   /** A reference to the underlying `AlgorandClient` this app client is using. */
-  public get algorand(): AlgorandClientInterface {
+  public get algorand(): AlgorandClient {
     return this.appClient.algorand;
   }
 
@@ -9187,8 +9186,8 @@ export class BiatecClammPoolClient {
      * Makes a call to the BiatecClammPool smart contract using the `removeLiquidityAdmin(uint64,uint64,uint64,uint64,uint256)uint256` ABI method.
      *
     * This method allows biatec admin to reduce the lp position created by lp fees allocation.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -9226,11 +9225,11 @@ export class BiatecClammPoolClient {
      *
     * If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.
     If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
-
-
+    
+    
     This method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -9251,11 +9250,11 @@ export class BiatecClammPoolClient {
      *
     * If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.
     If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
-
-
+    
+    
     This method is used to distribute amount a and amount b of asset a and asset b to addressExecutiveFee account.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -9275,8 +9274,8 @@ export class BiatecClammPoolClient {
      * Makes a call to the BiatecClammPool smart contract using the `sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -9294,12 +9293,12 @@ export class BiatecClammPoolClient {
 
     /**
      * Makes a call to the BiatecClammPool smart contract using the `calculateDistributedLiquidity(uint64,uint256)uint256` ABI method.
-     *
+     * 
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
     * addressExecutiveFee can perfom key unregistration for this LP pool
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -9334,7 +9333,7 @@ export class BiatecClammPoolClient {
 
     /**
      * Makes a call to the BiatecClammPool smart contract using the `calculateLiquidityD(uint256,uint256,uint256,uint256,uint256,uint256)uint256` ABI method.
-     *
+     * 
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
     * Calculates the liquidity  from the x - Asset A position and y - Asset B position
@@ -9470,12 +9469,12 @@ export class BiatecClammPoolClient {
 
     /**
      * Makes a call to the BiatecClammPool smart contract using the `calculateAssetBDepositOnAssetADeposit(uint256,uint256,uint256,uint256)uint256` ABI method.
-     *
+     * 
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
     * Calculates how much asset B should be deposited when user deposit asset a and b.
-
-
+    
+    
     On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
 
      *
@@ -9493,12 +9492,12 @@ export class BiatecClammPoolClient {
 
     /**
      * Makes a call to the BiatecClammPool smart contract using the `calculateAssetADepositOnAssetBDeposit(uint256,uint256,uint256,uint256)uint256` ABI method.
-     *
+     * 
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
     * Calculates how much asset A should be deposited when user deposit asset a and b
-
-
+    
+    
     On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
 
      *
@@ -9688,8 +9687,8 @@ export class BiatecClammPoolClient {
      * Makes a call to the BiatecClammPool smart contract using the `removeLiquidityAdmin(uint64,uint64,uint64,uint64,uint256)uint256` ABI method.
      *
     * This method allows biatec admin to reduce the lp position created by lp fees allocation.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -9727,11 +9726,11 @@ export class BiatecClammPoolClient {
      *
     * If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.
     If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
-
-
+    
+    
     This method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -9752,11 +9751,11 @@ export class BiatecClammPoolClient {
      *
     * If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.
     If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
-
-
+    
+    
     This method is used to distribute amount a and amount b of asset a and asset b to addressExecutiveFee account.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -9776,8 +9775,8 @@ export class BiatecClammPoolClient {
      * Makes a call to the BiatecClammPool smart contract using the `sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -9795,12 +9794,12 @@ export class BiatecClammPoolClient {
 
     /**
      * Makes a call to the BiatecClammPool smart contract using the `calculateDistributedLiquidity(uint64,uint256)uint256` ABI method.
-     *
+     * 
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
     * addressExecutiveFee can perfom key unregistration for this LP pool
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -9835,7 +9834,7 @@ export class BiatecClammPoolClient {
 
     /**
      * Makes a call to the BiatecClammPool smart contract using the `calculateLiquidityD(uint256,uint256,uint256,uint256,uint256,uint256)uint256` ABI method.
-     *
+     * 
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
     * Calculates the liquidity  from the x - Asset A position and y - Asset B position
@@ -9979,12 +9978,12 @@ export class BiatecClammPoolClient {
 
     /**
      * Makes a call to the BiatecClammPool smart contract using the `calculateAssetBDepositOnAssetADeposit(uint256,uint256,uint256,uint256)uint256` ABI method.
-     *
+     * 
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
     * Calculates how much asset B should be deposited when user deposit asset a and b.
-
-
+    
+    
     On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
 
      *
@@ -10004,12 +10003,12 @@ export class BiatecClammPoolClient {
 
     /**
      * Makes a call to the BiatecClammPool smart contract using the `calculateAssetADepositOnAssetBDeposit(uint256,uint256,uint256,uint256)uint256` ABI method.
-     *
+     * 
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
     * Calculates how much asset A should be deposited when user deposit asset a and b
-
-
+    
+    
     On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
 
      *
@@ -10249,8 +10248,8 @@ export class BiatecClammPoolClient {
      * Makes a call to the BiatecClammPool smart contract using the `removeLiquidityAdmin(uint64,uint64,uint64,uint64,uint256)uint256` ABI method.
      *
     * This method allows biatec admin to reduce the lp position created by lp fees allocation.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -10302,11 +10301,11 @@ export class BiatecClammPoolClient {
      *
     * If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.
     If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
-
-
+    
+    
     This method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -10334,11 +10333,11 @@ export class BiatecClammPoolClient {
      *
     * If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.
     If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
-
-
+    
+    
     This method is used to distribute amount a and amount b of asset a and asset b to addressExecutiveFee account.
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -10365,8 +10364,8 @@ export class BiatecClammPoolClient {
      * Makes a call to the BiatecClammPool smart contract using the `sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void` ABI method.
      *
     * addressExecutiveFee can perfom key registration for this LP pool
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -10391,12 +10390,12 @@ export class BiatecClammPoolClient {
 
     /**
      * Makes a call to the BiatecClammPool smart contract using the `calculateDistributedLiquidity(uint64,uint256)uint256` ABI method.
-     *
+     * 
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
     * addressExecutiveFee can perfom key unregistration for this LP pool
-
-
+    
+    
     Only addressExecutiveFee is allowed to execute this method.
 
      *
@@ -10445,7 +10444,7 @@ export class BiatecClammPoolClient {
 
     /**
      * Makes a call to the BiatecClammPool smart contract using the `calculateLiquidityD(uint256,uint256,uint256,uint256,uint256,uint256)uint256` ABI method.
-     *
+     * 
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
     * Calculates the liquidity  from the x - Asset A position and y - Asset B position
@@ -10638,12 +10637,12 @@ export class BiatecClammPoolClient {
 
     /**
      * Makes a call to the BiatecClammPool smart contract using the `calculateAssetBDepositOnAssetADeposit(uint256,uint256,uint256,uint256)uint256` ABI method.
-     *
+     * 
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
     * Calculates how much asset B should be deposited when user deposit asset a and b.
-
-
+    
+    
     On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
 
      *
@@ -10670,12 +10669,12 @@ export class BiatecClammPoolClient {
 
     /**
      * Makes a call to the BiatecClammPool smart contract using the `calculateAssetADepositOnAssetBDeposit(uint256,uint256,uint256,uint256)uint256` ABI method.
-     *
+     * 
      * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
      *
     * Calculates how much asset A should be deposited when user deposit asset a and b
-
-
+    
+    
     On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
 
      *
@@ -10788,12 +10787,12 @@ export class BiatecClammPoolClient {
 
   /**
    * Makes a readonly (simulated) call to the BiatecClammPool smart contract using the `calculateDistributedLiquidity(uint64,uint256)uint256` ABI method.
-   *
+   * 
    * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
    *
   * addressExecutiveFee can perfom key unregistration for this LP pool
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -10830,7 +10829,7 @@ export class BiatecClammPoolClient {
 
   /**
    * Makes a readonly (simulated) call to the BiatecClammPool smart contract using the `calculateLiquidityD(uint256,uint256,uint256,uint256,uint256,uint256)uint256` ABI method.
-   *
+   * 
    * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
    *
   * Calculates the liquidity  from the x - Asset A position and y - Asset B position
@@ -10981,12 +10980,12 @@ export class BiatecClammPoolClient {
 
   /**
    * Makes a readonly (simulated) call to the BiatecClammPool smart contract using the `calculateAssetBDepositOnAssetADeposit(uint256,uint256,uint256,uint256)uint256` ABI method.
-   *
+   * 
    * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
    *
   * Calculates how much asset B should be deposited when user deposit asset a and b.
-
-
+  
+  
   On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
 
    *
@@ -11007,12 +11006,12 @@ export class BiatecClammPoolClient {
 
   /**
    * Makes a readonly (simulated) call to the BiatecClammPool smart contract using the `calculateAssetADepositOnAssetBDeposit(uint256,uint256,uint256,uint256)uint256` ABI method.
-   *
+   * 
    * This method is a readonly method; calling it with onComplete of NoOp will result in a simulated transaction rather than a real transaction.
    *
   * Calculates how much asset A should be deposited when user deposit asset a and b
-
-
+  
+  
   On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
 
    *
@@ -11786,8 +11785,8 @@ export type BiatecClammPoolComposer<TReturns extends [...any[]] = []> = {
    * Calls the removeLiquidityAdmin(uint64,uint64,uint64,uint64,uint256)uint256 ABI method.
    *
   * This method allows biatec admin to reduce the lp position created by lp fees allocation.
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -11830,11 +11829,11 @@ export type BiatecClammPoolComposer<TReturns extends [...any[]] = []> = {
    *
   * If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.
   If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
-
-
+  
+  
   This method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -11859,11 +11858,11 @@ export type BiatecClammPoolComposer<TReturns extends [...any[]] = []> = {
    *
   * If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.
   If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
-
-
+  
+  
   This method is used to distribute amount a and amount b of asset a and asset b to addressExecutiveFee account.
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -11884,8 +11883,8 @@ export type BiatecClammPoolComposer<TReturns extends [...any[]] = []> = {
    * Calls the sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void ABI method.
    *
   * addressExecutiveFee can perfom key registration for this LP pool
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -11912,8 +11911,8 @@ export type BiatecClammPoolComposer<TReturns extends [...any[]] = []> = {
    * Calls the calculateDistributedLiquidity(uint64,uint256)uint256 ABI method.
    *
   * addressExecutiveFee can perfom key unregistration for this LP pool
-
-
+  
+  
   Only addressExecutiveFee is allowed to execute this method.
 
    *
@@ -12103,8 +12102,8 @@ export type BiatecClammPoolComposer<TReturns extends [...any[]] = []> = {
    * Calls the calculateAssetBDepositOnAssetADeposit(uint256,uint256,uint256,uint256)uint256 ABI method.
    *
   * Calculates how much asset B should be deposited when user deposit asset a and b.
-
-
+  
+  
   On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
 
    *
@@ -12131,8 +12130,8 @@ export type BiatecClammPoolComposer<TReturns extends [...any[]] = []> = {
    * Calls the calculateAssetADepositOnAssetBDeposit(uint256,uint256,uint256,uint256)uint256 ABI method.
    *
   * Calculates how much asset A should be deposited when user deposit asset a and b
-
-
+  
+  
   On deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user
 
    *
@@ -12220,13 +12219,13 @@ export type BiatecClammPoolComposer<TReturns extends [...any[]] = []> = {
   /**
    * Simulates the transaction group and returns the result
    */
-  simulate(): Promise<BiatecClammPoolComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  simulate(): Promise<BiatecClammPoolComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>;
   simulate(
     options: SkipSignaturesSimulateOptions
-  ): Promise<BiatecClammPoolComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  ): Promise<BiatecClammPoolComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>;
   simulate(
     options: RawSimulateOptions
-  ): Promise<BiatecClammPoolComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  ): Promise<BiatecClammPoolComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>;
   /**
    * Sends the transaction group to the network and returns the results
    */

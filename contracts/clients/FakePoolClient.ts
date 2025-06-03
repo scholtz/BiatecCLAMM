@@ -4,7 +4,7 @@
  * DO NOT MODIFY IT BY HAND.
  * requires: @algorandfoundation/algokit-utils: ^7
  */
-import { AlgorandClientInterface } from '@algorandfoundation/algokit-utils/types/algorand-client-interface';
+import { type AlgorandClient } from '@algorandfoundation/algokit-utils/types/algorand-client';
 import { ABIReturn, AppReturn, SendAppTransactionResult } from '@algorandfoundation/algokit-utils/types/app';
 import {
   Arc56Contract,
@@ -44,7 +44,6 @@ import {
   SendAtomicTransactionComposerResults,
 } from '@algorandfoundation/algokit-utils/types/transaction';
 import { Address, encodeAddress, modelsv2, OnApplicationComplete, Transaction, TransactionSigner } from 'algosdk';
-import { SimulateResponse } from 'algosdk/dist/types/client/v2/algod/models/types';
 
 export const APP_SPEC: Arc56Contract = {
   name: 'FakePool',
@@ -165,7 +164,7 @@ export const APP_SPEC: Arc56Contract = {
       'CiACAQYxGBQjCzEZCI0MAFMAAAAAAAAAAAAAAEUAAAAAAAAAAAAAADYaBBc2GgMXNhoCFzYaAReIAAIiQ4oEALEjshCABMvLvjeyGjIIFrIai/8WshqL/hayGov9FrIagQCyAYv8shiziSJDgAS4RHs2NhoAjgH/8QCABKB6D2o2GgCOAf+hAA==',
     clear: 'Cg==',
   },
-  compilerInfo: { compiler: 'algod', compilerVersion: { major: 4, minor: 0, patch: 3, commitHash: 'f3be4a3b' } },
+  compilerInfo: { compiler: 'algod', compilerVersion: { major: 4, minor: 1, patch: 1, commitHash: 'd7a21824' } },
 } as unknown as Arc56Contract;
 
 /**
@@ -422,7 +421,7 @@ export class FakePoolFactory {
   }
 
   /** A reference to the underlying `AlgorandClient` this app factory is using. */
-  public get algorand(): AlgorandClientInterface {
+  public get algorand(): AlgorandClient {
     return this.appFactory.algorand;
   }
 
@@ -646,7 +645,7 @@ export class FakePoolClient {
   }
 
   /** A reference to the underlying `AlgorandClient` this app client is using. */
-  public get algorand(): AlgorandClientInterface {
+  public get algorand(): AlgorandClient {
     return this.appClient.algorand;
   }
 
@@ -866,13 +865,13 @@ export type FakePoolComposer<TReturns extends [...any[]] = []> = {
   /**
    * Simulates the transaction group and returns the result
    */
-  simulate(): Promise<FakePoolComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  simulate(): Promise<FakePoolComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>;
   simulate(
     options: SkipSignaturesSimulateOptions
-  ): Promise<FakePoolComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  ): Promise<FakePoolComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>;
   simulate(
     options: RawSimulateOptions
-  ): Promise<FakePoolComposerResults<TReturns> & { simulateResponse: SimulateResponse }>;
+  ): Promise<FakePoolComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>;
   /**
    * Sends the transaction group to the network and returns the results
    */
