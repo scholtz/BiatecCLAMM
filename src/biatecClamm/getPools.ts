@@ -5,7 +5,7 @@ interface IGetPoolsInput {
   assetId: bigint;
   verificationClass?: bigint;
   fee?: bigint;
-  poolProviderAppId: number;
+  poolProviderAppId: number | bigint;
   algod: Algodv2;
 }
 function uint8ArrayToBigInt(bytes: Uint8Array) {

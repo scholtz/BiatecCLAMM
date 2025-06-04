@@ -164,7 +164,7 @@ export const APP_SPEC: Arc56Contract = {
       'CiACAQYxGBQjCzEZCI0MAFMAAAAAAAAAAAAAAEUAAAAAAAAAAAAAADYaBBc2GgMXNhoCFzYaAReIAAIiQ4oEALEjshCABMvLvjeyGjIIFrIai/8WshqL/hayGov9FrIagQCyAYv8shiziSJDgAS4RHs2NhoAjgH/8QCABKB6D2o2GgCOAf+hAA==',
     clear: 'Cg==',
   },
-  compilerInfo: { compiler: 'algod', compilerVersion: { major: 4, minor: 1, patch: 1, commitHash: 'd7a21824' } },
+  compilerInfo: { compiler: 'algod', compilerVersion: { major: 4, minor: 1, patch: 2, commitHash: '088f89dd' } },
 } as unknown as Arc56Contract;
 
 /**

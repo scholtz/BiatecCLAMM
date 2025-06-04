@@ -6676,67 +6676,60 @@ describe('clamm', () => {
     }
   });
 
-  test('npm method getPools() works 1', async () => {
-    assetAId = 1n;
-    const { algod } = fixture.context;
+  test('npm method getPools() works', async () => {
+    try {
+      assetAId = 1n;
+      const { algod } = fixture.context;
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider } = await setupPool({
+        algod,
+        signer: deployer,
+        assetA: assetAId,
+        biatecFee: BigInt(SCALE / 10),
+        lpFee: BigInt(SCALE / 10),
+        p: BigInt(1.5 * SCALE),
+        p1: BigInt(1 * SCALE),
+        p2: BigInt(2 * SCALE),
+      });
+      expect(!!clientBiatecClammPoolProvider).toBeTruthy();
+      const appId = await clientBiatecClammPoolProvider.appClient.appId;
+      expect(appId).toBeGreaterThan(0);
+      const deployerSigner = {
+        addr: deployer.addr,
+        // eslint-disable-next-line no-unused-vars
+        signer: async (txnGroup: Transaction[], indexesToSign: number[]) => {
+          return txnGroup.map((tx) => tx.signTxn(deployer.sk));
+        },
+      };
+      await clammCreateSender({
+        transactionSigner: deployerSigner,
+        appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
+        assetA: assetAId,
+        assetB: assetBId,
+        clientBiatecPoolProvider: clientBiatecPoolProvider.appClient,
+        currentPrice: BigInt(1.5 * SCALE),
+        fee: BigInt(SCALE / 10),
+        priceMin: BigInt(2 * SCALE),
+        priceMax: BigInt(3 * SCALE),
+        verificationClass: 0,
+      });
 
-    const pools = await getPools({
-      assetId: assetAId,
-      algod: algod,
-      poolProviderAppId: 32317,
-      fee: undefined,
-      verificationClass: undefined,
-    });
-    expect(pools.length).toBe(2);
+      // for (let i = 0; i < 10; i++) {
+      //   await fixture.context.generateAccount({ initialFunds: AlgoAmount.Algo(1) }); // generate new tx on chain, so that we move one block further
+      // }
+
+      const pools = await getPools({
+        assetId: assetAId,
+        algod: algod,
+        poolProviderAppId: clientBiatecPoolProvider.appClient.appId,
+        fee: undefined,
+        verificationClass: undefined,
+      });
+
+      expect(pools.length).toBe(2);
+    } catch (e: any) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      throw Error(e.message);
+    }
   });
-
-  // test('npm method getPools() works', async () => {
-  //   try {
-  //     assetAId = 1n;
-  //     const { algod } = fixture.context;
-  //     const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider } = await setupPool({
-  //       algod,
-  //       signer: deployer,
-  //       assetA: assetAId,
-  //       biatecFee: BigInt(SCALE / 10),
-  //       lpFee: BigInt(SCALE / 10),
-  //       p: BigInt(1.5 * SCALE),
-  //       p1: BigInt(1 * SCALE),
-  //       p2: BigInt(2 * SCALE),
-  //     });
-  //     expect(!!clientBiatecClammPoolProvider).toBeTruthy();
-  //     const appId = await clientBiatecClammPoolProvider.appClient.appId;
-  //     expect(appId).toBeGreaterThan(0);
-  //     const deployerSigner = {
-  //       addr: deployer.addr,
-  //       // eslint-disable-next-line no-unused-vars
-  //       signer: async (txnGroup: Transaction[], indexesToSign: number[]) => {
-  //         return txnGroup.map((tx) => tx.signTxn(deployer.sk));
-  //       },
-  //     };
-  //     await clammCreateSender({
-  //       transactionSigner: deployerSigner,
-  //       appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-  //       assetA: assetAId,
-  //       assetB: assetBId,
-  //       clientBiatecPoolProvider: clientBiatecPoolProvider.appClient,
-  //       currentPrice: BigInt(1.5 * SCALE),
-  //       fee: BigInt(SCALE / 10),
-  //       priceMin: BigInt(2 * SCALE),
-  //       priceMax: BigInt(3 * SCALE),
-  //       verificationClass: 0,
-  //     });
-
-  //     const pools = await getPools({
-  //       assetId: assetAId,
-  //       clientPoolProvider: clientBiatecPoolProvider.appClient,
-  //     });
-
-  //     expect(pools.length).toBe(2);
-  //   } catch (e: any) {
-  //     // eslint-disable-next-line no-console
-  //     console.error(e);
-  //     throw Error(e.message);
-  //   }
-  // });
 });

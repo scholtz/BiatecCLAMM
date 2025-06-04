@@ -1268,9 +1268,6 @@ registerPool:
 	//     }
 	frame_dig 0 // appClammPool: uint64
 	itob
-	frame_dig 7 // lpToken: uint64
-	itob
-	concat
 	frame_dig 1 // assetA: uint64
 	itob
 	concat
@@ -1284,6 +1281,9 @@ registerPool:
 	itob
 	concat
 	frame_dig 6 // fee: uint64
+	itob
+	concat
+	frame_dig 7 // lpToken: uint64
 	itob
 	concat
 	frame_dig 3 // verificationClass: uint64
