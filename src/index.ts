@@ -3,6 +3,7 @@ import parseStatus from './biatecClamm/parseStatus';
 
 import clammAddLiquiditySender from './biatecClamm/sender/clammAddLiquiditySender';
 import clammBootstrapSender from './biatecClamm/sender/clammBootstrapSender';
+import clammCreateSender from './biatecClamm/sender/clammCreateSender';
 import clammDistributeExcessAssetsSender from './biatecClamm/sender/clammDistributeExcessAssetsSender';
 import clammRemoveLiquidityAdminSender from './biatecClamm/sender/clammRemoveLiquidityAdminSender';
 import clammRemoveLiquiditySender from './biatecClamm/sender/clammRemoveLiquiditySender';
@@ -20,7 +21,7 @@ import clammSendOfflineKeyRegistrationTxs from './biatecClamm/txs/clammSendOffli
 import clammSendOnlineKeyRegistrationTxs from './biatecClamm/txs/clammSendOnlineKeyRegistrationTxs';
 import clammSwapTxs from './biatecClamm/txs/clammSwapTxs';
 import clammWithdrawExcessAssetsTxs from './biatecClamm/txs/clammWithdrawExcessAssetsTxs';
-
+import getPools from './biatecClamm/getPools';
 import { BiatecClammPoolClient, BiatecClammPoolFactory, AmmStatus } from '../contracts/clients/BiatecClammPoolClient';
 import {
   BiatecConfigProviderClient,
@@ -44,6 +45,7 @@ import {
 export {
   clientBiatecClammPool,
   clammAddLiquiditySender,
+  clammCreateSender,
   clammBootstrapSender,
   clammDistributeExcessAssetsSender,
   clammRemoveLiquidityAdminSender,
@@ -62,6 +64,7 @@ export {
   clammSendOnlineKeyRegistrationTxs,
   clammSwapTxs,
   clammWithdrawExcessAssetsTxs,
+  getPools,
 };
 
 export {
