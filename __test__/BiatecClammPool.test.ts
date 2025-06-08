@@ -41,8 +41,8 @@ const SCALE_ALGO = 10 ** 6;
 const LP_TOKEN_DECIMALS = 6; // BTC Like
 const SCALE_LP = 10 ** LP_TOKEN_DECIMALS;
 
-let assetAId: bigint = 1n;
-let assetBId: bigint = 2n;
+export let assetAId: bigint = 1n;
+export let assetBId: bigint = 2n;
 let deployer: algosdk.Account;
 let deployerSigner: TransactionSignerAccount;
 
@@ -370,7 +370,7 @@ export const setupPool = async (input: ISetup) => {
   expect(lastLog.length).toBe(12);
   const poolAppId = algosdk.decodeUint64(lastLog.subarray(4, 12));
 
-  console.log('Pool deployed', poolAppId);
+  //console.log('Pool deployed', poolAppId);
 
   // txId = await clammBootstrapSender({
   //   fee: lpFee,

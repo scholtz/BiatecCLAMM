@@ -39,7 +39,7 @@ const clammCreateSender = async (input: IClammBootstrapSkInput): Promise<BiatecC
   });
   const signed = await input.transactionSigner.signer(
     txs,
-    Array.from(Array(txs.length), (_, i) => i)
+    txs.map((_, i) => i)
   );
   const { txid } = await input.clientBiatecPoolProvider.algorand.client.algod.sendRawTransaction(signed).do();
   const lastTxId = txs[txs.length - 1].txID();
@@ -70,9 +70,11 @@ const clammCreateSender = async (input: IClammBootstrapSkInput): Promise<BiatecC
   await newClient.send.bootstrapStep2({
     args: {},
     staticFee: AlgoAmount.MicroAlgo(2000),
+    sender: input.transactionSigner.addr.toString(),
+    signer: input.transactionSigner.signer,
   });
 
-  console.log('Pool deployed', newClient);
+  //console.log('Pool deployed', newClient);
 
   return newClient;
 };

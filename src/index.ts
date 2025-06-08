@@ -42,6 +42,11 @@ import {
   PoolConfig,
 } from '../contracts/clients/BiatecPoolProviderClient';
 
+import getBoxReferenceAggregated from './biatecPools/getBoxReferenceAggregated';
+import getBoxReferenceFullConfig from './biatecPools/getBoxReferenceFullConfig';
+import getBoxReferencePool from './biatecPools/getBoxReferencePool';
+import getBoxReferencePoolByConfig from './biatecPools/getBoxReferencePoolByConfig';
+import getBoxReferenceIdentity from './biatecIdentity/getBoxReferenceIdentity';
 export {
   clientBiatecClammPool,
   clammAddLiquiditySender,
@@ -83,4 +88,11 @@ export {
   AppPoolInfo,
   FullConfig,
   PoolConfig,
+};
+export {
+  getBoxReferenceAggregated,
+  getBoxReferenceFullConfig,
+  getBoxReferencePool,
+  getBoxReferencePoolByConfig,
+  getBoxReferenceIdentity,
 };

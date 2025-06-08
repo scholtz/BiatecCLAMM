@@ -54,6 +54,7 @@ const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.T
         suggestedParams: params,
       }),
     },
+    sender: sender,
     staticFee: AlgoAmount.MicroAlgos(10000),
     boxReferences: [
       new Uint8Array(Buffer.from('capb1', 'ascii')),
@@ -84,6 +85,7 @@ const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.T
           new Uint8Array(Buffer.from('13', 'ascii')),
           new Uint8Array(Buffer.from('14', 'ascii')),
         ],
+        sender: sender,
       })
     ).transactions,
     ...(
@@ -95,6 +97,7 @@ const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.T
           new Uint8Array(Buffer.from('23', 'ascii')),
           new Uint8Array(Buffer.from('24', 'ascii')),
         ],
+        sender: sender,
       })
     ).transactions,
     ...poolDeployTx.transactions,
