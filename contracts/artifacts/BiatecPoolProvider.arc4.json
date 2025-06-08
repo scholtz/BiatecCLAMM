@@ -281,6 +281,53 @@
       "returns": {
         "type": "uint64"
       }
+    },
+    {
+      "name": "getPrice",
+      "readonly": true,
+      "args": [
+        {
+          "name": "assetA",
+          "type": "uint64"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64"
+        },
+        {
+          "name": "appPoolId",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)"
+      }
+    },
+    {
+      "name": "calculateAssetBWithdrawOnLpDeposit",
+      "desc": "Calculates how much asset B will be taken from the smart contract on LP asset deposit",
+      "readonly": true,
+      "args": [
+        {
+          "name": "inAmount",
+          "type": "uint256",
+          "desc": "LP Asset amount in Base decimal representation.."
+        },
+        {
+          "name": "assetBBalance",
+          "type": "uint256",
+          "desc": "Asset B balance. Variable ab, in base scale"
+        },
+        {
+          "name": "liqudity",
+          "type": "uint256",
+          "desc": "Current liqudity. Variable L, in base scale"
+        }
+      ],
+      "returns": {
+        "type": "uint256",
+        "desc": "Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)"
+      }
     }
   ]
 }

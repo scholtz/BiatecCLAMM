@@ -644,32 +644,6 @@
       }
     },
     {
-      "name": "calculateAssetBWithdrawOnLpDeposit",
-      "desc": "Calculates how much asset B will be taken from the smart contract on LP asset deposit",
-      "readonly": true,
-      "args": [
-        {
-          "name": "inAmount",
-          "type": "uint256",
-          "desc": "LP Asset amount in Base decimal representation.."
-        },
-        {
-          "name": "assetBBalance",
-          "type": "uint256",
-          "desc": "Asset B balance. Variable ab, in base scale"
-        },
-        {
-          "name": "liqudity",
-          "type": "uint256",
-          "desc": "Current liqudity. Variable L, in base scale"
-        }
-      ],
-      "returns": {
-        "type": "uint256",
-        "desc": "Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)"
-      }
-    },
-    {
       "name": "calculateAssetBDepositOnAssetADeposit",
       "desc": "Calculates how much asset B should be deposited when user deposit asset a and b.\n\n\nOn deposit min(calculateAssetBDepositOnAssetADeposit, calculateAssetADepositOnAssetBDeposit) should be considered for the real deposit and rest should be swapped or returned back to user",
       "readonly": true,

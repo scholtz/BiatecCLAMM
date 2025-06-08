@@ -1,6 +1,6 @@
 {
   "name": "biatec-concentrated-liquidity-amm",
-  "version": "0.9.14",
+  "version": "0.9.16",
   "license": "AGPL-3.0",
   "categories": [
     "Algorand",
@@ -19,7 +19,7 @@
     "build": "npm run compile-contract && npm run generate-client",
     "test": "npm run build && jest",
     "test:1:build": "npm run build && npm run test:1:nobuild",
-    "test:1:nobuild": "jest -t \"getPools\"",
+    "test:1:nobuild": "jest -t \"LP fees 10\"",
     "test:nobuild": "jest",
     "lint": "eslint . --ext .ts",
     "fix": "eslint . --ext .ts --fix",

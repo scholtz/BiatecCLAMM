@@ -781,7 +781,7 @@ describe('clamm', () => {
         { x: 2.5, L: 10, lpDeposit: 10, aWithdraw: 2.5 },
       ];
 
-      const { clientBiatecClammPoolProvider } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecPoolProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: assetAId,
@@ -794,7 +794,7 @@ describe('clamm', () => {
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const result = await clientBiatecClammPoolProvider.appClient.calculateAssetBWithdrawOnLpDeposit({
+        const result = await clientBiatecPoolProvider.appClient.calculateAssetBWithdrawOnLpDeposit({
           args: {
             inAmount: BigInt(Math.round(t.lpDeposit * SCALE)),
             assetBBalance: BigInt(Math.round(t.x * SCALE)),
@@ -821,7 +821,7 @@ describe('clamm', () => {
         { y: 2.5, L: 10, lpDeposit: 10, bWithdraw: 2.5 },
       ];
 
-      const { clientBiatecClammPoolProvider } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecPoolProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: assetAId,
@@ -834,7 +834,7 @@ describe('clamm', () => {
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const result = await clientBiatecClammPoolProvider.appClient.calculateAssetBWithdrawOnLpDeposit({
+        const result = await clientBiatecPoolProvider.appClient.calculateAssetBWithdrawOnLpDeposit({
           args: {
             inAmount: BigInt(Math.round(t.lpDeposit * SCALE)),
             assetBBalance: BigInt(Math.round(t.y * SCALE)),
@@ -2391,12 +2391,13 @@ describe('clamm', () => {
           p1: BigInt(t.P1 * SCALE),
           p2: BigInt(t.P2 * SCALE),
         });
-
         const params = await algod.getTransactionParams().do();
         // opt in to the LP token
 
         const poolTokenId = await clientBiatecClammPoolProvider.appClient.getLpTokenId();
         expect(poolTokenId).toBeGreaterThan(0);
+        const token = await algod.getAssetByID(poolTokenId).do();
+        expect(token.params.name).toEqual('B-EUR-USD');
         const optinToTheLPToken = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           amount: 0,
           assetIndex: Number(poolTokenId),

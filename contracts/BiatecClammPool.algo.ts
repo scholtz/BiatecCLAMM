@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-03-01';
+const version = 'BIATEC-CLAMM-01-04-01';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
@@ -262,7 +262,6 @@ export class BiatecClammPool extends Contract {
       this.doAxfer(this.app.address, asset, 0);
     }
   }
-
   /**
    * Creates LP token
    * @param assetA Asset A
@@ -279,7 +278,14 @@ export class BiatecClammPool extends Contract {
     }
 
     const name =
-      'B-' + itob(this.verificationClass.value) + '-' + nameAssetA + '-' + assetB.unitName + '-' + itob(this.fee.value); // TODO
+      'B-' +
+      //this.verificationClass.value.toString() +
+      //'-' +
+      nameAssetA +
+      '-' +
+      assetB.unitName; // +
+    //'-' +
+    //this.fee.value.toString(10); // TODO the toString does not work
 
     return sendAssetCreation({
       configAssetName: name,
@@ -1627,23 +1633,6 @@ export class BiatecClammPool extends Contract {
     // const percentageOfL = (inAmount * s) / liqudity;
     // const ret = (assetABalance * percentageOfL) / s;
     const ret = (assetABalance * inAmount) / liqudity;
-    return ret;
-  }
-
-  /**
-   * Calculates how much asset B will be taken from the smart contract on LP asset deposit
-   * @param inAmount LP Asset amount in Base decimal representation..
-   * @param assetBBalance Asset B balance. Variable ab, in base scale
-   * @param liqudity Current liqudity. Variable L, in base scale
-   *
-   * @returns Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)
-   */
-  @abi.readonly
-  calculateAssetBWithdrawOnLpDeposit(inAmount: uint256, assetBBalance: uint256, liqudity: uint256): uint256 {
-    // const s = SCALE as uint256;
-    // const percentageOfL = (inAmount * s) / liqudity;
-    // const ret = (assetBBalance * percentageOfL) / s;
-    const ret = (assetBBalance * inAmount) / liqudity;
     return ret;
   }
 

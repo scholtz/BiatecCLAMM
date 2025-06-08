@@ -415,6 +415,7 @@ export class BiatecPoolProvider extends Contract {
     const pMax = appClammPool.globalState('pMax') as uint64;
     const fee = appClammPool.globalState('f') as uint64;
     const lpToken = appClammPool.globalState('lp') as uint64;
+    const ammPoolPrice = appClammPool.globalState('price') as uint64;
     assert(!this.pools(appClammPool.id).exists);
     const config: PoolConfig = {
       assetA: assetA.id,
@@ -454,13 +455,22 @@ export class BiatecPoolProvider extends Contract {
     ) {
       assert(false, 'App not in recently created apps');
     }
-
+    const aggregatedIndex: AssetsCombined = {
+      assetA: assetA.id,
+      assetB: assetB.id,
+    };
+    let latestPrice: uint64 = 0;
+    if (this.poolsAggregated(aggregatedIndex).exists) {
+      latestPrice = this.poolsAggregated(aggregatedIndex).value.latestPrice;
+    } else {
+      latestPrice = ammPoolPrice;
+    }
     const data: AppPoolInfo = {
       assetA: assetA.id,
       assetB: assetB.id,
       verificationClass: verificationClass as uint64,
 
-      latestPrice: 0,
+      latestPrice: latestPrice,
 
       period1Duration: this.period1.value,
 
@@ -553,10 +563,7 @@ export class BiatecPoolProvider extends Contract {
       // period6PrevVWAP: <uint64>0,
     };
     this.pools(appClammPool.id).value = data;
-    const aggregatedIndex: AssetsCombined = {
-      assetA: assetA.id,
-      assetB: assetB.id,
-    };
+
     if (!this.poolsAggregated(aggregatedIndex).exists) {
       this.poolsAggregated(aggregatedIndex).value = data;
     }
@@ -1116,5 +1123,36 @@ export class BiatecPoolProvider extends Contract {
         fee: 0,
       });
     }
+  }
+  /**
+   *
+   * @param assetA
+   * @param assetB
+   * @param appPoolId
+   * @returns
+   */
+  @abi.readonly
+  public getPrice(assetA: AssetID, assetB: AssetID, appPoolId: AppID): AppPoolInfo {
+    const info = this.pools(appPoolId.id).value;
+    assert(assetA.id === info.assetA);
+    assert(assetB.id === info.assetB);
+    return info;
+  }
+
+  /**
+   * Calculates how much asset B will be taken from the smart contract on LP asset deposit
+   * @param inAmount LP Asset amount in Base decimal representation..
+   * @param assetBBalance Asset B balance. Variable ab, in base scale
+   * @param liqudity Current liqudity. Variable L, in base scale
+   *
+   * @returns Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)
+   */
+  @abi.readonly
+  calculateAssetBWithdrawOnLpDeposit(inAmount: uint256, assetBBalance: uint256, liqudity: uint256): uint256 {
+    // const s = SCALE as uint256;
+    // const percentageOfL = (inAmount * s) / liqudity;
+    // const ret = (assetBBalance * percentageOfL) / s;
+    const ret = (assetBBalance * inAmount) / liqudity;
+    return ret;
   }
 }
