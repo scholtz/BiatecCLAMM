@@ -660,7 +660,7 @@ deployPool:
 	dup
 
 	// contracts\BiatecPoolProvider.algo.ts:322
-	// verifyPayTxn(txSeed, { receiver: this.app.address, amount: { greaterThanEqualTo: 1_500_000 } })
+	// verifyPayTxn(txSeed, { receiver: this.app.address, amount: { greaterThanEqualTo: 5_000_000 } })
 	// verify receiver
 	frame_dig -5 // txSeed: PayTxn
 	gtxns Receiver
@@ -673,10 +673,10 @@ deployPool:
 	// verify amount
 	frame_dig -5 // txSeed: PayTxn
 	gtxns Amount
-	pushint 1_500_000
+	pushint 5_000_000
 	>=
 
-	// transaction verification failed: {"txn":"txSeed","field":"amount","condition":"greaterThanEqualTo","expected":">=1_500_000"}
+	// transaction verification failed: {"txn":"txSeed","field":"amount","condition":"greaterThanEqualTo","expected":">=5_000_000"}
 	assert
 
 	// contracts\BiatecPoolProvider.algo.ts:323
