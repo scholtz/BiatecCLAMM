@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { BiatecClammPool } from './BiatecClammPool.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-PP-01-03-01';
+const version = 'BIATEC-PP-01-04-01';
 const SCALE = 1_000_000_000;
 
 type AppPoolInfo = {
@@ -1125,18 +1125,30 @@ export class BiatecPoolProvider extends Contract {
     }
   }
   /**
-   *
-   * @param assetA
-   * @param assetB
-   * @param appPoolId
-   * @returns
+   * Retuns the full price info for the asset pair. If app pool is defined, then it returns the pool info.
+   * @param assetA Asset A must be less than Asset B
+   * @param assetB Asset B
+   * @param appPoolId Liquidity pool app id. If zero, then aggregated price info is returned.
+   * @returns AppPoolInfo with the price info for the asset pair
    */
   @abi.readonly
   public getPrice(assetA: AssetID, assetB: AssetID, appPoolId: AppID): AppPoolInfo {
-    const info = this.pools(appPoolId.id).value;
-    assert(assetA.id === info.assetA);
-    assert(assetB.id === info.assetB);
-    return info;
+    assert(assetA.id < assetB.id, 'Asset A id must be less than Asset B id');
+
+    if (appPoolId.id > 0) {
+      // if pool is defined, then return the pool info
+      const info = this.pools(appPoolId.id).value;
+      assert(assetA.id === info.assetA);
+      assert(assetB.id === info.assetB);
+      return info;
+    }
+
+    const aggregatedIndex: AssetsCombined = {
+      assetA: assetA.id,
+      assetB: assetB.id,
+    };
+    assert(this.poolsAggregated(aggregatedIndex).exists, 'The asset pair is not registered');
+    return this.poolsAggregated(aggregatedIndex).value;
   }
 
   /**

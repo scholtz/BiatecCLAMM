@@ -90,6 +90,123 @@ describe('clamm', () => {
       throw Error(e.message);
     }
   });
+  test('npm: getPrice()', async () => {
+    try {
+      const { algod } = fixture.context;
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider } = await setupPool({
+        algod,
+        signer: deployer,
+        assetA: assetAId,
+        biatecFee: BigInt(SCALE / 10),
+        lpFee: BigInt(SCALE / 10),
+        p: BigInt(1.5 * SCALE),
+        p1: BigInt(1 * SCALE),
+        p2: BigInt(2 * SCALE),
+      });
+      expect(!!clientBiatecClammPoolProvider).toBeTruthy();
+      const appId = await clientBiatecClammPoolProvider.appClient.appId;
+      expect(appId).toBeGreaterThan(0);
+      const deployerSigner = {
+        addr: deployer.addr,
+        // eslint-disable-next-line no-unused-vars
+        signer: async (txnGroup: Transaction[], indexesToSign: number[]) => {
+          return txnGroup.map((tx) => tx.signTxn(deployer.sk));
+        },
+      };
+      const client = await clammCreateSender({
+        transactionSigner: deployerSigner,
+        appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
+        assetA: assetAId,
+        assetB: assetBId,
+        clientBiatecPoolProvider: clientBiatecPoolProvider.appClient,
+        currentPrice: BigInt(1.5 * SCALE),
+        fee: BigInt(SCALE / 10),
+        priceMin: BigInt(2 * SCALE),
+        priceMax: BigInt(3 * SCALE),
+        verificationClass: 0,
+      });
+      expect(client.appId).toBeGreaterThan(0);
+
+      const priceBox = await clientBiatecPoolProvider.appClient.getPrice({
+        args: {
+          appPoolId: appId,
+          assetA: assetAId,
+          assetB: assetBId,
+        },
+      });
+      const priceBoxAggregated = await clientBiatecPoolProvider.appClient.getPrice({
+        args: {
+          appPoolId: 0n,
+          assetA: assetAId,
+          assetB: assetBId,
+        },
+      });
+      expect(priceBox).toEqual(priceBoxAggregated);
+      console.log('priceBox', priceBox);
+      expect(priceBox).toEqual({
+        assetA: assetAId,
+        assetB: assetBId,
+        verificationClass: 0n,
+        latestPrice: 1500000000n,
+        period1Duration: 60n,
+        period1NowVolumeA: 0n,
+        period1NowVolumeB: 0n,
+        period1NowFeeA: 0n,
+        period1NowFeeB: 0n,
+        period1NowVwap: 0n,
+        period1NowTime: 0n,
+        period1PrevVolumeA: 0n,
+        period1PrevVolumeB: 0n,
+        period1PrevFeeA: 0n,
+        period1PrevFeeB: 0n,
+        period1PrevVwap: 0n,
+        period1PrevTime: 0n,
+        period2Duration: 86400n,
+        period2NowVolumeA: 0n,
+        period2NowVolumeB: 0n,
+        period2NowFeeA: 0n,
+        period2NowFeeB: 0n,
+        period2NowVwap: 0n,
+        period2NowTime: 0n,
+        period2PrevVolumeA: 0n,
+        period2PrevVolumeB: 0n,
+        period2PrevFeeA: 0n,
+        period2PrevFeeB: 0n,
+        period2PrevVwap: 0n,
+        period2PrevTime: 0n,
+        period3Duration: 604800n,
+        period3NowVolumeA: 0n,
+        period3NowVolumeB: 0n,
+        period3NowFeeA: 0n,
+        period3NowFeeB: 0n,
+        period3NowVwap: 0n,
+        period3NowTime: 0n,
+        period3PrevVolumeA: 0n,
+        period3PrevVolumeB: 0n,
+        period3PrevFeeA: 0n,
+        period3PrevFeeB: 0n,
+        period3PrevVwap: 0n,
+        period3PrevTime: 0n,
+        period4Duration: 31536000n,
+        period4NowVolumeA: 0n,
+        period4NowVolumeB: 0n,
+        period4NowFeeA: 0n,
+        period4NowFeeB: 0n,
+        period4NowVwap: 0n,
+        period4NowTime: 0n,
+        period4PrevVolumeA: 0n,
+        period4PrevVolumeB: 0n,
+        period4PrevFeeA: 0n,
+        period4PrevFeeB: 0n,
+        period4PrevVwap: 0n,
+        period4PrevTime: 0n,
+      });
+    } catch (e: any) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      throw Error(e.message);
+    }
+  });
   test('npm: clammAddLiquiditySender()', async () => {
     try {
       const { algod } = fixture.context;

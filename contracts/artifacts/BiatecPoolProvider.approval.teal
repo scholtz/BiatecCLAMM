@@ -134,7 +134,7 @@ createApplication:
 
 	// contracts\BiatecPoolProvider.algo.ts:219
 	// log(version)
-	pushbytes "BIATEC-PP-01-03-01"
+	pushbytes "BIATEC-PP-01-04-01"
 	log
 
 	// contracts\BiatecPoolProvider.algo.ts:220
@@ -5404,8 +5404,27 @@ getPrice:
 
 	// Push empty bytes after the frame pointer to reserve space for local variables
 	bytec 1 // 0x
+	dup
 
 	// contracts\BiatecPoolProvider.algo.ts:1136
+	// assert(assetA.id < assetB.id, 'Asset A id must be less than Asset B id')
+	frame_dig -1 // assetA: AssetID
+	frame_dig -2 // assetB: AssetID
+	<
+
+	// Asset A id must be less than Asset B id
+	assert
+
+	// *if25_condition
+	// contracts\BiatecPoolProvider.algo.ts:1138
+	// appPoolId.id > 0
+	frame_dig -3 // appPoolId: AppID
+	intc 1 // 0
+	>
+	bz *if25_end
+
+	// *if25_consequent
+	// contracts\BiatecPoolProvider.algo.ts:1140
 	// info = this.pools(appPoolId.id).value
 	bytec 3 //  "p"
 	frame_dig -3 // appPoolId: AppID
@@ -5413,14 +5432,14 @@ getPrice:
 	concat
 	frame_bury 0 // storage key//info
 
-	// contracts\BiatecPoolProvider.algo.ts:1137
+	// contracts\BiatecPoolProvider.algo.ts:1141
 	// assert(assetA.id === info.assetA)
 	frame_dig -1 // assetA: AssetID
 	intc 1 // 0
 	intc 0 // 8
 	bytec 3 //  "p"
 
-	// contracts\BiatecPoolProvider.algo.ts:1136
+	// contracts\BiatecPoolProvider.algo.ts:1140
 	// appPoolId.id
 	frame_dig -3 // appPoolId: AppID
 	itob
@@ -5431,14 +5450,14 @@ getPrice:
 	==
 	assert
 
-	// contracts\BiatecPoolProvider.algo.ts:1138
+	// contracts\BiatecPoolProvider.algo.ts:1142
 	// assert(assetB.id === info.assetB)
 	frame_dig -2 // assetB: AssetID
 	intc 0 //  headOffset
 	intc 0 // 8
 	bytec 3 //  "p"
 
-	// contracts\BiatecPoolProvider.algo.ts:1136
+	// contracts\BiatecPoolProvider.algo.ts:1140
 	// appPoolId.id
 	frame_dig -3 // appPoolId: AppID
 	itob
@@ -5449,16 +5468,56 @@ getPrice:
 	==
 	assert
 
-	// contracts\BiatecPoolProvider.algo.ts:1139
+	// contracts\BiatecPoolProvider.algo.ts:1143
 	// return info;
 	frame_dig 0 // storage key//info
 	box_get
 
 	// box value does not exist: this.pools(appPoolId.id).value
 	assert
+	b *getPrice*return
 
+*if25_end:
+	// contracts\BiatecPoolProvider.algo.ts:1146
+	// aggregatedIndex: AssetsCombined = {
+	//       assetA: assetA.id,
+	//       assetB: assetB.id,
+	//     }
+	frame_dig -1 // assetA: AssetID
+	itob
+	frame_dig -2 // assetB: AssetID
+	itob
+	concat
+	frame_bury 1 // aggregatedIndex: AssetsCombined
+
+	// contracts\BiatecPoolProvider.algo.ts:1150
+	// assert(this.poolsAggregated(aggregatedIndex).exists, 'The asset pair is not registered')
+	bytec 2 //  "s"
+	frame_dig 1 // aggregatedIndex: AssetsCombined
+	concat
+	box_len
+	swap
+	pop
+
+	// The asset pair is not registered
+	assert
+
+	// contracts\BiatecPoolProvider.algo.ts:1151
+	// return this.poolsAggregated(aggregatedIndex).value;
+	bytec 2 //  "s"
+	frame_dig 1 // aggregatedIndex: AssetsCombined
+	concat
+	box_get
+
+	// box value does not exist: this.poolsAggregated(aggregatedIndex).value
+	assert
+
+*getPrice*return:
 	// set the subroutine return value
 	frame_bury 0
+
+	// pop all local variables from the stack
+	popn 1
 	retsub
 
 // calculateAssetBWithdrawOnLpDeposit(uint256,uint256,uint256)uint256
@@ -5533,7 +5592,7 @@ calculateAssetBWithdrawOnLpDeposit:
 	// Push empty bytes after the frame pointer to reserve space for local variables
 	bytec 1 // 0x
 
-	// contracts\BiatecPoolProvider.algo.ts:1155
+	// contracts\BiatecPoolProvider.algo.ts:1167
 	// ret = (assetBBalance * inAmount) / liqudity
 	frame_dig -2 // assetBBalance: uint256
 	frame_dig -1 // inAmount: uint256
@@ -5542,7 +5601,7 @@ calculateAssetBWithdrawOnLpDeposit:
 	b/
 	frame_bury 0 // ret: unsafe uint256
 
-	// contracts\BiatecPoolProvider.algo.ts:1156
+	// contracts\BiatecPoolProvider.algo.ts:1168
 	// return ret;
 	frame_dig 0 // ret: unsafe uint256
 
