@@ -48,7 +48,7 @@ const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.T
       currentPrice: currentPrice,
       appBiatecConfigProvider: BigInt(appBiatecConfigProvider),
       txSeed: makePaymentTxnWithSuggestedParamsFromObject({
-        amount: 1_000_000,
+        amount: 1_500_000,
         receiver: clientBiatecPoolProvider.appClient.appAddress,
         sender: sender,
         suggestedParams: params,

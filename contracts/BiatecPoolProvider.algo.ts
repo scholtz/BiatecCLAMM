@@ -234,6 +234,7 @@ export class BiatecPoolProvider extends Contract {
     this.recentPools8.value = 0;
     this.recentPools9.value = 0;
     this.recentPools10.value = 0;
+    this.version.value = version;
   }
 
   /**
@@ -318,7 +319,7 @@ export class BiatecPoolProvider extends Contract {
     currentPrice: uint64,
     verificationClass: uint64
   ): uint64 {
-    verifyPayTxn(txSeed, { receiver: this.app.address, amount: { greaterThanEqualTo: 1_000_000 } });
+    verifyPayTxn(txSeed, { receiver: this.app.address, amount: { greaterThanEqualTo: 1_500_000 } });
     assert(verificationClass <= 4); // verificationClass
 
     // Create the actual staker pool contract instance

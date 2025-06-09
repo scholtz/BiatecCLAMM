@@ -284,23 +284,28 @@
     },
     {
       "name": "getPrice",
+      "desc": "Retuns the full price info for the asset pair. If app pool is defined, then it returns the pool info.",
       "readonly": true,
       "args": [
         {
           "name": "assetA",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "Asset A must be less than Asset B"
         },
         {
           "name": "assetB",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "Asset B"
         },
         {
           "name": "appPoolId",
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "Liquidity pool app id. If zero, then aggregated price info is returned."
         }
       ],
       "returns": {
-        "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)"
+        "type": "(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)",
+        "desc": "AppPoolInfo with the price info for the asset pair"
       }
     },
     {
