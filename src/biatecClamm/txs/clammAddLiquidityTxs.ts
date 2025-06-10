@@ -139,7 +139,7 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
       assetLp,
     },
     sender: account.addr,
-    staticFee: algokit.microAlgos(6000),
+    staticFee: algokit.microAlgos(7000),
     boxReferences: [boxPool, boxPoolByConfig],
     assetReferences: [BigInt(assetA), BigInt(assetB), BigInt(assetLp)],
     accountReferences: [],
