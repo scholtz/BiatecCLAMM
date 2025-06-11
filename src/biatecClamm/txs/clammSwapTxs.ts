@@ -1,4 +1,4 @@
-import algosdk, { AtomicTransactionComposer, SuggestedParams } from 'algosdk';
+import algosdk, { assignGroupID, AtomicTransactionComposer, SuggestedParams } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
@@ -80,6 +80,11 @@ const clammSwapTxs = async (input: IClammSwapTxsInput): Promise<algosdk.Transact
     assetReferences: [BigInt(assetA), BigInt(assetB)],
     accountReferences: [],
   });
-  return tx.transactions;
+    const txsToGroupNoGroup = tx.transactions.map((tx: algosdk.Transaction) => {
+      tx.group = undefined;
+      return tx;
+    });
+    const txsToGroupNoGrouped = assignGroupID(txsToGroupNoGroup);
+    return txsToGroupNoGrouped;
 };
 export default clammSwapTxs;
