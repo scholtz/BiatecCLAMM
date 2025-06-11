@@ -7,7 +7,7 @@ import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/type
 import getPools from '../src/biatecClamm/getPools';
 import clammCreateSender from '../src/biatecClamm/sender/clammCreateSender';
 import { assetAId, assetBId, setupPool } from './BiatecClammPool.test';
-import { clammAddLiquiditySender } from '../src';
+import { clammAddLiquiditySender, clammRemoveLiquiditySender } from '../src';
 import createToken from '../src/createToken';
 
 const fixture = algorandFixture();
@@ -278,6 +278,101 @@ describe('clamm', () => {
         assetADeposit: BigInt(1 * SCALE_A),
         assetBDeposit: BigInt(1 * SCALE_B),
         assetLp: assetLp,
+      });
+      expect(liquidity).toBeDefined();
+    } catch (e: any) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      throw Error(e.message);
+    }
+  });
+  test('npm: clammRemoveLiquiditySender()', async () => {
+    try {
+      const { algod } = fixture.context;
+      const assetUSD = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_A_DECIMALS });
+      const assetEUR = await createToken({ account: deployer, algod, name: 'EUR', decimals: ASSET_B_DECIMALS });
+      const {
+        clientBiatecClammPoolProvider,
+        clientBiatecConfigProvider,
+        clientBiatecPoolProvider,
+        clientBiatecIdentityProvider,
+      } = await setupPool({
+        algod,
+        signer: deployer,
+        assetA: assetUSD,
+        biatecFee: BigInt(SCALE / 10),
+        lpFee: BigInt(SCALE / 10),
+        p: BigInt(1.5 * SCALE),
+        p1: BigInt(1 * SCALE),
+        p2: BigInt(2 * SCALE),
+      });
+      expect(!!clientBiatecClammPoolProvider).toBeTruthy();
+      const appId = await clientBiatecClammPoolProvider.appClient.appId;
+      expect(appId).toBeGreaterThan(0);
+      const deployerSigner = {
+        addr: deployer.addr,
+        // eslint-disable-next-line no-unused-vars
+        signer: async (txnGroup: Transaction[], indexesToSign: number[]) => {
+          return txnGroup.map((tx) => tx.signTxn(deployer.sk));
+        },
+      };
+      const client = await clammCreateSender({
+        transactionSigner: deployerSigner,
+        appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
+        assetA: assetUSD,
+        assetB: assetEUR,
+        clientBiatecPoolProvider: clientBiatecPoolProvider.appClient,
+        currentPrice: BigInt(1.5 * SCALE),
+        fee: BigInt(SCALE / 10),
+        priceMin: BigInt(2 * SCALE),
+        priceMax: BigInt(3 * SCALE),
+        verificationClass: 0,
+      });
+      expect(client.appId).toBeGreaterThan(0);
+      const assetLp = await client.state.global.assetLp();
+      expect(assetLp).toBeDefined();
+      expect(assetLp).toBeGreaterThan(0n);
+      if (!assetLp) throw Error('LP token not defined');
+      console.log('add liquidity to pool', {
+        account: deployerSigner,
+        assetA: assetUSD,
+        assetB: assetEUR,
+        appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
+        algod: algod,
+        clientBiatecClammPool: client,
+        appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
+        assetADeposit: BigInt(1 * SCALE_A),
+        assetBDeposit: BigInt(1 * SCALE_B),
+        assetLp: assetLp,
+      });
+      const liquidity = await clammAddLiquiditySender({
+        account: deployerSigner,
+        assetA: assetUSD,
+        assetB: assetEUR,
+        appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
+        algod: algod,
+        clientBiatecClammPool: client,
+        appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
+        clientBiatecPoolProvider: clientBiatecPoolProvider.appClient,
+        assetADeposit: BigInt(1 * SCALE_A),
+        assetBDeposit: BigInt(1 * SCALE_B),
+        assetLp: assetLp,
+      });
+      expect(liquidity).toBeDefined();
+
+      const assetLpBalance = await algod.accountAssetInformation(deployer.addr, assetLp).do();
+      expect(assetLpBalance.assetHolding?.amount).toBeGreaterThan(0n);
+      if (!assetLpBalance.assetHolding) throw Error('LP token balance not defined');
+      const removedLiquidity = await clammRemoveLiquiditySender({
+        account: deployerSigner,
+        assetA: assetUSD,
+        assetB: assetEUR,
+        appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
+        algod: algod,
+        clientBiatecClammPool: client,
+        appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
+        assetLp: assetLp,
+        lpToSend: assetLpBalance.assetHolding.amount,
       });
       expect(liquidity).toBeDefined();
     } catch (e: any) {

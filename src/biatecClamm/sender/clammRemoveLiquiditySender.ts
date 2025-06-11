@@ -22,6 +22,7 @@ interface IClammRemoveLiquidityInput {
  */
 const clammRemoveLiquiditySender = async (input: IClammRemoveLiquidityInput): Promise<string> => {
   const params = await input.algod.getTransactionParams().do();
+
   const txs = await clammRemoveLiquidityTxs({
     ...input,
     params,

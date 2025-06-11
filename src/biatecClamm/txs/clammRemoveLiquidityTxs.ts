@@ -2,7 +2,13 @@ import algosdk, { assignGroupID, AtomicTransactionComposer, SuggestedParams } fr
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
-
+import {
+  getBoxReferenceFullConfig,
+  getBoxReferenceAggregated,
+  getBoxReferencePool,
+  getBoxReferencePoolByConfig,
+  getBoxReferenceIdentity,
+} from '../../index';
 interface IClammRemoveLiquidityTxsInput {
   params: SuggestedParams;
   clientBiatecClammPool: BiatecClammPoolClient;
@@ -32,6 +38,11 @@ const clammRemoveLiquidityTxs = async (input: IClammRemoveLiquidityTxsInput): Pr
     lpToSend,
   } = input;
 
+  const boxIdentity = getBoxReferenceIdentity({
+    appBiatecIdentity: input.appBiatecIdentityProvider,
+    address: account.addr,
+  });
+
   const txLpXfer = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
     amount: lpToSend,
     assetIndex: Number(assetLp),
@@ -54,6 +65,7 @@ const clammRemoveLiquidityTxs = async (input: IClammRemoveLiquidityTxsInput): Pr
     appReferences: [BigInt(appBiatecConfigProvider), BigInt(appBiatecIdentityProvider)],
     assetReferences: [BigInt(assetA), BigInt(assetB)],
     accountReferences: [],
+    boxReferences: [boxIdentity],
   });
   const txsToGroupNoGroup = tx.transactions.map((tx: algosdk.Transaction) => {
     tx.group = undefined;
