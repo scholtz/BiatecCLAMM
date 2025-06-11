@@ -175,7 +175,8 @@ export class BiatecClammPool extends Contract {
     assert(this.priceMax.value === 0, 'E_PRICE_MAX'); // It is not possible to call bootrap twice
     assert(this.txn.sender === this.app.creator, 'E_SENDER'); // 'Only creator of the app can set it up'
     assert(priceMax > 0, 'E_PRICE'); // 'You must set price'
-    assert(assetA < assetB);
+    //assert(assetA < assetB);
+    assert(assetB.id > 0, 'Asset B must be ASA');
     assert(fee <= SCALE / 10); // fee must be lower then 10%
     // assert(verificationClass <= 4); // verificationClass  // SHORTENED_APP
     assert(!this.currentPrice.exists);
@@ -915,7 +916,7 @@ export class BiatecClammPool extends Contract {
       ret = toSwapBDecimals;
       if (minimumToReceive > 0) {
         // if minimumToReceive == 0, do not restrict the price
-        assert(minimumToReceive >= toSwapBDecimals);
+        assert(toSwapBDecimals >= minimumToReceive, 'Minimum to receive is not met');
       }
       amountBForStats = toSwapBDecimals;
       this.doAxfer(this.txn.sender, assetB, toSwapBDecimals);
@@ -948,7 +949,7 @@ export class BiatecClammPool extends Contract {
       ret = toSwapADecimals;
       if (minimumToReceive > 0) {
         // if minimumToReceive == 0, do not restrict the price
-        assert(minimumToReceive >= toSwapADecimals);
+        assert(toSwapADecimals >= minimumToReceive, 'Minimum to receive is not met');
       }
       amountAForStats = toSwapADecimals;
       this.doAxfer(this.txn.sender, assetA, toSwapADecimals);

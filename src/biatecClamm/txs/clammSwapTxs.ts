@@ -3,6 +3,13 @@ import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
 import getBoxReferenceStats from '../../biatecPools/getBoxReferenceStats';
+import {
+  getBoxReferenceFullConfig,
+  getBoxReferenceAggregated,
+  getBoxReferencePool,
+  getBoxReferencePoolByConfig,
+  getBoxReferenceIdentity,
+} from '../../index';
 
 interface IClammSwapTxsInput {
   params: SuggestedParams;
@@ -55,14 +62,21 @@ const clammSwapTxs = async (input: IClammSwapTxsInput): Promise<algosdk.Transact
       receiver: clientBiatecClammPool.appClient.appAddress,
     });
   }
-  const boxes = getBoxReferenceStats({
-    appBiatecCLAMMPool: clientBiatecClammPool.appClient.appId,
-    appBiatecPoolProvider,
-    assetA,
-    assetB,
-    includingAssetBoxes: false,
+
+  const boxPriceFeed = getBoxReferenceAggregated({
+    appBiatecPoolProvider: input.appBiatecPoolProvider,
+    assetA: assetA,
+    assetB: assetB,
+  });
+  const boxIdentity = getBoxReferenceIdentity({
+    appBiatecIdentity: input.appBiatecIdentityProvider,
+    address: account.addr,
   });
 
+  const boxPool = getBoxReferencePool({
+    appBiatecPoolProvider: input.appBiatecPoolProvider,
+    ammPool: clientBiatecClammPool.appId,
+  });
   const tx = await clientBiatecClammPool.createTransaction.swap({
     args: {
       appBiatecConfigProvider,
@@ -76,15 +90,16 @@ const clammSwapTxs = async (input: IClammSwapTxsInput): Promise<algosdk.Transact
 
     sender: account.addr,
     staticFee: algokit.microAlgos(12000),
-    boxReferences: boxes,
+    boxReferences: [boxPriceFeed, boxIdentity, boxPool],
     assetReferences: [BigInt(assetA), BigInt(assetB)],
     accountReferences: [],
+    appReferences: [appBiatecIdentityProvider, appBiatecConfigProvider, appBiatecPoolProvider],
   });
-    const txsToGroupNoGroup = tx.transactions.map((tx: algosdk.Transaction) => {
-      tx.group = undefined;
-      return tx;
-    });
-    const txsToGroupNoGrouped = assignGroupID(txsToGroupNoGroup);
-    return txsToGroupNoGrouped;
+  const txsToGroupNoGroup = tx.transactions.map((tx: algosdk.Transaction) => {
+    tx.group = undefined;
+    return tx;
+  });
+  const txsToGroupNoGrouped = assignGroupID(txsToGroupNoGroup);
+  return txsToGroupNoGrouped;
 };
 export default clammSwapTxs;
