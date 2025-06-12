@@ -1100,6 +1100,7 @@ export abstract class BiatecConfigProviderParamsFactory {
           case 'createApplication()void':
             return BiatecConfigProviderParamsFactory.create.createApplication(params);
         }
+        throw new Error(`Unknown ' + verb + ' method`);
       },
 
       /**
@@ -1135,6 +1136,7 @@ export abstract class BiatecConfigProviderParamsFactory {
           case 'updateApplication(byte[])void':
             return BiatecConfigProviderParamsFactory.update.updateApplication(params);
         }
+        throw new Error(`Unknown ' + verb + ' method`);
       },
 
       /**

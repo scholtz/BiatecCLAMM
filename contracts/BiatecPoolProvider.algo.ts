@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { BiatecClammPool } from './BiatecClammPool.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-PP-01-04-01';
+const version = 'BIATEC-PP-01-05-01';
 const SCALE = 1_000_000_000;
 
 type AppPoolInfo = {
@@ -1134,8 +1134,6 @@ export class BiatecPoolProvider extends Contract {
    */
   @abi.readonly
   public getPrice(assetA: AssetID, assetB: AssetID, appPoolId: AppID): AppPoolInfo {
-    assert(assetA.id < assetB.id, 'Asset A id must be less than Asset B id');
-
     if (appPoolId.id > 0) {
       // if pool is defined, then return the pool info
       const info = this.pools(appPoolId.id).value;

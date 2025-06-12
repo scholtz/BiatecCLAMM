@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-04-01';
+const version = 'BIATEC-CLAMM-01-05-01';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
@@ -10,7 +10,7 @@ const SCALE = 1_000_000_000;
 const s = <uint256>1_000_000_000;
 // const SCALEUINT256 = <uint256>1_000_000_000;
 const SCALE_DECIMALS = 9;
-
+const LP_SCALE_DECIMALS = 10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS);
 type AmmStatus = {
   scale: uint64;
   assetABalance: uint64;
@@ -38,9 +38,13 @@ export class BiatecClammPool extends Contract {
   setupFinished = GlobalStateKey<boolean>({ key: 's' });
   // asset A id
   assetA = GlobalStateKey<uint64>({ key: 'a' });
+  // asset A decimals
+  assetADecimals = GlobalStateKey<uint256>({ key: 'ad' });
 
   // asset B id
   assetB = GlobalStateKey<uint64>({ key: 'b' });
+  // asset B decimals
+  assetBDecimals = GlobalStateKey<uint256>({ key: 'bd' });
 
   // pool LP token id
   assetLp = GlobalStateKey<uint64>({ key: 'lp' });
@@ -176,14 +180,16 @@ export class BiatecClammPool extends Contract {
     assert(this.txn.sender === this.app.creator, 'E_SENDER'); // 'Only creator of the app can set it up'
     assert(priceMax > 0, 'E_PRICE'); // 'You must set price'
     //assert(assetA < assetB);
-    assert(assetB.id > 0, 'Asset B must be ASA');
+    assert(assetA.id !== assetB.id, 'Asset A must not be asset B');
     assert(fee <= SCALE / 10); // fee must be lower then 10%
     // assert(verificationClass <= 4); // verificationClass  // SHORTENED_APP
     assert(!this.currentPrice.exists);
     if (assetA.id > 0) {
       assert(assetA.decimals <= SCALE_DECIMALS); // asset A can be algo
     }
-    assert(assetB.decimals <= SCALE_DECIMALS);
+    if (assetB.id > 0) {
+      assert(assetB.decimals <= SCALE_DECIMALS);
+    }
 
     assert(this.fee.value <= 0, 'E_FEE'); // , 'You can bootstrap contract only once'); // check that this contract deployment was not yet initialized
 
@@ -213,6 +219,16 @@ export class BiatecClammPool extends Contract {
     this.doOptIn(assetB);
     this.verificationClass.value = verificationClass;
 
+    let assetADecimals = 6;
+    if (assetA.id > 0) assetADecimals = assetA.decimals;
+    let assetBDecimals = 6;
+    if (assetB.id > 0) assetBDecimals = assetB.decimals;
+    // if assetA.decimals == 8 then this.assetADecimals.value = 10
+    const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetADecimals)) as uint256;
+    // if assetB.decimals == 6 then this.assetBDecimals.value = 1000
+    const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetBDecimals)) as uint256;
+    this.assetADecimals.value = assetADelicmalScale2Scale;
+    this.assetBDecimals.value = assetBDelicmalScale2Scale;
     return this.assetLp.value;
   }
   /**
@@ -277,6 +293,10 @@ export class BiatecClammPool extends Contract {
     if (assetA.id > 0) {
       nameAssetA = assetA.unitName;
     }
+    let nameAssetB = 'ALGO';
+    if (assetB.id > 0) {
+      nameAssetB = assetB.unitName;
+    }
 
     const name =
       'B-' +
@@ -284,7 +304,7 @@ export class BiatecClammPool extends Contract {
       //'-' +
       nameAssetA +
       '-' +
-      assetB.unitName; // +
+      nameAssetB; // +
     //'-' +
     //this.fee.value.toString(10); // TODO the toString does not work
 
@@ -336,22 +356,16 @@ export class BiatecClammPool extends Contract {
 
     this.verifyIdentity(appBiatecConfigProvider, appBiatecIdentityProvider);
 
-    let assetADecimals = 6;
-    if (assetA.id > 0) assetADecimals = assetA.decimals;
-    // if assetA.decimals == 8 then assetADelicmalScale2Scale = 10
-    const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetADecimals)) as uint256;
-    // if assetB.decimals == 6 then assetBDelicmalScale2Scale = 1000
-    const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256;
-    // if assetLp.decimals == 6 then assetLpDelicmalScale2Scale = 1000
-    const assetLpDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256;
+    const assetLpDelicmalScale2Scale = <uint256>LP_SCALE_DECIMALS;
 
-    const aDepositInBaseScale = (txAssetADeposit.assetAmount as uint256) * assetADelicmalScale2Scale;
-    const bDepositInBaseScale = (txAssetBDeposit.assetAmount as uint256) * assetBDelicmalScale2Scale;
-
+    let aDepositInBaseScale = <uint256>0;
+    let bDepositInBaseScale = <uint256>0;
     if (assetA.id > 0) {
       assert(txAssetADeposit.typeEnum === TransactionType.AssetTransfer);
+      aDepositInBaseScale = (txAssetADeposit.assetAmount as uint256) * this.assetADecimals.value;
     } else {
       assert(txAssetADeposit.typeEnum === TransactionType.Payment);
+      aDepositInBaseScale = (txAssetADeposit.amount as uint256) * this.assetADecimals.value;
     }
 
     if (txAssetADeposit.typeEnum === TransactionType.AssetTransfer) {
@@ -373,8 +387,10 @@ export class BiatecClammPool extends Contract {
 
     if (assetB.id > 0) {
       assert(txAssetBDeposit.typeEnum === TransactionType.AssetTransfer);
+      bDepositInBaseScale = (txAssetBDeposit.assetAmount as uint256) * this.assetBDecimals.value;
     } else {
       assert(txAssetBDeposit.typeEnum === TransactionType.Payment);
+      bDepositInBaseScale = (txAssetBDeposit.amount as uint256) * this.assetBDecimals.value;
     }
 
     if (txAssetBDeposit.typeEnum === TransactionType.AssetTransfer) {
@@ -443,8 +459,8 @@ export class BiatecClammPool extends Contract {
       this.assetABalance.value,
       this.assetBBalance.value
     );
-    const expectedADepositB64 = (a / assetADelicmalScale2Scale) as uint64;
-    const expectedBDepositB64 = (b / assetBDelicmalScale2Scale) as uint64;
+    const expectedADepositB64 = (a / this.assetADecimals.value) as uint64;
+    const expectedBDepositB64 = (b / this.assetBDecimals.value) as uint64;
 
     if (expectedADepositB64 > txAssetADeposit.assetAmount) {
       // dominant is asset B. User sent more asset B then asset A, so we should return excess asset B to the user back.
@@ -461,7 +477,7 @@ export class BiatecClammPool extends Contract {
         this.doAxfer(this.txn.sender, assetB, txAssetBDeposit.assetAmount - expectedBDepositB64);
       }
       const realAssetADeposit = aDepositInBaseScale;
-      const realAssetBDeposit = (expectedBDepositB64 as uint256) * assetBDelicmalScale2Scale;
+      const realAssetBDeposit = (expectedBDepositB64 as uint256) * this.assetBDecimals.value;
       return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp);
     }
 
@@ -479,7 +495,7 @@ export class BiatecClammPool extends Contract {
         // return excess asset A to the user
         this.doAxfer(this.txn.sender, assetB, txAssetADeposit.assetAmount - expectedADepositB64);
       }
-      const realAssetADeposit = (expectedADepositB64 as uint256) * assetADelicmalScale2Scale;
+      const realAssetADeposit = (expectedADepositB64 as uint256) * this.assetADecimals.value;
       const realAssetBDeposit = bDepositInBaseScale;
       return this.processAddLiqudity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp);
     }
@@ -589,14 +605,7 @@ export class BiatecClammPool extends Contract {
     increaseOpcodeBudget();
     increaseOpcodeBudget();
 
-    let assetADecimals = 6;
-    if (assetA.id > 0) assetADecimals = assetA.decimals;
-    // if assetA.decimals == 8 then assetADelicmalScale2Scale = 10
-    const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetADecimals)) as uint256;
-    // if assetB.decimals == 6 then assetBDelicmalScale2Scale = 1000
-    const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256;
-    // if assetLp.decimals == 6 then assetLpDelicmalScale2Scale = 1000
-    const assetLpDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256;
+    const assetLpDelicmalScale2Scale = <uint256>LP_SCALE_DECIMALS;
 
     const lpDelta = txLpXfer.assetAmount as uint256;
     const lpDeltaBase = lpDelta * assetLpDelicmalScale2Scale;
@@ -614,7 +623,7 @@ export class BiatecClammPool extends Contract {
       this.assetABalance.value,
       this.Liqudity.value
     );
-    const aToSend64 = (aToSend / assetADelicmalScale2Scale) as uint64;
+    const aToSend64 = (aToSend / this.assetADecimals.value) as uint64;
     if (aToSend64 > 0) {
       this.doAxfer(this.txn.sender, assetA, aToSend64);
     }
@@ -623,7 +632,7 @@ export class BiatecClammPool extends Contract {
       this.assetBBalance.value,
       this.Liqudity.value
     );
-    const bToSend64 = (bToSend / assetBDelicmalScale2Scale) as uint64;
+    const bToSend64 = (bToSend / this.assetBDecimals.value) as uint64;
     if (bToSend64 > 0) {
       this.doAxfer(this.txn.sender, assetB, bToSend64);
     }
@@ -703,14 +712,8 @@ export class BiatecClammPool extends Contract {
     increaseOpcodeBudget();
     increaseOpcodeBudget();
 
-    let assetADecimals = 6;
-    if (assetA.id > 0) assetADecimals = assetA.decimals;
-    // if assetA.decimals == 8 then assetADelicmalScale2Scale = 10
-    const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetADecimals)) as uint256;
-    // if assetB.decimals == 6 then assetBDelicmalScale2Scale = 1000
-    const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256;
     // if assetLp.decimals == 6 then assetLpDelicmalScale2Scale = 1000
-    const assetLpDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256;
+    const assetLpDelicmalScale2Scale = <uint256>LP_SCALE_DECIMALS;
 
     let lpDeltaWithFees = amount;
     if (lpDeltaWithFees === <uint256>0) lpDeltaWithFees = this.LiqudityBiatecFromFees.value;
@@ -724,7 +727,7 @@ export class BiatecClammPool extends Contract {
       this.assetABalance.value,
       this.Liqudity.value
     );
-    const aToSend64 = (aToSend / assetADelicmalScale2Scale) as uint64;
+    const aToSend64 = (aToSend / this.assetADecimals.value) as uint64;
     if (aToSend64 > 0) {
       this.doAxfer(this.txn.sender, assetA, aToSend64);
     }
@@ -733,7 +736,7 @@ export class BiatecClammPool extends Contract {
       this.assetBBalance.value,
       this.Liqudity.value
     );
-    const bToSend64 = (bToSend / assetBDelicmalScale2Scale) as uint64;
+    const bToSend64 = (bToSend / this.assetBDecimals.value) as uint64;
     if (bToSend64 > 0) {
       this.doAxfer(this.txn.sender, assetB, bToSend64);
     }
@@ -837,7 +840,10 @@ export class BiatecClammPool extends Contract {
     this.checkAssetsAB(assetA, assetB);
 
     if (txSwap.typeEnum === TransactionType.Payment) {
-      assert(assetA.id === 0);
+      assert(
+        assetA.id === 0 || assetB.id === 0,
+        'Payment can be done only when one of the pool assets is native token'
+      ); // only native token can be swapped
 
       verifyPayTxn(txSwap, {
         amount: { greaterThan: 0 },
@@ -862,13 +868,6 @@ export class BiatecClammPool extends Contract {
     );
     const user = this.verifyIdentity(appBiatecConfigProvider, appBiatecIdentityProvider);
 
-    let assetADecimals = 6;
-    if (assetA.id > 0) assetADecimals = assetA.decimals;
-    // if assetA.decimals == 8 then assetADelicmalScale2Scale = 10
-    const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetADecimals)) as uint256;
-    // if assetA.decimals == 6 then assetADelicmalScale2Scale = 1000
-    const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256;
-
     const feesMultiplier = (s -
       ((this.fee.value as uint256) * (user.feeMultiplier as uint256)) / (user.base as uint256)) as uint256;
     let ret: uint64 = 0;
@@ -879,7 +878,7 @@ export class BiatecClammPool extends Contract {
 
     let isAssetA = false;
     if (txSwap.typeEnum === TransactionType.Payment) {
-      isAssetA = true;
+      isAssetA = assetA.id === 0; // if asset A is native token, then it is asset A
     } else {
       isAssetA = txSwap.xferAsset === assetA;
     }
@@ -894,7 +893,7 @@ export class BiatecClammPool extends Contract {
         assetInAssetDecimals = txSwap.assetAmount as uint256;
         amountAForStats = txSwap.assetAmount;
       }
-      inAsset = (assetInAssetDecimals * assetADelicmalScale2Scale) as uint256;
+      inAsset = (assetInAssetDecimals * this.assetADecimals.value) as uint256;
       const inAssetAfterFee = (inAsset * feesMultiplier) / s;
 
       const toSwap = this.calculateAssetBWithdrawOnAssetADeposit(
@@ -906,11 +905,11 @@ export class BiatecClammPool extends Contract {
         this.Liqudity.value
       );
       realSwapBaseDecimals = toSwap;
-      let realSwapBDecimals = (toSwap / assetBDelicmalScale2Scale) as uint256;
+      let realSwapBDecimals = (toSwap / this.assetBDecimals.value) as uint256;
 
-      if (realSwapBDecimals * assetBDelicmalScale2Scale !== toSwap) {
+      if (realSwapBDecimals * this.assetBDecimals.value !== toSwap) {
         realSwapBDecimals = realSwapBDecimals - <uint256>1; // rounding issue.. do not allow the LP to bleed
-        realSwapBaseDecimals = realSwapBDecimals * assetBDelicmalScale2Scale;
+        realSwapBaseDecimals = realSwapBDecimals * this.assetBDecimals.value;
       }
       const toSwapBDecimals = realSwapBDecimals as uint64;
       ret = toSwapBDecimals;
@@ -926,9 +925,15 @@ export class BiatecClammPool extends Contract {
     }
     // SWAP B to A
     if (!isAssetA) {
-      const assetInAssetDecimals = txSwap.assetAmount as uint256;
-      amountBForStats = txSwap.assetAmount;
-      inAsset = (assetInAssetDecimals * assetBDelicmalScale2Scale) as uint256;
+      let assetInAssetDecimals = <uint256>0;
+      if (txSwap.typeEnum === TransactionType.Payment) {
+        assetInAssetDecimals = txSwap.amount as uint256;
+        amountBForStats = txSwap.amount;
+      } else {
+        assetInAssetDecimals = txSwap.assetAmount as uint256;
+        amountBForStats = txSwap.assetAmount;
+      }
+      inAsset = (assetInAssetDecimals * this.assetBDecimals.value) as uint256;
       const inAssetAfterFee = (inAsset * feesMultiplier) / s;
       const toSwap = this.calculateAssetAWithdrawOnAssetBDeposit(
         inAssetAfterFee,
@@ -939,11 +944,11 @@ export class BiatecClammPool extends Contract {
         this.Liqudity.value
       );
       realSwapBaseDecimals = toSwap;
-      let realSwapADecimals = toSwap / assetADelicmalScale2Scale;
+      let realSwapADecimals = toSwap / this.assetADecimals.value;
 
-      if (realSwapADecimals * assetADelicmalScale2Scale !== toSwap) {
+      if (realSwapADecimals * this.assetADecimals.value !== toSwap) {
         realSwapADecimals = realSwapADecimals - <uint256>1; // rounding issue.. do not allow the LP to bleed
-        realSwapBaseDecimals = realSwapADecimals * assetADelicmalScale2Scale;
+        realSwapBaseDecimals = realSwapADecimals * this.assetADecimals.value;
       }
       const toSwapADecimals = realSwapADecimals as uint64;
       ret = toSwapADecimals;
@@ -1027,8 +1032,8 @@ export class BiatecClammPool extends Contract {
         assetB,
         this.currentPrice.value as uint64,
         newPrice as uint64,
-        amountAForStats * (assetADelicmalScale2Scale as uint64),
-        amountBForStats * (assetBDelicmalScale2Scale as uint64),
+        amountAForStats * (this.assetADecimals.value as uint64),
+        amountBForStats * (this.assetBDecimals.value as uint64),
         feeAmountAForStats,
         feeAmountBForStats,
         SCALE,
@@ -1041,18 +1046,18 @@ export class BiatecClammPool extends Contract {
     // uncomment after extraPages must be an Integer between and including 0 to 3
     // if (assetA.id === 0) {
     //   assert(
-    //     ((this.assetABalance.value / assetADelicmalScale2Scale) as uint64) <= this.app.address.balance,
+    //     ((this.assetABalance.value / this.assetADecimals.value) as uint64) <= this.app.address.balance,
     //     'ERR-BALANCE-CHECK-1' // current algo balance must be above the assetABalance value'
     //   );
     // } else {
     //   assert(
-    //     ((this.assetABalance.value / assetADelicmalScale2Scale) as uint64) <= this.app.address.assetBalance(assetA),
+    //     ((this.assetABalance.value / this.assetADecimals.value) as uint64) <= this.app.address.assetBalance(assetA),
     //     'ERR-BALANCE-CHECK-2' // 'current a balance must be above the assetABalance value'
     //   );
     // }
 
     // assert(
-    //   ((this.assetBBalance.value / assetBDelicmalScale2Scale) as uint64) <= this.app.address.assetBalance(assetB),
+    //   ((this.assetBBalance.value / this.assetBDecimals.value) as uint64) <= this.app.address.assetBalance(assetB),
     //   'ERR-BALANCE-CHECK-3' // 'current B balance must be above the assetBBalance value'
     // );
     // assert(
@@ -1098,28 +1103,21 @@ export class BiatecClammPool extends Contract {
       'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
     );
 
-    let assetADecimals = 6;
-    if (assetA.id > 0) assetADecimals = assetA.decimals;
-    // if assetA.decimals == 8 then assetADelicmalScale2Scale = 10
-    const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetADecimals)) as uint256;
-    // if assetA.decimals == 6 then assetADelicmalScale2Scale = 1000
-    const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256;
-
     this.assetABalance.value = this.assetABalance.value + amountA;
     this.assetBBalance.value = this.assetBBalance.value + amountB;
     if (assetA.id === 0) {
       assert(
-        ((this.app.address.balance - 1_000_000) as uint256) * assetADelicmalScale2Scale >= this.assetABalance.value,
+        ((this.app.address.balance - 1_000_000) as uint256) * this.assetADecimals.value >= this.assetABalance.value,
         'E_A0_B' // 'It is not possible to set higher assetABalance in algos then is in the app balance'
       );
     } else {
       assert(
-        (this.app.address.assetBalance(assetA) as uint256) * assetADelicmalScale2Scale >= this.assetABalance.value,
+        (this.app.address.assetBalance(assetA) as uint256) * this.assetADecimals.value >= this.assetABalance.value,
         'E_A_B' // 'It is not possible to set higher assetABalance then is in the app balance'
       );
     }
     assert(
-      (this.app.address.assetBalance(assetB) as uint256) * assetBDelicmalScale2Scale >= this.assetBBalance.value,
+      (this.app.address.assetBalance(assetB) as uint256) * this.assetBDecimals.value >= this.assetBBalance.value,
       'E_B_B' // 'It is not possible to set higher assetBBalance then is in the app balance'
     );
     let newL = <uint256>0;
@@ -1205,12 +1203,6 @@ export class BiatecClammPool extends Contract {
       this.txn.sender === addressExecutiveFee,
       'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
     );
-    let assetADecimals = 6;
-    if (assetA.id > 0) assetADecimals = assetA.decimals;
-    // if assetA.decimals == 8 then assetADelicmalScale2Scale = 10
-    const assetADelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetADecimals)) as uint256;
-    // if assetA.decimals == 6 then assetADelicmalScale2Scale = 1000
-    const assetBDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - assetB.decimals)) as uint256;
 
     if (amountA > 0) {
       this.doAxfer(this.txn.sender, assetA, amountA);
@@ -1221,17 +1213,17 @@ export class BiatecClammPool extends Contract {
 
     if (assetA.id === 0) {
       assert(
-        ((this.app.address.balance - 1_000_000) as uint256) * assetADelicmalScale2Scale >= this.assetABalance.value,
+        ((this.app.address.balance - 1_000_000) as uint256) * this.assetADecimals.value >= this.assetABalance.value,
         'E_A0_B' // 'It is not possible to set higher assetABalance in algos then is in the app balance'
       );
     } else {
       assert(
-        (this.app.address.assetBalance(assetA) as uint256) * assetADelicmalScale2Scale >= this.assetABalance.value,
+        (this.app.address.assetBalance(assetA) as uint256) * this.assetADecimals.value >= this.assetABalance.value,
         'E_A_B' // 'It is not possible to set higher assetABalance then is in the app balance'
       );
     }
     assert(
-      (this.app.address.assetBalance(assetB) as uint256) * assetBDelicmalScale2Scale >= this.assetBBalance.value,
+      (this.app.address.assetBalance(assetB) as uint256) * this.assetBDecimals.value >= this.assetBBalance.value,
       'E_B_B' // 'It is not possible to set higher assetBBalance then is in the app balance'
     );
 
@@ -1297,7 +1289,7 @@ export class BiatecClammPool extends Contract {
     const minted = Uint<256>(TOTAL_SUPPLY) as uint256;
     const distributedLPTokens = minted - current;
     // if assetLp.decimals == 6 then assetLpDelicmalScale2Scale = 1000
-    const assetLpDelicmalScale2Scale = (10 ** (SCALE_DECIMALS - LP_TOKEN_DECIMALS)) as uint256;
+    const assetLpDelicmalScale2Scale = <uint256>LP_SCALE_DECIMALS;
     const ret = distributedLPTokens * assetLpDelicmalScale2Scale;
     return ret;
   }
