@@ -37433,563 +37433,543 @@
   },
   {
     "teal": 8331,
-    "source": "contracts\\BiatecClammPool.algo.ts:1695",
+    "source": "contracts\\BiatecClammPool.algo.ts:1696",
     "pc": [
       7596,
-      7597,
-      7598
+      7597
     ]
   },
   {
-    "teal": 8334,
-    "source": "contracts\\BiatecClammPool.algo.ts:1697",
+    "teal": 8332,
+    "source": "contracts\\BiatecClammPool.algo.ts:1696",
     "pc": [
-      7599,
+      7598,
+      7599
+    ]
+  },
+  {
+    "teal": 8333,
+    "source": "contracts\\BiatecClammPool.algo.ts:1696",
+    "pc": [
       7600
     ]
   },
   {
-    "teal": 8335,
-    "source": "contracts\\BiatecClammPool.algo.ts:1697",
+    "teal": 8334,
+    "source": "contracts\\BiatecClammPool.algo.ts:1696",
     "pc": [
-      7601,
-      7602
+      7601
     ]
   },
   {
-    "teal": 8336,
-    "source": "contracts\\BiatecClammPool.algo.ts:1697",
+    "teal": 8335,
+    "source": "contracts\\BiatecClammPool.algo.ts:1695",
     "pc": [
+      7602,
       7603,
       7604
     ]
   },
   {
-    "teal": 8337,
+    "teal": 8338,
     "source": "contracts\\BiatecClammPool.algo.ts:1697",
     "pc": [
-      7605
+      7605,
+      7606
+    ]
+  },
+  {
+    "teal": 8339,
+    "source": "contracts\\BiatecClammPool.algo.ts:1697",
+    "pc": [
+      7607,
+      7608
     ]
   },
   {
     "teal": 8340,
-    "source": "contracts\\BiatecClammPool.algo.ts:1694",
+    "source": "contracts\\BiatecClammPool.algo.ts:1697",
     "pc": [
-      7606,
-      7607
+      7609,
+      7610
     ]
   },
   {
-    "teal": 8344,
-    "source": "contracts\\BiatecClammPool.algo.ts:1698",
+    "teal": 8341,
+    "source": "contracts\\BiatecClammPool.algo.ts:1697",
     "pc": [
-      7608,
-      7609
-    ]
-  },
-  {
-    "teal": 8345,
-    "source": "contracts\\BiatecClammPool.algo.ts:1698",
-    "pc": [
-      7610,
       7611
     ]
   },
   {
-    "teal": 8346,
-    "source": "contracts\\BiatecClammPool.algo.ts:1698",
+    "teal": 8344,
+    "source": "contracts\\BiatecClammPool.algo.ts:1694",
     "pc": [
       7612,
       7613
     ]
   },
   {
-    "teal": 8347,
-    "source": "contracts\\BiatecClammPool.algo.ts:1698",
+    "teal": 8351,
+    "source": "contracts\\BiatecClammPool.algo.ts:1699",
     "pc": [
-      7614
+      7614,
+      7615
     ]
   },
   {
-    "teal": 8348,
-    "source": "contracts\\BiatecClammPool.algo.ts:1698",
+    "teal": 8352,
+    "source": "contracts\\BiatecClammPool.algo.ts:1699",
     "pc": [
-      7615,
       7616
     ]
   },
   {
-    "teal": 8371,
-    "source": "contracts\\BiatecClammPool.algo.ts:1716",
+    "teal": 8353,
+    "source": "contracts\\BiatecClammPool.algo.ts:1699",
     "pc": [
-      7617,
-      7618
+      7617
     ]
   },
   {
-    "teal": 8372,
-    "source": "contracts\\BiatecClammPool.algo.ts:1703",
+    "teal": 8354,
+    "source": "contracts\\BiatecClammPool.algo.ts:1699",
     "pc": [
-      7619
-    ]
-  },
-  {
-    "teal": 8373,
-    "source": "contracts\\BiatecClammPool.algo.ts:1703",
-    "pc": [
+      7618,
+      7619,
       7620
     ]
   },
   {
-    "teal": 8374,
-    "source": "contracts\\BiatecClammPool.algo.ts:1703",
+    "teal": 8355,
+    "source": "contracts\\BiatecClammPool.algo.ts:1700",
     "pc": [
-      7621
-    ]
-  },
-  {
-    "teal": 8375,
-    "source": "contracts\\BiatecClammPool.algo.ts:1703",
-    "pc": [
+      7621,
       7622
     ]
   },
   {
-    "teal": 8376,
-    "source": "contracts\\BiatecClammPool.algo.ts:1703",
+    "teal": 8356,
+    "source": "contracts\\BiatecClammPool.algo.ts:1700",
     "pc": [
       7623,
       7624
     ]
   },
   {
-    "teal": 8377,
-    "source": "contracts\\BiatecClammPool.algo.ts:1703",
+    "teal": 8357,
+    "source": "contracts\\BiatecClammPool.algo.ts:1700",
     "pc": [
       7625
     ]
   },
   {
-    "teal": 8380,
-    "source": "contracts\\BiatecClammPool.algo.ts:1703",
-    "errorMessage": "this.assetABalance.value as uint64 overflowed 64 bits",
+    "teal": 8358,
+    "source": "contracts\\BiatecClammPool.algo.ts:1700",
     "pc": [
-      7626
+      7626,
+      7627
     ]
   },
   {
-    "teal": 8381,
-    "source": "contracts\\BiatecClammPool.algo.ts:1703",
+    "teal": 8359,
+    "source": "contracts\\BiatecClammPool.algo.ts:1700",
     "pc": [
-      7627,
       7628,
       7629
     ]
   },
   {
-    "teal": 8382,
-    "source": "contracts\\BiatecClammPool.algo.ts:1703",
+    "teal": 8360,
+    "source": "contracts\\BiatecClammPool.algo.ts:1700",
     "pc": [
       7630
     ]
   },
   {
-    "teal": 8383,
-    "source": "contracts\\BiatecClammPool.algo.ts:1703",
+    "teal": 8361,
+    "source": "contracts\\BiatecClammPool.algo.ts:1700",
     "pc": [
       7631
     ]
   },
   {
-    "teal": 8384,
-    "source": "contracts\\BiatecClammPool.algo.ts:1703",
+    "teal": 8362,
+    "source": "contracts\\BiatecClammPool.algo.ts:1699",
     "pc": [
-      7632
-    ]
-  },
-  {
-    "teal": 8385,
-    "source": "contracts\\BiatecClammPool.algo.ts:1704",
-    "pc": [
+      7632,
       7633,
       7634
     ]
   },
   {
-    "teal": 8386,
-    "source": "contracts\\BiatecClammPool.algo.ts:1704",
+    "teal": 8365,
+    "source": "contracts\\BiatecClammPool.algo.ts:1701",
     "pc": [
-      7635
-    ]
-  },
-  {
-    "teal": 8387,
-    "source": "contracts\\BiatecClammPool.algo.ts:1704",
-    "pc": [
+      7635,
       7636
     ]
   },
   {
-    "teal": 8388,
-    "source": "contracts\\BiatecClammPool.algo.ts:1704",
+    "teal": 8366,
+    "source": "contracts\\BiatecClammPool.algo.ts:1701",
     "pc": [
-      7637
+      7637,
+      7638
     ]
   },
   {
-    "teal": 8389,
-    "source": "contracts\\BiatecClammPool.algo.ts:1704",
+    "teal": 8367,
+    "source": "contracts\\BiatecClammPool.algo.ts:1701",
     "pc": [
-      7638,
-      7639
-    ]
-  },
-  {
-    "teal": 8390,
-    "source": "contracts\\BiatecClammPool.algo.ts:1704",
-    "pc": [
+      7639,
       7640
     ]
   },
   {
-    "teal": 8393,
-    "source": "contracts\\BiatecClammPool.algo.ts:1704",
-    "errorMessage": "this.assetBBalance.value as uint64 overflowed 64 bits",
+    "teal": 8368,
+    "source": "contracts\\BiatecClammPool.algo.ts:1701",
     "pc": [
       7641
     ]
   },
   {
-    "teal": 8394,
-    "source": "contracts\\BiatecClammPool.algo.ts:1704",
+    "teal": 8371,
+    "source": "contracts\\BiatecClammPool.algo.ts:1698",
     "pc": [
       7642,
-      7643,
-      7644
+      7643
     ]
   },
   {
-    "teal": 8395,
-    "source": "contracts\\BiatecClammPool.algo.ts:1704",
+    "teal": 8394,
+    "source": "contracts\\BiatecClammPool.algo.ts:1719",
     "pc": [
+      7644,
       7645
     ]
   },
   {
-    "teal": 8396,
-    "source": "contracts\\BiatecClammPool.algo.ts:1704",
+    "teal": 8395,
+    "source": "contracts\\BiatecClammPool.algo.ts:1706",
     "pc": [
       7646
     ]
   },
   {
-    "teal": 8397,
-    "source": "contracts\\BiatecClammPool.algo.ts:1704",
+    "teal": 8396,
+    "source": "contracts\\BiatecClammPool.algo.ts:1706",
     "pc": [
       7647
     ]
   },
   {
-    "teal": 8398,
-    "source": "contracts\\BiatecClammPool.algo.ts:1705",
+    "teal": 8397,
+    "source": "contracts\\BiatecClammPool.algo.ts:1706",
     "pc": [
-      7648,
+      7648
+    ]
+  },
+  {
+    "teal": 8398,
+    "source": "contracts\\BiatecClammPool.algo.ts:1706",
+    "pc": [
       7649
     ]
   },
   {
     "teal": 8399,
-    "source": "contracts\\BiatecClammPool.algo.ts:1705",
+    "source": "contracts\\BiatecClammPool.algo.ts:1706",
     "pc": [
-      7650
-    ]
-  },
-  {
-    "teal": 8400,
-    "source": "contracts\\BiatecClammPool.algo.ts:1705",
-    "pc": [
+      7650,
       7651
     ]
   },
   {
-    "teal": 8401,
+    "teal": 8400,
     "source": "contracts\\BiatecClammPool.algo.ts:1706",
     "pc": [
-      7652,
-      7653
-    ]
-  },
-  {
-    "teal": 8402,
-    "source": "contracts\\BiatecClammPool.algo.ts:1706",
-    "pc": [
-      7654
+      7652
     ]
   },
   {
     "teal": 8403,
     "source": "contracts\\BiatecClammPool.algo.ts:1706",
+    "errorMessage": "this.assetABalance.value as uint64 overflowed 64 bits",
     "pc": [
-      7655
+      7653
     ]
   },
   {
     "teal": 8404,
-    "source": "contracts\\BiatecClammPool.algo.ts:1714",
+    "source": "contracts\\BiatecClammPool.algo.ts:1706",
     "pc": [
-      7656,
-      7657
+      7654,
+      7655,
+      7656
     ]
   },
   {
     "teal": 8405,
-    "source": "contracts\\BiatecClammPool.algo.ts:1714",
+    "source": "contracts\\BiatecClammPool.algo.ts:1706",
+    "pc": [
+      7657
+    ]
+  },
+  {
+    "teal": 8406,
+    "source": "contracts\\BiatecClammPool.algo.ts:1706",
     "pc": [
       7658
     ]
   },
   {
-    "teal": 8406,
-    "source": "contracts\\BiatecClammPool.algo.ts:1714",
+    "teal": 8407,
+    "source": "contracts\\BiatecClammPool.algo.ts:1706",
     "pc": [
       7659
     ]
   },
   {
-    "teal": 8407,
-    "source": "contracts\\BiatecClammPool.algo.ts:1714",
-    "pc": [
-      7660
-    ]
-  },
-  {
     "teal": 8408,
-    "source": "contracts\\BiatecClammPool.algo.ts:1714",
+    "source": "contracts\\BiatecClammPool.algo.ts:1707",
     "pc": [
-      7661,
-      7662
+      7660,
+      7661
     ]
   },
   {
     "teal": 8409,
-    "source": "contracts\\BiatecClammPool.algo.ts:1714",
+    "source": "contracts\\BiatecClammPool.algo.ts:1707",
+    "pc": [
+      7662
+    ]
+  },
+  {
+    "teal": 8410,
+    "source": "contracts\\BiatecClammPool.algo.ts:1707",
     "pc": [
       7663
     ]
   },
   {
-    "teal": 8412,
-    "source": "contracts\\BiatecClammPool.algo.ts:1714",
-    "errorMessage": "this.priceMinSqrt.value as uint64 overflowed 64 bits",
+    "teal": 8411,
+    "source": "contracts\\BiatecClammPool.algo.ts:1707",
     "pc": [
       7664
     ]
   },
   {
-    "teal": 8413,
-    "source": "contracts\\BiatecClammPool.algo.ts:1714",
+    "teal": 8412,
+    "source": "contracts\\BiatecClammPool.algo.ts:1707",
     "pc": [
       7665,
-      7666,
+      7666
+    ]
+  },
+  {
+    "teal": 8413,
+    "source": "contracts\\BiatecClammPool.algo.ts:1707",
+    "pc": [
       7667
     ]
   },
   {
-    "teal": 8414,
-    "source": "contracts\\BiatecClammPool.algo.ts:1714",
+    "teal": 8416,
+    "source": "contracts\\BiatecClammPool.algo.ts:1707",
+    "errorMessage": "this.assetBBalance.value as uint64 overflowed 64 bits",
     "pc": [
       7668
     ]
   },
   {
-    "teal": 8415,
-    "source": "contracts\\BiatecClammPool.algo.ts:1714",
-    "pc": [
-      7669
-    ]
-  },
-  {
-    "teal": 8416,
-    "source": "contracts\\BiatecClammPool.algo.ts:1714",
-    "pc": [
-      7670
-    ]
-  },
-  {
     "teal": 8417,
-    "source": "contracts\\BiatecClammPool.algo.ts:1713",
+    "source": "contracts\\BiatecClammPool.algo.ts:1707",
     "pc": [
-      7671,
-      7672
+      7669,
+      7670,
+      7671
     ]
   },
   {
     "teal": 8418,
-    "source": "contracts\\BiatecClammPool.algo.ts:1713",
+    "source": "contracts\\BiatecClammPool.algo.ts:1707",
+    "pc": [
+      7672
+    ]
+  },
+  {
+    "teal": 8419,
+    "source": "contracts\\BiatecClammPool.algo.ts:1707",
     "pc": [
       7673
     ]
   },
   {
-    "teal": 8419,
-    "source": "contracts\\BiatecClammPool.algo.ts:1713",
+    "teal": 8420,
+    "source": "contracts\\BiatecClammPool.algo.ts:1707",
     "pc": [
       7674
     ]
   },
   {
-    "teal": 8420,
-    "source": "contracts\\BiatecClammPool.algo.ts:1713",
-    "pc": [
-      7675
-    ]
-  },
-  {
     "teal": 8421,
-    "source": "contracts\\BiatecClammPool.algo.ts:1713",
+    "source": "contracts\\BiatecClammPool.algo.ts:1708",
     "pc": [
-      7676,
-      7677
+      7675,
+      7676
     ]
   },
   {
     "teal": 8422,
-    "source": "contracts\\BiatecClammPool.algo.ts:1713",
+    "source": "contracts\\BiatecClammPool.algo.ts:1708",
+    "pc": [
+      7677
+    ]
+  },
+  {
+    "teal": 8423,
+    "source": "contracts\\BiatecClammPool.algo.ts:1708",
     "pc": [
       7678
     ]
   },
   {
-    "teal": 8425,
-    "source": "contracts\\BiatecClammPool.algo.ts:1713",
-    "errorMessage": "this.priceMaxSqrt.value as uint64 overflowed 64 bits",
+    "teal": 8424,
+    "source": "contracts\\BiatecClammPool.algo.ts:1709",
     "pc": [
-      7679
+      7679,
+      7680
+    ]
+  },
+  {
+    "teal": 8425,
+    "source": "contracts\\BiatecClammPool.algo.ts:1709",
+    "pc": [
+      7681
     ]
   },
   {
     "teal": 8426,
-    "source": "contracts\\BiatecClammPool.algo.ts:1713",
+    "source": "contracts\\BiatecClammPool.algo.ts:1709",
     "pc": [
-      7680,
-      7681,
       7682
     ]
   },
   {
     "teal": 8427,
-    "source": "contracts\\BiatecClammPool.algo.ts:1713",
+    "source": "contracts\\BiatecClammPool.algo.ts:1717",
     "pc": [
-      7683
-    ]
-  },
-  {
-    "teal": 8428,
-    "source": "contracts\\BiatecClammPool.algo.ts:1713",
-    "pc": [
+      7683,
       7684
     ]
   },
   {
-    "teal": 8429,
-    "source": "contracts\\BiatecClammPool.algo.ts:1713",
+    "teal": 8428,
+    "source": "contracts\\BiatecClammPool.algo.ts:1717",
     "pc": [
       7685
     ]
   },
   {
-    "teal": 8430,
-    "source": "contracts\\BiatecClammPool.algo.ts:1709",
+    "teal": 8429,
+    "source": "contracts\\BiatecClammPool.algo.ts:1717",
     "pc": [
-      7686,
+      7686
+    ]
+  },
+  {
+    "teal": 8430,
+    "source": "contracts\\BiatecClammPool.algo.ts:1717",
+    "pc": [
       7687
     ]
   },
   {
     "teal": 8431,
-    "source": "contracts\\BiatecClammPool.algo.ts:1709",
+    "source": "contracts\\BiatecClammPool.algo.ts:1717",
     "pc": [
-      7688
-    ]
-  },
-  {
-    "teal": 8432,
-    "source": "contracts\\BiatecClammPool.algo.ts:1709",
-    "pc": [
+      7688,
       7689
     ]
   },
   {
-    "teal": 8433,
-    "source": "contracts\\BiatecClammPool.algo.ts:1709",
+    "teal": 8432,
+    "source": "contracts\\BiatecClammPool.algo.ts:1717",
     "pc": [
       7690
     ]
   },
   {
-    "teal": 8434,
-    "source": "contracts\\BiatecClammPool.algo.ts:1709",
-    "pc": [
-      7691,
-      7692
-    ]
-  },
-  {
     "teal": 8435,
-    "source": "contracts\\BiatecClammPool.algo.ts:1709",
+    "source": "contracts\\BiatecClammPool.algo.ts:1717",
+    "errorMessage": "this.priceMinSqrt.value as uint64 overflowed 64 bits",
     "pc": [
-      7693
+      7691
     ]
   },
   {
-    "teal": 8438,
-    "source": "contracts\\BiatecClammPool.algo.ts:1709",
-    "errorMessage": "this.Liqudity.value as uint64 overflowed 64 bits",
+    "teal": 8436,
+    "source": "contracts\\BiatecClammPool.algo.ts:1717",
     "pc": [
+      7692,
+      7693,
       7694
     ]
   },
   {
-    "teal": 8439,
-    "source": "contracts\\BiatecClammPool.algo.ts:1709",
+    "teal": 8437,
+    "source": "contracts\\BiatecClammPool.algo.ts:1717",
     "pc": [
-      7695,
-      7696,
+      7695
+    ]
+  },
+  {
+    "teal": 8438,
+    "source": "contracts\\BiatecClammPool.algo.ts:1717",
+    "pc": [
+      7696
+    ]
+  },
+  {
+    "teal": 8439,
+    "source": "contracts\\BiatecClammPool.algo.ts:1717",
+    "pc": [
       7697
     ]
   },
   {
     "teal": 8440,
-    "source": "contracts\\BiatecClammPool.algo.ts:1709",
+    "source": "contracts\\BiatecClammPool.algo.ts:1716",
     "pc": [
-      7698
-    ]
-  },
-  {
-    "teal": 8441,
-    "source": "contracts\\BiatecClammPool.algo.ts:1709",
-    "pc": [
+      7698,
       7699
     ]
   },
   {
-    "teal": 8442,
-    "source": "contracts\\BiatecClammPool.algo.ts:1709",
+    "teal": 8441,
+    "source": "contracts\\BiatecClammPool.algo.ts:1716",
     "pc": [
       7700
     ]
   },
   {
-    "teal": 8443,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "teal": 8442,
+    "source": "contracts\\BiatecClammPool.algo.ts:1716",
     "pc": [
-      7701,
+      7701
+    ]
+  },
+  {
+    "teal": 8443,
+    "source": "contracts\\BiatecClammPool.algo.ts:1716",
+    "pc": [
       7702
     ]
   },
   {
     "teal": 8444,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "source": "contracts\\BiatecClammPool.algo.ts:1716",
     "pc": [
       7703,
       7704
@@ -37997,898 +37977,984 @@
   },
   {
     "teal": 8445,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "source": "contracts\\BiatecClammPool.algo.ts:1716",
     "pc": [
-      7705,
-      7706,
-      7707
-    ]
-  },
-  {
-    "teal": 8446,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
-    "pc": [
-      7708
-    ]
-  },
-  {
-    "teal": 8447,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
-    "pc": [
-      7709
+      7705
     ]
   },
   {
     "teal": 8448,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "source": "contracts\\BiatecClammPool.algo.ts:1716",
+    "errorMessage": "this.priceMaxSqrt.value as uint64 overflowed 64 bits",
     "pc": [
-      7710,
-      7711
+      7706
     ]
   },
   {
     "teal": 8449,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "source": "contracts\\BiatecClammPool.algo.ts:1716",
+    "pc": [
+      7707,
+      7708,
+      7709
+    ]
+  },
+  {
+    "teal": 8450,
+    "source": "contracts\\BiatecClammPool.algo.ts:1716",
+    "pc": [
+      7710
+    ]
+  },
+  {
+    "teal": 8451,
+    "source": "contracts\\BiatecClammPool.algo.ts:1716",
+    "pc": [
+      7711
+    ]
+  },
+  {
+    "teal": 8452,
+    "source": "contracts\\BiatecClammPool.algo.ts:1716",
     "pc": [
       7712
     ]
   },
   {
-    "teal": 8452,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
-    "errorMessage": "this.calculateDistributedLiquidity(assetLp, <uint256>0) as uint64 overflowed 64 bits",
-    "pc": [
-      7713
-    ]
-  },
-  {
     "teal": 8453,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "source": "contracts\\BiatecClammPool.algo.ts:1712",
     "pc": [
-      7714,
-      7715
+      7713,
+      7714
     ]
   },
   {
     "teal": 8454,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "source": "contracts\\BiatecClammPool.algo.ts:1712",
+    "pc": [
+      7715
+    ]
+  },
+  {
+    "teal": 8455,
+    "source": "contracts\\BiatecClammPool.algo.ts:1712",
     "pc": [
       7716
     ]
   },
   {
-    "teal": 8455,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "teal": 8456,
+    "source": "contracts\\BiatecClammPool.algo.ts:1712",
     "pc": [
       7717
     ]
   },
   {
-    "teal": 8456,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
-    "pc": [
-      7718
-    ]
-  },
-  {
     "teal": 8457,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "source": "contracts\\BiatecClammPool.algo.ts:1712",
     "pc": [
+      7718,
       7719
     ]
   },
   {
     "teal": 8458,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "source": "contracts\\BiatecClammPool.algo.ts:1712",
     "pc": [
-      7720,
-      7721
-    ]
-  },
-  {
-    "teal": 8459,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
-    "pc": [
-      7722
-    ]
-  },
-  {
-    "teal": 8460,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
-    "pc": [
-      7723
+      7720
     ]
   },
   {
     "teal": 8461,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "source": "contracts\\BiatecClammPool.algo.ts:1712",
+    "errorMessage": "this.Liqudity.value as uint64 overflowed 64 bits",
     "pc": [
-      7724
+      7721
     ]
   },
   {
     "teal": 8462,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "source": "contracts\\BiatecClammPool.algo.ts:1712",
+    "pc": [
+      7722,
+      7723,
+      7724
+    ]
+  },
+  {
+    "teal": 8463,
+    "source": "contracts\\BiatecClammPool.algo.ts:1712",
     "pc": [
       7725
     ]
   },
   {
-    "teal": 8463,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "teal": 8464,
+    "source": "contracts\\BiatecClammPool.algo.ts:1712",
     "pc": [
       7726
     ]
   },
   {
-    "teal": 8464,
-    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "teal": 8465,
+    "source": "contracts\\BiatecClammPool.algo.ts:1712",
     "pc": [
       7727
     ]
   },
   {
-    "teal": 8465,
-    "source": "contracts\\BiatecClammPool.algo.ts:1711",
+    "teal": 8466,
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
       7728,
       7729
     ]
   },
   {
-    "teal": 8466,
-    "source": "contracts\\BiatecClammPool.algo.ts:1711",
-    "pc": [
-      7730
-    ]
-  },
-  {
     "teal": 8467,
-    "source": "contracts\\BiatecClammPool.algo.ts:1711",
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
+      7730,
       7731
     ]
   },
   {
     "teal": 8468,
-    "source": "contracts\\BiatecClammPool.algo.ts:1711",
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
-      7732
-    ]
-  },
-  {
-    "teal": 8469,
-    "source": "contracts\\BiatecClammPool.algo.ts:1711",
-    "pc": [
+      7732,
       7733,
       7734
     ]
   },
   {
-    "teal": 8470,
-    "source": "contracts\\BiatecClammPool.algo.ts:1711",
+    "teal": 8469,
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
       7735
     ]
   },
   {
-    "teal": 8473,
-    "source": "contracts\\BiatecClammPool.algo.ts:1711",
-    "errorMessage": "this.LiqudityUsersFromFees.value as uint64 overflowed 64 bits",
+    "teal": 8470,
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
       7736
     ]
   },
   {
-    "teal": 8474,
-    "source": "contracts\\BiatecClammPool.algo.ts:1711",
+    "teal": 8471,
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
       7737,
-      7738,
+      7738
+    ]
+  },
+  {
+    "teal": 8472,
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
+    "pc": [
       7739
     ]
   },
   {
     "teal": 8475,
-    "source": "contracts\\BiatecClammPool.algo.ts:1711",
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
+    "errorMessage": "this.calculateDistributedLiquidity(assetLp, <uint256>0) as uint64 overflowed 64 bits",
     "pc": [
       7740
     ]
   },
   {
     "teal": 8476,
-    "source": "contracts\\BiatecClammPool.algo.ts:1711",
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
-      7741
-    ]
-  },
-  {
-    "teal": 8477,
-    "source": "contracts\\BiatecClammPool.algo.ts:1711",
-    "pc": [
+      7741,
       7742
     ]
   },
   {
-    "teal": 8478,
-    "source": "contracts\\BiatecClammPool.algo.ts:1710",
+    "teal": 8477,
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
-      7743,
+      7743
+    ]
+  },
+  {
+    "teal": 8478,
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
+    "pc": [
       7744
     ]
   },
   {
     "teal": 8479,
-    "source": "contracts\\BiatecClammPool.algo.ts:1710",
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
       7745
     ]
   },
   {
     "teal": 8480,
-    "source": "contracts\\BiatecClammPool.algo.ts:1710",
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
       7746
     ]
   },
   {
     "teal": 8481,
-    "source": "contracts\\BiatecClammPool.algo.ts:1710",
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
-      7747
+      7747,
+      7748
     ]
   },
   {
     "teal": 8482,
-    "source": "contracts\\BiatecClammPool.algo.ts:1710",
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
-      7748,
       7749
     ]
   },
   {
     "teal": 8483,
-    "source": "contracts\\BiatecClammPool.algo.ts:1710",
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
       7750
     ]
   },
   {
-    "teal": 8486,
-    "source": "contracts\\BiatecClammPool.algo.ts:1710",
-    "errorMessage": "this.LiqudityBiatecFromFees.value as uint64 overflowed 64 bits",
+    "teal": 8484,
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
       7751
     ]
   },
   {
-    "teal": 8487,
-    "source": "contracts\\BiatecClammPool.algo.ts:1710",
+    "teal": 8485,
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
     "pc": [
-      7752,
-      7753,
+      7752
+    ]
+  },
+  {
+    "teal": 8486,
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
+    "pc": [
+      7753
+    ]
+  },
+  {
+    "teal": 8487,
+    "source": "contracts\\BiatecClammPool.algo.ts:1718",
+    "pc": [
       7754
     ]
   },
   {
     "teal": 8488,
-    "source": "contracts\\BiatecClammPool.algo.ts:1710",
+    "source": "contracts\\BiatecClammPool.algo.ts:1714",
     "pc": [
-      7755
-    ]
-  },
-  {
-    "teal": 8489,
-    "source": "contracts\\BiatecClammPool.algo.ts:1710",
-    "pc": [
+      7755,
       7756
     ]
   },
   {
-    "teal": 8490,
-    "source": "contracts\\BiatecClammPool.algo.ts:1710",
+    "teal": 8489,
+    "source": "contracts\\BiatecClammPool.algo.ts:1714",
     "pc": [
       7757
     ]
   },
   {
-    "teal": 8491,
-    "source": "contracts\\BiatecClammPool.algo.ts:1700",
+    "teal": 8490,
+    "source": "contracts\\BiatecClammPool.algo.ts:1714",
     "pc": [
-      7758,
+      7758
+    ]
+  },
+  {
+    "teal": 8491,
+    "source": "contracts\\BiatecClammPool.algo.ts:1714",
+    "pc": [
       7759
     ]
   },
   {
     "teal": 8492,
-    "source": "contracts\\BiatecClammPool.algo.ts:1700",
+    "source": "contracts\\BiatecClammPool.algo.ts:1714",
     "pc": [
-      7760
-    ]
-  },
-  {
-    "teal": 8493,
-    "source": "contracts\\BiatecClammPool.algo.ts:1700",
-    "pc": [
+      7760,
       7761
     ]
   },
   {
-    "teal": 8494,
-    "source": "contracts\\BiatecClammPool.algo.ts:1700",
+    "teal": 8493,
+    "source": "contracts\\BiatecClammPool.algo.ts:1714",
     "pc": [
       7762
     ]
   },
   {
-    "teal": 8495,
-    "source": "contracts\\BiatecClammPool.algo.ts:1701",
-    "pc": [
-      7763,
-      7764
-    ]
-  },
-  {
     "teal": 8496,
-    "source": "contracts\\BiatecClammPool.algo.ts:1701",
+    "source": "contracts\\BiatecClammPool.algo.ts:1714",
+    "errorMessage": "this.LiqudityUsersFromFees.value as uint64 overflowed 64 bits",
     "pc": [
-      7765
+      7763
     ]
   },
   {
     "teal": 8497,
-    "source": "contracts\\BiatecClammPool.algo.ts:1701",
+    "source": "contracts\\BiatecClammPool.algo.ts:1714",
     "pc": [
+      7764,
+      7765,
       7766
     ]
   },
   {
     "teal": 8498,
-    "source": "contracts\\BiatecClammPool.algo.ts:1701",
+    "source": "contracts\\BiatecClammPool.algo.ts:1714",
     "pc": [
       7767
     ]
   },
   {
     "teal": 8499,
-    "source": "contracts\\BiatecClammPool.algo.ts:1702",
+    "source": "contracts\\BiatecClammPool.algo.ts:1714",
     "pc": [
-      7768,
-      7769
+      7768
     ]
   },
   {
     "teal": 8500,
-    "source": "contracts\\BiatecClammPool.algo.ts:1702",
+    "source": "contracts\\BiatecClammPool.algo.ts:1714",
     "pc": [
-      7770
+      7769
     ]
   },
   {
     "teal": 8501,
-    "source": "contracts\\BiatecClammPool.algo.ts:1702",
+    "source": "contracts\\BiatecClammPool.algo.ts:1713",
     "pc": [
+      7770,
       7771
     ]
   },
   {
     "teal": 8502,
-    "source": "contracts\\BiatecClammPool.algo.ts:1702",
+    "source": "contracts\\BiatecClammPool.algo.ts:1713",
     "pc": [
       7772
     ]
   },
   {
     "teal": 8503,
-    "source": "contracts\\BiatecClammPool.algo.ts:1712",
+    "source": "contracts\\BiatecClammPool.algo.ts:1713",
     "pc": [
-      7773,
-      7774
+      7773
     ]
   },
   {
     "teal": 8504,
-    "source": "contracts\\BiatecClammPool.algo.ts:1712",
+    "source": "contracts\\BiatecClammPool.algo.ts:1713",
     "pc": [
-      7775
+      7774
     ]
   },
   {
     "teal": 8505,
-    "source": "contracts\\BiatecClammPool.algo.ts:1712",
+    "source": "contracts\\BiatecClammPool.algo.ts:1713",
     "pc": [
+      7775,
       7776
     ]
   },
   {
     "teal": 8506,
-    "source": "contracts\\BiatecClammPool.algo.ts:1712",
+    "source": "contracts\\BiatecClammPool.algo.ts:1713",
     "pc": [
       7777
     ]
   },
   {
-    "teal": 8507,
-    "source": "contracts\\BiatecClammPool.algo.ts:1707",
-    "pc": [
-      7778,
-      7779
-    ]
-  },
-  {
-    "teal": 8508,
-    "source": "contracts\\BiatecClammPool.algo.ts:1707",
-    "pc": [
-      7780
-    ]
-  },
-  {
     "teal": 8509,
-    "source": "contracts\\BiatecClammPool.algo.ts:1707",
+    "source": "contracts\\BiatecClammPool.algo.ts:1713",
+    "errorMessage": "this.LiqudityBiatecFromFees.value as uint64 overflowed 64 bits",
     "pc": [
-      7781
+      7778
     ]
   },
   {
     "teal": 8510,
-    "source": "contracts\\BiatecClammPool.algo.ts:1707",
+    "source": "contracts\\BiatecClammPool.algo.ts:1713",
+    "pc": [
+      7779,
+      7780,
+      7781
+    ]
+  },
+  {
+    "teal": 8511,
+    "source": "contracts\\BiatecClammPool.algo.ts:1713",
     "pc": [
       7782
     ]
   },
   {
-    "teal": 8511,
-    "source": "contracts\\BiatecClammPool.algo.ts:1708",
-    "pc": [
-      7783,
-      7784
-    ]
-  },
-  {
     "teal": 8512,
-    "source": "contracts\\BiatecClammPool.algo.ts:1708",
+    "source": "contracts\\BiatecClammPool.algo.ts:1713",
     "pc": [
-      7785
+      7783
     ]
   },
   {
     "teal": 8513,
-    "source": "contracts\\BiatecClammPool.algo.ts:1708",
+    "source": "contracts\\BiatecClammPool.algo.ts:1713",
     "pc": [
-      7786
+      7784
     ]
   },
   {
     "teal": 8514,
-    "source": "contracts\\BiatecClammPool.algo.ts:1708",
+    "source": "contracts\\BiatecClammPool.algo.ts:1703",
     "pc": [
-      7787,
-      7788
+      7785,
+      7786
     ]
   },
   {
     "teal": 8515,
-    "source": "contracts\\BiatecClammPool.algo.ts:1708",
+    "source": "contracts\\BiatecClammPool.algo.ts:1703",
+    "pc": [
+      7787
+    ]
+  },
+  {
+    "teal": 8516,
+    "source": "contracts\\BiatecClammPool.algo.ts:1703",
+    "pc": [
+      7788
+    ]
+  },
+  {
+    "teal": 8517,
+    "source": "contracts\\BiatecClammPool.algo.ts:1703",
     "pc": [
       7789
     ]
   },
   {
     "teal": 8518,
-    "source": "contracts\\BiatecClammPool.algo.ts:1708",
-    "errorMessage": "biatecFee as uint64 overflowed 64 bits",
+    "source": "contracts\\BiatecClammPool.algo.ts:1704",
     "pc": [
-      7790
+      7790,
+      7791
     ]
   },
   {
     "teal": 8519,
-    "source": "contracts\\BiatecClammPool.algo.ts:1708",
+    "source": "contracts\\BiatecClammPool.algo.ts:1704",
     "pc": [
-      7791,
-      7792,
-      7793
+      7792
     ]
   },
   {
     "teal": 8520,
-    "source": "contracts\\BiatecClammPool.algo.ts:1708",
+    "source": "contracts\\BiatecClammPool.algo.ts:1704",
+    "pc": [
+      7793
+    ]
+  },
+  {
+    "teal": 8521,
+    "source": "contracts\\BiatecClammPool.algo.ts:1704",
     "pc": [
       7794
     ]
   },
   {
-    "teal": 8521,
-    "source": "contracts\\BiatecClammPool.algo.ts:1708",
-    "pc": [
-      7795
-    ]
-  },
-  {
     "teal": 8522,
-    "source": "contracts\\BiatecClammPool.algo.ts:1708",
+    "source": "contracts\\BiatecClammPool.algo.ts:1705",
     "pc": [
+      7795,
       7796
     ]
   },
   {
     "teal": 8523,
-    "source": "contracts\\BiatecClammPool.algo.ts:1717",
+    "source": "contracts\\BiatecClammPool.algo.ts:1705",
     "pc": [
-      7797,
-      7798
+      7797
     ]
   },
   {
     "teal": 8524,
-    "source": "contracts\\BiatecClammPool.algo.ts:1717",
+    "source": "contracts\\BiatecClammPool.algo.ts:1705",
+    "pc": [
+      7798
+    ]
+  },
+  {
+    "teal": 8525,
+    "source": "contracts\\BiatecClammPool.algo.ts:1705",
     "pc": [
       7799
     ]
   },
   {
-    "teal": 8525,
-    "source": "contracts\\BiatecClammPool.algo.ts:1717",
-    "pc": [
-      7800
-    ]
-  },
-  {
     "teal": 8526,
-    "source": "contracts\\BiatecClammPool.algo.ts:1717",
+    "source": "contracts\\BiatecClammPool.algo.ts:1715",
     "pc": [
+      7800,
       7801
     ]
   },
   {
-    "teal": 8529,
-    "source": "contracts\\BiatecClammPool.algo.ts:1684",
+    "teal": 8527,
+    "source": "contracts\\BiatecClammPool.algo.ts:1715",
     "pc": [
-      7802,
+      7802
+    ]
+  },
+  {
+    "teal": 8528,
+    "source": "contracts\\BiatecClammPool.algo.ts:1715",
+    "pc": [
       7803
     ]
   },
   {
-    "teal": 8532,
-    "source": "contracts\\BiatecClammPool.algo.ts:1684",
+    "teal": 8529,
+    "source": "contracts\\BiatecClammPool.algo.ts:1715",
     "pc": [
-      7804,
-      7805
+      7804
     ]
   },
   {
-    "teal": 8533,
-    "source": "contracts\\BiatecClammPool.algo.ts:1684",
+    "teal": 8530,
+    "source": "contracts\\BiatecClammPool.algo.ts:1710",
     "pc": [
+      7805,
       7806
     ]
   },
   {
-    "teal": 8536,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "teal": 8531,
+    "source": "contracts\\BiatecClammPool.algo.ts:1710",
     "pc": [
-      7807,
-      7808,
-      7809,
+      7807
+    ]
+  },
+  {
+    "teal": 8532,
+    "source": "contracts\\BiatecClammPool.algo.ts:1710",
+    "pc": [
+      7808
+    ]
+  },
+  {
+    "teal": 8533,
+    "source": "contracts\\BiatecClammPool.algo.ts:1710",
+    "pc": [
+      7809
+    ]
+  },
+  {
+    "teal": 8534,
+    "source": "contracts\\BiatecClammPool.algo.ts:1711",
+    "pc": [
       7810,
-      7811,
+      7811
+    ]
+  },
+  {
+    "teal": 8535,
+    "source": "contracts\\BiatecClammPool.algo.ts:1711",
+    "pc": [
       7812
     ]
   },
   {
-    "teal": 8537,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "teal": 8536,
+    "source": "contracts\\BiatecClammPool.algo.ts:1711",
     "pc": [
-      7813,
+      7813
+    ]
+  },
+  {
+    "teal": 8537,
+    "source": "contracts\\BiatecClammPool.algo.ts:1711",
+    "pc": [
       7814,
       7815
     ]
   },
   {
     "teal": 8538,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "source": "contracts\\BiatecClammPool.algo.ts:1711",
     "pc": [
-      7816,
-      7817,
-      7818,
-      7819
+      7816
     ]
   },
   {
     "teal": 8541,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "errorMessage": "this contract does not implement the given ABI method for create NoOp",
+    "source": "contracts\\BiatecClammPool.algo.ts:1711",
+    "errorMessage": "biatecFee as uint64 overflowed 64 bits",
     "pc": [
+      7817
+    ]
+  },
+  {
+    "teal": 8542,
+    "source": "contracts\\BiatecClammPool.algo.ts:1711",
+    "pc": [
+      7818,
+      7819,
       7820
     ]
   },
   {
-    "teal": 8544,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "teal": 8543,
+    "source": "contracts\\BiatecClammPool.algo.ts:1711",
     "pc": [
-      7821,
-      7822,
-      7823,
-      7824,
-      7825,
-      7826
+      7821
+    ]
+  },
+  {
+    "teal": 8544,
+    "source": "contracts\\BiatecClammPool.algo.ts:1711",
+    "pc": [
+      7822
     ]
   },
   {
     "teal": 8545,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "source": "contracts\\BiatecClammPool.algo.ts:1711",
     "pc": [
-      7827,
-      7828,
+      7823
+    ]
+  },
+  {
+    "teal": 8546,
+    "source": "contracts\\BiatecClammPool.algo.ts:1720",
+    "pc": [
+      7824,
+      7825
+    ]
+  },
+  {
+    "teal": 8547,
+    "source": "contracts\\BiatecClammPool.algo.ts:1720",
+    "pc": [
+      7826
+    ]
+  },
+  {
+    "teal": 8548,
+    "source": "contracts\\BiatecClammPool.algo.ts:1720",
+    "pc": [
+      7827
+    ]
+  },
+  {
+    "teal": 8549,
+    "source": "contracts\\BiatecClammPool.algo.ts:1720",
+    "pc": [
+      7828
+    ]
+  },
+  {
+    "teal": 8552,
+    "source": "contracts\\BiatecClammPool.algo.ts:1684",
+    "pc": [
       7829,
-      7830,
+      7830
+    ]
+  },
+  {
+    "teal": 8555,
+    "source": "contracts\\BiatecClammPool.algo.ts:1684",
+    "pc": [
       7831,
       7832
     ]
   },
   {
-    "teal": 8546,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7833,
-      7834,
-      7835,
-      7836,
-      7837,
-      7838
-    ]
-  },
-  {
-    "teal": 8547,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7839,
-      7840,
-      7841,
-      7842,
-      7843,
-      7844
-    ]
-  },
-  {
-    "teal": 8548,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7845,
-      7846,
-      7847,
-      7848,
-      7849,
-      7850
-    ]
-  },
-  {
-    "teal": 8549,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7851,
-      7852,
-      7853,
-      7854,
-      7855,
-      7856
-    ]
-  },
-  {
-    "teal": 8550,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7857,
-      7858,
-      7859,
-      7860,
-      7861,
-      7862
-    ]
-  },
-  {
-    "teal": 8551,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7863,
-      7864,
-      7865,
-      7866,
-      7867,
-      7868
-    ]
-  },
-  {
-    "teal": 8552,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7869,
-      7870,
-      7871,
-      7872,
-      7873,
-      7874
-    ]
-  },
-  {
-    "teal": 8553,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7875,
-      7876,
-      7877,
-      7878,
-      7879,
-      7880
-    ]
-  },
-  {
-    "teal": 8554,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7881,
-      7882,
-      7883,
-      7884,
-      7885,
-      7886
-    ]
-  },
-  {
-    "teal": 8555,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7887,
-      7888,
-      7889,
-      7890,
-      7891,
-      7892
-    ]
-  },
-  {
     "teal": 8556,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "source": "contracts\\BiatecClammPool.algo.ts:1684",
     "pc": [
-      7893,
-      7894,
-      7895,
-      7896,
-      7897,
-      7898
-    ]
-  },
-  {
-    "teal": 8557,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7899,
-      7900,
-      7901,
-      7902,
-      7903,
-      7904
-    ]
-  },
-  {
-    "teal": 8558,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7905,
-      7906,
-      7907,
-      7908,
-      7909,
-      7910
+      7833
     ]
   },
   {
     "teal": 8559,
     "source": "contracts\\BiatecClammPool.algo.ts:36",
     "pc": [
-      7911,
-      7912,
-      7913,
-      7914,
-      7915,
-      7916
+      7834,
+      7835,
+      7836,
+      7837,
+      7838,
+      7839
     ]
   },
   {
     "teal": 8560,
     "source": "contracts\\BiatecClammPool.algo.ts:36",
     "pc": [
-      7917,
-      7918,
-      7919,
-      7920,
-      7921,
-      7922
+      7840,
+      7841,
+      7842
     ]
   },
   {
     "teal": 8561,
     "source": "contracts\\BiatecClammPool.algo.ts:36",
     "pc": [
-      7923,
-      7924,
-      7925,
-      7926,
-      7927,
-      7928
-    ]
-  },
-  {
-    "teal": 8562,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7929,
-      7930,
-      7931,
-      7932,
-      7933,
-      7934
-    ]
-  },
-  {
-    "teal": 8563,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7935,
-      7936,
-      7937,
-      7938,
-      7939,
-      7940
+      7843,
+      7844,
+      7845,
+      7846
     ]
   },
   {
     "teal": 8564,
     "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "errorMessage": "this contract does not implement the given ABI method for create NoOp",
     "pc": [
-      7941,
-      7942,
-      7943,
-      7944,
-      7945,
-      7946
-    ]
-  },
-  {
-    "teal": 8565,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7947,
-      7948,
-      7949,
-      7950,
-      7951,
-      7952
-    ]
-  },
-  {
-    "teal": 8566,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
-      7953,
-      7954,
-      7955,
-      7956,
-      7957,
-      7958
+      7847
     ]
   },
   {
     "teal": 8567,
     "source": "contracts\\BiatecClammPool.algo.ts:36",
     "pc": [
+      7848,
+      7849,
+      7850,
+      7851,
+      7852,
+      7853
+    ]
+  },
+  {
+    "teal": 8568,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7854,
+      7855,
+      7856,
+      7857,
+      7858,
+      7859
+    ]
+  },
+  {
+    "teal": 8569,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7860,
+      7861,
+      7862,
+      7863,
+      7864,
+      7865
+    ]
+  },
+  {
+    "teal": 8570,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7866,
+      7867,
+      7868,
+      7869,
+      7870,
+      7871
+    ]
+  },
+  {
+    "teal": 8571,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7872,
+      7873,
+      7874,
+      7875,
+      7876,
+      7877
+    ]
+  },
+  {
+    "teal": 8572,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7878,
+      7879,
+      7880,
+      7881,
+      7882,
+      7883
+    ]
+  },
+  {
+    "teal": 8573,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7884,
+      7885,
+      7886,
+      7887,
+      7888,
+      7889
+    ]
+  },
+  {
+    "teal": 8574,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7890,
+      7891,
+      7892,
+      7893,
+      7894,
+      7895
+    ]
+  },
+  {
+    "teal": 8575,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7896,
+      7897,
+      7898,
+      7899,
+      7900,
+      7901
+    ]
+  },
+  {
+    "teal": 8576,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7902,
+      7903,
+      7904,
+      7905,
+      7906,
+      7907
+    ]
+  },
+  {
+    "teal": 8577,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7908,
+      7909,
+      7910,
+      7911,
+      7912,
+      7913
+    ]
+  },
+  {
+    "teal": 8578,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7914,
+      7915,
+      7916,
+      7917,
+      7918,
+      7919
+    ]
+  },
+  {
+    "teal": 8579,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7920,
+      7921,
+      7922,
+      7923,
+      7924,
+      7925
+    ]
+  },
+  {
+    "teal": 8580,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7926,
+      7927,
+      7928,
+      7929,
+      7930,
+      7931
+    ]
+  },
+  {
+    "teal": 8581,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7932,
+      7933,
+      7934,
+      7935,
+      7936,
+      7937
+    ]
+  },
+  {
+    "teal": 8582,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7938,
+      7939,
+      7940,
+      7941,
+      7942,
+      7943
+    ]
+  },
+  {
+    "teal": 8583,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7944,
+      7945,
+      7946,
+      7947,
+      7948,
+      7949
+    ]
+  },
+  {
+    "teal": 8584,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7950,
+      7951,
+      7952,
+      7953,
+      7954,
+      7955
+    ]
+  },
+  {
+    "teal": 8585,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      7956,
+      7957,
+      7958,
       7959,
       7960,
       7961
     ]
   },
   {
-    "teal": 8568,
+    "teal": 8586,
     "source": "contracts\\BiatecClammPool.algo.ts:36",
     "pc": [
       7962,
@@ -38896,28 +38962,58 @@
       7964,
       7965,
       7966,
-      7967,
+      7967
+    ]
+  },
+  {
+    "teal": 8587,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
       7968,
       7969,
       7970,
       7971,
       7972,
-      7973,
+      7973
+    ]
+  },
+  {
+    "teal": 8588,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
       7974,
       7975,
       7976,
       7977,
       7978,
-      7979,
+      7979
+    ]
+  },
+  {
+    "teal": 8589,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
       7980,
       7981,
       7982,
       7983,
       7984,
-      7985,
+      7985
+    ]
+  },
+  {
+    "teal": 8590,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
       7986,
       7987,
-      7988,
+      7988
+    ]
+  },
+  {
+    "teal": 8591,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
       7989,
       7990,
       7991,
@@ -38938,54 +39034,81 @@
       8006,
       8007,
       8008,
-      8009
-    ]
-  },
-  {
-    "teal": 8571,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "errorMessage": "this contract does not implement the given ABI method for call NoOp",
-    "pc": [
-      8010
-    ]
-  },
-  {
-    "teal": 8574,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
+      8009,
+      8010,
       8011,
       8012,
       8013,
       8014,
       8015,
-      8016
-    ]
-  },
-  {
-    "teal": 8575,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
+      8016,
       8017,
       8018,
-      8019
-    ]
-  },
-  {
-    "teal": 8576,
-    "source": "contracts\\BiatecClammPool.algo.ts:36",
-    "pc": [
+      8019,
       8020,
       8021,
       8022,
-      8023
+      8023,
+      8024,
+      8025,
+      8026,
+      8027,
+      8028,
+      8029,
+      8030,
+      8031,
+      8032,
+      8033,
+      8034,
+      8035,
+      8036
     ]
   },
   {
-    "teal": 8579,
+    "teal": 8594,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "errorMessage": "this contract does not implement the given ABI method for call NoOp",
+    "pc": [
+      8037
+    ]
+  },
+  {
+    "teal": 8597,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      8038,
+      8039,
+      8040,
+      8041,
+      8042,
+      8043
+    ]
+  },
+  {
+    "teal": 8598,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      8044,
+      8045,
+      8046
+    ]
+  },
+  {
+    "teal": 8599,
+    "source": "contracts\\BiatecClammPool.algo.ts:36",
+    "pc": [
+      8047,
+      8048,
+      8049,
+      8050
+    ]
+  },
+  {
+    "teal": 8602,
     "source": "contracts\\BiatecClammPool.algo.ts:36",
     "errorMessage": "this contract does not implement the given ABI method for call UpdateApplication",
     "pc": [
-      8024
+      8051
     ]
   }
 ]

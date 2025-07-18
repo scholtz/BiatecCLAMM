@@ -8319,7 +8319,7 @@ status:
 	// contracts\BiatecClammPool.algo.ts:1694
 	// realBalanceA =
 	//       assetA.id === 0
-	//         ? globals.currentApplicationAddress.balance
+	//         ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
 	//         : globals.currentApplicationAddress.assetBalance(assetA)
 	frame_dig -2 // assetA: AssetID
 	intc 2 // 0
@@ -8328,6 +8328,10 @@ status:
 	global CurrentApplicationAddress
 	acct_params_get AcctBalance
 	pop
+	global CurrentApplicationAddress
+	acct_params_get AcctMinBalance
+	pop
+	-
 	b *ternary0_end
 
 *ternary0_false:
@@ -8340,14 +8344,33 @@ status:
 	frame_bury 1 // realBalanceA: uint64
 
 	// contracts\BiatecClammPool.algo.ts:1698
-	// realBalanceB = globals.currentApplicationAddress.assetBalance(assetB)
+	// realBalanceB =
+	//     assetB.id === 0
+	//         ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
+	//         : globals.currentApplicationAddress.assetBalance(assetB)
+	frame_dig -3 // assetB: AssetID
+	intc 2 // 0
+	==
+	bz *ternary1_false
+	global CurrentApplicationAddress
+	acct_params_get AcctBalance
+	pop
+	global CurrentApplicationAddress
+	acct_params_get AcctMinBalance
+	pop
+	-
+	b *ternary1_end
+
+*ternary1_false:
 	global CurrentApplicationAddress
 	frame_dig -3 // assetB: AssetID
 	asset_holding_get AssetBalance
 	pop
+
+*ternary1_end:
 	frame_bury 2 // realBalanceB: uint64
 
-	// contracts\BiatecClammPool.algo.ts:1699
+	// contracts\BiatecClammPool.algo.ts:1702
 	// return {
 	//       assetA: this.assetA.value,
 	//       assetB: this.assetB.value,

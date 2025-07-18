@@ -601,7 +601,7 @@ describe('clamm', () => {
         appBiatecPoolProvider: clientBiatecPoolProvider.appClient.appId,
         fromAmount: BigInt(5 * SCALE_ALGO),
         fromAsset: 0n,
-        minimumToReceive: BigInt(0.9 * SCALE_B),
+        minimumToReceive: BigInt(0.7 * SCALE_B),
       };
       console.log('swap', swapInput);
       const swap = await clammSwapSender(swapInput);

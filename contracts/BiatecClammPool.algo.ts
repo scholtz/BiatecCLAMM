@@ -1693,9 +1693,12 @@ export class BiatecClammPool extends Contract {
     const biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256;
     const realBalanceA =
       assetA.id === 0
-        ? globals.currentApplicationAddress.balance
+        ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
         : globals.currentApplicationAddress.assetBalance(assetA);
-    const realBalanceB = globals.currentApplicationAddress.assetBalance(assetB);
+    const realBalanceB =
+    assetB.id === 0
+        ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
+        : globals.currentApplicationAddress.assetBalance(assetB);
     return {
       assetA: this.assetA.value,
       assetB: this.assetB.value,
