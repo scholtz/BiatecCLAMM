@@ -127,7 +127,7 @@ const app = async () => {
   if(!appBiatecClammPool ) {
     throw new Error('Please set appBiatecClammPool env variables');
   }
-  console.log('upgrading single pool');
+  console.log(`making pool ${appBiatecClammPool} online`);
 
   var pool = new BiatecClammPoolClient({
     appId: appBiatecClammPool,
@@ -136,12 +136,47 @@ const app = async () => {
     defaultSigner: signer.signer,
   })
 
-  await pool.send.update.updateApplication({
-    args:{
-      appBiatecConfigProvider: appBiatecConfigProvider,
-      newVersion: Buffer.from('BIATEC-CLAMM-01-05-04','ascii'),
-    }
-  })
+  // first find the app address .. for 3125651391 is X5CHHSCGANKUKDPRMPR3V4HSSDWQTZB3SDR6LJ5YMI7JZ7ZO2OLFABDS7I
+  // then issue the participation key: ADDRESS=X5CHHSCGANKUKDPRMPR3V4HSSDWQTZB3SDR6LJ5YMI7JZ7ZO2OLFABDS7I ROUNDS=10000000 ./create-participation-key.sh
+var participatiDetails =`Participation ID:          3LJNO6P7GH5EA6U46FYTKDJCDUYLLBMSXSOVFVCDNF27F45HCC7A
+Parent address:            X5CHHSCGANKUKDPRMPR3V4HSSDWQTZB3SDR6LJ5YMI7JZ7ZO2OLFABDS7I
+Last vote round:           N/A
+Last block proposal round: N/A
+Effective first round:     N/A
+Effective last round:      N/A
+First round:               51950243
+Last round:                61950243
+Key dilution:              3163
+Selection key:             rkNH/PtJDyqU9W8chXLYImzJA79lKbzko/pVRx7RLDo=
+Voting key:                sVHAw8+X7GevpkRa4rH7p4UyWQkukGR2ciTvD8eg/9c=
+State proof key:           U2UCQiRe8xPlmN/1v+xK/6djFseMWheL+ox69z6HEryLCYqeyUCMOg+zgt+Ec2XTYxf8h725rCBTzPrT278RyA==`
+
+// Parse participatiDetails
+const parseDetail = (label: string) => {
+  const match = participatiDetails.match(new RegExp(`${label}:\\s+(.+)`));
+  return match ? match[1].trim() : '';
+};
+
+const voteFirst = BigInt(parseDetail('First round'));
+const voteLast = BigInt(parseDetail('Last round'));
+const voteKeyDilution = BigInt(parseDetail('Key dilution'));
+const selectionPk = Buffer.from(parseDetail('Selection key'), 'base64');
+const votePk = Buffer.from(parseDetail('Voting key'), 'base64');
+const stateProofPk = Buffer.from(parseDetail('State proof key'), 'base64');
+const fee = 2000000; // or set as needed
+
+await pool.send.sendOnlineKeyRegistration({
+  args: {
+    appBiatecConfigProvider: appBiatecConfigProvider,
+    selectionPk,
+    stateProofPk,
+    voteFirst,
+    voteLast,
+    voteKeyDilution,
+    votePk,
+    fee,
+  }
+});
 
   console.log(`${Date()} Deploy DONE`);
 };

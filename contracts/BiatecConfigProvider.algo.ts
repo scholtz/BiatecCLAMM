@@ -74,7 +74,9 @@ export class BiatecConfigProvider extends Contract {
       this.txn.sender === this.addressUdpater.value,
       'Only addressUdpater setup in the config can update application'
     );
-    this.version.value = newVersion;
+    log(version);
+    log(newVersion);
+    this.version.value = version;
   }
 
   /**
@@ -185,7 +187,8 @@ export class BiatecConfigProvider extends Contract {
     stateProofPK: bytes,
     voteFirst: uint64,
     voteLast: uint64,
-    voteKeyDilution: uint64
+    voteKeyDilution: uint64,
+    fee: uint64
   ): void {
     assert(
       this.txn.sender === this.addressExecutiveFee.value,
@@ -198,7 +201,7 @@ export class BiatecConfigProvider extends Contract {
       voteKeyDilution: voteKeyDilution,
       voteLast: voteLast,
       votePK: votePK,
-      fee: 0,
+      fee: fee,
     });
   }
 

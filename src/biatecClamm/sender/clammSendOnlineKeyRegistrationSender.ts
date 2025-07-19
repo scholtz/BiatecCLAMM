@@ -8,6 +8,7 @@ interface IClammRemoveLiquidityInput {
   clientBiatecClammPool: BiatecClammPoolClient;
   account: TransactionSignerAccount;
   algod: algosdk.Algodv2;
+  fee: bigint;
 
   appBiatecConfigProvider: bigint;
   keyregParams: ICustomOnlineKeyRegParams;

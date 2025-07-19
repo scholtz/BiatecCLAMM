@@ -516,8 +516,12 @@ setBiatecFee:
 	app_global_put
 	retsub
 
-// sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void
+// sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64,uint64)void
 *abi_route_sendOnlineKeyRegistration:
+	// fee: uint64
+	txna ApplicationArgs 7
+	btoi
+
 	// voteKeyDilution: uint64
 	txna ApplicationArgs 6
 	btoi
@@ -542,20 +546,20 @@ setBiatecFee:
 	txna ApplicationArgs 1
 	extract 2 0
 
-	// execute sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void
+	// execute sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64,uint64)void
 	callsub sendOnlineKeyRegistration
 	intc 0 // 1
 	return
 
-// sendOnlineKeyRegistration(votePK: bytes, selectionPK: bytes, stateProofPK: bytes, voteFirst: uint64, voteLast: uint64, voteKeyDilution: uint64): void
+// sendOnlineKeyRegistration(votePK: bytes, selectionPK: bytes, stateProofPK: bytes, voteFirst: uint64, voteLast: uint64, voteKeyDilution: uint64, fee: uint64): void
 //
 // addressExecutiveFee can perfom key registration for this LP pool
 //
 // Only addressExecutiveFee is allowed to execute this method.
 sendOnlineKeyRegistration:
-	proto 6 0
+	proto 7 0
 
-	// contracts/BiatecConfigProvider.algo.ts:190
+	// contracts/BiatecConfigProvider.algo.ts:191
 	// assert(
 	//       this.txn.sender === this.addressExecutiveFee.value,
 	//       'Only fee executor setup in the config can take the collected fees'
@@ -568,7 +572,7 @@ sendOnlineKeyRegistration:
 	// Only fee executor setup in the config can take the collected fees
 	assert
 
-	// contracts/BiatecConfigProvider.algo.ts:194
+	// contracts/BiatecConfigProvider.algo.ts:195
 	// sendOnlineKeyRegistration({
 	//       selectionPK: selectionPK,
 	//       stateProofPK: stateProofPK,
@@ -576,45 +580,45 @@ sendOnlineKeyRegistration:
 	//       voteKeyDilution: voteKeyDilution,
 	//       voteLast: voteLast,
 	//       votePK: votePK,
-	//       fee: 0,
+	//       fee: fee,
 	//     })
 	itxn_begin
 	pushint 2 // keyreg
 	itxn_field TypeEnum
 
-	// contracts/BiatecConfigProvider.algo.ts:195
+	// contracts/BiatecConfigProvider.algo.ts:196
 	// selectionPK: selectionPK
 	frame_dig -2 // selectionPK: bytes
 	itxn_field SelectionPK
 
-	// contracts/BiatecConfigProvider.algo.ts:196
+	// contracts/BiatecConfigProvider.algo.ts:197
 	// stateProofPK: stateProofPK
 	frame_dig -3 // stateProofPK: bytes
 	itxn_field StateProofPK
 
-	// contracts/BiatecConfigProvider.algo.ts:197
+	// contracts/BiatecConfigProvider.algo.ts:198
 	// voteFirst: voteFirst
 	frame_dig -4 // voteFirst: uint64
 	itxn_field VoteFirst
 
-	// contracts/BiatecConfigProvider.algo.ts:198
+	// contracts/BiatecConfigProvider.algo.ts:199
 	// voteKeyDilution: voteKeyDilution
 	frame_dig -6 // voteKeyDilution: uint64
 	itxn_field VoteKeyDilution
 
-	// contracts/BiatecConfigProvider.algo.ts:199
+	// contracts/BiatecConfigProvider.algo.ts:200
 	// voteLast: voteLast
 	frame_dig -5 // voteLast: uint64
 	itxn_field VoteLast
 
-	// contracts/BiatecConfigProvider.algo.ts:200
+	// contracts/BiatecConfigProvider.algo.ts:201
 	// votePK: votePK
 	frame_dig -1 // votePK: bytes
 	itxn_field VotePK
 
-	// contracts/BiatecConfigProvider.algo.ts:201
-	// fee: 0
-	intc 2 // 0
+	// contracts/BiatecConfigProvider.algo.ts:202
+	// fee: fee
+	frame_dig -7 // fee: uint64
 	itxn_field Fee
 
 	// Submit inner transaction
@@ -653,7 +657,7 @@ sendOnlineKeyRegistration:
 withdrawExcessAssets:
 	proto 2 1
 
-	// contracts/BiatecConfigProvider.algo.ts:214
+	// contracts/BiatecConfigProvider.algo.ts:215
 	// assert(
 	//       this.txn.sender === this.addressExecutiveFee.value,
 	//       'Only fee executor setup in the config can take the collected fees'
@@ -666,14 +670,14 @@ withdrawExcessAssets:
 	// Only fee executor setup in the config can take the collected fees
 	assert
 
-	// contracts/BiatecConfigProvider.algo.ts:219
+	// contracts/BiatecConfigProvider.algo.ts:220
 	// this.doAxfer(this.txn.sender, asset, amount)
 	frame_dig -2 // amount: uint64
 	frame_dig -1 // asset: AssetID
 	txn Sender
 	callsub doAxfer
 
-	// contracts/BiatecConfigProvider.algo.ts:221
+	// contracts/BiatecConfigProvider.algo.ts:222
 	// return amount;
 	frame_dig -2 // amount: uint64
 	retsub
@@ -688,7 +692,7 @@ doAxfer:
 	proto 3 0
 
 	// *if0_condition
-	// contracts/BiatecConfigProvider.algo.ts:231
+	// contracts/BiatecConfigProvider.algo.ts:232
 	// asset.id === 0
 	frame_dig -2 // asset: AssetID
 	intc 2 // 0
@@ -696,7 +700,7 @@ doAxfer:
 	bz *if0_else
 
 	// *if0_consequent
-	// contracts/BiatecConfigProvider.algo.ts:232
+	// contracts/BiatecConfigProvider.algo.ts:233
 	// sendPayment({
 	//         receiver: receiver,
 	//         amount: amount,
@@ -706,17 +710,17 @@ doAxfer:
 	intc 0 //  pay
 	itxn_field TypeEnum
 
-	// contracts/BiatecConfigProvider.algo.ts:233
+	// contracts/BiatecConfigProvider.algo.ts:234
 	// receiver: receiver
 	frame_dig -1 // receiver: Address
 	itxn_field Receiver
 
-	// contracts/BiatecConfigProvider.algo.ts:234
+	// contracts/BiatecConfigProvider.algo.ts:235
 	// amount: amount
 	frame_dig -3 // amount: uint64
 	itxn_field Amount
 
-	// contracts/BiatecConfigProvider.algo.ts:235
+	// contracts/BiatecConfigProvider.algo.ts:236
 	// fee: 0
 	intc 2 // 0
 	itxn_field Fee
@@ -726,7 +730,7 @@ doAxfer:
 	b *if0_end
 
 *if0_else:
-	// contracts/BiatecConfigProvider.algo.ts:238
+	// contracts/BiatecConfigProvider.algo.ts:239
 	// sendAssetTransfer({
 	//         assetReceiver: receiver,
 	//         xferAsset: asset,
@@ -737,22 +741,22 @@ doAxfer:
 	pushint 4 // axfer
 	itxn_field TypeEnum
 
-	// contracts/BiatecConfigProvider.algo.ts:239
+	// contracts/BiatecConfigProvider.algo.ts:240
 	// assetReceiver: receiver
 	frame_dig -1 // receiver: Address
 	itxn_field AssetReceiver
 
-	// contracts/BiatecConfigProvider.algo.ts:240
+	// contracts/BiatecConfigProvider.algo.ts:241
 	// xferAsset: asset
 	frame_dig -2 // asset: AssetID
 	itxn_field XferAsset
 
-	// contracts/BiatecConfigProvider.algo.ts:241
+	// contracts/BiatecConfigProvider.algo.ts:242
 	// assetAmount: amount
 	frame_dig -3 // amount: uint64
 	itxn_field AssetAmount
 
-	// contracts/BiatecConfigProvider.algo.ts:242
+	// contracts/BiatecConfigProvider.algo.ts:243
 	// fee: 0
 	intc 2 // 0
 	itxn_field Fee
@@ -781,7 +785,7 @@ doAxfer:
 	pushbytes 0xbabe1e11 // method "setBiatecIdentity(uint64)void"
 	pushbytes 0xc58b9da4 // method "setBiatecPool(uint64)void"
 	pushbytes 0xca344a34 // method "setBiatecFee(uint256)void"
-	pushbytes 0x49f3a17f // method "sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64)void"
+	pushbytes 0x4ae6e9cb // method "sendOnlineKeyRegistration(byte[],byte[],byte[],uint64,uint64,uint64,uint64)void"
 	pushbytes 0x87283730 // method "withdrawExcessAssets(uint64,uint64)uint64"
 	txna ApplicationArgs 0
 	match *abi_route_bootstrap *abi_route_setAddressUdpater *abi_route_setPaused *abi_route_setAddressGov *abi_route_setAddressExecutive *abi_route_setAddressExecutiveFee *abi_route_setBiatecIdentity *abi_route_setBiatecPool *abi_route_setBiatecFee *abi_route_sendOnlineKeyRegistration *abi_route_withdrawExcessAssets

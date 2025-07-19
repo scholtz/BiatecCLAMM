@@ -236,7 +236,9 @@ export class BiatecIdentityProvider extends Contract {
     assert(this.txn.sender === addressUdpater, 'Only addressUdpater setup in the config can update application');
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
-    this.version.value = newVersion;
+    log(version);
+    log(newVersion);
+    this.version.value = version;
   }
 
   selfRegistration(user: Address, info: IdentityInfo) {
@@ -301,7 +303,8 @@ export class BiatecIdentityProvider extends Contract {
     stateProofPK: bytes,
     voteFirst: uint64,
     voteLast: uint64,
-    voteKeyDilution: uint64
+    voteKeyDilution: uint64,
+    fee: uint64
   ): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
@@ -318,7 +321,7 @@ export class BiatecIdentityProvider extends Contract {
       voteKeyDilution: voteKeyDilution,
       voteLast: voteLast,
       votePK: votePK,
-      fee: 0,
+      fee: fee,
     });
   }
 

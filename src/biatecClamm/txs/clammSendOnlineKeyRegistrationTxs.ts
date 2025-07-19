@@ -8,6 +8,7 @@ interface IClammSendOnlineKeyRegistrationTxsInput {
   params: SuggestedParams;
   clientBiatecClammPool: BiatecClammPoolClient;
   account: TransactionSignerAccount;
+  fee: bigint;
 
   appBiatecConfigProvider: bigint;
   keyregParams: ICustomOnlineKeyRegParams;
@@ -32,6 +33,7 @@ const clammSendOnlineKeyRegistrationTxs = async (
       voteFirst: keyregParams.voteFirst,
       voteLast: keyregParams.voteLast,
       voteKeyDilution: keyregParams.voteKeyDilution,
+      fee: input.fee
     },
     sender: account.addr,
     staticFee: algokit.microAlgos(2000),

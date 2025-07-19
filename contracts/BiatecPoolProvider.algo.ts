@@ -261,7 +261,9 @@ export class BiatecPoolProvider extends Contract {
     assert(this.txn.sender === addressUdpater, 'Only addressUdpater setup in the config can update application');
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
-    this.version.value = newVersion;
+    log(version);
+    log(newVersion);
+    this.version.value = version;
   }
 
   loadCLAMMContractData(
@@ -1086,7 +1088,8 @@ export class BiatecPoolProvider extends Contract {
     stateProofPK: bytes,
     voteFirst: uint64,
     voteLast: uint64,
-    voteKeyDilution: uint64
+    voteKeyDilution: uint64,
+    fee: uint64
   ): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
@@ -1103,7 +1106,7 @@ export class BiatecPoolProvider extends Contract {
       voteKeyDilution: voteKeyDilution,
       voteLast: voteLast,
       votePK: votePK,
-      fee: 0,
+      fee: fee,
     });
   }
 

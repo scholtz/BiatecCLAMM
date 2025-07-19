@@ -184,6 +184,10 @@
         {
           "name": "voteKeyDilution",
           "type": "uint64"
+        },
+        {
+          "name": "fee",
+          "type": "uint64"
         }
       ],
       "returns": {

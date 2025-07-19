@@ -5074,8 +5074,12 @@ registerTrade:
 	callsub updatePriceBoxAggregated
 	retsub
 
-// sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void
+// sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64,uint64)void
 *abi_route_sendOnlineKeyRegistration:
+	// fee: uint64
+	txna ApplicationArgs 8
+	btoi
+
 	// voteKeyDilution: uint64
 	txna ApplicationArgs 7
 	btoi
@@ -5104,24 +5108,24 @@ registerTrade:
 	txna ApplicationArgs 1
 	btoi
 
-	// execute sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void
+	// execute sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64,uint64)void
 	callsub sendOnlineKeyRegistration
 	intc 2 // 1
 	return
 
-// sendOnlineKeyRegistration(appBiatecConfigProvider: AppID, votePK: bytes, selectionPK: bytes, stateProofPK: bytes, voteFirst: uint64, voteLast: uint64, voteKeyDilution: uint64): void
+// sendOnlineKeyRegistration(appBiatecConfigProvider: AppID, votePK: bytes, selectionPK: bytes, stateProofPK: bytes, voteFirst: uint64, voteLast: uint64, voteKeyDilution: uint64, fee: uint64): void
 //
 // addressExecutiveFee can perfom key registration for this LP pool
 //
 // Only addressExecutiveFee is allowed to execute this method.
 sendOnlineKeyRegistration:
-	proto 7 0
+	proto 8 0
 
 	// Push empty bytes after the frame pointer to reserve space for local variables
 	bytec 1 // 0x
 	dup
 
-	// contracts/BiatecPoolProvider.algo.ts:1091
+	// contracts/BiatecPoolProvider.algo.ts:1092
 	// assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match')
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	bytec 13 //  "B"
@@ -5131,7 +5135,7 @@ sendOnlineKeyRegistration:
 	// Configuration app does not match
 	assert
 
-	// contracts/BiatecPoolProvider.algo.ts:1092
+	// contracts/BiatecPoolProvider.algo.ts:1093
 	// addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	bytec 30 //  "ef"
@@ -5141,7 +5145,7 @@ sendOnlineKeyRegistration:
 	assert
 	frame_bury 0 // addressExecutiveFee: address
 
-	// contracts/BiatecPoolProvider.algo.ts:1093
+	// contracts/BiatecPoolProvider.algo.ts:1094
 	// paused = appBiatecConfigProvider.globalState('s') as uint64
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	bytec 2 //  "s"
@@ -5151,7 +5155,7 @@ sendOnlineKeyRegistration:
 	assert
 	frame_bury 1 // paused: uint64
 
-	// contracts/BiatecPoolProvider.algo.ts:1094
+	// contracts/BiatecPoolProvider.algo.ts:1095
 	// assert(paused === 0, 'ERR_PAUSED')
 	frame_dig 1 // paused: uint64
 	intc 1 // 0
@@ -5160,7 +5164,7 @@ sendOnlineKeyRegistration:
 	// ERR_PAUSED
 	assert
 
-	// contracts/BiatecPoolProvider.algo.ts:1095
+	// contracts/BiatecPoolProvider.algo.ts:1096
 	// assert(
 	//       this.txn.sender === addressExecutiveFee,
 	//       'Only fee executor setup in the config can take the collected fees'
@@ -5172,7 +5176,7 @@ sendOnlineKeyRegistration:
 	// Only fee executor setup in the config can take the collected fees
 	assert
 
-	// contracts/BiatecPoolProvider.algo.ts:1099
+	// contracts/BiatecPoolProvider.algo.ts:1100
 	// sendOnlineKeyRegistration({
 	//       selectionPK: selectionPK,
 	//       stateProofPK: stateProofPK,
@@ -5180,45 +5184,45 @@ sendOnlineKeyRegistration:
 	//       voteKeyDilution: voteKeyDilution,
 	//       voteLast: voteLast,
 	//       votePK: votePK,
-	//       fee: 0,
+	//       fee: fee,
 	//     })
 	itxn_begin
 	intc 30 //  keyreg
 	itxn_field TypeEnum
 
-	// contracts/BiatecPoolProvider.algo.ts:1100
+	// contracts/BiatecPoolProvider.algo.ts:1101
 	// selectionPK: selectionPK
 	frame_dig -3 // selectionPK: bytes
 	itxn_field SelectionPK
 
-	// contracts/BiatecPoolProvider.algo.ts:1101
+	// contracts/BiatecPoolProvider.algo.ts:1102
 	// stateProofPK: stateProofPK
 	frame_dig -4 // stateProofPK: bytes
 	itxn_field StateProofPK
 
-	// contracts/BiatecPoolProvider.algo.ts:1102
+	// contracts/BiatecPoolProvider.algo.ts:1103
 	// voteFirst: voteFirst
 	frame_dig -5 // voteFirst: uint64
 	itxn_field VoteFirst
 
-	// contracts/BiatecPoolProvider.algo.ts:1103
+	// contracts/BiatecPoolProvider.algo.ts:1104
 	// voteKeyDilution: voteKeyDilution
 	frame_dig -7 // voteKeyDilution: uint64
 	itxn_field VoteKeyDilution
 
-	// contracts/BiatecPoolProvider.algo.ts:1104
+	// contracts/BiatecPoolProvider.algo.ts:1105
 	// voteLast: voteLast
 	frame_dig -6 // voteLast: uint64
 	itxn_field VoteLast
 
-	// contracts/BiatecPoolProvider.algo.ts:1105
+	// contracts/BiatecPoolProvider.algo.ts:1106
 	// votePK: votePK
 	frame_dig -2 // votePK: bytes
 	itxn_field VotePK
 
-	// contracts/BiatecPoolProvider.algo.ts:1106
-	// fee: 0
-	intc 1 // 0
+	// contracts/BiatecPoolProvider.algo.ts:1107
+	// fee: fee
+	frame_dig -8 // fee: uint64
 	itxn_field Fee
 
 	// Submit inner transaction
@@ -5266,7 +5270,7 @@ withdrawExcessAssets:
 	bytec 1 // 0x
 	dup
 
-	// contracts/BiatecPoolProvider.algo.ts:1120
+	// contracts/BiatecPoolProvider.algo.ts:1121
 	// assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match')
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	bytec 13 //  "B"
@@ -5276,7 +5280,7 @@ withdrawExcessAssets:
 	// Configuration app does not match
 	assert
 
-	// contracts/BiatecPoolProvider.algo.ts:1121
+	// contracts/BiatecPoolProvider.algo.ts:1122
 	// addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	bytec 30 //  "ef"
@@ -5286,7 +5290,7 @@ withdrawExcessAssets:
 	assert
 	frame_bury 0 // addressExecutiveFee: address
 
-	// contracts/BiatecPoolProvider.algo.ts:1122
+	// contracts/BiatecPoolProvider.algo.ts:1123
 	// paused = appBiatecConfigProvider.globalState('s') as uint64
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	bytec 2 //  "s"
@@ -5296,7 +5300,7 @@ withdrawExcessAssets:
 	assert
 	frame_bury 1 // paused: uint64
 
-	// contracts/BiatecPoolProvider.algo.ts:1123
+	// contracts/BiatecPoolProvider.algo.ts:1124
 	// assert(paused === 0, 'ERR_PAUSED')
 	frame_dig 1 // paused: uint64
 	intc 1 // 0
@@ -5305,7 +5309,7 @@ withdrawExcessAssets:
 	// ERR_PAUSED
 	assert
 
-	// contracts/BiatecPoolProvider.algo.ts:1124
+	// contracts/BiatecPoolProvider.algo.ts:1125
 	// assert(
 	//       this.txn.sender === addressExecutiveFee,
 	//       'Only fee executor setup in the config can take the collected fees'
@@ -5317,14 +5321,14 @@ withdrawExcessAssets:
 	// Only fee executor setup in the config can take the collected fees
 	assert
 
-	// contracts/BiatecPoolProvider.algo.ts:1129
+	// contracts/BiatecPoolProvider.algo.ts:1130
 	// this.doAxfer(this.txn.sender, asset, amount)
 	frame_dig -3 // amount: uint64
 	frame_dig -2 // asset: AssetID
 	txn Sender
 	callsub doAxfer
 
-	// contracts/BiatecPoolProvider.algo.ts:1131
+	// contracts/BiatecPoolProvider.algo.ts:1132
 	// return amount;
 	frame_dig -3 // amount: uint64
 
@@ -5345,7 +5349,7 @@ doAxfer:
 	proto 3 0
 
 	// *if24_condition
-	// contracts/BiatecPoolProvider.algo.ts:1141
+	// contracts/BiatecPoolProvider.algo.ts:1142
 	// asset.id === 0
 	frame_dig -2 // asset: AssetID
 	intc 1 // 0
@@ -5353,7 +5357,7 @@ doAxfer:
 	bz *if24_else
 
 	// *if24_consequent
-	// contracts/BiatecPoolProvider.algo.ts:1142
+	// contracts/BiatecPoolProvider.algo.ts:1143
 	// sendPayment({
 	//         receiver: receiver,
 	//         amount: amount,
@@ -5363,17 +5367,17 @@ doAxfer:
 	intc 2 //  pay
 	itxn_field TypeEnum
 
-	// contracts/BiatecPoolProvider.algo.ts:1143
+	// contracts/BiatecPoolProvider.algo.ts:1144
 	// receiver: receiver
 	frame_dig -1 // receiver: Address
 	itxn_field Receiver
 
-	// contracts/BiatecPoolProvider.algo.ts:1144
+	// contracts/BiatecPoolProvider.algo.ts:1145
 	// amount: amount
 	frame_dig -3 // amount: uint64
 	itxn_field Amount
 
-	// contracts/BiatecPoolProvider.algo.ts:1145
+	// contracts/BiatecPoolProvider.algo.ts:1146
 	// fee: 0
 	intc 1 // 0
 	itxn_field Fee
@@ -5383,7 +5387,7 @@ doAxfer:
 	b *if24_end
 
 *if24_else:
-	// contracts/BiatecPoolProvider.algo.ts:1148
+	// contracts/BiatecPoolProvider.algo.ts:1149
 	// sendAssetTransfer({
 	//         assetReceiver: receiver,
 	//         xferAsset: asset,
@@ -5394,22 +5398,22 @@ doAxfer:
 	intc 32 //  axfer
 	itxn_field TypeEnum
 
-	// contracts/BiatecPoolProvider.algo.ts:1149
+	// contracts/BiatecPoolProvider.algo.ts:1150
 	// assetReceiver: receiver
 	frame_dig -1 // receiver: Address
 	itxn_field AssetReceiver
 
-	// contracts/BiatecPoolProvider.algo.ts:1150
+	// contracts/BiatecPoolProvider.algo.ts:1151
 	// xferAsset: asset
 	frame_dig -2 // asset: AssetID
 	itxn_field XferAsset
 
-	// contracts/BiatecPoolProvider.algo.ts:1151
+	// contracts/BiatecPoolProvider.algo.ts:1152
 	// assetAmount: amount
 	frame_dig -3 // amount: uint64
 	itxn_field AssetAmount
 
-	// contracts/BiatecPoolProvider.algo.ts:1152
+	// contracts/BiatecPoolProvider.algo.ts:1153
 	// fee: 0
 	intc 1 // 0
 	itxn_field Fee
@@ -5459,7 +5463,7 @@ getPrice:
 	dup
 
 	// *if25_condition
-	// contracts/BiatecPoolProvider.algo.ts:1165
+	// contracts/BiatecPoolProvider.algo.ts:1166
 	// appPoolId.id > 0
 	frame_dig -3 // appPoolId: AppID
 	intc 1 // 0
@@ -5467,7 +5471,7 @@ getPrice:
 	bz *if25_end
 
 	// *if25_consequent
-	// contracts/BiatecPoolProvider.algo.ts:1167
+	// contracts/BiatecPoolProvider.algo.ts:1168
 	// info = this.pools(appPoolId.id).value
 	bytec 3 //  "p"
 	frame_dig -3 // appPoolId: AppID
@@ -5475,32 +5479,14 @@ getPrice:
 	concat
 	frame_bury 0 // storage key//info
 
-	// contracts/BiatecPoolProvider.algo.ts:1168
+	// contracts/BiatecPoolProvider.algo.ts:1169
 	// assert(assetA.id === info.assetA)
 	frame_dig -1 // assetA: AssetID
 	intc 1 // 0
 	intc 0 // 8
 	bytec 3 //  "p"
 
-	// contracts/BiatecPoolProvider.algo.ts:1167
-	// appPoolId.id
-	frame_dig -3 // appPoolId: AppID
-	itob
-	concat
-	cover 2
-	box_extract
-	btoi
-	==
-	assert
-
-	// contracts/BiatecPoolProvider.algo.ts:1169
-	// assert(assetB.id === info.assetB)
-	frame_dig -2 // assetB: AssetID
-	intc 0 //  headOffset
-	intc 0 // 8
-	bytec 3 //  "p"
-
-	// contracts/BiatecPoolProvider.algo.ts:1167
+	// contracts/BiatecPoolProvider.algo.ts:1168
 	// appPoolId.id
 	frame_dig -3 // appPoolId: AppID
 	itob
@@ -5512,6 +5498,24 @@ getPrice:
 	assert
 
 	// contracts/BiatecPoolProvider.algo.ts:1170
+	// assert(assetB.id === info.assetB)
+	frame_dig -2 // assetB: AssetID
+	intc 0 //  headOffset
+	intc 0 // 8
+	bytec 3 //  "p"
+
+	// contracts/BiatecPoolProvider.algo.ts:1168
+	// appPoolId.id
+	frame_dig -3 // appPoolId: AppID
+	itob
+	concat
+	cover 2
+	box_extract
+	btoi
+	==
+	assert
+
+	// contracts/BiatecPoolProvider.algo.ts:1171
 	// return info;
 	frame_dig 0 // storage key//info
 	box_get
@@ -5521,7 +5525,7 @@ getPrice:
 	b *getPrice*return
 
 *if25_end:
-	// contracts/BiatecPoolProvider.algo.ts:1173
+	// contracts/BiatecPoolProvider.algo.ts:1174
 	// aggregatedIndex: AssetsCombined = {
 	//       assetA: assetA.id,
 	//       assetB: assetB.id,
@@ -5533,7 +5537,7 @@ getPrice:
 	concat
 	frame_bury 1 // aggregatedIndex: AssetsCombined
 
-	// contracts/BiatecPoolProvider.algo.ts:1177
+	// contracts/BiatecPoolProvider.algo.ts:1178
 	// assert(this.poolsAggregated(aggregatedIndex).exists, 'The asset pair is not registered')
 	bytec 2 //  "s"
 	frame_dig 1 // aggregatedIndex: AssetsCombined
@@ -5545,7 +5549,7 @@ getPrice:
 	// The asset pair is not registered
 	assert
 
-	// contracts/BiatecPoolProvider.algo.ts:1178
+	// contracts/BiatecPoolProvider.algo.ts:1179
 	// return this.poolsAggregated(aggregatedIndex).value;
 	bytec 2 //  "s"
 	frame_dig 1 // aggregatedIndex: AssetsCombined
@@ -5635,7 +5639,7 @@ calculateAssetBWithdrawOnLpDeposit:
 	// Push empty bytes after the frame pointer to reserve space for local variables
 	bytec 1 // 0x
 
-	// contracts/BiatecPoolProvider.algo.ts:1194
+	// contracts/BiatecPoolProvider.algo.ts:1195
 	// ret = (assetBBalance * inAmount) / liqudity
 	frame_dig -2 // assetBBalance: uint256
 	frame_dig -1 // inAmount: uint256
@@ -5644,7 +5648,7 @@ calculateAssetBWithdrawOnLpDeposit:
 	b/
 	frame_bury 0 // ret: unsafe uint256
 
-	// contracts/BiatecPoolProvider.algo.ts:1195
+	// contracts/BiatecPoolProvider.algo.ts:1196
 	// return ret;
 	frame_dig 0 // ret: unsafe uint256
 
@@ -5668,7 +5672,7 @@ calculateAssetBWithdrawOnLpDeposit:
 	pushbytes 0x4d9fffa7 // method "deployPool(uint64,uint64,uint64,uint64,pay,uint64,uint64,uint64,uint64,uint64)uint64"
 	pushbytes 0x40540ee6 // method "registerPool()void"
 	pushbytes 0xe13e4f5a // method "registerTrade(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)void"
-	pushbytes 0x83925c17 // method "sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64)void"
+	pushbytes 0x67914264 // method "sendOnlineKeyRegistration(uint64,byte[],byte[],byte[],uint64,uint64,uint64,uint64)void"
 	pushbytes 0xcba2e95d // method "withdrawExcessAssets(uint64,uint64,uint64)uint64"
 	pushbytes 0xf2295c0c // method "getPrice(uint64,uint64,uint64)(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)"
 	pushbytes 0x05fc238c // method "calculateAssetBWithdrawOnLpDeposit(uint256,uint256,uint256)uint256"

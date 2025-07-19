@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-05-02';
+const version = 'BIATEC-CLAMM-01-05-03';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
@@ -130,7 +130,9 @@ export class BiatecClammPool extends Contract {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressUdpater = appBiatecConfigProvider.globalState('u') as Address;
     assert(this.txn.sender === addressUdpater, 'E_UPDATER'); // 'Only addressUdpater setup in the config can update application');
-    this.version.value = newVersion;
+    log(version);
+    log(newVersion);
+    this.version.value = version;
   }
 
   @abi.readonly
@@ -1245,7 +1247,8 @@ export class BiatecClammPool extends Contract {
     stateProofPk: bytes,
     voteFirst: uint64,
     voteLast: uint64,
-    voteKeyDilution: uint64
+    voteKeyDilution: uint64,
+    fee: uint64
   ): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
@@ -1260,7 +1263,7 @@ export class BiatecClammPool extends Contract {
       voteKeyDilution: voteKeyDilution,
       voteLast: voteLast,
       votePK: votePk,
-      fee: 0,
+      fee: fee,
     });
   }
 

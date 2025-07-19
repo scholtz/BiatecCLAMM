@@ -24451,7 +24451,7 @@
   },
   {
     "teal": 5080,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1089",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1090",
     "pc": [
       5091,
       5092,
@@ -24460,14 +24460,14 @@
   },
   {
     "teal": 5081,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1089",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1090",
     "pc": [
       5094
     ]
   },
   {
     "teal": 5084,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1088",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1089",
     "pc": [
       5095,
       5096,
@@ -24476,14 +24476,14 @@
   },
   {
     "teal": 5085,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1088",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1089",
     "pc": [
       5098
     ]
   },
   {
     "teal": 5088,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1087",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1088",
     "pc": [
       5099,
       5100,
@@ -24492,14 +24492,14 @@
   },
   {
     "teal": 5089,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1087",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1088",
     "pc": [
       5102
     ]
   },
   {
     "teal": 5092,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1086",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1087",
     "pc": [
       5103,
       5104,
@@ -24508,68 +24508,68 @@
   },
   {
     "teal": 5093,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1086",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1087",
     "pc": [
-      5106,
-      5107,
-      5108
+      5106
     ]
   },
   {
     "teal": 5096,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1085",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1086",
     "pc": [
-      5109,
-      5110,
-      5111
+      5107,
+      5108,
+      5109
     ]
   },
   {
     "teal": 5097,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1085",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1086",
     "pc": [
-      5112,
-      5113,
-      5114
+      5110,
+      5111,
+      5112
     ]
   },
   {
     "teal": 5100,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1084",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1085",
     "pc": [
-      5115,
-      5116,
-      5117
+      5113,
+      5114,
+      5115
     ]
   },
   {
     "teal": 5101,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1084",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1085",
     "pc": [
-      5118,
-      5119,
-      5120
+      5116,
+      5117,
+      5118
     ]
   },
   {
     "teal": 5104,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1083",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1084",
     "pc": [
-      5121,
-      5122,
-      5123
+      5119,
+      5120,
+      5121
     ]
   },
   {
     "teal": 5105,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1083",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1084",
     "pc": [
+      5122,
+      5123,
       5124
     ]
   },
   {
     "teal": 5108,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1082",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1083",
     "pc": [
       5125,
       5126,
@@ -24578,29 +24578,29 @@
   },
   {
     "teal": 5109,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1082",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1083",
     "pc": [
       5128
     ]
   },
   {
-    "teal": 5110,
+    "teal": 5112,
     "source": "contracts/BiatecPoolProvider.algo.ts:1082",
     "pc": [
-      5129
+      5129,
+      5130,
+      5131
     ]
   },
   {
-    "teal": 5118,
+    "teal": 5113,
     "source": "contracts/BiatecPoolProvider.algo.ts:1082",
     "pc": [
-      5130,
-      5131,
       5132
     ]
   },
   {
-    "teal": 5121,
+    "teal": 5114,
     "source": "contracts/BiatecPoolProvider.algo.ts:1082",
     "pc": [
       5133
@@ -24610,210 +24610,210 @@
     "teal": 5122,
     "source": "contracts/BiatecPoolProvider.algo.ts:1082",
     "pc": [
-      5134
-    ]
-  },
-  {
-    "teal": 5126,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1091",
-    "pc": [
+      5134,
       5135,
       5136
     ]
   },
   {
-    "teal": 5127,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1091",
+    "teal": 5125,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1082",
     "pc": [
-      5137,
+      5137
+    ]
+  },
+  {
+    "teal": 5126,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1082",
+    "pc": [
       5138
     ]
   },
   {
-    "teal": 5128,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1091",
+    "teal": 5130,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1092",
     "pc": [
-      5139
-    ]
-  },
-  {
-    "teal": 5129,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1091",
-    "pc": [
+      5139,
       5140
     ]
   },
   {
-    "teal": 5132,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1091",
-    "errorMessage": "Configuration app does not match",
+    "teal": 5131,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1092",
     "pc": [
-      5141
+      5141,
+      5142
+    ]
+  },
+  {
+    "teal": 5132,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1092",
+    "pc": [
+      5143
+    ]
+  },
+  {
+    "teal": 5133,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1092",
+    "pc": [
+      5144
     ]
   },
   {
     "teal": 5136,
     "source": "contracts/BiatecPoolProvider.algo.ts:1092",
+    "errorMessage": "Configuration app does not match",
     "pc": [
-      5142,
-      5143
-    ]
-  },
-  {
-    "teal": 5137,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1092",
-    "pc": [
-      5144,
       5145
     ]
   },
   {
-    "teal": 5138,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1092",
+    "teal": 5140,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1093",
     "pc": [
-      5146
-    ]
-  },
-  {
-    "teal": 5141,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1092",
-    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('ef')",
-    "pc": [
+      5146,
       5147
     ]
   },
   {
-    "teal": 5142,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1092",
+    "teal": 5141,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1093",
     "pc": [
       5148,
       5149
     ]
   },
   {
-    "teal": 5146,
+    "teal": 5142,
     "source": "contracts/BiatecPoolProvider.algo.ts:1093",
     "pc": [
-      5150,
+      5150
+    ]
+  },
+  {
+    "teal": 5145,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1093",
+    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('ef')",
+    "pc": [
       5151
     ]
   },
   {
-    "teal": 5147,
+    "teal": 5146,
     "source": "contracts/BiatecPoolProvider.algo.ts:1093",
     "pc": [
-      5152
-    ]
-  },
-  {
-    "teal": 5148,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1093",
-    "pc": [
+      5152,
       5153
     ]
   },
   {
-    "teal": 5151,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1093",
-    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('s')",
+    "teal": 5150,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1094",
     "pc": [
-      5154
+      5154,
+      5155
+    ]
+  },
+  {
+    "teal": 5151,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1094",
+    "pc": [
+      5156
     ]
   },
   {
     "teal": 5152,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1093",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1094",
     "pc": [
-      5155,
-      5156
+      5157
+    ]
+  },
+  {
+    "teal": 5155,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1094",
+    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('s')",
+    "pc": [
+      5158
     ]
   },
   {
     "teal": 5156,
     "source": "contracts/BiatecPoolProvider.algo.ts:1094",
     "pc": [
-      5157,
-      5158
-    ]
-  },
-  {
-    "teal": 5157,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1094",
-    "pc": [
-      5159
-    ]
-  },
-  {
-    "teal": 5158,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1094",
-    "pc": [
+      5159,
       5160
     ]
   },
   {
-    "teal": 5161,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1094",
-    "errorMessage": "ERR_PAUSED",
+    "teal": 5160,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1095",
     "pc": [
-      5161
+      5161,
+      5162
     ]
   },
   {
-    "teal": 5168,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1096",
+    "teal": 5161,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1095",
     "pc": [
-      5162,
       5163
     ]
   },
   {
-    "teal": 5169,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1096",
+    "teal": 5162,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1095",
     "pc": [
-      5164,
+      5164
+    ]
+  },
+  {
+    "teal": 5165,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1095",
+    "errorMessage": "ERR_PAUSED",
+    "pc": [
       5165
     ]
   },
   {
-    "teal": 5170,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1096",
+    "teal": 5172,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1097",
     "pc": [
-      5166
-    ]
-  },
-  {
-    "teal": 5173,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1095",
-    "errorMessage": "Only fee executor setup in the config can take the collected fees",
-    "pc": [
+      5166,
       5167
     ]
   },
   {
-    "teal": 5185,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1099",
+    "teal": 5173,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1097",
     "pc": [
-      5168
+      5168,
+      5169
     ]
   },
   {
-    "teal": 5186,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1099",
+    "teal": 5174,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1097",
     "pc": [
-      5169,
       5170
     ]
   },
   {
-    "teal": 5187,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1099",
+    "teal": 5177,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1096",
+    "errorMessage": "Only fee executor setup in the config can take the collected fees",
     "pc": [
-      5171,
+      5171
+    ]
+  },
+  {
+    "teal": 5189,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1100",
+    "pc": [
       5172
     ]
   },
   {
-    "teal": 5191,
+    "teal": 5190,
     "source": "contracts/BiatecPoolProvider.algo.ts:1100",
     "pc": [
       5173,
@@ -24821,7 +24821,7 @@
     ]
   },
   {
-    "teal": 5192,
+    "teal": 5191,
     "source": "contracts/BiatecPoolProvider.algo.ts:1100",
     "pc": [
       5175,
@@ -24829,7 +24829,7 @@
     ]
   },
   {
-    "teal": 5196,
+    "teal": 5195,
     "source": "contracts/BiatecPoolProvider.algo.ts:1101",
     "pc": [
       5177,
@@ -24837,7 +24837,7 @@
     ]
   },
   {
-    "teal": 5197,
+    "teal": 5196,
     "source": "contracts/BiatecPoolProvider.algo.ts:1101",
     "pc": [
       5179,
@@ -24845,7 +24845,7 @@
     ]
   },
   {
-    "teal": 5201,
+    "teal": 5200,
     "source": "contracts/BiatecPoolProvider.algo.ts:1102",
     "pc": [
       5181,
@@ -24853,7 +24853,7 @@
     ]
   },
   {
-    "teal": 5202,
+    "teal": 5201,
     "source": "contracts/BiatecPoolProvider.algo.ts:1102",
     "pc": [
       5183,
@@ -24861,7 +24861,7 @@
     ]
   },
   {
-    "teal": 5206,
+    "teal": 5205,
     "source": "contracts/BiatecPoolProvider.algo.ts:1103",
     "pc": [
       5185,
@@ -24869,7 +24869,7 @@
     ]
   },
   {
-    "teal": 5207,
+    "teal": 5206,
     "source": "contracts/BiatecPoolProvider.algo.ts:1103",
     "pc": [
       5187,
@@ -24877,7 +24877,7 @@
     ]
   },
   {
-    "teal": 5211,
+    "teal": 5210,
     "source": "contracts/BiatecPoolProvider.algo.ts:1104",
     "pc": [
       5189,
@@ -24885,7 +24885,7 @@
     ]
   },
   {
-    "teal": 5212,
+    "teal": 5211,
     "source": "contracts/BiatecPoolProvider.algo.ts:1104",
     "pc": [
       5191,
@@ -24893,7 +24893,7 @@
     ]
   },
   {
-    "teal": 5216,
+    "teal": 5215,
     "source": "contracts/BiatecPoolProvider.algo.ts:1105",
     "pc": [
       5193,
@@ -24901,7 +24901,7 @@
     ]
   },
   {
-    "teal": 5217,
+    "teal": 5216,
     "source": "contracts/BiatecPoolProvider.algo.ts:1105",
     "pc": [
       5195,
@@ -24909,197 +24909,184 @@
     ]
   },
   {
+    "teal": 5220,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1106",
+    "pc": [
+      5197,
+      5198
+    ]
+  },
+  {
     "teal": 5221,
     "source": "contracts/BiatecPoolProvider.algo.ts:1106",
     "pc": [
-      5197
-    ]
-  },
-  {
-    "teal": 5222,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1106",
-    "pc": [
-      5198,
-      5199
-    ]
-  },
-  {
-    "teal": 5225,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1099",
-    "pc": [
+      5199,
       5200
     ]
   },
   {
+    "teal": 5225,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1107",
+    "pc": [
+      5201,
+      5202
+    ]
+  },
+  {
     "teal": 5226,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1107",
+    "pc": [
+      5203,
+      5204
+    ]
+  },
+  {
+    "teal": 5229,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1100",
+    "pc": [
+      5205
+    ]
+  },
+  {
+    "teal": 5230,
     "source": "contracts/BiatecPoolProvider.algo.ts:1082",
     "pc": [
-      5201
-    ]
-  },
-  {
-    "teal": 5231,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
-    "pc": [
-      5202,
-      5203
-    ]
-  },
-  {
-    "teal": 5234,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
-    "pc": [
-      5204,
-      5205,
       5206
     ]
   },
   {
     "teal": 5235,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
-      5207
+      5207,
+      5208
     ]
   },
   {
     "teal": 5238,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
-      5208,
       5209,
-      5210
-    ]
-  },
-  {
-    "teal": 5239,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
-    "pc": [
+      5210,
       5211
     ]
   },
   {
-    "teal": 5242,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
+    "teal": 5239,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
-      5212,
-      5213,
-      5214
+      5212
     ]
   },
   {
-    "teal": 5243,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
+    "teal": 5242,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
+      5213,
+      5214,
       5215
     ]
   },
   {
-    "teal": 5246,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
+    "teal": 5243,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
-      5216,
-      5217,
-      5218
+      5216
     ]
   },
   {
-    "teal": 5247,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
+    "teal": 5246,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
+      5217,
+      5218,
       5219
     ]
   },
   {
-    "teal": 5248,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
+    "teal": 5247,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
       5220
     ]
   },
   {
-    "teal": 5249,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
-    "pc": [
-      5221
-    ]
-  },
-  {
     "teal": 5250,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
-      5222
-    ]
-  },
-  {
-    "teal": 5251,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
-    "pc": [
+      5221,
+      5222,
       5223
     ]
   },
   {
-    "teal": 5263,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
+    "teal": 5251,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
-      5224,
-      5225,
+      5224
+    ]
+  },
+  {
+    "teal": 5252,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
+    "pc": [
+      5225
+    ]
+  },
+  {
+    "teal": 5253,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
+    "pc": [
       5226
     ]
   },
   {
-    "teal": 5266,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
+    "teal": 5254,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
       5227
     ]
   },
   {
-    "teal": 5267,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
+    "teal": 5255,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
       5228
+    ]
+  },
+  {
+    "teal": 5267,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
+    "pc": [
+      5229,
+      5230,
+      5231
+    ]
+  },
+  {
+    "teal": 5270,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
+    "pc": [
+      5232
     ]
   },
   {
     "teal": 5271,
     "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
-      5229,
-      5230
-    ]
-  },
-  {
-    "teal": 5272,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
-    "pc": [
-      5231,
-      5232
-    ]
-  },
-  {
-    "teal": 5273,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
-    "pc": [
       5233
     ]
   },
   {
-    "teal": 5274,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
+    "teal": 5275,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1121",
     "pc": [
-      5234
-    ]
-  },
-  {
-    "teal": 5277,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
-    "errorMessage": "Configuration app does not match",
-    "pc": [
+      5234,
       5235
     ]
   },
   {
-    "teal": 5281,
+    "teal": 5276,
     "source": "contracts/BiatecPoolProvider.algo.ts:1121",
     "pc": [
       5236,
@@ -25107,302 +25094,309 @@
     ]
   },
   {
-    "teal": 5282,
+    "teal": 5277,
     "source": "contracts/BiatecPoolProvider.algo.ts:1121",
     "pc": [
-      5238,
+      5238
+    ]
+  },
+  {
+    "teal": 5278,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1121",
+    "pc": [
       5239
     ]
   },
   {
-    "teal": 5283,
+    "teal": 5281,
     "source": "contracts/BiatecPoolProvider.algo.ts:1121",
+    "errorMessage": "Configuration app does not match",
     "pc": [
       5240
     ]
   },
   {
-    "teal": 5286,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1121",
-    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('ef')",
+    "teal": 5285,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1122",
     "pc": [
-      5241
+      5241,
+      5242
+    ]
+  },
+  {
+    "teal": 5286,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1122",
+    "pc": [
+      5243,
+      5244
     ]
   },
   {
     "teal": 5287,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1121",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1122",
     "pc": [
-      5242,
-      5243
+      5245
+    ]
+  },
+  {
+    "teal": 5290,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1122",
+    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('ef')",
+    "pc": [
+      5246
     ]
   },
   {
     "teal": 5291,
     "source": "contracts/BiatecPoolProvider.algo.ts:1122",
     "pc": [
-      5244,
-      5245
-    ]
-  },
-  {
-    "teal": 5292,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1122",
-    "pc": [
-      5246
-    ]
-  },
-  {
-    "teal": 5293,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1122",
-    "pc": [
-      5247
-    ]
-  },
-  {
-    "teal": 5296,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1122",
-    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('s')",
-    "pc": [
+      5247,
       5248
     ]
   },
   {
-    "teal": 5297,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1122",
+    "teal": 5295,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1123",
     "pc": [
       5249,
       5250
     ]
   },
   {
-    "teal": 5301,
+    "teal": 5296,
     "source": "contracts/BiatecPoolProvider.algo.ts:1123",
     "pc": [
-      5251,
+      5251
+    ]
+  },
+  {
+    "teal": 5297,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1123",
+    "pc": [
       5252
     ]
   },
   {
-    "teal": 5302,
+    "teal": 5300,
     "source": "contracts/BiatecPoolProvider.algo.ts:1123",
+    "errorMessage": "global state value does not exist: appBiatecConfigProvider.globalState('s')",
     "pc": [
       5253
     ]
   },
   {
-    "teal": 5303,
+    "teal": 5301,
     "source": "contracts/BiatecPoolProvider.algo.ts:1123",
     "pc": [
-      5254
-    ]
-  },
-  {
-    "teal": 5306,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1123",
-    "errorMessage": "ERR_PAUSED",
-    "pc": [
+      5254,
       5255
     ]
   },
   {
-    "teal": 5313,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1125",
+    "teal": 5305,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1124",
     "pc": [
       5256,
       5257
     ]
   },
   {
-    "teal": 5314,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1125",
+    "teal": 5306,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1124",
     "pc": [
-      5258,
+      5258
+    ]
+  },
+  {
+    "teal": 5307,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1124",
+    "pc": [
       5259
     ]
   },
   {
-    "teal": 5315,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1125",
+    "teal": 5310,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1124",
+    "errorMessage": "ERR_PAUSED",
     "pc": [
       5260
     ]
   },
   {
+    "teal": 5317,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1126",
+    "pc": [
+      5261,
+      5262
+    ]
+  },
+  {
     "teal": 5318,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1124",
-    "errorMessage": "Only fee executor setup in the config can take the collected fees",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1126",
     "pc": [
-      5261
+      5263,
+      5264
     ]
   },
   {
-    "teal": 5322,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1129",
+    "teal": 5319,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1126",
     "pc": [
-      5262,
-      5263
-    ]
-  },
-  {
-    "teal": 5323,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1129",
-    "pc": [
-      5264,
       5265
     ]
   },
   {
-    "teal": 5324,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1129",
+    "teal": 5322,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1125",
+    "errorMessage": "Only fee executor setup in the config can take the collected fees",
     "pc": [
-      5266,
-      5267
+      5266
     ]
   },
   {
-    "teal": 5325,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1129",
+    "teal": 5326,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1130",
     "pc": [
-      5268,
+      5267,
+      5268
+    ]
+  },
+  {
+    "teal": 5327,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1130",
+    "pc": [
       5269,
       5270
     ]
   },
   {
-    "teal": 5329,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1131",
+    "teal": 5328,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1130",
     "pc": [
       5271,
       5272
     ]
   },
   {
-    "teal": 5332,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
+    "teal": 5329,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1130",
     "pc": [
       5273,
-      5274
+      5274,
+      5275
     ]
   },
   {
-    "teal": 5335,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
+    "teal": 5333,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1132",
     "pc": [
-      5275,
-      5276
-    ]
-  },
-  {
-    "teal": 5336,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1119",
-    "pc": [
+      5276,
       5277
     ]
   },
   {
-    "teal": 5345,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1140",
+    "teal": 5336,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
       5278,
-      5279,
-      5280
+      5279
     ]
   },
   {
-    "teal": 5350,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1141",
+    "teal": 5339,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
     "pc": [
-      5281,
+      5280,
+      5281
+    ]
+  },
+  {
+    "teal": 5340,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1120",
+    "pc": [
       5282
     ]
   },
   {
-    "teal": 5351,
+    "teal": 5349,
     "source": "contracts/BiatecPoolProvider.algo.ts:1141",
     "pc": [
-      5283
+      5283,
+      5284,
+      5285
     ]
   },
   {
-    "teal": 5352,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1141",
+    "teal": 5354,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1142",
     "pc": [
-      5284
-    ]
-  },
-  {
-    "teal": 5353,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1141",
-    "pc": [
-      5285,
       5286,
       5287
     ]
   },
   {
-    "teal": 5362,
+    "teal": 5355,
     "source": "contracts/BiatecPoolProvider.algo.ts:1142",
     "pc": [
       5288
     ]
   },
   {
-    "teal": 5363,
+    "teal": 5356,
     "source": "contracts/BiatecPoolProvider.algo.ts:1142",
     "pc": [
       5289
     ]
   },
   {
-    "teal": 5364,
+    "teal": 5357,
     "source": "contracts/BiatecPoolProvider.algo.ts:1142",
     "pc": [
       5290,
-      5291
+      5291,
+      5292
+    ]
+  },
+  {
+    "teal": 5366,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1143",
+    "pc": [
+      5293
+    ]
+  },
+  {
+    "teal": 5367,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1143",
+    "pc": [
+      5294
     ]
   },
   {
     "teal": 5368,
     "source": "contracts/BiatecPoolProvider.algo.ts:1143",
     "pc": [
-      5292,
-      5293
+      5295,
+      5296
     ]
   },
   {
-    "teal": 5369,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1143",
+    "teal": 5372,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1144",
     "pc": [
-      5294,
-      5295
+      5297,
+      5298
     ]
   },
   {
     "teal": 5373,
     "source": "contracts/BiatecPoolProvider.algo.ts:1144",
     "pc": [
-      5296,
-      5297
-    ]
-  },
-  {
-    "teal": 5374,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1144",
-    "pc": [
-      5298,
-      5299
-    ]
-  },
-  {
-    "teal": 5378,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1145",
-    "pc": [
+      5299,
       5300
     ]
   },
   {
-    "teal": 5379,
+    "teal": 5377,
     "source": "contracts/BiatecPoolProvider.algo.ts:1145",
     "pc": [
       5301,
@@ -25410,101 +25404,101 @@
     ]
   },
   {
-    "teal": 5382,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1142",
+    "teal": 5378,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1145",
     "pc": [
-      5303
+      5303,
+      5304
+    ]
+  },
+  {
+    "teal": 5382,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1146",
+    "pc": [
+      5305
     ]
   },
   {
     "teal": 5383,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1141",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1146",
     "pc": [
-      5304,
-      5305,
-      5306
-    ]
-  },
-  {
-    "teal": 5393,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1148",
-    "pc": [
+      5306,
       5307
     ]
   },
   {
-    "teal": 5394,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1148",
+    "teal": 5386,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1143",
     "pc": [
-      5308,
-      5309
+      5308
     ]
   },
   {
-    "teal": 5395,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1148",
+    "teal": 5387,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1142",
     "pc": [
+      5309,
       5310,
       5311
+    ]
+  },
+  {
+    "teal": 5397,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1149",
+    "pc": [
+      5312
+    ]
+  },
+  {
+    "teal": 5398,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1149",
+    "pc": [
+      5313,
+      5314
     ]
   },
   {
     "teal": 5399,
     "source": "contracts/BiatecPoolProvider.algo.ts:1149",
     "pc": [
-      5312,
-      5313
+      5315,
+      5316
     ]
   },
   {
-    "teal": 5400,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1149",
+    "teal": 5403,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1150",
     "pc": [
-      5314,
-      5315
+      5317,
+      5318
     ]
   },
   {
     "teal": 5404,
     "source": "contracts/BiatecPoolProvider.algo.ts:1150",
     "pc": [
-      5316,
-      5317
+      5319,
+      5320
     ]
   },
   {
-    "teal": 5405,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1150",
+    "teal": 5408,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1151",
     "pc": [
-      5318,
-      5319
+      5321,
+      5322
     ]
   },
   {
     "teal": 5409,
     "source": "contracts/BiatecPoolProvider.algo.ts:1151",
     "pc": [
-      5320,
-      5321
-    ]
-  },
-  {
-    "teal": 5410,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1151",
-    "pc": [
-      5322,
-      5323
-    ]
-  },
-  {
-    "teal": 5414,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1152",
-    "pc": [
+      5323,
       5324
     ]
   },
   {
-    "teal": 5415,
+    "teal": 5413,
     "source": "contracts/BiatecPoolProvider.algo.ts:1152",
     "pc": [
       5325,
@@ -25512,33 +25506,39 @@
     ]
   },
   {
-    "teal": 5418,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1148",
+    "teal": 5414,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1152",
     "pc": [
-      5327
-    ]
-  },
-  {
-    "teal": 5421,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1140",
-    "pc": [
+      5327,
       5328
     ]
   },
   {
-    "teal": 5426,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1163",
+    "teal": 5418,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1153",
     "pc": [
-      5329,
-      5330
+      5329
     ]
   },
   {
-    "teal": 5429,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
+    "teal": 5419,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1153",
     "pc": [
-      5331,
-      5332,
+      5330,
+      5331
+    ]
+  },
+  {
+    "teal": 5422,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1149",
+    "pc": [
+      5332
+    ]
+  },
+  {
+    "teal": 5425,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1141",
+    "pc": [
       5333
     ]
   },
@@ -25546,232 +25546,220 @@
     "teal": 5430,
     "source": "contracts/BiatecPoolProvider.algo.ts:1164",
     "pc": [
-      5334
+      5334,
+      5335
     ]
   },
   {
     "teal": 5433,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1165",
     "pc": [
-      5335,
       5336,
-      5337
-    ]
-  },
-  {
-    "teal": 5434,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
-    "pc": [
+      5337,
       5338
     ]
   },
   {
-    "teal": 5437,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
+    "teal": 5434,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1165",
     "pc": [
-      5339,
-      5340,
-      5341
+      5339
     ]
   },
   {
-    "teal": 5438,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
+    "teal": 5437,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1165",
     "pc": [
+      5340,
+      5341,
       5342
     ]
   },
   {
-    "teal": 5441,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1163",
+    "teal": 5438,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1165",
     "pc": [
-      5343,
-      5344,
-      5345
+      5343
     ]
   },
   {
-    "teal": 5442,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1163",
+    "teal": 5441,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1165",
     "pc": [
+      5344,
+      5345,
       5346
     ]
   },
   {
-    "teal": 5443,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1163",
+    "teal": 5442,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1165",
     "pc": [
       5347
     ]
   },
   {
-    "teal": 5444,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1163",
-    "pc": [
-      5348
-    ]
-  },
-  {
     "teal": 5445,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1163",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
     "pc": [
-      5349
+      5348,
+      5349,
+      5350
     ]
   },
   {
-    "teal": 5455,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1163",
+    "teal": 5446,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
     "pc": [
-      5350,
-      5351,
+      5351
+    ]
+  },
+  {
+    "teal": 5447,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
+    "pc": [
       5352
     ]
   },
   {
-    "teal": 5458,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1163",
+    "teal": 5448,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
     "pc": [
       5353
     ]
   },
   {
-    "teal": 5459,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1163",
+    "teal": 5449,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
     "pc": [
       5354
     ]
   },
   {
-    "teal": 5464,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1165",
+    "teal": 5459,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
     "pc": [
       5355,
-      5356
-    ]
-  },
-  {
-    "teal": 5465,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1165",
-    "pc": [
+      5356,
       5357
     ]
   },
   {
-    "teal": 5466,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1165",
+    "teal": 5462,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
     "pc": [
       5358
     ]
   },
   {
-    "teal": 5467,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1165",
+    "teal": 5463,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
     "pc": [
-      5359,
+      5359
+    ]
+  },
+  {
+    "teal": 5468,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1166",
+    "pc": [
       5360,
       5361
     ]
   },
   {
-    "teal": 5472,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5469,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1166",
     "pc": [
       5362
     ]
   },
   {
-    "teal": 5473,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5470,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1166",
     "pc": [
-      5363,
-      5364
+      5363
     ]
   },
   {
-    "teal": 5474,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5471,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1166",
     "pc": [
-      5365
-    ]
-  },
-  {
-    "teal": 5475,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
-    "pc": [
+      5364,
+      5365,
       5366
     ]
   },
   {
     "teal": 5476,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
-      5367,
-      5368
+      5367
     ]
   },
   {
-    "teal": 5480,
+    "teal": 5477,
     "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
-      5369,
+      5368,
+      5369
+    ]
+  },
+  {
+    "teal": 5478,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
+    "pc": [
       5370
     ]
   },
   {
-    "teal": 5481,
+    "teal": 5479,
     "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
       5371
     ]
   },
   {
-    "teal": 5482,
+    "teal": 5480,
     "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
-      5372
-    ]
-  },
-  {
-    "teal": 5483,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
-    "pc": [
+      5372,
       5373
     ]
   },
   {
-    "teal": 5487,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5484,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1169",
     "pc": [
       5374,
       5375
     ]
   },
   {
-    "teal": 5488,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5485,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1169",
     "pc": [
       5376
     ]
   },
   {
-    "teal": 5489,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5486,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1169",
     "pc": [
       5377
     ]
   },
   {
-    "teal": 5490,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5487,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
-      5378,
-      5379
+      5378
     ]
   },
   {
     "teal": 5491,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
+      5379,
       5380
     ]
   },
@@ -25793,298 +25781,310 @@
     "teal": 5494,
     "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
-      5383
+      5383,
+      5384
     ]
   },
   {
-    "teal": 5498,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1169",
+    "teal": 5495,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
-      5384,
       5385
     ]
   },
   {
-    "teal": 5499,
+    "teal": 5496,
     "source": "contracts/BiatecPoolProvider.algo.ts:1169",
     "pc": [
       5386
     ]
   },
   {
-    "teal": 5500,
+    "teal": 5497,
     "source": "contracts/BiatecPoolProvider.algo.ts:1169",
     "pc": [
       5387
     ]
   },
   {
-    "teal": 5501,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5498,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1169",
     "pc": [
       5388
     ]
   },
   {
-    "teal": 5505,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5502,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1170",
     "pc": [
       5389,
       5390
     ]
   },
   {
-    "teal": 5506,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5503,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1170",
     "pc": [
       5391
     ]
   },
   {
-    "teal": 5507,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5504,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1170",
     "pc": [
       5392
     ]
   },
   {
-    "teal": 5508,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5505,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
-      5393,
-      5394
+      5393
     ]
   },
   {
     "teal": 5509,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
+      5394,
       5395
     ]
   },
   {
     "teal": 5510,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1169",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
       5396
     ]
   },
   {
     "teal": 5511,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1169",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
       5397
     ]
   },
   {
     "teal": 5512,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1169",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
-      5398
+      5398,
+      5399
     ]
   },
   {
-    "teal": 5516,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5513,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
-      5399,
       5400
     ]
   },
   {
-    "teal": 5517,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
+    "teal": 5514,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1170",
     "pc": [
       5401
     ]
   },
   {
-    "teal": 5520,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1167",
-    "errorMessage": "box value does not exist: this.pools(appPoolId.id).value",
+    "teal": 5515,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1170",
     "pc": [
       5402
     ]
   },
   {
-    "teal": 5521,
+    "teal": 5516,
     "source": "contracts/BiatecPoolProvider.algo.ts:1170",
     "pc": [
-      5403,
+      5403
+    ]
+  },
+  {
+    "teal": 5520,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
+    "pc": [
       5404,
       5405
     ]
   },
   {
-    "teal": 5529,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1174",
+    "teal": 5521,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
     "pc": [
-      5406,
+      5406
+    ]
+  },
+  {
+    "teal": 5524,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1168",
+    "errorMessage": "box value does not exist: this.pools(appPoolId.id).value",
+    "pc": [
       5407
     ]
   },
   {
-    "teal": 5530,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1174",
+    "teal": 5525,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1171",
     "pc": [
-      5408
-    ]
-  },
-  {
-    "teal": 5531,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1175",
-    "pc": [
+      5408,
       5409,
       5410
-    ]
-  },
-  {
-    "teal": 5532,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1175",
-    "pc": [
-      5411
     ]
   },
   {
     "teal": 5533,
     "source": "contracts/BiatecPoolProvider.algo.ts:1175",
     "pc": [
+      5411,
       5412
     ]
   },
   {
     "teal": 5534,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1173",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1175",
     "pc": [
-      5413,
-      5414
+      5413
     ]
   },
   {
-    "teal": 5538,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1177",
+    "teal": 5535,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1176",
     "pc": [
+      5414,
       5415
     ]
   },
   {
-    "teal": 5539,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1177",
+    "teal": 5536,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1176",
     "pc": [
-      5416,
+      5416
+    ]
+  },
+  {
+    "teal": 5537,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1176",
+    "pc": [
       5417
     ]
   },
   {
-    "teal": 5540,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1177",
+    "teal": 5538,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1174",
     "pc": [
-      5418
-    ]
-  },
-  {
-    "teal": 5541,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1177",
-    "pc": [
+      5418,
       5419
     ]
   },
   {
     "teal": 5542,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1177",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1178",
     "pc": [
       5420
     ]
   },
   {
     "teal": 5543,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1177",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1178",
     "pc": [
-      5421
-    ]
-  },
-  {
-    "teal": 5546,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1177",
-    "errorMessage": "The asset pair is not registered",
-    "pc": [
+      5421,
       5422
     ]
   },
   {
-    "teal": 5550,
+    "teal": 5544,
     "source": "contracts/BiatecPoolProvider.algo.ts:1178",
     "pc": [
       5423
     ]
   },
   {
-    "teal": 5551,
+    "teal": 5545,
     "source": "contracts/BiatecPoolProvider.algo.ts:1178",
     "pc": [
-      5424,
+      5424
+    ]
+  },
+  {
+    "teal": 5546,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1178",
+    "pc": [
       5425
     ]
   },
   {
-    "teal": 5552,
+    "teal": 5547,
     "source": "contracts/BiatecPoolProvider.algo.ts:1178",
     "pc": [
       5426
     ]
   },
   {
-    "teal": 5553,
+    "teal": 5550,
     "source": "contracts/BiatecPoolProvider.algo.ts:1178",
+    "errorMessage": "The asset pair is not registered",
     "pc": [
       5427
     ]
   },
   {
-    "teal": 5556,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1178",
-    "errorMessage": "box value does not exist: this.poolsAggregated(aggregatedIndex).value",
+    "teal": 5554,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1179",
     "pc": [
       5428
     ]
   },
   {
-    "teal": 5560,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1163",
+    "teal": 5555,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1179",
     "pc": [
       5429,
       5430
     ]
   },
   {
-    "teal": 5563,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1163",
+    "teal": 5556,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1179",
     "pc": [
-      5431,
+      5431
+    ]
+  },
+  {
+    "teal": 5557,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1179",
+    "pc": [
       5432
     ]
   },
   {
-    "teal": 5564,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1163",
+    "teal": 5560,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1179",
+    "errorMessage": "box value does not exist: this.poolsAggregated(aggregatedIndex).value",
     "pc": [
       5433
     ]
   },
   {
-    "teal": 5569,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "teal": 5564,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
     "pc": [
       5434,
       5435
     ]
   },
   {
-    "teal": 5572,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "teal": 5567,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
     "pc": [
       5436,
-      5437,
+      5437
+    ]
+  },
+  {
+    "teal": 5568,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1164",
+    "pc": [
       5438
     ]
   },
@@ -26092,186 +26092,198 @@
     "teal": 5573,
     "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
-      5439
-    ]
-  },
-  {
-    "teal": 5574,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
-    "pc": [
+      5439,
       5440
     ]
   },
   {
-    "teal": 5575,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "teal": 5576,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
     "pc": [
       5441,
-      5442
-    ]
-  },
-  {
-    "teal": 5576,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
-    "pc": [
+      5442,
       5443
     ]
   },
   {
-    "teal": 5579,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
-    "errorMessage": "argument 0 (liqudity) for calculateAssetBWithdrawOnLpDeposit must be a uint256",
+    "teal": 5577,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
     "pc": [
       5444
     ]
   },
   {
-    "teal": 5582,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "teal": 5578,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
     "pc": [
-      5445,
+      5445
+    ]
+  },
+  {
+    "teal": 5579,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
+    "pc": [
       5446,
       5447
     ]
   },
   {
-    "teal": 5583,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "teal": 5580,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
     "pc": [
       5448
     ]
   },
   {
-    "teal": 5584,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "teal": 5583,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
+    "errorMessage": "argument 0 (liqudity) for calculateAssetBWithdrawOnLpDeposit must be a uint256",
     "pc": [
       5449
     ]
   },
   {
-    "teal": 5585,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "teal": 5586,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
     "pc": [
       5450,
-      5451
-    ]
-  },
-  {
-    "teal": 5586,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
-    "pc": [
+      5451,
       5452
     ]
   },
   {
-    "teal": 5589,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
-    "errorMessage": "argument 1 (assetBBalance) for calculateAssetBWithdrawOnLpDeposit must be a uint256",
+    "teal": 5587,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
     "pc": [
       5453
     ]
   },
   {
-    "teal": 5592,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "teal": 5588,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
     "pc": [
-      5454,
+      5454
+    ]
+  },
+  {
+    "teal": 5589,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
+    "pc": [
       5455,
       5456
     ]
   },
   {
-    "teal": 5593,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "teal": 5590,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
     "pc": [
       5457
     ]
   },
   {
-    "teal": 5594,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "teal": 5593,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
+    "errorMessage": "argument 1 (assetBBalance) for calculateAssetBWithdrawOnLpDeposit must be a uint256",
     "pc": [
       5458
     ]
   },
   {
-    "teal": 5595,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "teal": 5596,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
     "pc": [
       5459,
-      5460
-    ]
-  },
-  {
-    "teal": 5596,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
-    "pc": [
+      5460,
       5461
     ]
   },
   {
-    "teal": 5599,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
-    "errorMessage": "argument 2 (inAmount) for calculateAssetBWithdrawOnLpDeposit must be a uint256",
+    "teal": 5597,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
     "pc": [
       5462
     ]
   },
   {
-    "teal": 5602,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "teal": 5598,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
     "pc": [
-      5463,
+      5463
+    ]
+  },
+  {
+    "teal": 5599,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
+    "pc": [
       5464,
       5465
     ]
   },
   {
-    "teal": 5603,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "teal": 5600,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
     "pc": [
       5466
     ]
   },
   {
-    "teal": 5604,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "teal": 5603,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1191",
+    "errorMessage": "argument 2 (inAmount) for calculateAssetBWithdrawOnLpDeposit must be a uint256",
     "pc": [
       5467
     ]
   },
   {
-    "teal": 5605,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "teal": 5606,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
       5468,
-      5469
-    ]
-  },
-  {
-    "teal": 5606,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
-    "pc": [
+      5469,
       5470
     ]
   },
   {
-    "teal": 5609,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
-    "errorMessage": "calculateAssetBWithdrawOnLpDeposit return value overflowed 256 bits",
+    "teal": 5607,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
       5471
     ]
   },
   {
-    "teal": 5610,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "teal": 5608,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
-      5472,
+      5472
+    ]
+  },
+  {
+    "teal": 5609,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "pc": [
       5473,
-      5474,
-      5475,
-      5476,
+      5474
+    ]
+  },
+  {
+    "teal": 5610,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "pc": [
+      5475
+    ]
+  },
+  {
+    "teal": 5613,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "errorMessage": "calculateAssetBWithdrawOnLpDeposit return value overflowed 256 bits",
+    "pc": [
+      5476
+    ]
+  },
+  {
+    "teal": 5614,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "pc": [
       5477,
       5478,
       5479,
@@ -26300,158 +26312,140 @@
       5502,
       5503,
       5504,
-      5505
-    ]
-  },
-  {
-    "teal": 5611,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
-    "pc": [
-      5506
-    ]
-  },
-  {
-    "teal": 5612,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
-    "pc": [
-      5507
-    ]
-  },
-  {
-    "teal": 5613,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
-    "pc": [
-      5508
-    ]
-  },
-  {
-    "teal": 5614,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
-    "pc": [
-      5509
+      5505,
+      5506,
+      5507,
+      5508,
+      5509,
+      5510
     ]
   },
   {
     "teal": 5615,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
-      5510,
       5511
     ]
   },
   {
     "teal": 5616,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
       5512
     ]
   },
   {
     "teal": 5617,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
       5513
     ]
   },
   {
     "teal": 5618,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
       5514
     ]
   },
   {
     "teal": 5619,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
-      5515
-    ]
-  },
-  {
-    "teal": 5620,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
-    "pc": [
+      5515,
       5516
     ]
   },
   {
-    "teal": 5621,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "teal": 5620,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
       5517
     ]
   },
   {
-    "teal": 5622,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "teal": 5621,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
       5518
     ]
   },
   {
-    "teal": 5633,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "teal": 5622,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
-      5519,
-      5520,
+      5519
+    ]
+  },
+  {
+    "teal": 5623,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "pc": [
+      5520
+    ]
+  },
+  {
+    "teal": 5624,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "pc": [
       5521
     ]
   },
   {
-    "teal": 5636,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "teal": 5625,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
       5522
     ]
   },
   {
-    "teal": 5640,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1194",
+    "teal": 5626,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
-      5523,
-      5524
+      5523
     ]
   },
   {
-    "teal": 5641,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1194",
+    "teal": 5637,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
+      5524,
       5525,
       5526
     ]
   },
   {
-    "teal": 5642,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1194",
+    "teal": 5640,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
       5527
     ]
   },
   {
-    "teal": 5643,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1194",
+    "teal": 5644,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1195",
     "pc": [
       5528,
       5529
     ]
   },
   {
-    "teal": 5644,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1194",
+    "teal": 5645,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1195",
     "pc": [
-      5530
+      5530,
+      5531
     ]
   },
   {
-    "teal": 5645,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1194",
+    "teal": 5646,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1195",
     "pc": [
-      5531,
       5532
     ]
   },
   {
-    "teal": 5649,
+    "teal": 5647,
     "source": "contracts/BiatecPoolProvider.algo.ts:1195",
     "pc": [
       5533,
@@ -26459,205 +26453,223 @@
     ]
   },
   {
-    "teal": 5652,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "teal": 5648,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1195",
     "pc": [
-      5535,
-      5536
+      5535
     ]
   },
   {
-    "teal": 5653,
-    "source": "contracts/BiatecPoolProvider.algo.ts:1189",
+    "teal": 5649,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1195",
     "pc": [
+      5536,
       5537
     ]
   },
   {
-    "teal": 5656,
-    "source": "contracts/BiatecPoolProvider.algo.ts:141",
+    "teal": 5653,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1196",
     "pc": [
       5538,
       5539
     ]
   },
   {
-    "teal": 5657,
-    "source": "contracts/BiatecPoolProvider.algo.ts:141",
+    "teal": 5656,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
     "pc": [
       5540,
-      5541,
+      5541
+    ]
+  },
+  {
+    "teal": 5657,
+    "source": "contracts/BiatecPoolProvider.algo.ts:1190",
+    "pc": [
       5542
     ]
   },
   {
-    "teal": 5658,
+    "teal": 5660,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
     "pc": [
       5543,
-      5544,
-      5545,
-      5546
+      5544
     ]
   },
   {
     "teal": 5661,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
-    "errorMessage": "this contract does not implement the given ABI method for create NoOp",
     "pc": [
+      5545,
+      5546,
       5547
     ]
   },
   {
-    "teal": 5664,
+    "teal": 5662,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
     "pc": [
       5548,
       5549,
       5550,
-      5551,
-      5552,
-      5553
+      5551
     ]
   },
   {
     "teal": 5665,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
+    "errorMessage": "this contract does not implement the given ABI method for create NoOp",
     "pc": [
-      5554,
-      5555,
-      5556,
-      5557,
-      5558,
-      5559
-    ]
-  },
-  {
-    "teal": 5666,
-    "source": "contracts/BiatecPoolProvider.algo.ts:141",
-    "pc": [
-      5560,
-      5561,
-      5562,
-      5563,
-      5564,
-      5565
-    ]
-  },
-  {
-    "teal": 5667,
-    "source": "contracts/BiatecPoolProvider.algo.ts:141",
-    "pc": [
-      5566,
-      5567,
-      5568,
-      5569,
-      5570,
-      5571
+      5552
     ]
   },
   {
     "teal": 5668,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
     "pc": [
-      5572,
-      5573,
-      5574,
-      5575,
-      5576,
-      5577
+      5553,
+      5554,
+      5555,
+      5556,
+      5557,
+      5558
     ]
   },
   {
     "teal": 5669,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
     "pc": [
-      5578,
-      5579,
-      5580,
-      5581,
-      5582,
-      5583
+      5559,
+      5560,
+      5561,
+      5562,
+      5563,
+      5564
     ]
   },
   {
     "teal": 5670,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
     "pc": [
-      5584,
-      5585,
-      5586,
-      5587,
-      5588,
-      5589
+      5565,
+      5566,
+      5567,
+      5568,
+      5569,
+      5570
     ]
   },
   {
     "teal": 5671,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
     "pc": [
-      5590,
-      5591,
-      5592,
-      5593,
-      5594,
-      5595
+      5571,
+      5572,
+      5573,
+      5574,
+      5575,
+      5576
     ]
   },
   {
     "teal": 5672,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
     "pc": [
-      5596,
-      5597,
-      5598,
-      5599,
-      5600,
-      5601
+      5577,
+      5578,
+      5579,
+      5580,
+      5581,
+      5582
     ]
   },
   {
     "teal": 5673,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
     "pc": [
-      5602,
-      5603,
-      5604,
-      5605,
-      5606,
-      5607
+      5583,
+      5584,
+      5585,
+      5586,
+      5587,
+      5588
     ]
   },
   {
     "teal": 5674,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
     "pc": [
-      5608,
-      5609,
-      5610,
-      5611,
-      5612,
-      5613
+      5589,
+      5590,
+      5591,
+      5592,
+      5593,
+      5594
     ]
   },
   {
     "teal": 5675,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
     "pc": [
-      5614,
-      5615,
-      5616
+      5595,
+      5596,
+      5597,
+      5598,
+      5599,
+      5600
     ]
   },
   {
     "teal": 5676,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
     "pc": [
+      5601,
+      5602,
+      5603,
+      5604,
+      5605,
+      5606
+    ]
+  },
+  {
+    "teal": 5677,
+    "source": "contracts/BiatecPoolProvider.algo.ts:141",
+    "pc": [
+      5607,
+      5608,
+      5609,
+      5610,
+      5611,
+      5612
+    ]
+  },
+  {
+    "teal": 5678,
+    "source": "contracts/BiatecPoolProvider.algo.ts:141",
+    "pc": [
+      5613,
+      5614,
+      5615,
+      5616,
       5617,
-      5618,
+      5618
+    ]
+  },
+  {
+    "teal": 5679,
+    "source": "contracts/BiatecPoolProvider.algo.ts:141",
+    "pc": [
       5619,
       5620,
-      5621,
+      5621
+    ]
+  },
+  {
+    "teal": 5680,
+    "source": "contracts/BiatecPoolProvider.algo.ts:141",
+    "pc": [
       5622,
       5623,
       5624,
@@ -26676,54 +26688,59 @@
       5637,
       5638,
       5639,
-      5640
-    ]
-  },
-  {
-    "teal": 5679,
-    "source": "contracts/BiatecPoolProvider.algo.ts:141",
-    "errorMessage": "this contract does not implement the given ABI method for call NoOp",
-    "pc": [
-      5641
-    ]
-  },
-  {
-    "teal": 5682,
-    "source": "contracts/BiatecPoolProvider.algo.ts:141",
-    "pc": [
+      5640,
+      5641,
       5642,
       5643,
       5644,
-      5645,
-      5646,
-      5647
+      5645
     ]
   },
   {
     "teal": 5683,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
+    "errorMessage": "this contract does not implement the given ABI method for call NoOp",
     "pc": [
-      5648,
-      5649,
-      5650
+      5646
     ]
   },
   {
-    "teal": 5684,
+    "teal": 5686,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
     "pc": [
+      5647,
+      5648,
+      5649,
+      5650,
       5651,
-      5652,
-      5653,
-      5654
+      5652
     ]
   },
   {
     "teal": 5687,
     "source": "contracts/BiatecPoolProvider.algo.ts:141",
+    "pc": [
+      5653,
+      5654,
+      5655
+    ]
+  },
+  {
+    "teal": 5688,
+    "source": "contracts/BiatecPoolProvider.algo.ts:141",
+    "pc": [
+      5656,
+      5657,
+      5658,
+      5659
+    ]
+  },
+  {
+    "teal": 5691,
+    "source": "contracts/BiatecPoolProvider.algo.ts:141",
     "errorMessage": "this contract does not implement the given ABI method for call UpdateApplication",
     "pc": [
-      5655
+      5660
     ]
   }
 ]

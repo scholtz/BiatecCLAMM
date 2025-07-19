@@ -119,18 +119,18 @@ const app = async () => {
   }
 
   const appBiatecConfigProvider = BigInt(process.env.appBiatecConfigProvider ?? '0');
-  const appBiatecClammPool = BigInt(process.env.appBiatecClammPool ?? '0');
+  const appBiatecPoolProvider = BigInt(process.env.appBiatecPoolProvider ?? '0');
 
   if(!appBiatecConfigProvider ) {
     throw new Error('Please set appBiatecConfigProvider env variables');
   }
-  if(!appBiatecClammPool ) {
+  if(!appBiatecPoolProvider ) {
     throw new Error('Please set appBiatecClammPool env variables');
   }
   console.log('upgrading single pool');
 
-  var pool = new BiatecClammPoolClient({
-    appId: appBiatecClammPool,
+  var pool = new BiatecPoolProviderClient({
+    appId: appBiatecPoolProvider,
     algorand,
     defaultSender: signer.addr,
     defaultSigner: signer.signer,
@@ -139,7 +139,7 @@ const app = async () => {
   await pool.send.update.updateApplication({
     args:{
       appBiatecConfigProvider: appBiatecConfigProvider,
-      newVersion: Buffer.from('BIATEC-CLAMM-01-05-04','ascii'),
+      newVersion: Buffer.from('BIATEC-PP-01-05-02','ascii')
     }
   })
 

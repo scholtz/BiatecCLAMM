@@ -1887,7 +1887,7 @@
   },
   {
     "teal": 522,
-    "source": "contracts/BiatecConfigProvider.algo.ts:188",
+    "source": "contracts/BiatecConfigProvider.algo.ts:189",
     "pc": [
       487,
       488,
@@ -1896,14 +1896,14 @@
   },
   {
     "teal": 523,
-    "source": "contracts/BiatecConfigProvider.algo.ts:188",
+    "source": "contracts/BiatecConfigProvider.algo.ts:189",
     "pc": [
       490
     ]
   },
   {
     "teal": 526,
-    "source": "contracts/BiatecConfigProvider.algo.ts:187",
+    "source": "contracts/BiatecConfigProvider.algo.ts:188",
     "pc": [
       491,
       492,
@@ -1912,14 +1912,14 @@
   },
   {
     "teal": 527,
-    "source": "contracts/BiatecConfigProvider.algo.ts:187",
+    "source": "contracts/BiatecConfigProvider.algo.ts:188",
     "pc": [
       494
     ]
   },
   {
     "teal": 530,
-    "source": "contracts/BiatecConfigProvider.algo.ts:186",
+    "source": "contracts/BiatecConfigProvider.algo.ts:187",
     "pc": [
       495,
       496,
@@ -1928,14 +1928,14 @@
   },
   {
     "teal": 531,
-    "source": "contracts/BiatecConfigProvider.algo.ts:186",
+    "source": "contracts/BiatecConfigProvider.algo.ts:187",
     "pc": [
       498
     ]
   },
   {
     "teal": 534,
-    "source": "contracts/BiatecConfigProvider.algo.ts:185",
+    "source": "contracts/BiatecConfigProvider.algo.ts:186",
     "pc": [
       499,
       500,
@@ -1944,143 +1944,143 @@
   },
   {
     "teal": 535,
-    "source": "contracts/BiatecConfigProvider.algo.ts:185",
+    "source": "contracts/BiatecConfigProvider.algo.ts:186",
     "pc": [
-      502,
-      503,
-      504
+      502
     ]
   },
   {
     "teal": 538,
-    "source": "contracts/BiatecConfigProvider.algo.ts:184",
+    "source": "contracts/BiatecConfigProvider.algo.ts:185",
     "pc": [
-      505,
-      506,
-      507
+      503,
+      504,
+      505
     ]
   },
   {
     "teal": 539,
-    "source": "contracts/BiatecConfigProvider.algo.ts:184",
+    "source": "contracts/BiatecConfigProvider.algo.ts:185",
     "pc": [
-      508,
-      509,
-      510
+      506,
+      507,
+      508
     ]
   },
   {
     "teal": 542,
-    "source": "contracts/BiatecConfigProvider.algo.ts:183",
+    "source": "contracts/BiatecConfigProvider.algo.ts:184",
     "pc": [
-      511,
-      512,
-      513
+      509,
+      510,
+      511
     ]
   },
   {
     "teal": 543,
-    "source": "contracts/BiatecConfigProvider.algo.ts:183",
+    "source": "contracts/BiatecConfigProvider.algo.ts:184",
     "pc": [
-      514,
-      515,
-      516
+      512,
+      513,
+      514
     ]
   },
   {
     "teal": 546,
-    "source": "contracts/BiatecConfigProvider.algo.ts:182",
+    "source": "contracts/BiatecConfigProvider.algo.ts:183",
     "pc": [
-      517,
-      518,
-      519
+      515,
+      516,
+      517
     ]
   },
   {
     "teal": 547,
-    "source": "contracts/BiatecConfigProvider.algo.ts:182",
+    "source": "contracts/BiatecConfigProvider.algo.ts:183",
     "pc": [
+      518,
+      519,
       520
     ]
   },
   {
-    "teal": 548,
+    "teal": 550,
     "source": "contracts/BiatecConfigProvider.algo.ts:182",
     "pc": [
-      521
+      521,
+      522,
+      523
     ]
   },
   {
-    "teal": 556,
+    "teal": 551,
     "source": "contracts/BiatecConfigProvider.algo.ts:182",
     "pc": [
-      522,
-      523,
       524
     ]
   },
   {
-    "teal": 563,
-    "source": "contracts/BiatecConfigProvider.algo.ts:191",
+    "teal": 552,
+    "source": "contracts/BiatecConfigProvider.algo.ts:182",
     "pc": [
-      525,
-      526
+      525
     ]
   },
   {
-    "teal": 564,
-    "source": "contracts/BiatecConfigProvider.algo.ts:191",
+    "teal": 560,
+    "source": "contracts/BiatecConfigProvider.algo.ts:182",
     "pc": [
-      527
-    ]
-  },
-  {
-    "teal": 565,
-    "source": "contracts/BiatecConfigProvider.algo.ts:191",
-    "pc": [
+      526,
+      527,
       528
     ]
   },
   {
-    "teal": 566,
-    "source": "contracts/BiatecConfigProvider.algo.ts:191",
+    "teal": 567,
+    "source": "contracts/BiatecConfigProvider.algo.ts:192",
     "pc": [
-      529
-    ]
-  },
-  {
-    "teal": 569,
-    "source": "contracts/BiatecConfigProvider.algo.ts:190",
-    "errorMessage": "Only fee executor setup in the config can take the collected fees",
-    "pc": [
+      529,
       530
     ]
   },
   {
-    "teal": 581,
-    "source": "contracts/BiatecConfigProvider.algo.ts:194",
+    "teal": 568,
+    "source": "contracts/BiatecConfigProvider.algo.ts:192",
     "pc": [
       531
     ]
   },
   {
-    "teal": 582,
-    "source": "contracts/BiatecConfigProvider.algo.ts:194",
+    "teal": 569,
+    "source": "contracts/BiatecConfigProvider.algo.ts:192",
     "pc": [
-      532,
+      532
+    ]
+  },
+  {
+    "teal": 570,
+    "source": "contracts/BiatecConfigProvider.algo.ts:192",
+    "pc": [
       533
     ]
   },
   {
-    "teal": 583,
-    "source": "contracts/BiatecConfigProvider.algo.ts:194",
+    "teal": 573,
+    "source": "contracts/BiatecConfigProvider.algo.ts:191",
+    "errorMessage": "Only fee executor setup in the config can take the collected fees",
     "pc": [
-      534,
+      534
+    ]
+  },
+  {
+    "teal": 585,
+    "source": "contracts/BiatecConfigProvider.algo.ts:195",
+    "pc": [
       535
     ]
   },
   {
-    "teal": 587,
+    "teal": 586,
     "source": "contracts/BiatecConfigProvider.algo.ts:195",
     "pc": [
       536,
@@ -2088,7 +2088,7 @@
     ]
   },
   {
-    "teal": 588,
+    "teal": 587,
     "source": "contracts/BiatecConfigProvider.algo.ts:195",
     "pc": [
       538,
@@ -2096,7 +2096,7 @@
     ]
   },
   {
-    "teal": 592,
+    "teal": 591,
     "source": "contracts/BiatecConfigProvider.algo.ts:196",
     "pc": [
       540,
@@ -2104,7 +2104,7 @@
     ]
   },
   {
-    "teal": 593,
+    "teal": 592,
     "source": "contracts/BiatecConfigProvider.algo.ts:196",
     "pc": [
       542,
@@ -2112,7 +2112,7 @@
     ]
   },
   {
-    "teal": 597,
+    "teal": 596,
     "source": "contracts/BiatecConfigProvider.algo.ts:197",
     "pc": [
       544,
@@ -2120,7 +2120,7 @@
     ]
   },
   {
-    "teal": 598,
+    "teal": 597,
     "source": "contracts/BiatecConfigProvider.algo.ts:197",
     "pc": [
       546,
@@ -2128,7 +2128,7 @@
     ]
   },
   {
-    "teal": 602,
+    "teal": 601,
     "source": "contracts/BiatecConfigProvider.algo.ts:198",
     "pc": [
       548,
@@ -2136,7 +2136,7 @@
     ]
   },
   {
-    "teal": 603,
+    "teal": 602,
     "source": "contracts/BiatecConfigProvider.algo.ts:198",
     "pc": [
       550,
@@ -2144,7 +2144,7 @@
     ]
   },
   {
-    "teal": 607,
+    "teal": 606,
     "source": "contracts/BiatecConfigProvider.algo.ts:199",
     "pc": [
       552,
@@ -2152,7 +2152,7 @@
     ]
   },
   {
-    "teal": 608,
+    "teal": 607,
     "source": "contracts/BiatecConfigProvider.algo.ts:199",
     "pc": [
       554,
@@ -2160,7 +2160,7 @@
     ]
   },
   {
-    "teal": 612,
+    "teal": 611,
     "source": "contracts/BiatecConfigProvider.algo.ts:200",
     "pc": [
       556,
@@ -2168,7 +2168,7 @@
     ]
   },
   {
-    "teal": 613,
+    "teal": 612,
     "source": "contracts/BiatecConfigProvider.algo.ts:200",
     "pc": [
       558,
@@ -2176,319 +2176,313 @@
     ]
   },
   {
+    "teal": 616,
+    "source": "contracts/BiatecConfigProvider.algo.ts:201",
+    "pc": [
+      560,
+      561
+    ]
+  },
+  {
     "teal": 617,
     "source": "contracts/BiatecConfigProvider.algo.ts:201",
     "pc": [
-      560
-    ]
-  },
-  {
-    "teal": 618,
-    "source": "contracts/BiatecConfigProvider.algo.ts:201",
-    "pc": [
-      561,
-      562
-    ]
-  },
-  {
-    "teal": 621,
-    "source": "contracts/BiatecConfigProvider.algo.ts:194",
-    "pc": [
+      562,
       563
     ]
   },
   {
+    "teal": 621,
+    "source": "contracts/BiatecConfigProvider.algo.ts:202",
+    "pc": [
+      564,
+      565
+    ]
+  },
+  {
     "teal": 622,
+    "source": "contracts/BiatecConfigProvider.algo.ts:202",
+    "pc": [
+      566,
+      567
+    ]
+  },
+  {
+    "teal": 625,
+    "source": "contracts/BiatecConfigProvider.algo.ts:195",
+    "pc": [
+      568
+    ]
+  },
+  {
+    "teal": 626,
     "source": "contracts/BiatecConfigProvider.algo.ts:182",
     "pc": [
-      564
-    ]
-  },
-  {
-    "teal": 627,
-    "source": "contracts/BiatecConfigProvider.algo.ts:213",
-    "pc": [
-      565,
-      566,
-      567,
-      568,
-      569,
-      570
-    ]
-  },
-  {
-    "teal": 630,
-    "source": "contracts/BiatecConfigProvider.algo.ts:213",
-    "pc": [
-      571,
-      572,
-      573
+      569
     ]
   },
   {
     "teal": 631,
-    "source": "contracts/BiatecConfigProvider.algo.ts:213",
+    "source": "contracts/BiatecConfigProvider.algo.ts:214",
     "pc": [
-      574
+      570,
+      571,
+      572,
+      573,
+      574,
+      575
     ]
   },
   {
     "teal": 634,
-    "source": "contracts/BiatecConfigProvider.algo.ts:213",
+    "source": "contracts/BiatecConfigProvider.algo.ts:214",
     "pc": [
-      575,
       576,
-      577
-    ]
-  },
-  {
-    "teal": 635,
-    "source": "contracts/BiatecConfigProvider.algo.ts:213",
-    "pc": [
+      577,
       578
     ]
   },
   {
-    "teal": 638,
-    "source": "contracts/BiatecConfigProvider.algo.ts:213",
+    "teal": 635,
+    "source": "contracts/BiatecConfigProvider.algo.ts:214",
     "pc": [
-      579,
-      580,
-      581
+      579
     ]
   },
   {
-    "teal": 639,
-    "source": "contracts/BiatecConfigProvider.algo.ts:213",
+    "teal": 638,
+    "source": "contracts/BiatecConfigProvider.algo.ts:214",
     "pc": [
+      580,
+      581,
       582
     ]
   },
   {
-    "teal": 640,
-    "source": "contracts/BiatecConfigProvider.algo.ts:213",
+    "teal": 639,
+    "source": "contracts/BiatecConfigProvider.algo.ts:214",
     "pc": [
       583
     ]
   },
   {
-    "teal": 641,
-    "source": "contracts/BiatecConfigProvider.algo.ts:213",
-    "pc": [
-      584
-    ]
-  },
-  {
     "teal": 642,
-    "source": "contracts/BiatecConfigProvider.algo.ts:213",
+    "source": "contracts/BiatecConfigProvider.algo.ts:214",
     "pc": [
-      585
-    ]
-  },
-  {
-    "teal": 643,
-    "source": "contracts/BiatecConfigProvider.algo.ts:213",
-    "pc": [
+      584,
+      585,
       586
     ]
   },
   {
-    "teal": 654,
-    "source": "contracts/BiatecConfigProvider.algo.ts:213",
+    "teal": 643,
+    "source": "contracts/BiatecConfigProvider.algo.ts:214",
     "pc": [
-      587,
-      588,
+      587
+    ]
+  },
+  {
+    "teal": 644,
+    "source": "contracts/BiatecConfigProvider.algo.ts:214",
+    "pc": [
+      588
+    ]
+  },
+  {
+    "teal": 645,
+    "source": "contracts/BiatecConfigProvider.algo.ts:214",
+    "pc": [
       589
     ]
   },
   {
-    "teal": 661,
-    "source": "contracts/BiatecConfigProvider.algo.ts:215",
+    "teal": 646,
+    "source": "contracts/BiatecConfigProvider.algo.ts:214",
     "pc": [
-      590,
+      590
+    ]
+  },
+  {
+    "teal": 647,
+    "source": "contracts/BiatecConfigProvider.algo.ts:214",
+    "pc": [
       591
     ]
   },
   {
-    "teal": 662,
-    "source": "contracts/BiatecConfigProvider.algo.ts:215",
+    "teal": 658,
+    "source": "contracts/BiatecConfigProvider.algo.ts:214",
     "pc": [
-      592
-    ]
-  },
-  {
-    "teal": 663,
-    "source": "contracts/BiatecConfigProvider.algo.ts:215",
-    "pc": [
-      593
-    ]
-  },
-  {
-    "teal": 664,
-    "source": "contracts/BiatecConfigProvider.algo.ts:215",
-    "pc": [
+      592,
+      593,
       594
     ]
   },
   {
-    "teal": 667,
-    "source": "contracts/BiatecConfigProvider.algo.ts:214",
-    "errorMessage": "Only fee executor setup in the config can take the collected fees",
+    "teal": 665,
+    "source": "contracts/BiatecConfigProvider.algo.ts:216",
     "pc": [
-      595
+      595,
+      596
     ]
   },
   {
-    "teal": 671,
-    "source": "contracts/BiatecConfigProvider.algo.ts:219",
+    "teal": 666,
+    "source": "contracts/BiatecConfigProvider.algo.ts:216",
     "pc": [
-      596,
       597
     ]
   },
   {
-    "teal": 672,
-    "source": "contracts/BiatecConfigProvider.algo.ts:219",
+    "teal": 667,
+    "source": "contracts/BiatecConfigProvider.algo.ts:216",
     "pc": [
-      598,
+      598
+    ]
+  },
+  {
+    "teal": 668,
+    "source": "contracts/BiatecConfigProvider.algo.ts:216",
+    "pc": [
       599
     ]
   },
   {
-    "teal": 673,
-    "source": "contracts/BiatecConfigProvider.algo.ts:219",
+    "teal": 671,
+    "source": "contracts/BiatecConfigProvider.algo.ts:215",
+    "errorMessage": "Only fee executor setup in the config can take the collected fees",
     "pc": [
-      600,
-      601
+      600
     ]
   },
   {
-    "teal": 674,
-    "source": "contracts/BiatecConfigProvider.algo.ts:219",
+    "teal": 675,
+    "source": "contracts/BiatecConfigProvider.algo.ts:220",
     "pc": [
-      602,
+      601,
+      602
+    ]
+  },
+  {
+    "teal": 676,
+    "source": "contracts/BiatecConfigProvider.algo.ts:220",
+    "pc": [
       603,
       604
     ]
   },
   {
-    "teal": 678,
-    "source": "contracts/BiatecConfigProvider.algo.ts:221",
+    "teal": 677,
+    "source": "contracts/BiatecConfigProvider.algo.ts:220",
     "pc": [
       605,
       606
     ]
   },
   {
-    "teal": 679,
-    "source": "contracts/BiatecConfigProvider.algo.ts:213",
+    "teal": 678,
+    "source": "contracts/BiatecConfigProvider.algo.ts:220",
     "pc": [
-      607
-    ]
-  },
-  {
-    "teal": 688,
-    "source": "contracts/BiatecConfigProvider.algo.ts:230",
-    "pc": [
+      607,
       608,
-      609,
-      610
+      609
     ]
   },
   {
-    "teal": 693,
-    "source": "contracts/BiatecConfigProvider.algo.ts:231",
+    "teal": 682,
+    "source": "contracts/BiatecConfigProvider.algo.ts:222",
     "pc": [
-      611,
+      610,
+      611
+    ]
+  },
+  {
+    "teal": 683,
+    "source": "contracts/BiatecConfigProvider.algo.ts:214",
+    "pc": [
       612
     ]
   },
   {
-    "teal": 694,
+    "teal": 692,
     "source": "contracts/BiatecConfigProvider.algo.ts:231",
     "pc": [
-      613
+      613,
+      614,
+      615
     ]
   },
   {
-    "teal": 695,
-    "source": "contracts/BiatecConfigProvider.algo.ts:231",
+    "teal": 697,
+    "source": "contracts/BiatecConfigProvider.algo.ts:232",
     "pc": [
-      614
-    ]
-  },
-  {
-    "teal": 696,
-    "source": "contracts/BiatecConfigProvider.algo.ts:231",
-    "pc": [
-      615,
       616,
       617
     ]
   },
   {
-    "teal": 705,
+    "teal": 698,
     "source": "contracts/BiatecConfigProvider.algo.ts:232",
     "pc": [
       618
     ]
   },
   {
-    "teal": 706,
+    "teal": 699,
     "source": "contracts/BiatecConfigProvider.algo.ts:232",
     "pc": [
       619
     ]
   },
   {
-    "teal": 707,
+    "teal": 700,
     "source": "contracts/BiatecConfigProvider.algo.ts:232",
     "pc": [
       620,
-      621
+      621,
+      622
+    ]
+  },
+  {
+    "teal": 709,
+    "source": "contracts/BiatecConfigProvider.algo.ts:233",
+    "pc": [
+      623
+    ]
+  },
+  {
+    "teal": 710,
+    "source": "contracts/BiatecConfigProvider.algo.ts:233",
+    "pc": [
+      624
     ]
   },
   {
     "teal": 711,
     "source": "contracts/BiatecConfigProvider.algo.ts:233",
     "pc": [
-      622,
-      623
+      625,
+      626
     ]
   },
   {
-    "teal": 712,
-    "source": "contracts/BiatecConfigProvider.algo.ts:233",
+    "teal": 715,
+    "source": "contracts/BiatecConfigProvider.algo.ts:234",
     "pc": [
-      624,
-      625
+      627,
+      628
     ]
   },
   {
     "teal": 716,
     "source": "contracts/BiatecConfigProvider.algo.ts:234",
     "pc": [
-      626,
-      627
-    ]
-  },
-  {
-    "teal": 717,
-    "source": "contracts/BiatecConfigProvider.algo.ts:234",
-    "pc": [
-      628,
-      629
-    ]
-  },
-  {
-    "teal": 721,
-    "source": "contracts/BiatecConfigProvider.algo.ts:235",
-    "pc": [
+      629,
       630
     ]
   },
   {
-    "teal": 722,
+    "teal": 720,
     "source": "contracts/BiatecConfigProvider.algo.ts:235",
     "pc": [
       631,
@@ -2496,101 +2490,101 @@
     ]
   },
   {
-    "teal": 725,
-    "source": "contracts/BiatecConfigProvider.algo.ts:232",
+    "teal": 721,
+    "source": "contracts/BiatecConfigProvider.algo.ts:235",
     "pc": [
-      633
+      633,
+      634
+    ]
+  },
+  {
+    "teal": 725,
+    "source": "contracts/BiatecConfigProvider.algo.ts:236",
+    "pc": [
+      635
     ]
   },
   {
     "teal": 726,
-    "source": "contracts/BiatecConfigProvider.algo.ts:231",
+    "source": "contracts/BiatecConfigProvider.algo.ts:236",
     "pc": [
-      634,
-      635,
-      636
-    ]
-  },
-  {
-    "teal": 736,
-    "source": "contracts/BiatecConfigProvider.algo.ts:238",
-    "pc": [
+      636,
       637
     ]
   },
   {
-    "teal": 737,
-    "source": "contracts/BiatecConfigProvider.algo.ts:238",
+    "teal": 729,
+    "source": "contracts/BiatecConfigProvider.algo.ts:233",
     "pc": [
-      638,
-      639
+      638
     ]
   },
   {
-    "teal": 738,
-    "source": "contracts/BiatecConfigProvider.algo.ts:238",
+    "teal": 730,
+    "source": "contracts/BiatecConfigProvider.algo.ts:232",
     "pc": [
+      639,
       640,
       641
+    ]
+  },
+  {
+    "teal": 740,
+    "source": "contracts/BiatecConfigProvider.algo.ts:239",
+    "pc": [
+      642
+    ]
+  },
+  {
+    "teal": 741,
+    "source": "contracts/BiatecConfigProvider.algo.ts:239",
+    "pc": [
+      643,
+      644
     ]
   },
   {
     "teal": 742,
     "source": "contracts/BiatecConfigProvider.algo.ts:239",
     "pc": [
-      642,
-      643
+      645,
+      646
     ]
   },
   {
-    "teal": 743,
-    "source": "contracts/BiatecConfigProvider.algo.ts:239",
+    "teal": 746,
+    "source": "contracts/BiatecConfigProvider.algo.ts:240",
     "pc": [
-      644,
-      645
+      647,
+      648
     ]
   },
   {
     "teal": 747,
     "source": "contracts/BiatecConfigProvider.algo.ts:240",
     "pc": [
-      646,
-      647
+      649,
+      650
     ]
   },
   {
-    "teal": 748,
-    "source": "contracts/BiatecConfigProvider.algo.ts:240",
+    "teal": 751,
+    "source": "contracts/BiatecConfigProvider.algo.ts:241",
     "pc": [
-      648,
-      649
+      651,
+      652
     ]
   },
   {
     "teal": 752,
     "source": "contracts/BiatecConfigProvider.algo.ts:241",
     "pc": [
-      650,
-      651
-    ]
-  },
-  {
-    "teal": 753,
-    "source": "contracts/BiatecConfigProvider.algo.ts:241",
-    "pc": [
-      652,
-      653
-    ]
-  },
-  {
-    "teal": 757,
-    "source": "contracts/BiatecConfigProvider.algo.ts:242",
-    "pc": [
+      653,
       654
     ]
   },
   {
-    "teal": 758,
+    "teal": 756,
     "source": "contracts/BiatecConfigProvider.algo.ts:242",
     "pc": [
       655,
@@ -2598,208 +2592,226 @@
     ]
   },
   {
-    "teal": 761,
-    "source": "contracts/BiatecConfigProvider.algo.ts:238",
+    "teal": 757,
+    "source": "contracts/BiatecConfigProvider.algo.ts:242",
     "pc": [
-      657
-    ]
-  },
-  {
-    "teal": 764,
-    "source": "contracts/BiatecConfigProvider.algo.ts:230",
-    "pc": [
+      657,
       658
     ]
   },
   {
-    "teal": 767,
-    "source": "contracts/BiatecConfigProvider.algo.ts:6",
+    "teal": 761,
+    "source": "contracts/BiatecConfigProvider.algo.ts:243",
     "pc": [
-      659,
+      659
+    ]
+  },
+  {
+    "teal": 762,
+    "source": "contracts/BiatecConfigProvider.algo.ts:243",
+    "pc": [
       660,
-      661,
-      662,
-      663,
-      664
+      661
+    ]
+  },
+  {
+    "teal": 765,
+    "source": "contracts/BiatecConfigProvider.algo.ts:239",
+    "pc": [
+      662
     ]
   },
   {
     "teal": 768,
-    "source": "contracts/BiatecConfigProvider.algo.ts:6",
+    "source": "contracts/BiatecConfigProvider.algo.ts:231",
     "pc": [
-      665,
-      666,
-      667
+      663
     ]
   },
   {
-    "teal": 769,
+    "teal": 771,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
     "pc": [
+      664,
+      665,
+      666,
+      667,
       668,
-      669,
-      670,
-      671
+      669
     ]
   },
   {
     "teal": 772,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
-    "errorMessage": "this contract does not implement the given ABI method for create NoOp",
     "pc": [
+      670,
+      671,
       672
     ]
   },
   {
-    "teal": 775,
+    "teal": 773,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
     "pc": [
       673,
       674,
       675,
-      676,
-      677,
-      678
+      676
     ]
   },
   {
     "teal": 776,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
+    "errorMessage": "this contract does not implement the given ABI method for create NoOp",
     "pc": [
-      679,
-      680,
-      681,
-      682,
-      683,
-      684
-    ]
-  },
-  {
-    "teal": 777,
-    "source": "contracts/BiatecConfigProvider.algo.ts:6",
-    "pc": [
-      685,
-      686,
-      687,
-      688,
-      689,
-      690
-    ]
-  },
-  {
-    "teal": 778,
-    "source": "contracts/BiatecConfigProvider.algo.ts:6",
-    "pc": [
-      691,
-      692,
-      693,
-      694,
-      695,
-      696
+      677
     ]
   },
   {
     "teal": 779,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
     "pc": [
-      697,
-      698,
-      699,
-      700,
-      701,
-      702
+      678,
+      679,
+      680,
+      681,
+      682,
+      683
     ]
   },
   {
     "teal": 780,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
     "pc": [
-      703,
-      704,
-      705,
-      706,
-      707,
-      708
+      684,
+      685,
+      686,
+      687,
+      688,
+      689
     ]
   },
   {
     "teal": 781,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
     "pc": [
-      709,
-      710,
-      711,
-      712,
-      713,
-      714
+      690,
+      691,
+      692,
+      693,
+      694,
+      695
     ]
   },
   {
     "teal": 782,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
     "pc": [
-      715,
-      716,
-      717,
-      718,
-      719,
-      720
+      696,
+      697,
+      698,
+      699,
+      700,
+      701
     ]
   },
   {
     "teal": 783,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
     "pc": [
-      721,
-      722,
-      723,
-      724,
-      725,
-      726
+      702,
+      703,
+      704,
+      705,
+      706,
+      707
     ]
   },
   {
     "teal": 784,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
     "pc": [
-      727,
-      728,
-      729,
-      730,
-      731,
-      732
+      708,
+      709,
+      710,
+      711,
+      712,
+      713
     ]
   },
   {
     "teal": 785,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
     "pc": [
-      733,
-      734,
-      735,
-      736,
-      737,
-      738
+      714,
+      715,
+      716,
+      717,
+      718,
+      719
     ]
   },
   {
     "teal": 786,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
     "pc": [
-      739,
-      740,
-      741
+      720,
+      721,
+      722,
+      723,
+      724,
+      725
     ]
   },
   {
     "teal": 787,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
     "pc": [
+      726,
+      727,
+      728,
+      729,
+      730,
+      731
+    ]
+  },
+  {
+    "teal": 788,
+    "source": "contracts/BiatecConfigProvider.algo.ts:6",
+    "pc": [
+      732,
+      733,
+      734,
+      735,
+      736,
+      737
+    ]
+  },
+  {
+    "teal": 789,
+    "source": "contracts/BiatecConfigProvider.algo.ts:6",
+    "pc": [
+      738,
+      739,
+      740,
+      741,
       742,
-      743,
+      743
+    ]
+  },
+  {
+    "teal": 790,
+    "source": "contracts/BiatecConfigProvider.algo.ts:6",
+    "pc": [
       744,
       745,
-      746,
+      746
+    ]
+  },
+  {
+    "teal": 791,
+    "source": "contracts/BiatecConfigProvider.algo.ts:6",
+    "pc": [
       747,
       748,
       749,
@@ -2818,54 +2830,59 @@
       762,
       763,
       764,
-      765
-    ]
-  },
-  {
-    "teal": 790,
-    "source": "contracts/BiatecConfigProvider.algo.ts:6",
-    "errorMessage": "this contract does not implement the given ABI method for call NoOp",
-    "pc": [
-      766
-    ]
-  },
-  {
-    "teal": 793,
-    "source": "contracts/BiatecConfigProvider.algo.ts:6",
-    "pc": [
+      765,
+      766,
       767,
       768,
       769,
-      770,
-      771,
-      772
+      770
     ]
   },
   {
     "teal": 794,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
+    "errorMessage": "this contract does not implement the given ABI method for call NoOp",
     "pc": [
-      773,
-      774,
-      775
+      771
     ]
   },
   {
-    "teal": 795,
+    "teal": 797,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
     "pc": [
+      772,
+      773,
+      774,
+      775,
       776,
-      777,
-      778,
-      779
+      777
     ]
   },
   {
     "teal": 798,
     "source": "contracts/BiatecConfigProvider.algo.ts:6",
+    "pc": [
+      778,
+      779,
+      780
+    ]
+  },
+  {
+    "teal": 799,
+    "source": "contracts/BiatecConfigProvider.algo.ts:6",
+    "pc": [
+      781,
+      782,
+      783,
+      784
+    ]
+  },
+  {
+    "teal": 802,
+    "source": "contracts/BiatecConfigProvider.algo.ts:6",
     "errorMessage": "this contract does not implement the given ABI method for call UpdateApplication",
     "pc": [
-      780
+      785
     ]
   }
 ]
