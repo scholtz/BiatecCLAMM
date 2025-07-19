@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { BiatecClammPool } from './BiatecClammPool.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-PP-01-05-01';
+const version = 'BIATEC-PP-01-05-02';
 const SCALE = 1_000_000_000;
 
 type AppPoolInfo = {
@@ -136,6 +136,8 @@ type PoolRetVal = {
   lpAssetId: AssetID;
 };
 
+
+
 export class BiatecPoolProvider extends Contract {
   /**
    * Each LP pool is registered in this contract. Each pool has custom box and stores there the trading stats.
@@ -143,6 +145,19 @@ export class BiatecPoolProvider extends Contract {
   pools = BoxMap<uint64, AppPoolInfo>({ prefix: 'p' });
   poolsByConfig = BoxMap<PoolConfig, uint64>({ prefix: 'pc' });
   fullConfigs = BoxMap<FullConfig, uint64>({ prefix: 'fc' });
+
+  tradeEvent = new EventLogger<{
+    appPoolId: AppID,
+    assetA: AssetID,
+    assetB: AssetID,
+    priceFrom: uint64,
+    priceTo: uint64,
+    amountA: uint64,
+    amountB: uint64,
+    feeAmountA: uint64,
+    feeAmountB: uint64,
+    s: uint64
+  }>();
 
   poolsAggregated = BoxMap<AssetsCombined, AppPoolInfo>({ prefix: 's' });
 
@@ -1041,6 +1056,19 @@ export class BiatecPoolProvider extends Contract {
     increaseOpcodeBudget();
     assert(appPoolId === globals.callerApplicationID);
     assert(s === SCALE);
+
+    this.tradeEvent.log({
+      appPoolId:appPoolId,
+      assetA:assetA,
+      assetB:assetB,
+      priceFrom:priceFrom,
+      priceTo:priceTo,
+      amountA:amountA,
+      amountB:amountB,
+      feeAmountA:feeAmountA,
+      feeAmountB:feeAmountB,
+      s:s
+    });
 
     this.updatePriceBoxInfo(appPoolId, assetA, assetB, priceFrom, priceTo, amountA, amountB, feeAmountA, feeAmountB);
     this.updatePriceBoxAggregated(assetA, assetB, priceFrom, priceTo, amountA, amountB, feeAmountA, feeAmountB);

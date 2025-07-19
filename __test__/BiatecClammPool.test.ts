@@ -6130,6 +6130,7 @@ describe('clamm', () => {
           suggestedParams: params,
           receiver: clientBiatecClammPoolProvider.appClient.appAddress,
         });
+        expect(addSwapA.assetTransfer?.amount).toEqual(10_000_000_000n);// 100 * 10^8
 
         const swapResult = await clientBiatecClammPoolProvider.appClient.send.swap({
           args: {

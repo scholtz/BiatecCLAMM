@@ -52,7 +52,7 @@ switch *call_NoOp *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEM
 bootstrapStep2:
 	proto 4 0
 
-	// contracts\FakePool.algo.ts:7
+	// contracts/FakePool.algo.ts:7
 	// sendMethodCall<[AppID, AssetID, AssetID, uint64], void>({
 	//       name: 'registerPool',
 	//       methodArgs: [globals.currentApplicationID, assetA, assetB, verificationClass],
@@ -65,7 +65,7 @@ bootstrapStep2:
 	pushbytes 0xcbcbbe37 // method "registerPool(uint64,uint64,uint64,uint64)void"
 	itxn_field ApplicationArgs
 
-	// contracts\FakePool.algo.ts:9
+	// contracts/FakePool.algo.ts:9
 	// methodArgs: [globals.currentApplicationID, assetA, assetB, verificationClass]
 	global CurrentApplicationID
 	itob
@@ -80,12 +80,12 @@ bootstrapStep2:
 	itob
 	itxn_field ApplicationArgs
 
-	// contracts\FakePool.algo.ts:10
+	// contracts/FakePool.algo.ts:10
 	// fee: 0
 	pushint 0
 	itxn_field Fee
 
-	// contracts\FakePool.algo.ts:11
+	// contracts/FakePool.algo.ts:11
 	// applicationID: appBiatecPoolProvider
 	frame_dig -4 // appBiatecPoolProvider: AppID
 	itxn_field ApplicationID

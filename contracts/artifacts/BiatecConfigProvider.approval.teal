@@ -37,37 +37,37 @@ switch *call_NoOp *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEMENTED *call_Updat
 createApplication:
 	proto 0 0
 
-	// contracts\BiatecConfigProvider.algo.ts:61
+	// contracts/BiatecConfigProvider.algo.ts:61
 	// this.version.value = version
 	bytec 5 //  "scver"
 	pushbytes "BIATEC-CONFIG-01-02-01"
 	app_global_put
 
-	// contracts\BiatecConfigProvider.algo.ts:62
+	// contracts/BiatecConfigProvider.algo.ts:62
 	// this.addressExecutive.value = this.txn.sender
 	bytec 2 //  "e"
 	txn Sender
 	app_global_put
 
-	// contracts\BiatecConfigProvider.algo.ts:63
+	// contracts/BiatecConfigProvider.algo.ts:63
 	// this.addressGov.value = this.txn.sender
 	bytec 6 //  "g"
 	txn Sender
 	app_global_put
 
-	// contracts\BiatecConfigProvider.algo.ts:64
+	// contracts/BiatecConfigProvider.algo.ts:64
 	// this.addressUdpater.value = this.txn.sender
 	bytec 0 //  "u"
 	txn Sender
 	app_global_put
 
-	// contracts\BiatecConfigProvider.algo.ts:65
+	// contracts/BiatecConfigProvider.algo.ts:65
 	// this.addressExecutiveFee.value = this.txn.sender
 	bytec 1 //  "ef"
 	txn Sender
 	app_global_put
 
-	// contracts\BiatecConfigProvider.algo.ts:66
+	// contracts/BiatecConfigProvider.algo.ts:66
 	// this.suspended.value = 0
 	bytec 7 //  "s"
 	intc 2 // 0
@@ -91,7 +91,7 @@ createApplication:
 updateApplication:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:73
+	// contracts/BiatecConfigProvider.algo.ts:73
 	// assert(
 	//       this.txn.sender === this.addressUdpater.value,
 	//       'Only addressUdpater setup in the config can update application'
@@ -104,7 +104,7 @@ updateApplication:
 	// Only addressUdpater setup in the config can update application
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:77
+	// contracts/BiatecConfigProvider.algo.ts:77
 	// this.version.value = newVersion
 	bytec 5 //  "scver"
 	frame_dig -1 // newVersion: bytes
@@ -143,7 +143,7 @@ updateApplication:
 bootstrap:
 	proto 3 0
 
-	// contracts\BiatecConfigProvider.algo.ts:85
+	// contracts/BiatecConfigProvider.algo.ts:85
 	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can call bootstrap method')
 	txn Sender
 	bytec 0 //  "u"
@@ -153,7 +153,7 @@ bootstrap:
 	// Only updater can call bootstrap method
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:86
+	// contracts/BiatecConfigProvider.algo.ts:86
 	// assert(biatecFee <= (SCALE as uint256) / 2, 'Biatec cannot set fees higher then 50% of lp fees')
 	frame_dig -1 // biatecFee: uint256
 	bytec 3 // 0x000000000000000000000000000000000000000000000000000000003b9aca00
@@ -164,19 +164,19 @@ bootstrap:
 	// Biatec cannot set fees higher then 50% of lp fees
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:87
+	// contracts/BiatecConfigProvider.algo.ts:87
 	// this.biatecFee.value = biatecFee
 	bytec 8 //  "f"
 	frame_dig -1 // biatecFee: uint256
 	app_global_put
 
-	// contracts\BiatecConfigProvider.algo.ts:88
+	// contracts/BiatecConfigProvider.algo.ts:88
 	// this.appBiatecIdentityProvider.value = appBiatecIdentityProvider
 	bytec 9 //  "i"
 	frame_dig -2 // appBiatecIdentityProvider: AppID
 	app_global_put
 
-	// contracts\BiatecConfigProvider.algo.ts:89
+	// contracts/BiatecConfigProvider.algo.ts:89
 	// this.appBiatecPoolProvider.value = appBiatecPoolProvider
 	bytec 10 //  "p"
 	frame_dig -3 // appBiatecPoolProvider: AppID
@@ -208,7 +208,7 @@ bootstrap:
 setAddressUdpater:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:98
+	// contracts/BiatecConfigProvider.algo.ts:98
 	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change updater address')
 	txn Sender
 	bytec 0 //  "u"
@@ -218,7 +218,7 @@ setAddressUdpater:
 	// Only updater can change updater address
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:99
+	// contracts/BiatecConfigProvider.algo.ts:99
 	// this.addressUdpater.value = a
 	bytec 0 //  "u"
 	frame_dig -1 // a: Address
@@ -244,7 +244,7 @@ setAddressUdpater:
 setPaused:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:108
+	// contracts/BiatecConfigProvider.algo.ts:108
 	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can pause and unpause the biatec services')
 	txn Sender
 	bytec 0 //  "u"
@@ -254,7 +254,7 @@ setPaused:
 	// Only updater can pause and unpause the biatec services
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:109
+	// contracts/BiatecConfigProvider.algo.ts:109
 	// this.suspended.value = a
 	bytec 7 //  "s"
 	frame_dig -1 // a: uint64
@@ -286,7 +286,7 @@ setPaused:
 setAddressGov:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:118
+	// contracts/BiatecConfigProvider.algo.ts:118
 	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change gov address')
 	txn Sender
 	bytec 0 //  "u"
@@ -296,7 +296,7 @@ setAddressGov:
 	// Only updater can change gov address
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:119
+	// contracts/BiatecConfigProvider.algo.ts:119
 	// this.addressGov.value = a
 	bytec 6 //  "g"
 	frame_dig -1 // a: Address
@@ -328,7 +328,7 @@ setAddressGov:
 setAddressExecutive:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:128
+	// contracts/BiatecConfigProvider.algo.ts:128
 	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change addressExecutive')
 	txn Sender
 	bytec 0 //  "u"
@@ -338,7 +338,7 @@ setAddressExecutive:
 	// Only updater can change addressExecutive
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:129
+	// contracts/BiatecConfigProvider.algo.ts:129
 	// this.addressExecutive.value = a
 	bytec 2 //  "e"
 	frame_dig -1 // a: Address
@@ -370,7 +370,7 @@ setAddressExecutive:
 setAddressExecutiveFee:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:138
+	// contracts/BiatecConfigProvider.algo.ts:138
 	// assert(this.txn.sender === this.addressExecutive.value, 'Only addressExecutive can change fee executor address')
 	txn Sender
 	bytec 2 //  "e"
@@ -380,7 +380,7 @@ setAddressExecutiveFee:
 	// Only addressExecutive can change fee executor address
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:139
+	// contracts/BiatecConfigProvider.algo.ts:139
 	// this.addressExecutiveFee.value = a
 	bytec 1 //  "ef"
 	frame_dig -1 // a: Address
@@ -406,7 +406,7 @@ setAddressExecutiveFee:
 setBiatecIdentity:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:148
+	// contracts/BiatecConfigProvider.algo.ts:148
 	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change appIdentityProvider')
 	txn Sender
 	bytec 0 //  "u"
@@ -416,7 +416,7 @@ setBiatecIdentity:
 	// Only updater can change appIdentityProvider
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:149
+	// contracts/BiatecConfigProvider.algo.ts:149
 	// this.appBiatecIdentityProvider.value = a
 	bytec 9 //  "i"
 	frame_dig -1 // a: AppID
@@ -442,7 +442,7 @@ setBiatecIdentity:
 setBiatecPool:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:158
+	// contracts/BiatecConfigProvider.algo.ts:158
 	// assert(this.txn.sender === this.addressUdpater.value, 'Only updater can change appPoolProvider')
 	txn Sender
 	bytec 0 //  "u"
@@ -452,7 +452,7 @@ setBiatecPool:
 	// Only updater can change appPoolProvider
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:159
+	// contracts/BiatecConfigProvider.algo.ts:159
 	// this.appBiatecPoolProvider.value = a
 	bytec 10 //  "p"
 	frame_dig -1 // a: AppID
@@ -488,7 +488,7 @@ setBiatecPool:
 setBiatecFee:
 	proto 1 0
 
-	// contracts\BiatecConfigProvider.algo.ts:172
+	// contracts/BiatecConfigProvider.algo.ts:172
 	// assert(this.txn.sender === this.addressExecutive.value, 'Only executive address can change fees')
 	txn Sender
 	bytec 2 //  "e"
@@ -498,7 +498,7 @@ setBiatecFee:
 	// Only executive address can change fees
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:173
+	// contracts/BiatecConfigProvider.algo.ts:173
 	// assert(biatecFee <= (SCALE as uint256) / 2, 'Biatec cannot set fees higher then 50% of lp fees')
 	frame_dig -1 // biatecFee: uint256
 	bytec 3 // 0x000000000000000000000000000000000000000000000000000000003b9aca00
@@ -509,7 +509,7 @@ setBiatecFee:
 	// Biatec cannot set fees higher then 50% of lp fees
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:174
+	// contracts/BiatecConfigProvider.algo.ts:174
 	// this.biatecFee.value = biatecFee
 	bytec 8 //  "f"
 	frame_dig -1 // biatecFee: uint256
@@ -555,7 +555,7 @@ setBiatecFee:
 sendOnlineKeyRegistration:
 	proto 6 0
 
-	// contracts\BiatecConfigProvider.algo.ts:190
+	// contracts/BiatecConfigProvider.algo.ts:190
 	// assert(
 	//       this.txn.sender === this.addressExecutiveFee.value,
 	//       'Only fee executor setup in the config can take the collected fees'
@@ -568,7 +568,7 @@ sendOnlineKeyRegistration:
 	// Only fee executor setup in the config can take the collected fees
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:194
+	// contracts/BiatecConfigProvider.algo.ts:194
 	// sendOnlineKeyRegistration({
 	//       selectionPK: selectionPK,
 	//       stateProofPK: stateProofPK,
@@ -582,37 +582,37 @@ sendOnlineKeyRegistration:
 	pushint 2 // keyreg
 	itxn_field TypeEnum
 
-	// contracts\BiatecConfigProvider.algo.ts:195
+	// contracts/BiatecConfigProvider.algo.ts:195
 	// selectionPK: selectionPK
 	frame_dig -2 // selectionPK: bytes
 	itxn_field SelectionPK
 
-	// contracts\BiatecConfigProvider.algo.ts:196
+	// contracts/BiatecConfigProvider.algo.ts:196
 	// stateProofPK: stateProofPK
 	frame_dig -3 // stateProofPK: bytes
 	itxn_field StateProofPK
 
-	// contracts\BiatecConfigProvider.algo.ts:197
+	// contracts/BiatecConfigProvider.algo.ts:197
 	// voteFirst: voteFirst
 	frame_dig -4 // voteFirst: uint64
 	itxn_field VoteFirst
 
-	// contracts\BiatecConfigProvider.algo.ts:198
+	// contracts/BiatecConfigProvider.algo.ts:198
 	// voteKeyDilution: voteKeyDilution
 	frame_dig -6 // voteKeyDilution: uint64
 	itxn_field VoteKeyDilution
 
-	// contracts\BiatecConfigProvider.algo.ts:199
+	// contracts/BiatecConfigProvider.algo.ts:199
 	// voteLast: voteLast
 	frame_dig -5 // voteLast: uint64
 	itxn_field VoteLast
 
-	// contracts\BiatecConfigProvider.algo.ts:200
+	// contracts/BiatecConfigProvider.algo.ts:200
 	// votePK: votePK
 	frame_dig -1 // votePK: bytes
 	itxn_field VotePK
 
-	// contracts\BiatecConfigProvider.algo.ts:201
+	// contracts/BiatecConfigProvider.algo.ts:201
 	// fee: 0
 	intc 2 // 0
 	itxn_field Fee
@@ -653,7 +653,7 @@ sendOnlineKeyRegistration:
 withdrawExcessAssets:
 	proto 2 1
 
-	// contracts\BiatecConfigProvider.algo.ts:214
+	// contracts/BiatecConfigProvider.algo.ts:214
 	// assert(
 	//       this.txn.sender === this.addressExecutiveFee.value,
 	//       'Only fee executor setup in the config can take the collected fees'
@@ -666,14 +666,14 @@ withdrawExcessAssets:
 	// Only fee executor setup in the config can take the collected fees
 	assert
 
-	// contracts\BiatecConfigProvider.algo.ts:219
+	// contracts/BiatecConfigProvider.algo.ts:219
 	// this.doAxfer(this.txn.sender, asset, amount)
 	frame_dig -2 // amount: uint64
 	frame_dig -1 // asset: AssetID
 	txn Sender
 	callsub doAxfer
 
-	// contracts\BiatecConfigProvider.algo.ts:221
+	// contracts/BiatecConfigProvider.algo.ts:221
 	// return amount;
 	frame_dig -2 // amount: uint64
 	retsub
@@ -688,7 +688,7 @@ doAxfer:
 	proto 3 0
 
 	// *if0_condition
-	// contracts\BiatecConfigProvider.algo.ts:231
+	// contracts/BiatecConfigProvider.algo.ts:231
 	// asset.id === 0
 	frame_dig -2 // asset: AssetID
 	intc 2 // 0
@@ -696,7 +696,7 @@ doAxfer:
 	bz *if0_else
 
 	// *if0_consequent
-	// contracts\BiatecConfigProvider.algo.ts:232
+	// contracts/BiatecConfigProvider.algo.ts:232
 	// sendPayment({
 	//         receiver: receiver,
 	//         amount: amount,
@@ -706,17 +706,17 @@ doAxfer:
 	intc 0 //  pay
 	itxn_field TypeEnum
 
-	// contracts\BiatecConfigProvider.algo.ts:233
+	// contracts/BiatecConfigProvider.algo.ts:233
 	// receiver: receiver
 	frame_dig -1 // receiver: Address
 	itxn_field Receiver
 
-	// contracts\BiatecConfigProvider.algo.ts:234
+	// contracts/BiatecConfigProvider.algo.ts:234
 	// amount: amount
 	frame_dig -3 // amount: uint64
 	itxn_field Amount
 
-	// contracts\BiatecConfigProvider.algo.ts:235
+	// contracts/BiatecConfigProvider.algo.ts:235
 	// fee: 0
 	intc 2 // 0
 	itxn_field Fee
@@ -726,7 +726,7 @@ doAxfer:
 	b *if0_end
 
 *if0_else:
-	// contracts\BiatecConfigProvider.algo.ts:238
+	// contracts/BiatecConfigProvider.algo.ts:238
 	// sendAssetTransfer({
 	//         assetReceiver: receiver,
 	//         xferAsset: asset,
@@ -737,22 +737,22 @@ doAxfer:
 	pushint 4 // axfer
 	itxn_field TypeEnum
 
-	// contracts\BiatecConfigProvider.algo.ts:239
+	// contracts/BiatecConfigProvider.algo.ts:239
 	// assetReceiver: receiver
 	frame_dig -1 // receiver: Address
 	itxn_field AssetReceiver
 
-	// contracts\BiatecConfigProvider.algo.ts:240
+	// contracts/BiatecConfigProvider.algo.ts:240
 	// xferAsset: asset
 	frame_dig -2 // asset: AssetID
 	itxn_field XferAsset
 
-	// contracts\BiatecConfigProvider.algo.ts:241
+	// contracts/BiatecConfigProvider.algo.ts:241
 	// assetAmount: amount
 	frame_dig -3 // amount: uint64
 	itxn_field AssetAmount
 
-	// contracts\BiatecConfigProvider.algo.ts:242
+	// contracts/BiatecConfigProvider.algo.ts:242
 	// fee: 0
 	intc 2 // 0
 	itxn_field Fee

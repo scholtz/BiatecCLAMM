@@ -219,7 +219,55 @@
       ],
       "returns": {
         "type": "void"
-      }
+      },
+      "events": [
+        {
+          "name": "tradeEvent",
+          "args": [
+            {
+              "name": "appPoolId",
+              "type": "uint64"
+            },
+            {
+              "name": "assetA",
+              "type": "uint64"
+            },
+            {
+              "name": "assetB",
+              "type": "uint64"
+            },
+            {
+              "name": "priceFrom",
+              "type": "uint64"
+            },
+            {
+              "name": "priceTo",
+              "type": "uint64"
+            },
+            {
+              "name": "amountA",
+              "type": "uint64"
+            },
+            {
+              "name": "amountB",
+              "type": "uint64"
+            },
+            {
+              "name": "feeAmountA",
+              "type": "uint64"
+            },
+            {
+              "name": "feeAmountB",
+              "type": "uint64"
+            },
+            {
+              "name": "s",
+              "type": "uint64"
+            }
+          ],
+          "desc": ""
+        }
+      ]
     },
     {
       "name": "sendOnlineKeyRegistration",
@@ -333,6 +381,54 @@
         "type": "uint256",
         "desc": "Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)"
       }
+    }
+  ],
+  "events": [
+    {
+      "name": "tradeEvent",
+      "args": [
+        {
+          "name": "appPoolId",
+          "type": "uint64"
+        },
+        {
+          "name": "assetA",
+          "type": "uint64"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64"
+        },
+        {
+          "name": "priceFrom",
+          "type": "uint64"
+        },
+        {
+          "name": "priceTo",
+          "type": "uint64"
+        },
+        {
+          "name": "amountA",
+          "type": "uint64"
+        },
+        {
+          "name": "amountB",
+          "type": "uint64"
+        },
+        {
+          "name": "feeAmountA",
+          "type": "uint64"
+        },
+        {
+          "name": "feeAmountB",
+          "type": "uint64"
+        },
+        {
+          "name": "s",
+          "type": "uint64"
+        }
+      ],
+      "desc": ""
     }
   ]
 }
