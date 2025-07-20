@@ -169,7 +169,7 @@
         {
           "name": "appPoolId",
           "type": "uint64",
-          "desc": "Liqudity pool smart contract"
+          "desc": "Liquidity pool smart contract"
         },
         {
           "name": "assetA",
@@ -376,9 +376,9 @@
           "desc": "Asset B balance. Variable ab, in base scale"
         },
         {
-          "name": "liqudity",
+          "name": "liquidity",
           "type": "uint256",
-          "desc": "Current liqudity. Variable L, in base scale"
+          "desc": "Current liquidity. Variable L, in base scale"
         }
       ],
       "returns": {

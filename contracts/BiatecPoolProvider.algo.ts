@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { BiatecClammPool } from './BiatecClammPool.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-PP-01-05-02';
+const version = 'BIATEC-PP-01-05-03';
 const SCALE = 1_000_000_000;
 
 type AppPoolInfo = {
@@ -1028,7 +1028,7 @@ export class BiatecPoolProvider extends Contract {
   /**
    * This metod registers the trade and calculates and store the trade statistics
    *
-   * @param appPoolId Liqudity pool smart contract
+   * @param appPoolId Liquidity pool smart contract
    * @param assetA Asset A
    * @param assetB Asset B
    * @param priceFrom The original price
@@ -1185,16 +1185,16 @@ export class BiatecPoolProvider extends Contract {
    * Calculates how much asset B will be taken from the smart contract on LP asset deposit
    * @param inAmount LP Asset amount in Base decimal representation..
    * @param assetBBalance Asset B balance. Variable ab, in base scale
-   * @param liqudity Current liqudity. Variable L, in base scale
+   * @param liquidity Current liquidity. Variable L, in base scale
    *
    * @returns Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)
    */
   @abi.readonly
-  calculateAssetBWithdrawOnLpDeposit(inAmount: uint256, assetBBalance: uint256, liqudity: uint256): uint256 {
+  calculateAssetBWithdrawOnLpDeposit(inAmount: uint256, assetBBalance: uint256, liquidity: uint256): uint256 {
     // const s = SCALE as uint256;
-    // const percentageOfL = (inAmount * s) / liqudity;
+    // const percentageOfL = (inAmount * s) / liquidity;
     // const ret = (assetBBalance * percentageOfL) / s;
-    const ret = (assetBBalance * inAmount) / liqudity;
+    const ret = (assetBBalance * inAmount) / liquidity;
     return ret;
   }
 }

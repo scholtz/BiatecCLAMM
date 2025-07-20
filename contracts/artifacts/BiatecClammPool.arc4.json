@@ -121,7 +121,7 @@
     },
     {
       "name": "addLiquidity",
-      "desc": "This method adds Asset A and Asset B to the Automated Market Maker Concentrated Liqudidity Pool and send to the liqudidty provider the liqudity token",
+      "desc": "This method adds Asset A and Asset B to the Automated Market Maker Concentrated Liqudidity Pool and send to the liqudidty provider the liquidity token",
       "args": [
         {
           "name": "appBiatecConfigProvider",
@@ -570,7 +570,7 @@
           "desc": "sqrt(Max price). Variable pMaxS, in base scale"
         },
         {
-          "name": "liqudity",
+          "name": "liquidity",
           "type": "uint256",
           "desc": "sqrt(Max price). Variable L, in base scale"
         }
@@ -611,7 +611,7 @@
           "desc": "sqrt(Max price). Variable pMaxS, in base scale"
         },
         {
-          "name": "liqudity",
+          "name": "liquidity",
           "type": "uint256",
           "desc": "sqrt(Max price). Variable L, in base scale"
         }
@@ -637,9 +637,9 @@
           "desc": "Asset A balance. Variable ab, in base scale"
         },
         {
-          "name": "liqudity",
+          "name": "liquidity",
           "type": "uint256",
-          "desc": "Current liqudity. Variable L, in base scale"
+          "desc": "Current liquidity. Variable L, in base scale"
         }
       ],
       "returns": {

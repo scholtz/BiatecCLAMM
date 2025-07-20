@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-05-03';
+const version = 'BIATEC-CLAMM-01-05-04';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
@@ -870,8 +870,7 @@ export class BiatecClammPool extends Contract {
     );
     const user = this.verifyIdentity(appBiatecConfigProvider, appBiatecIdentityProvider);
 
-    const feesMultiplier = (s -
-      ((this.fee.value as uint256) * (user.feeMultiplier as uint256)) / (user.base as uint256)) as uint256;
+    const feesMultiplier = (s - ((this.fee.value as uint256) * (user.feeMultiplier as uint256)) / (user.base as uint256)) as uint256;
     let ret: uint64 = 0;
     let amountAForStatsInAssetDecimals = 0;
     let amountBForStatsInAssetDecimals = 0;
@@ -885,7 +884,7 @@ export class BiatecClammPool extends Contract {
       isAssetA = txSwap.xferAsset === assetA;
     }
     let realSwapBaseDecimals = <uint256>0;
-    let inAsset = <uint256>0;
+    let inAssetInBaseScale = <uint256>0;
     if (isAssetA) {
       let assetInAssetDecimals = <uint256>0;
       if (txSwap.typeEnum === TransactionType.Payment) {
@@ -895,8 +894,8 @@ export class BiatecClammPool extends Contract {
         assetInAssetDecimals = txSwap.assetAmount as uint256;
         amountAForStatsInAssetDecimals = txSwap.assetAmount;
       }
-      inAsset = (assetInAssetDecimals * this.assetADecimalsScaleFromBase.value) as uint256;
-      const inAssetAfterFee = (inAsset * feesMultiplier) / s;
+      inAssetInBaseScale = (assetInAssetDecimals * this.assetADecimalsScaleFromBase.value) as uint256;
+      const inAssetAfterFee = (inAssetInBaseScale * feesMultiplier) / s;
 
       const toSwap = this.calculateAssetBWithdrawOnAssetADeposit(
         inAssetAfterFee,
@@ -922,7 +921,7 @@ export class BiatecClammPool extends Contract {
       amountBForStatsInAssetDecimals = toSwapBDecimals;
       this.doAxfer(this.txn.sender, assetB, toSwapBDecimals);
 
-      this.assetABalanceBaseScale.value = this.assetABalanceBaseScale.value + inAsset;
+      this.assetABalanceBaseScale.value = this.assetABalanceBaseScale.value + inAssetInBaseScale;
       this.assetBBalanceBaseScale.value = this.assetBBalanceBaseScale.value - realSwapBaseDecimals;
     }
     // SWAP B to A
@@ -935,8 +934,8 @@ export class BiatecClammPool extends Contract {
         assetInAssetDecimals = txSwap.assetAmount as uint256;
         amountBForStatsInAssetDecimals = txSwap.assetAmount;
       }
-      inAsset = (assetInAssetDecimals * this.assetBDecimalsScaleFromBase.value) as uint256;
-      const inAssetAfterFee = (inAsset * feesMultiplier) / s;
+      inAssetInBaseScale = (assetInAssetDecimals * this.assetBDecimalsScaleFromBase.value) as uint256;
+      const inAssetAfterFee = (inAssetInBaseScale * feesMultiplier) / s;
       const toSwap = this.calculateAssetAWithdrawOnAssetBDeposit(
         inAssetAfterFee,
         this.assetABalanceBaseScale.value,
@@ -961,7 +960,7 @@ export class BiatecClammPool extends Contract {
       amountAForStatsInAssetDecimals = toSwapADecimals;
       this.doAxfer(this.txn.sender, assetA, toSwapADecimals);
 
-      this.assetBBalanceBaseScale.value = this.assetBBalanceBaseScale.value + inAsset;
+      this.assetBBalanceBaseScale.value = this.assetBBalanceBaseScale.value + inAssetInBaseScale;
       this.assetABalanceBaseScale.value = this.assetABalanceBaseScale.value - realSwapBaseDecimals;
     }
     let newL = <uint256>0;
@@ -1543,23 +1542,23 @@ export class BiatecClammPool extends Contract {
     // const assetADelicmalScale: uint64 = 10 ** assetADecimals;
     // const assetBDelicmalScale: uint64 = 10 ** assetBDecimals;
 
-    const x = assetABalance;
-    const y = assetBBalance;
-    const a = priceMinSqrt;
-    const b = priceMaxSqrt;
-    const L = liquidity;
+    // const x = assetABalance;
+    // const y = assetBBalance;
+    // const a = priceMinSqrt;
+    // const b = priceMaxSqrt;
+    // const L = liquidity;
     // a*b*d*l
-    const P1 = (((((a /* 10D */ * b) /* 10D */ / s) * inAmount) /* AD */ / s) * L) /* 10D */ / s;
+    const P1 = (((((priceMinSqrt /* 10D */ * priceMaxSqrt) /* 10D */ / s) * inAmount) /* AD */ / s) * liquidity) /* 10D */ / s;
     // b*d*y
-    const P2 = (((b /* 10D */ * inAmount) /* AD */ / s) * y) /* BD */ / s; // << TODO CHECK B Decimals not applied?
+    const P2 = (((priceMaxSqrt /* 10D */ * inAmount) /* AD */ / s) * assetBBalance) /* BD */ / s; // << TODO CHECK B Decimals not applied?
     // b*d
-    const P3 = (b /* 10D */ * inAmount) /* AD */ / s;
+    const P3 = (priceMaxSqrt /* 10D */ * inAmount) /* AD */ / s;
     // b*x
-    const P4 = (b /* 10D */ * x) /* 10D */ / s;
+    const P4 = (priceMaxSqrt /* 10D */ * assetABalance) /* 10D */ / s;
     // (a*b*d*l + b*d*y)
     const P12 = P1 + P2;
     // (b*d+b*x+l)
-    const P345 = P3 + P4 + L;
+    const P345 = P3 + P4 + liquidity;
     // (a*b*d*l + b*d*y)/(b*d+b*x+l)
     const ret = (P12 * s) / P345;
     return ret;
