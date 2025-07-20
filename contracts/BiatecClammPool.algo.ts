@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-05-04';
+const version = 'BIATEC-CLAMM-01-05-05';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
@@ -360,6 +360,7 @@ export class BiatecClammPool extends Contract {
 
     const assetLpDelicmalScale2Scale = <uint256>LP_SCALE_DECIMALS;
 
+    const zeroUint256 = <uint256>0;
     let aDepositInBaseScale = <uint256>0;
     let bDepositInBaseScale = <uint256>0;
     if (assetA.id > 0) {
@@ -412,10 +413,36 @@ export class BiatecClammPool extends Contract {
       assert(false, 'Unsupported tx type of the asset B');
     }
 
+    //this.setDepositsValueIfNeeded(aDepositInBaseScale, bDepositInBaseScale,assetA,assetB);
+    const realBalanceA: uint64 =
+      assetA.id === 0
+        ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
+        : globals.currentApplicationAddress.assetBalance(assetA);
+    const realBalanceB =
+      assetB.id === 0
+        ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
+        : globals.currentApplicationAddress.assetBalance(assetB);
+    const realBalanceAInBaseScale: uint256 = this.assetADecimalsScaleFromBase.value * (realBalanceA as uint256) - aDepositInBaseScale;
+    const realBalanceBInBaseScale: uint256 = this.assetBDecimalsScaleFromBase.value * (realBalanceB as uint256) - bDepositInBaseScale;
+
+    if(this.assetABalanceBaseScale.value > realBalanceAInBaseScale || this.assetBBalanceBaseScale.value > realBalanceBInBaseScale){
+      // if the real balance is lower then the balance in the pool, we set the real balance to fix the pool
+      this.assetABalanceBaseScale.value = realBalanceAInBaseScale;
+      this.assetBBalanceBaseScale.value = realBalanceBInBaseScale;
+    }
+
+    this.processAddLiquidity(
+      zeroUint256,
+      zeroUint256,
+      assetLpDelicmalScale2Scale,
+      assetLp,
+      false
+    ); // set the liquidity first from the current state of the pool. when swappers performs swaps the liquidity is not calculated even when it is increasing. calculate current liquidty before we calculate the current deposit liqudity change
+
     // if minprice == maxprice
 
     if (this.priceMinSqrt.value === this.priceMaxSqrt.value) {
-      return this.processAddLiquidity(aDepositInBaseScale, bDepositInBaseScale, assetLpDelicmalScale2Scale, assetLp);
+      return this.processAddLiquidity(aDepositInBaseScale, bDepositInBaseScale, assetLpDelicmalScale2Scale, assetLp, true);
     }
 
     // else
@@ -429,7 +456,8 @@ export class BiatecClammPool extends Contract {
         aDepositInBaseScale,
         bDepositInBaseScale,
         assetLpDelicmalScale2Scale,
-        assetLp
+        assetLp,
+        true
       );
 
       const newPrice = this.calculatePrice(
@@ -480,7 +508,7 @@ export class BiatecClammPool extends Contract {
       }
       const realAssetADeposit = aDepositInBaseScale;
       const realAssetBDeposit = (expectedBDepositB64 as uint256) * this.assetBDecimalsScaleFromBase.value;
-      return this.processAddLiquidity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp);
+      return this.processAddLiquidity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp,true);
     }
 
     if (expectedBDepositB64 > txAssetBDeposit.assetAmount) {
@@ -499,18 +527,12 @@ export class BiatecClammPool extends Contract {
       }
       const realAssetADeposit = (expectedADepositB64 as uint256) * this.assetADecimalsScaleFromBase.value;
       const realAssetBDeposit = bDepositInBaseScale;
-      return this.processAddLiquidity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp);
+      return this.processAddLiquidity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp,true);
     }
     if (expectedADepositB64 === txAssetADeposit.assetAmount && expectedBDepositB64 === txAssetBDeposit.assetAmount) {
       const realAssetADeposit = aDepositInBaseScale;
       const realAssetBDeposit = bDepositInBaseScale;
-      return this.processAddLiquidity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp);
-    }
-
-    if (expectedADepositB64 === txAssetADeposit.assetAmount && expectedBDepositB64 === txAssetBDeposit.assetAmount) {
-      const realAssetADeposit = aDepositInBaseScale;
-      const realAssetBDeposit = bDepositInBaseScale;
-      return this.processAddLiquidity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp);
+      return this.processAddLiquidity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp,true);
     }
 
     if (expectedADepositB64 === 0 && expectedBDepositB64 === 0) {
@@ -527,6 +549,29 @@ export class BiatecClammPool extends Contract {
     return expectedBDepositB64; //
   }
 
+  // private setDepositsValueIfNeeded(
+  //   aDepositInBaseScale:uint256,
+  //   bDepositInBaseScale:uint256,
+  //   assetA: AssetID,
+  //   assetB: AssetID): void{
+  //   const realBalanceA: uint64 =
+  //     assetA.id === 0
+  //       ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
+  //       : globals.currentApplicationAddress.assetBalance(assetA);
+  //   const realBalanceB =
+  //     assetB.id === 0
+  //       ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
+  //       : globals.currentApplicationAddress.assetBalance(assetB);
+  //   const realBalanceAInBaseScale: uint256 = this.assetADecimalsScaleFromBase.value * (realBalanceA as uint256) - aDepositInBaseScale;
+  //   const realBalanceBInBaseScale: uint256 = this.assetBDecimalsScaleFromBase.value * (realBalanceB as uint256) - bDepositInBaseScale;
+
+  //   if(this.assetABalanceBaseScale.value > realBalanceAInBaseScale || this.assetBBalanceBaseScale.value > realBalanceBInBaseScale){
+  //     // if the real balance is lower then the balance in the pool, we set the real balance to fix the pool
+  //     this.assetABalanceBaseScale.value = realBalanceAInBaseScale;
+  //     this.assetBBalanceBaseScale.value = realBalanceBInBaseScale;
+  //   }
+  // }
+
   /**
    * This method is used in addLiquidity to process the liquidity addition from calculated values
    * @param realAssetADeposit Real asset a deposit
@@ -539,7 +584,8 @@ export class BiatecClammPool extends Contract {
     realAssetADeposit: uint256,
     realAssetBDeposit: uint256,
     assetLpDelicmalScale2Scale: uint256,
-    assetLp: AssetID
+    assetLp: AssetID,
+    send: boolean
   ): uint64 {
     increaseOpcodeBudget();
     // SET NEW ASSET A AND B VALUES
@@ -564,15 +610,18 @@ export class BiatecClammPool extends Contract {
     const lpTokensToSend = ((newLiquidity - this.Liquidity.value) / assetLpDelicmalScale2Scale) as uint64;
 
     this.Liquidity.value = newLiquidity;
-    // send LP tokens to user
-    this.doAxfer(this.txn.sender, assetLp, lpTokensToSend);
-    // return lpTokensToSend;
-    // 2000000000n
-    // 2000000000n
+    if(send){
+      // send LP tokens to user
+      this.doAxfer(this.txn.sender, assetLp, lpTokensToSend);
+      // return lpTokensToSend;
+      // 2000000000n
+      // 2000000000n
 
-    // assert(lpTokensToSend > 0, 'Adding the liquidity would lead to zero LP tokens deposited to the user'); // Liquidity provider protection.. He must receive at least 1 LP token
-    assert(lpTokensToSend > 0, 'LP-ZERO-ERR'); // Liquidity provider protection.. He must receive at least 1 LP token
-    return lpTokensToSend as uint64;
+      // assert(lpTokensToSend > 0, 'Adding the liquidity would lead to zero LP tokens deposited to the user'); // Liquidity provider protection.. He must receive at least 1 LP token
+      assert(lpTokensToSend > 0, 'LP-ZERO-ERR'); // Liquidity provider protection.. He must receive at least 1 LP token
+      return lpTokensToSend as uint64;
+    }
+    return 0;
   }
 
   /**
