@@ -414,30 +414,31 @@ export class BiatecClammPool extends Contract {
     }
 
     //this.setDepositsValueIfNeeded(aDepositInBaseScale, bDepositInBaseScale,assetA,assetB);
-    const realBalanceA: uint64 =
-      assetA.id === 0
-        ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
-        : globals.currentApplicationAddress.assetBalance(assetA);
-    const realBalanceB =
-      assetB.id === 0
-        ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
-        : globals.currentApplicationAddress.assetBalance(assetB);
-    const realBalanceAInBaseScale: uint256 = this.assetADecimalsScaleFromBase.value * (realBalanceA as uint256) - aDepositInBaseScale;
-    const realBalanceBInBaseScale: uint256 = this.assetBDecimalsScaleFromBase.value * (realBalanceB as uint256) - bDepositInBaseScale;
+    // const realBalanceA: uint64 =
+    //   assetA.id === 0
+    //     ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
+    //     : globals.currentApplicationAddress.assetBalance(assetA);
+    // const realBalanceB =
+    //   assetB.id === 0
+    //     ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
+    //     : globals.currentApplicationAddress.assetBalance(assetB);
+    // const realBalanceAInBaseScale: uint256 = this.assetADecimalsScaleFromBase.value * (realBalanceA as uint256) - aDepositInBaseScale;
+    // const realBalanceBInBaseScale: uint256 = this.assetBDecimalsScaleFromBase.value * (realBalanceB as uint256) - bDepositInBaseScale;
 
-    if(this.assetABalanceBaseScale.value > realBalanceAInBaseScale || this.assetBBalanceBaseScale.value > realBalanceBInBaseScale){
-      // if the real balance is lower then the balance in the pool, we set the real balance to fix the pool
-      this.assetABalanceBaseScale.value = realBalanceAInBaseScale;
-      this.assetBBalanceBaseScale.value = realBalanceBInBaseScale;
-    }
+    // if(this.assetABalanceBaseScale.value > realBalanceAInBaseScale || this.assetBBalanceBaseScale.value > realBalanceBInBaseScale){
+    //   // if the real balance is lower then the balance in the pool, we set the real balance to fix the pool
+    //   this.assetABalanceBaseScale.value = realBalanceAInBaseScale;
+    //   this.assetBBalanceBaseScale.value = realBalanceBInBaseScale;
+    // }
 
+    // set the liquidity first from the current state of the pool. when swappers performs swaps the liquidity is not calculated even when it is increasing. calculate current liquidty before we calculate the current deposit liqudity change
     this.processAddLiquidity(
       zeroUint256,
       zeroUint256,
       assetLpDelicmalScale2Scale,
       assetLp,
       false
-    ); // set the liquidity first from the current state of the pool. when swappers performs swaps the liquidity is not calculated even when it is increasing. calculate current liquidty before we calculate the current deposit liqudity change
+    );
 
     // if minprice == maxprice
 
@@ -447,106 +448,109 @@ export class BiatecClammPool extends Contract {
 
     // else
 
-    if (this.assetABalanceBaseScale.value === <uint256>0 && this.assetBBalanceBaseScale.value === <uint256>0) {
-      // calculate LP position
-      // this.assetABalanceBaseScale.value = aDepositInBaseScale;
-      // this.assetBBalanceBaseScale.value = bDepositInBaseScale;
+    //if (this.assetABalanceBaseScale.value === <uint256>0 && this.assetBBalanceBaseScale.value === <uint256>0) {
+    // calculate LP position
+    // this.assetABalanceBaseScale.value = aDepositInBaseScale;
+    // this.assetBBalanceBaseScale.value = bDepositInBaseScale;
 
-      const ret = this.processAddLiquidity(
-        aDepositInBaseScale,
-        bDepositInBaseScale,
-        assetLpDelicmalScale2Scale,
-        assetLp,
-        true
-      );
-
-      const newPrice = this.calculatePrice(
-        this.assetABalanceBaseScale.value, // assetAQuantity: uint256,
-        this.assetBBalanceBaseScale.value, // assetBQuantity: uint256,
-        this.priceMinSqrt.value, // priceMinSqrt: uint256,
-        this.priceMaxSqrt.value, // priceMaxSqrt: uint256,
-        this.Liquidity.value // liquidity: uint256
-      );
-
-      this.currentPrice.value = newPrice as uint64;
-      return ret;
-    }
-
-    // add asset to LP position
-
-    // first we need to find if user sent more asset a or asset b
-    // inAmountA: uint256, assetABalance: uint256, assetBBalance: uint256
-    const a = this.calculateAssetADepositOnAssetBDeposit(
+    const ret = this.processAddLiquidity(
       aDepositInBaseScale,
       bDepositInBaseScale,
-      this.assetABalanceBaseScale.value,
-      this.assetBBalanceBaseScale.value
+      assetLpDelicmalScale2Scale,
+      assetLp,
+      true
     );
 
-    const b = this.calculateAssetBDepositOnAssetADeposit(
-      aDepositInBaseScale,
-      bDepositInBaseScale,
-      this.assetABalanceBaseScale.value,
-      this.assetBBalanceBaseScale.value
+    const newPrice = this.calculatePrice(
+      this.assetABalanceBaseScale.value, // assetAQuantity: uint256,
+      this.assetBBalanceBaseScale.value, // assetBQuantity: uint256,
+      this.priceMinSqrt.value, // priceMinSqrt: uint256,
+      this.priceMaxSqrt.value, // priceMaxSqrt: uint256,
+      this.Liquidity.value // liquidity: uint256
     );
-    const expectedADepositB64 = (a / this.assetADecimalsScaleFromBase.value) as uint64;
-    const expectedBDepositB64 = (b / this.assetBDecimalsScaleFromBase.value) as uint64;
 
-    if (expectedADepositB64 > txAssetADeposit.assetAmount) {
-      // dominant is asset B. User sent more asset B then asset A, so we should return excess asset B to the user back.
+    this.currentPrice.value = newPrice as uint64;
+    return ret;
+    //}
 
-      // AB=1,BB=1, P = 1, deposit A = 0.5, deposit B = 1
-      // expected a = (inAmountB * assetABalance) / assetBBalance = 1 * 1 / 1 = 1
-      // expected b = (inAmountA * assetBBalance) / assetABalance = 0.5 * 1 / 1 = 0.5
+    // allow user to deposit any combination of asset A and asset B
+    //return this.processAddLiquidity(aDepositInBaseScale, bDepositInBaseScale, assetLpDelicmalScale2Scale, assetLp, true);
 
-      if (expectedBDepositB64 > txAssetBDeposit.assetAmount) {
-        assert(false, 'Dominant is asset B'); // there should not be case to return bot asset a and asset b
-      }
-      if (txAssetBDeposit.assetAmount - expectedBDepositB64 > 0) {
-        // return excess asset B to the user
-        this.doAxfer(this.txn.sender, assetB, txAssetBDeposit.assetAmount - expectedBDepositB64);
-      }
-      const realAssetADeposit = aDepositInBaseScale;
-      const realAssetBDeposit = (expectedBDepositB64 as uint256) * this.assetBDecimalsScaleFromBase.value;
-      return this.processAddLiquidity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp,true);
-    }
+    // // add asset to LP position
 
-    if (expectedBDepositB64 > txAssetBDeposit.assetAmount) {
-      // dominant is asset A. User sent more asset A then asset B, so we should return excess asset A to the user back.
+    // // first we need to find if user sent more asset a or asset b
+    // // inAmountA: uint256, assetABalance: uint256, assetBBalance: uint256
+    // const a = this.calculateAssetADepositOnAssetBDeposit(
+    //   aDepositInBaseScale,
+    //   bDepositInBaseScale,
+    //   this.assetABalanceBaseScale.value,
+    //   this.assetBBalanceBaseScale.value
+    // );
 
-      // AB=1,BB=1, P = 1, deposit A = 1, deposit B = 0.5
-      // expected a = (inAmountB * assetABalance) / assetBBalance = 0.5 * 1 / 1 = 0.5
-      // expected b = (inAmountA * assetBBalance) / assetABalance = 1 * 1 / 1 = 1
+    // const b = this.calculateAssetBDepositOnAssetADeposit(
+    //   aDepositInBaseScale,
+    //   bDepositInBaseScale,
+    //   this.assetABalanceBaseScale.value,
+    //   this.assetBBalanceBaseScale.value
+    // );
+    // const expectedADepositB64 = (a / this.assetADecimalsScaleFromBase.value) as uint64;
+    // const expectedBDepositB64 = (b / this.assetBDecimalsScaleFromBase.value) as uint64;
 
-      if (expectedADepositB64 > txAssetADeposit.assetAmount) {
-        assert(false, 'Dominant is asset A'); // there should not be case to return bot asset a and asset b
-      }
-      if (txAssetADeposit.assetAmount - expectedADepositB64 > 0) {
-        // return excess asset A to the user
-        this.doAxfer(this.txn.sender, assetB, txAssetADeposit.assetAmount - expectedADepositB64);
-      }
-      const realAssetADeposit = (expectedADepositB64 as uint256) * this.assetADecimalsScaleFromBase.value;
-      const realAssetBDeposit = bDepositInBaseScale;
-      return this.processAddLiquidity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp,true);
-    }
-    if (expectedADepositB64 === txAssetADeposit.assetAmount && expectedBDepositB64 === txAssetBDeposit.assetAmount) {
-      const realAssetADeposit = aDepositInBaseScale;
-      const realAssetBDeposit = bDepositInBaseScale;
-      return this.processAddLiquidity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp,true);
-    }
+    // if (expectedADepositB64 > txAssetADeposit.assetAmount) {
+    //   // dominant is asset B. User sent more asset B then asset A, so we should return excess asset B to the user back.
 
-    if (expectedADepositB64 === 0 && expectedBDepositB64 === 0) {
-      // return all assets to the user.. he deposited asset other asset then is currently being fully used in the pool
-      if (txAssetADeposit.assetAmount > 0) {
-        this.doAxfer(this.txn.sender, assetA, txAssetADeposit.assetAmount);
-      }
-      if (txAssetBDeposit.assetAmount > 0) {
-        this.doAxfer(this.txn.sender, assetB, txAssetBDeposit.assetAmount);
-      }
-      return 0;
-    }
-    assert(false, 'failed to calculate exact liqudidity'); // we should not get here
-    return expectedBDepositB64; //
+    //   // AB=1,BB=1, P = 1, deposit A = 0.5, deposit B = 1
+    //   // expected a = (inAmountB * assetABalance) / assetBBalance = 1 * 1 / 1 = 1
+    //   // expected b = (inAmountA * assetBBalance) / assetABalance = 0.5 * 1 / 1 = 0.5
+
+    //   if (expectedBDepositB64 > txAssetBDeposit.assetAmount + 1) {
+    //     assert(false, 'Dominant is asset B'); // there should not be case to return bot asset a and asset b
+    //   }
+    //   if (txAssetBDeposit.assetAmount - expectedBDepositB64 > 0) {
+    //     // return excess asset B to the user
+    //     this.doAxfer(this.txn.sender, assetB, txAssetBDeposit.assetAmount - expectedBDepositB64);
+    //   }
+    //   const realAssetADeposit = aDepositInBaseScale;
+    //   const realAssetBDeposit = (expectedBDepositB64 as uint256) * this.assetBDecimalsScaleFromBase.value;
+    //   return this.processAddLiquidity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp,true);
+    // }
+
+    // if (expectedBDepositB64 > txAssetBDeposit.assetAmount) {
+    //   // dominant is asset A. User sent more asset A then asset B, so we should return excess asset A to the user back.
+
+    //   // AB=1,BB=1, P = 1, deposit A = 1, deposit B = 0.5
+    //   // expected a = (inAmountB * assetABalance) / assetBBalance = 0.5 * 1 / 1 = 0.5
+    //   // expected b = (inAmountA * assetBBalance) / assetABalance = 1 * 1 / 1 = 1
+
+    //   if (expectedADepositB64 > txAssetADeposit.assetAmount) {
+    //     assert(false, 'Dominant is asset A'); // there should not be case to return bot asset a and asset b
+    //   }
+    //   if (txAssetADeposit.assetAmount - expectedADepositB64 > 0) {
+    //     // return excess asset A to the user
+    //     this.doAxfer(this.txn.sender, assetB, txAssetADeposit.assetAmount - expectedADepositB64);
+    //   }
+    //   const realAssetADeposit = (expectedADepositB64 as uint256) * this.assetADecimalsScaleFromBase.value;
+    //   const realAssetBDeposit = bDepositInBaseScale;
+    //   return this.processAddLiquidity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp,true);
+    // }
+    // if (expectedADepositB64 === txAssetADeposit.assetAmount && expectedBDepositB64 === txAssetBDeposit.assetAmount) {
+    //   const realAssetADeposit = aDepositInBaseScale;
+    //   const realAssetBDeposit = bDepositInBaseScale;
+    //   return this.processAddLiquidity(realAssetADeposit, realAssetBDeposit, assetLpDelicmalScale2Scale, assetLp,true);
+    // }
+
+    // if (expectedADepositB64 === 0 && expectedBDepositB64 === 0) {
+    //   // return all assets to the user.. he deposited asset other asset then is currently being fully used in the pool
+    //   if (txAssetADeposit.assetAmount > 0) {
+    //     this.doAxfer(this.txn.sender, assetA, txAssetADeposit.assetAmount);
+    //   }
+    //   if (txAssetBDeposit.assetAmount > 0) {
+    //     this.doAxfer(this.txn.sender, assetB, txAssetBDeposit.assetAmount);
+    //   }
+    //   return 0;
+    // }
+    // assert(false, 'failed to calculate exact liqudidity'); // we should not get here
+    // return expectedBDepositB64; //
   }
 
   // private setDepositsValueIfNeeded(
@@ -588,6 +592,7 @@ export class BiatecClammPool extends Contract {
     send: boolean
   ): uint64 {
     increaseOpcodeBudget();
+    const oldLiquidity = this.Liquidity.value;
     // SET NEW ASSET A AND B VALUES
     this.assetABalanceBaseScale.value = this.assetABalanceBaseScale.value + realAssetADeposit;
     this.assetBBalanceBaseScale.value = this.assetBBalanceBaseScale.value + realAssetBDeposit;
@@ -611,15 +616,15 @@ export class BiatecClammPool extends Contract {
 
     if(send){
       // SEND NEW LP TOKENS TO USER
-      const lpTokensToSend = ((newLiquidity - this.Liquidity.value) / assetLpDelicmalScale2Scale) as uint64;
+      const lpTokensToSend = ((newLiquidity - oldLiquidity) / assetLpDelicmalScale2Scale) as uint64;
       // send LP tokens to user
+      assert(lpTokensToSend > 0, 'LP-ZERO-ERR'); // Liquidity provider protection.. He must receive at least 1 LP token
       this.doAxfer(this.txn.sender, assetLp, lpTokensToSend);
       // return lpTokensToSend;
       // 2000000000n
       // 2000000000n
 
       // assert(lpTokensToSend > 0, 'Adding the liquidity would lead to zero LP tokens deposited to the user'); // Liquidity provider protection.. He must receive at least 1 LP token
-      assert(lpTokensToSend > 0, 'LP-ZERO-ERR'); // Liquidity provider protection.. He must receive at least 1 LP token
       return lpTokensToSend as uint64;
     }
     return 0;
