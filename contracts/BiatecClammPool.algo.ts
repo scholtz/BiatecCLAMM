@@ -606,11 +606,12 @@ export class BiatecClammPool extends Contract {
       const D_SQRT = this.calculateLiquidityD(x, y, priceMin, priceMax, priceMinSqrt, priceMaxSqrt);
       newLiquidity = this.calculateLiquidityWithD(x, y, priceMinSqrt, priceMaxSqrt, D_SQRT);
     }
-    // SEND NEW LP TOKENS TO USER
-    const lpTokensToSend = ((newLiquidity - this.Liquidity.value) / assetLpDelicmalScale2Scale) as uint64;
 
     this.Liquidity.value = newLiquidity;
+
     if(send){
+      // SEND NEW LP TOKENS TO USER
+      const lpTokensToSend = ((newLiquidity - this.Liquidity.value) / assetLpDelicmalScale2Scale) as uint64;
       // send LP tokens to user
       this.doAxfer(this.txn.sender, assetLp, lpTokensToSend);
       // return lpTokensToSend;
