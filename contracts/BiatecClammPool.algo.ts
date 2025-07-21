@@ -598,25 +598,11 @@ export class BiatecClammPool extends Contract {
     this.assetBBalanceBaseScale.value = this.assetBBalanceBaseScale.value + realAssetBDeposit;
 
     // CALCULATE NEW LIQUIDITY
-    const x = this.assetABalanceBaseScale.value;
-    const y = this.assetBBalanceBaseScale.value;
-    const priceMin = this.priceMin.value as uint256;
-    const priceMax = this.priceMax.value as uint256;
-    const priceMinSqrt = this.priceMinSqrt.value;
-    const priceMaxSqrt = this.priceMaxSqrt.value;
-    let newLiquidity = <uint256>0;
-    if (priceMin === priceMax) {
-      newLiquidity = this.calculateLiquidityFlatPrice(x, y, priceMin);
-    } else {
-      const D_SQRT = this.calculateLiquidityD(x, y, priceMin, priceMax, priceMinSqrt, priceMaxSqrt);
-      newLiquidity = this.calculateLiquidityWithD(x, y, priceMinSqrt, priceMaxSqrt, D_SQRT);
-    }
-
-    this.Liquidity.value = newLiquidity;
+    this.setCurrentLiquidity()
 
     if(send){
       // SEND NEW LP TOKENS TO USER
-      const lpTokensToSend = ((newLiquidity - oldLiquidity) / assetLpDelicmalScale2Scale) as uint64;
+      const lpTokensToSend = ((this.Liquidity.value - oldLiquidity) / assetLpDelicmalScale2Scale) as uint64;
       // send LP tokens to user
       assert(lpTokensToSend > 0, 'LP-ZERO-ERR'); // Liquidity provider protection.. He must receive at least 1 LP token
       this.doAxfer(this.txn.sender, assetLp, lpTokensToSend);
@@ -630,6 +616,23 @@ export class BiatecClammPool extends Contract {
     return 0;
   }
 
+  private setCurrentLiquidity(): void {
+    // CALCULATE NEW LIQUIDITY
+    const x = this.assetABalanceBaseScale.value;
+    const y = this.assetBBalanceBaseScale.value;
+    const priceMin = this.priceMin.value as uint256;
+    const priceMax = this.priceMax.value as uint256;
+    const priceMinSqrt = this.priceMinSqrt.value;
+    const priceMaxSqrt = this.priceMaxSqrt.value;
+    let newLiquidity = <uint256>0;
+    if (priceMin === priceMax) {
+      newLiquidity = this.calculateLiquidityFlatPrice(x, y, priceMin);
+    } else {
+      const D_SQRT = this.calculateLiquidityD(x, y, priceMin, priceMax, priceMinSqrt, priceMaxSqrt);
+      newLiquidity = this.calculateLiquidityWithD(x, y, priceMinSqrt, priceMaxSqrt, D_SQRT);
+    }
+    this.Liquidity.value = newLiquidity;
+  }
   /**
    * This method retrieves from the liquidity provider LP token and returns Asset A and Asset B from the Automated Market Maker Concentrated Liqudidity Pool
    * @param appBiatecConfigProvider Configuration reference
@@ -701,34 +704,7 @@ export class BiatecClammPool extends Contract {
     const newAssetB = this.assetBBalanceBaseScale.value - bToSend;
     this.assetABalanceBaseScale.value = newAssetA;
     this.assetBBalanceBaseScale.value = newAssetB;
-
-    // verify that L with new x and y is correctly calculated
-    // this part can be removed if all tests goes through to lower cost by 1 tx
-    let lAfter = <uint256>0;
-    if (this.priceMin.value === this.priceMax.value) {
-      lAfter = this.calculateLiquidityFlatPrice(
-        this.assetABalanceBaseScale.value,
-        this.assetBBalanceBaseScale.value,
-        this.priceMin.value as uint256
-      );
-    } else {
-      const D_SQRT = this.calculateLiquidityD(
-        this.assetABalanceBaseScale.value,
-        this.assetBBalanceBaseScale.value,
-        this.priceMin.value as uint256, // priceMin: uint256,
-        this.priceMax.value as uint256, // priceMax: uint256,
-        this.priceMinSqrt.value, // priceMinSqrt: uint256,
-        this.priceMaxSqrt.value // priceMaxSqrt: uint256,
-      );
-      lAfter = this.calculateLiquidityWithD(
-        this.assetABalanceBaseScale.value,
-        this.assetBBalanceBaseScale.value,
-        this.priceMinSqrt.value, // priceMinSqrt: uint256,
-        this.priceMaxSqrt.value, // priceMaxSqrt: uint256,
-        D_SQRT
-      );
-    }
-    this.Liquidity.value = lAfter;
+    this.setCurrentLiquidity()
     return lpDeltaWithFees / assetLpDelicmalScale2Scale;
   }
 
@@ -802,34 +778,7 @@ export class BiatecClammPool extends Contract {
     const newAssetB = this.assetBBalanceBaseScale.value - bToSend;
     this.assetABalanceBaseScale.value = newAssetA;
     this.assetBBalanceBaseScale.value = newAssetB;
-
-    // verify that L with new x and y is correctly calculated
-    // this part can be removed if all tests goes through to lower cost by 1 tx
-    let lAfter = <uint256>0;
-    if (this.priceMin.value === this.priceMax.value) {
-      lAfter = this.calculateLiquidityFlatPrice(
-        this.assetABalanceBaseScale.value,
-        this.assetBBalanceBaseScale.value,
-        this.priceMin.value as uint256 // priceMin: uint256,
-      );
-    } else {
-      const D_SQRT = this.calculateLiquidityD(
-        this.assetABalanceBaseScale.value,
-        this.assetBBalanceBaseScale.value,
-        this.priceMin.value as uint256, // priceMin: uint256,
-        this.priceMax.value as uint256, // priceMax: uint256,
-        this.priceMinSqrt.value, // priceMinSqrt: uint256,
-        this.priceMaxSqrt.value // priceMaxSqrt: uint256,
-      );
-      lAfter = this.calculateLiquidityWithD(
-        this.assetABalanceBaseScale.value,
-        this.assetBBalanceBaseScale.value,
-        this.priceMinSqrt.value, // priceMinSqrt: uint256,
-        this.priceMaxSqrt.value, // priceMaxSqrt: uint256,
-        D_SQRT
-      );
-    }
-    this.Liquidity.value = lAfter;
+    this.setCurrentLiquidity();
     return lpDeltaWithFees / assetLpDelicmalScale2Scale;
   }
 
@@ -1018,60 +967,38 @@ export class BiatecClammPool extends Contract {
       this.assetBBalanceBaseScale.value = this.assetBBalanceBaseScale.value + inAssetInBaseScale;
       this.assetABalanceBaseScale.value = this.assetABalanceBaseScale.value - realSwapBaseDecimals;
     }
-    let newL = <uint256>0;
-    if (this.priceMin.value === this.priceMax.value) {
-      newL = this.calculateLiquidityFlatPrice(
-        this.assetABalanceBaseScale.value,
-        this.assetBBalanceBaseScale.value,
-        this.priceMin.value as uint256 // priceMin: uint256,
-      );
+    const oldL = this.Liquidity.value;
+    this.setCurrentLiquidity();
+    const newL = this.Liquidity.value;
+    assert(newL > oldL, "Liquidity must increase after swap"); // liquidity must increase after swap
+
+    // liquidity increase is the result of the fees
+
+    const diff = (newL - oldL) as uint256; // difference is the lp increment by fees .. ready to be split between users and biatec
+
+    if (isAssetA) {
+      // fee is in asset A ( incomming tx )
+      const feeB256 = (this.assetABalanceBaseScale.value * diff) / newL;
+      feeAmountAForStatsInBaseScale = feeB256 as uint64;
+      feeAmountBForStatsInBaseScale = 0;
     } else {
-      const D_SQRT = this.calculateLiquidityD(
-        this.assetABalanceBaseScale.value,
-        this.assetBBalanceBaseScale.value,
-        this.priceMin.value as uint256, // priceMin: uint256,
-        this.priceMax.value as uint256, // priceMax: uint256,
-        this.priceMinSqrt.value, // priceMinSqrt: uint256,
-        this.priceMaxSqrt.value // priceMaxSqrt: uint256,
-      );
-      newL = this.calculateLiquidityWithD(
-        this.assetABalanceBaseScale.value,
-        this.assetBBalanceBaseScale.value,
-        this.priceMinSqrt.value, // priceMinSqrt: uint256,
-        this.priceMaxSqrt.value, // priceMaxSqrt: uint256,
-        D_SQRT
-      );
+      // fee is in asset B ( incomming tx )
+      const feeB256 = (this.assetBBalanceBaseScale.value * diff) / newL;
+      feeAmountAForStatsInBaseScale = 0;
+      feeAmountBForStatsInBaseScale = feeB256 as uint64;
     }
 
-    if (newL > this.Liquidity.value) {
-      // liquidity increase is the result of the fees
-
-      const diff = (newL - this.Liquidity.value) as uint256; // difference is the lp increment by fees .. ready to be split between users and biatec
-      this.Liquidity.value = newL; // new liquidity is liquidity increase by users fees and biatec fees
-
-      if (isAssetA) {
-        // fee is in asset A ( incomming tx )
-        const feeB256 = (this.assetABalanceBaseScale.value * diff) / newL;
-        feeAmountAForStatsInBaseScale = feeB256 as uint64;
-        feeAmountBForStatsInBaseScale = 0;
-      } else {
-        // fee is in asset B ( incomming tx )
-        const feeB256 = (this.assetBBalanceBaseScale.value * diff) / newL;
-        feeAmountAForStatsInBaseScale = 0;
-        feeAmountBForStatsInBaseScale = feeB256 as uint64;
-      }
-
-      const biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256;
-      if (biatecFee === <uint256>0) {
-        const usersLiquidityFromFeeIncrement = diff;
-        this.LiquidityUsersFromFees.value = this.LiquidityUsersFromFees.value + usersLiquidityFromFeeIncrement;
-      } else {
-        const usersLiquidityFromFeeIncrement = (diff * (s - biatecFee)) / s;
-        const biatecLiquidityFromFeeIncrement = diff - usersLiquidityFromFeeIncrement;
-        this.LiquidityUsersFromFees.value = this.LiquidityUsersFromFees.value + usersLiquidityFromFeeIncrement;
-        this.LiquidityBiatecFromFees.value = this.LiquidityBiatecFromFees.value + biatecLiquidityFromFeeIncrement;
-      }
+    const biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256;
+    if (biatecFee === <uint256>0) {
+      const usersLiquidityFromFeeIncrement = diff;
+      this.LiquidityUsersFromFees.value = this.LiquidityUsersFromFees.value + usersLiquidityFromFeeIncrement;
+    } else {
+      const usersLiquidityFromFeeIncrement = (diff * (s - biatecFee)) / s;
+      const biatecLiquidityFromFeeIncrement = diff - usersLiquidityFromFeeIncrement;
+      this.LiquidityUsersFromFees.value = this.LiquidityUsersFromFees.value + usersLiquidityFromFeeIncrement;
+      this.LiquidityBiatecFromFees.value = this.LiquidityBiatecFromFees.value + biatecLiquidityFromFeeIncrement;
     }
+
     const newPrice = this.calculatePrice(
       this.assetABalanceBaseScale.value, // assetAQuantity: uint256,
       this.assetBBalanceBaseScale.value, // assetBQuantity: uint256,
@@ -1185,33 +1112,11 @@ export class BiatecClammPool extends Contract {
         this.assetBBalanceBaseScale.value,
       'E_B_B' // 'It is not possible to set higher assetBBalance then is in the app balance'
     );
-    let newL = <uint256>0;
-    if (this.priceMin.value === this.priceMax.value) {
-      newL = this.calculateLiquidityFlatPrice(
-        this.assetABalanceBaseScale.value,
-        this.assetBBalanceBaseScale.value,
-        this.priceMin.value as uint256 // priceMin: uint256,
-      );
-    } else {
-      const D_SQRT = this.calculateLiquidityD(
-        this.assetABalanceBaseScale.value,
-        this.assetBBalanceBaseScale.value,
-        this.priceMin.value as uint256, // priceMin: uint256,
-        this.priceMax.value as uint256, // priceMax: uint256,
-        this.priceMinSqrt.value, // priceMinSqrt: uint256,
-        this.priceMaxSqrt.value // priceMaxSqrt: uint256,
-      );
-      newL = this.calculateLiquidityWithD(
-        this.assetABalanceBaseScale.value,
-        this.assetBBalanceBaseScale.value,
-        this.priceMinSqrt.value, // priceMinSqrt: uint256,
-        this.priceMaxSqrt.value, // priceMaxSqrt: uint256,
-        D_SQRT
-      );
-    }
+    const oldL = this.Liquidity.value; // old liquidity before the deposit
+    this.setCurrentLiquidity(); // set the new liquidity after the deposit
+    const newL = this.Liquidity.value; // new liquidity after the deposit
     // liquidity increase is the result of the asset a and asset b deposit
-    const diff = (newL - this.Liquidity.value) as uint256; // difference is the lp increment by fees .. ready to be split between users and biatec
-    this.Liquidity.value = newL; // new liquidity is liquidity increase by users fees and biatec fees
+    const diff = (newL - oldL) as uint256; // difference is the lp increment by fees .. ready to be split between users and biatec
 
     const biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256;
     if (biatecFee === <uint256>0) {
