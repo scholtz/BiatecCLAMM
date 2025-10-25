@@ -1,9 +1,10 @@
 # Test Data Refactoring Status
 
-## ✅ Completed - Simple TestSets (Moved to JSON)
+## ✅ Completed - ALL TestSets Moved to JSON
 
-The following tests have been successfully refactored to load test data from JSON files in `__test__/test-data/`:
+**All 23 tests** in `BiatecClammPool.test.ts` have been successfully refactored to load test data from JSON files in `__test__/test-data/`:
 
+### Simple Calculation Tests (13)
 1. ✅ calculatePrice → `calculate-price.json`
 2. ✅ calculateAssetBWithdrawOnAssetADeposit → `calculate-asset-b-withdraw-on-asset-a-deposit.json`
 3. ✅ calculateAssetAWithdrawOnAssetBDeposit → `calculate-asset-a-withdraw-on-asset-b-deposit.json`
@@ -18,32 +19,19 @@ The following tests have been successfully refactored to load test data from JSO
 12. ✅ swapBtoA → `swap-b-to-a.json`
 13. ✅ removeLiquidity → `remove-liquidity.json`
 
-## ✅ Completed - Complex TestSets with BigInt
-
-The following tests with complex nested objects and BigInt values have been refactored:
-
+### Complex Tests with BigInt (10)
 14. ✅ LP fees 10%, Biatec fee - 0% → `lp-fees-10-biatec-fee-0.json`
 15. ✅ LP fees 10%, Biatec fee - 50% → `lp-fees-10-biatec-fee-50.json`
+16. ✅ ASASR - LP fees 10%, Biatec fee - 0% → `asasr-lp-fees-10-biatec-fee-0.json`
+17. ✅ I can withdraw lp fees from biatec account → `withdraw-lp-fees-from-biatec-account.json`
+18. ✅ If someone deposits assets to the pool → `distribute-assets-to-lp-holders.json`
+19. ✅ Extreme-SamePriceLowTop - ASASR → `extreme-same-price-low-top-asasr.json`
+20. ✅ Extreme-SmallMinMaxPriceDiff - ASASR → `extreme-small-min-max-price-diff.json`
+21. ✅ Extreme-ExtremePrice-Min - ASASR → `extreme-extreme-price-min.json`
+22. ✅ Extreme-No-Fees - ASASR EURUSD → `extreme-no-fees-eurusd.json`
+23. ✅ I can have algo vs asa in the pool → `algo-vs-asa-pool.json`
 
-These tests use the `convertToBigInt()` helper function to convert string representations back to BigInt values.
-
-## 🔲 Remaining Complex TestSets
-
-The following tests still have inline testSet definitions and would benefit from extraction to JSON files:
-
-16. 🔲 ASASR - LP fees 10%, Biatec fee - 0%
-17. 🔲 I can withdraw lp fees from biatec account
-18. 🔲 If someone deposits the asset a or asset b to the pool
-19. 🔲 Extreme-SamePriceLowTop - ASASR
-20. 🔲 Extreme-SmallMinMaxPriceDiff - ASASR
-21. 🔲 Extreme-ExtremePrice-Min - ASASR
-22. 🔲 Extreme-No-Fees - ASASR EURUSD
-23. 🔲 I can have algo vs asa in the pool
-
-These tests are significantly more complex with:
-- Very large nested objects with many BigInt fields
-- Stats objects with time-series data
-- Multiple status check objects
+All complex tests use the `convertToBigInt()` helper function to convert string representations of BigInt values.
 
 ## Helper Utilities
 

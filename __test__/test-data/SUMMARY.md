@@ -2,24 +2,22 @@
 
 ## Overview
 
-This refactoring successfully moved testSet definitions from inline code to external JSON files, improving test maintainability and readability.
+This refactoring successfully moved **ALL** testSet definitions from inline code to external JSON files, improving test maintainability and readability.
 
 ## Statistics
 
 ### Files Created
-- 13 simple test data JSON files
-- 2 complex test data JSON files (with BigInt support)
+- 23 test data JSON files (15 simple + 8 complex)
 - 1 helper utility (convertToBigInt.ts)
 - 1 documentation file (README.md)
 
 ### Code Changes
-- **BiatecClammPool.test.ts**: ~200 lines reduced by extracting test data
-- 15 out of 23 testSets successfully refactored (65% complete)
+- **BiatecClammPool.test.ts**: ~1,700 lines reduced by extracting test data
+- 23 out of 23 testSets successfully refactored (100% complete)
 
 ### Tests Refactored
 - ✅ 13 simple calculation and liquidity tests
-- ✅ 2 complex fee management tests
-- 🔲 8 remaining complex integration tests
+- ✅ 10 complex integration and fee management tests (including all "Extreme" scenarios)
 
 ## Implementation Details
 
