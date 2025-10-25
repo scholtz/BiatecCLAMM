@@ -1,6 +1,6 @@
 # Test Data Refactoring Status
 
-## Completed - Simple TestSets (Moved to JSON)
+## ✅ Completed - Simple TestSets (Moved to JSON)
 
 The following tests have been successfully refactored to load test data from JSON files in `__test__/test-data/`:
 
@@ -18,12 +18,19 @@ The following tests have been successfully refactored to load test data from JSO
 12. ✅ swapBtoA → `swap-b-to-a.json`
 13. ✅ removeLiquidity → `remove-liquidity.json`
 
-## Complex TestSets - Require BigInt Conversion
+## ✅ Completed - Complex TestSets with BigInt
 
-The following tests contain complex nested objects with BigInt values. They require a helper function to convert string values from JSON to BigInt:
+The following tests with complex nested objects and BigInt values have been refactored:
 
-14. ⚠️ LP fees 10%, Biatec fee - 0% → `lp-fees-10-biatec-fee-0.json` (JSON created, needs converter)
-15. 🔲 LP fees 10%, Biatec fee - 50%
+14. ✅ LP fees 10%, Biatec fee - 0% → `lp-fees-10-biatec-fee-0.json`
+15. ✅ LP fees 10%, Biatec fee - 50% → `lp-fees-10-biatec-fee-50.json`
+
+These tests use the `convertToBigInt()` helper function to convert string representations back to BigInt values.
+
+## 🔲 Remaining Complex TestSets
+
+The following tests still have inline testSet definitions and would benefit from extraction to JSON files:
+
 16. 🔲 ASASR - LP fees 10%, Biatec fee - 0%
 17. 🔲 I can withdraw lp fees from biatec account
 18. 🔲 If someone deposits the asset a or asset b to the pool
@@ -33,14 +40,33 @@ The following tests contain complex nested objects with BigInt values. They requ
 22. 🔲 Extreme-No-Fees - ASASR EURUSD
 23. 🔲 I can have algo vs asa in the pool
 
-## Next Steps
+These tests are significantly more complex with:
+- Very large nested objects with many BigInt fields
+- Stats objects with time-series data
+- Multiple status check objects
 
-To complete the refactoring of complex tests:
+## Helper Utilities
 
-1. Create a helper function to recursively convert string values to BigInt in loaded JSON data
-2. Extract remaining complex testSets to JSON files with string representations of BigInt values
-3. Update tests to use the helper function when loading complex test data
-4. Test all changes to ensure tests still pass
+### convertToBigInt.ts
+
+A utility function that recursively converts string representations of numbers to BigInt in test data objects. This is necessary because JSON doesn't natively support BigInt values.
+
+**Usage:**
+```typescript
+import { convertToBigInt } from './test-data/convertToBigInt';
+import testData from './test-data/my-test.json';
+
+const testSet = convertToBigInt(testData);
+// All numeric strings in the JSON are now BigInt values
+```
+
+## Benefits Achieved
+
+1. **Separation of Concerns**: Test data is now separate from test logic
+2. **Maintainability**: Test data can be updated without modifying test code
+3. **Reusability**: Test data can be shared across multiple tests if needed
+4. **Readability**: Tests are more focused on logic rather than data definition
+5. **Consistency**: Same pattern as existing clamm tests (math.test.ts, liquidity.test.ts)
 
 ## Other Test Files
 
