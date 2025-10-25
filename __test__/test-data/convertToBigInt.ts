@@ -5,13 +5,13 @@
  * @param obj - The object to convert
  * @returns A new object with string values converted to BigInt where appropriate
  */
-export function convertToBigInt<T>(obj: T): T {
+export function convertToBigInt(obj: unknown): any {
   if (obj === null || obj === undefined) {
     return obj;
   }
 
   if (Array.isArray(obj)) {
-    return obj.map(item => convertToBigInt(item)) as T;
+    return obj.map(item => convertToBigInt(item));
   }
 
   if (typeof obj === 'object') {
