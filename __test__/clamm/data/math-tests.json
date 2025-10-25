@@ -1,0 +1,63 @@
+{
+  "calculatePrice": [
+    { "x": 0.2, "y": 0, "p1": 1, "p2": 1.5625, "liquidity": 1, "price": 1 },
+    { "x": 0, "y": 0.25, "p1": 1, "p2": 1.5625, "liquidity": 1, "price": 1.5625 },
+    { "x": 2, "y": 0, "p1": 1, "p2": 1.5625, "liquidity": 10, "price": 1 }
+  ],
+  "calculateAssetBWithdrawOnAssetADeposit": [
+    { "x": 0, "y": 0.25, "p1": 1, "p2": 1.5625, "p": 1.5625, "liquidity": 1, "deposit": 0.2, "expected": 0.25 },
+    { "x": 1, "y": 1, "p1": 1, "p2": 1, "p": 1, "liquidity": 1, "deposit": 1, "expected": 1 },
+    {
+      "x": 1000,
+      "y": 1100,
+      "p1": 1.1,
+      "p2": 1.1,
+      "p": 1.1,
+      "liquidity": 1,
+      "deposit": 1000,
+      "expected": 1099.999999643
+    }
+  ],
+  "calculateAssetAWithdrawOnAssetBDeposit": [
+    { "x": 0.2, "y": 0, "p1": 1, "p2": 1.5625, "deposit": 0.25, "expected": 0.2 },
+    { "x": 2, "y": 2, "p1": 1, "p2": 1, "deposit": 1, "expected": 1 },
+    { "x": 2, "y": 0, "p1": 1, "p2": 1, "deposit": 2, "expected": 2 },
+    { "x": 1000, "y": 1100, "p1": 1.1, "p2": 1.1, "deposit": 1100, "expected": 1000.000000324 },
+    { "x": 4, "y": 0, "p1": 4, "p2": 4, "deposit": 4, "expected": 1 },
+    { "x": 4, "y": 0, "p1": 0.25, "p2": 0.25, "deposit": 1, "expected": 4 }
+  ],
+  "calculateLiquidity": [
+    { "x": 0.1, "y": 0.1, "p": 1, "p1": 0.9999, "p2": 1.0001, "dSqrt": 0.2, "liquidity": 2000.039996799 },
+    { "x": 0.2, "y": 0, "p1": 1, "p2": 1.5625, "dSqrt": 0.2, "liquidity": 1 },
+    { "x": 2, "y": 0, "p": 1, "p1": 1, "p2": 1.5625, "dSqrt": 2, "liquidity": 10 },
+    { "x": 0, "y": 0.25, "p": 1.5625, "p1": 1, "p2": 1.5625, "dSqrt": 0.2, "liquidity": 1 },
+    { "x": 0.00000001, "y": 0, "p": 1, "p1": 1, "p2": 1.5625, "dSqrt": 0, "liquidity": 0.000000025 }
+  ],
+  "calculateAssetAWithdrawOnLpDeposit": [
+    { "balance": 0.25, "liquidity": 1, "deposit": 0.5, "expected": 0.125 },
+    { "balance": 2.5, "liquidity": 10, "deposit": 5, "expected": 1.25 },
+    { "balance": 2.5, "liquidity": 10, "deposit": 1, "expected": 0.25 },
+    { "balance": 2.5, "liquidity": 10, "deposit": 10, "expected": 2.5 }
+  ],
+  "calculateAssetBWithdrawOnLpDeposit": [
+    { "balance": 0.25, "liquidity": 1, "deposit": 0.5, "expected": 0.125 },
+    { "balance": 2.5, "liquidity": 10, "deposit": 5, "expected": 1.25 },
+    { "balance": 2.5, "liquidity": 10, "deposit": 1, "expected": 0.25 },
+    { "balance": 2.5, "liquidity": 10, "deposit": 10, "expected": 2.5 }
+  ],
+  "calculateAssetBDepositOnAssetADeposit": [
+    { "x": 0.25, "y": 0, "depositA": 0.25, "depositB": 0 },
+    { "x": 1, "y": 1, "depositA": 2, "depositB": 2 },
+    { "x": 10, "y": 10, "depositA": 1, "depositB": 1 },
+    { "x": 10, "y": 1, "depositA": 10, "depositB": 1 },
+    { "x": 1, "y": 10, "depositA": 10, "depositB": 100 }
+  ],
+  "calculateAssetADepositOnAssetBDeposit": [
+    { "y": 0, "x": 1, "depositB": 3, "depositA": 0.001, "expected": 0.001 },
+    { "y": 0.25, "x": 0, "depositB": 1, "depositA": 0, "expected": 0 },
+    { "y": 1, "x": 1, "depositB": 2, "depositA": 2, "expected": 2 },
+    { "y": 10, "x": 10, "depositB": 1, "depositA": 1, "expected": 1 },
+    { "y": 10, "x": 1, "depositB": 10, "depositA": 1, "expected": 1 },
+    { "y": 1, "x": 10, "depositB": 10, "depositA": 100, "expected": 100 }
+  ]
+}
