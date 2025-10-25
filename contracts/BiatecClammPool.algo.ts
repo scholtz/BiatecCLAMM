@@ -432,18 +432,18 @@ export class BiatecClammPool extends Contract {
     // }
 
     // set the liquidity first from the current state of the pool. when swappers performs swaps the liquidity is not calculated even when it is increasing. calculate current liquidty before we calculate the current deposit liqudity change
-    this.processAddLiquidity(
-      zeroUint256,
-      zeroUint256,
-      assetLpDelicmalScale2Scale,
-      assetLp,
-      false
-    );
+    this.processAddLiquidity(zeroUint256, zeroUint256, assetLpDelicmalScale2Scale, assetLp, false);
 
     // if minprice == maxprice
 
     if (this.priceMinSqrt.value === this.priceMaxSqrt.value) {
-      return this.processAddLiquidity(aDepositInBaseScale, bDepositInBaseScale, assetLpDelicmalScale2Scale, assetLp, true);
+      return this.processAddLiquidity(
+        aDepositInBaseScale,
+        bDepositInBaseScale,
+        assetLpDelicmalScale2Scale,
+        assetLp,
+        true
+      );
     }
 
     // else
@@ -598,11 +598,11 @@ export class BiatecClammPool extends Contract {
     this.assetBBalanceBaseScale.value = this.assetBBalanceBaseScale.value + realAssetBDeposit;
 
     // CALCULATE NEW LIQUIDITY
-    this.setCurrentLiquidity()
+    const newLiquidity = this.setCurrentLiquidityNonDecreasing(oldLiquidity);
 
-    if(send){
+    if (send) {
       // SEND NEW LP TOKENS TO USER
-      const lpTokensToSend = ((this.Liquidity.value - oldLiquidity) / assetLpDelicmalScale2Scale) as uint64;
+      const lpTokensToSend = ((newLiquidity - oldLiquidity) / assetLpDelicmalScale2Scale) as uint64;
       // send LP tokens to user
       assert(lpTokensToSend > 0, 'LP-ZERO-ERR'); // Liquidity provider protection.. He must receive at least 1 LP token
       this.doAxfer(this.txn.sender, assetLp, lpTokensToSend);
@@ -616,7 +616,7 @@ export class BiatecClammPool extends Contract {
     return 0;
   }
 
-  private setCurrentLiquidity(): void {
+  private calculateCurrentLiquidity(): uint256 {
     // CALCULATE NEW LIQUIDITY
     const x = this.assetABalanceBaseScale.value;
     const y = this.assetBBalanceBaseScale.value;
@@ -631,7 +631,30 @@ export class BiatecClammPool extends Contract {
       const D_SQRT = this.calculateLiquidityD(x, y, priceMin, priceMax, priceMinSqrt, priceMaxSqrt);
       newLiquidity = this.calculateLiquidityWithD(x, y, priceMinSqrt, priceMaxSqrt, D_SQRT);
     }
-    this.Liquidity.value = newLiquidity;
+    return newLiquidity;
+  }
+
+  private setCurrentLiquidity(): void {
+    this.Liquidity.value = this.calculateCurrentLiquidity();
+  }
+
+  private setCurrentLiquidityNonDecreasing(oldLiquidity: uint256): uint256 {
+    const projectedLiquidity = this.calculateCurrentLiquidity();
+    if (projectedLiquidity >= oldLiquidity) {
+      this.Liquidity.value = projectedLiquidity;
+      return projectedLiquidity;
+    }
+    const liquidityDrop = (oldLiquidity - projectedLiquidity) as uint256;
+    const allowedDrop = this.getLiquidityRoundingAllowance();
+    assert(liquidityDrop <= allowedDrop, 'ERR-LIQ-DROP');
+    this.Liquidity.value = oldLiquidity;
+    return oldLiquidity;
+  }
+
+  private getLiquidityRoundingAllowance(): uint256 {
+    const scaleA = this.assetADecimalsScaleFromBase.value;
+    const scaleB = this.assetBDecimalsScaleFromBase.value;
+    return scaleA * scaleB + scaleA + scaleB;
   }
   /**
    * This method retrieves from the liquidity provider LP token and returns Asset A and Asset B from the Automated Market Maker Concentrated Liqudidity Pool
@@ -704,7 +727,7 @@ export class BiatecClammPool extends Contract {
     const newAssetB = this.assetBBalanceBaseScale.value - bToSend;
     this.assetABalanceBaseScale.value = newAssetA;
     this.assetBBalanceBaseScale.value = newAssetB;
-    this.setCurrentLiquidity()
+    this.setCurrentLiquidity();
     return lpDeltaWithFees / assetLpDelicmalScale2Scale;
   }
 
@@ -874,7 +897,8 @@ export class BiatecClammPool extends Contract {
     );
     const user = this.verifyIdentity(appBiatecConfigProvider, appBiatecIdentityProvider);
 
-    const feesMultiplier = (s - ((this.fee.value as uint256) * (user.feeMultiplier as uint256)) / (user.base as uint256)) as uint256;
+    const feesMultiplier = (s -
+      ((this.fee.value as uint256) * (user.feeMultiplier as uint256)) / (user.base as uint256)) as uint256;
     let ret: uint64 = 0;
     let amountAForStatsInAssetDecimals = 0;
     let amountBForStatsInAssetDecimals = 0;
@@ -968,9 +992,7 @@ export class BiatecClammPool extends Contract {
       this.assetABalanceBaseScale.value = this.assetABalanceBaseScale.value - realSwapBaseDecimals;
     }
     const oldL = this.Liquidity.value;
-    this.setCurrentLiquidity();
-    const newL = this.Liquidity.value;
-    assert(newL > oldL, "Liquidity must increase after swap"); // liquidity must increase after swap
+    const newL = this.setCurrentLiquidityNonDecreasing(oldL);
 
     // liquidity increase is the result of the fees
 
@@ -1113,8 +1135,7 @@ export class BiatecClammPool extends Contract {
       'E_B_B' // 'It is not possible to set higher assetBBalance then is in the app balance'
     );
     const oldL = this.Liquidity.value; // old liquidity before the deposit
-    this.setCurrentLiquidity(); // set the new liquidity after the deposit
-    const newL = this.Liquidity.value; // new liquidity after the deposit
+    const newL = this.setCurrentLiquidityNonDecreasing(oldL); // set the new liquidity after the deposit
     // liquidity increase is the result of the asset a and asset b deposit
     const diff = (newL - oldL) as uint256; // difference is the lp increment by fees .. ready to be split between users and biatec
 
@@ -1508,7 +1529,8 @@ export class BiatecClammPool extends Contract {
     // const b = priceMaxSqrt;
     // const L = liquidity;
     // a*b*d*l
-    const P1 = (((((priceMinSqrt /* 10D */ * priceMaxSqrt) /* 10D */ / s) * inAmount) /* AD */ / s) * liquidity) /* 10D */ / s;
+    const P1 =
+      (((((priceMinSqrt /* 10D */ * priceMaxSqrt) /* 10D */ / s) * inAmount) /* AD */ / s) * liquidity) /* 10D */ / s;
     // b*d*y
     const P2 = (((priceMaxSqrt /* 10D */ * inAmount) /* AD */ / s) * assetBBalance) /* BD */ / s; // << TODO CHECK B Decimals not applied?
     // b*d
