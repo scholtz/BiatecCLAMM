@@ -62,7 +62,7 @@ export interface SetupPoolResult {
 
 export const initDeployer = async () => {
   await fixture.newScope();
-  deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(1_000_000_000) });
+  deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(100_000_000) });
   deployerSigner = {
     addr: deployer.addr,
     signer: async (txnGroup: Transaction[], indexesToSign: number[]) => txnGroup.map((tx) => tx.signTxn(deployer.sk)),
@@ -77,7 +77,7 @@ export const setupPool = async (input: SetupPoolInput): Promise<SetupPoolResult>
   const algorand = await AlgorandClient.fromEnvironment();
   await fixture.newScope();
 
-  deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(1_000_000_000) });
+  deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(100_000_000) });
   deployerSigner = {
     addr: deployer.addr,
     signer: async (txnGroup: Transaction[], indexesToSign: number[]) => txnGroup.map((tx) => tx.signTxn(deployer.sk)),

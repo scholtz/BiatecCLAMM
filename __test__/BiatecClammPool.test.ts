@@ -82,7 +82,7 @@ export const setupPool = async (input: ISetup) => {
   const algorand = await AlgorandClient.fromEnvironment();
   await fixture.newScope();
 
-  deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(1_000_000_000) });
+  deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(100_000_000) });
 
   deployerSigner = {
     addr: deployer.addr,
@@ -444,7 +444,7 @@ describe('clamm', () => {
   beforeAll(async () => {
     await fixture.newScope();
     const { algod } = fixture.context;
-    deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(1_000_000_000) });
+  deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(100_000_000) });
 
     deployerSigner = {
       addr: deployer.addr,
