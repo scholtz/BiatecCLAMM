@@ -444,7 +444,7 @@ describe('clamm', () => {
   beforeAll(async () => {
     await fixture.newScope();
     const { algod } = fixture.context;
-  deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(100_000_000) });
+    deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(100_000_000) });
 
     deployerSigner = {
       addr: deployer.addr,
@@ -4078,7 +4078,7 @@ describe('clamm', () => {
           add2A: 10,
           add2B: 1,
           lpTokensToReceive2: 110000.360611,
-          checkDistributed2:  112000.400607000,
+          checkDistributed2: 112000.400607,
 
           checkStatus4: {
             scale: 1000000000n,
@@ -4098,13 +4098,13 @@ describe('clamm', () => {
             price: 999917854n,
             fee: 100000n,
             biatecFee: 100000000n,
-            verificationClass: 0n
+            verificationClass: 0n,
           },
 
           swap2B: 10, //  i will swap this asset from B asset to A and this is what I deposit
           swap2A: 9.99792882, //  this is how much asset A i should receive
 
-          checkDistributed3: 112000.400607000,
+          checkDistributed3: 112000.400607,
 
           checkStatus5: {
             scale: 1000000000n,
@@ -4124,7 +4124,7 @@ describe('clamm', () => {
             price: 1000096390n,
             fee: 100000n,
             biatecFee: 100000000n,
-            verificationClass: 0n
+            verificationClass: 0n,
           },
 
           stats2: {
@@ -4183,10 +4183,10 @@ describe('clamm', () => {
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVwap: 0n,
-            period4PrevTime: 0n
+            period4PrevTime: 0n,
           },
 
-          lpTokensToWithdraw: 112000.400607000,
+          lpTokensToWithdraw: 112000.400607,
           retLRemove: 112018.589557,
 
           checkStatus6: {
@@ -4207,7 +4207,7 @@ describe('clamm', () => {
             price: 1000096390n,
             fee: 100000n,
             biatecFee: 100000000n,
-            verificationClass: 0n
+            verificationClass: 0n,
           },
         },
       ];
@@ -4713,7 +4713,7 @@ describe('clamm', () => {
           add2A: 1,
           add2B: 10000,
           lpTokensToReceive2: 10001.316171,
-          checkDistributed2: 10001.416184000,
+          checkDistributed2: 10001.416184,
 
           checkStatus4: {
             scale: 1000000000n,
@@ -4733,13 +4733,13 @@ describe('clamm', () => {
             price: 999799856n,
             fee: 100000n,
             biatecFee: 100000000n,
-            verificationClass: 0n
+            verificationClass: 0n,
           },
 
           swap2B: 0.5, //  i will swap this asset from B asset to A and this is what I deposit
           swap2A: 0.49997506, //  this is how much asset A i should receive
 
-          checkDistributed3: 10001.416184000,
+          checkDistributed3: 10001.416184,
 
           checkStatus5: {
             scale: 1000000000n,
@@ -4759,7 +4759,7 @@ describe('clamm', () => {
             price: 999899814n,
             fee: 100000n,
             biatecFee: 100000000n,
-            verificationClass: 0n
+            verificationClass: 0n,
           },
 
           stats2: {
@@ -4818,10 +4818,10 @@ describe('clamm', () => {
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVwap: 0n,
-            period4PrevTime: 0n
+            period4PrevTime: 0n,
           },
 
-          lpTokensToWithdraw: 10001.416184000,
+          lpTokensToWithdraw: 10001.416184,
           retLRemove: 10001.416275,
 
           checkStatus6: {
@@ -4842,7 +4842,7 @@ describe('clamm', () => {
             price: 999899814n,
             fee: 100000n,
             biatecFee: 100000000n,
-            verificationClass: 0n
+            verificationClass: 0n,
           },
         },
 
@@ -4986,7 +4986,7 @@ describe('clamm', () => {
           add2A: 0.1,
           add2B: 0.001,
           lpTokensToReceive2: 0.050992,
-          checkDistributed2: 100.712869000,
+          checkDistributed2: 100.712869,
 
           checkStatus4: {
             scale: 1000000000n,
@@ -5006,13 +5006,13 @@ describe('clamm', () => {
             price: 99414n,
             fee: 100000n,
             biatecFee: 100000000n,
-            verificationClass: 0n
+            verificationClass: 0n,
           },
 
           swap2B: 0.5, //  i will swap this asset from B asset to A and this is what I deposit
-          swap2A: 3357.17336860, //  this is how much asset A i should receive
+          swap2A: 3357.1733686, //  this is how much asset A i should receive
 
-          checkDistributed3: 100.712869000,
+          checkDistributed3: 100.712869,
 
           checkStatus5: {
             scale: 1000000000n,
@@ -5032,7 +5032,7 @@ describe('clamm', () => {
             price: 223047n,
             fee: 100000n,
             biatecFee: 100000000n,
-            verificationClass: 0n
+            verificationClass: 0n,
           },
 
           stats2: {
@@ -5091,10 +5091,10 @@ describe('clamm', () => {
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVwap: 0n,
-            period4PrevTime: 0n
+            period4PrevTime: 0n,
           },
 
-          lpTokensToWithdraw: 100.712869000,
+          lpTokensToWithdraw: 100.712869,
           retLRemove: 100.715995,
 
           checkStatus6: {
@@ -5115,7 +5115,7 @@ describe('clamm', () => {
             price: 223047n,
             fee: 100000n,
             biatecFee: 100000000n,
-            verificationClass: 0n
+            verificationClass: 0n,
           },
         },
       ];
@@ -5639,7 +5639,7 @@ describe('clamm', () => {
             price: 995232018n,
             fee: 0n,
             biatecFee: 0n,
-            verificationClass: 0n
+            verificationClass: 0n,
           },
 
           swap2B: 1000, //  i will swap this asset from B asset to A and this is what I deposit
@@ -5663,7 +5663,7 @@ describe('clamm', () => {
             price: 995232995n,
             fee: 0n,
             biatecFee: 0n,
-            verificationClass: 0n
+            verificationClass: 0n,
           },
 
           stats2: {
@@ -5722,11 +5722,11 @@ describe('clamm', () => {
             period4PrevFeeA: 0n,
             period4PrevFeeB: 0n,
             period4PrevVwap: 0n,
-            period4PrevTime: 0n
+            period4PrevTime: 0n,
           },
 
-          lpTokensToWithdraw: 2043760081.096385000,
-          retLRemove:         2043760081.096400,
+          lpTokensToWithdraw: 2043760081.096385,
+          retLRemove: 2043760081.0964,
 
           checkStatus6: {
             scale: 1000000000n,
@@ -5746,7 +5746,7 @@ describe('clamm', () => {
             price: 995232995n,
             fee: 0n,
             biatecFee: 0n,
-            verificationClass: 0n
+            verificationClass: 0n,
           },
         },
       ];
@@ -5862,7 +5862,7 @@ describe('clamm', () => {
           suggestedParams: params,
           receiver: clientBiatecClammPoolProvider.appClient.appAddress,
         });
-        expect(addSwapA.assetTransfer?.amount).toEqual(10_000_000_000n);// 100 * 10^8
+        expect(addSwapA.assetTransfer?.amount).toEqual(10_000_000_000n); // 100 * 10^8
 
         const swapResult = await clientBiatecClammPoolProvider.appClient.send.swap({
           args: {

@@ -37,7 +37,7 @@ describe('clamm', () => {
   beforeAll(async () => {
     await fixture.newScope();
     const { algod } = fixture.context;
-  deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(500_000_000) });
+    deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(500_000_000) });
 
     deployerSigner = {
       addr: deployer.addr,
