@@ -1,7 +1,7 @@
 /**
  * Recursively converts string representations of numbers to BigInt in test data objects.
  * This is necessary because JSON doesn't natively support BigInt values.
- * 
+ *
  * @param obj - The object to convert
  * @returns A new object with string values converted to BigInt where appropriate
  */
@@ -11,7 +11,7 @@ export function convertToBigInt(obj: unknown): any {
   }
 
   if (Array.isArray(obj)) {
-    return obj.map(item => convertToBigInt(item));
+    return obj.map((item) => convertToBigInt(item));
   }
 
   if (typeof obj === 'object') {
