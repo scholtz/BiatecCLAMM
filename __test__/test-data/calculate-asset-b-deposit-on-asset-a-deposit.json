@@ -1,0 +1,7 @@
+[
+  { "x": 0.25, "y": 0, "aDeposit": 0.25, "bDeposit": 0 },
+  { "x": 1, "y": 1, "aDeposit": 2, "bDeposit": 2 },
+  { "x": 10, "y": 10, "aDeposit": 1, "bDeposit": 1 },
+  { "x": 10, "y": 1, "aDeposit": 10, "bDeposit": 1 },
+  { "x": 1, "y": 10, "aDeposit": 10, "bDeposit": 100 }
+]

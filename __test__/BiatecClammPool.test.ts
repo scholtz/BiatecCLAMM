@@ -28,6 +28,20 @@ import { BoxReference } from '@algorandfoundation/algokit-utils/types/app-manage
 import clammCreateTxs from '../src/biatecClamm/txs/clammCreateTxs';
 import getPools from '../src/biatecClamm/getPools';
 import clammCreateSender from '../src/biatecClamm/sender/clammCreateSender';
+import calculatePriceData from './test-data/calculate-price.json';
+import calculateAssetBWithdrawData from './test-data/calculate-asset-b-withdraw-on-asset-a-deposit.json';
+import calculateAssetAWithdrawData from './test-data/calculate-asset-a-withdraw-on-asset-b-deposit.json';
+import calculateLiquidityData from './test-data/calculate-liquidity.json';
+import calculateAssetAWithdrawLpData from './test-data/calculate-asset-a-withdraw-on-lp-deposit.json';
+import calculateAssetBWithdrawLpData from './test-data/calculate-asset-b-withdraw-on-lp-deposit.json';
+import calculateAssetBDepositData from './test-data/calculate-asset-b-deposit-on-asset-a-deposit.json';
+import calculateAssetADepositData from './test-data/calculate-asset-a-deposit-on-asset-b-deposit.json';
+import addLiquidityData from './test-data/add-liquidity.json';
+import addLiquiditySecondData from './test-data/add-liquidity-second.json';
+import swapAToBData from './test-data/swap-a-to-b.json';
+import swapBToAData from './test-data/swap-b-to-a.json';
+import removeLiquidityData from './test-data/remove-liquidity.json';
+import lpFees10BiatecFee0Data from './test-data/lp-fees-10-biatec-fee-0.json';
 
 const fixture = algorandFixture();
 algokit.Config.configure({ populateAppCallResources: true });
@@ -531,11 +545,7 @@ describe('clamm', () => {
     try {
       assetAId = 1n;
       const { algod } = fixture.context;
-      const testSet = [
-        { x: 0.2, y: 0, P1: 1, P2: 1.5625, L: 1, P: 1 },
-        { x: 0, y: 0.25, P1: 1, P2: 1.5625, L: 1, P: 1.5625 },
-        { x: 2, y: 0, P1: 1, P2: 1.5625, L: 10, P: 1 },
-      ];
+      const testSet = calculatePriceData;
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
@@ -571,29 +581,7 @@ describe('clamm', () => {
     try {
       assetAId = 1n;
       const { algod } = fixture.context;
-      const testSet = [
-        {
-          x: 0,
-          y: 0.25,
-          P1: 1,
-          P2: 1.5625,
-          P: 1.5625,
-          L: 1,
-          deposit: 0.2,
-          expectedWithdrawResult: 0.25,
-        },
-        {
-          x: 1,
-          y: 1,
-          P1: 1,
-          P2: 1,
-          P: 1,
-          L: 1,
-          deposit: 1,
-          expectedWithdrawResult: 1,
-        },
-        { x: 1000, y: 1100, P1: 1.1, P2: 1.1, L: 1, deposit: 1000, expectedWithdrawResult: 1099.999999643 }, // eurusd = 1.1 x = eur, y=usd, x = 1000 eur, y = 1100 usd, deposit 1100 usd, withdraw 1000 eur
-      ];
+      const testSet = calculateAssetBWithdrawData;
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
@@ -631,14 +619,7 @@ describe('clamm', () => {
     try {
       assetAId = 1n;
       const { algod } = fixture.context;
-      const testSet = [
-        { x: 0.2, y: 0, P1: 1, P2: 1.5625, depositB: 0.25, expectedWithdrawResult: 0.2 },
-        { x: 2, y: 2, P1: 1, P2: 1, depositB: 1, expectedWithdrawResult: 1 },
-        { x: 2, y: 0, P1: 1, P2: 1, depositB: 2, expectedWithdrawResult: 2 },
-        { x: 1000, y: 1100, P1: 1.1, P2: 1.1, depositB: 1100, expectedWithdrawResult: 1000.000000324 }, // eurusd = 1.1 x = eur, y=usd, x = 1000 eur, y = 1100 usd, deposit 1100 usd, withdraw 1000 eur
-        { x: 4, y: 0, P1: 4, P2: 4, depositB: 4, expectedWithdrawResult: 1 },
-        { x: 4, y: 0, P1: 0.25, P2: 0.25, depositB: 1, expectedWithdrawResult: 4 },
-      ];
+      const testSet = calculateAssetAWithdrawData;
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
@@ -720,13 +701,7 @@ describe('clamm', () => {
     try {
       assetAId = 1n;
       const { algod } = fixture.context;
-      const testSet = [
-        { x: 0.1, y: 0.1, P: 1, P1: 0.9999, P2: 1.0001, dSqrt: 0.2, L: 2000.039996799 },
-        { x: 0.2, y: 0, P1: 1, P2: 1.5625, dSqrt: 0.2, L: 1 },
-        { x: 2, y: 0, P: 1, P1: 1, P2: 1.5625, dSqrt: 2, L: 10 },
-        { x: 0, y: 0.25, P: 1.5625, P1: 1, P2: 1.5625, dSqrt: 0.2, L: 1 },
-        { x: 0.00000001, y: 0, P: 1, P1: 1, P2: 1.5625, dSqrt: 0, L: 0.000000025 },
-      ];
+      const testSet = calculateLiquidityData;
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
@@ -774,12 +749,7 @@ describe('clamm', () => {
     try {
       assetAId = 1n;
       const { algod } = fixture.context;
-      const testSet = [
-        { x: 0.25, L: 1, lpDeposit: 1 / 2, aWithdraw: 0.25 / 2 },
-        { x: 2.5, L: 10, lpDeposit: 10 / 2, aWithdraw: 2.5 / 2 },
-        { x: 2.5, L: 10, lpDeposit: 10 / 10, aWithdraw: 2.5 / 10 },
-        { x: 2.5, L: 10, lpDeposit: 10, aWithdraw: 2.5 },
-      ];
+      const testSet = calculateAssetAWithdrawLpData;
 
       const { clientBiatecClammPoolProvider, clientBiatecPoolProvider } = await setupPool({
         algod,
@@ -814,12 +784,7 @@ describe('clamm', () => {
     try {
       assetAId = 1n;
       const { algod } = fixture.context;
-      const testSet = [
-        { y: 0.25, L: 1, lpDeposit: 1 / 2, bWithdraw: 0.25 / 2 },
-        { y: 2.5, L: 10, lpDeposit: 10 / 2, bWithdraw: 2.5 / 2 },
-        { y: 2.5, L: 10, lpDeposit: 10 / 10, bWithdraw: 2.5 / 10 },
-        { y: 2.5, L: 10, lpDeposit: 10, bWithdraw: 2.5 },
-      ];
+      const testSet = calculateAssetBWithdrawLpData;
 
       const { clientBiatecClammPoolProvider, clientBiatecPoolProvider } = await setupPool({
         algod,
@@ -854,14 +819,7 @@ describe('clamm', () => {
     try {
       assetAId = 1n;
       const { algod } = fixture.context;
-      const testSet = [
-        { x: 0.25, y: 0, aDeposit: 0.25, bDeposit: 0 },
-        // { x: 0, y: 0.25, aDeposit: 1, bDeposit: 0 }, // should fail
-        { x: 1, y: 1, aDeposit: 2, bDeposit: 2 },
-        { x: 10, y: 10, aDeposit: 1, bDeposit: 1 },
-        { x: 10, y: 1, aDeposit: 10, bDeposit: 1 },
-        { x: 1, y: 10, aDeposit: 10, bDeposit: 100 },
-      ];
+      const testSet = calculateAssetBDepositData;
 
       const { clientBiatecClammPoolProvider } = await setupPool({
         algod,
@@ -898,14 +856,7 @@ describe('clamm', () => {
     try {
       assetAId = 1n;
       const { algod } = fixture.context;
-      const testSet = [
-        { y: 0, x: 1, bDeposit: 3, aDeposit: 0.001, aDepositOut: 0.001 }, // > special case aDepositOut = aDeposit
-        { y: 0.25, x: 0, bDeposit: 1, aDeposit: 0, aDepositOut: 0 },
-        { y: 1, x: 1, bDeposit: 2, aDeposit: 2, aDepositOut: 2 },
-        { y: 10, x: 10, bDeposit: 1, aDeposit: 1, aDepositOut: 1 },
-        { y: 10, x: 1, bDeposit: 10, aDeposit: 1, aDepositOut: 1 },
-        { y: 1, x: 10, bDeposit: 10, aDeposit: 100, aDepositOut: 100 },
-      ];
+      const testSet = calculateAssetADepositData;
 
       const { clientBiatecClammPoolProvider } = await setupPool({
         algod,
@@ -944,12 +895,7 @@ describe('clamm', () => {
       assetAId = 1n;
       const { algod } = fixture.context;
 
-      const testSet = [
-        { x: 2, y: 0, P: 1, P1: 1, P2: 1.5625, lpTokensToReceive: 10 },
-        { x: 0, y: 0.25, P: 1.5625, P1: 1, P2: 1.5625, lpTokensToReceive: 1 },
-        { x: 0.2, y: 0, P: 1, P1: 1, P2: 1.5625, lpTokensToReceive: 1 },
-        { x: 0.00001, y: 0, P: 1, P1: 1, P2: 1.5625, lpTokensToReceive: 0.000025 },
-      ];
+      const testSet = addLiquidityData;
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
@@ -1042,9 +988,7 @@ describe('clamm', () => {
       assetAId = 1n;
       const { algod } = fixture.context;
 
-      const testSet = [
-        { x: 0.2, y: 0, P: 1, P1: 1, P2: 1.5625, lpTokensToReceive: 1, x2: 2, y2: 0, lpTokensToReceive2: 10 },
-      ];
+      const testSet = addLiquiditySecondData;
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
@@ -1153,7 +1097,7 @@ describe('clamm', () => {
       assetAId = 1n;
       const { algod } = fixture.context;
 
-      const testSet = [{ x: 0, y: 0.25, P: 1.5625, P1: 1, P2: 1.5625, L: 1, swapA: 0.2, swapB: 0.25 }];
+      const testSet = swapAToBData;
 
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
@@ -1271,7 +1215,7 @@ describe('clamm', () => {
       assetAId = 1n;
       const { algod } = fixture.context;
 
-      const testSet = [{ x: 0.2, y: 0, P: 1, P1: 1, P2: 1.5625, L: 1, swapB: 0.25, swapA: 0.2 }];
+      const testSet = swapBToAData;
 
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
@@ -1389,21 +1333,7 @@ describe('clamm', () => {
       assetAId = 1n;
       const { algod } = fixture.context;
 
-      const testSet = [
-        { x: 2, y: 0, P: 1, P1: 1, P2: 1.5625, lpTokensToReceive: 10, lpTokensToWithdraw: 3, retLRemove: 3 },
-        { x: 0, y: 0.25, P: 1.5625, P1: 1, P2: 1.5625, lpTokensToReceive: 1, lpTokensToWithdraw: 1, retLRemove: 1 },
-        { x: 0.2, y: 0, P: 1, P1: 1, P2: 1.5625, lpTokensToReceive: 1, lpTokensToWithdraw: 0.5, retLRemove: 0.5 },
-        {
-          x: 0.00001,
-          y: 0,
-          P: 1,
-          P1: 1,
-          P2: 1.5625,
-          lpTokensToReceive: 0.000025,
-          lpTokensToWithdraw: 0.000025,
-          retLRemove: 0.000025,
-        },
-      ];
+      const testSet = removeLiquidityData;
 
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax

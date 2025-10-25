@@ -1,0 +1,42 @@
+[
+  {
+    "x": 2,
+    "y": 0,
+    "P": 1,
+    "P1": 1,
+    "P2": 1.5625,
+    "lpTokensToReceive": 10,
+    "lpTokensToWithdraw": 3,
+    "retLRemove": 3
+  },
+  {
+    "x": 0,
+    "y": 0.25,
+    "P": 1.5625,
+    "P1": 1,
+    "P2": 1.5625,
+    "lpTokensToReceive": 1,
+    "lpTokensToWithdraw": 1,
+    "retLRemove": 1
+  },
+  {
+    "x": 0.2,
+    "y": 0,
+    "P": 1,
+    "P1": 1,
+    "P2": 1.5625,
+    "lpTokensToReceive": 1,
+    "lpTokensToWithdraw": 0.5,
+    "retLRemove": 0.5
+  },
+  {
+    "x": 0.00001,
+    "y": 0,
+    "P": 1,
+    "P1": 1,
+    "P2": 1.5625,
+    "lpTokensToReceive": 0.000025,
+    "lpTokensToWithdraw": 0.000025,
+    "retLRemove": 0.000025
+  }
+]

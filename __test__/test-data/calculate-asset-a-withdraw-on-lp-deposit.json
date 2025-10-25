@@ -1,0 +1,6 @@
+[
+  { "x": 0.25, "L": 1, "lpDeposit": 0.5, "aWithdraw": 0.125 },
+  { "x": 2.5, "L": 10, "lpDeposit": 5, "aWithdraw": 1.25 },
+  { "x": 2.5, "L": 10, "lpDeposit": 1, "aWithdraw": 0.25 },
+  { "x": 2.5, "L": 10, "lpDeposit": 10, "aWithdraw": 2.5 }
+]

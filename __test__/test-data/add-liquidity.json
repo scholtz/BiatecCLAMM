@@ -1,0 +1,6 @@
+[
+  { "x": 2, "y": 0, "P": 1, "P1": 1, "P2": 1.5625, "lpTokensToReceive": 10 },
+  { "x": 0, "y": 0.25, "P": 1.5625, "P1": 1, "P2": 1.5625, "lpTokensToReceive": 1 },
+  { "x": 0.2, "y": 0, "P": 1, "P1": 1, "P2": 1.5625, "lpTokensToReceive": 1 },
+  { "x": 0.00001, "y": 0, "P": 1, "P1": 1, "P2": 1.5625, "lpTokensToReceive": 0.000025 }
+]
