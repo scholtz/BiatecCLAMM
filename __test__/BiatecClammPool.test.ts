@@ -42,6 +42,8 @@ import swapAToBData from './test-data/swap-a-to-b.json';
 import swapBToAData from './test-data/swap-b-to-a.json';
 import removeLiquidityData from './test-data/remove-liquidity.json';
 import lpFees10BiatecFee0Data from './test-data/lp-fees-10-biatec-fee-0.json';
+import lpFees10BiatecFee50Data from './test-data/lp-fees-10-biatec-fee-50.json';
+import { convertToBigInt } from './test-data/convertToBigInt';
 
 const fixture = algorandFixture();
 algokit.Config.configure({ populateAppCallResources: true });
@@ -1432,107 +1434,7 @@ describe('clamm', () => {
       assetAId = 1n;
       const { algod } = fixture.context;
 
-      const testSet = [
-        {
-          P: 1.5625,
-          P1: 1,
-          P2: 1.5625,
-
-          checkStatus1: {
-            scale: 1000000000n,
-            assetABalance: 0n,
-            assetBBalance: 0n,
-            realABalance: 0n,
-            realBBalance: 0n,
-            priceMinSqrt: 1000000000n,
-            priceMaxSqrt: 1250000000n,
-            currentLiquidity: 0n,
-            releasedLiquidity: 0n,
-            liquidityUsersFromFees: 0n,
-            liquidityBiatecFromFees: 0n,
-            assetA: 37134n,
-            assetB: 37135n,
-            poolToken: 37145n,
-            price: 1562500000n,
-            fee: 100000000n,
-            biatecFee: 0n,
-            verificationClass: 0n,
-          },
-
-          x: 0,
-          y: 2.5,
-          lpTokensToReceive: 10,
-
-          checkStatus2: {
-            scale: 1000000000n,
-            assetABalance: 0n,
-            assetBBalance: 2500000000n,
-            realABalance: 0n,
-            realBBalance: 2500000n,
-            priceMinSqrt: 1000000000n,
-            priceMaxSqrt: 1250000000n,
-            currentLiquidity: 10000000000n,
-            releasedLiquidity: 10000000000n,
-            liquidityUsersFromFees: 0n,
-            liquidityBiatecFromFees: 0n,
-            assetA: 37183n,
-            assetB: 37184n,
-            poolToken: 37194n,
-            price: 1562500000n,
-            fee: 100000000n,
-            biatecFee: 0n,
-            verificationClass: 0n,
-          },
-
-          swapA: 2 / 0.8, // i will swap this asset to b asset // 0.8 = with fee multiplier
-          swapB: 2.5, // this is how much asset b i should receive
-
-          checkStatus3: {
-            scale: 1000000000n,
-            assetABalance: 2500000000n,
-            assetBBalance: 0n,
-            realABalance: 250000000n,
-            realBBalance: 0n,
-            priceMinSqrt: 1000000000n,
-            priceMaxSqrt: 1250000000n,
-            currentLiquidity: 12500000000n,
-            releasedLiquidity: 10000000000n,
-            liquidityUsersFromFees: 2500000000n,
-            liquidityBiatecFromFees: 0n,
-            assetA: 8895n,
-            assetB: 8896n,
-            poolToken: 8905n,
-            price: 1000000000n,
-            fee: 100000000n,
-            biatecFee: 0n,
-            verificationClass: 0n,
-          },
-
-          lpTokensToWithdraw: 3,
-          retLRemove: 3.75,
-
-          checkStatus4: {
-            scale: 1000000000n,
-            assetABalance: 1750000000n,
-            assetBBalance: 0n,
-            realABalance: 175000000n,
-            realBBalance: 0n,
-            priceMinSqrt: 1000000000n,
-            priceMaxSqrt: 1250000000n,
-            currentLiquidity: 8750000000n,
-            releasedLiquidity: 7000000000n,
-            liquidityUsersFromFees: 1750000000n,
-            liquidityBiatecFromFees: 0n,
-            assetA: 8968n,
-            assetB: 8969n,
-            poolToken: 8978n,
-            price: 1000000000n,
-            fee: 100000000n,
-            biatecFee: 0n,
-            verificationClass: 0n,
-          },
-        },
-      ];
+      const testSet = convertToBigInt(lpFees10BiatecFee0Data);
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
@@ -1731,107 +1633,7 @@ describe('clamm', () => {
       assetAId = 1n;
       const { algod } = fixture.context;
 
-      const testSet = [
-        {
-          P: 1.5625,
-          P1: 1,
-          P2: 1.5625,
-
-          checkStatus1: {
-            scale: 1000000000n,
-            assetABalance: 0n,
-            assetBBalance: 0n,
-            realABalance: 0n,
-            realBBalance: 0n,
-            priceMinSqrt: 1000000000n,
-            priceMaxSqrt: 1250000000n,
-            currentLiquidity: 0n,
-            releasedLiquidity: 0n,
-            liquidityUsersFromFees: 0n,
-            liquidityBiatecFromFees: 0n,
-            assetA: 0n,
-            assetB: 0n,
-            poolToken: 0n,
-            price: 1562500000n,
-            fee: 100000000n,
-            biatecFee: 500000000n,
-            verificationClass: 0n,
-          },
-
-          x: 0,
-          y: 2.5,
-          lpTokensToReceive: 10,
-
-          checkStatus2: {
-            scale: 1000000000n,
-            assetABalance: 0n,
-            assetBBalance: 2500000000n,
-            realABalance: 0n,
-            realBBalance: 2500000n,
-            priceMinSqrt: 1000000000n,
-            priceMaxSqrt: 1250000000n,
-            currentLiquidity: 10000000000n,
-            releasedLiquidity: 10000000000n,
-            liquidityUsersFromFees: 0n,
-            liquidityBiatecFromFees: 0n,
-            assetA: 8868n,
-            assetB: 8869n,
-            poolToken: 8878n,
-            price: 1562500000n,
-            fee: 100000000n,
-            biatecFee: 500000000n,
-            verificationClass: 0n,
-          },
-
-          swapA: 2 / 0.8, // i will swap this asset to b asset // 0.8 = with fee multiplier
-          swapB: 2.5, // this is how much asset b i should receive
-
-          checkStatus3: {
-            scale: 1000000000n,
-            assetABalance: 2500000000n,
-            assetBBalance: 0n,
-            realABalance: 250000000n,
-            realBBalance: 0n,
-            priceMinSqrt: 1000000000n,
-            priceMaxSqrt: 1250000000n,
-            currentLiquidity: 12500000000n,
-            releasedLiquidity: 10000000000n,
-            liquidityUsersFromFees: 1250000000n,
-            liquidityBiatecFromFees: 1250000000n,
-            assetA: 8895n,
-            assetB: 8896n,
-            poolToken: 8905n,
-            price: 1000000000n,
-            fee: 100000000n,
-            biatecFee: 500000000n,
-            verificationClass: 0n,
-          },
-
-          lpTokensToWithdraw: 3,
-          retLRemove: 3.375,
-
-          checkStatus4: {
-            scale: 1000000000n,
-            assetABalance: 1825000000n,
-            assetBBalance: 0n,
-            realABalance: 182500000n,
-            realBBalance: 0n,
-            priceMinSqrt: 1000000000n,
-            priceMaxSqrt: 1250000000n,
-            currentLiquidity: 9125000000n,
-            releasedLiquidity: 7000000000n,
-            liquidityUsersFromFees: 875000000n,
-            liquidityBiatecFromFees: 1250000000n,
-            assetA: 8968n,
-            assetB: 8969n,
-            poolToken: 8978n,
-            price: 1000000000n,
-            fee: 100000000n,
-            biatecFee: 500000000n,
-            verificationClass: 0n,
-          },
-        },
-      ];
+      const testSet = convertToBigInt(lpFees10BiatecFee50Data);
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
