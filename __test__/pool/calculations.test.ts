@@ -31,7 +31,7 @@ describe('BiatecClammPool - calculations', () => {
       for (const t of testSet) {
         const { clientBiatecClammPoolProvider } = await setupPool({
           algod,
-          signer: deployer,
+          
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 0n,
@@ -68,7 +68,7 @@ describe('BiatecClammPool - calculations', () => {
       for (const t of testSet) {
         const { clientBiatecClammPoolProvider } = await setupPool({
           algod,
-          signer: deployer,
+          
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 0n,
@@ -107,7 +107,7 @@ describe('BiatecClammPool - calculations', () => {
       for (const t of testSet) {
         const { clientBiatecClammPoolProvider } = await setupPool({
           algod,
-          signer: deployer,
+          
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 0n,
@@ -190,7 +190,7 @@ describe('BiatecClammPool - calculations', () => {
       for (const t of testSet) {
         const { clientBiatecClammPoolProvider } = await setupPool({
           algod,
-          signer: deployer,
+          
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 0n,
@@ -237,7 +237,7 @@ describe('BiatecClammPool - calculations', () => {
 
       const { clientBiatecClammPoolProvider, clientBiatecPoolProvider } = await setupPool({
         algod,
-        signer: deployer,
+        
         assetA: assetAId,
         biatecFee: 0n,
         lpFee: 0n,
@@ -273,7 +273,7 @@ describe('BiatecClammPool - calculations', () => {
 
       const { clientBiatecClammPoolProvider, clientBiatecPoolProvider } = await setupPool({
         algod,
-        signer: deployer,
+        
         assetA: assetAId,
         biatecFee: 0n,
         lpFee: 0n,
@@ -309,7 +309,7 @@ describe('BiatecClammPool - calculations', () => {
 
       const { clientBiatecClammPoolProvider } = await setupPool({
         algod,
-        signer: deployer,
+        
         assetA: assetAId,
         biatecFee: 0n,
         lpFee: 0n,
@@ -347,7 +347,7 @@ describe('BiatecClammPool - calculations', () => {
 
       const { clientBiatecClammPoolProvider } = await setupPool({
         algod,
-        signer: deployer,
+        
         assetA: assetAId,
         biatecFee: 0n,
         lpFee: 0n,

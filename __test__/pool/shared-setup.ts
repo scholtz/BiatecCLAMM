@@ -54,7 +54,7 @@ export let deployerSigner: TransactionSignerAccount;
 
 export interface ISetup {
   algod: algosdk.Algodv2;
-  signer: algosdk.Account;
+  signer?: algosdk.Account; // Optional - not actually used, deployer is created internally
   p1: bigint;
   p2: bigint;
   p: bigint;

@@ -12,6 +12,7 @@ import {
   SCALE_A,
   SCALE_B,
   fixture,
+  algosdk,
 } from './shared-setup';
 
 describe('BiatecClammPool - swaps', () => {
@@ -32,7 +33,7 @@ describe('BiatecClammPool - swaps', () => {
           clientBiatecPoolProvider,
         } = await setupPool({
           algod,
-          signer: deployer,
+          
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 0n,
@@ -151,7 +152,7 @@ describe('BiatecClammPool - swaps', () => {
           clientBiatecPoolProvider,
         } = await setupPool({
           algod,
-          signer: deployer,
+          
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 0n,

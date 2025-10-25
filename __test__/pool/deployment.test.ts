@@ -10,7 +10,10 @@ import {
   SCALE_A,
   SCALE_B,
   fixture,
+  FakePoolFactory,
+  AlgoAmount,
 } from './shared-setup';
+import type { Transaction } from './shared-setup';
 
 describe('BiatecClammPool - deployment', () => {
   test('I can deploy the concentrated liquidity pool', async () => {
@@ -19,7 +22,7 @@ describe('BiatecClammPool - deployment', () => {
       const { algod } = fixture.context;
       const { clientBiatecClammPoolProvider } = await setupPool({
         algod,
-        signer: deployer,
+        
         assetA: assetAId,
         biatecFee: BigInt(SCALE / 10),
         lpFee: BigInt(SCALE / 10),
@@ -49,7 +52,7 @@ describe('BiatecClammPool - deployment', () => {
         clientBiatecPoolProvider,
       } = await setupPool({
         algod,
-        signer: deployer,
+        
         assetA: assetAId,
         biatecFee: BigInt(SCALE / 10),
         lpFee: BigInt(SCALE / 10),

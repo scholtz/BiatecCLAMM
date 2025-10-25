@@ -11,6 +11,9 @@ import {
   SCALE_A,
   SCALE_B,
   fixture,
+  algosdk,
+  AlgoAmount,
+  getPools,
 } from './shared-setup';
 
 describe('BiatecClammPool - misc', () => {
@@ -20,7 +23,7 @@ describe('BiatecClammPool - misc', () => {
 
     const { clientBiatecClammPoolProvider } = await setupPool({
       algod,
-      signer: deployer,
+      
       assetA: assetAId,
       biatecFee: 100_000_000n,
       lpFee: 100_000_000n,
@@ -50,7 +53,7 @@ describe('BiatecClammPool - misc', () => {
           clientBiatecPoolProvider,
         } = await setupPool({
           algod,
-          signer: deployer,
+          
           assetA: 0n,
           biatecFee: 0n,
           lpFee: 100_000_000n,
@@ -263,7 +266,7 @@ describe('BiatecClammPool - misc', () => {
       const { algod } = fixture.context;
       const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider } = await setupPool({
         algod,
-        signer: deployer,
+        
         assetA: assetAId,
         biatecFee: BigInt(SCALE / 10),
         lpFee: BigInt(SCALE / 10),
