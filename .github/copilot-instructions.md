@@ -24,6 +24,15 @@
 - **State Access**: When sender helpers read `appClient.state.global.getAll()`, keys surface in camelCase (e.g., `priceMin`); maintain those labels when referencing state to prevent undefined access.
 - **Common Pitfalls**: Forgetting to opt into LP tokens, missing box references in grouped transactions, or skipping config app references will cause on-chain assertions (`E_CONFIG`, `ERR-LOW-VER`) seen throughout the TEALScript. Use provided helpers to avoid these errors.
 
+## Staking Pools (Interest-Bearing Tokens)
+
+- **Same Asset Pools**: The contract now allows `assetA.id === assetB.id` to create staking pools where users deposit tokens and earn rewards. These pools generate LP tokens named `B-{AssetName}` (e.g., B-ALGO, B-USDC) with the asset's unit name as the LP token symbol.
+- **Native Token Staking**: Set both `assetA` and `assetB` to 0 to create a B-ALGO (or B-VOI, B-ARAMID) staking pool. Pass the appropriate `nativeTokenName` parameter during pool creation to ensure correct LP token naming across different chains (Algorand, Voi, Aramid).
+- **Asset Staking**: Set both `assetA` and `assetB` to the same ASA ID to create a staking pool for that asset (e.g., B-USDC for staked USDC).
+- **Reward Distribution**: Use `clammDistributeExcessAssetsSender` to distribute rewards (staking rewards, interest, fees) that have accrued to the pool. Only the executive fee address can call this method. The rewards increase the pool's liquidity proportionally, so LPs receive more tokens when they withdraw.
+- **Testing Staking Pools**: See `__test__/pool/staking.test.ts` for examples of creating and testing staking pools, including reward distribution scenarios.
+- **Documentation**: Full staking pool documentation is available in `docs/staking-pools.md`, including use cases, examples, and security considerations.
+
 ## Error handling
 
 - On error `couldn't find the default account in KMD` run command `algokit localnet reset` and run tests again

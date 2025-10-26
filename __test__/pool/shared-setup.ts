@@ -64,11 +64,13 @@ export interface ISetup {
   p2: bigint;
   p: bigint;
   assetA: bigint;
+  assetB?: bigint; // Optional: if not provided, a separate asset will be created
   biatecFee: bigint;
   lpFee: bigint;
+  nativeTokenName?: string; // Optional: name for native token (default: 'ALGO')
 }
 export const setupPool = async (input: ISetup) => {
-  const { algod: algodInput, p1, p2, p, assetA, biatecFee, lpFee } = input;
+  const { algod: algodInput, p1, p2, p, assetA, assetB: assetBInput, biatecFee, lpFee, nativeTokenName } = input;
   const algorand = await AlgorandClient.fromEnvironment();
   await fixture.newScope();
 
@@ -92,7 +94,17 @@ export const setupPool = async (input: ISetup) => {
   } else {
     assetAId = 0n;
   }
-  assetBId = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_B_DECIMALS });
+  
+  // If assetB is explicitly provided, use it; otherwise create a new token
+  if (assetBInput !== undefined) {
+    assetBId = assetBInput;
+  } else if (assetA === 0n) {
+    // Default behavior: create a separate asset when assetA is native token
+    assetBId = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_B_DECIMALS });
+  } else {
+    // Default behavior: create a separate asset
+    assetBId = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_B_DECIMALS });
+  }
 
   const biatecClammPoolFactoryfactory = new BiatecClammPoolFactory({
     defaultSender: deployer.addr,
@@ -355,6 +367,7 @@ export const setupPool = async (input: ISetup) => {
     priceMax: p2,
     priceMin: p1,
     verificationClass: 0,
+    nativeTokenName: nativeTokenName || 'ALGO',
   });
   expect(txsClammCreateTxs.length).toBe(4);
   const txsClammCreateTxsSigned: Uint8Array[] = [];
