@@ -229,7 +229,7 @@ describe('BiatecClammPool - extreme', () => {
         });
 
         const ret2 = await liqudidtyResult2.return;
-        expect(ret2?.valueOf()).toEqual(BigInt(t.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS));
+        expect(ret2?.valueOf()).toEqual(BigInt(Math.round(t.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS)));
 
         const distributed2 = await clientBiatecClammPoolProvider.appClient.calculateDistributedLiquidity({
           args: {
@@ -954,7 +954,7 @@ describe('BiatecClammPool - extreme', () => {
         });
 
         const ret2 = await liqudidtyResult2.return;
-        expect(ret2?.valueOf()).toEqual(BigInt(t.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS));
+        expect(ret2?.valueOf()).toEqual(BigInt(Math.round(t.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS)));
 
         const distributed2 = await clientBiatecClammPoolProvider.appClient.calculateDistributedLiquidity({
           args: {

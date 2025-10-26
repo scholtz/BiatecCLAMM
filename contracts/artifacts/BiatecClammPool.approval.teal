@@ -1936,7 +1936,7 @@ processAddLiquidity:
 	// *if14_consequent
 	// contracts\BiatecClammPool.algo.ts:608
 	// distributedBefore =
-	//           (Uint<256>(TOTAL_SUPPLY) as uint256 - (this.app.address.assetBalance(assetLp) as uint256)) *
+	//           ((Uint<256>(TOTAL_SUPPLY) as uint256) - (this.app.address.assetBalance(assetLp) as uint256)) *
 	//           assetLpDelicmalScale2Scale
 	bytec 27 // 0x000000000000000000000000000000000000000000000000f9ccd8a1c5080000
 	global CurrentApplicationAddress
