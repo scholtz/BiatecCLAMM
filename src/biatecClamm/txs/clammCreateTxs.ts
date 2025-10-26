@@ -17,6 +17,7 @@ interface IClammBootstrapTxsInput {
   priceMin: bigint;
   priceMax: bigint;
   currentPrice: bigint;
+  nativeTokenName?: string; // Optional: defaults to 'ALGO' if not provided
 }
 /**
  * This method creates list of transactions to be signed to add liquidity to the concentrated liquidity amm
@@ -35,6 +36,7 @@ const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.T
     currentPrice,
     sender,
     appBiatecConfigProvider,
+    nativeTokenName = 'ALGO', // Default to 'ALGO' if not provided
   } = input;
   const poolDeployTx = await clientBiatecPoolProvider.createTransaction.deployPool({
     args: {
@@ -47,6 +49,7 @@ const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.T
       priceMax: priceMax,
       currentPrice: currentPrice,
       appBiatecConfigProvider: BigInt(appBiatecConfigProvider),
+      nativeTokenName: nativeTokenName,
       txSeed: makePaymentTxnWithSuggestedParamsFromObject({
         amount: 5_000_000,
         receiver: clientBiatecPoolProvider.appClient.appAddress,
@@ -75,13 +78,16 @@ const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.T
     appId: clientBiatecPoolProvider.appId,
     name: new Uint8Array([...Buffer.from('b', 'ascii'), ...algosdk.encodeUint64(assetB)]),
   };
+  
+  // When assetA equals assetB, we only need one box reference
+  const boxReferences = assetA === assetB ? [boxRefA] : [boxRefA, boxRefB];
+  
   const txsToGroup = [
     ...(
       await clientBiatecPoolProvider.createTransaction.noop({
         args: { i: 1 },
         boxReferences: [
-          boxRefA,
-          boxRefB,
+          ...boxReferences,
           new Uint8Array(Buffer.from('13', 'ascii')),
           new Uint8Array(Buffer.from('14', 'ascii')),
         ],

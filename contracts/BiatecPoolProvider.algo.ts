@@ -332,7 +332,8 @@ export class BiatecPoolProvider extends Contract {
     priceMin: uint64,
     priceMax: uint64,
     currentPrice: uint64,
-    verificationClass: uint64
+    verificationClass: uint64,
+    nativeTokenName: bytes
   ): uint64 {
     verifyPayTxn(txSeed, { receiver: this.app.address, amount: { greaterThanEqualTo: 5_000_000 } });
     assert(verificationClass <= 4); // verificationClass
@@ -369,8 +370,8 @@ export class BiatecPoolProvider extends Contract {
     this.pendingGroup.addAppCall({
       applicationID: AppID.fromUint64(appId),
       applicationArgs: [
-        // assetA, assetB, appBiatecConfigProvider, appBiatecPoolProvider, txSeed, fee, priceMin, priceMax, currentPrice, verificationClass
-        method('bootstrap(uint64,uint64,uint64,uint64,pay,uint64,uint64,uint64,uint64,uint64)uint64'),
+        // assetA, assetB, appBiatecConfigProvider, appBiatecPoolProvider, txSeed, fee, priceMin, priceMax, currentPrice, verificationClass, nativeTokenName
+        method('bootstrap(uint64,uint64,uint64,uint64,pay,uint64,uint64,uint64,uint64,uint64,byte[])uint64'),
         itob(assetA.id),
         itob(assetB.id),
         itob(appBiatecConfigProvider.id),
@@ -380,6 +381,7 @@ export class BiatecPoolProvider extends Contract {
         itob(priceMax as uint64),
         itob(currentPrice as uint64),
         itob(verificationClass as uint64),
+        nativeTokenName,
       ],
       assets: [assetA, assetB],
       applications: [appBiatecConfigProvider, appBiatecPoolProvider],

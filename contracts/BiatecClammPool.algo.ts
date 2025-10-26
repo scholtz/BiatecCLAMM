@@ -152,7 +152,7 @@ export class BiatecClammPool extends Contract {
 
   /**
    * Only Biatec Pool Provider can deploy and bootsrap this smart contract
-   * @param assetA Asset A ID must be lower then Asset B ID
+   * @param assetA Asset A ID must be lower then Asset B ID, or can be equal to Asset B ID for staking pools
    * @param assetB Asset B
    * @param appBiatecConfigProvider Biatec amm provider
    * @param appBiatecPoolProvider Pool provider
@@ -162,6 +162,7 @@ export class BiatecClammPool extends Contract {
    * @param priceMax Max price range. At this point all assets are in asset B.
    * @param currentPrice Deployer can specify the current price for easier deployemnt.
    * @param verificationClass Minimum verification level from the biatec identity. Level 0 means no kyc.
+   * @param nativeTokenName Name of the native token (e.g., 'ALGO', 'VOI', 'ARAMID') when assetA.id = 0
    * @returns LP token ID
    */
   bootstrap(
@@ -174,7 +175,8 @@ export class BiatecClammPool extends Contract {
     priceMin: uint64,
     priceMax: uint64,
     currentPrice: uint64,
-    verificationClass: uint64
+    verificationClass: uint64,
+    nativeTokenName: bytes
   ): uint64 {
     assert(globals.callerApplicationID == appBiatecPoolProvider, 'Only the pool provider can init this contract');
     verifyPayTxn(txSeed, { receiver: this.app.address, amount: { greaterThanEqualTo: 400_000 } });
@@ -182,7 +184,7 @@ export class BiatecClammPool extends Contract {
     assert(this.txn.sender === this.app.creator, 'E_SENDER'); // 'Only creator of the app can set it up'
     assert(priceMax > 0, 'E_PRICE'); // 'You must set price'
     //assert(assetA < assetB);
-    assert(assetA.id !== assetB.id, 'Asset A must not be asset B');
+    // Allow assetA.id === assetB.id for staking pools (e.g., B-ALGO for interest bearing ALGO)
     assert(fee <= SCALE / 10); // fee must be lower then 10%
     // assert(verificationClass <= 4); // verificationClass  // SHORTENED_APP
     assert(!this.currentPrice.exists);
@@ -215,10 +217,12 @@ export class BiatecClammPool extends Contract {
 
     this.assetA.value = assetA.id;
     this.assetB.value = assetB.id;
-    this.assetLp.value = this.doCreatePoolToken(assetA, assetB).id;
+    this.assetLp.value = this.doCreatePoolToken(assetA, assetB, nativeTokenName).id;
     this.fee.value = fee;
     this.doOptIn(assetA);
-    this.doOptIn(assetB);
+    if (assetA.id !== assetB.id) {
+      this.doOptIn(assetB);
+    }
     this.verificationClass.value = verificationClass;
 
     let assetADecimals = 6;
@@ -285,34 +289,50 @@ export class BiatecClammPool extends Contract {
    * Creates LP token
    * @param assetA Asset A
    * @param assetB Asset B
+   * @param nativeTokenName Name of the native token (e.g., 'ALGO', 'VOI', 'ARAMID') when assetA.id = 0
    * @returns id of the token
    */
-  private doCreatePoolToken(assetA: AssetID, assetB: AssetID): AssetID {
+  private doCreatePoolToken(assetA: AssetID, assetB: AssetID, nativeTokenName: bytes): AssetID {
     // const verificationClass = this.verificationClass.value.toString(); // TODO
     // const feeB100000 = this.feeB100000.value.toString();
     // const name = 'B-' + verificationClass + '-' + feeB100000 + '-' + assetA.unitName + '-' + assetB.unitName; // TODO
-    let nameAssetA = 'ALGO';
+    let nameAssetA = rawBytes(nativeTokenName);
     if (assetA.id > 0) {
       nameAssetA = assetA.unitName;
     }
-    let nameAssetB = 'ALGO';
+    let nameAssetB = rawBytes(nativeTokenName);
     if (assetB.id > 0) {
       nameAssetB = assetB.unitName;
     }
 
-    const name =
-      'B-' +
-      //this.verificationClass.value.toString() +
+    let name = '';
+    let unitName = 'BLP'; // Biatec LP token
+    
+    // If assetA and assetB are the same, create a staking pool token: B-{AssetName}
+    if (assetA.id === assetB.id) {
+      name = 'B-' + nameAssetA;
+      // For staking pools, use the asset's unit name as the symbol
+      if (assetA.id > 0) {
+        unitName = assetA.unitName;
+      } else {
+        unitName = rawBytes(nativeTokenName);
+      }
+    } else {
+      // Standard liquidity pool: B-{AssetA}-{AssetB}
+      name =
+        'B-' +
+        //this.verificationClass.value.toString() +
+        //'-' +
+        nameAssetA +
+        '-' +
+        nameAssetB; // +
       //'-' +
-      nameAssetA +
-      '-' +
-      nameAssetB; // +
-    //'-' +
-    //this.fee.value.toString(10); // TODO the toString does not work
+      //this.fee.value.toString(10); // TODO the toString does not work
+    }
 
     return sendAssetCreation({
       configAssetName: name,
-      configAssetUnitName: 'BLP', // Biatec LP token
+      configAssetUnitName: unitName,
       // eslint-disable-next-line no-loss-of-precision
       configAssetTotal: Uint<64>(TOTAL_SUPPLY),
       configAssetDecimals: LP_TOKEN_DECIMALS,

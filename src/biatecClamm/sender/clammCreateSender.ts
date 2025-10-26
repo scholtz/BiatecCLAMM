@@ -16,6 +16,7 @@ interface IClammBootstrapSkInput {
   priceMin: bigint;
   priceMax: bigint;
   currentPrice: bigint;
+  nativeTokenName?: string; // Optional: defaults to 'ALGO' if not provided
 }
 /**
  * Add the liqudity to the concentrated liquidity AMM
@@ -35,6 +36,7 @@ const clammCreateSender = async (input: IClammBootstrapSkInput): Promise<BiatecC
     priceMin: input.priceMin,
     sender: input.transactionSigner.addr.toString(),
     verificationClass: input.verificationClass,
+    nativeTokenName: input.nativeTokenName,
     params,
   });
   const signed = await input.transactionSigner.signer(
