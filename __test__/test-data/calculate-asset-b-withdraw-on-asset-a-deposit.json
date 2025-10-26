@@ -1,0 +1,31 @@
+[
+  {
+    "x": 0,
+    "y": 0.25,
+    "P1": 1,
+    "P2": 1.5625,
+    "P": 1.5625,
+    "L": 1,
+    "deposit": 0.2,
+    "expectedWithdrawResult": 0.25
+  },
+  {
+    "x": 1,
+    "y": 1,
+    "P1": 1,
+    "P2": 1,
+    "P": 1,
+    "L": 1,
+    "deposit": 1,
+    "expectedWithdrawResult": 1
+  },
+  {
+    "x": 1000,
+    "y": 1100,
+    "P1": 1.1,
+    "P2": 1.1,
+    "L": 1,
+    "deposit": 1000,
+    "expectedWithdrawResult": 1099.999999643
+  }
+]

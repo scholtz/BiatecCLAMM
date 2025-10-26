@@ -22,7 +22,7 @@ import parseStatus from '../src/biatecClamm/parseStatus';
 import parseStats from '../src/biatecPools/parseStats';
 import { AlgorandClient } from '@algorandfoundation/algokit-utils';
 import clammAddLiquiditySender from '../src/biatecClamm/sender/clammAddLiquiditySender';
-import { setupPool } from './BiatecClammPool.test';
+import { setupPool } from './pool/shared-setup';
 
 const fixture = algorandFixture();
 algokit.Config.configure({ populateAppCallResources: true });

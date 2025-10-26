@@ -6,8 +6,17 @@ import algosdk, { Transaction } from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import getPools from '../src/biatecClamm/getPools';
 import clammCreateSender from '../src/biatecClamm/sender/clammCreateSender';
-import { assetAId, assetBId, setupPool } from './BiatecClammPool.test';
+import { assetAId, assetBId, setupPool } from './pool/shared-setup';
 import { clammAddLiquiditySender, clammRemoveLiquiditySender, clammSwapSender } from '../src';
+if (
+  typeof clammAddLiquiditySender !== 'function' ||
+  typeof clammRemoveLiquiditySender !== 'function' ||
+  typeof clammSwapSender !== 'function'
+) {
+  throw new Error(
+    `npm barrel exports invalid types: add=${typeof clammAddLiquiditySender}, remove=${typeof clammRemoveLiquiditySender}, swap=${typeof clammSwapSender}`
+  );
+}
 import createToken from '../src/createToken';
 
 const fixture = algorandFixture();
@@ -37,7 +46,7 @@ describe('clamm', () => {
   beforeAll(async () => {
     await fixture.newScope();
     const { algod } = fixture.context;
-    deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(1_000_000_000) });
+    deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(500_000_000) });
 
     deployerSigner = {
       addr: deployer.addr,
