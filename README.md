@@ -137,10 +137,14 @@ const poolClient = await clammCreateSender({
 import { clammDistributeExcessAssetsSender } from "biatec-concentrated-liquidity-amm"
 
 // After rewards accrue to the pool (e.g., from consensus rewards)
+// Note: rewardsAmount should already be in asset decimals (e.g., microAlgos)
+// Convert to base scale (9 decimals) by multiplying with scale factor
+const rewardsInBaseScale = (rewardsAmount * BigInt(SCALE)) / BigInt(assetDecimals);
+
 const txId = await clammDistributeExcessAssetsSender({
   algod,
   account: executiveSigner,
-  amountA: rewardsAmount * BigInt(SCALE / assetDecimals), // Base scale
+  amountA: rewardsInBaseScale, // Amount in base scale (9 decimals)
   amountB: 0n,
   appBiatecConfigProvider: configAppId,
   assetA: 0n,
@@ -152,10 +156,10 @@ const txId = await clammDistributeExcessAssetsSender({
 For complete documentation, see [docs/staking-pools.md](docs/staking-pools.md).
 
 ### Key Features:
-- **Interest-Bearing Tokens**: Create B-ALGO, B-USDC, or any B-{TOKEN}
-- **Multi-Chain Support**: Works with ALGO, VOI, ARAMID networks
-- **Reward Distribution**: Distribute staking rewards, interest, or fees to LP holders
-- **Flexible Use Cases**: Lending protocols, yield aggregation, revenue sharing
+- **Create Interest-Bearing Tokens**: Build B-ALGO, B-USDC, or any B-{TOKEN}
+- **Support Multi-Chain Networks**: Works with ALGO, VOI, ARAMID chains
+- **Distribute Rewards to LP Holders**: Share staking rewards, interest, or fees
+- **Enable Flexible Use Cases**: Power lending protocols, yield aggregation, revenue sharing
 
 ### Use Cases:
 1. **Native Token Staking**: B-ALGO pools for staking ALGO with consensus rewards
