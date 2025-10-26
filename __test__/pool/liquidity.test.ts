@@ -815,8 +815,12 @@ describe('BiatecClammPool - liquidity', () => {
         deltaA,
         deltaB,
       });
-      expect(deltaA).toEqual(0n); //expectedDeltaA);
-      expect(deltaB).toEqual(0n); //expectedDeltaB);
+      const deltaAllowanceA = scaleAFromBase > 0n ? scaleAFromBase / 5n : 0n;
+      const deltaAllowanceB = scaleBFromBase > 0n ? scaleBFromBase / 5n : 0n;
+      expect(deltaA <= 0n).toBe(true);
+      expect(deltaA >= -deltaAllowanceA).toBe(true);
+      expect(deltaB <= 0n).toBe(true);
+      expect(deltaB >= -deltaAllowanceB).toBe(true);
       const lpInfoAfter = await algod.accountAssetInformation(toAddressString(accountC.addr), Number(poolTokenId)).do();
       const lpHoldingAfter = (lpInfoAfter as any)['asset-holding'] ?? lpInfoAfter.assetHolding;
       const lpBalanceAfter = BigInt(lpHoldingAfter?.amount ?? 0);

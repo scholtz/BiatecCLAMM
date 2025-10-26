@@ -601,16 +601,51 @@ export class BiatecClammPool extends Contract {
     const newLiquidity = this.setCurrentLiquidityNonDecreasing(oldLiquidity);
 
     if (send) {
-      // SEND NEW LP TOKENS TO USER
-      const lpTokensToSend = ((newLiquidity - oldLiquidity) / assetLpDelicmalScale2Scale) as uint64;
-      // send LP tokens to user
-      assert(lpTokensToSend > 0, 'LP-ZERO-ERR'); // Liquidity provider protection.. He must receive at least 1 LP token
+      const liquidityDelta = newLiquidity - oldLiquidity;
+      let lpDeltaBase = liquidityDelta;
+      if (lpDeltaBase > <uint256>0) {
+        // Base-scaled LP currently circulating outside the app account
+        const distributedBefore =
+          ((Uint<256>(TOTAL_SUPPLY) as uint256) - (this.app.address.assetBalance(assetLp) as uint256)) *
+          assetLpDelicmalScale2Scale;
+        if (distributedBefore > <uint256>0) {
+          let contributionScaled = <uint256>0;
+          if (realAssetADeposit > <uint256>0) {
+            // Estimate caller share using whichever side contributed funds
+            contributionScaled = (realAssetADeposit * newLiquidity) / this.assetABalanceBaseScale.value;
+          } else if (realAssetBDeposit > <uint256>0) {
+            contributionScaled = (realAssetBDeposit * newLiquidity) / this.assetBBalanceBaseScale.value;
+          }
+          if (contributionScaled > <uint256>0) {
+            const usersFeeLiquidity = this.LiquidityUsersFromFees.value;
+            const sumDistributedAndFees = distributedBefore + usersFeeLiquidity;
+            // Solve X^2 + X(sumDistributedAndFees - contributionScaled) - contributionScaled*distributedBefore = 0
+            const diff =
+              sumDistributedAndFees >= contributionScaled
+                ? sumDistributedAndFees - contributionScaled
+                : contributionScaled - sumDistributedAndFees;
+            const discriminant = diff * diff + <uint256>4 * contributionScaled * distributedBefore;
+            const sqrtTerm = sqrt(discriminant);
+            let numerator = <uint256>0;
+            if (contributionScaled >= sumDistributedAndFees) {
+              numerator = sqrtTerm + (contributionScaled - sumDistributedAndFees);
+            } else {
+              numerator = sqrtTerm - (sumDistributedAndFees - contributionScaled);
+            }
+            const solution = numerator / <uint256>2;
+            // Floor the root to keep rounding drift inside the pool
+            if (solution > <uint256>0 && solution < lpDeltaBase) {
+              lpDeltaBase = solution;
+            }
+          }
+        }
+      }
+      let lpTokensToSend = (lpDeltaBase / assetLpDelicmalScale2Scale) as uint64;
+      if (lpTokensToSend === 0 && lpDeltaBase > <uint256>0) {
+        lpTokensToSend = 1;
+      }
+      assert(lpTokensToSend > 0, 'LP-ZERO-ERR');
       this.doAxfer(this.txn.sender, assetLp, lpTokensToSend);
-      // return lpTokensToSend;
-      // 2000000000n
-      // 2000000000n
-
-      // assert(lpTokensToSend > 0, 'Adding the liquidity would lead to zero LP tokens deposited to the user'); // Liquidity provider protection.. He must receive at least 1 LP token
       return lpTokensToSend as uint64;
     }
     return 0;
@@ -695,9 +730,7 @@ export class BiatecClammPool extends Contract {
     let lpDeltaWithFees = lpDeltaBase;
     const lpWithOthers = this.calculateDistributedLiquidity(assetLp, lpDelta);
     if (lpWithOthers > <uint256>0) {
-      // 10 / 1000
-      const myPortion = (lpDeltaBase * s) / lpWithOthers;
-      const myPortionOfFeesCollected = (this.LiquidityUsersFromFees.value * myPortion) / s;
+      const myPortionOfFeesCollected = (this.LiquidityUsersFromFees.value * lpDeltaBase) / lpWithOthers;
       lpDeltaWithFees = lpDeltaBase + myPortionOfFeesCollected;
       this.LiquidityUsersFromFees.value = this.LiquidityUsersFromFees.value - myPortionOfFeesCollected;
     }

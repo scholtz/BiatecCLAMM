@@ -136,8 +136,6 @@ type PoolRetVal = {
   lpAssetId: AssetID;
 };
 
-
-
 export class BiatecPoolProvider extends Contract {
   /**
    * Each LP pool is registered in this contract. Each pool has custom box and stores there the trading stats.
@@ -147,16 +145,16 @@ export class BiatecPoolProvider extends Contract {
   fullConfigs = BoxMap<FullConfig, uint64>({ prefix: 'fc' });
 
   tradeEvent = new EventLogger<{
-    appPoolId: AppID,
-    assetA: AssetID,
-    assetB: AssetID,
-    priceFrom: uint64,
-    priceTo: uint64,
-    amountA: uint64,
-    amountB: uint64,
-    feeAmountA: uint64,
-    feeAmountB: uint64,
-    s: uint64
+    appPoolId: AppID;
+    assetA: AssetID;
+    assetB: AssetID;
+    priceFrom: uint64;
+    priceTo: uint64;
+    amountA: uint64;
+    amountB: uint64;
+    feeAmountA: uint64;
+    feeAmountB: uint64;
+    s: uint64;
   }>();
 
   poolsAggregated = BoxMap<AssetsCombined, AppPoolInfo>({ prefix: 's' });
@@ -418,11 +416,6 @@ export class BiatecPoolProvider extends Contract {
   }
   /**
    * This method is called by constructor of the luquidity pool
-   *
-   * @param appPoolId Luquidity pool id
-   * @param assetA Asset A
-   * @param assetB Asset B
-   * @param verificationClass Verification class
    */
   registerPool(): void {
     const appClammPool = globals.callerApplicationID as AppID;
@@ -1060,16 +1053,16 @@ export class BiatecPoolProvider extends Contract {
     assert(s === SCALE);
 
     this.tradeEvent.log({
-      appPoolId:appPoolId,
-      assetA:assetA,
-      assetB:assetB,
-      priceFrom:priceFrom,
-      priceTo:priceTo,
-      amountA:amountA,
-      amountB:amountB,
-      feeAmountA:feeAmountA,
-      feeAmountB:feeAmountB,
-      s:s
+      appPoolId: appPoolId,
+      assetA: assetA,
+      assetB: assetB,
+      priceFrom: priceFrom,
+      priceTo: priceTo,
+      amountA: amountA,
+      amountB: amountB,
+      feeAmountA: feeAmountA,
+      feeAmountB: feeAmountB,
+      s: s,
     });
 
     this.updatePriceBoxInfo(appPoolId, assetA, assetB, priceFrom, priceTo, amountA, amountB, feeAmountA, feeAmountB);
