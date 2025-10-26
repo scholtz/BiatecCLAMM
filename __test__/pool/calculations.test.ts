@@ -33,7 +33,7 @@ describe('BiatecClammPool - calculations', () => {
       for (const t of testSet) {
         const { clientBiatecClammPoolProvider } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 0n,
@@ -70,7 +70,7 @@ describe('BiatecClammPool - calculations', () => {
       for (const t of testSet) {
         const { clientBiatecClammPoolProvider } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 0n,
@@ -109,7 +109,7 @@ describe('BiatecClammPool - calculations', () => {
       for (const t of testSet) {
         const { clientBiatecClammPoolProvider } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 0n,
@@ -192,7 +192,7 @@ describe('BiatecClammPool - calculations', () => {
       for (const t of testSet) {
         const { clientBiatecClammPoolProvider } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 0n,
@@ -239,7 +239,7 @@ describe('BiatecClammPool - calculations', () => {
 
       const { clientBiatecClammPoolProvider, clientBiatecPoolProvider } = await setupPool({
         algod,
-        
+
         assetA: assetAId,
         biatecFee: 0n,
         lpFee: 0n,
@@ -275,7 +275,7 @@ describe('BiatecClammPool - calculations', () => {
 
       const { clientBiatecClammPoolProvider, clientBiatecPoolProvider } = await setupPool({
         algod,
-        
+
         assetA: assetAId,
         biatecFee: 0n,
         lpFee: 0n,
@@ -311,7 +311,7 @@ describe('BiatecClammPool - calculations', () => {
 
       const { clientBiatecClammPoolProvider } = await setupPool({
         algod,
-        
+
         assetA: assetAId,
         biatecFee: 0n,
         lpFee: 0n,
@@ -340,7 +340,6 @@ describe('BiatecClammPool - calculations', () => {
     }
   });
 
-
   test('calculateAssetADepositOnAssetBDeposit returns correct results', async () => {
     try {
       await setAssetAId(1n);
@@ -349,7 +348,7 @@ describe('BiatecClammPool - calculations', () => {
 
       const { clientBiatecClammPoolProvider } = await setupPool({
         algod,
-        
+
         assetA: assetAId,
         biatecFee: 0n,
         lpFee: 0n,
@@ -379,5 +378,4 @@ describe('BiatecClammPool - calculations', () => {
       throw Error(e.message);
     }
   });
-
 });

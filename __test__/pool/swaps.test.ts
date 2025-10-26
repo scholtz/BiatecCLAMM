@@ -37,7 +37,7 @@ describe('BiatecClammPool - swaps', () => {
           clientBiatecPoolProvider,
         } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 0n,
@@ -156,7 +156,7 @@ describe('BiatecClammPool - swaps', () => {
           clientBiatecPoolProvider,
         } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 0n,
@@ -257,5 +257,4 @@ describe('BiatecClammPool - swaps', () => {
       throw Error(e.message);
     }
   });
-
 });

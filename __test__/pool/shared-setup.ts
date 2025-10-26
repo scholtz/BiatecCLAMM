@@ -434,8 +434,8 @@ export const setupPool = async (input: ISetup) => {
 
 // Re-export commonly used items for tests
 export { algosdk, algokit, AlgorandClient, AlgoAmount, BoxReference };
-export { 
-  BiatecClammPoolClient, 
+export {
+  BiatecClammPoolClient,
   BiatecClammPoolFactory,
   BiatecIdentityProviderClient,
   BiatecIdentityProviderFactory,
@@ -444,7 +444,7 @@ export {
   BiatecConfigProviderClient,
   BiatecConfigProviderFactory,
   FakePoolClient,
-  FakePoolFactory
+  FakePoolFactory,
 };
 export {
   clammBootstrapSender,
@@ -458,6 +458,6 @@ export {
   clammCreateSender,
   createToken,
   assignGroupID,
-  makePaymentTxnWithSuggestedParamsFromObject
+  makePaymentTxnWithSuggestedParamsFromObject,
 };
 export type { Transaction, TransactionSignerAccount };

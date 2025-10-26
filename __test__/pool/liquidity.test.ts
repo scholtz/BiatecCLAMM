@@ -33,7 +33,7 @@ describe('BiatecClammPool - liquidity', () => {
         const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider } =
           await setupPool({
             algod,
-            
+
             assetA: assetAId,
             biatecFee: 0n,
             lpFee: 0n,
@@ -127,7 +127,7 @@ describe('BiatecClammPool - liquidity', () => {
         const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider } =
           await setupPool({
             algod,
-            
+
             assetA: assetAId,
             biatecFee: 0n,
             lpFee: 0n,
@@ -238,7 +238,7 @@ describe('BiatecClammPool - liquidity', () => {
         const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider } =
           await setupPool({
             algod,
-            
+
             assetA: assetAId,
             biatecFee: 0n,
             lpFee: 0n,
@@ -324,5 +324,4 @@ describe('BiatecClammPool - liquidity', () => {
       throw Error(e.message);
     }
   });
-
 });

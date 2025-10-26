@@ -30,8 +30,6 @@ describe('BiatecClammPool - extreme', () => {
 
       const testSet = convertToBigInt(extremeSamePriceLowTopData);
 
-      
-
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
         const {
@@ -41,7 +39,7 @@ describe('BiatecClammPool - extreme', () => {
           clientBiatecPoolProvider,
         } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 500_000_000n,
           lpFee: 100_000_000n,
@@ -394,8 +392,6 @@ describe('BiatecClammPool - extreme', () => {
 
       const testSet = convertToBigInt(extremeSmallMinMaxPriceDiffData);
 
-      
-
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
         const {
@@ -405,7 +401,7 @@ describe('BiatecClammPool - extreme', () => {
           clientBiatecPoolProvider,
         } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 100_000_000n,
           lpFee: 100_000n, // 0.01%
@@ -751,15 +747,12 @@ describe('BiatecClammPool - extreme', () => {
     }
   });
 
-
   test('Extreme-ExtremePrice-Min - ASASR 0.000000001 - 1, LP fee 1BPS, Biatec fee 10%', async () => {
     try {
       await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = convertToBigInt(extremeExtremePriceMinData);
-
-      
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
@@ -770,7 +763,7 @@ describe('BiatecClammPool - extreme', () => {
           clientBiatecPoolProvider,
         } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 100_000_000n,
           lpFee: 100_000n, // 0.01%
@@ -1124,8 +1117,6 @@ describe('BiatecClammPool - extreme', () => {
 
       const testSet = convertToBigInt(extremeNoFeesEurusdData);
 
-      
-
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
         const {
@@ -1135,7 +1126,7 @@ describe('BiatecClammPool - extreme', () => {
           clientBiatecPoolProvider,
         } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 0n, // 0.01%
@@ -1464,5 +1455,4 @@ describe('BiatecClammPool - extreme', () => {
       throw Error(e.message);
     }
   });
-
 });

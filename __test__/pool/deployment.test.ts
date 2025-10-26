@@ -23,7 +23,7 @@ describe('BiatecClammPool - deployment', () => {
       const { algod } = fixture.context;
       const { clientBiatecClammPoolProvider } = await setupPool({
         algod,
-        
+
         assetA: assetAId,
         biatecFee: BigInt(SCALE / 10),
         lpFee: BigInt(SCALE / 10),
@@ -41,7 +41,6 @@ describe('BiatecClammPool - deployment', () => {
     }
   });
 
-
   test('CantMixPP: I can not register to pool provider amm pool not created by pool provider', async () => {
     try {
       await setAssetAId(1n);
@@ -53,7 +52,7 @@ describe('BiatecClammPool - deployment', () => {
         clientBiatecPoolProvider,
       } = await setupPool({
         algod,
-        
+
         assetA: assetAId,
         biatecFee: BigInt(SCALE / 10),
         lpFee: BigInt(SCALE / 10),
@@ -103,6 +102,4 @@ describe('BiatecClammPool - deployment', () => {
       throw Error(e.message);
     }
   });
-
-
 });

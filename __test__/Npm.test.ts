@@ -8,7 +8,11 @@ import getPools from '../src/biatecClamm/getPools';
 import clammCreateSender from '../src/biatecClamm/sender/clammCreateSender';
 import { assetAId, assetBId, setupPool } from './pool/shared-setup';
 import { clammAddLiquiditySender, clammRemoveLiquiditySender, clammSwapSender } from '../src';
-if (typeof clammAddLiquiditySender !== 'function' || typeof clammRemoveLiquiditySender !== 'function' || typeof clammSwapSender !== 'function') {
+if (
+  typeof clammAddLiquiditySender !== 'function' ||
+  typeof clammRemoveLiquiditySender !== 'function' ||
+  typeof clammSwapSender !== 'function'
+) {
   throw new Error(
     `npm barrel exports invalid types: add=${typeof clammAddLiquiditySender}, remove=${typeof clammRemoveLiquiditySender}, swap=${typeof clammSwapSender}`
   );

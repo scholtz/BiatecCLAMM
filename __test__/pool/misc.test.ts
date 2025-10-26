@@ -39,8 +39,6 @@ describe('BiatecClammPool - misc', () => {
     try {
       const testSet = convertToBigInt(algoVsAsaPoolData);
 
-      
-
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
         const {
@@ -255,22 +253,17 @@ describe('BiatecClammPool - misc', () => {
     }
   });
 
-
   test('npm method getPools() works', async () => {
     try {
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecPoolProvider,
-        algod,
-      } = await setupPool({
-        assetA: 1n,
-        biatecFee: BigInt(SCALE / 10),
-        lpFee: BigInt(SCALE / 10),
-        p: BigInt(1.5 * SCALE),
-        p1: BigInt(1 * SCALE),
-        p2: BigInt(2 * SCALE),
-      });
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, algod } =
+        await setupPool({
+          assetA: 1n,
+          biatecFee: BigInt(SCALE / 10),
+          lpFee: BigInt(SCALE / 10),
+          p: BigInt(1.5 * SCALE),
+          p1: BigInt(1 * SCALE),
+          p2: BigInt(2 * SCALE),
+        });
       expect(!!clientBiatecClammPoolProvider).toBeTruthy();
       const appId = await clientBiatecClammPoolProvider.appClient.appId;
       expect(appId).toBeGreaterThan(0);
