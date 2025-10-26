@@ -33,7 +33,7 @@ const clammSendOnlineKeyRegistrationTxs = async (
       voteFirst: keyregParams.voteFirst,
       voteLast: keyregParams.voteLast,
       voteKeyDilution: keyregParams.voteKeyDilution,
-      fee: input.fee
+      fee: input.fee,
     },
     sender: account.addr,
     staticFee: algokit.microAlgos(2000),

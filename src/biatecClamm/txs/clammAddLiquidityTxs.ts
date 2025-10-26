@@ -93,8 +93,8 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
   const boxFC = getBoxReferenceFullConfig({
     ammPool: clientBiatecClammPool.appId,
     appBiatecPoolProvider: input.clientBiatecPoolProvider.appId,
-    assetA: assetA,
-    assetB: assetB,
+    assetA,
+    assetB,
     fee: input.fee,
     lpTokenId: assetLp,
     verificationClass: input.verificationClass,
@@ -104,8 +104,8 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
 
   const boxPriceFeed = getBoxReferenceAggregated({
     appBiatecPoolProvider: input.clientBiatecPoolProvider.appId,
-    assetA: assetA,
-    assetB: assetB,
+    assetA,
+    assetB,
   });
   const boxPool = getBoxReferencePool({
     appBiatecPoolProvider: input.clientBiatecPoolProvider.appId,
@@ -113,8 +113,8 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
   });
   const boxPoolByConfig = getBoxReferencePoolByConfig({
     appBiatecPoolProvider: input.clientBiatecPoolProvider.appId,
-    assetA: assetA,
-    assetB: assetB,
+    assetA,
+    assetB,
     fee: input.fee,
     verificationClass: input.verificationClass,
     max: input.max,
@@ -143,7 +143,7 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
     accountReferences: [],
     appReferences: [appBiatecConfigProvider, appBiatecIdentityProvider, input.clientBiatecPoolProvider.appId],
   });
-  let txOptin: algosdk.Transaction | undefined = undefined;
+  let txOptin: algosdk.Transaction | undefined;
   if (optinSender) {
     txOptin = makeAssetTransferTxnWithSuggestedParamsFromObject({
       amount: 0n,

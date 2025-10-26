@@ -1,18 +1,18 @@
-import { existsSync, readFileSync, writeFileSync } from 'fs'
-import publishFileBuffer from './ipfs/publishFileBuffer'
-import CryptoJS from 'crypto-js'
-import sharp from 'sharp'
+import { existsSync, readFileSync, writeFileSync } from 'fs';
+import CryptoJS from 'crypto-js';
+import sharp from 'sharp';
+import publishFileBuffer from './ipfs/publishFileBuffer';
 
 const pad = (num: number, size: number): string => {
-  const s = '000000000' + num
-  return s.substring(s.length - size)
-}
+  const s = `000000000${num}`;
+  return s.substring(s.length - size);
+};
 
 const createArc3Files = async (network: string, sn: number) => {
   const properties1 = {
-    name: 'Gold coin 1 oz, SN ' + sn,
-    slugName: 'gold-coin-1-oz-sn-' + sn,
-    network: network,
+    name: `Gold coin 1 oz, SN ${sn}`,
+    slugName: `gold-coin-1-oz-sn-${sn}`,
+    network,
     form: 'coin',
     serialNumber: sn,
     issueDate: '2023-04-01',
@@ -33,13 +33,13 @@ const createArc3Files = async (network: string, sn: number) => {
       { url: `sn-${pad(sn, 4)}-o-front.png` },
       { url: `sn-${pad(sn, 4)}-o-back.png` },
       { url: `sn-${pad(sn, 4)}-p-front.png` },
-      { url: `sn-${pad(sn, 4)}-p-back.png` }
-    ]
-  }
+      { url: `sn-${pad(sn, 4)}-p-back.png` },
+    ],
+  };
   const properties2 = {
-    name: 'Gold coin 1 oz, SN ' + sn,
-    slugName: 'gold-coin-1-oz-sn-' + sn,
-    network: network,
+    name: `Gold coin 1 oz, SN ${sn}`,
+    slugName: `gold-coin-1-oz-sn-${sn}`,
+    network,
     form: 'coin',
     serialNumber: sn,
     issueDate: '2022-01-01',
@@ -55,12 +55,12 @@ const createArc3Files = async (network: string, sn: number) => {
     quality: 'stand',
     story:
       '“Wiener Philharmoniker“ is one of the most popular investment coins. Since 1989 it has been struck in the Vienna Mint in four sizes and weights (1 ounce, 1/2, 1/4 and 1/10 of an ounce). And the motif of the Vienna Philharmonic Orchestra which is considered to be one of the best music ensembles worldwide, was not chosen by coincidence. The coin is minted of the purest 24 carat gold. In 2002, the original 2000, 1000, 500 and 250 shilling coins were replaced with 100, 50, 25 and 10 euro coins. The obverse of the coins features the organ in the Golden Hall of the Musikverein in Vienna, the renowned seat of  the Vienna Philharmonic Orchestra. The reverse is decorated with various musical instruments.',
-    pictures: [{ url: `sn-${pad(sn, 4)}-p-front.png` }, { url: `sn-${pad(sn, 4)}-p-back.png` }]
-  }
+    pictures: [{ url: `sn-${pad(sn, 4)}-p-front.png` }, { url: `sn-${pad(sn, 4)}-p-back.png` }],
+  };
   const properties3_12 = {
-    name: 'Gold coin 1/10 oz, SN ' + sn,
-    slugName: 'gold-coin-1-10-oz-sn-' + sn,
-    network: network,
+    name: `Gold coin 1/10 oz, SN ${sn}`,
+    slugName: `gold-coin-1-10-oz-sn-${sn}`,
+    network,
     form: 'coin',
     serialNumber: sn,
     issueDate: '2023-04-01',
@@ -81,13 +81,13 @@ const createArc3Files = async (network: string, sn: number) => {
       { url: `sn-${pad(sn, 4)}-o-front.png` },
       { url: `sn-${pad(sn, 4)}-o-back.png` },
       { url: `sn-${pad(sn, 4)}-p-front.png` },
-      { url: `sn-${pad(sn, 4)}-p-back.png` }
-    ]
-  }
+      { url: `sn-${pad(sn, 4)}-p-back.png` },
+    ],
+  };
   const properties13 = {
-    name: 'Gold coin 1 oz, SN ' + sn,
-    slugName: 'gold-coin-1-oz-sn-' + sn,
-    network: network,
+    name: `Gold coin 1 oz, SN ${sn}`,
+    slugName: `gold-coin-1-oz-sn-${sn}`,
+    network,
     form: 'coin',
     serialNumber: sn,
     issueDate: '2023-01-01',
@@ -102,61 +102,59 @@ const createArc3Files = async (network: string, sn: number) => {
     quality: 'stand',
     story:
       '“Wiener Philharmoniker“ is one of the most popular investment coins. Since 1989 it has been struck in the Vienna Mint in four sizes and weights (1 ounce, 1/2, 1/4 and 1/10 of an ounce). And the motif of the Vienna Philharmonic Orchestra which is considered to be one of the best music ensembles worldwide, was not chosen by coincidence. The coin is minted of the purest 24 carat gold. In 2002, the original 2000, 1000, 500 and 250 shilling coins were replaced with 100, 50, 25 and 10 euro coins. The obverse of the coins features the organ in the Golden Hall of the Musikverein in Vienna, the renowned seat of  the Vienna Philharmonic Orchestra. The reverse is decorated with various musical instruments. Gold coin with serial number XIII is special as it is the first addition to the ASA.gold reserves since the project launch. The gold coin NFT has been minted on January 1st 2024.',
-    pictures: [{ url: `sn-${pad(sn, 4)}-p-front.png` }, { url: `sn-${pad(sn, 4)}-p-back.png` }]
-  }
-  let properties: any = properties1
-  if (sn == 2) properties = properties2
-  if (sn >= 3) properties = properties3_12
-  if (sn == 13) properties = properties13
-  var pictures = []
+    pictures: [{ url: `sn-${pad(sn, 4)}-p-front.png` }, { url: `sn-${pad(sn, 4)}-p-back.png` }],
+  };
+  let properties: any = properties1;
+  if (sn == 2) properties = properties2;
+  if (sn >= 3) properties = properties3_12;
+  if (sn == 13) properties = properties13;
+  const pictures = [];
   for (const picture of properties.pictures) {
-    const file = readFileSync(`./img/${picture.url}`)
-    const ipfs = await publishFileBuffer(file)
+    const file = readFileSync(`./img/${picture.url}`);
+    const ipfs = await publishFileBuffer(file);
 
-    const integrity = CryptoJS.SHA256(CryptoJS.enc.Base64.parse(file.toString('base64'))).toString(
-      CryptoJS.enc.Base64
-    )
-    let mime = ''
-    let ext = ''
+    const integrity = CryptoJS.SHA256(CryptoJS.enc.Base64.parse(file.toString('base64'))).toString(CryptoJS.enc.Base64);
+    let mime = '';
+    let ext = '';
     if (picture.url.endsWith('.jpg')) {
-      mime = 'image/jpeg'
-      ext = '.jpg'
+      mime = 'image/jpeg';
+      ext = '.jpg';
     }
     if (picture.url.endsWith('.png')) {
-      mime = 'image/png'
-      ext = '.png'
+      mime = 'image/png';
+      ext = '.png';
     }
-    if (!mime) throw Error('Unknown mime type for image ' + picture.url)
-    let thumbnail: Buffer | undefined = undefined
-    const thumbFile = `./img/${picture.url}.small${ext}`
+    if (!mime) throw Error(`Unknown mime type for image ${picture.url}`);
+    let thumbnail: Buffer | undefined;
+    const thumbFile = `./img/${picture.url}.small${ext}`;
     try {
       if (existsSync(thumbFile)) {
-        thumbnail = readFileSync(thumbFile)
+        thumbnail = readFileSync(thumbFile);
       }
     } catch (e) {
-      console.log('thumbnail does not exists yet', e)
+      console.log('thumbnail does not exists yet', e);
     }
     if (!thumbnail?.length) {
-      thumbnail = await sharp(file).resize(200, 200).toBuffer()
+      thumbnail = await sharp(file).resize(200, 200).toBuffer();
       writeFileSync(thumbFile, thumbnail, {
-        flag: 'w'
-      })
+        flag: 'w',
+      });
     }
 
-    const thumbnailIpfs = await publishFileBuffer(thumbnail)
-    const thumbnailIntegrity = CryptoJS.SHA256(
-      CryptoJS.enc.Base64.parse(thumbnail.toString('base64'))
-    ).toString(CryptoJS.enc.Base64)
+    const thumbnailIpfs = await publishFileBuffer(thumbnail);
+    const thumbnailIntegrity = CryptoJS.SHA256(CryptoJS.enc.Base64.parse(thumbnail.toString('base64'))).toString(
+      CryptoJS.enc.Base64
+    );
 
     pictures.push({
       url: `ipfs://${ipfs}`,
       integrity: `sha256-${integrity}`,
       thumbnail: `ipfs://${thumbnailIpfs}`,
       thumbnailIntegrity: `sha256-${thumbnailIntegrity}`,
-      mimetype: mime
-    })
+      mimetype: mime,
+    });
   }
-  properties.pictures = pictures
+  properties.pictures = pictures;
 
   const template = {
     name: properties.name,
@@ -165,25 +163,23 @@ const createArc3Files = async (network: string, sn: number) => {
     image_integrity: pictures[0].integrity,
     image_mimetype: pictures[0].mimetype,
     external_url: `https://${network}.asa.gold/coin/${properties.slugName}`,
-    properties
-  }
+    properties,
+  };
 
-  const jsonFile = JSON.stringify(template)
+  const jsonFile = JSON.stringify(template);
   writeFileSync(`./arc0003/${properties.network}/${properties.slugName}.json`, jsonFile, {
-    flag: 'w'
-  })
-  console.log(`./arc0003/${properties.network}/${properties.slugName}.json done`)
+    flag: 'w',
+  });
+  console.log(`./arc0003/${properties.network}/${properties.slugName}.json done`);
 
-  const fileJ = readFileSync(`./arc0003/${properties.network}/${properties.slugName}.json`)
-  const ipfsJ = await publishFileBuffer(fileJ)
-  const integrityJ = CryptoJS.SHA256(CryptoJS.enc.Base64.parse(fileJ.toString('base64'))).toString(
-    CryptoJS.enc.Base64
-  )
+  const fileJ = readFileSync(`./arc0003/${properties.network}/${properties.slugName}.json`);
+  const ipfsJ = await publishFileBuffer(fileJ);
+  const integrityJ = CryptoJS.SHA256(CryptoJS.enc.Base64.parse(fileJ.toString('base64'))).toString(CryptoJS.enc.Base64);
   writeFileSync(`./arc0003/${properties.network}/${properties.slugName}.ipfs`, ipfsJ, {
-    flag: 'w'
-  })
+    flag: 'w',
+  });
   writeFileSync(`./arc0003/${properties.network}/${properties.slugName}.integrity`, integrityJ, {
-    flag: 'w'
-  })
-}
-export default createArc3Files
+    flag: 'w',
+  });
+};
+export default createArc3Files;

@@ -36,13 +36,16 @@ type AmmStatus = {
 export class BiatecClammPool extends Contract {
   // bootstrapped
   setupFinished = GlobalStateKey<boolean>({ key: 's' });
+
   // asset A id
   assetA = GlobalStateKey<uint64>({ key: 'a' });
+
   // asset A decimals scale difference from base in utint256. For 6 decimals, the scale is 1000. For 8 decimals, the scale is 10
   assetADecimalsScaleFromBase = GlobalStateKey<uint256>({ key: 'ad' });
 
   // asset B id
   assetB = GlobalStateKey<uint64>({ key: 'b' });
+
   // asset B decimals scale difference from base in utint256. For 6 decimals, the scale is 1000. For 8 decimals, the scale is 10
   assetBDecimalsScaleFromBase = GlobalStateKey<uint256>({ key: 'bd' });
 
@@ -183,7 +186,7 @@ export class BiatecClammPool extends Contract {
     assert(this.priceMax.value === 0, 'E_PRICE_MAX'); // It is not possible to call bootrap twice
     assert(this.txn.sender === this.app.creator, 'E_SENDER'); // 'Only creator of the app can set it up'
     assert(priceMax > 0, 'E_PRICE'); // 'You must set price'
-    //assert(assetA < assetB);
+    // assert(assetA < assetB);
     // Allow assetA.id === assetB.id for staking pools (e.g., B-ALGO for interest bearing ALGO)
     assert(fee <= SCALE / 10); // fee must be lower then 10%
     // assert(verificationClass <= 4); // verificationClass  // SHORTENED_APP
@@ -237,6 +240,7 @@ export class BiatecClammPool extends Contract {
     this.assetBDecimalsScaleFromBase.value = assetBDelicmalScale2Scale;
     return this.assetLp.value;
   }
+
   /**
    * When we know the app id of this pool, we can register it properly at the pool provider
    */
@@ -252,6 +256,7 @@ export class BiatecClammPool extends Contract {
     });
     this.setupFinished.value = true;
   }
+
   /**
    * Executes xfer of pay payment methods to specified receiver from smart contract aggregated account with specified asset and amount in tokens decimals
    * @param receiver Receiver
@@ -285,6 +290,7 @@ export class BiatecClammPool extends Contract {
       this.doAxfer(this.app.address, asset, 0);
     }
   }
+
   /**
    * Creates LP token
    * @param assetA Asset A
@@ -296,18 +302,18 @@ export class BiatecClammPool extends Contract {
     // const verificationClass = this.verificationClass.value.toString(); // TODO
     // const feeB100000 = this.feeB100000.value.toString();
     // const name = 'B-' + verificationClass + '-' + feeB100000 + '-' + assetA.unitName + '-' + assetB.unitName; // TODO
-    let nameAssetA = rawBytes(nativeTokenName);
+    let nameAssetA = nativeTokenName;
     if (assetA.id > 0) {
       nameAssetA = assetA.unitName;
     }
-    let nameAssetB = rawBytes(nativeTokenName);
+    let nameAssetB = nativeTokenName;
     if (assetB.id > 0) {
       nameAssetB = assetB.unitName;
     }
 
     let name = '';
     let unitName = 'BLP'; // Biatec LP token
-    
+
     // If assetA and assetB are the same, create a staking pool token: B-{AssetName}
     if (assetA.id === assetB.id) {
       name = 'B-' + nameAssetA;
@@ -315,19 +321,19 @@ export class BiatecClammPool extends Contract {
       if (assetA.id > 0) {
         unitName = assetA.unitName;
       } else {
-        unitName = rawBytes(nativeTokenName);
+        unitName = nativeTokenName;
       }
     } else {
       // Standard liquidity pool: B-{AssetA}-{AssetB}
       name =
         'B-' +
-        //this.verificationClass.value.toString() +
-        //'-' +
+        // this.verificationClass.value.toString() +
+        // '-' +
         nameAssetA +
         '-' +
         nameAssetB; // +
-      //'-' +
-      //this.fee.value.toString(10); // TODO the toString does not work
+      // '-' +
+      // this.fee.value.toString(10); // TODO the toString does not work
     }
 
     return sendAssetCreation({
@@ -433,7 +439,7 @@ export class BiatecClammPool extends Contract {
       assert(false, 'Unsupported tx type of the asset B');
     }
 
-    //this.setDepositsValueIfNeeded(aDepositInBaseScale, bDepositInBaseScale,assetA,assetB);
+    // this.setDepositsValueIfNeeded(aDepositInBaseScale, bDepositInBaseScale,assetA,assetB);
     // const realBalanceA: uint64 =
     //   assetA.id === 0
     //     ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
@@ -468,7 +474,7 @@ export class BiatecClammPool extends Contract {
 
     // else
 
-    //if (this.assetABalanceBaseScale.value === <uint256>0 && this.assetBBalanceBaseScale.value === <uint256>0) {
+    // if (this.assetABalanceBaseScale.value === <uint256>0 && this.assetBBalanceBaseScale.value === <uint256>0) {
     // calculate LP position
     // this.assetABalanceBaseScale.value = aDepositInBaseScale;
     // this.assetBBalanceBaseScale.value = bDepositInBaseScale;
@@ -491,10 +497,10 @@ export class BiatecClammPool extends Contract {
 
     this.currentPrice.value = newPrice as uint64;
     return ret;
-    //}
+    // }
 
     // allow user to deposit any combination of asset A and asset B
-    //return this.processAddLiquidity(aDepositInBaseScale, bDepositInBaseScale, assetLpDelicmalScale2Scale, assetLp, true);
+    // return this.processAddLiquidity(aDepositInBaseScale, bDepositInBaseScale, assetLpDelicmalScale2Scale, assetLp, true);
 
     // // add asset to LP position
 
@@ -711,6 +717,7 @@ export class BiatecClammPool extends Contract {
     const scaleB = this.assetBDecimalsScaleFromBase.value;
     return scaleA * scaleB + scaleA + scaleB;
   }
+
   /**
    * This method retrieves from the liquidity provider LP token and returns Asset A and Asset B from the Automated Market Maker Concentrated Liqudidity Pool
    * @param appBiatecConfigProvider Configuration reference

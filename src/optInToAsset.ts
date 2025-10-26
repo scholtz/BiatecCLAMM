@@ -1,9 +1,10 @@
-import algosdk, { Algodv2 } from 'algosdk'
-import doAssetTransfer from './doAssetTransfer'
+import algosdk, { Algodv2 } from 'algosdk';
+import doAssetTransfer from './doAssetTransfer';
+
 interface IOptInToAssetInput {
-  account: algosdk.Account
-  assetIndex: number
-  algod: Algodv2
+  account: algosdk.Account;
+  assetIndex: number;
+  algod: Algodv2;
 }
 const optInToAsset = (input: IOptInToAssetInput) => {
   return doAssetTransfer({
@@ -11,7 +12,7 @@ const optInToAsset = (input: IOptInToAssetInput) => {
     to: input.account.addr,
     assetIndex: input.assetIndex,
     amount: 0,
-    algod: input.algod
-  })
-}
-export default optInToAsset
+    algod: input.algod,
+  });
+};
+export default optInToAsset;

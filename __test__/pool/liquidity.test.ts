@@ -3,6 +3,7 @@ import { describe, test, expect } from '@jest/globals';
 import fs from 'fs';
 import path from 'path';
 import net from 'net';
+import type { Address } from 'algosdk';
 import { convertToBigInt } from '../test-data/convertToBigInt';
 import addLiquidityData from '../test-data/add-liquidity.json';
 import addLiquiditySecondData from '../test-data/add-liquidity-second.json';
@@ -26,7 +27,6 @@ import {
 } from './shared-setup';
 import clammSwapSender from '../../src/biatecClamm/sender/clammSwapSender';
 import clammRemoveLiquiditySender from '../../src/biatecClamm/sender/clammRemoveLiquiditySender';
-import type { Address } from 'algosdk';
 
 describe('BiatecClammPool - liquidity', () => {
   // Debug helper: show sandbox algod config and test TCP connectivity to common algod ports
@@ -197,7 +197,7 @@ describe('BiatecClammPool - liquidity', () => {
         // show debug info then rethrow with hint
         // eslint-disable-next-line no-await-in-loop
         await debugAlgodConnectivity();
-        throw new Error(msg + ' — algod unreachable. Ensure sandbox is running: cd sandbox_ ; docker compose up -d');
+        throw new Error(`${msg} — algod unreachable. Ensure sandbox is running: cd sandbox_ ; docker compose up -d`);
       }
       throw new Error(msg);
     }
@@ -324,7 +324,7 @@ describe('BiatecClammPool - liquidity', () => {
         // eslint-disable-next-line no-console
         console.error('Network connection to algod failed. Running TCP/debug checks...');
         await debugAlgodConnectivity();
-        throw new Error(msg + ' — algod unreachable. Ensure sandbox is running: cd sandbox_ ; docker compose up -d');
+        throw new Error(`${msg} — algod unreachable. Ensure sandbox is running: cd sandbox_ ; docker compose up -d`);
       }
       throw new Error(msg);
     }
@@ -441,7 +441,7 @@ describe('BiatecClammPool - liquidity', () => {
         // eslint-disable-next-line no-console
         console.error('Network connection to algod failed. Running TCP/debug checks...');
         await debugAlgodConnectivity();
-        throw new Error(msg + ' — algod unreachable. Ensure sandbox is running: cd sandbox_ ; docker compose up -d');
+        throw new Error(`${msg} — algod unreachable. Ensure sandbox is running: cd sandbox_ ; docker compose up -d`);
       }
       throw new Error(msg);
     }
@@ -839,7 +839,7 @@ describe('BiatecClammPool - liquidity', () => {
         // eslint-disable-next-line no-console
         console.error('Network connection to algod failed. Running TCP/debug checks...');
         await debugAlgodConnectivity();
-        throw new Error(msg + ' — algod unreachable. Ensure sandbox is running: cd sandbox_ ; docker compose up -d');
+        throw new Error(`${msg} — algod unreachable. Ensure sandbox is running: cd sandbox_ ; docker compose up -d`);
       }
       throw new Error(msg);
     }

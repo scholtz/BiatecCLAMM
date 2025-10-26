@@ -1,4 +1,5 @@
 import { Contract } from '@algorandfoundation/tealscript';
+
 export class FakePool extends Contract {
   /**
    * When we know the app id of this pool, we can register it properly at the pool provider

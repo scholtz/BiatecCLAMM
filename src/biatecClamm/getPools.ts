@@ -16,7 +16,7 @@ function uint8ArrayToBigInt(bytes: Uint8Array) {
   return Number(result);
 }
 const getPools = async (input: IGetPoolsInput): Promise<FullConfig[]> => {
-  var ret: FullConfig[] = [];
+  const ret: FullConfig[] = [];
   const keys = await input.algod.getApplicationBoxes(input.poolProviderAppId).do();
   // const keys = await input.clientPoolProvider.algorand.client.indexer
   //   .searchForApplicationBoxes(input.clientPoolProvider.appId)
@@ -48,14 +48,14 @@ const getPools = async (input: IGetPoolsInput): Promise<FullConfig[]> => {
           const verificationClass = uint8ArrayToBigInt(box.name.subarray(58, 59));
 
           ret.push({
-            appId: appId,
-            assetA: assetA,
-            assetB: assetB,
-            fee: fee,
-            max: max,
-            min: min,
-            lpTokenId: lpTokenId,
-            verificationClass: verificationClass,
+            appId,
+            assetA,
+            assetB,
+            fee,
+            max,
+            min,
+            lpTokenId,
+            verificationClass,
           });
         }
       }

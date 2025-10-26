@@ -1,7 +1,6 @@
 import { beforeAll, beforeEach, describe, expect, test } from '@jest/globals';
 import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
-import algosdk from 'algosdk';
-import { Transaction } from 'algosdk';
+import algosdk, { Transaction } from 'algosdk';
 import { FakePoolFactory } from '../../contracts/clients/FakePoolClient';
 import { SCALE, fixture, initDeployer, setupPool } from './setup';
 

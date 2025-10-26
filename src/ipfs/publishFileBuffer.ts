@@ -1,4 +1,4 @@
-import getClient from './getClient'
+import getClient from './getClient';
 
 /**
  * Uploads the string content to IPFS
@@ -7,14 +7,14 @@ import getClient from './getClient'
  */
 const publishFileBuffer = async (content: Buffer): Promise<string> => {
   try {
-    const ipfs = getClient()
+    const ipfs = getClient();
     if (ipfs) {
-      const added = await ipfs.add(content)
-      return added.path
+      const added = await ipfs.add(content);
+      return added.path;
     }
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
-  return ''
-}
-export default publishFileBuffer
+  return '';
+};
+export default publishFileBuffer;

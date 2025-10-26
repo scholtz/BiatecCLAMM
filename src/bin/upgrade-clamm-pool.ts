@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import algosdk, { assignGroupID, makePaymentTxnWithSuggestedParamsFromObject, Transaction } from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
+import { AlgorandClient } from '@algorandfoundation/algokit-utils';
 import {
   BiatecConfigProviderClient,
   BiatecConfigProviderFactory,
@@ -11,7 +12,6 @@ import {
 } from '../../contracts/clients/BiatecIdentityProviderClient';
 import { BiatecPoolProviderClient, BiatecPoolProviderFactory } from '../../contracts/clients/BiatecPoolProviderClient';
 import { BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
-import { AlgorandClient } from '@algorandfoundation/algokit-utils';
 import { BiatecClammPoolClient } from '../../dist';
 
 const biatecFee = BigInt(200_000_000);
@@ -21,9 +21,9 @@ const algod = new algosdk.Algodv2(
   process.env.ALGOD_SERVER ?? 'http://localhost',
   parseInt(process.env.ALGOD_PORT ?? '4001')
 );
-let appBiatecConfigProvider = BigInt(process.env.appBiatecConfigProvider ?? '0');
-let appBiatecIdentityProvider = BigInt(process.env.appBiatecIdentityProvider ?? '0');
-let appBiatecPoolProvider = BigInt(process.env.appBiatecPoolProvider ?? '0');
+const appBiatecConfigProvider = BigInt(process.env.appBiatecConfigProvider ?? '0');
+const appBiatecIdentityProvider = BigInt(process.env.appBiatecIdentityProvider ?? '0');
+const appBiatecPoolProvider = BigInt(process.env.appBiatecPoolProvider ?? '0');
 const signers: algosdk.Account[] = [];
 const accounts: string[] = [];
 if (process.env.signer1) {
@@ -115,33 +115,33 @@ const app = async () => {
   console.log(`${Date()} App started - Deployer: ${signer.addr}`);
   const t = true;
   if (t) {
-    //return;
+    // return;
   }
 
   const appBiatecConfigProvider = BigInt(process.env.appBiatecConfigProvider ?? '0');
   const appBiatecClammPool = BigInt(process.env.appBiatecClammPool ?? '0');
 
-  if(!appBiatecConfigProvider ) {
+  if (!appBiatecConfigProvider) {
     throw new Error('Please set appBiatecConfigProvider env variables');
   }
-  if(!appBiatecClammPool ) {
+  if (!appBiatecClammPool) {
     throw new Error('Please set appBiatecClammPool env variables');
   }
   console.log('upgrading single pool');
 
-  var pool = new BiatecClammPoolClient({
+  const pool = new BiatecClammPoolClient({
     appId: appBiatecClammPool,
     algorand,
     defaultSender: signer.addr,
     defaultSigner: signer.signer,
-  })
+  });
 
   await pool.send.update.updateApplication({
-    args:{
-      appBiatecConfigProvider: appBiatecConfigProvider,
-      newVersion: Buffer.from('BIATEC-CLAMM-01-05-04','ascii'),
-    }
-  })
+    args: {
+      appBiatecConfigProvider,
+      newVersion: Buffer.from('BIATEC-CLAMM-01-05-04', 'ascii'),
+    },
+  });
 
   console.log(`${Date()} Deploy DONE`);
 };

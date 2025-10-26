@@ -7,6 +7,7 @@ import getBoxReferenceFullConfig from '../../biatecPools/getBoxReferenceFullConf
 import getBoxReferencePool from '../../biatecPools/getBoxReferencePool';
 import getBoxReferencePoolByConfig from '../../biatecPools/getBoxReferencePoolByConfig';
 import getBoxReferenceIdentity from '../../biatecIdentity/getBoxReferenceIdentity';
+
 interface IClammRemoveLiquidityTxsInput {
   params: SuggestedParams;
   clientBiatecClammPool: BiatecClammPoolClient;

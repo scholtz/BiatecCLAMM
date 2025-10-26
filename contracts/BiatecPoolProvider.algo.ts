@@ -141,7 +141,9 @@ export class BiatecPoolProvider extends Contract {
    * Each LP pool is registered in this contract. Each pool has custom box and stores there the trading stats.
    */
   pools = BoxMap<uint64, AppPoolInfo>({ prefix: 'p' });
+
   poolsByConfig = BoxMap<PoolConfig, uint64>({ prefix: 'pc' });
+
   fullConfigs = BoxMap<FullConfig, uint64>({ prefix: 'fc' });
 
   tradeEvent = new EventLogger<{
@@ -175,15 +177,25 @@ export class BiatecPoolProvider extends Contract {
    * We cannot create application and store the appid to the chain in one app call, therefore we need to store it to the blobal storage of currently created apps. When we register the pool with the proper box id from the pool we can create infinite number of boxes, but we can create only 10 pools by any users at once.
    */
   recentPools1 = GlobalStateKey<uint64>({ key: 'rp1' });
+
   recentPools2 = GlobalStateKey<uint64>({ key: 'rp2' });
+
   recentPools3 = GlobalStateKey<uint64>({ key: 'rp3' });
+
   recentPools4 = GlobalStateKey<uint64>({ key: 'rp4' });
+
   recentPools5 = GlobalStateKey<uint64>({ key: 'rp5' });
+
   recentPools6 = GlobalStateKey<uint64>({ key: 'rp6' });
+
   recentPools7 = GlobalStateKey<uint64>({ key: 'rp7' });
+
   recentPools8 = GlobalStateKey<uint64>({ key: 'rp8' });
+
   recentPools9 = GlobalStateKey<uint64>({ key: 'rp9' });
+
   recentPools10 = GlobalStateKey<uint64>({ key: 'rp10' });
+
   recentPoolsIndex = GlobalStateKey<uint64>({ key: 'rpi' });
 
   /**
@@ -195,8 +207,11 @@ export class BiatecPoolProvider extends Contract {
    * Anyone can deploy the CLAMM pool through this contract. When its done this way, we can be sure that the smart contract communicating with this contract to store the price feed is legit
    */
   clammApprovalProgram1 = BoxKey<bytes>({ key: 'capb1' });
+
   clammApprovalProgram2 = BoxKey<bytes>({ key: 'capb2' });
+
   clammApprovalProgram3 = BoxKey<bytes>({ key: 'capb3' });
+
   // clammApprovalProgram4 = BoxKey<bytes>({ key: 'capb4' });
   /**
    * Version of the smart contract
@@ -231,10 +246,10 @@ export class BiatecPoolProvider extends Contract {
   createApplication(): void {
     log(version);
     this.period1.value = 60;
-    //this.period2.value = 3600;
+    // this.period2.value = 3600;
     this.period2.value = 3600 * 24;
     this.period3.value = 3600 * 24 * 7;
-    //this.period5.value = 3600 * 24 * 30;
+    // this.period5.value = 3600 * 24 * 30;
     this.period4.value = 3600 * 24 * 365;
     this.recentPoolsIndex.value = 1;
     this.recentPools1.value = 0;
@@ -303,10 +318,12 @@ export class BiatecPoolProvider extends Contract {
     //   this.clammApprovalProgram4.replace(offset - 12288, data);
     // }
   }
+
   /**
    * No op tx to increase the app call and box size limits
    */
   noop(i: uint64): void {}
+
   /**
    * Anybody can call this method to bootstrap new clamm pool
    *
@@ -388,7 +405,7 @@ export class BiatecPoolProvider extends Contract {
       fee: 0,
     });
     this.pendingGroup.submit();
-    //this.registerPool(AppID.fromUint64(appId), assetA, assetB, verificationClass);
+    // this.registerPool(AppID.fromUint64(appId), assetA, assetB, verificationClass);
 
     this.recentPoolsIndex.value = this.recentPoolsIndex.value + 1;
     if (this.recentPoolsIndex.value > 10) this.recentPoolsIndex.value = 1;
@@ -416,6 +433,7 @@ export class BiatecPoolProvider extends Contract {
     }
     return appId;
   }
+
   /**
    * This method is called by constructor of the luquidity pool
    */
@@ -1151,6 +1169,7 @@ export class BiatecPoolProvider extends Contract {
       });
     }
   }
+
   /**
    * Retuns the full price info for the asset pair. If app pool is defined, then it returns the pool info.
    * @param assetA Asset A must be less than Asset B

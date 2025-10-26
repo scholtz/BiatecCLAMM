@@ -412,6 +412,7 @@ export class BiatecIdentityProvider extends Contract {
     };
     return ret;
   }
+
   /**
    * If someone deposits excess assets to this smart contract biatec can use them.
    *

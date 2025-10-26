@@ -70,7 +70,7 @@ describe('BiatecClammPool - deployment', () => {
 
       const fakePoolfactory = new FakePoolFactory({
         defaultSender: deployer.addr,
-        defaultSigner: defaultSigner,
+        defaultSigner,
         algorand: clientBiatecClammPoolProvider.appClient.algorand,
       });
       const fakeClientProvider = await fakePoolfactory.send.create.createApplication({ args: {} });

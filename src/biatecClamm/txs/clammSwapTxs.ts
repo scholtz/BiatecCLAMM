@@ -63,8 +63,8 @@ const clammSwapTxs = async (input: IClammSwapTxsInput): Promise<algosdk.Transact
 
   const boxPriceFeed = getBoxReferenceAggregated({
     appBiatecPoolProvider: input.appBiatecPoolProvider,
-    assetA: assetA,
-    assetB: assetB,
+    assetA,
+    assetB,
   });
   const boxIdentity = getBoxReferenceIdentity({
     appBiatecIdentity: input.appBiatecIdentityProvider,

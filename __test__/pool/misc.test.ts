@@ -293,7 +293,7 @@ describe('BiatecClammPool - misc', () => {
 
       const pools = await getPools({
         assetId: assetAId,
-        algod: algod,
+        algod,
         poolProviderAppId: clientBiatecPoolProvider.appClient.appId,
         fee: undefined,
         verificationClass: undefined,

@@ -110,10 +110,10 @@ describe('BiatecClammPool - Staking Pools', () => {
       const lpTokenInfo = await algod.getAssetByID(lpTokenId!).do();
       console.log('B-TEST LP Token Name:', lpTokenInfo.params.name);
       console.log('B-TEST LP Token Unit:', lpTokenInfo.params['unit-name']);
-      
+
       // Get the test asset info to verify unit name
       const testAssetInfo = await algod.getAssetByID(Number(testAssetId)).do();
-      expect(lpTokenInfo.params.name).toBe('B-' + testAssetInfo.params['unit-name']);
+      expect(lpTokenInfo.params.name).toBe(`B-${testAssetInfo.params['unit-name']}`);
       expect(lpTokenInfo.params['unit-name']).toBe(testAssetInfo.params['unit-name']);
     } catch (e: any) {
       // eslint-disable-next-line no-console
@@ -189,9 +189,7 @@ describe('BiatecClammPool - Staking Pools', () => {
 
       // Simulate staking rewards: Send 100 ALGO directly to pool address
       const rewardsAmount = 100n * BigInt(SCALE_ALGO);
-      const poolAddress = algosdk.getApplicationAddress(
-        BigInt(clientBiatecClammPoolProvider.appClient.appId)
-      );
+      const poolAddress = algosdk.getApplicationAddress(BigInt(clientBiatecClammPoolProvider.appClient.appId));
       const paymentTx = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
         from: deployer.addr,
         to: poolAddress,
