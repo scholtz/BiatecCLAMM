@@ -106,3 +106,59 @@ const txId = await clammRemoveLiquiditySender({
   lpToSend: bigint;
 })
 ```
+
+## Staking Pools (NEW)
+
+BiatecCLAMM now supports staking pools where asset A and asset B are the same token. This enables creation of interest-bearing tokens like B-ALGO, B-USDC, etc.
+
+### Creating a Native Token Staking Pool (B-ALGO)
+
+```typescript
+import { clammCreateSender } from "biatec-concentrated-liquidity-amm"
+
+const poolClient = await clammCreateSender({
+  transactionSigner: signerAccount,
+  clientBiatecPoolProvider: poolProviderClient,
+  appBiatecConfigProvider: configAppId,
+  assetA: 0n,              // Native token (ALGO)
+  assetB: 0n,              // Same as asset A
+  fee: 0n,                 // No fee
+  verificationClass: 0,
+  priceMin: BigInt(SCALE),
+  priceMax: BigInt(SCALE),
+  currentPrice: BigInt(SCALE),
+  nativeTokenName: 'ALGO', // Chain-specific name
+});
+```
+
+### Distributing Staking Rewards
+
+```typescript
+import { clammDistributeExcessAssetsSender } from "biatec-concentrated-liquidity-amm"
+
+// After rewards accrue to the pool (e.g., from consensus rewards)
+const txId = await clammDistributeExcessAssetsSender({
+  algod,
+  account: executiveSigner,
+  amountA: rewardsAmount * BigInt(SCALE / assetDecimals), // Base scale
+  amountB: 0n,
+  appBiatecConfigProvider: configAppId,
+  assetA: 0n,
+  assetB: 0n,
+  clientBiatecClammPool: poolClient,
+});
+```
+
+For complete documentation, see [docs/staking-pools.md](docs/staking-pools.md).
+
+### Key Features:
+- **Interest-Bearing Tokens**: Create B-ALGO, B-USDC, or any B-{TOKEN}
+- **Multi-Chain Support**: Works with ALGO, VOI, ARAMID networks
+- **Reward Distribution**: Distribute staking rewards, interest, or fees to LP holders
+- **Flexible Use Cases**: Lending protocols, yield aggregation, revenue sharing
+
+### Use Cases:
+1. **Native Token Staking**: B-ALGO pools for staking ALGO with consensus rewards
+2. **Asset Staking**: B-USDC pools for lending protocol interest
+3. **Revenue Sharing**: Distribute protocol fees to token holders
+4. **Yield Aggregation**: Combine multiple yield sources

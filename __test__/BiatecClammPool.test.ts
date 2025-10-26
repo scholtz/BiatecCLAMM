@@ -12,6 +12,7 @@
  * - pool/fees.test.ts - Fee management and ASASR tests
  * - pool/extreme.test.ts - Extreme price scenario tests
  * - pool/misc.test.ts - Miscellaneous tests (network, algo/asa, npm)
+ * - pool/staking.test.ts - Staking pool tests (asset A = asset B)
  * - pool/shared-setup.ts - Common setup, constants, and utilities
  *
  * To run all pool tests:
@@ -29,3 +30,4 @@ import './pool/swaps.test';
 import './pool/fees.test';
 import './pool/extreme.test';
 import './pool/misc.test';
+import './pool/staking.test';
