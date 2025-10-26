@@ -12,13 +12,14 @@ import {
   fixture,
   FakePoolFactory,
   AlgoAmount,
+  setAssetAId,
 } from './shared-setup';
 import type { Transaction } from './shared-setup';
 
 describe('BiatecClammPool - deployment', () => {
   test('I can deploy the concentrated liquidity pool', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
       const { clientBiatecClammPoolProvider } = await setupPool({
         algod,
@@ -43,7 +44,7 @@ describe('BiatecClammPool - deployment', () => {
 
   test('CantMixPP: I can not register to pool provider amm pool not created by pool provider', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
       const {
         clientBiatecClammPoolProvider,

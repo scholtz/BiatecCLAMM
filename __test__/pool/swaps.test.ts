@@ -13,12 +13,16 @@ import {
   SCALE_B,
   fixture,
   algosdk,
+  algokit,
+  getBoxReferenceStats,
+  LP_TOKEN_DECIMALS,
+  setAssetAId,
 } from './shared-setup';
 
 describe('BiatecClammPool - swaps', () => {
   test('swapAtoB - I can add liquidity to the pool and swap from A token to B token', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = swapAToBData;
@@ -137,7 +141,7 @@ describe('BiatecClammPool - swaps', () => {
 
   test('swapBtoA - I can add liquidity to the pool and swap from B token to A token', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = swapBToAData;

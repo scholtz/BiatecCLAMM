@@ -8,13 +8,11 @@ import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
 import { BiatecPoolProviderClient } from '../../../contracts/clients/BiatecPoolProviderClient';
-import {
-  getBoxReferenceFullConfig,
-  getBoxReferenceAggregated,
-  getBoxReferencePool,
-  getBoxReferencePoolByConfig,
-  getBoxReferenceIdentity,
-} from '../../index';
+import getBoxReferenceAggregated from '../../biatecPools/getBoxReferenceAggregated';
+import getBoxReferenceFullConfig from '../../biatecPools/getBoxReferenceFullConfig';
+import getBoxReferencePool from '../../biatecPools/getBoxReferencePool';
+import getBoxReferencePoolByConfig from '../../biatecPools/getBoxReferencePoolByConfig';
+import getBoxReferenceIdentity from '../../biatecIdentity/getBoxReferenceIdentity';
 
 interface IClammBootstrapTxsInput {
   params: SuggestedParams;

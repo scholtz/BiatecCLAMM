@@ -10,21 +10,21 @@ import {
   SCALE,
   SCALE_A,
   SCALE_B,
-  fixture,
+  SCALE_ALGO,
+  SCALE_LP,
+  LP_TOKEN_DECIMALS,
   algosdk,
-  AlgoAmount,
+  algokit,
   getPools,
+  clammCreateSender,
+  getBoxReferenceStats,
 } from './shared-setup';
+import type { Transaction } from './shared-setup';
 
 describe('BiatecClammPool - misc', () => {
   test('I can make the pool protect algorand network', async () => {
-    assetAId = 1n;
-    const { algod } = fixture.context;
-
     const { clientBiatecClammPoolProvider } = await setupPool({
-      algod,
-      
-      assetA: assetAId,
+      assetA: 1n,
       biatecFee: 100_000_000n,
       lpFee: 100_000_000n,
       p: 100_000_000n,
@@ -37,9 +37,6 @@ describe('BiatecClammPool - misc', () => {
 
   test('I can have algo vs asa in the pool', async () => {
     try {
-      assetAId = 1n;
-      const { algod } = fixture.context;
-
       const testSet = convertToBigInt(algoVsAsaPoolData);
 
       
@@ -51,9 +48,8 @@ describe('BiatecClammPool - misc', () => {
           clientBiatecConfigProvider,
           clientBiatecIdentityProvider,
           clientBiatecPoolProvider,
-        } = await setupPool({
           algod,
-          
+        } = await setupPool({
           assetA: 0n,
           biatecFee: 0n,
           lpFee: 100_000_000n,
@@ -262,12 +258,13 @@ describe('BiatecClammPool - misc', () => {
 
   test('npm method getPools() works', async () => {
     try {
-      assetAId = 1n;
-      const { algod } = fixture.context;
-      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider } = await setupPool({
+      const {
+        clientBiatecClammPoolProvider,
+        clientBiatecConfigProvider,
+        clientBiatecPoolProvider,
         algod,
-        
-        assetA: assetAId,
+      } = await setupPool({
+        assetA: 1n,
         biatecFee: BigInt(SCALE / 10),
         lpFee: BigInt(SCALE / 10),
         p: BigInt(1.5 * SCALE),
@@ -316,6 +313,4 @@ describe('BiatecClammPool - misc', () => {
       throw Error(e.message);
     }
   });
-});
-
 });

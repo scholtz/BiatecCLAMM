@@ -18,12 +18,14 @@ import {
   SCALE_A,
   SCALE_B,
   fixture,
+  algokit,
+  setAssetAId,
 } from './shared-setup';
 
 describe('BiatecClammPool - calculations', () => {
   test('calculatePrice returns correct results', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
       const testSet = calculatePriceData;
 
@@ -60,7 +62,7 @@ describe('BiatecClammPool - calculations', () => {
 
   test('calculateAssetBWithdrawOnAssetADeposit returns correct results', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
       const testSet = calculateAssetBWithdrawData;
 
@@ -99,7 +101,7 @@ describe('BiatecClammPool - calculations', () => {
 
   test('calculateAssetAWithdrawOnAssetBDeposit returns correct results', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
       const testSet = calculateAssetAWithdrawData;
 
@@ -182,7 +184,7 @@ describe('BiatecClammPool - calculations', () => {
 
   test('calculateLiquidity returns correct results', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
       const testSet = calculateLiquidityData;
 
@@ -231,7 +233,7 @@ describe('BiatecClammPool - calculations', () => {
 
   test('calculateAssetAWithdrawOnLPDeposit returns correct results', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
       const testSet = calculateAssetAWithdrawLpData;
 
@@ -267,7 +269,7 @@ describe('BiatecClammPool - calculations', () => {
 
   test('calculateAssetBWithdrawOnLPDeposit returns correct results', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
       const testSet = calculateAssetBWithdrawLpData;
 
@@ -303,7 +305,7 @@ describe('BiatecClammPool - calculations', () => {
 
   test('calculateAssetBDepositOnAssetADeposit returns correct results', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
       const testSet = calculateAssetBDepositData;
 
@@ -341,7 +343,7 @@ describe('BiatecClammPool - calculations', () => {
 
   test('calculateAssetADepositOnAssetBDeposit returns correct results', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
       const testSet = calculateAssetADepositData;
 

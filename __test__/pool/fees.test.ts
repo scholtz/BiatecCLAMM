@@ -16,12 +16,17 @@ import {
   SCALE_B,
   fixture,
   algosdk,
+  algokit,
+  getBoxReferenceStats,
+  LP_TOKEN_DECIMALS,
+  SCALE_LP,
+  setAssetAId,
 } from './shared-setup';
 
 describe('BiatecClammPool - fees', () => {
   test('LP fees 10%, Biatec fee - 0% - I can add, swap and remove liquidity from the pool', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = convertToBigInt(lpFees10BiatecFee0Data);
@@ -35,7 +40,7 @@ describe('BiatecClammPool - fees', () => {
           clientBiatecPoolProvider,
         } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 100_000_000n,
@@ -218,10 +223,9 @@ describe('BiatecClammPool - fees', () => {
     }
   });
 
-
   test('LP fees 10%, Biatec fee - 50% - I can add, swap and remove liquidity from the pool', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = convertToBigInt(lpFees10BiatecFee50Data);
@@ -235,7 +239,7 @@ describe('BiatecClammPool - fees', () => {
           clientBiatecPoolProvider,
         } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 500_000_000n,
           lpFee: 100_000_000n,
@@ -417,10 +421,9 @@ describe('BiatecClammPool - fees', () => {
     }
   });
 
-
   test('ASASR - LP fees 10%, Biatec fee - 0% - I can add, swap, add, swap, and remove all liquidity from the pool', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = convertToBigInt(asasrLpFees10BiatecFee0Data);
@@ -434,7 +437,7 @@ describe('BiatecClammPool - fees', () => {
           clientBiatecPoolProvider,
         } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 0n,
           lpFee: 100_000_000n,
@@ -780,15 +783,12 @@ describe('BiatecClammPool - fees', () => {
     }
   });
 
-
   test('I can withdraw lp fees from biatec account', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = convertToBigInt(withdrawLpFeesData);
-
-      
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
@@ -799,7 +799,7 @@ describe('BiatecClammPool - fees', () => {
           clientBiatecPoolProvider,
         } = await setupPool({
           algod,
-          
+
           assetA: assetAId,
           biatecFee: 100_000_000n,
           lpFee: 100_000_000n,
@@ -1111,19 +1111,17 @@ describe('BiatecClammPool - fees', () => {
 
   test('If someone deposits the asset a or asset b to the pool, we can distribute these assets to lp holders', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = convertToBigInt(distributeAssetsData);
-
-      
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
         const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider } =
           await setupPool({
             algod,
-            
+
             assetA: assetAId,
             biatecFee: 100_000_000n,
             lpFee: 100_000_000n,
@@ -1269,5 +1267,4 @@ describe('BiatecClammPool - fees', () => {
       throw Error(e.message);
     }
   });
-
 });

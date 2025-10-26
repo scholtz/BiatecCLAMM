@@ -46,6 +46,11 @@ export let assetBId: bigint = 2n;
 export let deployer: algosdk.Account;
 export let deployerSigner: TransactionSignerAccount;
 
+export const setAssetAId = async (value: bigint) => {
+  await fixture.newScope();
+  assetAId = value;
+};
+
 // https://github.com/GoogleChromeLabs/jsbi/issues/30
 // eslint-disable-next-line no-extend-native, @typescript-eslint/no-explicit-any, func-names
 (BigInt.prototype as any).toJSON = function () {
@@ -53,7 +58,7 @@ export let deployerSigner: TransactionSignerAccount;
 };
 
 export interface ISetup {
-  algod: algosdk.Algodv2;
+  algod?: algosdk.Algodv2;
   signer?: algosdk.Account; // Optional - not actually used, deployer is created internally
   p1: bigint;
   p2: bigint;
@@ -63,9 +68,11 @@ export interface ISetup {
   lpFee: bigint;
 }
 export const setupPool = async (input: ISetup) => {
-  const { algod, p1, p2, p, assetA, biatecFee, lpFee } = input;
+  const { algod: algodInput, p1, p2, p, assetA, biatecFee, lpFee } = input;
   const algorand = await AlgorandClient.fromEnvironment();
   await fixture.newScope();
+
+  const algod = algodInput ?? fixture.context.algod;
 
   deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(100_000_000) });
 
@@ -421,6 +428,7 @@ export const setupPool = async (input: ISetup) => {
     deployer,
     assetAId,
     assetBId,
+    algod,
   };
 };
 

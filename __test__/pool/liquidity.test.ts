@@ -14,12 +14,16 @@ import {
   SCALE_B,
   fixture,
   algosdk,
+  algokit,
+  LP_TOKEN_DECIMALS,
+  SCALE_LP,
+  setAssetAId,
 } from './shared-setup';
 
 describe('BiatecClammPool - liquidity', () => {
   test('addLiquidity1 - I can add liquidity to the pool', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = addLiquidityData;
@@ -113,7 +117,7 @@ describe('BiatecClammPool - liquidity', () => {
 
   test('addLiquidity2 - I can add liquidity to the pool second step', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = addLiquiditySecondData;
@@ -223,7 +227,7 @@ describe('BiatecClammPool - liquidity', () => {
 
   test('removeLiquidity - I can add and remove liquidity from the pool', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = removeLiquidityData;

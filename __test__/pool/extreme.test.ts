@@ -15,12 +15,17 @@ import {
   SCALE_B,
   fixture,
   algosdk,
+  algokit,
+  getBoxReferenceStats,
+  LP_TOKEN_DECIMALS,
+  SCALE_LP,
+  setAssetAId,
 } from './shared-setup';
 
 describe('BiatecClammPool - extreme', () => {
   test('Extreme-SamePriceLowTop - ASASR - I can handle the trade as an order book item', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = convertToBigInt(extremeSamePriceLowTopData);
@@ -384,7 +389,7 @@ describe('BiatecClammPool - extreme', () => {
 
   test('Extreme-SmallMinMaxPriceDiff - ASASR 0.9999 - 1.0001, LP fee 1BPS, Biatec fee 10%', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = convertToBigInt(extremeSmallMinMaxPriceDiffData);
@@ -749,7 +754,7 @@ describe('BiatecClammPool - extreme', () => {
 
   test('Extreme-ExtremePrice-Min - ASASR 0.000000001 - 1, LP fee 1BPS, Biatec fee 10%', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = convertToBigInt(extremeExtremePriceMinData);
@@ -1114,7 +1119,7 @@ describe('BiatecClammPool - extreme', () => {
 
   test('Extreme-No-Fees - ASASR EURUSD - 0.9 - 1.1, LP fee 0, Biatec fee 0%', async () => {
     try {
-      assetAId = 1n;
+      await setAssetAId(1n);
       const { algod } = fixture.context;
 
       const testSet = convertToBigInt(extremeNoFeesEurusdData);
