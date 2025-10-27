@@ -135,7 +135,7 @@ export class BiatecClammPool extends Contract {
     assert(this.txn.sender === addressUdpater, 'E_UPDATER'); // 'Only addressUdpater setup in the config can update application');
     log(version);
     log(newVersion);
-    this.version.value = version;
+    this.version.value = newVersion;
   }
 
   @abi.readonly

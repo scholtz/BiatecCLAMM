@@ -279,7 +279,7 @@ export class BiatecPoolProvider extends Contract {
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
     log(version);
     log(newVersion);
-    this.version.value = version;
+    this.version.value = newVersion;
   }
 
   setNativeTokenName(appBiatecConfigProvider: AppID, nativeTokenName: bytes): void {
@@ -370,6 +370,8 @@ export class BiatecPoolProvider extends Contract {
   ): uint64 {
     verifyPayTxn(txSeed, { receiver: this.app.address, amount: { greaterThanEqualTo: 5_000_000 } });
     assert(verificationClass <= 4); // verificationClass
+    // Ensure the config app is the registered one to prevent hostile pools with arbitrary identity/fee policies
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG');
 
     // Create the actual staker pool contract instance
     this.pendingGroup.addAppCall({

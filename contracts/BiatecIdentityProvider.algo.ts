@@ -233,7 +233,7 @@ export class BiatecIdentityProvider extends Contract {
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
     log(version);
     log(newVersion);
-    this.version.value = version;
+    this.version.value = newVersion;
   }
 
   selfRegistration(user: Address, info: IdentityInfo) {
