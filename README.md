@@ -124,15 +124,15 @@ BiatecCLAMM now supports staking pools where asset A and asset B are the same to
 ### Creating a Native Token Staking Pool (B-ALGO)
 
 ```typescript
-import { clammCreateSender } from "biatec-concentrated-liquidity-amm"
+import { clammCreateSender } from 'biatec-concentrated-liquidity-amm';
 
 const poolClient = await clammCreateSender({
   transactionSigner: signerAccount,
   clientBiatecPoolProvider: poolProviderClient,
   appBiatecConfigProvider: configAppId,
-  assetA: 0n,              // Native token (ALGO)
-  assetB: 0n,              // Same as asset A
-  fee: 0n,                 // No fee
+  assetA: 0n, // Native token (ALGO)
+  assetB: 0n, // Same as asset A
+  fee: 0n, // No fee
   verificationClass: 0,
   priceMin: BigInt(SCALE),
   priceMax: BigInt(SCALE),
@@ -144,7 +144,7 @@ const poolClient = await clammCreateSender({
 ### Distributing Staking Rewards
 
 ```typescript
-import { clammDistributeExcessAssetsSender } from "biatec-concentrated-liquidity-amm"
+import { clammDistributeExcessAssetsSender } from 'biatec-concentrated-liquidity-amm';
 
 // After rewards accrue to the pool (e.g., from consensus rewards)
 // Note: rewardsAmount should already be in asset decimals (e.g., microAlgos)
@@ -166,12 +166,14 @@ const txId = await clammDistributeExcessAssetsSender({
 For complete documentation, see [docs/staking-pools.md](docs/staking-pools.md).
 
 ### Key Features:
+
 - **Create Interest-Bearing Tokens**: Build B-ALGO, B-USDC, or any B-{TOKEN}
 - **Support Multi-Chain Networks**: Works with ALGO, VOI, ARAMID chains
 - **Distribute Rewards to LP Holders**: Share staking rewards, interest, or fees
 - **Enable Flexible Use Cases**: Power lending protocols, yield aggregation, revenue sharing
 
 ### Use Cases:
+
 1. **Native Token Staking**: B-ALGO pools for staking ALGO with consensus rewards
 2. **Asset Staking**: B-USDC pools for lending protocol interest
 3. **Revenue Sharing**: Distribute protocol fees to token holders

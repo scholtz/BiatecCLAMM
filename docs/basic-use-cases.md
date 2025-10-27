@@ -3,6 +3,7 @@
 This guide walks through the day-to-day flows supported by the Biatec concentrated liquidity AMM (CLAMM). It focuses on instantiating clients, funding liquidity inside a price band or at a constant price, removing liquidity, executing swaps, and consuming the pool-provider oracle feed. Advanced topics such as rounding behaviour and staking-specific flows are covered in the existing documents under `docs/`.
 
 ## Prerequisites
+
 - Access to an Algorand network (Sandbox LocalNet, TestNet, or MainNet) and an `Algodv2` RPC endpoint.
 - Deployed instances of the Biatec configuration provider, identity provider, and pool provider contracts. The examples below assume their app IDs are already known.
 - A funded account represented as an `Algokit` `TransactionSignerAccount` to sign transactions.
@@ -10,15 +11,12 @@ This guide walks through the day-to-day flows supported by the Biatec concentrat
 - Optional but recommended: use `getConfig(genesisId)` to pull the latest production app IDs for supported networks instead of hard-coding them.
 
 ## Shared Setup
+
 ```typescript
 import algosdk from 'algosdk';
 import { AlgorandClient } from '@algorandfoundation/algokit-utils';
 import { mnemonicToSecretKey } from 'algosdk';
-import {
-  clientBiatecClammPool,
-  BiatecPoolProviderClient,
-  getConfig,
-} from 'biatec-concentrated-liquidity-amm';
+import { clientBiatecClammPool, BiatecPoolProviderClient, getConfig } from 'biatec-concentrated-liquidity-amm';
 
 const ALGOD_URL = 'http://localhost:4001';
 const ALGOD_TOKEN = 'a'.repeat(64);
@@ -56,6 +54,7 @@ const poolClient = clientBiatecClammPool({
 > **Tip:** Use the helper in `src/biatecClamm/getPools.ts` to discover pools managed by the pool provider when you only know an asset ID or verification class.
 
 ## Creating a Pool (Price Range vs Constant Price)
+
 Pool creation is handled by `clammCreateSender`. Pass `priceMin`, `priceMax`, and `currentPrice` in base scale (1e9). Setting `priceMin === priceMax` pins the pool to a constant price, which is how staking pools are created.
 
 ```typescript
@@ -83,6 +82,7 @@ const poolClient = await clammCreateSender({
 For constant-price staking pools, reuse the snippet above and set `priceMin`, `priceMax`, and `currentPrice` to the same base-scale value (usually `SCALE`). See `docs/staking-pools.md` for additional staking-specific guidance.
 
 ## Supplying Liquidity
+
 `clammAddLiquiditySender` wraps the grouped transaction set required to deposit both assets and reference the pool-provider metadata.
 
 ```typescript
@@ -98,7 +98,7 @@ await clammAddLiquiditySender({
   assetA: 9581n,
   assetB: 0n,
   assetLp: 9619n,
-  assetADeposit: 2_500_000n,       // amount in the asset's native decimals
+  assetADeposit: 2_500_000n, // amount in the asset's native decimals
   assetBDeposit: 2_500_000n,
 });
 ```
@@ -108,6 +108,7 @@ await clammAddLiquiditySender({
 - For detailed rounding expectations, read `docs/liquidity-rounding.md` and `docs/liquidity-fee-protection.md`.
 
 ## Withdrawing Liquidity
+
 `clammRemoveLiquiditySender` burns LP tokens in exchange for the underlying assets plus accrued fees.
 
 ```typescript
@@ -129,6 +130,7 @@ await clammRemoveLiquiditySender({
 Use the `clammRemoveLiquidityAdminSender` helper if you need an administrative withdrawal that bypasses the identity checks (reserved for governance flows).
 
 ## Swapping Assets
+
 `clammSwapSender` executes a swap in either direction. Provide the asset you are sending, the amount, and the minimum amount you are willing to receive (after fees) in the counter asset.
 
 ```typescript
@@ -152,6 +154,7 @@ await clammSwapSender({
 The swap helper attaches pool-provider and identity box references automatically. To estimate output amounts before submitting a swap, call the read-only calculator methods exposed on `BiatecPoolProviderClient` (for example, `clientBiatecPoolProvider.getPrice` or the `calculateAsset*` family of methods).
 
 ## Consuming the Pool-Provider Oracle Feed
+
 The Biatec pool provider maintains on-chain oracle data for each asset pair. Call the generated `getPrice` method with `appPoolId = 0n` to retrieve the aggregated metrics. The return value is already decoded into camelCase fields.
 
 ```typescript
@@ -171,12 +174,14 @@ console.log('most recent trade fee (asset A):', priceInfo.period1NowFeeA);
 When you need pool-specific oracle data, pass the CLAMM app ID as `appPoolId` instead of zero. The method returns the same `AppPoolInfo` structure in both cases.
 
 ## Additional Operations
+
 - **Distribute rewards:** `clammDistributeExcessAssetsSender` credits staking or fee rewards to LP holders. Amounts must be expressed in the 1e9 base scale.
 - **Withdraw protocol fees:** `clammWithdrawExcessAssetsSender` lets the fee executor retrieve accumulated protocol revenue.
 - **Toggle validator status:** `clammSendOnlineKeyRegistrationSender` and `clammSendOfflineKeyRegistrationSender` wrap the AVM key registration flows when the pool account stakes on consensus chains.
 - **Pool discovery and quoting:** `getPools` (from `src/biatecClamm/getPools.ts`) enumerates registry entries; the generated pool-provider client exposes pure functions for sizing deposits and withdrawals (e.g., `calculateAssetADepositOnAssetBDeposit`).
 
 ## Recommended Reading
+
 - `docs/liquidity-rounding.md` for rounding and precision rules.
 - `docs/liquidity-fee-protection.md` for fee accounting guarantees.
 - `docs/staking-pools.md` for constant-price (same-asset) staking scenarios.

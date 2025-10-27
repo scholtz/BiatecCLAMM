@@ -24,9 +24,24 @@ import clammWithdrawExcessAssetsTxs from './biatecClamm/txs/clammWithdrawExcessA
 import getPools from './biatecClamm/getPools';
 import getConfig from './getConfig';
 import { BiatecClammPoolClient, BiatecClammPoolFactory, AmmStatus } from '../contracts/clients/BiatecClammPoolClient';
-import { BiatecConfigProviderClient, BiatecConfigProviderFactory } from '../contracts/clients/BiatecConfigProviderClient';
-import { BiatecIdentityProviderClient, BiatecIdentityProviderFactory, IdentityInfo, UserInfoV1, UserInfoShortV1 } from '../contracts/clients/BiatecIdentityProviderClient';
-import { BiatecPoolProviderClient, BiatecPoolProviderFactory, AppPoolInfo, FullConfig, PoolConfig } from '../contracts/clients/BiatecPoolProviderClient';
+import {
+  BiatecConfigProviderClient,
+  BiatecConfigProviderFactory,
+} from '../contracts/clients/BiatecConfigProviderClient';
+import {
+  BiatecIdentityProviderClient,
+  BiatecIdentityProviderFactory,
+  IdentityInfo,
+  UserInfoV1,
+  UserInfoShortV1,
+} from '../contracts/clients/BiatecIdentityProviderClient';
+import {
+  BiatecPoolProviderClient,
+  BiatecPoolProviderFactory,
+  AppPoolInfo,
+  FullConfig,
+  PoolConfig,
+} from '../contracts/clients/BiatecPoolProviderClient';
 
 import getBoxReferenceAggregated from './biatecPools/getBoxReferenceAggregated';
 import getBoxReferenceFullConfig from './biatecPools/getBoxReferenceFullConfig';
@@ -77,5 +92,11 @@ export {
   FullConfig,
   PoolConfig,
 };
-export { getBoxReferenceAggregated, getBoxReferenceFullConfig, getBoxReferencePool, getBoxReferencePoolByConfig, getBoxReferenceIdentity };
+export {
+  getBoxReferenceAggregated,
+  getBoxReferenceFullConfig,
+  getBoxReferencePool,
+  getBoxReferencePoolByConfig,
+  getBoxReferenceIdentity,
+};
 export type { BiatecNetworkConfig } from './getConfig';
