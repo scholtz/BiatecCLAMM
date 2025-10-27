@@ -4,23 +4,17 @@ import { algorandFixture } from '@algorandfoundation/algokit-utils/testing';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import algosdk, { makePaymentTxnWithSuggestedParamsFromObject, Transaction } from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
+import { AlgorandClient } from '@algorandfoundation/algokit-utils';
 import { BiatecClammPoolClient, BiatecClammPoolFactory } from '../contracts/clients/BiatecClammPoolClient';
 import createToken from '../src/createToken';
-import {
-  BiatecIdentityProviderClient,
-  BiatecIdentityProviderFactory,
-} from '../contracts/clients/BiatecIdentityProviderClient';
+import { BiatecIdentityProviderClient, BiatecIdentityProviderFactory } from '../contracts/clients/BiatecIdentityProviderClient';
 import { BiatecPoolProviderClient, BiatecPoolProviderFactory } from '../contracts/clients/BiatecPoolProviderClient';
-import {
-  BiatecConfigProviderClient,
-  BiatecConfigProviderFactory,
-} from '../contracts/clients/BiatecConfigProviderClient';
+import { BiatecConfigProviderClient, BiatecConfigProviderFactory } from '../contracts/clients/BiatecConfigProviderClient';
 import clammBootstrapSender from '../src/biatecClamm/sender/clammBootstrapSender';
 import configBootstrapSender from '../src/biatecConfig/sender/configBootstrapSender';
 import getBoxReferenceStats from '../src/biatecPools/getBoxReferenceStats';
 import parseStatus from '../src/biatecClamm/parseStatus';
 import parseStats from '../src/biatecPools/parseStats';
-import { AlgorandClient } from '@algorandfoundation/algokit-utils';
 import clammAddLiquiditySender from '../src/biatecClamm/sender/clammAddLiquiditySender';
 import { setupPool } from './pool/shared-setup';
 

@@ -15,9 +15,7 @@ interface IClammSendOnlineKeyRegistrationTxsInput {
  * This method creates list of transactions to be signed
  * @returns List of transactions to sign
  */
-const clammSendOfflineKeyRegistrationTxs = async (
-  input: IClammSendOnlineKeyRegistrationTxsInput
-): Promise<algosdk.Transaction[]> => {
+const clammSendOfflineKeyRegistrationTxs = async (input: IClammSendOnlineKeyRegistrationTxsInput): Promise<algosdk.Transaction[]> => {
   throw new Error('Offline key registration is disabled atm');
   // const { clientBiatecClammPool, account, appBiatecConfigProvider } = input;
   // const tx = await clientBiatecClammPool.createTransaction.sendOfflineKeyRegistration({

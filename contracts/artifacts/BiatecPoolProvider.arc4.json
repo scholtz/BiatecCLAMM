@@ -58,6 +58,22 @@
       }
     },
     {
+      "name": "setNativeTokenName",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64"
+        },
+        {
+          "name": "nativeTokenName",
+          "type": "byte[]"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
       "name": "loadCLAMMContractData",
       "args": [
         {

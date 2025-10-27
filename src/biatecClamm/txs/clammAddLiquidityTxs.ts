@@ -1,9 +1,4 @@
-import algosdk, {
-  assignGroupID,
-  AtomicTransactionComposer,
-  makeAssetTransferTxnWithSuggestedParamsFromObject,
-  SuggestedParams,
-} from 'algosdk';
+import algosdk, { assignGroupID, AtomicTransactionComposer, makeAssetTransferTxnWithSuggestedParamsFromObject, SuggestedParams } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
@@ -40,20 +35,7 @@ interface IClammBootstrapTxsInput {
  * @returns List of transactions to sign
  */
 const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.Transaction[]> => {
-  const {
-    params,
-    clientBiatecClammPool,
-    account,
-    appBiatecConfigProvider,
-    appBiatecIdentityProvider,
-    assetA,
-    assetB,
-    assetLp,
-    assetADeposit,
-    assetBDeposit,
-    optinSender,
-  } = input;
-
+  const { params, clientBiatecClammPool, account, appBiatecConfigProvider, appBiatecIdentityProvider, assetA, assetB, assetLp, assetADeposit, assetBDeposit, optinSender } = input;
   let txAssetADeposit: algosdk.Transaction;
   let txAssetBDeposit: algosdk.Transaction;
   if (assetA === 0n) {
@@ -73,12 +55,15 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
     });
   }
 
+  const assetBDifferentiator = assetA === assetB ? new TextEncoder().encode('asset-b') : undefined;
+
   if (assetB === 0n) {
     txAssetBDeposit = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       amount: assetBDeposit,
       sender: account.addr,
       suggestedParams: params,
       receiver: clientBiatecClammPool.appClient.appAddress,
+      note: assetBDifferentiator,
     });
   } else {
     txAssetBDeposit = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -87,14 +72,15 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
       sender: account.addr,
       suggestedParams: params,
       receiver: clientBiatecClammPool.appClient.appAddress,
+      note: assetBDifferentiator,
     });
   }
 
   const boxFC = getBoxReferenceFullConfig({
     ammPool: clientBiatecClammPool.appId,
     appBiatecPoolProvider: input.clientBiatecPoolProvider.appId,
-    assetA: assetA,
-    assetB: assetB,
+    assetA,
+    assetB,
     fee: input.fee,
     lpTokenId: assetLp,
     verificationClass: input.verificationClass,
@@ -104,8 +90,8 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
 
   const boxPriceFeed = getBoxReferenceAggregated({
     appBiatecPoolProvider: input.clientBiatecPoolProvider.appId,
-    assetA: assetA,
-    assetB: assetB,
+    assetA,
+    assetB,
   });
   const boxPool = getBoxReferencePool({
     appBiatecPoolProvider: input.clientBiatecPoolProvider.appId,
@@ -113,8 +99,8 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
   });
   const boxPoolByConfig = getBoxReferencePoolByConfig({
     appBiatecPoolProvider: input.clientBiatecPoolProvider.appId,
-    assetA: assetA,
-    assetB: assetB,
+    assetA,
+    assetB,
     fee: input.fee,
     verificationClass: input.verificationClass,
     max: input.max,
@@ -143,7 +129,7 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
     accountReferences: [],
     appReferences: [appBiatecConfigProvider, appBiatecIdentityProvider, input.clientBiatecPoolProvider.appId],
   });
-  let txOptin: algosdk.Transaction | undefined = undefined;
+  let txOptin: algosdk.Transaction | undefined;
   if (optinSender) {
     txOptin = makeAssetTransferTxnWithSuggestedParamsFromObject({
       amount: 0n,
@@ -180,11 +166,6 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
         ).transactions,
         ...tx.transactions,
       ];
-  console.log(
-    'txs',
-    txsToGroup.map((tx) => tx.txID()),
-    txsToGroup
-  );
   const txsToGroupNoGroup = txsToGroup.map((tx: algosdk.Transaction) => {
     tx.group = undefined;
     return tx;

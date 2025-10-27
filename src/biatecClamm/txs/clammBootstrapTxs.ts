@@ -20,8 +20,7 @@ interface IClammBootstrapTxsInput {
  * @returns List of transactions to sign
  */
 const clammBootstrapTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.Transaction[]> => {
-  const { params, clientBiatecClammPool, account, appBiatecPoolProvider, appBiatecConfigProvider, assetA, assetB } =
-    input;
+  const { params, clientBiatecClammPool, account, appBiatecPoolProvider, appBiatecConfigProvider, assetA, assetB } = input;
 
   // console.debug('boxes', boxes, Buffer.from(boxes[0].name).toString('hex'), Buffer.from(boxes[1].name).toString('hex'));
   const tx = await clientBiatecClammPool.createTransaction.bootstrapStep2({

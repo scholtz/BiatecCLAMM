@@ -1,17 +1,11 @@
 /* eslint-disable no-console */
 import algosdk, { assignGroupID, makePaymentTxnWithSuggestedParamsFromObject, Transaction } from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
-import {
-  BiatecConfigProviderClient,
-  BiatecConfigProviderFactory,
-} from '../../contracts/clients/BiatecConfigProviderClient';
-import {
-  BiatecIdentityProviderClient,
-  BiatecIdentityProviderFactory,
-} from '../../contracts/clients/BiatecIdentityProviderClient';
+import { AlgorandClient } from '@algorandfoundation/algokit-utils';
+import { BiatecConfigProviderClient, BiatecConfigProviderFactory } from '../../contracts/clients/BiatecConfigProviderClient';
+import { BiatecIdentityProviderClient, BiatecIdentityProviderFactory } from '../../contracts/clients/BiatecIdentityProviderClient';
 import { BiatecPoolProviderClient, BiatecPoolProviderFactory } from '../../contracts/clients/BiatecPoolProviderClient';
 import { BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
-import { AlgorandClient } from '@algorandfoundation/algokit-utils';
 import { BiatecClammPoolClient } from '../../dist';
 
 const biatecFee = BigInt(200_000_000);
@@ -21,9 +15,9 @@ const algod = new algosdk.Algodv2(
   process.env.ALGOD_SERVER ?? 'http://localhost',
   parseInt(process.env.ALGOD_PORT ?? '4001')
 );
-let appBiatecConfigProvider = BigInt(process.env.appBiatecConfigProvider ?? '0');
-let appBiatecIdentityProvider = BigInt(process.env.appBiatecIdentityProvider ?? '0');
-let appBiatecPoolProvider = BigInt(process.env.appBiatecPoolProvider ?? '0');
+const appBiatecConfigProvider = BigInt(process.env.appBiatecConfigProvider ?? '0');
+const appBiatecIdentityProvider = BigInt(process.env.appBiatecIdentityProvider ?? '0');
+const appBiatecPoolProvider = BigInt(process.env.appBiatecPoolProvider ?? '0');
 const signers: algosdk.Account[] = [];
 const accounts: string[] = [];
 if (process.env.signer1) {
@@ -115,30 +109,30 @@ const app = async () => {
   console.log(`${Date()} App started - Deployer: ${signer.addr}`);
   const t = true;
   if (t) {
-    //return;
+    // return;
   }
 
   const appBiatecConfigProvider = BigInt(process.env.appBiatecConfigProvider ?? '0');
   const appBiatecClammPool = BigInt(process.env.appBiatecClammPool ?? '0');
 
-  if(!appBiatecConfigProvider ) {
+  if (!appBiatecConfigProvider) {
     throw new Error('Please set appBiatecConfigProvider env variables');
   }
-  if(!appBiatecClammPool ) {
+  if (!appBiatecClammPool) {
     throw new Error('Please set appBiatecClammPool env variables');
   }
   console.log(`making pool ${appBiatecClammPool} online`);
 
-  var pool = new BiatecClammPoolClient({
+  const pool = new BiatecClammPoolClient({
     appId: appBiatecClammPool,
     algorand,
     defaultSender: signer.addr,
     defaultSigner: signer.signer,
-  })
+  });
 
   // first find the app address .. for 3125651391 is X5CHHSCGANKUKDPRMPR3V4HSSDWQTZB3SDR6LJ5YMI7JZ7ZO2OLFABDS7I
   // then issue the participation key: ADDRESS=X5CHHSCGANKUKDPRMPR3V4HSSDWQTZB3SDR6LJ5YMI7JZ7ZO2OLFABDS7I ROUNDS=10000000 ./create-participation-key.sh
-var participatiDetails =`Participation ID:          3LJNO6P7GH5EA6U46FYTKDJCDUYLLBMSXSOVFVCDNF27F45HCC7A
+  const participatiDetails = `Participation ID:          3LJNO6P7GH5EA6U46FYTKDJCDUYLLBMSXSOVFVCDNF27F45HCC7A
 Parent address:            X5CHHSCGANKUKDPRMPR3V4HSSDWQTZB3SDR6LJ5YMI7JZ7ZO2OLFABDS7I
 Last vote round:           N/A
 Last block proposal round: N/A
@@ -149,34 +143,34 @@ Last round:                61950243
 Key dilution:              3163
 Selection key:             rkNH/PtJDyqU9W8chXLYImzJA79lKbzko/pVRx7RLDo=
 Voting key:                sVHAw8+X7GevpkRa4rH7p4UyWQkukGR2ciTvD8eg/9c=
-State proof key:           U2UCQiRe8xPlmN/1v+xK/6djFseMWheL+ox69z6HEryLCYqeyUCMOg+zgt+Ec2XTYxf8h725rCBTzPrT278RyA==`
+State proof key:           U2UCQiRe8xPlmN/1v+xK/6djFseMWheL+ox69z6HEryLCYqeyUCMOg+zgt+Ec2XTYxf8h725rCBTzPrT278RyA==`;
 
-// Parse participatiDetails
-const parseDetail = (label: string) => {
-  const match = participatiDetails.match(new RegExp(`${label}:\\s+(.+)`));
-  return match ? match[1].trim() : '';
-};
+  // Parse participatiDetails
+  const parseDetail = (label: string) => {
+    const match = participatiDetails.match(new RegExp(`${label}:\\s+(.+)`));
+    return match ? match[1].trim() : '';
+  };
 
-const voteFirst = BigInt(parseDetail('First round'));
-const voteLast = BigInt(parseDetail('Last round'));
-const voteKeyDilution = BigInt(parseDetail('Key dilution'));
-const selectionPk = Buffer.from(parseDetail('Selection key'), 'base64');
-const votePk = Buffer.from(parseDetail('Voting key'), 'base64');
-const stateProofPk = Buffer.from(parseDetail('State proof key'), 'base64');
-const fee = 2000000; // or set as needed
+  const voteFirst = BigInt(parseDetail('First round'));
+  const voteLast = BigInt(parseDetail('Last round'));
+  const voteKeyDilution = BigInt(parseDetail('Key dilution'));
+  const selectionPk = Buffer.from(parseDetail('Selection key'), 'base64');
+  const votePk = Buffer.from(parseDetail('Voting key'), 'base64');
+  const stateProofPk = Buffer.from(parseDetail('State proof key'), 'base64');
+  const fee = 2000000; // or set as needed
 
-await pool.send.sendOnlineKeyRegistration({
-  args: {
-    appBiatecConfigProvider: appBiatecConfigProvider,
-    selectionPk,
-    stateProofPk,
-    voteFirst,
-    voteLast,
-    voteKeyDilution,
-    votePk,
-    fee,
-  }
-});
+  await pool.send.sendOnlineKeyRegistration({
+    args: {
+      appBiatecConfigProvider,
+      selectionPk,
+      stateProofPk,
+      voteFirst,
+      voteLast,
+      voteKeyDilution,
+      votePk,
+      fee,
+    },
+  });
 
   console.log(`${Date()} Deploy DONE`);
 };

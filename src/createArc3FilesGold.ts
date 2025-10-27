@@ -1,29 +1,27 @@
-import { readFileSync, writeFileSync } from 'fs'
-import publishFileBuffer from './ipfs/publishFileBuffer'
-import CryptoJS from 'crypto-js'
+import { readFileSync, writeFileSync } from 'fs';
+import CryptoJS from 'crypto-js';
+import publishFileBuffer from './ipfs/publishFileBuffer';
 
 const createArc3FilesGold = async () => {
-  var picture = 'logo.png'
-  const file = readFileSync(`./img/${picture}`)
-  const ipfs = await publishFileBuffer(file)
+  const picture = 'logo.png';
+  const file = readFileSync(`./img/${picture}`);
+  const ipfs = await publishFileBuffer(file);
 
-  const integrity = CryptoJS.SHA256(CryptoJS.enc.Base64.parse(file.toString('base64'))).toString(
-    CryptoJS.enc.Base64
-  )
-  let mime = ''
+  const integrity = CryptoJS.SHA256(CryptoJS.enc.Base64.parse(file.toString('base64'))).toString(CryptoJS.enc.Base64);
+  let mime = '';
   if (picture.endsWith('.jpg')) {
-    mime = 'image/jpeg'
+    mime = 'image/jpeg';
   }
   if (picture.endsWith('.png')) {
-    mime = 'image/png'
+    mime = 'image/png';
   }
-  if (!mime) throw Error('Unknown mime type for image ' + picture)
+  if (!mime) throw Error(`Unknown mime type for image ${picture}`);
 
   const pic = {
     url: `ipfs://${ipfs}`,
     integrity: `sha256-${integrity}`,
-    mimetype: mime
-  }
+    mimetype: mime,
+  };
 
   const template = {
     name: 'Gold',
@@ -34,26 +32,24 @@ const createArc3FilesGold = async () => {
     image_mimetype: pic.mimetype,
     external_url: `https://www.asa.gold/token/gold`,
     properties: {
-      whitepaper: 'https://www.asa.gold/gold.pdf'
-    }
-  }
+      whitepaper: 'https://www.asa.gold/gold.pdf',
+    },
+  };
 
-  const jsonFile = JSON.stringify(template)
+  const jsonFile = JSON.stringify(template);
   writeFileSync(`./arc0003/gold.json`, jsonFile, {
-    flag: 'w'
-  })
-  console.log(`./arc0003/gold.json done`)
+    flag: 'w',
+  });
+  console.log(`./arc0003/gold.json done`);
 
-  const fileJ = readFileSync(`./arc0003/gold.json`)
-  const ipfsJ = await publishFileBuffer(fileJ)
-  const integrityJ = CryptoJS.SHA256(CryptoJS.enc.Base64.parse(fileJ.toString('base64'))).toString(
-    CryptoJS.enc.Base64
-  )
+  const fileJ = readFileSync(`./arc0003/gold.json`);
+  const ipfsJ = await publishFileBuffer(fileJ);
+  const integrityJ = CryptoJS.SHA256(CryptoJS.enc.Base64.parse(fileJ.toString('base64'))).toString(CryptoJS.enc.Base64);
   writeFileSync(`./arc0003/gold.ipfs`, ipfsJ, {
-    flag: 'w'
-  })
+    flag: 'w',
+  });
   writeFileSync(`./arc0003/gold.integrity`, integrityJ, {
-    flag: 'w'
-  })
-}
-export default createArc3FilesGold
+    flag: 'w',
+  });
+};
+export default createArc3FilesGold;

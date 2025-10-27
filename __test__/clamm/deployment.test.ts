@@ -1,7 +1,6 @@
 import { beforeAll, beforeEach, describe, expect, test } from '@jest/globals';
 import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
-import algosdk from 'algosdk';
-import { Transaction } from 'algosdk';
+import algosdk, { Transaction } from 'algosdk';
 import { FakePoolFactory } from '../../contracts/clients/FakePoolClient';
 import { SCALE, fixture, initDeployer, setupPool } from './setup';
 
@@ -29,15 +28,7 @@ describe('clamm deployment', () => {
 
   test('CantMixPP: I cannot register a fake pool with the pool provider', async () => {
     const { algod } = fixture.context;
-    const {
-      clientBiatecClammPoolProvider,
-      clientBiatecConfigProvider,
-      clientBiatecIdentityProvider,
-      clientBiatecPoolProvider,
-      assetAId,
-      assetBId,
-      deployer,
-    } = await setupPool({
+    const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider, assetAId, assetBId, deployer } = await setupPool({
       algod,
       assetA: 1n,
       biatecFee: BigInt(SCALE / 10),
@@ -47,8 +38,7 @@ describe('clamm deployment', () => {
       p2: BigInt(2 * SCALE),
     });
 
-    const defaultSigner = async (txnGroup: Transaction[], _indexesToSign: number[]) =>
-      txnGroup.map((tx) => tx.signTxn(deployer.sk));
+    const defaultSigner = async (txnGroup: Transaction[], _indexesToSign: number[]) => txnGroup.map((tx) => tx.signTxn(deployer.sk));
 
     const fakePoolFactory = new FakePoolFactory({
       defaultSender: deployer.addr,

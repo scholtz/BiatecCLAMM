@@ -3,21 +3,7 @@ import { describe, test, expect } from '@jest/globals';
 import { convertToBigInt } from '../test-data/convertToBigInt';
 import swapAToBData from '../test-data/swap-a-to-b.json';
 import swapBToAData from '../test-data/swap-b-to-a.json';
-import {
-  setupPool,
-  assetAId,
-  assetBId,
-  deployer,
-  SCALE,
-  SCALE_A,
-  SCALE_B,
-  fixture,
-  algosdk,
-  algokit,
-  getBoxReferenceStats,
-  LP_TOKEN_DECIMALS,
-  setAssetAId,
-} from './shared-setup';
+import { setupPool, assetAId, assetBId, deployer, SCALE, SCALE_A, SCALE_B, fixture, algosdk, algokit, getBoxReferenceStats, LP_TOKEN_DECIMALS, setAssetAId } from './shared-setup';
 
 describe('BiatecClammPool - swaps', () => {
   test('swapAtoB - I can add liquidity to the pool and swap from A token to B token', async () => {
@@ -30,12 +16,7 @@ describe('BiatecClammPool - swaps', () => {
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const {
-          clientBiatecClammPoolProvider,
-          clientBiatecConfigProvider,
-          clientBiatecIdentityProvider,
-          clientBiatecPoolProvider,
-        } = await setupPool({
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
           algod,
 
           assetA: assetAId,
@@ -121,11 +102,7 @@ describe('BiatecClammPool - swaps', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -149,12 +126,7 @@ describe('BiatecClammPool - swaps', () => {
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const {
-          clientBiatecClammPoolProvider,
-          clientBiatecConfigProvider,
-          clientBiatecIdentityProvider,
-          clientBiatecPoolProvider,
-        } = await setupPool({
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
           algod,
 
           assetA: assetAId,
@@ -240,11 +212,7 @@ describe('BiatecClammPool - swaps', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 

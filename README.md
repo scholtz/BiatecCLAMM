@@ -30,6 +30,16 @@ npm i biatec-concentrated-liquidity-amm
 
 ## Examples
 
+### Retrieve deployed app IDs
+
+```ts
+import { getConfig } from 'biatec-concentrated-liquidity-amm';
+
+const { configAppId, identityAppId, poolProviderAppId } = getConfig('testnet-v1.0');
+```
+
+Supported genesis IDs are `mainnet-v1.0`, `voimain-v1.0`, and `testnet-v1.0`. The helper throws if you pass an unsupported network so deployments stay explicit.
+
 ## Add liquidity
 
 ```
@@ -106,3 +116,72 @@ const txId = await clammRemoveLiquiditySender({
   lpToSend: bigint;
 })
 ```
+
+## Staking Pools (NEW)
+
+BiatecCLAMM now supports staking pools where asset A and asset B are the same token. This enables creation of interest-bearing tokens like B-ALGO, B-USDC, etc.
+
+### Creating a Native Token Staking Pool (B-ALGO)
+
+```typescript
+import { clammCreateSender } from 'biatec-concentrated-liquidity-amm';
+
+await poolProviderClient.send.setNativeTokenName({
+  args: {
+    appBiatecConfigProvider: configAppId,
+    nativeTokenName: 'ALGO',
+  },
+  appReferences: [configAppId],
+});
+
+const poolClient = await clammCreateSender({
+  transactionSigner: signerAccount,
+  clientBiatecPoolProvider: poolProviderClient,
+  appBiatecConfigProvider: configAppId,
+  assetA: 0n, // Native token (ALGO)
+  assetB: 0n, // Same as asset A
+  fee: 0n, // No fee
+  verificationClass: 0,
+  priceMin: BigInt(SCALE),
+  priceMax: BigInt(SCALE),
+  currentPrice: BigInt(SCALE),
+});
+```
+
+### Distributing Staking Rewards
+
+```typescript
+import { clammDistributeExcessAssetsSender } from 'biatec-concentrated-liquidity-amm';
+
+// After rewards accrue to the pool (e.g., from consensus rewards)
+// Note: rewardsAmount should already be in asset decimals (e.g., microAlgos)
+// Convert to base scale (9 decimals) by multiplying with scale factor
+const rewardsInBaseScale = (rewardsAmount * BigInt(SCALE)) / BigInt(assetDecimals);
+
+const txId = await clammDistributeExcessAssetsSender({
+  algod,
+  account: executiveSigner,
+  amountA: rewardsInBaseScale, // Amount in base scale (9 decimals)
+  amountB: 0n,
+  appBiatecConfigProvider: configAppId,
+  assetA: 0n,
+  assetB: 0n,
+  clientBiatecClammPool: poolClient,
+});
+```
+
+For complete documentation, see [docs/staking-pools.md](docs/staking-pools.md).
+
+### Key Features:
+
+- **Create Interest-Bearing Tokens**: Build B-ALGO, B-USDC, or any B-{TOKEN}
+- **Support Multi-Chain Networks**: Works with ALGO, VOI, ARAMID chains
+- **Distribute Rewards to LP Holders**: Share staking rewards, interest, or fees
+- **Enable Flexible Use Cases**: Power lending protocols, yield aggregation, revenue sharing
+
+### Use Cases:
+
+1. **Native Token Staking**: B-ALGO pools for staking ALGO with consensus rewards
+2. **Asset Staking**: B-USDC pools for lending protocol interest
+3. **Revenue Sharing**: Distribute protocol fees to token holders
+4. **Yield Aggregation**: Combine multiple yield sources

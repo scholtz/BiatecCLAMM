@@ -1,17 +1,11 @@
 /* eslint-disable no-console */
 import algosdk, { assignGroupID, makePaymentTxnWithSuggestedParamsFromObject, Transaction } from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
-import {
-  BiatecConfigProviderClient,
-  BiatecConfigProviderFactory,
-} from '../../contracts/clients/BiatecConfigProviderClient';
-import {
-  BiatecIdentityProviderClient,
-  BiatecIdentityProviderFactory,
-} from '../../contracts/clients/BiatecIdentityProviderClient';
+import { AlgorandClient } from '@algorandfoundation/algokit-utils';
+import { BiatecConfigProviderClient, BiatecConfigProviderFactory } from '../../contracts/clients/BiatecConfigProviderClient';
+import { BiatecIdentityProviderClient, BiatecIdentityProviderFactory } from '../../contracts/clients/BiatecIdentityProviderClient';
 import { BiatecPoolProviderClient, BiatecPoolProviderFactory } from '../../contracts/clients/BiatecPoolProviderClient';
 import { BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
-import { AlgorandClient } from '@algorandfoundation/algokit-utils';
 
 const biatecFee = BigInt(200_000_000);
 
@@ -20,9 +14,9 @@ const algod = new algosdk.Algodv2(
   process.env.ALGOD_SERVER ?? 'http://localhost',
   parseInt(process.env.ALGOD_PORT ?? '4001')
 );
-let appBiatecConfigProvider = BigInt(process.env.appBiatecConfigProvider ?? '0');
-let appBiatecIdentityProvider = BigInt(process.env.appBiatecIdentityProvider ?? '0');
-let appBiatecPoolProvider = BigInt(process.env.appBiatecPoolProvider ?? '0');
+const appBiatecConfigProvider = BigInt(process.env.appBiatecConfigProvider ?? '0');
+const appBiatecIdentityProvider = BigInt(process.env.appBiatecIdentityProvider ?? '0');
+const appBiatecPoolProvider = BigInt(process.env.appBiatecPoolProvider ?? '0');
 const signers: algosdk.Account[] = [];
 const accounts: string[] = [];
 if (process.env.signer1) {
@@ -114,7 +108,7 @@ const app = async () => {
   console.log(`${Date()} App started - Deployer: ${signer.addr}`);
   const t = true;
   if (t) {
-    //return;
+    // return;
   }
   const biatecIdentityProviderFactory = new BiatecIdentityProviderFactory({
     defaultSender: signer.addr,
@@ -122,12 +116,10 @@ const app = async () => {
     algorand,
   });
 
-  const clientBiatecIdentityProvider = await biatecIdentityProviderFactory.send.create
-    .createApplication()
-    .catch((e: Error) => {
-      console.error(e);
-      return undefined;
-    });
+  const clientBiatecIdentityProvider = await biatecIdentityProviderFactory.send.create.createApplication().catch((e: Error) => {
+    console.error(e);
+    return undefined;
+  });
   if (!clientBiatecIdentityProvider) throw Error('clientBiatecIdentityProvider is empty');
 
   const biatecPoolProviderFactory = new BiatecPoolProviderFactory({
@@ -149,12 +141,10 @@ const app = async () => {
     algorand,
   });
 
-  const clientBiatecConfigProvider = await biatecConfigProviderFactory.send.create
-    .createApplication()
-    .catch((e: Error) => {
-      console.error(e);
-      return undefined;
-    });
+  const clientBiatecConfigProvider = await biatecConfigProviderFactory.send.create.createApplication().catch((e: Error) => {
+    console.error(e);
+    return undefined;
+  });
   if (!clientBiatecConfigProvider) throw Error('clientBiatecConfigProvider is empty');
 
   const biatecClammPoolFactoryfactory = new BiatecClammPoolFactory({
@@ -162,12 +152,7 @@ const app = async () => {
     defaultSigner: signer.signer,
     algorand,
   });
-  console.log(
-    'Config/Identity/PP',
-    clientBiatecConfigProvider.appClient.appId,
-    clientBiatecIdentityProvider.appClient.appId,
-    clientBiatecPoolProvider.appClient.appId
-  );
+  console.log('Config/Identity/PP', clientBiatecConfigProvider.appClient.appId, clientBiatecIdentityProvider.appClient.appId, clientBiatecPoolProvider.appClient.appId);
   const { approvalProgram: clammPoolApprovalProgram } = await biatecClammPoolFactoryfactory.appFactory.compile({});
   console.log('sending MBR to config addr');
   await algod

@@ -1,17 +1,18 @@
-import winston, { format } from 'winston'
-import DailyRotateFile from 'winston-daily-rotate-file'
-let loggerInstance: winston.Logger
+import winston, { format } from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
+
+let loggerInstance: winston.Logger;
 /**
  * Returns logger
  */
-const { combine, timestamp, label, printf } = format
+const { combine, timestamp, label, printf } = format;
 
 const myFormat = printf(({ level, message, timestamp }) => {
-  return `${timestamp} [${level}]: ${message}`
-})
+  return `${timestamp} [${level}]: ${message}`;
+});
 
 const getLogger = () => {
-  if (loggerInstance) return loggerInstance
+  if (loggerInstance) return loggerInstance;
   const logger = winston.createLogger({
     level: 'info',
     format: combine(timestamp(), myFormat),
@@ -22,7 +23,7 @@ const getLogger = () => {
         level: 'error',
         zippedArchive: true,
         maxSize: '100m',
-        maxFiles: '14d'
+        maxFiles: '14d',
       }),
       new DailyRotateFile({
         filename: 'logs/info-%DATE%.log',
@@ -30,22 +31,22 @@ const getLogger = () => {
         level: 'info',
         zippedArchive: true,
         maxSize: '100m',
-        maxFiles: '14d'
+        maxFiles: '14d',
       }),
       new DailyRotateFile({
         filename: 'logs/all-%DATE%.log',
         datePattern: 'YYYY-MM-DD',
         zippedArchive: true,
         maxSize: '100m',
-        maxFiles: '31d'
+        maxFiles: '31d',
       }),
       new winston.transports.Console({
         format: winston.format.colorize(),
-        level: 'info'
-      })
-    ]
-  })
-  loggerInstance = logger
-  return loggerInstance
-}
-export default getLogger
+        level: 'info',
+      }),
+    ],
+  });
+  loggerInstance = logger;
+  return loggerInstance;
+};
+export default getLogger;

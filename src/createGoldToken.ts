@@ -1,11 +1,12 @@
-import algosdk, { Algodv2 } from 'algosdk'
-import * as algokit from '@algorandfoundation/algokit-utils'
+import algosdk, { Algodv2 } from 'algosdk';
+import * as algokit from '@algorandfoundation/algokit-utils';
+
 interface ICreateGoldTokenInput {
-  accountDeployGoldToken: algosdk.Account
-  algod: Algodv2
+  accountDeployGoldToken: algosdk.Account;
+  algod: Algodv2;
 }
 const createGoldToken = async (input: ICreateGoldTokenInput) => {
-  const params = await input.algod.getTransactionParams().do()
+  const params = await input.algod.getTransactionParams().do();
   const goldTokenTx = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
     from: input.accountDeployGoldToken.addr,
     reserve: input.accountDeployGoldToken.addr,
@@ -13,17 +14,15 @@ const createGoldToken = async (input: ICreateGoldTokenInput) => {
     defaultFrozen: false,
     total: 1_000_000_000_000_000,
     assetName: 'GOLD',
-    assetURL: 'https://asa.gold/reserve/' + input.accountDeployGoldToken.addr,
+    assetURL: `https://asa.gold/reserve/${input.accountDeployGoldToken.addr}`,
     manager: input.accountDeployGoldToken.addr,
     unitName: 'GOLD',
-    suggestedParams: params
-  })
+    suggestedParams: params,
+  });
 
-  const tx = await input.algod
-    .sendRawTransaction(goldTokenTx.signTxn(input.accountDeployGoldToken.sk))
-    .do()
-  const tx2 = await algokit.waitForConfirmation(tx.txId, 3, input.algod)
-  const goldToken = Number(tx2.assetIndex)
-  return goldToken
-}
-export default createGoldToken
+  const tx = await input.algod.sendRawTransaction(goldTokenTx.signTxn(input.accountDeployGoldToken.sk)).do();
+  const tx2 = await algokit.waitForConfirmation(tx.txId, 3, input.algod);
+  const goldToken = Number(tx2.assetIndex);
+  return goldToken;
+};
+export default createGoldToken;

@@ -18,9 +18,7 @@ interface IClammSendOnlineKeyRegistrationTxsInput {
  * This method creates list of transactions to be signed
  * @returns List of transactions to sign
  */
-const clammSendOnlineKeyRegistrationTxs = async (
-  input: IClammSendOnlineKeyRegistrationTxsInput
-): Promise<algosdk.Transaction[]> => {
+const clammSendOnlineKeyRegistrationTxs = async (input: IClammSendOnlineKeyRegistrationTxsInput): Promise<algosdk.Transaction[]> => {
   const { clientBiatecClammPool, account, appBiatecConfigProvider, keyregParams } = input;
   // [Uint8Array, Uint8Array, Uint8Array, number | bigint, number | bigint, number | bigint]
   // [Uint8Array, Uint8Array, Uint8Array, number | bigint, number | bigint, number | bigint]
@@ -33,7 +31,7 @@ const clammSendOnlineKeyRegistrationTxs = async (
       voteFirst: keyregParams.voteFirst,
       voteLast: keyregParams.voteLast,
       voteKeyDilution: keyregParams.voteKeyDilution,
-      fee: input.fee
+      fee: input.fee,
     },
     sender: account.addr,
     staticFee: algokit.microAlgos(2000),

@@ -1,5 +1,5 @@
-import { BiatecClammPoolClient, BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
 import { AlgorandClient } from '@algorandfoundation/algokit-utils/types/algorand-client';
+import { BiatecClammPoolClient, BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
 
 interface IGetClientInput {
   appId: bigint;

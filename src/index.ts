@@ -22,6 +22,7 @@ import clammSendOnlineKeyRegistrationTxs from './biatecClamm/txs/clammSendOnline
 import clammSwapTxs from './biatecClamm/txs/clammSwapTxs';
 import clammWithdrawExcessAssetsTxs from './biatecClamm/txs/clammWithdrawExcessAssetsTxs';
 import getPools from './biatecClamm/getPools';
+import getConfig from './getConfig';
 import { BiatecClammPoolClient, BiatecClammPoolFactory, AmmStatus } from '../contracts/clients/BiatecClammPoolClient';
 import {
   BiatecConfigProviderClient,
@@ -47,6 +48,7 @@ import getBoxReferenceFullConfig from './biatecPools/getBoxReferenceFullConfig';
 import getBoxReferencePool from './biatecPools/getBoxReferencePool';
 import getBoxReferencePoolByConfig from './biatecPools/getBoxReferencePoolByConfig';
 import getBoxReferenceIdentity from './biatecIdentity/getBoxReferenceIdentity';
+
 export {
   clientBiatecClammPool,
   clammAddLiquiditySender,
@@ -59,6 +61,7 @@ export {
   clammSendOnlineKeyRegistrationSender,
   clammSwapSender,
   clammWithdrawExcessAssetsSender,
+  getConfig,
   parseStatus,
   clammAddLiquidityTxs,
   clammBootstrapTxs,
@@ -96,3 +99,4 @@ export {
   getBoxReferencePoolByConfig,
   getBoxReferenceIdentity,
 };
+export type { BiatecNetworkConfig } from './getConfig';

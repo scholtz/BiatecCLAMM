@@ -58,7 +58,7 @@
         {
           "name": "assetA",
           "type": "uint64",
-          "desc": "Asset A ID must be lower then Asset B ID"
+          "desc": "Asset A ID must be lower then Asset B ID, or can be equal to Asset B ID for staking pools"
         },
         {
           "name": "assetB",

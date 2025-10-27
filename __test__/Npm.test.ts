@@ -8,16 +8,11 @@ import getPools from '../src/biatecClamm/getPools';
 import clammCreateSender from '../src/biatecClamm/sender/clammCreateSender';
 import { assetAId, assetBId, setupPool } from './pool/shared-setup';
 import { clammAddLiquiditySender, clammRemoveLiquiditySender, clammSwapSender } from '../src';
-if (
-  typeof clammAddLiquiditySender !== 'function' ||
-  typeof clammRemoveLiquiditySender !== 'function' ||
-  typeof clammSwapSender !== 'function'
-) {
-  throw new Error(
-    `npm barrel exports invalid types: add=${typeof clammAddLiquiditySender}, remove=${typeof clammRemoveLiquiditySender}, swap=${typeof clammSwapSender}`
-  );
-}
 import createToken from '../src/createToken';
+
+if (typeof clammAddLiquiditySender !== 'function' || typeof clammRemoveLiquiditySender !== 'function' || typeof clammSwapSender !== 'function') {
+  throw new Error(`npm barrel exports invalid types: add=${typeof clammAddLiquiditySender}, remove=${typeof clammRemoveLiquiditySender}, swap=${typeof clammSwapSender}`);
+}
 
 const fixture = algorandFixture();
 algokit.Config.configure({ populateAppCallResources: true });
@@ -221,12 +216,7 @@ describe('clamm', () => {
       const { algod } = fixture.context;
       const assetUSD = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_A_DECIMALS });
       const assetEUR = await createToken({ account: deployer, algod, name: 'EUR', decimals: ASSET_B_DECIMALS });
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecPoolProvider,
-        clientBiatecIdentityProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, clientBiatecIdentityProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: assetUSD,
@@ -268,25 +258,25 @@ describe('clamm', () => {
         assetA: assetUSD,
         assetB: assetEUR,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         assetADeposit: BigInt(1 * SCALE_A),
         assetBDeposit: BigInt(1 * SCALE_B),
-        assetLp: assetLp,
+        assetLp,
       });
       const liquidity = await clammAddLiquiditySender({
         account: deployerSigner,
         assetA: assetUSD,
         assetB: assetEUR,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         clientBiatecPoolProvider: clientBiatecPoolProvider.appClient,
         assetADeposit: BigInt(1 * SCALE_A),
         assetBDeposit: BigInt(1 * SCALE_B),
-        assetLp: assetLp,
+        assetLp,
       });
       expect(liquidity).toBeDefined();
     } catch (e: any) {
@@ -300,12 +290,7 @@ describe('clamm', () => {
       const { algod } = fixture.context;
       const assetUSD = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_A_DECIMALS });
       const assetEUR = await createToken({ account: deployer, algod, name: 'EUR', decimals: ASSET_B_DECIMALS });
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecPoolProvider,
-        clientBiatecIdentityProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, clientBiatecIdentityProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: assetUSD,
@@ -347,13 +332,13 @@ describe('clamm', () => {
         assetA: assetUSD,
         assetB: assetEUR,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         clientBiatecPoolProvider: clientBiatecPoolProvider.appClient,
         assetADeposit: BigInt(10 * SCALE_A),
         assetBDeposit: BigInt(10 * SCALE_B),
-        assetLp: assetLp,
+        assetLp,
       });
       if (!assetLp) throw Error('LP token not defined');
       console.log('swap', {
@@ -361,7 +346,7 @@ describe('clamm', () => {
         assetA: assetUSD,
         assetB: assetEUR,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         appBiatecPoolProvider: clientBiatecPoolProvider.appClient.appId,
@@ -374,7 +359,7 @@ describe('clamm', () => {
         assetA: assetUSD,
         assetB: assetEUR,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         appBiatecPoolProvider: clientBiatecPoolProvider.appClient.appId,
@@ -394,12 +379,7 @@ describe('clamm', () => {
       const { algod } = fixture.context;
       const assetUSD = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_A_DECIMALS });
       const assetEUR = await createToken({ account: deployer, algod, name: 'EUR', decimals: ASSET_B_DECIMALS });
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecPoolProvider,
-        clientBiatecIdentityProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, clientBiatecIdentityProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: assetUSD,
@@ -441,25 +421,25 @@ describe('clamm', () => {
         assetA: assetUSD,
         assetB: assetEUR,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         assetADeposit: BigInt(1 * SCALE_A),
         assetBDeposit: BigInt(1 * SCALE_B),
-        assetLp: assetLp,
+        assetLp,
       });
       const liquidity = await clammAddLiquiditySender({
         account: deployerSigner,
         assetA: assetUSD,
         assetB: assetEUR,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         clientBiatecPoolProvider: clientBiatecPoolProvider.appClient,
         assetADeposit: BigInt(1 * SCALE_A),
         assetBDeposit: BigInt(1 * SCALE_B),
-        assetLp: assetLp,
+        assetLp,
       });
       expect(liquidity).toBeDefined();
 
@@ -471,10 +451,10 @@ describe('clamm', () => {
         assetA: assetUSD,
         assetB: assetEUR,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
-        assetLp: assetLp,
+        assetLp,
         lpToSend: assetLpBalance.assetHolding.amount,
       });
       expect(liquidity).toBeDefined();
@@ -526,7 +506,7 @@ describe('clamm', () => {
 
       const pools = await getPools({
         assetId: assetAId,
-        algod: algod,
+        algod,
         poolProviderAppId: clientBiatecPoolProvider.appClient.appId,
         fee: undefined,
         verificationClass: undefined,
@@ -543,12 +523,7 @@ describe('clamm', () => {
     try {
       const { algod } = fixture.context;
       const assetUSD = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_B_DECIMALS });
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecPoolProvider,
-        clientBiatecIdentityProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, clientBiatecIdentityProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: 0n,
@@ -590,13 +565,13 @@ describe('clamm', () => {
         assetA: 0n,
         assetB: assetUSD,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         clientBiatecPoolProvider: clientBiatecPoolProvider.appClient,
         assetADeposit: BigInt(100 * SCALE_ALGO),
         assetBDeposit: BigInt(20 * SCALE_B),
-        assetLp: assetLp,
+        assetLp,
       });
       if (!assetLp) throw Error('LP token not defined');
       const swapInput = {
@@ -604,7 +579,7 @@ describe('clamm', () => {
         assetA: 0n,
         assetB: assetUSD,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         appBiatecPoolProvider: clientBiatecPoolProvider.appClient.appId,
@@ -626,12 +601,7 @@ describe('clamm', () => {
     try {
       const { algod } = fixture.context;
       const assetUSD = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_A_DECIMALS });
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecPoolProvider,
-        clientBiatecIdentityProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, clientBiatecIdentityProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: 0n,
@@ -673,13 +643,13 @@ describe('clamm', () => {
         assetA: assetUSD,
         assetB: 0n,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         clientBiatecPoolProvider: clientBiatecPoolProvider.appClient,
         assetADeposit: BigInt(20 * SCALE_A),
         assetBDeposit: BigInt(100 * SCALE_ALGO),
-        assetLp: assetLp,
+        assetLp,
       });
       if (!assetLp) throw Error('LP token not defined');
       const swapInput = {
@@ -687,7 +657,7 @@ describe('clamm', () => {
         assetA: assetUSD,
         assetB: 0n,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         appBiatecPoolProvider: clientBiatecPoolProvider.appClient.appId,
@@ -713,12 +683,7 @@ describe('clamm', () => {
     try {
       const { algod } = fixture.context;
       const assetUSD = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_B_DECIMALS });
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecPoolProvider,
-        clientBiatecIdentityProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, clientBiatecIdentityProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: 0n,
@@ -783,7 +748,7 @@ describe('clamm', () => {
         assetA: 0n,
         assetB: assetUSD,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client1,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         clientBiatecPoolProvider: clientBiatecPoolProvider.appClient,
@@ -797,7 +762,7 @@ describe('clamm', () => {
         assetA: 0n,
         assetB: assetUSD,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client2,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         clientBiatecPoolProvider: clientBiatecPoolProvider.appClient,
@@ -811,7 +776,7 @@ describe('clamm', () => {
         assetA: 0n,
         assetB: assetUSD,
         appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
-        algod: algod,
+        algod,
         clientBiatecClammPool: client2,
         appBiatecIdentityProvider: clientBiatecIdentityProvider.appClient.appId,
         appBiatecPoolProvider: clientBiatecPoolProvider.appClient.appId,

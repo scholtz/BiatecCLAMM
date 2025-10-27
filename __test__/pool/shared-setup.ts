@@ -4,6 +4,9 @@ import { algorandFixture } from '@algorandfoundation/algokit-utils/testing';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import algosdk, { assignGroupID, makePaymentTxnWithSuggestedParamsFromObject, Transaction } from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
+import { AlgorandClient } from '@algorandfoundation/algokit-utils';
+import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
+import { BoxReference } from '@algorandfoundation/algokit-utils/types/app-manager';
 import { BiatecClammPoolClient, BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
 import createToken from '../../src/createToken';
 import {
@@ -21,10 +24,7 @@ import configBootstrapSender from '../../src/biatecConfig/sender/configBootstrap
 import getBoxReferenceStats from '../../src/biatecPools/getBoxReferenceStats';
 import parseStatus from '../../src/biatecClamm/parseStatus';
 import parseStats from '../../src/biatecPools/parseStats';
-import { AlgorandClient } from '@algorandfoundation/algokit-utils';
 import clammAddLiquiditySender from '../../src/biatecClamm/sender/clammAddLiquiditySender';
-import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
-import { BoxReference } from '@algorandfoundation/algokit-utils/types/app-manager';
 import clammCreateTxs from '../../src/biatecClamm/txs/clammCreateTxs';
 import getPools from '../../src/biatecClamm/getPools';
 import clammCreateSender from '../../src/biatecClamm/sender/clammCreateSender';
@@ -64,17 +64,31 @@ export interface ISetup {
   p2: bigint;
   p: bigint;
   assetA: bigint;
+  assetB?: bigint; // Optional: if not provided, a separate asset will be created
   biatecFee: bigint;
   lpFee: bigint;
+  nativeTokenName?: string; // Optional: name for native token (default: 'ALGO')
+  useProvidedAssets?: boolean; // When true, re-use provided asset IDs instead of minting
 }
 export const setupPool = async (input: ISetup) => {
-  const { algod: algodInput, p1, p2, p, assetA, biatecFee, lpFee } = input;
+  const {
+    algod: algodInput,
+    p1,
+    p2,
+    p,
+    assetA,
+    assetB: assetBInput,
+    biatecFee,
+    lpFee,
+    nativeTokenName,
+    useProvidedAssets = false,
+  } = input;
   const algorand = await AlgorandClient.fromEnvironment();
   await fixture.newScope();
 
   const algod = algodInput ?? fixture.context.algod;
 
-  deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(100_000_000) });
+  deployer = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(200_000_000) });
 
   deployerSigner = {
     addr: deployer.addr,
@@ -87,16 +101,28 @@ export const setupPool = async (input: ISetup) => {
   const defaultSigner = async (txnGroup: Transaction[], indexesToSign: number[]) => {
     return txnGroup.map((tx) => tx.signTxn(deployer.sk));
   };
-  if (assetA !== 0n) {
+  if (useProvidedAssets) {
+    assetAId = assetA;
+  } else if (assetA !== 0n) {
     assetAId = await createToken({ account: deployer, algod, name: 'EUR', decimals: ASSET_A_DECIMALS });
   } else {
     assetAId = 0n;
   }
-  assetBId = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_B_DECIMALS });
+
+  // If assetB is explicitly provided, use it; otherwise create a new token
+  if (useProvidedAssets && assetBInput !== undefined) {
+    assetBId = assetBInput;
+  } else if (assetA === 0n) {
+    // Default behavior: create a separate asset when assetA is native token
+    assetBId = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_B_DECIMALS });
+  } else {
+    // Default behavior: create a separate asset
+    assetBId = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_B_DECIMALS });
+  }
 
   const biatecClammPoolFactoryfactory = new BiatecClammPoolFactory({
     defaultSender: deployer.addr,
-    defaultSigner: defaultSigner,
+    defaultSigner,
 
     algorand,
   });
@@ -112,7 +138,7 @@ export const setupPool = async (input: ISetup) => {
 
   const biatecIdentityProviderFactory = new BiatecIdentityProviderFactory({
     defaultSender: deployer.addr,
-    defaultSigner: defaultSigner,
+    defaultSigner,
     algorand,
   });
 
@@ -127,7 +153,7 @@ export const setupPool = async (input: ISetup) => {
 
   const biatecPoolProviderFactory = new BiatecPoolProviderFactory({
     defaultSender: deployer.addr,
-    defaultSigner: defaultSigner,
+    defaultSigner,
     algorand,
   });
 
@@ -140,7 +166,7 @@ export const setupPool = async (input: ISetup) => {
 
   const biatecConfigProviderFactory = new BiatecConfigProviderFactory({
     defaultSender: deployer.addr,
-    defaultSigner: defaultSigner,
+    defaultSigner,
     algorand,
   });
 
@@ -156,7 +182,7 @@ export const setupPool = async (input: ISetup) => {
 
   expect(clientBiatecConfigProvider.appClient.appId).toBeGreaterThan(0);
   expect(clientBiatecIdentityProvider.appClient.appId).toBeGreaterThan(0);
-  //expect(clientBiatecClammPoolProvider.appClient.appId).toBeGreaterThan(0);
+  // expect(clientBiatecClammPoolProvider.appClient.appId).toBeGreaterThan(0);
   expect(clientBiatecPoolProvider.appClient.appId).toBeGreaterThan(0);
 
   const signerObj = {
@@ -166,7 +192,7 @@ export const setupPool = async (input: ISetup) => {
       return txnGroup.map((tx) => tx.signTxn(deployer.sk));
     },
   };
-  let txId = await configBootstrapSender({
+  const txId = await configBootstrapSender({
     algod,
     clientBiatecConfigProvider: clientBiatecConfigProvider?.appClient,
     account: signerObj,
@@ -190,6 +216,15 @@ export const setupPool = async (input: ISetup) => {
       appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
     },
   });
+  if (nativeTokenName !== undefined) {
+    await clientBiatecPoolProvider.appClient.send.setNativeTokenName({
+      args: {
+        appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
+        nativeTokenName: Buffer.from(nativeTokenName, 'utf8'),
+      },
+      appReferences: [clientBiatecConfigProvider.appClient.appId],
+    });
+  }
   console.log(
     'apps PP,Identity,Config',
     clientBiatecPoolProvider.appClient.appId,
@@ -342,7 +377,6 @@ export const setupPool = async (input: ISetup) => {
   //   tx.group = undefined;
   //   return tx;
   // });
-  console.log('fetching txs to clammCreateTxs', assetAId, assetBId);
   const txsClammCreateTxs = await clammCreateTxs({
     sender: deployer.addr.toString(),
     appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
@@ -356,6 +390,18 @@ export const setupPool = async (input: ISetup) => {
     priceMin: p1,
     verificationClass: 0,
   });
+  txsClammCreateTxs
+    .filter((txn) => txn.type === 'appl')
+    .forEach((txn, index) => {
+      const appArgs = txn.applicationCall?.appArgs;
+      if (appArgs) {
+        // eslint-disable-next-line no-console
+        console.log(
+          `app call ${index} args`,
+          appArgs.map((arg: Uint8Array) => Buffer.from(arg).toString('hex'))
+        );
+      }
+    });
   expect(txsClammCreateTxs.length).toBe(4);
   const txsClammCreateTxsSigned: Uint8Array[] = [];
   txsClammCreateTxs.forEach((t) => txsClammCreateTxsSigned.push(t.signTxn(deployer.sk)));
@@ -371,14 +417,13 @@ export const setupPool = async (input: ISetup) => {
   // const deployTx = await algorand.client.indexer.lookupTransactionByID(poolDeployTx.transactions[0].txID()).do();
   // if (!(deployTx.transaction.logs && deployTx.transaction.logs.length > 0)) throw new Error('Logs not found');
   if (!(confirmation.logs && confirmation.logs.length > 0)) {
-    console.log('confirmation', txsClammCreateTxs[txsClammCreateTxs.length - 1].txID(), confirmation);
     throw new Error('Logs not found');
   }
   const lastLog = confirmation.logs[confirmation.logs.length - 1];
   expect(lastLog.length).toBe(12);
   const poolAppId = algosdk.decodeUint64(lastLog.subarray(4, 12));
 
-  //console.log('Pool deployed', poolAppId);
+  // console.log('Pool deployed', poolAppId);
 
   // txId = await clammBootstrapSender({
   //   fee: lpFee,
@@ -397,9 +442,9 @@ export const setupPool = async (input: ISetup) => {
 
   const clientBiatecClammPoolProvider = {
     appClient: new BiatecClammPoolClient({
-      algorand: algorand,
+      algorand,
       defaultSender: deployer.addr,
-      defaultSigner: defaultSigner,
+      defaultSigner,
       appId: BigInt(poolAppId),
     }),
   };

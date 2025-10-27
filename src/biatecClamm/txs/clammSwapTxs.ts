@@ -28,19 +28,7 @@ interface IClammSwapTxsInput {
  * @returns List of transactions to sign
  */
 const clammSwapTxs = async (input: IClammSwapTxsInput): Promise<algosdk.Transaction[]> => {
-  const {
-    params,
-    clientBiatecClammPool,
-    account,
-    appBiatecConfigProvider,
-    appBiatecIdentityProvider,
-    appBiatecPoolProvider,
-    assetA,
-    assetB,
-    minimumToReceive,
-    fromAsset,
-    fromAmount,
-  } = input;
+  const { params, clientBiatecClammPool, account, appBiatecConfigProvider, appBiatecIdentityProvider, appBiatecPoolProvider, assetA, assetB, minimumToReceive, fromAsset, fromAmount } = input;
 
   let txSwap: algosdk.Transaction;
 
@@ -63,8 +51,8 @@ const clammSwapTxs = async (input: IClammSwapTxsInput): Promise<algosdk.Transact
 
   const boxPriceFeed = getBoxReferenceAggregated({
     appBiatecPoolProvider: input.appBiatecPoolProvider,
-    assetA: assetA,
-    assetB: assetB,
+    assetA,
+    assetB,
   });
   const boxIdentity = getBoxReferenceIdentity({
     appBiatecIdentity: input.appBiatecIdentityProvider,

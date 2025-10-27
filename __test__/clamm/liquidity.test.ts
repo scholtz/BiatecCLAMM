@@ -18,12 +18,7 @@ describe('clamm liquidity flows', () => {
     await initDeployer();
   });
 
-  const optInToAsset = async (
-    algod: algosdk.Algodv2,
-    account: algosdk.Account,
-    assetId: number | bigint,
-    params: algosdk.SuggestedParams
-  ) => {
+  const optInToAsset = async (algod: algosdk.Algodv2, account: algosdk.Account, assetId: number | bigint, params: algosdk.SuggestedParams) => {
     const optInTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
       amount: 0,
       assetIndex: Number(assetId),
@@ -36,13 +31,7 @@ describe('clamm liquidity flows', () => {
     await algosdk.waitForConfirmation(algod, signedOptIn.txID, 4);
   };
 
-  const makeDepositTxn = (
-    sender: algosdk.Account,
-    receiver: string,
-    params: algosdk.SuggestedParams,
-    amount: bigint,
-    assetId: number | bigint
-  ) =>
+  const makeDepositTxn = (sender: algosdk.Account, receiver: string, params: algosdk.SuggestedParams, amount: bigint, assetId: number | bigint) =>
     algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
       amount,
       assetIndex: Number(assetId),
@@ -54,14 +43,7 @@ describe('clamm liquidity flows', () => {
   test('addLiquidity issues expected LP tokens', async () => {
     for (const scenario of liquidityData.addLiquidity as LiquidityScenario[]) {
       const { algod } = fixture.context;
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecIdentityProvider,
-        assetAId,
-        assetBId,
-        deployer,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, assetAId, assetBId, deployer } = await setupPool({
         algod,
         assetA: 1n,
         biatecFee: 0n,
@@ -78,20 +60,8 @@ describe('clamm liquidity flows', () => {
       await optInToAsset(algod, deployer, poolTokenId, params);
       const poolAddress = String(clientBiatecClammPoolProvider.appClient.appAddress);
 
-      const depositA = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.x * SCALE_A)),
-        assetAId
-      );
-      const depositB = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.y * SCALE_B)),
-        assetBId
-      );
+      const depositA = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.x * SCALE_A)), assetAId);
+      const depositB = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.y * SCALE_B)), assetBId);
 
       const liquidityResult = await clientBiatecClammPoolProvider.appClient.send.addLiquidity({
         args: {
@@ -114,14 +84,7 @@ describe('clamm liquidity flows', () => {
   test('addLiquidity supports multiple rounds', async () => {
     for (const scenario of liquidityData.addLiquiditySecond as LiquiditySecondScenario[]) {
       const { algod } = fixture.context;
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecIdentityProvider,
-        assetAId,
-        assetBId,
-        deployer,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, assetAId, assetBId, deployer } = await setupPool({
         algod,
         assetA: 1n,
         biatecFee: 0n,
@@ -136,20 +99,8 @@ describe('clamm liquidity flows', () => {
       await optInToAsset(algod, deployer, poolTokenId, params);
       const poolAddress = String(clientBiatecClammPoolProvider.appClient.appAddress);
 
-      const firstDepositA = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.x * SCALE_A)),
-        assetAId
-      );
-      const firstDepositB = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.y * SCALE_B)),
-        assetBId
-      );
+      const firstDepositA = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.x * SCALE_A)), assetAId);
+      const firstDepositB = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.y * SCALE_B)), assetBId);
 
       const firstResult = await clientBiatecClammPoolProvider.appClient.send.addLiquidity({
         args: {
@@ -164,24 +115,10 @@ describe('clamm liquidity flows', () => {
         extraFee: algokit.microAlgos(9_000),
       });
 
-      expect(await firstResult.return).toEqual(
-        BigInt(Math.round(scenario.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS))
-      );
+      expect(await firstResult.return).toEqual(BigInt(Math.round(scenario.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS)));
 
-      const secondDepositA = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.x2 * SCALE_A)),
-        assetAId
-      );
-      const secondDepositB = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.y2 * SCALE_B)),
-        assetBId
-      );
+      const secondDepositA = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.x2 * SCALE_A)), assetAId);
+      const secondDepositB = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.y2 * SCALE_B)), assetBId);
 
       const secondResult = await clientBiatecClammPoolProvider.appClient.send.addLiquidity({
         args: {
@@ -196,24 +133,14 @@ describe('clamm liquidity flows', () => {
         extraFee: algokit.microAlgos(9_000),
       });
 
-      expect(await secondResult.return).toEqual(
-        BigInt(Math.round(scenario.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS))
-      );
+      expect(await secondResult.return).toEqual(BigInt(Math.round(scenario.lpTokensToReceive2 * 10 ** LP_TOKEN_DECIMALS)));
     }
   });
 
   test('swap from asset A to asset B matches expectations', async () => {
     for (const scenario of liquidityData.swapAtoB as SwapScenario[]) {
       const { algod } = fixture.context;
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecIdentityProvider,
-        clientBiatecPoolProvider,
-        assetAId,
-        assetBId,
-        deployer,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider, assetAId, assetBId, deployer } = await setupPool({
         algod,
         assetA: 1n,
         biatecFee: 0n,
@@ -228,20 +155,8 @@ describe('clamm liquidity flows', () => {
       await optInToAsset(algod, deployer, poolTokenId, params);
       const poolAddress = String(clientBiatecClammPoolProvider.appClient.appAddress);
 
-      const depositA = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.x * SCALE_A)),
-        assetAId
-      );
-      const depositB = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.y * SCALE_B)),
-        assetBId
-      );
+      const depositA = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.x * SCALE_A)), assetAId);
+      const depositB = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.y * SCALE_B)), assetBId);
 
       await clientBiatecClammPoolProvider.appClient.send.addLiquidity({
         args: {
@@ -256,13 +171,7 @@ describe('clamm liquidity flows', () => {
         extraFee: algokit.microAlgos(9_000),
       });
 
-      const swapDeposit = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.swapA * SCALE_A)),
-        assetAId
-      );
+      const swapDeposit = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.swapA * SCALE_A)), assetAId);
 
       const swapResult = await clientBiatecClammPoolProvider.appClient.send.swap({
         args: {
@@ -282,11 +191,7 @@ describe('clamm liquidity flows', () => {
           assetB: assetBId,
           includingAssetBoxes: false,
         }),
-        appReferences: [
-          BigInt(clientBiatecConfigProvider.appClient.appId),
-          BigInt(clientBiatecIdentityProvider.appClient.appId),
-          BigInt(clientBiatecPoolProvider.appClient.appId),
-        ],
+        appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
         assetReferences: [toBigInt(assetAId), toBigInt(assetBId)],
       });
 
@@ -297,15 +202,7 @@ describe('clamm liquidity flows', () => {
   test('swap from asset B to asset A matches expectations', async () => {
     for (const scenario of liquidityData.swapBtoA as SwapScenario[]) {
       const { algod } = fixture.context;
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecIdentityProvider,
-        clientBiatecPoolProvider,
-        assetAId,
-        assetBId,
-        deployer,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider, assetAId, assetBId, deployer } = await setupPool({
         algod,
         assetA: 1n,
         biatecFee: 0n,
@@ -320,20 +217,8 @@ describe('clamm liquidity flows', () => {
       await optInToAsset(algod, deployer, poolTokenId, params);
       const poolAddress = String(clientBiatecClammPoolProvider.appClient.appAddress);
 
-      const depositA = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.x * SCALE_A)),
-        assetAId
-      );
-      const depositB = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.y * SCALE_B)),
-        assetBId
-      );
+      const depositA = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.x * SCALE_A)), assetAId);
+      const depositB = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.y * SCALE_B)), assetBId);
 
       await clientBiatecClammPoolProvider.appClient.send.addLiquidity({
         args: {
@@ -348,13 +233,7 @@ describe('clamm liquidity flows', () => {
         extraFee: algokit.microAlgos(9_000),
       });
 
-      const swapDeposit = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.swapB * SCALE_B)),
-        assetBId
-      );
+      const swapDeposit = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.swapB * SCALE_B)), assetBId);
 
       const swapResult = await clientBiatecClammPoolProvider.appClient.send.swap({
         args: {
@@ -374,11 +253,7 @@ describe('clamm liquidity flows', () => {
           assetB: assetBId,
           includingAssetBoxes: false,
         }),
-        appReferences: [
-          BigInt(clientBiatecConfigProvider.appClient.appId),
-          BigInt(clientBiatecIdentityProvider.appClient.appId),
-          BigInt(clientBiatecPoolProvider.appClient.appId),
-        ],
+        appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
         assetReferences: [toBigInt(assetAId), toBigInt(assetBId)],
       });
 
@@ -389,14 +264,7 @@ describe('clamm liquidity flows', () => {
   test('removeLiquidity returns proportional LP share', async () => {
     for (const scenario of liquidityData.removeLiquidity as RemoveScenario[]) {
       const { algod } = fixture.context;
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecIdentityProvider,
-        assetAId,
-        assetBId,
-        deployer,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, assetAId, assetBId, deployer } = await setupPool({
         algod,
         assetA: 1n,
         biatecFee: 0n,
@@ -411,20 +279,8 @@ describe('clamm liquidity flows', () => {
       await optInToAsset(algod, deployer, poolTokenId, params);
       const poolAddress = String(clientBiatecClammPoolProvider.appClient.appAddress);
 
-      const depositA = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.x * SCALE_A)),
-        assetAId
-      );
-      const depositB = makeDepositTxn(
-        deployer,
-        poolAddress,
-        params,
-        BigInt(Math.round(scenario.y * SCALE_B)),
-        assetBId
-      );
+      const depositA = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.x * SCALE_A)), assetAId);
+      const depositB = makeDepositTxn(deployer, poolAddress, params, BigInt(Math.round(scenario.y * SCALE_B)), assetBId);
 
       const liquidityResult = await clientBiatecClammPoolProvider.appClient.send.addLiquidity({
         args: {
@@ -439,9 +295,7 @@ describe('clamm liquidity flows', () => {
         extraFee: algokit.microAlgos(9_000),
       });
 
-      expect(await liquidityResult.return).toEqual(
-        BigInt(Math.round(scenario.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS))
-      );
+      expect(await liquidityResult.return).toEqual(BigInt(Math.round(scenario.lpTokensToReceive * 10 ** LP_TOKEN_DECIMALS)));
 
       const removeTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
         amount: BigInt(Math.round(scenario.lpTokensToWithdraw * SCALE_LP)),

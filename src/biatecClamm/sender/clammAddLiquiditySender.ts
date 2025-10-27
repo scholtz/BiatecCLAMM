@@ -34,14 +34,14 @@ const clammAddLiquiditySender = async (input: IClammBootstrapSkInput): Promise<s
     optinSender = true;
   }
 
-  //console.log('state', state);
+  // console.log('state', state);
   const txs = await clammAddLiquidityTxs({
     ...input,
     params,
-    min: state['priceMin'],
-    max: state['priceMax'],
-    fee: state['fee'],
-    verificationClass: state['verificationClass'],
+    min: state.priceMin,
+    max: state.priceMax,
+    fee: state.fee,
+    verificationClass: state.verificationClass,
     optinSender,
   });
   const signed = await input.account.signer(

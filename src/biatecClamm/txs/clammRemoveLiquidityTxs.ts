@@ -7,6 +7,7 @@ import getBoxReferenceFullConfig from '../../biatecPools/getBoxReferenceFullConf
 import getBoxReferencePool from '../../biatecPools/getBoxReferencePool';
 import getBoxReferencePoolByConfig from '../../biatecPools/getBoxReferencePoolByConfig';
 import getBoxReferenceIdentity from '../../biatecIdentity/getBoxReferenceIdentity';
+
 interface IClammRemoveLiquidityTxsInput {
   params: SuggestedParams;
   clientBiatecClammPool: BiatecClammPoolClient;
@@ -24,17 +25,7 @@ interface IClammRemoveLiquidityTxsInput {
  * @returns List of transactions to sign
  */
 const clammRemoveLiquidityTxs = async (input: IClammRemoveLiquidityTxsInput): Promise<algosdk.Transaction[]> => {
-  const {
-    params,
-    clientBiatecClammPool,
-    account,
-    appBiatecConfigProvider,
-    appBiatecIdentityProvider,
-    assetA,
-    assetB,
-    assetLp,
-    lpToSend,
-  } = input;
+  const { params, clientBiatecClammPool, account, appBiatecConfigProvider, appBiatecIdentityProvider, assetA, assetB, assetLp, lpToSend } = input;
 
   const boxIdentity = getBoxReferenceIdentity({
     appBiatecIdentity: input.appBiatecIdentityProvider,

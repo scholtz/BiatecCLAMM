@@ -9,18 +9,7 @@ import calculateAssetAWithdrawLpData from '../test-data/calculate-asset-a-withdr
 import calculateAssetBWithdrawLpData from '../test-data/calculate-asset-b-withdraw-on-lp-deposit.json';
 import calculateAssetBDepositData from '../test-data/calculate-asset-b-deposit-on-asset-a-deposit.json';
 import calculateAssetADepositData from '../test-data/calculate-asset-a-deposit-on-asset-b-deposit.json';
-import {
-  setupPool,
-  assetAId,
-  assetBId,
-  deployer,
-  SCALE,
-  SCALE_A,
-  SCALE_B,
-  fixture,
-  algokit,
-  setAssetAId,
-} from './shared-setup';
+import { setupPool, assetAId, assetBId, deployer, SCALE, SCALE_A, SCALE_B, fixture, algokit, setAssetAId } from './shared-setup';
 
 describe('BiatecClammPool - calculations', () => {
   test('calculatePrice returns correct results', async () => {

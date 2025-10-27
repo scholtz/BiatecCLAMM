@@ -1,9 +1,9 @@
 import algosdk from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
+import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
 import clammCreateTxs from '../txs/clammCreateTxs';
 import { BiatecPoolProviderClient } from '../../../contracts/clients/BiatecPoolProviderClient';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
-import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
 
 interface IClammBootstrapSkInput {
   transactionSigner: TransactionSignerAccount;
@@ -51,7 +51,7 @@ const clammCreateSender = async (input: IClammBootstrapSkInput): Promise<BiatecC
     4
   );
   if (!(confirmation.logs && confirmation.logs.length > 0)) {
-    throw new Error('Logs not found for' + lastTxId);
+    throw new Error(`Logs not found for${lastTxId}`);
   }
   const lastLog = confirmation.logs[confirmation.logs.length - 1];
   if (lastLog.length != 12) {
@@ -74,7 +74,7 @@ const clammCreateSender = async (input: IClammBootstrapSkInput): Promise<BiatecC
     signer: input.transactionSigner.signer,
   });
 
-  //console.log('Pool deployed', newClient);
+  // console.log('Pool deployed', newClient);
 
   return newClient;
 };
