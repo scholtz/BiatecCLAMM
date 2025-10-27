@@ -16,7 +16,6 @@ interface IClammBootstrapSkInput {
   priceMin: bigint;
   priceMax: bigint;
   currentPrice: bigint;
-  nativeTokenName?: string; // Optional: defaults to 'ALGO' if not provided
 }
 /**
  * Add the liqudity to the concentrated liquidity AMM
@@ -36,7 +35,6 @@ const clammCreateSender = async (input: IClammBootstrapSkInput): Promise<BiatecC
     priceMin: input.priceMin,
     sender: input.transactionSigner.addr.toString(),
     verificationClass: input.verificationClass,
-    nativeTokenName: input.nativeTokenName,
     params,
   });
   const signed = await input.transactionSigner.signer(
@@ -47,7 +45,11 @@ const clammCreateSender = async (input: IClammBootstrapSkInput): Promise<BiatecC
   const lastTxId = txs[txs.length - 1].txID();
 
   console.debug('lastTxId', lastTxId);
-  const confirmation = await algosdk.waitForConfirmation(input.clientBiatecPoolProvider.algorand.client.algod, lastTxId, 4);
+  const confirmation = await algosdk.waitForConfirmation(
+    input.clientBiatecPoolProvider.algorand.client.algod,
+    lastTxId,
+    4
+  );
   if (!(confirmation.logs && confirmation.logs.length > 0)) {
     throw new Error(`Logs not found for${lastTxId}`);
   }

@@ -17,7 +17,6 @@ interface IClammBootstrapTxsInput {
   priceMin: bigint;
   priceMax: bigint;
   currentPrice: bigint;
-  nativeTokenName?: string | Uint8Array; // Optional: defaults to 'ALGO' if not provided
 }
 /**
  * This method creates list of transactions to be signed to add liquidity to the concentrated liquidity amm
@@ -36,22 +35,7 @@ const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.T
     currentPrice,
     sender,
     appBiatecConfigProvider,
-    nativeTokenName = 'ALGO', // Default to 'ALGO' if not provided
   } = input;
-
-  // Some older callers still pass bytes here; default back to 'ALGO' unless we get a real string.
-  const decoder = new TextDecoder();
-  const encoder = new TextEncoder();
-  let nativeTokenNameStr = 'ALGO';
-  if (typeof nativeTokenName === 'string' && nativeTokenName.trim().length > 0) {
-    nativeTokenNameStr = nativeTokenName.trim();
-  } else if (nativeTokenName instanceof Uint8Array && nativeTokenName.length > 0) {
-    const decoded = decoder.decode(nativeTokenName).trim();
-    if (decoded.length > 0) nativeTokenNameStr = decoded;
-  }
-  const nativeTokenNameBytes = encoder.encode(nativeTokenNameStr);
-  // eslint-disable-next-line no-console
-  console.log('clammCreateTxs nativeTokenName', nativeTokenNameStr, nativeTokenNameBytes);
 
   const poolDeployTx = await clientBiatecPoolProvider.createTransaction.deployPool({
     args: {
@@ -64,7 +48,6 @@ const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.T
       priceMax,
       currentPrice,
       appBiatecConfigProvider: BigInt(appBiatecConfigProvider),
-      nativeTokenName: nativeTokenNameBytes,
       txSeed: makePaymentTxnWithSuggestedParamsFromObject({
         amount: 5_000_000,
         receiver: clientBiatecPoolProvider.appClient.appAddress,
@@ -101,14 +84,23 @@ const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.T
     ...(
       await clientBiatecPoolProvider.createTransaction.noop({
         args: { i: 1 },
-        boxReferences: [...boxReferences, new Uint8Array(Buffer.from('13', 'ascii')), new Uint8Array(Buffer.from('14', 'ascii'))],
+        boxReferences: [
+          ...boxReferences,
+          new Uint8Array(Buffer.from('13', 'ascii')),
+          new Uint8Array(Buffer.from('14', 'ascii')),
+        ],
         sender,
       })
     ).transactions,
     ...(
       await clientBiatecPoolProvider.createTransaction.noop({
         args: { i: 2 },
-        boxReferences: [new Uint8Array(Buffer.from('21', 'ascii')), new Uint8Array(Buffer.from('22', 'ascii')), new Uint8Array(Buffer.from('23', 'ascii')), new Uint8Array(Buffer.from('24', 'ascii'))],
+        boxReferences: [
+          new Uint8Array(Buffer.from('21', 'ascii')),
+          new Uint8Array(Buffer.from('22', 'ascii')),
+          new Uint8Array(Buffer.from('23', 'ascii')),
+          new Uint8Array(Buffer.from('24', 'ascii')),
+        ],
         sender,
       })
     ).transactions,

@@ -62,6 +62,14 @@ import { clammCreateSender } from 'biatec-concentrated-liquidity-amm';
 
 const SCALE = 1_000_000_000n;
 
+await poolProviderClient.send.setNativeTokenName({
+  args: {
+    appBiatecConfigProvider: configProviderAppId,
+    nativeTokenName: 'ALGO',
+  },
+  appReferences: [configProviderAppId],
+});
+
 const poolClient = await clammCreateSender({
   transactionSigner: signerAccount,
   clientBiatecPoolProvider: poolProviderClient,
@@ -73,7 +81,6 @@ const poolClient = await clammCreateSender({
   priceMin: SCALE / 2n,
   priceMax: SCALE * 2n,
   currentPrice: SCALE,
-  nativeTokenName: 'ALGO',
 });
 
 // clammCreateSender automatically calls bootstrapStep2, so the pool is ready for deposits.

@@ -126,6 +126,14 @@ BiatecCLAMM now supports staking pools where asset A and asset B are the same to
 ```typescript
 import { clammCreateSender } from 'biatec-concentrated-liquidity-amm';
 
+await poolProviderClient.send.setNativeTokenName({
+  args: {
+    appBiatecConfigProvider: configAppId,
+    nativeTokenName: 'ALGO',
+  },
+  appReferences: [configAppId],
+});
+
 const poolClient = await clammCreateSender({
   transactionSigner: signerAccount,
   clientBiatecPoolProvider: poolProviderClient,
@@ -137,7 +145,6 @@ const poolClient = await clammCreateSender({
   priceMin: BigInt(SCALE),
   priceMax: BigInt(SCALE),
   currentPrice: BigInt(SCALE),
-  nativeTokenName: 'ALGO', // Chain-specific name
 });
 ```
 

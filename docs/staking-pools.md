@@ -7,10 +7,13 @@ BiatecCLAMM now supports staking pools where asset A and asset B are the same to
 ## Use Cases
 
 ### 1. Native Token Staking (B-ALGO)
+
 Create a pool where both asset A and asset B are set to 0 (native token). This creates a B-ALGO token that represents staked ALGO. Any ALGO that accrues to the pool (e.g., from consensus rewards, governance rewards, or direct deposits) can be distributed to B-ALGO holders.
 
 ### 2. Asset Staking (B-USDC, B-TOKEN, etc.)
+
 Create a pool where both asset A and asset B are set to the same ASA ID. This creates a B-{TOKEN} token that represents staked tokens. This is useful for:
+
 - Lending protocols where deposited assets earn interest
 - Revenue-sharing mechanisms
 - Yield aggregation strategies
@@ -18,6 +21,7 @@ Create a pool where both asset A and asset B are set to the same ASA ID. This cr
 ## Pool Characteristics
 
 When asset A equals asset B:
+
 - **LP Token Name**: `B-{AssetName}` (e.g., "B-ALGO", "B-USDC")
 - **LP Token Symbol**: The asset's unit name (e.g., "ALGO", "USDC")
 - **Price Range**: Typically set to 1:1 (priceMin = priceMax = currentPrice = SCALE)
@@ -31,15 +35,21 @@ When asset A equals asset B:
 ```typescript
 const { clientBiatecClammPoolProvider } = await setupPool({
   algod,
-  assetA: 0n,              // 0 for ALGO, or an ASA ID
-  assetB: 0n,              // Same as assetA
-  biatecFee: 0n,           // No Biatec fee
+  assetA: 0n, // 0 for ALGO, or an ASA ID
+  assetB: 0n, // Same as assetA
+  biatecFee: 0n, // No Biatec fee
   lpFee: BigInt(SCALE / 100), // 1% fee (optional)
-  p: BigInt(1 * SCALE),    // Price = 1:1
-  p1: BigInt(1 * SCALE),   // Min price = 1
-  p2: BigInt(1 * SCALE),   // Max price = 1
-  nativeTokenName: 'ALGO', // For native token pools
+  p: BigInt(1 * SCALE), // Price = 1:1
+  p1: BigInt(1 * SCALE), // Min price = 1
+  p2: BigInt(1 * SCALE), // Max price = 1
+  nativeTokenName: 'ALGO', // Optional helper parameter ensures provider global state matches
 });
+
+// When constructing transactions manually, configure the provider once via:
+// await poolProviderClient.send.setNativeTokenName({
+//   args: { appBiatecConfigProvider: configAppId, nativeTokenName: 'ALGO' },
+//   appReferences: [configAppId],
+// });
 ```
 
 ### 2. Adding Liquidity (Staking)
@@ -50,10 +60,10 @@ Users add liquidity to stake their tokens:
 const txId = await clammAddLiquiditySender({
   algod,
   account: userSigner,
-  amountA: stakeAmount,        // Amount to stake
-  amountB: stakeAmount,        // Same as amountA
-  assetA: 0n,                  // 0 for ALGO
-  assetB: 0n,                  // Same as assetA
+  amountA: stakeAmount, // Amount to stake
+  amountB: stakeAmount, // Same as amountA
+  assetA: 0n, // 0 for ALGO
+  assetB: 0n, // Same as assetA
   assetLP: lpTokenId,
   clientBiatecClammPool,
   appBiatecConfigProvider,
@@ -77,9 +87,9 @@ const txId = await clammDistributeExcessAssetsSender({
   algod,
   account: executiveSigner,
   amountA: rewardsAmount * (SCALE / assetDecimals), // In base scale (9 decimals)
-  amountB: 0n,                                       // No rewards for asset B
-  assetA: 0n,                                        // 0 for ALGO
-  assetB: 0n,                                        // Same as assetA
+  amountB: 0n, // No rewards for asset B
+  assetA: 0n, // 0 for ALGO
+  assetB: 0n, // Same as assetA
   clientBiatecClammPool,
   appBiatecConfigProvider,
 });
@@ -98,7 +108,7 @@ const txId = await clammRemoveLiquiditySender({
   assetA: 0n,
   assetB: 0n,
   assetLP: lpTokenId,
-  lpTokensToSend: lpBalance,  // All or partial LP tokens
+  lpTokensToSend: lpBalance, // All or partial LP tokens
   clientBiatecClammPool,
   appBiatecConfigProvider,
   appBiatecIdentityProvider,
@@ -112,11 +122,12 @@ Users receive back their staked tokens plus a proportional share of the rewards.
 
 ### Contract Changes
 
-1. **Bootstrap Method**: Now accepts a `nativeTokenName` parameter to specify the name of the native token (e.g., 'ALGO', 'VOI', 'ARAMID') for different chains.
+1. **Pool Provider Global State**: Added `nativeTokenName` (`nt`) to the pool provider global state with an admin-only `setNativeTokenName` method. The CLAMM bootstrap reads this value when creating LP tokens.
 
 2. **Asset Validation**: Removed the assertion that prevented `assetA.id === assetB.id`. The contract now supports this configuration for staking pools.
 
 3. **LP Token Naming**:
+
    - Standard pools: `B-{AssetA}-{AssetB}` with unit name `BLP`
    - Staking pools: `B-{AssetName}` with unit name matching the underlying asset
 
@@ -124,7 +135,7 @@ Users receive back their staked tokens plus a proportional share of the rewards.
 
 ### TypeScript API Changes
 
-1. **clammCreateTxs / clammCreateSender**: Added optional `nativeTokenName` parameter (defaults to 'ALGO')
+1. **clammCreateTxs / clammCreateSender**: No longer accept a `nativeTokenName` parameter; configure the pool provider once via `BiatecPoolProviderClient.send.setNativeTokenName`.
 
 2. **setupPool**: Added optional `assetB` and `nativeTokenName` parameters for test scenarios
 
@@ -220,6 +231,7 @@ await clammRemoveLiquiditySender({
 ## Testing
 
 See `__test__/pool/staking.test.ts` for comprehensive test examples including:
+
 - Creating a B-ALGO pool
 - Creating a B-TOKEN pool with an ASA
 - Distributing rewards and verifying LP profit
@@ -227,8 +239,9 @@ See `__test__/pool/staking.test.ts` for comprehensive test examples including:
 ## Chain-Specific Configuration
 
 Different blockchain networks may use different native token names:
+
 - **Algorand Mainnet/Testnet**: 'ALGO'
 - **Voi Network**: 'VOI'
 - **Aramid Network**: 'ARAMID'
 
-Specify the appropriate `nativeTokenName` when deploying pools to ensure correct LP token naming.
+Use `setNativeTokenName` to configure the provider before deploying pools to ensure the LP token naming matches the target chain.

@@ -104,11 +104,6 @@
           "name": "verificationClass",
           "type": "uint64",
           "desc": "Minimum verification level from the biatec identity. Level 0 means no kyc."
-        },
-        {
-          "name": "nativeTokenName",
-          "type": "byte[]",
-          "desc": "Name of the native token (e.g., 'ALGO', 'VOI', 'ARAMID') when assetA.id = 0"
         }
       ],
       "returns": {

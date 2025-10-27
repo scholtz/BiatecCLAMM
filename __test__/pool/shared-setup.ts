@@ -9,10 +9,16 @@ import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
 import { BoxReference } from '@algorandfoundation/algokit-utils/types/app-manager';
 import { BiatecClammPoolClient, BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
 import createToken from '../../src/createToken';
-import { BiatecIdentityProviderClient, BiatecIdentityProviderFactory } from '../../contracts/clients/BiatecIdentityProviderClient';
+import {
+  BiatecIdentityProviderClient,
+  BiatecIdentityProviderFactory,
+} from '../../contracts/clients/BiatecIdentityProviderClient';
 import { BiatecPoolProviderClient, BiatecPoolProviderFactory } from '../../contracts/clients/BiatecPoolProviderClient';
 import { FakePoolClient, FakePoolFactory } from '../../contracts/clients/FakePoolClient';
-import { BiatecConfigProviderClient, BiatecConfigProviderFactory } from '../../contracts/clients/BiatecConfigProviderClient';
+import {
+  BiatecConfigProviderClient,
+  BiatecConfigProviderFactory,
+} from '../../contracts/clients/BiatecConfigProviderClient';
 import clammBootstrapSender from '../../src/biatecClamm/sender/clammBootstrapSender';
 import configBootstrapSender from '../../src/biatecConfig/sender/configBootstrapSender';
 import getBoxReferenceStats from '../../src/biatecPools/getBoxReferenceStats';
@@ -65,7 +71,18 @@ export interface ISetup {
   useProvidedAssets?: boolean; // When true, re-use provided asset IDs instead of minting
 }
 export const setupPool = async (input: ISetup) => {
-  const { algod: algodInput, p1, p2, p, assetA, assetB: assetBInput, biatecFee, lpFee, nativeTokenName, useProvidedAssets = false } = input;
+  const {
+    algod: algodInput,
+    p1,
+    p2,
+    p,
+    assetA,
+    assetB: assetBInput,
+    biatecFee,
+    lpFee,
+    nativeTokenName,
+    useProvidedAssets = false,
+  } = input;
   const algorand = await AlgorandClient.fromEnvironment();
   await fixture.newScope();
 
@@ -125,10 +142,12 @@ export const setupPool = async (input: ISetup) => {
     algorand,
   });
 
-  const clientBiatecIdentityProvider = await biatecIdentityProviderFactory.send.create.createApplication().catch((e: Error) => {
-    console.error(e);
-    return undefined;
-  });
+  const clientBiatecIdentityProvider = await biatecIdentityProviderFactory.send.create
+    .createApplication()
+    .catch((e: Error) => {
+      console.error(e);
+      return undefined;
+    });
   expect(clientBiatecIdentityProvider).not.toBeNull();
   if (!clientBiatecIdentityProvider) throw Error('clientBiatecIdentityProvider is empty');
 
@@ -151,10 +170,12 @@ export const setupPool = async (input: ISetup) => {
     algorand,
   });
 
-  const clientBiatecConfigProvider = await biatecConfigProviderFactory.send.create.createApplication().catch((e: Error) => {
-    console.error(e);
-    return undefined;
-  });
+  const clientBiatecConfigProvider = await biatecConfigProviderFactory.send.create
+    .createApplication()
+    .catch((e: Error) => {
+      console.error(e);
+      return undefined;
+    });
   if (!clientBiatecConfigProvider) throw Error('clientBiatecConfigProvider is empty');
 
   expect(clientBiatecConfigProvider).not.toBeNull();
@@ -195,7 +216,21 @@ export const setupPool = async (input: ISetup) => {
       appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
     },
   });
-  console.log('apps PP,Identity,Config', clientBiatecPoolProvider.appClient.appId, clientBiatecIdentityProvider.appClient.appId, clientBiatecConfigProvider.appClient.appId);
+  if (nativeTokenName !== undefined) {
+    await clientBiatecPoolProvider.appClient.send.setNativeTokenName({
+      args: {
+        appBiatecConfigProvider: clientBiatecConfigProvider.appClient.appId,
+        nativeTokenName: Buffer.from(nativeTokenName, 'utf8'),
+      },
+      appReferences: [clientBiatecConfigProvider.appClient.appId],
+    });
+  }
+  console.log(
+    'apps PP,Identity,Config',
+    clientBiatecPoolProvider.appClient.appId,
+    clientBiatecIdentityProvider.appClient.appId,
+    clientBiatecConfigProvider.appClient.appId
+  );
   console.log('clammPoolApprovalProgram.length', clammPoolApprovalProgram.length);
   // if (clammPoolApprovalProgram.length > 0)
   //   throw Error(`clammPoolApprovalProgram.length ${clammPoolApprovalProgram.length}`);
@@ -354,7 +389,6 @@ export const setupPool = async (input: ISetup) => {
     priceMax: p2,
     priceMin: p1,
     verificationClass: 0,
-    nativeTokenName: nativeTokenName || 'ALGO',
   });
   txsClammCreateTxs
     .filter((txn) => txn.type === 'appl')
@@ -374,7 +408,11 @@ export const setupPool = async (input: ISetup) => {
   const poolDeployTxNetwork = await algod.sendRawTransaction(txsClammCreateTxsSigned).do();
 
   expect(poolDeployTxNetwork.txid.length).toBe(52);
-  const confirmation = await algosdk.waitForConfirmation(algorand.client.algod, txsClammCreateTxs[txsClammCreateTxs.length - 1].txID(), 4);
+  const confirmation = await algosdk.waitForConfirmation(
+    algorand.client.algod,
+    txsClammCreateTxs[txsClammCreateTxs.length - 1].txID(),
+    4
+  );
 
   // const deployTx = await algorand.client.indexer.lookupTransactionByID(poolDeployTx.transactions[0].txID()).do();
   // if (!(deployTx.transaction.logs && deployTx.transaction.logs.length > 0)) throw new Error('Logs not found');
