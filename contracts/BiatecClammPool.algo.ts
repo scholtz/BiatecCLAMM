@@ -921,6 +921,7 @@ export class BiatecClammPool extends Contract {
     increaseOpcodeBudget();
     /// well formed swap
     this.checkAssetsAB(assetA, assetB);
+    assert(assetA.id !== assetB.id, 'Swaps not allowed in staking pools');
 
     if (txSwap.typeEnum === TransactionType.Payment) {
       assert(
