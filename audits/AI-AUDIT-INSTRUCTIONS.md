@@ -36,6 +36,7 @@ At the start of the audit report, clearly document:
 ```
 
 Example:
+
 ```markdown
 **AI Model**: Claude 3.5 Sonnet (claude-3-5-sonnet-20241022)
 **Provider**: Anthropic
@@ -63,15 +64,22 @@ find __test__ -name "*.test.ts" -exec wc -l {} + | tail -1
 
 ---
 
+### 3. Audit report naming structure
+
+Write audit to folder audits.
+
+File name must contain date, context, ai to identify ai audit, and model name. `{YYYY-MM-DD}-audit-report-ai-{model-name}.md` for example: `2025-10-27-audit-report-ai-claude-4-5.md`
+
 ## Audit Methodology
 
 ### Phase 1: Comprehensive Code Review
 
-#### Smart Contracts (contracts/*.algo.ts)
+#### Smart Contracts (contracts/\*.algo.ts)
 
 Review each contract file systematically:
 
 1. **BiatecClammPool.algo.ts** (Main AMM logic - ~2100 lines)
+
    - Liquidity management functions
    - Swap calculations
    - Fee accounting
@@ -80,11 +88,13 @@ Review each contract file systematically:
    - Staking pool support
 
 2. **BiatecConfigProvider.algo.ts** (~200 lines)
+
    - Configuration management
    - Fee parameters
    - Administrative controls
 
 3. **BiatecIdentityProvider.algo.ts** (~450 lines)
+
    - Identity verification
    - KYC/compliance integration
    - Verification class management
@@ -98,6 +108,7 @@ Review each contract file systematically:
 #### Key Areas to Examine:
 
 **Mathematical Operations**:
+
 - [ ] Integer arithmetic (overflow/underflow risks)
 - [ ] Division operations (division by zero, rounding)
 - [ ] Square root calculations
@@ -106,12 +117,14 @@ Review each contract file systematically:
 - [ ] Fee distribution formulas
 
 **Access Control**:
+
 - [ ] Function authorization (who can call what)
 - [ ] Admin privileges
 - [ ] Executive fee address permissions
 - [ ] Identity verification requirements
 
 **State Management**:
+
 - [ ] Global state consistency
 - [ ] Box storage integrity
 - [ ] Asset balance tracking
@@ -119,6 +132,7 @@ Review each contract file systematically:
 - [ ] Fee accumulation
 
 **Asset Handling**:
+
 - [ ] Asset transfer security
 - [ ] Opt-in requirements
 - [ ] Minimum balance considerations
@@ -126,6 +140,7 @@ Review each contract file systematically:
 - [ ] Same-asset staking pools
 
 **Economic Security**:
+
 - [ ] Fee calculations
 - [ ] Slippage protection
 - [ ] Price manipulation resistance
@@ -137,12 +152,14 @@ Review each contract file systematically:
 Review transaction builders and helper functions:
 
 1. **Transaction Builders** (`src/biatecClamm/txs/`)
+
    - [ ] Parameter validation
    - [ ] Transaction group construction
    - [ ] Box reference inclusion
    - [ ] App call resource population
 
 2. **Sender Functions** (`src/biatecClamm/sender/`)
+
    - [ ] Error handling
    - [ ] State fetching
    - [ ] Transaction signing
@@ -166,6 +183,7 @@ npm run test -- --coverage
 ```
 
 **Key Testing Areas**:
+
 - [ ] Basic liquidity operations (add/remove)
 - [ ] Swap functionality
 - [ ] Fee calculations
@@ -175,6 +193,7 @@ npm run test -- --coverage
 - [ ] Error conditions
 
 **Identify Missing Scenarios**:
+
 - Attack vectors not covered
 - Edge cases not tested
 - Integration scenarios missing
@@ -186,12 +205,14 @@ npm run test -- --coverage
 Review all documentation for:
 
 1. **Completeness**:
+
    - [ ] All features documented
    - [ ] API documentation clear
    - [ ] Examples provided
    - [ ] Security considerations mentioned
 
 2. **Accuracy**:
+
    - [ ] Code matches documentation
    - [ ] Examples are correct
    - [ ] Warnings are appropriate
@@ -256,30 +277,35 @@ Use this checklist to systematically identify vulnerabilities:
 Use this framework to classify findings:
 
 ### Critical
+
 - Direct loss of user funds
 - Smart contract can be permanently locked
 - Unauthorized minting of LP tokens
 - Complete bypass of access controls
 
 ### High
+
 - Indirect loss of funds under specific conditions
 - Significant economic manipulation possible
 - Partial bypass of security controls
 - Data integrity compromise
 
 ### Medium
+
 - Potential for loss under unlikely conditions
 - Economic inefficiencies
 - Partial functionality degradation
 - Documentation mismatches leading to misuse
 
 ### Low
+
 - Code quality issues
 - Gas inefficiencies
 - Minor user experience issues
 - Non-critical documentation gaps
 
 ### Informational
+
 - Code style suggestions
 - Optimization opportunities
 - Best practice recommendations
@@ -299,6 +325,7 @@ For each identified gap in test coverage, document:
 **Risk if Untested**: [Potential vulnerabilities or bugs]
 
 **Test Steps**:
+
 1. [Setup step]
 2. [Action step]
 3. [Verification step]
@@ -306,6 +333,7 @@ For each identified gap in test coverage, document:
 **Expected Behavior**: [What should happen]
 
 **Edge Cases to Include**:
+
 - [Edge case 1]
 - [Edge case 2]
 
@@ -326,6 +354,7 @@ For each identified documentation gap:
 **User Impact**: [How this affects users]
 
 **Recommended Documentation**:
+
 - [Point 1]
 - [Point 2]
 
@@ -360,12 +389,14 @@ Follow the audit template structure exactly:
 ### Static Analysis
 
 1. **Code Flow Analysis**:
+
    - Trace execution paths
    - Identify all exit points
    - Map state changes
    - Document side effects
 
 2. **Data Flow Analysis**:
+
    - Track variable lifecycle
    - Identify data dependencies
    - Check validation at boundaries
@@ -381,12 +412,14 @@ Follow the audit template structure exactly:
 For AMM calculations:
 
 1. **Verify Formulas**:
+
    - Concentrated liquidity formula: `L = sqrt(x * y)`
    - Price calculation: `price = y/x`
    - Fee distribution formulas
    - LP minting quadratic equation
 
 2. **Check Invariants**:
+
    - Liquidity should never decrease from fees alone
    - Price should stay within bounds
    - Total LP supply should match distributed tokens
@@ -402,12 +435,14 @@ For AMM calculations:
 Consider these attack scenarios:
 
 1. **Economic Attacks**:
+
    - Sandwich attacks
    - Price manipulation
    - Fee harvesting
    - LP token dilution
 
 2. **Technical Attacks**:
+
    - Reentrancy
    - Overflow/underflow
    - State inconsistency
@@ -423,36 +458,42 @@ Consider these attack scenarios:
 ## Best Practices for AI Auditors
 
 ### 1. Be Thorough
+
 - Review every file in scope
 - Don't skip "obvious" code
 - Check dependencies
 - Verify assumptions
 
 ### 2. Be Systematic
+
 - Follow the checklist
 - Document everything
 - Use consistent terminology
 - Reference specific line numbers
 
 ### 3. Be Specific
+
 - Cite exact code locations
 - Provide reproducible examples
 - Explain impact clearly
 - Give actionable recommendations
 
 ### 4. Be Objective
+
 - Base findings on evidence
 - Don't speculate without basis
 - Distinguish between confirmed and potential issues
 - Acknowledge limitations
 
 ### 5. Be Constructive
+
 - Provide solutions, not just problems
 - Prioritize findings appropriately
 - Consider implementation difficulty
 - Balance security with usability
 
 ### 6. Context Awareness
+
 - Understand the Algorand ecosystem
 - Consider the CLAMM model specifics
 - Respect project goals
@@ -467,12 +508,14 @@ Consider these attack scenarios:
 **File**: `contracts/BiatecClammPool.algo.ts`
 
 Key functions to review:
+
 - `processAddLiquidity()`
 - `processRemoveLiquidity()`
 - `calculateLiquidityForDeposit()`
 - `calculateWithdrawal()`
 
 Questions to ask:
+
 - Can a user withdraw more than they deposited?
 - Are fee shares calculated correctly?
 - Can liquidity become negative?
@@ -481,11 +524,13 @@ Questions to ask:
 ### Swap Operations
 
 Key functions:
+
 - `swap()`
 - `swapFromAssetAToAssetB()`
 - `swapFromAssetBToAssetA()`
 
 Questions to ask:
+
 - Can swaps occur outside price bounds?
 - Are fees calculated correctly?
 - Can swaps result in negative balances?
@@ -495,11 +540,13 @@ Questions to ask:
 ### Fee Distribution
 
 Key areas:
+
 - `LiquidityUsersFromFees` tracking
 - `LiquidityBiatecFromFees` tracking
 - `distributeExcessAssets()` function
 
 Questions to ask:
+
 - Can fees be stolen?
 - Are fees distributed proportionally?
 - Can fee accounting become inconsistent?
@@ -508,10 +555,12 @@ Questions to ask:
 ### Identity Verification
 
 Key functions in `BiatecIdentityProvider.algo.ts`:
+
 - `verifyIdentity()`
 - `setVerificationClass()`
 
 Questions to ask:
+
 - Can identity checks be bypassed?
 - Is the verification class system secure?
 - Can users impersonate others?
@@ -524,18 +573,22 @@ Questions to ask:
 ### Algorand-Specific
 
 1. **Box Reference Missing**:
+
    - Check that all box accesses have corresponding references
    - Verify box name construction is consistent
 
 2. **App Reference Missing**:
+
    - Verify all cross-app calls include app references
    - Check foreign app array is populated
 
 3. **Asset Opt-In**:
+
    - Confirm contracts opt into assets before receiving
    - Handle duplicate opt-in attempts
 
 4. **Inner Transaction Budget**:
+
    - Count total inner transactions
    - Verify within Algorand limits (256 per group)
 
@@ -546,10 +599,12 @@ Questions to ask:
 ### TEALScript-Specific
 
 1. **Type Conversions**:
+
    - Check uint64 ↔ uint256 conversions
    - Verify no precision loss
 
 2. **Assert Statements**:
+
    - Ensure all asserts are reachable
    - Check error messages are meaningful
 
@@ -560,10 +615,12 @@ Questions to ask:
 ### General DeFi
 
 1. **Price Oracle Manipulation**:
+
    - Check if external price sources can be manipulated
    - Verify internal price calculation integrity
 
 2. **Flash Loan Attacks**:
+
    - Consider attacks enabled by temporary capital
    - Verify atomic transaction protection
 
@@ -618,14 +675,15 @@ Before submitting the audit:
 **File**: contracts/BiatecClammPool.algo.ts:456
 
 **Description**:
-The function `calculateLiquidityForDeposit()` multiplies two uint256 values 
-without checking for overflow. When both assetA and assetB amounts are near 
-their maximum values, the intermediate calculation can overflow, leading to 
+The function `calculateLiquidityForDeposit()` multiplies two uint256 values
+without checking for overflow. When both assetA and assetB amounts are near
+their maximum values, the intermediate calculation can overflow, leading to
 incorrect liquidity values.
 
 **Impact**:
-An attacker could potentially exploit this by providing specific input values 
+An attacker could potentially exploit this by providing specific input values
 that cause overflow, resulting in:
+
 - Incorrect LP token minting
 - Loss of funds for other liquidity providers
 - Pool state corruption
@@ -633,11 +691,12 @@ that cause overflow, resulting in:
 **Proof of Concept**:
 \`\`\`typescript
 // When assetAAmount and assetBAmount are both > 2^128
-const liquidity = assetAAmount * assetBAmount; // This can overflow
+const liquidity = assetAAmount \* assetBAmount; // This can overflow
 const sqrtLiquidity = sqrt(liquidity); // Operating on wrong value
 \`\`\`
 
 **Recommendation**:
+
 1. Add overflow checks before multiplication
 2. Use safe math libraries for uint256 operations
 3. Consider splitting large calculations into multiple steps
@@ -647,10 +706,11 @@ Example fix:
 \`\`\`typescript
 assert(assetAAmount <= MAX_SAFE_UINT128);
 assert(assetBAmount <= MAX_SAFE_UINT128);
-const liquidity = assetAAmount * assetBAmount;
+const liquidity = assetAAmount \* assetBAmount;
 \`\`\`
 
 **References**:
+
 - https://docs.algorand.foundation/docs/avm/teal/opcodes/#arithmetic
 - Similar vulnerability: [Link to similar case if applicable]
 ```
@@ -672,16 +732,19 @@ After completing the audit:
 ## Resources
 
 ### Algorand Documentation
+
 - [Algorand Developer Portal](https://developer.algorand.org/)
 - [TEALScript Documentation](https://tealscript.netlify.app/)
 - [Algorand Smart Contract Guidelines](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/guidelines/)
 
 ### Security Resources
+
 - [Smart Contract Security Best Practices](https://consensys.github.io/smart-contract-best-practices/)
 - [DeFi Security Summit Resources](https://defisecuritysummit.org/)
 - [Algorand Security Best Practices](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/security/)
 
 ### AMM Resources
+
 - [Uniswap V3 Whitepaper](https://uniswap.org/whitepaper-v3.pdf) (Concentrated liquidity reference)
 - [AMM Security Analysis](https://arxiv.org/abs/2103.00554)
 

@@ -430,21 +430,21 @@ export class BiatecPoolProvider extends Contract {
     } else if (storeTo == 2) {
       this.recentPools2.value = appId;
     } else if (storeTo == 3) {
-      this.recentPools1.value = appId;
+      this.recentPools3.value = appId;
     } else if (storeTo == 4) {
-      this.recentPools1.value = appId;
+      this.recentPools4.value = appId;
     } else if (storeTo == 5) {
-      this.recentPools1.value = appId;
+      this.recentPools5.value = appId;
     } else if (storeTo == 6) {
-      this.recentPools1.value = appId;
+      this.recentPools6.value = appId;
     } else if (storeTo == 7) {
-      this.recentPools1.value = appId;
+      this.recentPools7.value = appId;
     } else if (storeTo == 8) {
-      this.recentPools1.value = appId;
+      this.recentPools8.value = appId;
     } else if (storeTo == 9) {
-      this.recentPools1.value = appId;
+      this.recentPools9.value = appId;
     } else if (storeTo == 10) {
-      this.recentPools1.value = appId;
+      this.recentPools10.value = appId;
     }
     return appId;
   }
