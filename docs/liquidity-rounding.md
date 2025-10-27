@@ -4,6 +4,45 @@ Date: 2025-10-25
 Repository: BiatecCLAMM (projects/BiatecCLAMM)
 Primary file: `contracts/BiatecClammPool.algo.ts`
 
+## User-Facing Summary
+
+**Important**: When adding liquidity to pools with existing fees, you may receive slightly fewer LP tokens than a direct proportion would suggest. This is intentional and protects the pool from value bleeding through rounding errors.
+
+### What Users Should Know
+
+- **Typical Impact**: Loss is < 0.0001% of your deposit
+- **Maximum Observed**: ~10 base units per operation (often less than $0.000001)
+- **Not Compounding**: The loss is linear with number of operations, not exponential
+- **Pool Value Increases**: Despite this rounding, your LP tokens gain value from trading fees
+
+### Why This Happens
+
+The pool uses a quadratic equation to account for accumulated fees when minting LP tokens. The positive root is floored to ensure rounding always favors the pool over individual users. This prevents attackers from extracting value through repeated small operations.
+
+### Mitigation Strategies
+
+1. **Batch Your Operations**: Deposit larger amounts less frequently
+2. **Accept Small Losses**: Consider them the cost of fee protection
+3. **Long-Term Perspective**: Pool value still increases from trading fees over time
+
+### Example Scenario
+
+```
+Deposit: 1,000,000 tokens
+Immediate Withdrawal: 999,999.99 tokens
+Loss: 0.01 tokens (0.000001%)
+```
+
+This tiny loss is acceptable because:
+- It prevents the pool from losing value
+- The loss is deterministic and bounded
+- Your LP tokens appreciate from trading fees
+- The alternative (pool bleeding) would be worse for all LPs
+
+---
+
+## Technical Deep-Dive
+
 ## Goal
 
 Ensure that stored pool liquidity (global state `Liquidity`) never decreases as a result of normal operations (swaps, add-liquidity, distributing excess assets). Any observed small decrease must be an integer rounding artefact, not an economic loss. Reject only real, larger drops.
