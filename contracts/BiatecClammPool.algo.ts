@@ -1050,6 +1050,8 @@ export class BiatecClammPool extends Contract {
     const newL = this.setCurrentLiquidityNonDecreasing(oldL);
 
     // liquidity increase is the result of the fees
+    // Ensure liquidity is non-zero before division
+    assert(newL > <uint256>0, 'E_ZERO_LIQ');
 
     const diff = (newL - oldL) as uint256; // difference is the lp increment by fees .. ready to be split between users and biatec
 
@@ -1332,19 +1334,24 @@ export class BiatecClammPool extends Contract {
    *
    * Only addressExecutiveFee is allowed to execute this method.
    */
-  // sendOfflineKeyRegistration(appBiatecConfigProvider: AppID): void {
-  //   assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
-  //   const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
+  /**
+   * addressExecutiveFee can perform key unregistration for this LP pool
+   *
+   * Only addressExecutiveFee is allowed to execute this method.
+   */
+  sendOfflineKeyRegistration(appBiatecConfigProvider: AppID): void {
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
 
-  //   const paused = appBiatecConfigProvider.globalState('s') as uint64;
-  //   assert(paused === 0, 'E_PAUSED'); // services are paused at the moment
+    const paused = appBiatecConfigProvider.globalState('s') as uint64;
+    assert(paused === 0, 'E_PAUSED'); // services are paused at the moment
 
-  //   assert(
-  //     this.txn.sender === addressExecutiveFee,
-  //     'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
-  //   );
-  //   sendOfflineKeyRegistration({ fee: 0 });
-  // }
+    assert(
+      this.txn.sender === addressExecutiveFee,
+      'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
+    );
+    sendOfflineKeyRegistration({ fee: 0 });
+  }
 
   /**
    * Calculates the number of LP tokens issued to users
@@ -1612,6 +1619,8 @@ export class BiatecClammPool extends Contract {
     const P12 = P1 + P2;
     // (b*d+b*x+l)
     const P345 = P3 + P4 + liquidity;
+    // Ensure denominator is non-zero before division
+    assert(P345 > <uint256>0, 'E_ZERO_DENOM');
     // (a*b*d*l + b*d*y)/(b*d+b*x+l)
     const ret = (P12 * s) / P345;
     return ret;
@@ -1674,6 +1683,8 @@ export class BiatecClammPool extends Contract {
     const P5 = (b * y) / s;
     // (a*b*l+b*d+b*y) (P3 + P4 + P5)
     const denom = P3 + P4 + P5;
+    // Ensure denominator is non-zero before division
+    assert(denom > <uint256>0, 'E_ZERO_DENOM');
     // w = (d*l + b*d*x)/(a*b*l+b*d+b*y)
     const ret = (nom * s) / denom;
     return ret;
