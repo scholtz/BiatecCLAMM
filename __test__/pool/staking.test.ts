@@ -34,12 +34,46 @@ describe('BiatecClammPool - Staking Pools', () => {
 
       const lpTokenInfo = await algod.getAssetByID(Number(lpTokenId)).do();
       // eslint-disable-next-line no-console
-      const rawNameBuffer = typeof lpTokenInfo.params.nameB64 === 'string' ? Buffer.from(lpTokenInfo.params.nameB64, 'base64') : Buffer.from(lpTokenInfo.params.nameB64 ?? new Uint8Array());
+      const rawNameBuffer =
+        typeof lpTokenInfo.params.nameB64 === 'string'
+          ? Buffer.from(lpTokenInfo.params.nameB64, 'base64')
+          : Buffer.from(lpTokenInfo.params.nameB64 ?? new Uint8Array());
       console.log('LP raw name bytes', rawNameBuffer.toString('hex'));
       // eslint-disable-next-line no-console
       console.log('LP name/unit', lpTokenInfo.params.name, lpTokenInfo.params.unitName);
-      expect(lpTokenInfo.params.name).toBe('B-ALGO');
+      expect(lpTokenInfo.params.name).toBe('bALGO');
       expect(lpTokenInfo.params.unitName).toBe('ALGO');
+    } catch (e: any) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      throw Error(e.message);
+    }
+  });
+
+  test('Native Token Pool respects custom native token name casing', async () => {
+    try {
+      await setAssetAId(0n);
+      const { algod } = fixture.context;
+      const { clientBiatecClammPoolProvider } = await setupPool({
+        algod,
+        assetA: 0n,
+        assetB: 0n,
+        biatecFee: 0n,
+        lpFee: BigInt(SCALE / 100),
+        p: BigInt(SCALE),
+        p1: BigInt(SCALE),
+        p2: BigInt(SCALE),
+        nativeTokenName: 'Algo',
+        useProvidedAssets: true,
+      });
+
+      const state = await clientBiatecClammPoolProvider.appClient.state.global.getAll();
+      const lpTokenId = BigInt(state.assetLp ?? 0n);
+      expect(lpTokenId).toBeGreaterThan(0n);
+
+      const lpTokenInfo = await algod.getAssetByID(Number(lpTokenId)).do();
+      expect(lpTokenInfo.params.name).toBe('bAlgo');
+      expect(lpTokenInfo.params.unitName).toBe('Algo');
     } catch (e: any) {
       // eslint-disable-next-line no-console
       console.error(e);
@@ -80,7 +114,7 @@ describe('BiatecClammPool - Staking Pools', () => {
 
       const lpTokenInfo = await algod.getAssetByID(Number(lpTokenId)).do();
       const testAssetInfo = await algod.getAssetByID(Number(testAssetId)).do();
-      expect(lpTokenInfo.params.name).toBe(`B-${testAssetInfo.params.unitName}`);
+      expect(lpTokenInfo.params.name).toBe(`b${testAssetInfo.params.unitName}`);
       expect(lpTokenInfo.params.unitName).toBe(testAssetInfo.params.unitName);
     } catch (e: any) {
       // eslint-disable-next-line no-console
@@ -93,7 +127,12 @@ describe('BiatecClammPool - Staking Pools', () => {
     try {
       await setAssetAId(0n);
       const { algod } = fixture.context;
-      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
+      const {
+        clientBiatecClammPoolProvider,
+        clientBiatecConfigProvider,
+        clientBiatecIdentityProvider,
+        clientBiatecPoolProvider,
+      } = await setupPool({
         algod,
         assetA: 0n,
         assetB: 0n,

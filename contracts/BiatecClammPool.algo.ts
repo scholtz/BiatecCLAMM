@@ -315,10 +315,15 @@ export class BiatecClammPool extends Contract {
     let nameBytes: bytes = '';
     let unitNameBytes: bytes = 'BLP'; // Biatec LP token
 
-    // If assetA and assetB are the same, create a staking pool token: B-{AssetName}
-    if (assetA.id === assetB.id) {
+    const isNativeStakingPool = assetA.id == 0 && assetB.id == 0;
+    const isSameAssetPool = assetA.id == assetB.id;
+
+    if (isNativeStakingPool) {
+      nameBytes = 'b' + defaultNativeTokenName;
+      unitNameBytes = defaultNativeTokenName;
+    } else if (isSameAssetPool) {
+      // ASA staking pools add b prefix with a single asset name component, for example bVote
       nameBytes = 'b' + nameAssetABytes;
-      // For staking pools, use the asset's unit name (or native token name) as the symbol
       unitNameBytes = assetA.id > 0 ? assetA.unitName : defaultNativeTokenName;
     } else {
       // Standard liquidity pool: B-{AssetA}-{AssetB}
