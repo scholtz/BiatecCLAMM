@@ -5,14 +5,8 @@ describe('BiatecPoolProvider recentPools ring buffer', () => {
   jest.setTimeout(180000);
 
   test('stores the last 10 deployed pool app ids in recentPools1..10', async () => {
-    const {
-      clientBiatecPoolProvider,
-      clientBiatecConfigProvider,
-      deployer,
-      assetAId,
-      assetBId,
-      algod,
-    } = await setupPool({ p1: 1n, p2: 1n, p: 1n, assetA: 1n, biatecFee: 0n, lpFee: 0n });
+    const { clientBiatecPoolProvider, clientBiatecConfigProvider, deployer, assetAId, assetBId, algod } =
+      await setupPool({ p1: 1n, p2: 1n, p: 1n, assetA: 1n, biatecFee: 0n, lpFee: 0n });
 
     const createdIds: bigint[] = [];
 
@@ -36,7 +30,11 @@ describe('BiatecPoolProvider recentPools ring buffer', () => {
       txsClammCreateTxs.forEach((t) => signed.push(t.signTxn(deployer.sk)));
       await algod.sendRawTransaction(signed).do();
       // wait for confirmation
-      const confirmation = await algosdk.waitForConfirmation(algod, txsClammCreateTxs[txsClammCreateTxs.length - 1].txID(), 4);
+      const confirmation = await algosdk.waitForConfirmation(
+        algod,
+        txsClammCreateTxs[txsClammCreateTxs.length - 1].txID(),
+        4
+      );
       if (!(confirmation.logs && confirmation.logs.length > 0)) throw new Error('Logs not found');
       const lastLog = confirmation.logs[confirmation.logs.length - 1];
       const poolAppId = algosdk.decodeUint64(lastLog.subarray(4, 12));
