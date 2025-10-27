@@ -184,8 +184,17 @@ export class BiatecClammPool extends Contract {
     assert(this.priceMax.value === 0, 'E_PRICE_MAX'); // It is not possible to call bootrap twice
     assert(this.txn.sender === this.app.creator, 'E_SENDER'); // 'Only creator of the app can set it up'
     assert(priceMax > 0, 'E_PRICE'); // 'You must set price'
-    // assert(assetA < assetB);
-    // Allow assetA.id === assetB.id for staking pools (e.g., B-ALGO for interest bearing ALGO)
+    // Validate price parameters for same-asset staking pools
+    const isSameAssetPool = assetA.id === assetB.id;
+    if (isSameAssetPool) {
+      // Staking pools (same-asset) must have flat price range
+      assert(priceMin === priceMax, 'E_STAKING_PRICE'); // 'Same-asset pools require flat price range'
+    } else {
+      // Standard liquidity pools should have assetA < assetB (when both > 0)
+      if (assetA.id > 0 && assetB.id > 0) {
+        assert(assetA.id < assetB.id, 'E_ASSET_ORDER'); // 'Asset A must be less than Asset B'
+      }
+    }
     assert(fee <= SCALE / 10); // fee must be lower then 10%
     // assert(verificationClass <= 4); // verificationClass  // SHORTENED_APP
     assert(!this.currentPrice.exists);
@@ -892,6 +901,10 @@ export class BiatecClammPool extends Contract {
     assert(
       user.verificationClass >= this.verificationClass.value, // if(user.verificationClass >= this.verificationClass.value) then ok
       'ERR-LOW-VER' // 'User cannot interact with this smart contract as his verification class is lower then required here'
+    );
+    assert(
+      user.verificationClass <= 4, // Verification class must be within valid range
+      'ERR-HIGH-VER' // 'Verification class out of bounds'
     );
 
     const paused = appBiatecConfigProvider.globalState('s') as uint64;

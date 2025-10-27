@@ -277,6 +277,7 @@ export class BiatecIdentityProvider extends Contract {
   setInfo(user: Address, info: IdentityInfo) {
     assert(this.txn.sender === this.engagementSetter.value);
     assert(info.feeMultiplierBase === SCALE, 'FeeMultiplierBase must be set properly');
+    assert(info.verificationClass <= 4, 'Verification class out of bounds');
     this.identities(user).value = info;
   }
 
