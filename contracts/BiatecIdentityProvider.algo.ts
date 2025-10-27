@@ -211,12 +211,7 @@ export class BiatecIdentityProvider extends Contract {
    * Biatec deploys single identity provider smart contract
    * @param appBiatecConfigProvider Biatec amm provider
    */
-  bootstrap(
-    appBiatecConfigProvider: AppID,
-    governor: Address,
-    verificationSetter: Address,
-    engagementSetter: Address
-  ): void {
+  bootstrap(appBiatecConfigProvider: AppID, governor: Address, verificationSetter: Address, engagementSetter: Address): void {
     assert(this.txn.sender === this.app.creator, 'Only creator of the app can set it up');
     this.appBiatecConfigProvider.value = appBiatecConfigProvider;
     this.governor.value = governor;
@@ -250,15 +245,9 @@ export class BiatecIdentityProvider extends Contract {
     assert(info.verificationClass === 0, 'verificationClass must equal to 0');
     // isCompany: boolean;
     // personUUID: string[36];
-    assert(
-      info.personUUID === '00000000-0000-0000-0000-000000000000',
-      'personUUID must equal to 00000000-0000-0000-0000-000000000000'
-    );
+    assert(info.personUUID === '00000000-0000-0000-0000-000000000000', 'personUUID must equal to 00000000-0000-0000-0000-000000000000');
     // legalEntityUUID: string[36];
-    assert(
-      info.legalEntityUUID === '00000000-0000-0000-0000-000000000000',
-      'legalEntityUUID must equal to 00000000-0000-0000-0000-000000000000'
-    );
+    assert(info.legalEntityUUID === '00000000-0000-0000-0000-000000000000', 'legalEntityUUID must equal to 00000000-0000-0000-0000-000000000000');
     // biatecEngagementPoints: uint64;
     assert(info.biatecEngagementPoints === 0, 'biatecEngagementPoints must equal to 0');
     // biatecEngagementRank: uint64;
@@ -296,22 +285,10 @@ export class BiatecIdentityProvider extends Contract {
    *
    * Only addressExecutiveFee is allowed to execute this method.
    */
-  sendOnlineKeyRegistration(
-    appBiatecConfigProvider: AppID,
-    votePK: bytes,
-    selectionPK: bytes,
-    stateProofPK: bytes,
-    voteFirst: uint64,
-    voteLast: uint64,
-    voteKeyDilution: uint64,
-    fee: uint64
-  ): void {
+  sendOnlineKeyRegistration(appBiatecConfigProvider: AppID, votePK: bytes, selectionPK: bytes, stateProofPK: bytes, voteFirst: uint64, voteLast: uint64, voteKeyDilution: uint64, fee: uint64): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
-    assert(
-      this.txn.sender === addressExecutiveFee,
-      'Only fee executor setup in the config can take the collected fees'
-    );
+    assert(this.txn.sender === addressExecutiveFee, 'Only fee executor setup in the config can take the collected fees');
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
     sendOnlineKeyRegistration({
@@ -427,10 +404,7 @@ export class BiatecIdentityProvider extends Contract {
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
-    assert(
-      this.txn.sender === addressExecutiveFee,
-      'Only fee executor setup in the config can take the collected fees'
-    );
+    assert(this.txn.sender === addressExecutiveFee, 'Only fee executor setup in the config can take the collected fees');
 
     this.doAxfer(this.txn.sender, asset, amount);
 

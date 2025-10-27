@@ -2,14 +2,8 @@
 import algosdk, { assignGroupID, makePaymentTxnWithSuggestedParamsFromObject, Transaction } from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { AlgorandClient } from '@algorandfoundation/algokit-utils';
-import {
-  BiatecConfigProviderClient,
-  BiatecConfigProviderFactory,
-} from '../../contracts/clients/BiatecConfigProviderClient';
-import {
-  BiatecIdentityProviderClient,
-  BiatecIdentityProviderFactory,
-} from '../../contracts/clients/BiatecIdentityProviderClient';
+import { BiatecConfigProviderClient, BiatecConfigProviderFactory } from '../../contracts/clients/BiatecConfigProviderClient';
+import { BiatecIdentityProviderClient, BiatecIdentityProviderFactory } from '../../contracts/clients/BiatecIdentityProviderClient';
 import { BiatecPoolProviderClient, BiatecPoolProviderFactory } from '../../contracts/clients/BiatecPoolProviderClient';
 import { BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
 
@@ -123,9 +117,7 @@ const app = async () => {
 
   if (!appBiatecConfigProvider || !appBiatecIdentityProvider || !appBiatecPoolProvider) {
     console.log('Creating BiatecConfigProviderClient');
-    throw new Error(
-      'Please set appBiatecConfigProvider, appBiatecIdentityProvider and appBiatecPoolProvider env variables'
-    );
+    throw new Error('Please set appBiatecConfigProvider, appBiatecIdentityProvider and appBiatecPoolProvider env variables');
   }
   console.log('appBiatecConfigProvider', appBiatecConfigProvider);
   console.log('appBiatecIdentityProvider', appBiatecIdentityProvider);

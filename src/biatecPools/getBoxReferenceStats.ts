@@ -14,20 +14,12 @@ const getBoxReferenceStats = (input: IGetBoxReferenceInput): BoxReference[] => {
     {
       // single lp price feed
       appId: BigInt(input.appBiatecPoolProvider),
-      name: new Uint8Array(
-        Buffer.concat([Buffer.from('p', 'ascii'), algosdk.bigIntToBytes(input.appBiatecCLAMMPool, 8)])
-      ), // data box
+      name: new Uint8Array(Buffer.concat([Buffer.from('p', 'ascii'), algosdk.bigIntToBytes(input.appBiatecCLAMMPool, 8)])), // data box
     },
     {
       // aggregated price feed
       appId: BigInt(input.appBiatecPoolProvider),
-      name: new Uint8Array(
-        Buffer.concat([
-          Buffer.from('s', 'ascii'),
-          algosdk.bigIntToBytes(input.assetA, 8),
-          algosdk.bigIntToBytes(input.assetB, 8),
-        ])
-      ),
+      name: new Uint8Array(Buffer.concat([Buffer.from('s', 'ascii'), algosdk.bigIntToBytes(input.assetA, 8), algosdk.bigIntToBytes(input.assetB, 8)])),
     },
   ];
   if (input.includingAssetBoxes) {

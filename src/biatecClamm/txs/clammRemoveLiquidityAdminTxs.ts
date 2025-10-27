@@ -19,9 +19,7 @@ interface IClammRemoveLiquidityAdminTxsInput {
  * This method creates list of transactions to be signed
  * @returns List of transactions to sign
  */
-const clammRemoveLiquidityAdminTxs = async (
-  input: IClammRemoveLiquidityAdminTxsInput
-): Promise<algosdk.Transaction[]> => {
+const clammRemoveLiquidityAdminTxs = async (input: IClammRemoveLiquidityAdminTxsInput): Promise<algosdk.Transaction[]> => {
   const { clientBiatecClammPool, account, appBiatecConfigProvider, assetA, assetB, assetLp, amount } = input;
 
   const tx = await clientBiatecClammPool.createTransaction.removeLiquidityAdmin({

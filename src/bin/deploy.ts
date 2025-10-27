@@ -2,14 +2,8 @@
 import algosdk, { assignGroupID, makePaymentTxnWithSuggestedParamsFromObject, Transaction } from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { AlgorandClient } from '@algorandfoundation/algokit-utils';
-import {
-  BiatecConfigProviderClient,
-  BiatecConfigProviderFactory,
-} from '../../contracts/clients/BiatecConfigProviderClient';
-import {
-  BiatecIdentityProviderClient,
-  BiatecIdentityProviderFactory,
-} from '../../contracts/clients/BiatecIdentityProviderClient';
+import { BiatecConfigProviderClient, BiatecConfigProviderFactory } from '../../contracts/clients/BiatecConfigProviderClient';
+import { BiatecIdentityProviderClient, BiatecIdentityProviderFactory } from '../../contracts/clients/BiatecIdentityProviderClient';
 import { BiatecPoolProviderClient, BiatecPoolProviderFactory } from '../../contracts/clients/BiatecPoolProviderClient';
 import { BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
 
@@ -122,12 +116,10 @@ const app = async () => {
     algorand,
   });
 
-  const clientBiatecIdentityProvider = await biatecIdentityProviderFactory.send.create
-    .createApplication()
-    .catch((e: Error) => {
-      console.error(e);
-      return undefined;
-    });
+  const clientBiatecIdentityProvider = await biatecIdentityProviderFactory.send.create.createApplication().catch((e: Error) => {
+    console.error(e);
+    return undefined;
+  });
   if (!clientBiatecIdentityProvider) throw Error('clientBiatecIdentityProvider is empty');
 
   const biatecPoolProviderFactory = new BiatecPoolProviderFactory({
@@ -149,12 +141,10 @@ const app = async () => {
     algorand,
   });
 
-  const clientBiatecConfigProvider = await biatecConfigProviderFactory.send.create
-    .createApplication()
-    .catch((e: Error) => {
-      console.error(e);
-      return undefined;
-    });
+  const clientBiatecConfigProvider = await biatecConfigProviderFactory.send.create.createApplication().catch((e: Error) => {
+    console.error(e);
+    return undefined;
+  });
   if (!clientBiatecConfigProvider) throw Error('clientBiatecConfigProvider is empty');
 
   const biatecClammPoolFactoryfactory = new BiatecClammPoolFactory({
@@ -162,12 +152,7 @@ const app = async () => {
     defaultSigner: signer.signer,
     algorand,
   });
-  console.log(
-    'Config/Identity/PP',
-    clientBiatecConfigProvider.appClient.appId,
-    clientBiatecIdentityProvider.appClient.appId,
-    clientBiatecPoolProvider.appClient.appId
-  );
+  console.log('Config/Identity/PP', clientBiatecConfigProvider.appClient.appId, clientBiatecIdentityProvider.appClient.appId, clientBiatecPoolProvider.appClient.appId);
   const { approvalProgram: clammPoolApprovalProgram } = await biatecClammPoolFactoryfactory.appFactory.compile({});
   console.log('sending MBR to config addr');
   await algod

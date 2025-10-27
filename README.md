@@ -30,6 +30,16 @@ npm i biatec-concentrated-liquidity-amm
 
 ## Examples
 
+### Retrieve deployed app IDs
+
+```ts
+import { getConfig } from 'biatec-concentrated-liquidity-amm';
+
+const { configAppId, identityAppId, poolProviderAppId } = getConfig('testnet-v1.0');
+```
+
+Supported genesis IDs are `mainnet-v1.0`, `voimain-v1.0`, and `testnet-v1.0`. The helper throws if you pass an unsupported network so deployments stay explicit.
+
 ## Add liquidity
 
 ```

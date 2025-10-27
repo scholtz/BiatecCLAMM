@@ -7,15 +7,9 @@ import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/type
 import { AlgorandClient } from '@algorandfoundation/algokit-utils';
 import { BiatecClammPoolClient, BiatecClammPoolFactory } from '../contracts/clients/BiatecClammPoolClient';
 import createToken from '../src/createToken';
-import {
-  BiatecIdentityProviderClient,
-  BiatecIdentityProviderFactory,
-} from '../contracts/clients/BiatecIdentityProviderClient';
+import { BiatecIdentityProviderClient, BiatecIdentityProviderFactory } from '../contracts/clients/BiatecIdentityProviderClient';
 import { BiatecPoolProviderClient, BiatecPoolProviderFactory } from '../contracts/clients/BiatecPoolProviderClient';
-import {
-  BiatecConfigProviderClient,
-  BiatecConfigProviderFactory,
-} from '../contracts/clients/BiatecConfigProviderClient';
+import { BiatecConfigProviderClient, BiatecConfigProviderFactory } from '../contracts/clients/BiatecConfigProviderClient';
 import clammBootstrapSender from '../src/biatecClamm/sender/clammBootstrapSender';
 import configBootstrapSender from '../src/biatecConfig/sender/configBootstrapSender';
 import getBoxReferenceStats from '../src/biatecPools/getBoxReferenceStats';

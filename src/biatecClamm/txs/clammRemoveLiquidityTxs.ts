@@ -25,17 +25,7 @@ interface IClammRemoveLiquidityTxsInput {
  * @returns List of transactions to sign
  */
 const clammRemoveLiquidityTxs = async (input: IClammRemoveLiquidityTxsInput): Promise<algosdk.Transaction[]> => {
-  const {
-    params,
-    clientBiatecClammPool,
-    account,
-    appBiatecConfigProvider,
-    appBiatecIdentityProvider,
-    assetA,
-    assetB,
-    assetLp,
-    lpToSend,
-  } = input;
+  const { params, clientBiatecClammPool, account, appBiatecConfigProvider, appBiatecIdentityProvider, assetA, assetB, assetLp, lpToSend } = input;
 
   const boxIdentity = getBoxReferenceIdentity({
     appBiatecIdentity: input.appBiatecIdentityProvider,

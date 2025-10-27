@@ -6,22 +6,7 @@ import lpFees10BiatecFee50Data from '../test-data/lp-fees-10-biatec-fee-50.json'
 import asasrLpFees10BiatecFee0Data from '../test-data/asasr-lp-fees-10-biatec-fee-0.json';
 import withdrawLpFeesData from '../test-data/withdraw-lp-fees-from-biatec-account.json';
 import distributeAssetsData from '../test-data/distribute-assets-to-lp-holders.json';
-import {
-  setupPool,
-  assetAId,
-  assetBId,
-  deployer,
-  SCALE,
-  SCALE_A,
-  SCALE_B,
-  fixture,
-  algosdk,
-  algokit,
-  getBoxReferenceStats,
-  LP_TOKEN_DECIMALS,
-  SCALE_LP,
-  setAssetAId,
-} from './shared-setup';
+import { setupPool, assetAId, assetBId, deployer, SCALE, SCALE_A, SCALE_B, fixture, algosdk, algokit, getBoxReferenceStats, LP_TOKEN_DECIMALS, SCALE_LP, setAssetAId } from './shared-setup';
 
 describe('BiatecClammPool - fees', () => {
   test('LP fees 10%, Biatec fee - 0% - I can add, swap and remove liquidity from the pool', async () => {
@@ -33,12 +18,7 @@ describe('BiatecClammPool - fees', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const {
-          clientBiatecClammPoolProvider,
-          clientBiatecConfigProvider,
-          clientBiatecIdentityProvider,
-          clientBiatecPoolProvider,
-        } = await setupPool({
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
           algod,
 
           assetA: assetAId,
@@ -154,11 +134,7 @@ describe('BiatecClammPool - fees', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -232,12 +208,7 @@ describe('BiatecClammPool - fees', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const {
-          clientBiatecClammPoolProvider,
-          clientBiatecConfigProvider,
-          clientBiatecIdentityProvider,
-          clientBiatecPoolProvider,
-        } = await setupPool({
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
           algod,
 
           assetA: assetAId,
@@ -352,11 +323,7 @@ describe('BiatecClammPool - fees', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -430,12 +397,7 @@ describe('BiatecClammPool - fees', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const {
-          clientBiatecClammPoolProvider,
-          clientBiatecConfigProvider,
-          clientBiatecIdentityProvider,
-          clientBiatecPoolProvider,
-        } = await setupPool({
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
           algod,
 
           assetA: assetAId,
@@ -558,11 +520,7 @@ describe('BiatecClammPool - fees', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -679,11 +637,7 @@ describe('BiatecClammPool - fees', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -792,12 +746,7 @@ describe('BiatecClammPool - fees', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const {
-          clientBiatecClammPoolProvider,
-          clientBiatecConfigProvider,
-          clientBiatecIdentityProvider,
-          clientBiatecPoolProvider,
-        } = await setupPool({
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
           algod,
 
           assetA: assetAId,
@@ -919,11 +868,7 @@ describe('BiatecClammPool - fees', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -1047,11 +992,7 @@ describe('BiatecClammPool - fees', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -1118,17 +1059,16 @@ describe('BiatecClammPool - fees', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider } =
-          await setupPool({
-            algod,
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider } = await setupPool({
+          algod,
 
-            assetA: assetAId,
-            biatecFee: 100_000_000n,
-            lpFee: 100_000_000n,
-            p: BigInt(t.P * SCALE),
-            p1: BigInt(t.P1 * SCALE),
-            p2: BigInt(t.P2 * SCALE),
-          });
+          assetA: assetAId,
+          biatecFee: 100_000_000n,
+          lpFee: 100_000_000n,
+          p: BigInt(t.P * SCALE),
+          p1: BigInt(t.P1 * SCALE),
+          p2: BigInt(t.P2 * SCALE),
+        });
 
         const params = await algod.getTransactionParams().do();
         // opt in to the LP token

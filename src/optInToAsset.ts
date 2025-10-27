@@ -8,8 +8,8 @@ interface IOptInToAssetInput {
 }
 const optInToAsset = (input: IOptInToAssetInput) => {
   return doAssetTransfer({
-    from: input.account,
-    to: input.account.addr,
+    fromAccount: input.account,
+    to: input.account.addr.toString(),
     assetIndex: input.assetIndex,
     amount: 0,
     algod: input.algod,

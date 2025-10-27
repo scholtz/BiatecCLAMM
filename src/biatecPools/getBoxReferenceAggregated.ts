@@ -10,13 +10,7 @@ interface IBoxReferenceAggregatedInput {
 const getBoxReferenceAggregated = (input: IBoxReferenceAggregatedInput): BoxReference => {
   const ret: BoxReference = {
     appId: BigInt(input.appBiatecPoolProvider),
-    name: new Uint8Array(
-      Buffer.concat([
-        Buffer.from('s', 'ascii'),
-        algosdk.bigIntToBytes(input.assetA, 8),
-        algosdk.bigIntToBytes(input.assetB, 8),
-      ])
-    ),
+    name: new Uint8Array(Buffer.concat([Buffer.from('s', 'ascii'), algosdk.bigIntToBytes(input.assetA, 8), algosdk.bigIntToBytes(input.assetB, 8)])),
   };
 
   return ret;

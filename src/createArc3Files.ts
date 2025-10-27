@@ -29,12 +29,7 @@ const createArc3Files = async (network: string, sn: number) => {
     quality: 'proof',
     story:
       "The Slovaks have waited patiently for the opportunity for self-determination - like a bird of prey circling in the sky above the majestic Tatra Mountains, looking for its prey. It is no wonder that Slovak poets and revivalists of the 19th century regarded the eagle as a soulmate and that Ľudovít Štúr himself named the cultural supplement of the Slovak National Newspaper 'Orol tatránski'. Despite the unwilling attempts of the sovereign rulers, the Slovaks preserved their culture, language and character until they finally succeeded in winning their independence. The symbol of all they achieved was once again the eagle, which has always represented strength, victory, freedom and nobility, but also resurrection and new life. The bird of prey, which represents the Christian kingdom of heaven, also refers to Slovak religious tradition.",
-    pictures: [
-      { url: `sn-${pad(sn, 4)}-o-front.png` },
-      { url: `sn-${pad(sn, 4)}-o-back.png` },
-      { url: `sn-${pad(sn, 4)}-p-front.png` },
-      { url: `sn-${pad(sn, 4)}-p-back.png` },
-    ],
+    pictures: [{ url: `sn-${pad(sn, 4)}-o-front.png` }, { url: `sn-${pad(sn, 4)}-o-back.png` }, { url: `sn-${pad(sn, 4)}-p-front.png` }, { url: `sn-${pad(sn, 4)}-p-back.png` }],
   };
   const properties2 = {
     name: `Gold coin 1 oz, SN ${sn}`,
@@ -77,12 +72,7 @@ const createArc3Files = async (network: string, sn: number) => {
     quality: 'stand',
     story:
       "The best-known story of how the exotic lion became the symbol of the Czech country is the tale of Bruncvík - a mythical prince who travelled to Africa where he helped the king of beasts in his battle with the dragon. However, the old chroniclers offer more plausible explanation. According to them, Emperor Frederick I Barbarossa rewarded Prince Vladislaus II with a royal crown and a new heraldic animal, which replaced the current eagle in 1158. The lion represented the virtues of chivalry, strength and courage that Vladislaus had shown during the conquest of the city of Milan in the Emperor's service. And how did the heraldic beast get its second tail? Again, heroism played a role. King Ottokar I of Bohemia helped Emperor Otto IV in his fight against the Saxon in 1204, and in return the Bohemian lion was given a second tail, which distinguished it from the beasts of other nations and gave it a unique prestige. Medieval writers, however, liked to colour their narratives, therefore, they are not a reliable source of information. However, one thing is certain - the first truly documented Bohemian lion was a symbol of the Přemyslid dynasty and appears on the equestrian seal of Vladislaus Henry from 1203. The lion was elevated to the emblem of the whole country by Ottokar II of Bohemia, the Iron and Gold King.",
-    pictures: [
-      { url: `sn-${pad(sn, 4)}-o-front.png` },
-      { url: `sn-${pad(sn, 4)}-o-back.png` },
-      { url: `sn-${pad(sn, 4)}-p-front.png` },
-      { url: `sn-${pad(sn, 4)}-p-back.png` },
-    ],
+    pictures: [{ url: `sn-${pad(sn, 4)}-o-front.png` }, { url: `sn-${pad(sn, 4)}-o-back.png` }, { url: `sn-${pad(sn, 4)}-p-front.png` }, { url: `sn-${pad(sn, 4)}-p-back.png` }],
   };
   const properties13 = {
     name: `Gold coin 1 oz, SN ${sn}`,
@@ -142,9 +132,7 @@ const createArc3Files = async (network: string, sn: number) => {
     }
 
     const thumbnailIpfs = await publishFileBuffer(thumbnail);
-    const thumbnailIntegrity = CryptoJS.SHA256(CryptoJS.enc.Base64.parse(thumbnail.toString('base64'))).toString(
-      CryptoJS.enc.Base64
-    );
+    const thumbnailIntegrity = CryptoJS.SHA256(CryptoJS.enc.Base64.parse(thumbnail.toString('base64'))).toString(CryptoJS.enc.Base64);
 
     pictures.push({
       url: `ipfs://${ipfs}`,

@@ -28,19 +28,7 @@ interface IClammSwapTxsInput {
  * @returns List of transactions to sign
  */
 const clammSwapTxs = async (input: IClammSwapTxsInput): Promise<algosdk.Transaction[]> => {
-  const {
-    params,
-    clientBiatecClammPool,
-    account,
-    appBiatecConfigProvider,
-    appBiatecIdentityProvider,
-    appBiatecPoolProvider,
-    assetA,
-    assetB,
-    minimumToReceive,
-    fromAsset,
-    fromAmount,
-  } = input;
+  const { params, clientBiatecClammPool, account, appBiatecConfigProvider, appBiatecIdentityProvider, appBiatecPoolProvider, assetA, assetB, minimumToReceive, fromAsset, fromAmount } = input;
 
   let txSwap: algosdk.Transaction;
 

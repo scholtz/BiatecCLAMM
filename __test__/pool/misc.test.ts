@@ -41,13 +41,7 @@ describe('BiatecClammPool - misc', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const {
-          clientBiatecClammPoolProvider,
-          clientBiatecConfigProvider,
-          clientBiatecIdentityProvider,
-          clientBiatecPoolProvider,
-          algod,
-        } = await setupPool({
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider, algod } = await setupPool({
           assetA: 0n,
           biatecFee: 0n,
           lpFee: 100_000_000n,
@@ -184,11 +178,7 @@ describe('BiatecClammPool - misc', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(t.assetAId), BigInt(assetBId)],
         });
 
@@ -255,15 +245,14 @@ describe('BiatecClammPool - misc', () => {
 
   test('npm method getPools() works', async () => {
     try {
-      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, algod } =
-        await setupPool({
-          assetA: 1n,
-          biatecFee: BigInt(SCALE / 10),
-          lpFee: BigInt(SCALE / 10),
-          p: BigInt(1.5 * SCALE),
-          p1: BigInt(1 * SCALE),
-          p2: BigInt(2 * SCALE),
-        });
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, algod } = await setupPool({
+        assetA: 1n,
+        biatecFee: BigInt(SCALE / 10),
+        lpFee: BigInt(SCALE / 10),
+        p: BigInt(1.5 * SCALE),
+        p1: BigInt(1 * SCALE),
+        p2: BigInt(2 * SCALE),
+      });
       expect(!!clientBiatecClammPoolProvider).toBeTruthy();
       const appId = await clientBiatecClammPoolProvider.appClient.appId;
       expect(appId).toBeGreaterThan(0);

@@ -10,14 +10,8 @@ import { assetAId, assetBId, setupPool } from './pool/shared-setup';
 import { clammAddLiquiditySender, clammRemoveLiquiditySender, clammSwapSender } from '../src';
 import createToken from '../src/createToken';
 
-if (
-  typeof clammAddLiquiditySender !== 'function' ||
-  typeof clammRemoveLiquiditySender !== 'function' ||
-  typeof clammSwapSender !== 'function'
-) {
-  throw new Error(
-    `npm barrel exports invalid types: add=${typeof clammAddLiquiditySender}, remove=${typeof clammRemoveLiquiditySender}, swap=${typeof clammSwapSender}`
-  );
+if (typeof clammAddLiquiditySender !== 'function' || typeof clammRemoveLiquiditySender !== 'function' || typeof clammSwapSender !== 'function') {
+  throw new Error(`npm barrel exports invalid types: add=${typeof clammAddLiquiditySender}, remove=${typeof clammRemoveLiquiditySender}, swap=${typeof clammSwapSender}`);
 }
 
 const fixture = algorandFixture();
@@ -222,12 +216,7 @@ describe('clamm', () => {
       const { algod } = fixture.context;
       const assetUSD = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_A_DECIMALS });
       const assetEUR = await createToken({ account: deployer, algod, name: 'EUR', decimals: ASSET_B_DECIMALS });
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecPoolProvider,
-        clientBiatecIdentityProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, clientBiatecIdentityProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: assetUSD,
@@ -301,12 +290,7 @@ describe('clamm', () => {
       const { algod } = fixture.context;
       const assetUSD = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_A_DECIMALS });
       const assetEUR = await createToken({ account: deployer, algod, name: 'EUR', decimals: ASSET_B_DECIMALS });
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecPoolProvider,
-        clientBiatecIdentityProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, clientBiatecIdentityProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: assetUSD,
@@ -395,12 +379,7 @@ describe('clamm', () => {
       const { algod } = fixture.context;
       const assetUSD = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_A_DECIMALS });
       const assetEUR = await createToken({ account: deployer, algod, name: 'EUR', decimals: ASSET_B_DECIMALS });
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecPoolProvider,
-        clientBiatecIdentityProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, clientBiatecIdentityProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: assetUSD,
@@ -544,12 +523,7 @@ describe('clamm', () => {
     try {
       const { algod } = fixture.context;
       const assetUSD = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_B_DECIMALS });
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecPoolProvider,
-        clientBiatecIdentityProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, clientBiatecIdentityProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: 0n,
@@ -627,12 +601,7 @@ describe('clamm', () => {
     try {
       const { algod } = fixture.context;
       const assetUSD = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_A_DECIMALS });
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecPoolProvider,
-        clientBiatecIdentityProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, clientBiatecIdentityProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: 0n,
@@ -714,12 +683,7 @@ describe('clamm', () => {
     try {
       const { algod } = fixture.context;
       const assetUSD = await createToken({ account: deployer, algod, name: 'USD', decimals: ASSET_B_DECIMALS });
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecPoolProvider,
-        clientBiatecIdentityProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecPoolProvider, clientBiatecIdentityProvider } = await setupPool({
         algod,
         signer: deployer,
         assetA: 0n,

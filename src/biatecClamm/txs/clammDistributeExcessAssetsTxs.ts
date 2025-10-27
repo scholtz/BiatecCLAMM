@@ -19,9 +19,7 @@ interface IClammDistributeExcessAssetsTxsInput {
  * This method creates list of transactions to be signed
  * @returns List of transactions to sign
  */
-const clammDistributeExcessAssetsTxs = async (
-  input: IClammDistributeExcessAssetsTxsInput
-): Promise<algosdk.Transaction[]> => {
+const clammDistributeExcessAssetsTxs = async (input: IClammDistributeExcessAssetsTxsInput): Promise<algosdk.Transaction[]> => {
   const { clientBiatecClammPool, account, appBiatecConfigProvider, assetA, assetB, amountA, amountB } = input;
   const tx = await clientBiatecClammPool.createTransaction.distributeExcessAssets({
     args: {

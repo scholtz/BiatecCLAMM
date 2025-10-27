@@ -58,7 +58,7 @@
         {
           "name": "assetA",
           "type": "uint64",
-          "desc": "Asset A ID must be lower then Asset B ID"
+          "desc": "Asset A ID must be lower then Asset B ID, or can be equal to Asset B ID for staking pools"
         },
         {
           "name": "assetB",
@@ -104,6 +104,11 @@
           "name": "verificationClass",
           "type": "uint64",
           "desc": "Minimum verification level from the biatec identity. Level 0 means no kyc."
+        },
+        {
+          "name": "nativeTokenName",
+          "type": "byte[]",
+          "desc": "Name of the native token (e.g., 'ALGO', 'VOI', 'ARAMID') when assetA.id = 0"
         }
       ],
       "returns": {

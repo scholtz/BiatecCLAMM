@@ -70,10 +70,7 @@ export class BiatecConfigProvider extends Contract {
    * addressUdpater from global biatec configuration is allowed to update application
    */
   updateApplication(newVersion: bytes): void {
-    assert(
-      this.txn.sender === this.addressUdpater.value,
-      'Only addressUdpater setup in the config can update application'
-    );
+    assert(this.txn.sender === this.addressUdpater.value, 'Only addressUdpater setup in the config can update application');
     log(version);
     log(newVersion);
     this.version.value = version;
@@ -181,19 +178,8 @@ export class BiatecConfigProvider extends Contract {
    *
    * Only addressExecutiveFee is allowed to execute this method.
    */
-  sendOnlineKeyRegistration(
-    votePK: bytes,
-    selectionPK: bytes,
-    stateProofPK: bytes,
-    voteFirst: uint64,
-    voteLast: uint64,
-    voteKeyDilution: uint64,
-    fee: uint64
-  ): void {
-    assert(
-      this.txn.sender === this.addressExecutiveFee.value,
-      'Only fee executor setup in the config can take the collected fees'
-    );
+  sendOnlineKeyRegistration(votePK: bytes, selectionPK: bytes, stateProofPK: bytes, voteFirst: uint64, voteLast: uint64, voteKeyDilution: uint64, fee: uint64): void {
+    assert(this.txn.sender === this.addressExecutiveFee.value, 'Only fee executor setup in the config can take the collected fees');
     sendOnlineKeyRegistration({
       selectionPK: selectionPK,
       stateProofPK: stateProofPK,
@@ -214,10 +200,7 @@ export class BiatecConfigProvider extends Contract {
    * @param amount Amount of the asset to be withdrawn
    */
   withdrawExcessAssets(asset: AssetID, amount: uint64): uint64 {
-    assert(
-      this.txn.sender === this.addressExecutiveFee.value,
-      'Only fee executor setup in the config can take the collected fees'
-    );
+    assert(this.txn.sender === this.addressExecutiveFee.value, 'Only fee executor setup in the config can take the collected fees');
 
     this.doAxfer(this.txn.sender, asset, amount);
 

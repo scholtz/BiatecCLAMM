@@ -6,14 +6,8 @@ import { algorandFixture } from '@algorandfoundation/algokit-utils/testing';
 import { expect } from '@jest/globals';
 import algosdk, { assignGroupID, makePaymentTxnWithSuggestedParamsFromObject, Transaction } from 'algosdk';
 import { BiatecClammPoolClient, BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
-import {
-  BiatecConfigProviderClient,
-  BiatecConfigProviderFactory,
-} from '../../contracts/clients/BiatecConfigProviderClient';
-import {
-  BiatecIdentityProviderClient,
-  BiatecIdentityProviderFactory,
-} from '../../contracts/clients/BiatecIdentityProviderClient';
+import { BiatecConfigProviderClient, BiatecConfigProviderFactory } from '../../contracts/clients/BiatecConfigProviderClient';
+import { BiatecIdentityProviderClient, BiatecIdentityProviderFactory } from '../../contracts/clients/BiatecIdentityProviderClient';
 import { BiatecPoolProviderClient, BiatecPoolProviderFactory } from '../../contracts/clients/BiatecPoolProviderClient';
 import configBootstrapSender from '../../src/biatecConfig/sender/configBootstrapSender';
 import clammCreateTxs from '../../src/biatecClamm/txs/clammCreateTxs';
@@ -83,8 +77,7 @@ export const setupPool = async (input: SetupPoolInput): Promise<SetupPoolResult>
     signer: async (txnGroup: Transaction[], indexesToSign: number[]) => txnGroup.map((tx) => tx.signTxn(deployer.sk)),
   };
 
-  const defaultSigner = async (txnGroup: Transaction[], indexesToSign: number[]) =>
-    txnGroup.map((tx) => tx.signTxn(deployer.sk));
+  const defaultSigner = async (txnGroup: Transaction[], indexesToSign: number[]) => txnGroup.map((tx) => tx.signTxn(deployer.sk));
 
   if (assetA !== 0n) {
     assetAId = await createToken({ account: deployer, algod, name: 'EUR', decimals: ASSET_A_DECIMALS });
@@ -105,12 +98,10 @@ export const setupPool = async (input: SetupPoolInput): Promise<SetupPoolResult>
     algorand,
   });
 
-  const clientBiatecIdentityProvider = await biatecIdentityProviderFactory.send.create
-    .createApplication()
-    .catch((e: Error) => {
-      console.error(e);
-      return undefined;
-    });
+  const clientBiatecIdentityProvider = await biatecIdentityProviderFactory.send.create.createApplication().catch((e: Error) => {
+    console.error(e);
+    return undefined;
+  });
   expect(clientBiatecIdentityProvider).not.toBeNull();
   if (!clientBiatecIdentityProvider) throw Error('clientBiatecIdentityProvider is empty');
 
@@ -133,12 +124,10 @@ export const setupPool = async (input: SetupPoolInput): Promise<SetupPoolResult>
     algorand,
   });
 
-  const clientBiatecConfigProvider = await biatecConfigProviderFactory.send.create
-    .createApplication()
-    .catch((e: Error) => {
-      console.error(e);
-      return undefined;
-    });
+  const clientBiatecConfigProvider = await biatecConfigProviderFactory.send.create.createApplication().catch((e: Error) => {
+    console.error(e);
+    return undefined;
+  });
   if (!clientBiatecConfigProvider) throw Error('clientBiatecConfigProvider is empty');
   expect(clientBiatecConfigProvider.appClient.appId).toBeGreaterThan(0);
   expect(clientBiatecIdentityProvider.appClient.appId).toBeGreaterThan(0);
@@ -192,21 +181,11 @@ export const setupPool = async (input: SetupPoolInput): Promise<SetupPoolResult>
 
     const noop1 = await clientBiatecPoolProvider.appClient.createTransaction.noop({
       args: { i: 1 },
-      boxReferences: [
-        new Uint8Array(Buffer.from('11', 'ascii')),
-        new Uint8Array(Buffer.from('12', 'ascii')),
-        new Uint8Array(Buffer.from('13', 'ascii')),
-        new Uint8Array(Buffer.from('14', 'ascii')),
-      ],
+      boxReferences: [new Uint8Array(Buffer.from('11', 'ascii')), new Uint8Array(Buffer.from('12', 'ascii')), new Uint8Array(Buffer.from('13', 'ascii')), new Uint8Array(Buffer.from('14', 'ascii'))],
     });
     const noop2 = await clientBiatecPoolProvider.appClient.createTransaction.noop({
       args: { i: 2 },
-      boxReferences: [
-        new Uint8Array(Buffer.from('21', 'ascii')),
-        new Uint8Array(Buffer.from('22', 'ascii')),
-        new Uint8Array(Buffer.from('23', 'ascii')),
-        new Uint8Array(Buffer.from('24', 'ascii')),
-      ],
+      boxReferences: [new Uint8Array(Buffer.from('21', 'ascii')), new Uint8Array(Buffer.from('22', 'ascii')), new Uint8Array(Buffer.from('23', 'ascii')), new Uint8Array(Buffer.from('24', 'ascii'))],
     });
 
     const txsToGroup = [...noop1.transactions, ...noop2.transactions, ...chunkTx.transactions].map((tx) => {
@@ -238,11 +217,7 @@ export const setupPool = async (input: SetupPoolInput): Promise<SetupPoolResult>
   const deployResult = await algod.sendRawTransaction(signedGroup).do();
   expect(deployResult.txid.length).toBe(52);
 
-  const confirmation = await algosdk.waitForConfirmation(
-    algorand.client.algod,
-    creationGroup[creationGroup.length - 1].txID(),
-    4
-  );
+  const confirmation = await algosdk.waitForConfirmation(algorand.client.algod, creationGroup[creationGroup.length - 1].txID(), 4);
   if (!(confirmation.logs && confirmation.logs.length > 0)) {
     throw new Error('Logs not found');
   }

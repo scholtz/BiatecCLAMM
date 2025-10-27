@@ -5,22 +5,7 @@ import extremeSamePriceLowTopData from '../test-data/extreme-same-price-low-top-
 import extremeSmallMinMaxPriceDiffData from '../test-data/extreme-small-min-max-price-diff.json';
 import extremeExtremePriceMinData from '../test-data/extreme-extreme-price-min.json';
 import extremeNoFeesEurusdData from '../test-data/extreme-no-fees-eurusd.json';
-import {
-  setupPool,
-  assetAId,
-  assetBId,
-  deployer,
-  SCALE,
-  SCALE_A,
-  SCALE_B,
-  fixture,
-  algosdk,
-  algokit,
-  getBoxReferenceStats,
-  LP_TOKEN_DECIMALS,
-  SCALE_LP,
-  setAssetAId,
-} from './shared-setup';
+import { setupPool, assetAId, assetBId, deployer, SCALE, SCALE_A, SCALE_B, fixture, algosdk, algokit, getBoxReferenceStats, LP_TOKEN_DECIMALS, SCALE_LP, setAssetAId } from './shared-setup';
 
 describe('BiatecClammPool - extreme', () => {
   test('Extreme-SamePriceLowTop - ASASR - I can handle the trade as an order book item', async () => {
@@ -32,12 +17,7 @@ describe('BiatecClammPool - extreme', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const {
-          clientBiatecClammPoolProvider,
-          clientBiatecConfigProvider,
-          clientBiatecIdentityProvider,
-          clientBiatecPoolProvider,
-        } = await setupPool({
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
           algod,
 
           assetA: assetAId,
@@ -159,11 +139,7 @@ describe('BiatecClammPool - extreme', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -280,11 +256,7 @@ describe('BiatecClammPool - extreme', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -394,12 +366,7 @@ describe('BiatecClammPool - extreme', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const {
-          clientBiatecClammPoolProvider,
-          clientBiatecConfigProvider,
-          clientBiatecIdentityProvider,
-          clientBiatecPoolProvider,
-        } = await setupPool({
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
           algod,
 
           assetA: assetAId,
@@ -521,11 +488,7 @@ describe('BiatecClammPool - extreme', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -643,11 +606,7 @@ describe('BiatecClammPool - extreme', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -756,12 +715,7 @@ describe('BiatecClammPool - extreme', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const {
-          clientBiatecClammPoolProvider,
-          clientBiatecConfigProvider,
-          clientBiatecIdentityProvider,
-          clientBiatecPoolProvider,
-        } = await setupPool({
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
           algod,
 
           assetA: assetAId,
@@ -883,11 +837,7 @@ describe('BiatecClammPool - extreme', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -1005,11 +955,7 @@ describe('BiatecClammPool - extreme', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -1119,12 +1065,7 @@ describe('BiatecClammPool - extreme', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const {
-          clientBiatecClammPoolProvider,
-          clientBiatecConfigProvider,
-          clientBiatecIdentityProvider,
-          clientBiatecPoolProvider,
-        } = await setupPool({
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
           algod,
 
           assetA: assetAId,
@@ -1248,11 +1189,7 @@ describe('BiatecClammPool - extreme', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 
@@ -1359,11 +1296,7 @@ describe('BiatecClammPool - extreme', () => {
             assetB: assetBId,
             includingAssetBoxes: false,
           }),
-          appReferences: [
-            BigInt(clientBiatecConfigProvider.appClient.appId),
-            BigInt(clientBiatecIdentityProvider.appClient.appId),
-            BigInt(clientBiatecPoolProvider.appClient.appId),
-          ],
+          appReferences: [BigInt(clientBiatecConfigProvider.appClient.appId), BigInt(clientBiatecIdentityProvider.appClient.appId), BigInt(clientBiatecPoolProvider.appClient.appId)],
           assetReferences: [BigInt(assetAId), BigInt(assetBId)],
         });
 

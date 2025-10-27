@@ -128,17 +128,16 @@ describe('BiatecClammPool - liquidity', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider } =
-          await setupPool({
-            algod,
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider } = await setupPool({
+          algod,
 
-            assetA: assetAId,
-            biatecFee: 0n,
-            lpFee: 0n,
-            p: BigInt(t.P * SCALE),
-            p1: BigInt(t.P1 * SCALE),
-            p2: BigInt(t.P2 * SCALE),
-          });
+          assetA: assetAId,
+          biatecFee: 0n,
+          lpFee: 0n,
+          p: BigInt(t.P * SCALE),
+          p1: BigInt(t.P1 * SCALE),
+          p2: BigInt(t.P2 * SCALE),
+        });
         const params = await algod.getTransactionParams().do();
         const poolTokenId = await clientBiatecClammPoolProvider.appClient.getLpTokenId();
         expect(poolTokenId).toBeGreaterThan(0);
@@ -187,11 +186,7 @@ describe('BiatecClammPool - liquidity', () => {
       // eslint-disable-next-line no-console
       console.error(e);
       const msg = String((e as any)?.message ?? e);
-      if (
-        msg.includes('ECONNREFUSED') ||
-        msg.includes('fetch failed') ||
-        String((e as any)?.cause ?? '').includes('ECONNREFUSED')
-      ) {
+      if (msg.includes('ECONNREFUSED') || msg.includes('fetch failed') || String((e as any)?.cause ?? '').includes('ECONNREFUSED')) {
         // eslint-disable-next-line no-console
         console.error('Network connection to algod failed. Running TCP/debug checks...');
         // show debug info then rethrow with hint
@@ -218,17 +213,16 @@ describe('BiatecClammPool - liquidity', () => {
 
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider } =
-          await setupPool({
-            algod,
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider } = await setupPool({
+          algod,
 
-            assetA: assetAId,
-            biatecFee: 0n,
-            lpFee: 0n,
-            p: BigInt(t.P * SCALE),
-            p1: BigInt(t.P1 * SCALE),
-            p2: BigInt(t.P2 * SCALE),
-          });
+          assetA: assetAId,
+          biatecFee: 0n,
+          lpFee: 0n,
+          p: BigInt(t.P * SCALE),
+          p1: BigInt(t.P1 * SCALE),
+          p2: BigInt(t.P2 * SCALE),
+        });
 
         const params = await algod.getTransactionParams().do();
         // opt in to the LP token
@@ -316,11 +310,7 @@ describe('BiatecClammPool - liquidity', () => {
       // eslint-disable-next-line no-console
       console.error(e);
       const msg = String((e as any)?.message ?? e);
-      if (
-        msg.includes('ECONNREFUSED') ||
-        msg.includes('fetch failed') ||
-        String((e as any)?.cause ?? '').includes('ECONNREFUSED')
-      ) {
+      if (msg.includes('ECONNREFUSED') || msg.includes('fetch failed') || String((e as any)?.cause ?? '').includes('ECONNREFUSED')) {
         // eslint-disable-next-line no-console
         console.error('Network connection to algod failed. Running TCP/debug checks...');
         await debugAlgodConnectivity();
@@ -346,17 +336,16 @@ describe('BiatecClammPool - liquidity', () => {
       const params = await algod.getTransactionParams().do();
       // eslint-disable-next-line no-restricted-syntax
       for (const t of testSet) {
-        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider } =
-          await setupPool({
-            algod,
+        const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider } = await setupPool({
+          algod,
 
-            assetA: assetAId,
-            biatecFee: 0n,
-            lpFee: 0n,
-            p: BigInt(t.P * SCALE),
-            p1: BigInt(t.P1 * SCALE),
-            p2: BigInt(t.P2 * SCALE),
-          });
+          assetA: assetAId,
+          biatecFee: 0n,
+          lpFee: 0n,
+          p: BigInt(t.P * SCALE),
+          p1: BigInt(t.P1 * SCALE),
+          p2: BigInt(t.P2 * SCALE),
+        });
 
         // opt in to the LP token
 
@@ -433,11 +422,7 @@ describe('BiatecClammPool - liquidity', () => {
       // eslint-disable-next-line no-console
       console.error(e);
       const msg = String((e as any)?.message ?? e);
-      if (
-        msg.includes('ECONNREFUSED') ||
-        msg.includes('fetch failed') ||
-        String((e as any)?.cause ?? '').includes('ECONNREFUSED')
-      ) {
+      if (msg.includes('ECONNREFUSED') || msg.includes('fetch failed') || String((e as any)?.cause ?? '').includes('ECONNREFUSED')) {
         // eslint-disable-next-line no-console
         console.error('Network connection to algod failed. Running TCP/debug checks...');
         await debugAlgodConnectivity();
@@ -459,12 +444,7 @@ describe('BiatecClammPool - liquidity', () => {
       const { algod } = fixture.context;
       // Setup pool with fee so swaps accrue liquidity fees
       console.log('Setting up CLAMM pool with lpFee=100_000_000n (10%)...');
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecIdentityProvider,
-        clientBiatecPoolProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
         algod,
         assetA: assetAId,
         biatecFee: 0n,
@@ -658,38 +638,24 @@ describe('BiatecClammPool - liquidity', () => {
       // eslint-disable-next-line no-console
       console.log('Global state snapshot:', JSON.stringify(gs, null, 2));
       const portion = 10n;
-      const reservesA = toBigInt(
-        (gs as any).assetABalanceBaseScale ?? (gs as any).liquidityA,
-        'assetABalanceBaseScale'
-      );
-      const reservesB = toBigInt(
-        (gs as any).assetBBalanceBaseScale ?? (gs as any).liquidityB,
-        'assetBBalanceBaseScale'
-      );
+      const reservesA = toBigInt((gs as any).assetABalanceBaseScale ?? (gs as any).liquidityA, 'assetABalanceBaseScale');
+      const reservesB = toBigInt((gs as any).assetBBalanceBaseScale ?? (gs as any).liquidityB, 'assetBBalanceBaseScale');
       const scaleAFromBase = toBigInt((gs as any).assetADecimalsScaleFromBase, 'assetADecimalsScaleFromBase');
       const scaleBFromBase = toBigInt((gs as any).assetBDecimalsScaleFromBase, 'assetBDecimalsScaleFromBase');
       const liquidityTotal = toBigInt((gs as any).liquidity, 'liquidity');
       const liquidityUsersFromFees = toBigInt((gs as any).liquidityUsersFromFees ?? 0n, 'liquidityUsersFromFees');
       if (liquidityUsersFromFees >= liquidityTotal) {
-        throw new Error(
-          `liquidityUsersFromFees (${liquidityUsersFromFees}) >= liquidity (${liquidityTotal}); cannot compute proportional deposit without net liquidity.`
-        );
+        throw new Error(`liquidityUsersFromFees (${liquidityUsersFromFees}) >= liquidity (${liquidityTotal}); cannot compute proportional deposit without net liquidity.`);
       }
       const netLiquidity = liquidityTotal - liquidityUsersFromFees;
-      const releasedLiquidity = toBigInt(
-        (statusAfterSwaps as any).releasedLiquidity ?? netLiquidity,
-        'releasedLiquidity'
-      );
+      const releasedLiquidity = toBigInt((statusAfterSwaps as any).releasedLiquidity ?? netLiquidity, 'releasedLiquidity');
       const targetLiquidityDeltaBase = releasedLiquidity / portion;
       const depositABase = (targetLiquidityDeltaBase * reservesA) / liquidityTotal;
       const depositBBase = (targetLiquidityDeltaBase * reservesB) / liquidityTotal;
       const assetDepositAForC = depositABase / scaleAFromBase;
       const assetDepositBForC = depositBBase / scaleBFromBase;
       if (assetDepositAForC <= 0n || assetDepositBForC <= 0n) {
-        throw new Error(
-          `Computed asset deposit for account C is zero or negative (assetA=${assetDepositAForC}, assetB=${assetDepositBForC}). ` +
-            'Check portion scaling logic.'
-        );
+        throw new Error(`Computed asset deposit for account C is zero or negative (assetA=${assetDepositAForC}, assetB=${assetDepositBForC}). ` + 'Check portion scaling logic.');
       }
       // Diagnostic: log the shape of accountC.addr and the normalized address we will use
       // eslint-disable-next-line no-console
@@ -753,10 +719,7 @@ describe('BiatecClammPool - liquidity', () => {
 
       const gsAfterAdd = await clientBiatecClammPoolProvider.appClient.state.global.getAll();
       const liquidityAfter = toBigInt((gsAfterAdd as any).liquidity, 'liquidity');
-      const liquidityUsersFromFeesAfter = toBigInt(
-        (gsAfterAdd as any).liquidityUsersFromFees ?? 0n,
-        'liquidityUsersFromFees'
-      );
+      const liquidityUsersFromFeesAfter = toBigInt((gsAfterAdd as any).liquidityUsersFromFees ?? 0n, 'liquidityUsersFromFees');
       const reservesAAfter = toBigInt((gsAfterAdd as any).assetABalanceBaseScale, 'assetABalanceBaseScale');
       const reservesBAfter = toBigInt((gsAfterAdd as any).assetBBalanceBaseScale, 'assetBBalanceBaseScale');
       const scaleBig = BigInt(SCALE);
@@ -831,11 +794,7 @@ describe('BiatecClammPool - liquidity', () => {
       // eslint-disable-next-line no-console
       console.error(e);
       const msg = String((e as any)?.message ?? e);
-      if (
-        msg.includes('ECONNREFUSED') ||
-        msg.includes('fetch failed') ||
-        String((e as any)?.cause ?? '').includes('ECONNREFUSED')
-      ) {
+      if (msg.includes('ECONNREFUSED') || msg.includes('fetch failed') || String((e as any)?.cause ?? '').includes('ECONNREFUSED')) {
         // eslint-disable-next-line no-console
         console.error('Network connection to algod failed. Running TCP/debug checks...');
         await debugAlgodConnectivity();
