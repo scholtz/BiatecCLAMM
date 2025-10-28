@@ -190,10 +190,11 @@ export class BiatecClammPool extends Contract {
       // Staking pools (same-asset) must have flat price range
       assert(priceMin === priceMax, 'E_STAKING_PRICE'); // 'Same-asset pools require flat price range'
     } else {
-      // Standard liquidity pools should have assetA < assetB (when both > 0)
+      // Standard liquidity pools require an ordered pair and an expanding price interval
       if (assetA.id > 0 && assetB.id > 0) {
         assert(assetA.id < assetB.id, 'E_ASSET_ORDER'); // 'Asset A must be less than Asset B'
       }
+      assert(priceMin <= priceMax, 'E_PRICE_RANGE');
     }
     assert(fee <= SCALE / 10); // fee must be lower then 10%
     // assert(verificationClass <= 4); // verificationClass  // SHORTENED_APP
@@ -1717,6 +1718,7 @@ export class BiatecClammPool extends Contract {
     // const s = SCALE as uint256;
     // const percentageOfL = (inAmount * s) / liquidity;
     // const ret = (assetABalance * percentageOfL) / s;
+    assert(liquidity > <uint256>0, 'E_ZERO_LIQ');
     const ret = (assetABalance * inAmount) / liquidity;
     return ret;
   }

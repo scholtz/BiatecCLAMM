@@ -6,6 +6,7 @@ This guide walks through the day-to-day flows supported by the Biatec concentrat
 
 - Access to an Algorand network (Sandbox LocalNet, TestNet, or MainNet) and an `Algodv2` RPC endpoint.
 - Deployed instances of the Biatec configuration provider, identity provider, and pool provider contracts. The examples below assume their app IDs are already known.
+- Always confirm that the pool-provider global state (`key = 'B'`) matches the configuration app ID you reference in any deployment group before signing. If the IDs diverge, abort the transaction to avoid interacting with a forged config.
 - A funded account represented as an `Algokit` `TransactionSignerAccount` to sign transactions.
 - Familiarity with the 1e9 base scale (`SCALE = 1_000_000_000n`) used by the contracts. See `docs/liquidity-rounding.md` for precision details.
 - Optional but recommended: use `getConfig(genesisId)` to pull the latest production app IDs for supported networks instead of hard-coding them.

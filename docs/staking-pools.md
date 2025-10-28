@@ -24,7 +24,7 @@ When asset A equals asset B:
 
 - **LP Token Name**: `B-{AssetName}` (e.g., "B-ALGO", "B-USDC")
 - **LP Token Symbol**: The asset's unit name (e.g., "ALGO", "USDC")
-- **Price Range**: Typically set to 1:1 (priceMin = priceMax = currentPrice = SCALE)
+- **Price Range**: Must be flat at 1:1 (priceMin = priceMax = currentPrice = SCALE). The contract now enforces this during bootstrap (error `E_STAKING_PRICE`).
 - **Swaps**: Not meaningful since both assets are the same
 - **Main Operations**: Add liquidity (stake), remove liquidity (unstake), distribute rewards
 

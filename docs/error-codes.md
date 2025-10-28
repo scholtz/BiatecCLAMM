@@ -24,6 +24,7 @@ Error codes follow a consistent format:
 | `E_FEE` | Bootstrap already done | Fee already set, cannot bootstrap again | Pool already initialized |
 | `E_PAUSED` | Services paused | Protocol is currently paused by admin | Wait for unpause or contact admin |
 | `E_STAKING_PRICE` | Invalid staking pool price | Same-asset pools require flat price range | Set priceMin === priceMax for staking pools |
+| `E_PRICE_RANGE` | Invalid price interval | Standard pools require priceMin < priceMax | Use expanding price bounds |
 | `E_ASSET_ORDER` | Invalid asset order | Asset A must be less than Asset B | Ensure assetA.id < assetB.id |
 
 #### Liquidity and Balance Errors
@@ -213,6 +214,6 @@ If you encounter an error not documented here or need assistance:
 
 ---
 
-**Last Updated**: 2025-10-27
+**Last Updated**: 2025-10-28
 **Version**: 1.0
 **Maintained By**: BiatecCLAMM Team
