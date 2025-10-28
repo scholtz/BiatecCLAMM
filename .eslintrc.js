@@ -17,7 +17,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint'],
   rules: {
-    // Align with workspace Prettier settings (printWidth 200, tabWidth 2)
+    // Match VS Code's Prettier formatting (tabWidth 2, printWidth 200) while tolerating Windows line endings
     'prettier/prettier': [
       'error',
       {

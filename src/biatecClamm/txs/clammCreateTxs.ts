@@ -23,19 +23,7 @@ interface IClammBootstrapTxsInput {
  * @returns List of transactions to sign
  */
 const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.Transaction[]> => {
-  const {
-    params,
-    clientBiatecPoolProvider,
-    assetA,
-    assetB,
-    fee,
-    verificationClass,
-    priceMin,
-    priceMax,
-    currentPrice,
-    sender,
-    appBiatecConfigProvider,
-  } = input;
+  const { params, clientBiatecPoolProvider, assetA, assetB, fee, verificationClass, priceMin, priceMax, currentPrice, sender, appBiatecConfigProvider } = input;
 
   const poolDeployTx = await clientBiatecPoolProvider.createTransaction.deployPool({
     args: {
@@ -84,23 +72,14 @@ const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.T
     ...(
       await clientBiatecPoolProvider.createTransaction.noop({
         args: { i: 1 },
-        boxReferences: [
-          ...boxReferences,
-          new Uint8Array(Buffer.from('13', 'ascii')),
-          new Uint8Array(Buffer.from('14', 'ascii')),
-        ],
+        boxReferences: [...boxReferences, new Uint8Array(Buffer.from('13', 'ascii')), new Uint8Array(Buffer.from('14', 'ascii'))],
         sender,
       })
     ).transactions,
     ...(
       await clientBiatecPoolProvider.createTransaction.noop({
         args: { i: 2 },
-        boxReferences: [
-          new Uint8Array(Buffer.from('21', 'ascii')),
-          new Uint8Array(Buffer.from('22', 'ascii')),
-          new Uint8Array(Buffer.from('23', 'ascii')),
-          new Uint8Array(Buffer.from('24', 'ascii')),
-        ],
+        boxReferences: [new Uint8Array(Buffer.from('21', 'ascii')), new Uint8Array(Buffer.from('22', 'ascii')), new Uint8Array(Buffer.from('23', 'ascii')), new Uint8Array(Buffer.from('24', 'ascii'))],
         sender,
       })
     ).transactions,

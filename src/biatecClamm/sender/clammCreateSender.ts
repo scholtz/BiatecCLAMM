@@ -45,11 +45,7 @@ const clammCreateSender = async (input: IClammBootstrapSkInput): Promise<BiatecC
   const lastTxId = txs[txs.length - 1].txID();
 
   console.debug('lastTxId', lastTxId);
-  const confirmation = await algosdk.waitForConfirmation(
-    input.clientBiatecPoolProvider.algorand.client.algod,
-    lastTxId,
-    4
-  );
+  const confirmation = await algosdk.waitForConfirmation(input.clientBiatecPoolProvider.algorand.client.algod, lastTxId, 4);
   if (!(confirmation.logs && confirmation.logs.length > 0)) {
     throw new Error(`Logs not found for${lastTxId}`);
   }

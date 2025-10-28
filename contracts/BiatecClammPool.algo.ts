@@ -372,15 +372,7 @@ export class BiatecClammPool extends Contract {
    * @param assetB Asset B
    * @returns LP Token quantity distributed
    */
-  addLiquidity(
-    appBiatecConfigProvider: AppID,
-    appBiatecIdentityProvider: AppID,
-    txAssetADeposit: Txn,
-    txAssetBDeposit: Txn,
-    assetA: AssetID,
-    assetB: AssetID,
-    assetLp: AssetID
-  ): uint64 {
+  addLiquidity(appBiatecConfigProvider: AppID, appBiatecIdentityProvider: AppID, txAssetADeposit: Txn, txAssetBDeposit: Txn, assetA: AssetID, assetB: AssetID, assetLp: AssetID): uint64 {
     increaseOpcodeBudget();
     increaseOpcodeBudget();
     /// well formed mint
@@ -467,13 +459,7 @@ export class BiatecClammPool extends Contract {
     // if minprice == maxprice
 
     if (this.priceMinSqrt.value === this.priceMaxSqrt.value) {
-      return this.processAddLiquidity(
-        aDepositInBaseScale,
-        bDepositInBaseScale,
-        assetLpDelicmalScale2Scale,
-        assetLp,
-        true
-      );
+      return this.processAddLiquidity(aDepositInBaseScale, bDepositInBaseScale, assetLpDelicmalScale2Scale, assetLp, true);
     }
 
     // else
@@ -483,13 +469,7 @@ export class BiatecClammPool extends Contract {
     // this.assetABalanceBaseScale.value = aDepositInBaseScale;
     // this.assetBBalanceBaseScale.value = bDepositInBaseScale;
 
-    const ret = this.processAddLiquidity(
-      aDepositInBaseScale,
-      bDepositInBaseScale,
-      assetLpDelicmalScale2Scale,
-      assetLp,
-      true
-    );
+    const ret = this.processAddLiquidity(aDepositInBaseScale, bDepositInBaseScale, assetLpDelicmalScale2Scale, assetLp, true);
 
     const newPrice = this.calculatePrice(
       this.assetABalanceBaseScale.value, // assetAQuantity: uint256,
@@ -614,13 +594,7 @@ export class BiatecClammPool extends Contract {
    * @param assetLp LP Asset
    * @returns LP Token quantity distributed
    */
-  private processAddLiquidity(
-    realAssetADeposit: uint256,
-    realAssetBDeposit: uint256,
-    assetLpDelicmalScale2Scale: uint256,
-    assetLp: AssetID,
-    send: boolean
-  ): uint64 {
+  private processAddLiquidity(realAssetADeposit: uint256, realAssetBDeposit: uint256, assetLpDelicmalScale2Scale: uint256, assetLp: AssetID, send: boolean): uint64 {
     increaseOpcodeBudget();
     const oldLiquidity = this.Liquidity.value;
     // SET NEW ASSET A AND B VALUES
@@ -635,9 +609,7 @@ export class BiatecClammPool extends Contract {
       let lpDeltaBase = liquidityDelta;
       if (lpDeltaBase > <uint256>0) {
         // Base-scaled LP currently circulating outside the app account
-        const distributedBefore =
-          ((Uint<256>(TOTAL_SUPPLY) as uint256) - (this.app.address.assetBalance(assetLp) as uint256)) *
-          assetLpDelicmalScale2Scale;
+        const distributedBefore = ((Uint<256>(TOTAL_SUPPLY) as uint256) - (this.app.address.assetBalance(assetLp) as uint256)) * assetLpDelicmalScale2Scale;
         if (distributedBefore > <uint256>0) {
           let contributionScaled = <uint256>0;
           if (realAssetADeposit > <uint256>0) {
@@ -650,10 +622,7 @@ export class BiatecClammPool extends Contract {
             const usersFeeLiquidity = this.LiquidityUsersFromFees.value;
             const sumDistributedAndFees = distributedBefore + usersFeeLiquidity;
             // Solve X^2 + X(sumDistributedAndFees - contributionScaled) - contributionScaled*distributedBefore = 0
-            const diff =
-              sumDistributedAndFees >= contributionScaled
-                ? sumDistributedAndFees - contributionScaled
-                : contributionScaled - sumDistributedAndFees;
+            const diff = sumDistributedAndFees >= contributionScaled ? sumDistributedAndFees - contributionScaled : contributionScaled - sumDistributedAndFees;
             const discriminant = diff * diff + <uint256>4 * contributionScaled * distributedBefore;
             const sqrtTerm = sqrt(discriminant);
             let numerator = <uint256>0;
@@ -732,14 +701,7 @@ export class BiatecClammPool extends Contract {
    * @param assetB Asset B
    * @returns LP position reduced
    */
-  removeLiquidity(
-    appBiatecConfigProvider: AppID,
-    appBiatecIdentityProvider: AppID,
-    txLpXfer: AssetTransferTxn,
-    assetA: AssetID,
-    assetB: AssetID,
-    assetLp: AssetID
-  ): uint256 {
+  removeLiquidity(appBiatecConfigProvider: AppID, appBiatecIdentityProvider: AppID, txLpXfer: AssetTransferTxn, assetA: AssetID, assetB: AssetID, assetLp: AssetID): uint256 {
     /// well formed mint
     this.checkAssets(assetA, assetB, assetLp);
     verifyAssetTransferTxn(txLpXfer, {
@@ -765,20 +727,12 @@ export class BiatecClammPool extends Contract {
       lpDeltaWithFees = lpDeltaBase + myPortionOfFeesCollected;
       this.LiquidityUsersFromFees.value = this.LiquidityUsersFromFees.value - myPortionOfFeesCollected;
     }
-    const aToSend = this.calculateAssetAWithdrawOnLpDeposit(
-      lpDeltaWithFees,
-      this.assetABalanceBaseScale.value,
-      this.Liquidity.value
-    );
+    const aToSend = this.calculateAssetAWithdrawOnLpDeposit(lpDeltaWithFees, this.assetABalanceBaseScale.value, this.Liquidity.value);
     const aToSend64 = (aToSend / this.assetADecimalsScaleFromBase.value) as uint64;
     if (aToSend64 > 0) {
       this.doAxfer(this.txn.sender, assetA, aToSend64);
     }
-    const bToSend = this.calculateAssetAWithdrawOnLpDeposit(
-      lpDeltaWithFees,
-      this.assetBBalanceBaseScale.value,
-      this.Liquidity.value
-    );
+    const bToSend = this.calculateAssetAWithdrawOnLpDeposit(lpDeltaWithFees, this.assetBBalanceBaseScale.value, this.Liquidity.value);
     const bToSend64 = (bToSend / this.assetBDecimalsScaleFromBase.value) as uint64;
     if (bToSend64 > 0) {
       this.doAxfer(this.txn.sender, assetB, bToSend64);
@@ -807,13 +761,7 @@ export class BiatecClammPool extends Contract {
    *
    * @returns LP position reduced
    */
-  removeLiquidityAdmin(
-    appBiatecConfigProvider: AppID,
-    assetA: AssetID,
-    assetB: AssetID,
-    assetLp: AssetID,
-    amount: uint256
-  ): uint256 {
+  removeLiquidityAdmin(appBiatecConfigProvider: AppID, assetA: AssetID, assetB: AssetID, assetLp: AssetID, amount: uint256): uint256 {
     /// well formed mint
     this.checkAssets(assetA, assetB, assetLp);
 
@@ -842,20 +790,12 @@ export class BiatecClammPool extends Contract {
       'ERR-TOO-MUCH' // 'Biatec cannot take more lp then is collected in fees'
     );
     this.LiquidityBiatecFromFees.value = this.LiquidityBiatecFromFees.value - lpDeltaWithFees;
-    const aToSend = this.calculateAssetAWithdrawOnLpDeposit(
-      lpDeltaWithFees,
-      this.assetABalanceBaseScale.value,
-      this.Liquidity.value
-    );
+    const aToSend = this.calculateAssetAWithdrawOnLpDeposit(lpDeltaWithFees, this.assetABalanceBaseScale.value, this.Liquidity.value);
     const aToSend64 = (aToSend / this.assetADecimalsScaleFromBase.value) as uint64;
     if (aToSend64 > 0) {
       this.doAxfer(this.txn.sender, assetA, aToSend64);
     }
-    const bToSend = this.calculateAssetAWithdrawOnLpDeposit(
-      lpDeltaWithFees,
-      this.assetBBalanceBaseScale.value,
-      this.Liquidity.value
-    );
+    const bToSend = this.calculateAssetAWithdrawOnLpDeposit(lpDeltaWithFees, this.assetBBalanceBaseScale.value, this.Liquidity.value);
     const bToSend64 = (bToSend / this.assetBDecimalsScaleFromBase.value) as uint64;
     if (bToSend64 > 0) {
       this.doAxfer(this.txn.sender, assetB, bToSend64);
@@ -921,15 +861,7 @@ export class BiatecClammPool extends Contract {
    * @param assetB Asset B
    * @param minimumToReceive If number greater then zero, the check is performed for the output of the other asset
    */
-  swap(
-    appBiatecConfigProvider: AppID,
-    appBiatecIdentityProvider: AppID,
-    appBiatecPoolProvider: AppID,
-    txSwap: Txn,
-    assetA: AssetID,
-    assetB: AssetID,
-    minimumToReceive: uint64
-  ): uint256 {
+  swap(appBiatecConfigProvider: AppID, appBiatecIdentityProvider: AppID, appBiatecPoolProvider: AppID, txSwap: Txn, assetA: AssetID, assetB: AssetID, minimumToReceive: uint64): uint256 {
     increaseOpcodeBudget();
     increaseOpcodeBudget();
     increaseOpcodeBudget();
@@ -939,10 +871,7 @@ export class BiatecClammPool extends Contract {
     assert(assetA.id !== assetB.id, 'Swaps not allowed in staking pools');
 
     if (txSwap.typeEnum === TransactionType.Payment) {
-      assert(
-        assetA.id === 0 || assetB.id === 0,
-        'Payment can be done only when one of the pool assets is native token'
-      ); // only native token can be swapped
+      assert(assetA.id === 0 || assetB.id === 0, 'Payment can be done only when one of the pool assets is native token'); // only native token can be swapped
 
       verifyPayTxn(txSwap, {
         amount: { greaterThan: 0 },
@@ -967,8 +896,7 @@ export class BiatecClammPool extends Contract {
     );
     const user = this.verifyIdentity(appBiatecConfigProvider, appBiatecIdentityProvider);
 
-    const feesMultiplier = (s -
-      ((this.fee.value as uint256) * (user.feeMultiplier as uint256)) / (user.base as uint256)) as uint256;
+    const feesMultiplier = (s - ((this.fee.value as uint256) * (user.feeMultiplier as uint256)) / (user.base as uint256)) as uint256;
     let ret: uint64 = 0;
     let amountAForStatsInAssetDecimals = 0;
     let amountBForStatsInAssetDecimals = 0;
@@ -1100,10 +1028,7 @@ export class BiatecClammPool extends Contract {
       this.priceMaxSqrt.value, // priceMaxSqrt: uint256,
       this.Liquidity.value // liquidity: uint256
     );
-    assert(
-      amountAForStatsInAssetDecimals > 0 && amountBForStatsInAssetDecimals > 0,
-      'Stats to register must not be empty'
-    );
+    assert(amountAForStatsInAssetDecimals > 0 && amountBForStatsInAssetDecimals > 0, 'Stats to register must not be empty');
 
     const assetADelicmalScale2Scale: uint64 = this.assetADecimalsScaleFromBase.value as uint64;
     const assetBDelicmalScale2Scale: uint64 = this.assetBDecimalsScaleFromBase.value as uint64;
@@ -1164,13 +1089,7 @@ export class BiatecClammPool extends Contract {
    * @param amountA Amount of asset A to be deposited to the liquidity. In base decimals (9)
    * @param amountB Amount of asset B to be deposited to the liquidity. In base decimals (9)
    */
-  distributeExcessAssets(
-    appBiatecConfigProvider: AppID,
-    assetA: AssetID,
-    assetB: AssetID,
-    amountA: uint256,
-    amountB: uint256
-  ): uint256 {
+  distributeExcessAssets(appBiatecConfigProvider: AppID, assetA: AssetID, assetB: AssetID, amountA: uint256, amountB: uint256): uint256 {
     increaseOpcodeBudget();
     increaseOpcodeBudget();
     this.checkAssetsAB(assetA, assetB);
@@ -1190,27 +1109,23 @@ export class BiatecClammPool extends Contract {
     this.assetBBalanceBaseScale.value = this.assetBBalanceBaseScale.value + amountB;
     if (assetA.id === 0) {
       assert(
-        ((this.app.address.balance - 1_000_000) as uint256) * this.assetADecimalsScaleFromBase.value >=
-          this.assetABalanceBaseScale.value,
+        ((this.app.address.balance - 1_000_000) as uint256) * this.assetADecimalsScaleFromBase.value >= this.assetABalanceBaseScale.value,
         'E_A0_B' // 'It is not possible to set higher assetABalance in algos then is in the app balance'
       );
     } else {
       assert(
-        (this.app.address.assetBalance(assetA) as uint256) * this.assetADecimalsScaleFromBase.value >=
-          this.assetABalanceBaseScale.value,
+        (this.app.address.assetBalance(assetA) as uint256) * this.assetADecimalsScaleFromBase.value >= this.assetABalanceBaseScale.value,
         'E_A_B' // 'It is not possible to set higher assetABalance then is in the app balance'
       );
     }
     if (assetB.id === 0) {
       assert(
-        ((this.app.address.balance - 1_000_000) as uint256) * this.assetBDecimalsScaleFromBase.value >=
-          this.assetBBalanceBaseScale.value,
+        ((this.app.address.balance - 1_000_000) as uint256) * this.assetBDecimalsScaleFromBase.value >= this.assetBBalanceBaseScale.value,
         'E_B0_B' // 'It is not possible to set higher assetBBalance in algos then is in the app balance'
       );
     } else {
       assert(
-        (this.app.address.assetBalance(assetB) as uint256) * this.assetBDecimalsScaleFromBase.value >=
-          this.assetBBalanceBaseScale.value,
+        (this.app.address.assetBalance(assetB) as uint256) * this.assetBDecimalsScaleFromBase.value >= this.assetBBalanceBaseScale.value,
         'E_B_B' // 'It is not possible to set higher assetBBalance then is in the app balance'
       );
     }
@@ -1255,13 +1170,7 @@ export class BiatecClammPool extends Contract {
    * @param amountA Amount of asset A to be deposited to the liquidity. In asset a decimals
    * @param amountB Amount of asset B to be deposited to the liquidity. In asset b decimals
    */
-  withdrawExcessAssets(
-    appBiatecConfigProvider: AppID,
-    assetA: AssetID,
-    assetB: AssetID,
-    amountA: uint64,
-    amountB: uint64
-  ): uint64 {
+  withdrawExcessAssets(appBiatecConfigProvider: AppID, assetA: AssetID, assetB: AssetID, amountA: uint64, amountB: uint64): uint64 {
     this.checkAssetsAB(assetA, assetB);
 
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
@@ -1284,27 +1193,23 @@ export class BiatecClammPool extends Contract {
 
     if (assetA.id === 0) {
       assert(
-        ((this.app.address.balance - 1_000_000) as uint256) * this.assetADecimalsScaleFromBase.value >=
-          this.assetABalanceBaseScale.value,
+        ((this.app.address.balance - 1_000_000) as uint256) * this.assetADecimalsScaleFromBase.value >= this.assetABalanceBaseScale.value,
         'E_A0_B' // 'It is not possible to set higher assetABalance in algos then is in the app balance'
       );
     } else {
       assert(
-        (this.app.address.assetBalance(assetA) as uint256) * this.assetADecimalsScaleFromBase.value >=
-          this.assetABalanceBaseScale.value,
+        (this.app.address.assetBalance(assetA) as uint256) * this.assetADecimalsScaleFromBase.value >= this.assetABalanceBaseScale.value,
         'E_A_B' // 'It is not possible to set higher assetABalance then is in the app balance'
       );
     }
     if (assetB.id === 0) {
       assert(
-        ((this.app.address.balance - 1_000_000) as uint256) * this.assetBDecimalsScaleFromBase.value >=
-          this.assetBBalanceBaseScale.value,
+        ((this.app.address.balance - 1_000_000) as uint256) * this.assetBDecimalsScaleFromBase.value >= this.assetBBalanceBaseScale.value,
         'E_B0_B' // 'It is not possible to set higher assetBBalance in algos then is in the app balance'
       );
     } else {
       assert(
-        (this.app.address.assetBalance(assetB) as uint256) * this.assetBDecimalsScaleFromBase.value >=
-          this.assetBBalanceBaseScale.value,
+        (this.app.address.assetBalance(assetB) as uint256) * this.assetBDecimalsScaleFromBase.value >= this.assetBBalanceBaseScale.value,
         'E_B_B' // 'It is not possible to set higher assetBBalance then is in the app balance'
       );
     }
@@ -1317,16 +1222,7 @@ export class BiatecClammPool extends Contract {
    *
    * Only addressExecutiveFee is allowed to execute this method.
    */
-  sendOnlineKeyRegistration(
-    appBiatecConfigProvider: AppID,
-    votePk: bytes,
-    selectionPk: bytes,
-    stateProofPk: bytes,
-    voteFirst: uint64,
-    voteLast: uint64,
-    voteKeyDilution: uint64,
-    fee: uint64
-  ): void {
+  sendOnlineKeyRegistration(appBiatecConfigProvider: AppID, votePk: bytes, selectionPk: bytes, stateProofPk: bytes, voteFirst: uint64, voteLast: uint64, voteKeyDilution: uint64, fee: uint64): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
     assert(
@@ -1415,14 +1311,7 @@ export class BiatecClammPool extends Contract {
    * @returns Liquidity is constant in swapping each direction. On deposit the diff between the liquidity is number of LP tokens received by user.
    */
   @abi.readonly
-  calculateLiquidityD(
-    x: uint256,
-    y: uint256,
-    priceMin: uint256,
-    priceMax: uint256,
-    priceMinSqrt: uint256,
-    priceMaxSqrt: uint256
-  ): uint256 {
+  calculateLiquidityD(x: uint256, y: uint256, priceMin: uint256, priceMax: uint256, priceMinSqrt: uint256, priceMaxSqrt: uint256): uint256 {
     // (x + L/sqrt(P2))*(y+L*sqrt(P1))=L*L
     // y + L*sqrt(P1) = L*L / (x + L/sqrt(P2))
     // x*y + L*sqrt(P1)*L/sqrt(P2) + x * L*sqrt(P1) + y * L/sqrt(P2) =L*L
@@ -1479,13 +1368,7 @@ export class BiatecClammPool extends Contract {
    * @returns Liquidity is constant in swapping each direction. On deposit the diff between the liquidity is number of LP tokens received by user.
    */
   @abi.readonly
-  calculateLiquidityWithD(
-    x: uint256,
-    y: uint256,
-    priceMinSqrt: uint256,
-    priceMaxSqrt: uint256,
-    dSqrt: uint256
-  ): uint256 {
+  calculateLiquidityWithD(x: uint256, y: uint256, priceMinSqrt: uint256, priceMaxSqrt: uint256, dSqrt: uint256): uint256 {
     // (x + L/sqrt(P2))*(y+L*sqrt(P1))=L*L
     // y + L*sqrt(P1) = L*L / (x + L/sqrt(P2))
     // x*y + L*sqrt(P1)*L/sqrt(P2) + x * L*sqrt(P1) + y * L/sqrt(P2) =L*L
@@ -1553,13 +1436,7 @@ export class BiatecClammPool extends Contract {
    * @returns the price with specified quantity with the price range set in the contract
    */
   @abi.readonly
-  calculatePrice(
-    assetAQuantity: uint256,
-    assetBQuantity: uint256,
-    priceMinSqrt: uint256,
-    priceMaxSqrt: uint256,
-    liquidity: uint256
-  ): uint256 {
+  calculatePrice(assetAQuantity: uint256, assetBQuantity: uint256, priceMinSqrt: uint256, priceMaxSqrt: uint256, liquidity: uint256): uint256 {
     // for flat price use case
     if (priceMinSqrt === priceMaxSqrt) {
       const ret = (priceMinSqrt * priceMinSqrt) / s;
@@ -1587,14 +1464,7 @@ export class BiatecClammPool extends Contract {
    * @returns Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)
    */
   @abi.readonly
-  calculateAssetBWithdrawOnAssetADeposit(
-    inAmount: uint256,
-    assetABalance: uint256,
-    assetBBalance: uint256,
-    priceMinSqrt: uint256,
-    priceMaxSqrt: uint256,
-    liquidity: uint256
-  ): uint256 {
+  calculateAssetBWithdrawOnAssetADeposit(inAmount: uint256, assetABalance: uint256, assetBBalance: uint256, priceMinSqrt: uint256, priceMaxSqrt: uint256, liquidity: uint256): uint256 {
     // if we are at the same min and max price
     if (priceMinSqrt === priceMaxSqrt) {
       const ret = (inAmount * priceMinSqrt * priceMinSqrt) / s / s;
@@ -1622,8 +1492,7 @@ export class BiatecClammPool extends Contract {
     // const b = priceMaxSqrt;
     // const L = liquidity;
     // a*b*d*l
-    const P1 =
-      (((((priceMinSqrt /* 10D */ * priceMaxSqrt) /* 10D */ / s) * inAmount) /* AD */ / s) * liquidity) /* 10D */ / s;
+    const P1 = (((((priceMinSqrt /* 10D */ * priceMaxSqrt) /* 10D */ / s) * inAmount) /* AD */ / s) * liquidity) /* 10D */ / s;
     // b*d*y
     const P2 = (((priceMaxSqrt /* 10D */ * inAmount) /* AD */ / s) * assetBBalance) /* BD */ / s; // << TODO CHECK B Decimals not applied?
     // b*d
@@ -1653,14 +1522,7 @@ export class BiatecClammPool extends Contract {
    * @returns Amount of asset A to be given to the caller before fees. The result is in Base decimals (9)
    */
   @abi.readonly
-  calculateAssetAWithdrawOnAssetBDeposit(
-    inAmount: uint256,
-    assetABalance: uint256,
-    assetBBalance: uint256,
-    priceMinSqrt: uint256,
-    priceMaxSqrt: uint256,
-    liquidity: uint256
-  ): uint256 {
+  calculateAssetAWithdrawOnAssetBDeposit(inAmount: uint256, assetABalance: uint256, assetBBalance: uint256, priceMinSqrt: uint256, priceMaxSqrt: uint256, liquidity: uint256): uint256 {
     if (priceMinSqrt === priceMaxSqrt) {
       const ret = (inAmount * s * s) / priceMinSqrt / priceMinSqrt;
       return ret;
@@ -1736,12 +1598,7 @@ export class BiatecClammPool extends Contract {
    * @returns Amount of asset B to be given to the caller before fees. The result is in Base decimals (9)
    */
   @abi.readonly
-  calculateAssetBDepositOnAssetADeposit(
-    inAmountA: uint256,
-    inAmountB: uint256,
-    assetABalance: uint256,
-    assetBBalance: uint256
-  ): uint256 {
+  calculateAssetBDepositOnAssetADeposit(inAmountA: uint256, inAmountB: uint256, assetABalance: uint256, assetBBalance: uint256): uint256 {
     if (assetABalance > <uint256>0) {
       return (inAmountA * assetBBalance) / assetABalance;
     }
@@ -1762,12 +1619,7 @@ export class BiatecClammPool extends Contract {
    * @returns Amount of asset A to be deposited. The result is in Base decimals (9)
    */
   @abi.readonly
-  calculateAssetADepositOnAssetBDeposit(
-    inAmountA: uint256,
-    inAmountB: uint256,
-    assetABalance: uint256,
-    assetBBalance: uint256
-  ): uint256 {
+  calculateAssetADepositOnAssetBDeposit(inAmountA: uint256, inAmountB: uint256, assetABalance: uint256, assetBBalance: uint256): uint256 {
     if (assetBBalance > <uint256>0) {
       return (inAmountB * assetABalance) / assetBBalance;
     }
@@ -1785,14 +1637,8 @@ export class BiatecClammPool extends Contract {
     assert(assetB.id === this.assetB.value);
     assert(this.assetLp.value === assetLp.id, 'E_LP'); // 'LP asset does not match');
     const biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256;
-    const realBalanceA =
-      assetA.id === 0
-        ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
-        : globals.currentApplicationAddress.assetBalance(assetA);
-    const realBalanceB =
-      assetB.id === 0
-        ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance
-        : globals.currentApplicationAddress.assetBalance(assetB);
+    const realBalanceA = assetA.id === 0 ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance : globals.currentApplicationAddress.assetBalance(assetA);
+    const realBalanceB = assetB.id === 0 ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance : globals.currentApplicationAddress.assetBalance(assetB);
     return {
       assetA: this.assetA.value,
       assetB: this.assetB.value,

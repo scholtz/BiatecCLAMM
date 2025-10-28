@@ -1,19 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import { describe, test, expect } from '@jest/globals';
-import {
-  setupPool,
-  assetAId,
-  assetBId,
-  deployer,
-  SCALE,
-  SCALE_A,
-  SCALE_B,
-  fixture,
-  FakePoolFactory,
-  AlgoAmount,
-  setAssetAId,
-  clammCreateTxs,
-} from './shared-setup';
+import { setupPool, assetAId, assetBId, deployer, SCALE, SCALE_A, SCALE_B, fixture, FakePoolFactory, AlgoAmount, setAssetAId, clammCreateTxs } from './shared-setup';
 import type { Transaction } from './shared-setup';
 
 describe('BiatecClammPool - deployment', () => {
@@ -45,12 +32,7 @@ describe('BiatecClammPool - deployment', () => {
     try {
       await setAssetAId(1n);
       const { algod } = fixture.context;
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecIdentityProvider,
-        clientBiatecPoolProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
         algod,
 
         assetA: assetAId,

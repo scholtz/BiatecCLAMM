@@ -34,10 +34,7 @@ describe('BiatecClammPool - Staking Pools', () => {
 
       const lpTokenInfo = await algod.getAssetByID(Number(lpTokenId)).do();
       // eslint-disable-next-line no-console
-      const rawNameBuffer =
-        typeof lpTokenInfo.params.nameB64 === 'string'
-          ? Buffer.from(lpTokenInfo.params.nameB64, 'base64')
-          : Buffer.from(lpTokenInfo.params.nameB64 ?? new Uint8Array());
+      const rawNameBuffer = typeof lpTokenInfo.params.nameB64 === 'string' ? Buffer.from(lpTokenInfo.params.nameB64, 'base64') : Buffer.from(lpTokenInfo.params.nameB64 ?? new Uint8Array());
       console.log('LP raw name bytes', rawNameBuffer.toString('hex'));
       // eslint-disable-next-line no-console
       console.log('LP name/unit', lpTokenInfo.params.name, lpTokenInfo.params.unitName);
@@ -159,12 +156,7 @@ describe('BiatecClammPool - Staking Pools', () => {
     try {
       await setAssetAId(0n);
       const { algod } = fixture.context;
-      const {
-        clientBiatecClammPoolProvider,
-        clientBiatecConfigProvider,
-        clientBiatecIdentityProvider,
-        clientBiatecPoolProvider,
-      } = await setupPool({
+      const { clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
         algod,
         assetA: 0n,
         assetB: 0n,

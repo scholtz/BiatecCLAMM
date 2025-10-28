@@ -296,18 +296,10 @@ export class BiatecPoolProvider extends Contract {
     this.nativeTokenName.value = trimmedName;
   }
 
-  loadCLAMMContractData(
-    appBiatecConfigProvider: AppID,
-    approvalProgramSize: uint64,
-    offset: uint64,
-    data: bytes
-  ): void {
+  loadCLAMMContractData(appBiatecConfigProvider: AppID, approvalProgramSize: uint64, offset: uint64, data: bytes): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressUdpater = appBiatecConfigProvider.globalState('u') as Address;
-    assert(
-      this.txn.sender === addressUdpater,
-      'Only addressUdpater setup in the config can update the AMM application'
-    );
+    assert(this.txn.sender === addressUdpater, 'Only addressUdpater setup in the config can update the AMM application');
     if (this.clammApprovalProgram1.exists && offset == 0) {
       this.clammApprovalProgram1.delete();
       this.clammApprovalProgram2.delete();
@@ -316,12 +308,8 @@ export class BiatecPoolProvider extends Contract {
     }
     if (!this.clammApprovalProgram1.exists) {
       this.clammApprovalProgram1.create(approvalProgramSize < 4096 ? approvalProgramSize : 4096);
-      this.clammApprovalProgram2.create(
-        approvalProgramSize < 4096 ? 0 : approvalProgramSize < 8192 ? approvalProgramSize - 4096 : 4096
-      );
-      this.clammApprovalProgram3.create(
-        approvalProgramSize < 8192 ? 0 : approvalProgramSize < 12288 ? approvalProgramSize - 8192 : 4096
-      );
+      this.clammApprovalProgram2.create(approvalProgramSize < 4096 ? 0 : approvalProgramSize < 8192 ? approvalProgramSize - 4096 : 4096);
+      this.clammApprovalProgram3.create(approvalProgramSize < 8192 ? 0 : approvalProgramSize < 12288 ? approvalProgramSize - 8192 : 4096);
       // this.clammApprovalProgram4.create(approvalProgramSize < 16384 ? approvalProgramSize - 12288 : 4096);
     }
     if (offset < 4096) {
@@ -667,8 +655,7 @@ export class BiatecPoolProvider extends Contract {
     info.period1NowFeeB = info.period1NowFeeB + feeAmountB;
     const period1NowVolumeBUint256 = info.period1NowVolumeB as uint256;
     const period1NowVWAPUint256 = info.period1NowVWAP as uint256;
-    info.period1NowVWAP = ((period1NowVolumeBUint256 * period1NowVWAPUint256 + amountBUint256 * priceUint256) /
-      (period1NowVolumeBUint256 + amountBUint256)) as uint64;
+    info.period1NowVWAP = ((period1NowVolumeBUint256 * period1NowVWAPUint256 + amountBUint256 * priceUint256) / (period1NowVolumeBUint256 + amountBUint256)) as uint64;
     info.period1NowVolumeA = info.period1NowVolumeA + netAmountA;
     info.period1NowVolumeB = info.period1NowVolumeB + netAmountB;
 
@@ -700,8 +687,7 @@ export class BiatecPoolProvider extends Contract {
     info.period2NowFeeB = info.period2NowFeeB + feeAmountB;
     const period2NowVolumeBUint256 = info.period2NowVolumeB as uint256;
     const period2NowVWAPUint256 = info.period2NowVWAP as uint256;
-    info.period2NowVWAP = ((period2NowVolumeBUint256 * period2NowVWAPUint256 + amountBUint256 * priceUint256) /
-      (period2NowVolumeBUint256 + amountBUint256)) as uint64;
+    info.period2NowVWAP = ((period2NowVolumeBUint256 * period2NowVWAPUint256 + amountBUint256 * priceUint256) / (period2NowVolumeBUint256 + amountBUint256)) as uint64;
     info.period2NowVolumeA = info.period2NowVolumeA + netAmountA;
     info.period2NowVolumeB = info.period2NowVolumeB + netAmountB;
 
@@ -733,8 +719,7 @@ export class BiatecPoolProvider extends Contract {
     info.period3NowFeeB = info.period3NowFeeB + feeAmountB;
     const period3NowVolumeBUint256 = info.period3NowVolumeB as uint256;
     const period3NowVWAPUint256 = info.period3NowVWAP as uint256;
-    info.period3NowVWAP = ((period3NowVolumeBUint256 * period3NowVWAPUint256 + amountBUint256 * priceUint256) /
-      (period3NowVolumeBUint256 + amountBUint256)) as uint64;
+    info.period3NowVWAP = ((period3NowVolumeBUint256 * period3NowVWAPUint256 + amountBUint256 * priceUint256) / (period3NowVolumeBUint256 + amountBUint256)) as uint64;
     info.period3NowVolumeA = info.period3NowVolumeA + netAmountA;
     info.period3NowVolumeB = info.period3NowVolumeB + netAmountB;
     // 4
@@ -765,8 +750,7 @@ export class BiatecPoolProvider extends Contract {
     info.period4NowFeeB = info.period4NowFeeB + feeAmountB;
     const period4NowVolumeBUint256 = info.period4NowVolumeB as uint256;
     const period4NowVWAPUint256 = info.period4NowVWAP as uint256;
-    info.period4NowVWAP = ((period4NowVolumeBUint256 * period4NowVWAPUint256 + amountBUint256 * priceUint256) /
-      (period4NowVolumeBUint256 + amountBUint256)) as uint64;
+    info.period4NowVWAP = ((period4NowVolumeBUint256 * period4NowVWAPUint256 + amountBUint256 * priceUint256) / (period4NowVolumeBUint256 + amountBUint256)) as uint64;
     info.period4NowVolumeA = info.period4NowVolumeA + netAmountA;
     info.period4NowVolumeB = info.period4NowVolumeB + netAmountB;
     // 5
@@ -836,16 +820,7 @@ export class BiatecPoolProvider extends Contract {
     return info;
   }
 
-  private updatePriceBoxAggregated(
-    assetA: AssetID,
-    assetB: AssetID,
-    priceFrom: uint64,
-    priceTo: uint64,
-    amountA: uint64,
-    amountB: uint64,
-    feeAmountA: uint64,
-    feeAmountB: uint64
-  ): AppPoolInfo {
+  private updatePriceBoxAggregated(assetA: AssetID, assetB: AssetID, priceFrom: uint64, priceTo: uint64, amountA: uint64, amountB: uint64, feeAmountA: uint64, feeAmountB: uint64): AppPoolInfo {
     const aggregatedIndex: AssetsCombined = { assetA: assetA.id, assetB: assetB.id };
     const info = this.poolsAggregated(aggregatedIndex).value;
     assert(assetA.id === info.assetA);
@@ -886,8 +861,7 @@ export class BiatecPoolProvider extends Contract {
     info.period1NowFeeB = info.period1NowFeeB + feeAmountB;
     const period1NowVolumeBUint256 = info.period1NowVolumeB as uint256;
     const period1NowVWAPUint256 = info.period1NowVWAP as uint256;
-    info.period1NowVWAP = ((period1NowVolumeBUint256 * period1NowVWAPUint256 + amountBUint256 * priceUint256) /
-      (period1NowVolumeBUint256 + amountBUint256)) as uint64;
+    info.period1NowVWAP = ((period1NowVolumeBUint256 * period1NowVWAPUint256 + amountBUint256 * priceUint256) / (period1NowVolumeBUint256 + amountBUint256)) as uint64;
     info.period1NowVolumeA = info.period1NowVolumeA + netAmountA;
     info.period1NowVolumeB = info.period1NowVolumeB + netAmountB;
 
@@ -919,8 +893,7 @@ export class BiatecPoolProvider extends Contract {
     info.period2NowFeeB = info.period2NowFeeB + feeAmountB;
     const period2NowVolumeBUint256 = info.period2NowVolumeB as uint256;
     const period2NowVWAPUint256 = info.period2NowVWAP as uint256;
-    info.period2NowVWAP = ((period2NowVolumeBUint256 * period2NowVWAPUint256 + amountBUint256 * priceUint256) /
-      (period2NowVolumeBUint256 + amountBUint256)) as uint64;
+    info.period2NowVWAP = ((period2NowVolumeBUint256 * period2NowVWAPUint256 + amountBUint256 * priceUint256) / (period2NowVolumeBUint256 + amountBUint256)) as uint64;
     info.period2NowVolumeA = info.period2NowVolumeA + netAmountA;
     info.period2NowVolumeB = info.period2NowVolumeB + netAmountB;
 
@@ -952,8 +925,7 @@ export class BiatecPoolProvider extends Contract {
     info.period3NowFeeB = info.period3NowFeeB + feeAmountB;
     const period3NowVolumeBUint256 = info.period3NowVolumeB as uint256;
     const period3NowVWAPUint256 = info.period3NowVWAP as uint256;
-    info.period3NowVWAP = ((period3NowVolumeBUint256 * period3NowVWAPUint256 + amountBUint256 * priceUint256) /
-      (period3NowVolumeBUint256 + amountBUint256)) as uint64;
+    info.period3NowVWAP = ((period3NowVolumeBUint256 * period3NowVWAPUint256 + amountBUint256 * priceUint256) / (period3NowVolumeBUint256 + amountBUint256)) as uint64;
     info.period3NowVolumeA = info.period3NowVolumeA + netAmountA;
     info.period3NowVolumeB = info.period3NowVolumeB + netAmountB;
     // 4
@@ -984,8 +956,7 @@ export class BiatecPoolProvider extends Contract {
     info.period4NowFeeB = info.period4NowFeeB + feeAmountB;
     const period4NowVolumeBUint256 = info.period4NowVolumeB as uint256;
     const period4NowVWAPUint256 = info.period4NowVWAP as uint256;
-    info.period4NowVWAP = ((period4NowVolumeBUint256 * period4NowVWAPUint256 + amountBUint256 * priceUint256) /
-      (period4NowVolumeBUint256 + amountBUint256)) as uint64;
+    info.period4NowVWAP = ((period4NowVolumeBUint256 * period4NowVWAPUint256 + amountBUint256 * priceUint256) / (period4NowVolumeBUint256 + amountBUint256)) as uint64;
     info.period4NowVolumeA = info.period4NowVolumeA + netAmountA;
     info.period4NowVolumeB = info.period4NowVolumeB + netAmountB;
     // 5
@@ -1069,18 +1040,7 @@ export class BiatecPoolProvider extends Contract {
    * @param feeAmountB Fees paid in asset B if any
    * @param s Scale multiplier
    */
-  registerTrade(
-    appPoolId: AppID,
-    assetA: AssetID,
-    assetB: AssetID,
-    priceFrom: uint64,
-    priceTo: uint64,
-    amountA: uint64,
-    amountB: uint64,
-    feeAmountA: uint64,
-    feeAmountB: uint64,
-    s: uint64
-  ) {
+  registerTrade(appPoolId: AppID, assetA: AssetID, assetB: AssetID, priceFrom: uint64, priceTo: uint64, amountA: uint64, amountB: uint64, feeAmountA: uint64, feeAmountB: uint64, s: uint64) {
     // increaseOpcodeBudget();
     // increaseOpcodeBudget();
     // increaseOpcodeBudget();
@@ -1111,24 +1071,12 @@ export class BiatecPoolProvider extends Contract {
    *
    * Only addressExecutiveFee is allowed to execute this method.
    */
-  sendOnlineKeyRegistration(
-    appBiatecConfigProvider: AppID,
-    votePK: bytes,
-    selectionPK: bytes,
-    stateProofPK: bytes,
-    voteFirst: uint64,
-    voteLast: uint64,
-    voteKeyDilution: uint64,
-    fee: uint64
-  ): void {
+  sendOnlineKeyRegistration(appBiatecConfigProvider: AppID, votePK: bytes, selectionPK: bytes, stateProofPK: bytes, voteFirst: uint64, voteLast: uint64, voteKeyDilution: uint64, fee: uint64): void {
     assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
-    assert(
-      this.txn.sender === addressExecutiveFee,
-      'Only fee executor setup in the config can take the collected fees'
-    );
+    assert(this.txn.sender === addressExecutiveFee, 'Only fee executor setup in the config can take the collected fees');
     sendOnlineKeyRegistration({
       selectionPK: selectionPK,
       stateProofPK: stateProofPK,
@@ -1154,10 +1102,7 @@ export class BiatecPoolProvider extends Contract {
     const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment
-    assert(
-      this.txn.sender === addressExecutiveFee,
-      'Only fee executor setup in the config can take the collected fees'
-    );
+    assert(this.txn.sender === addressExecutiveFee, 'Only fee executor setup in the config can take the collected fees');
 
     this.doAxfer(this.txn.sender, asset, amount);
 
