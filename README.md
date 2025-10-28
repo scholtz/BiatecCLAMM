@@ -185,3 +185,39 @@ For complete documentation, see [docs/staking-pools.md](docs/staking-pools.md).
 2. **Asset Staking**: B-USDC pools for lending protocol interest
 3. **Revenue Sharing**: Distribute protocol fees to token holders
 4. **Yield Aggregation**: Combine multiple yield sources
+
+## Documentation
+
+Comprehensive documentation is available in the `docs/` folder:
+
+### Core Documentation
+- **[Basic Use Cases](docs/basic-use-cases.md)** - Getting started with pools, swaps, and liquidity
+- **[Staking Pools](docs/staking-pools.md)** - Create B-ALGO, B-USDC interest-bearing tokens
+- **[Integration Guide](docs/integration-guide.md)** - Best practices for integrating CLAMM into your application
+
+### Technical Details
+- **[Liquidity Fee Protection](docs/liquidity-fee-protection.md)** - How fee accounting protects LPs
+- **[Liquidity Rounding](docs/liquidity-rounding.md)** - Rounding behavior and user expectations
+- **[Error Codes](docs/error-codes.md)** - Complete reference of all error messages
+
+### Security
+- **[Security Audits](audits/)** - Multiple AI-powered security audit reports
+- **[Integration Security](docs/integration-guide.md#security-considerations)** - Critical warnings for developers
+
+### Key Resources
+
+- 📖 **Error Troubleshooting**: See [error-codes.md](docs/error-codes.md) for solutions
+- 🔐 **Security Best Practices**: Review [integration-guide.md](docs/integration-guide.md) before deployment
+- 🧪 **Testing**: Examples in `__test__/` folder show proper usage patterns
+- 🛡️ **Audit Reports**: Six AI security audits in `audits/` folder
+
+## Security Considerations
+
+⚠️ **Important Security Notices**:
+
+1. **Price Oracle Usage**: Never use single pool VWAP as sole price source. See [integration guide](docs/integration-guide.md#using-clamm-as-price-oracle) for safe patterns.
+2. **Slippage Protection**: Always enforce minimum slippage (≥0.5%). Never use `minimumToReceive = 0`.
+3. **Identity Verification**: All operations require proper KYC verification class.
+4. **LP Token Rounding**: Small rounding losses (< 0.0001%) are expected. See [liquidity-rounding.md](docs/liquidity-rounding.md).
+
+Multiple security audits have been conducted. Review the `audits/` folder before mainnet deployment.

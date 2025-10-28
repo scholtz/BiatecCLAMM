@@ -24,7 +24,7 @@ When asset A equals asset B:
 
 - **LP Token Name**: `B-{AssetName}` (e.g., "B-ALGO", "B-USDC")
 - **LP Token Symbol**: The asset's unit name (e.g., "ALGO", "USDC")
-- **Price Range**: Typically set to 1:1 (priceMin = priceMax = currentPrice = SCALE)
+- **Price Range**: Must be flat at 1:1 (priceMin = priceMax = currentPrice = SCALE). The contract now enforces this during bootstrap (error `E_STAKING_PRICE`).
 - **Swaps**: Not meaningful since both assets are the same
 - **Main Operations**: Add liquidity (stake), remove liquidity (unstake), distribute rewards
 
@@ -220,13 +220,111 @@ await clammRemoveLiquiditySender({
 
 ## Security Considerations
 
-1. **Executive Fee Address**: Only the executive fee address configured in the Biatec Config Provider can call `distributeExcessAssets`. This address must be carefully secured.
+### Trust Model
 
-2. **Reward Calculation**: The `distributeExcessAssets` method increases the pool's liquidity proportionally. Ensure the `amountA` parameter is calculated correctly in base scale (9 decimals).
+Staking pools (B-ALGO, B-USDC, etc.) require trust in specific addresses and processes:
 
-3. **Price Stability**: Since staking pools use a 1:1 price ratio, the price should remain constant. Any significant deviation may indicate an issue.
+1. **Executive Fee Address Control**: Only the `addressExecutiveFee` account configured in the Biatec Config Provider can distribute rewards via `distributeExcessAssets`. This address has significant power:
 
-4. **Rounding**: As with standard pools, small amounts may be lost to rounding. This is by design to protect the pool from bleeding.
+   - Can distribute rewards to all LP holders
+   - Can influence timing of reward distribution
+   - Must accurately calculate reward amounts
+   - **Recommendation**: Use a multi-signature account for this address
+
+2. **Config Provider Integrity**: The config provider contract controls critical parameters:
+   - Identity provider reference
+   - Fee structure
+   - Executive addresses
+   - **Recommendation**: Ensure config provider is immutable or governed by DAO
+
+### Differences from Liquidity Pools
+
+Staking pools have unique characteristics:
+
+- **No Impermanent Loss**: Since both assets are identical, there's no price risk
+- **No Swap Price Discovery**: Rewards come from external sources, not trades
+- **Simpler Price Model**: Always 1:1 at base scale
+- **Reward Rate Externally Set**: Returns depend on reward distribution by executive address
+- **Swap Operations Blocked**: The contract explicitly prevents swaps with error "Swaps not allowed in staking pools"
+
+### Risk Factors
+
+1. **Reward Shortfall**: If rewards aren't distributed as expected, staking yields nothing
+
+   - Mitigation: Monitor executive address activity and reward distribution schedule
+
+2. **Accounting Errors**: Incorrect `distributeExcessAssets` calls could lock funds or distribute unfairly
+
+   - Mitigation: Thoroughly test reward distribution calculations off-chain first
+   - Mitigation: Use the base scale (9 decimals) for all calculations
+
+3. **Governance Changes**: Executive fee address change affects control
+
+   - Mitigation: Require timelock for address changes
+   - Mitigation: Multi-sig governance for config updates
+
+4. **Price Validation**: Staking pools require `priceMin === priceMax === currentPrice`
+
+   - The contract now enforces this validation in the `bootstrap` function
+   - Error code: `E_STAKING_PRICE` if price range is not flat
+
+5. **Asset Order Validation**: Standard pools now enforce `assetA.id < assetB.id` for non-staking pools
+   - Staking pools bypass this check when `assetA.id === assetB.id`
+   - Error code: `E_ASSET_ORDER` if order is wrong in standard pools
+
+### Reward Distribution Best Practices
+
+1. **Calculate in Base Scale**: Always convert reward amounts to base scale (multiply by 1e9) before calling `distributeExcessAssets`
+2. **Verify Pool Balance**: Ensure the pool actually received the reward tokens before distributing
+3. **Test First**: Run reward distribution on testnet with small amounts first
+4. **Document Schedule**: Clearly communicate reward distribution frequency and amounts
+5. **Monitor State**: Track pool liquidity before and after distribution to verify correctness
+
+### Example Safe Reward Distribution
+
+```typescript
+// 1. Calculate reward in base scale
+const rewardInTokenUnits = 1000n; // 1000 tokens
+const tokenDecimals = 6n; // USDC has 6 decimals
+const baseScale = 1_000_000_000n;
+const rewardInBaseScale = rewardInTokenUnits * (baseScale / 10n ** tokenDecimals);
+
+// 2. Send tokens to pool first
+await algod.sendPaymentTransaction({
+  from: executiveAddress,
+  to: poolAddress,
+  amount: rewardInTokenUnits * 10n ** tokenDecimals, // In native units
+});
+
+// 3. Distribute via contract
+await clammDistributeExcessAssetsSender({
+  appBiatecClammPool: poolAppId,
+  appBiatecConfigProvider: configAppId,
+  assetA: usdcAssetId,
+  assetB: usdcAssetId,
+  amountA: rewardInBaseScale,
+  amountB: 0n,
+  // ... other params
+});
+```
+
+### Security Audits
+
+Multiple AI-powered security audits have been conducted on the staking pool implementation. Key findings addressed:
+
+- **[M-02]** Added validation for same-asset pool price ranges (must be flat)
+- **[M-06]** Recommend adding deposit proof to `distributeExcessAssets` for safety
+- **General** Staking pools are now explicitly validated during bootstrap
+
+See `audits/` folder for detailed security audit reports.
+
+### User Protection
+
+1. **Reward Calculation**: The `distributeExcessAssets` method increases the pool's liquidity proportionally. Ensure the `amountA` parameter is calculated correctly in base scale (9 decimals).
+
+2. **Price Stability**: Since staking pools use a 1:1 price ratio, the price should remain constant. Any significant deviation may indicate an issue.
+
+3. **Rounding**: As with standard pools, small amounts may be lost to rounding. This is by design to protect the pool from bleeding.
 
 ## Testing
 

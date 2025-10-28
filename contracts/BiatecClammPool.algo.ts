@@ -135,7 +135,7 @@ export class BiatecClammPool extends Contract {
     assert(this.txn.sender === addressUdpater, 'E_UPDATER'); // 'Only addressUdpater setup in the config can update application');
     log(version);
     log(newVersion);
-    this.version.value = version;
+    this.version.value = newVersion;
   }
 
   @abi.readonly
@@ -184,8 +184,18 @@ export class BiatecClammPool extends Contract {
     assert(this.priceMax.value === 0, 'E_PRICE_MAX'); // It is not possible to call bootrap twice
     assert(this.txn.sender === this.app.creator, 'E_SENDER'); // 'Only creator of the app can set it up'
     assert(priceMax > 0, 'E_PRICE'); // 'You must set price'
-    // assert(assetA < assetB);
-    // Allow assetA.id === assetB.id for staking pools (e.g., B-ALGO for interest bearing ALGO)
+    // Validate price parameters for same-asset staking pools
+    const isSameAssetPool = assetA.id === assetB.id;
+    if (isSameAssetPool) {
+      // Staking pools (same-asset) must have flat price range
+      assert(priceMin === priceMax, 'E_STAKING_PRICE'); // 'Same-asset pools require flat price range'
+    } else {
+      // Standard liquidity pools require an ordered pair and an expanding price interval
+      if (assetA.id > 0 && assetB.id > 0) {
+        assert(assetA.id < assetB.id, 'E_ASSET_ORDER'); // 'Asset A must be less than Asset B'
+      }
+      assert(priceMin <= priceMax, 'E_PRICE_RANGE');
+    }
     assert(fee <= SCALE / 10); // fee must be lower then 10%
     // assert(verificationClass <= 4); // verificationClass  // SHORTENED_APP
     assert(!this.currentPrice.exists);
@@ -893,6 +903,10 @@ export class BiatecClammPool extends Contract {
       user.verificationClass >= this.verificationClass.value, // if(user.verificationClass >= this.verificationClass.value) then ok
       'ERR-LOW-VER' // 'User cannot interact with this smart contract as his verification class is lower then required here'
     );
+    assert(
+      user.verificationClass <= 4, // Verification class must be within valid range
+      'ERR-HIGH-VER' // 'Verification class out of bounds'
+    );
 
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'E_PAUSED'); // services are paused at the moment
@@ -916,6 +930,7 @@ export class BiatecClammPool extends Contract {
     assetB: AssetID,
     minimumToReceive: uint64
   ): uint256 {
+    increaseOpcodeBudget();
     increaseOpcodeBudget();
     increaseOpcodeBudget();
     increaseOpcodeBudget();
@@ -1050,6 +1065,8 @@ export class BiatecClammPool extends Contract {
     const newL = this.setCurrentLiquidityNonDecreasing(oldL);
 
     // liquidity increase is the result of the fees
+    // Ensure liquidity is non-zero before division
+    assert(newL > <uint256>0, 'E_ZERO_LIQ');
 
     const diff = (newL - oldL) as uint256; // difference is the lp increment by fees .. ready to be split between users and biatec
 
@@ -1332,19 +1349,24 @@ export class BiatecClammPool extends Contract {
    *
    * Only addressExecutiveFee is allowed to execute this method.
    */
-  // sendOfflineKeyRegistration(appBiatecConfigProvider: AppID): void {
-  //   assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
-  //   const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
+  /**
+   * addressExecutiveFee can perform key unregistration for this LP pool
+   *
+   * Only addressExecutiveFee is allowed to execute this method.
+   */
+  sendOfflineKeyRegistration(appBiatecConfigProvider: AppID): void {
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG'); // assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
 
-  //   const paused = appBiatecConfigProvider.globalState('s') as uint64;
-  //   assert(paused === 0, 'E_PAUSED'); // services are paused at the moment
+    const paused = appBiatecConfigProvider.globalState('s') as uint64;
+    assert(paused === 0, 'E_PAUSED'); // services are paused at the moment
 
-  //   assert(
-  //     this.txn.sender === addressExecutiveFee,
-  //     'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
-  //   );
-  //   sendOfflineKeyRegistration({ fee: 0 });
-  // }
+    assert(
+      this.txn.sender === addressExecutiveFee,
+      'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
+    );
+    sendOfflineKeyRegistration({ fee: 0 });
+  }
 
   /**
    * Calculates the number of LP tokens issued to users
@@ -1612,6 +1634,8 @@ export class BiatecClammPool extends Contract {
     const P12 = P1 + P2;
     // (b*d+b*x+l)
     const P345 = P3 + P4 + liquidity;
+    // Ensure denominator is non-zero before division
+    assert(P345 > <uint256>0, 'E_ZERO_DENOM');
     // (a*b*d*l + b*d*y)/(b*d+b*x+l)
     const ret = (P12 * s) / P345;
     return ret;
@@ -1674,6 +1698,8 @@ export class BiatecClammPool extends Contract {
     const P5 = (b * y) / s;
     // (a*b*l+b*d+b*y) (P3 + P4 + P5)
     const denom = P3 + P4 + P5;
+    // Ensure denominator is non-zero before division
+    assert(denom > <uint256>0, 'E_ZERO_DENOM');
     // w = (d*l + b*d*x)/(a*b*l+b*d+b*y)
     const ret = (nom * s) / denom;
     return ret;
@@ -1692,6 +1718,7 @@ export class BiatecClammPool extends Contract {
     // const s = SCALE as uint256;
     // const percentageOfL = (inAmount * s) / liquidity;
     // const ret = (assetABalance * percentageOfL) / s;
+    assert(liquidity > <uint256>0, 'E_ZERO_LIQ');
     const ret = (assetABalance * inAmount) / liquidity;
     return ret;
   }

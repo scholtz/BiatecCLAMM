@@ -389,8 +389,21 @@
       }
     },
     {
-      "name": "calculateDistributedLiquidity",
+      "name": "sendOfflineKeyRegistration",
       "desc": "addressExecutiveFee can perfom key unregistration for this LP pool\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "calculateDistributedLiquidity",
+      "desc": "Calculates the number of LP tokens issued to users",
       "readonly": true,
       "args": [
         {

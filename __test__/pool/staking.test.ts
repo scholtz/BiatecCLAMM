@@ -123,6 +123,38 @@ describe('BiatecClammPool - Staking Pools', () => {
     }
   });
 
+  test('Asset Pool: rejects mismatched price range for identical assets', async () => {
+    try {
+      await setAssetAId(1n);
+      const { algod } = fixture.context;
+
+      const testAssetId = await createToken({
+        account: deployer,
+        algod,
+        name: 'TEST',
+        decimals: 6,
+      });
+
+      await expect(
+        setupPool({
+          algod,
+          assetA: testAssetId,
+          assetB: testAssetId,
+          biatecFee: 0n,
+          lpFee: BigInt(SCALE / 100),
+          p: BigInt(SCALE),
+          p1: BigInt(SCALE),
+          p2: BigInt(2 * SCALE),
+          useProvidedAssets: true,
+        })
+      ).rejects.toThrow();
+    } catch (e: any) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      throw Error(e.message);
+    }
+  });
+
   test('Staking Rewards: Distribute excess ALGO to B-ALGO pool LPs', async () => {
     try {
       await setAssetAId(0n);

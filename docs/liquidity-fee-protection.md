@@ -48,6 +48,7 @@ The same proportional arithmetic is reused on exit: fee shares are calculated wi
 
 - Any contract change requires recomputing TEAL artifacts (`npm run compile-contract`) and regenerating clients (`npm run generate-client` or `npm run build`) before publishing packages.
 - Off-chain helpers or simulations that relied on the raw `newLiquidity - oldLiquidity` mint formula must be updated to mirror the quadratic solution to avoid drift between client-side estimates and on-chain results.
+- Pool deployments must now use the pool provider's registered configuration app ID. The pool provider enforces this on-chain, so double-check the `B` global state key before initiating a deploy.
 
 ## Next steps
 
