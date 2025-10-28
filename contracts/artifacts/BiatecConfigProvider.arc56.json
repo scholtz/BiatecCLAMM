@@ -639,211 +639,212 @@
           "teal": 43,
           "source": "contracts\\BiatecConfigProvider.algo.ts:61",
           "pc": [
-            166
+            166,
+            167
           ]
         },
         {
           "teal": 44,
           "source": "contracts\\BiatecConfigProvider.algo.ts:61",
           "pc": [
-            167
+            168
           ]
         },
         {
           "teal": 48,
           "source": "contracts\\BiatecConfigProvider.algo.ts:62",
           "pc": [
-            168
+            169
           ]
         },
         {
           "teal": 49,
           "source": "contracts\\BiatecConfigProvider.algo.ts:62",
           "pc": [
-            169,
-            170
+            170,
+            171
           ]
         },
         {
           "teal": 50,
           "source": "contracts\\BiatecConfigProvider.algo.ts:62",
           "pc": [
-            171
+            172
           ]
         },
         {
           "teal": 54,
           "source": "contracts\\BiatecConfigProvider.algo.ts:63",
           "pc": [
-            172,
-            173
+            173,
+            174
           ]
         },
         {
           "teal": 55,
           "source": "contracts\\BiatecConfigProvider.algo.ts:63",
           "pc": [
-            174,
-            175
+            175,
+            176
           ]
         },
         {
           "teal": 56,
           "source": "contracts\\BiatecConfigProvider.algo.ts:63",
           "pc": [
-            176
+            177
           ]
         },
         {
           "teal": 60,
           "source": "contracts\\BiatecConfigProvider.algo.ts:64",
           "pc": [
-            177
+            178
           ]
         },
         {
           "teal": 61,
           "source": "contracts\\BiatecConfigProvider.algo.ts:64",
           "pc": [
-            178,
-            179
+            179,
+            180
           ]
         },
         {
           "teal": 62,
           "source": "contracts\\BiatecConfigProvider.algo.ts:64",
           "pc": [
-            180
+            181
           ]
         },
         {
           "teal": 66,
           "source": "contracts\\BiatecConfigProvider.algo.ts:65",
           "pc": [
-            181
+            182
           ]
         },
         {
           "teal": 67,
           "source": "contracts\\BiatecConfigProvider.algo.ts:65",
           "pc": [
-            182,
-            183
+            183,
+            184
           ]
         },
         {
           "teal": 68,
           "source": "contracts\\BiatecConfigProvider.algo.ts:65",
           "pc": [
-            184
+            185
           ]
         },
         {
           "teal": 72,
           "source": "contracts\\BiatecConfigProvider.algo.ts:66",
           "pc": [
-            185,
-            186
+            186,
+            187
           ]
         },
         {
           "teal": 73,
           "source": "contracts\\BiatecConfigProvider.algo.ts:66",
           "pc": [
-            187
+            188
           ]
         },
         {
           "teal": 74,
           "source": "contracts\\BiatecConfigProvider.algo.ts:66",
           "pc": [
-            188
+            189
           ]
         },
         {
           "teal": 75,
           "source": "contracts\\BiatecConfigProvider.algo.ts:60",
           "pc": [
-            189
+            190
           ]
         },
         {
           "teal": 80,
           "source": "contracts\\BiatecConfigProvider.algo.ts:72",
           "pc": [
-            190,
             191,
-            192
+            192,
+            193
           ]
         },
         {
           "teal": 81,
           "source": "contracts\\BiatecConfigProvider.algo.ts:72",
           "pc": [
-            193,
             194,
-            195
+            195,
+            196
           ]
         },
         {
           "teal": 84,
           "source": "contracts\\BiatecConfigProvider.algo.ts:72",
           "pc": [
-            196,
             197,
-            198
+            198,
+            199
           ]
         },
         {
           "teal": 85,
           "source": "contracts\\BiatecConfigProvider.algo.ts:72",
           "pc": [
-            199
+            200
           ]
         },
         {
           "teal": 86,
           "source": "contracts\\BiatecConfigProvider.algo.ts:72",
           "pc": [
-            200
+            201
           ]
         },
         {
           "teal": 92,
           "source": "contracts\\BiatecConfigProvider.algo.ts:72",
           "pc": [
-            201,
             202,
-            203
+            203,
+            204
           ]
         },
         {
           "teal": 96,
           "source": "contracts\\BiatecConfigProvider.algo.ts:73",
           "pc": [
-            204,
-            205
+            205,
+            206
           ]
         },
         {
           "teal": 97,
           "source": "contracts\\BiatecConfigProvider.algo.ts:73",
           "pc": [
-            206
+            207
           ]
         },
         {
           "teal": 98,
           "source": "contracts\\BiatecConfigProvider.algo.ts:73",
           "pc": [
-            207
+            208
           ]
         },
         {
           "teal": 99,
           "source": "contracts\\BiatecConfigProvider.algo.ts:73",
           "pc": [
-            208
+            209
           ]
         },
         {
@@ -851,134 +852,136 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:73",
           "errorMessage": "Only addressUdpater setup in the config can update application",
           "pc": [
-            209
+            210
           ]
         },
         {
           "teal": 106,
           "source": "contracts\\BiatecConfigProvider.algo.ts:74",
           "pc": [
-            210
+            211,
+            212
           ]
         },
         {
           "teal": 107,
           "source": "contracts\\BiatecConfigProvider.algo.ts:74",
           "pc": [
-            211
+            213
           ]
         },
         {
           "teal": 111,
           "source": "contracts\\BiatecConfigProvider.algo.ts:75",
           "pc": [
-            212,
-            213
+            214,
+            215
           ]
         },
         {
           "teal": 112,
           "source": "contracts\\BiatecConfigProvider.algo.ts:75",
           "pc": [
-            214
+            216
           ]
         },
         {
           "teal": 116,
           "source": "contracts\\BiatecConfigProvider.algo.ts:76",
           "pc": [
-            215,
-            216
+            217,
+            218
           ]
         },
         {
           "teal": 117,
           "source": "contracts\\BiatecConfigProvider.algo.ts:76",
           "pc": [
-            217
+            219,
+            220
           ]
         },
         {
           "teal": 118,
           "source": "contracts\\BiatecConfigProvider.algo.ts:76",
           "pc": [
-            218
+            221
           ]
         },
         {
           "teal": 119,
           "source": "contracts\\BiatecConfigProvider.algo.ts:72",
           "pc": [
-            219
+            222
           ]
         },
         {
           "teal": 124,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            220,
-            221,
-            222
+            223,
+            224,
+            225
           ]
         },
         {
           "teal": 125,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            223
+            226
           ]
         },
         {
           "teal": 128,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            224,
-            225,
-            226
+            227,
+            228,
+            229
           ]
         },
         {
           "teal": 129,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            227
+            230
           ]
         },
         {
           "teal": 132,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            228,
-            229,
-            230
+            231,
+            232,
+            233
           ]
         },
         {
           "teal": 133,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            231
+            234
           ]
         },
         {
           "teal": 134,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            232
+            235
           ]
         },
         {
           "teal": 135,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            233
+            236
           ]
         },
         {
           "teal": 136,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            234
+            237
           ]
         },
         {
@@ -986,68 +989,68 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "errorMessage": "argument 2 (biatecFee) for bootstrap must be a uint256",
           "pc": [
-            235
+            238
           ]
         },
         {
           "teal": 142,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            236,
-            237,
-            238
+            239,
+            240,
+            241
           ]
         },
         {
           "teal": 143,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            239
+            242
           ]
         },
         {
           "teal": 144,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            240
+            243
           ]
         },
         {
           "teal": 151,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            241,
-            242,
-            243
+            244,
+            245,
+            246
           ]
         },
         {
           "teal": 155,
           "source": "contracts\\BiatecConfigProvider.algo.ts:84",
           "pc": [
-            244,
-            245
+            247,
+            248
           ]
         },
         {
           "teal": 156,
           "source": "contracts\\BiatecConfigProvider.algo.ts:84",
           "pc": [
-            246
+            249
           ]
         },
         {
           "teal": 157,
           "source": "contracts\\BiatecConfigProvider.algo.ts:84",
           "pc": [
-            247
+            250
           ]
         },
         {
           "teal": 158,
           "source": "contracts\\BiatecConfigProvider.algo.ts:84",
           "pc": [
-            248
+            251
           ]
         },
         {
@@ -1055,45 +1058,44 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:84",
           "errorMessage": "Only updater can call bootstrap method",
           "pc": [
-            249
+            252
           ]
         },
         {
           "teal": 165,
           "source": "contracts\\BiatecConfigProvider.algo.ts:85",
           "pc": [
-            250,
-            251
+            253,
+            254
           ]
         },
         {
           "teal": 166,
           "source": "contracts\\BiatecConfigProvider.algo.ts:85",
           "pc": [
-            252,
-            253
+            255
           ]
         },
         {
           "teal": 167,
           "source": "contracts\\BiatecConfigProvider.algo.ts:85",
           "pc": [
-            254,
-            255
+            256,
+            257
           ]
         },
         {
           "teal": 168,
           "source": "contracts\\BiatecConfigProvider.algo.ts:85",
           "pc": [
-            256
+            258
           ]
         },
         {
           "teal": 169,
           "source": "contracts\\BiatecConfigProvider.algo.ts:85",
           "pc": [
-            257
+            259
           ]
         },
         {
@@ -1101,19 +1103,11 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:85",
           "errorMessage": "Biatec cannot set fees higher then 50% of lp fees",
           "pc": [
-            258
-          ]
-        },
-        {
-          "teal": 176,
-          "source": "contracts\\BiatecConfigProvider.algo.ts:86",
-          "pc": [
-            259,
             260
           ]
         },
         {
-          "teal": 177,
+          "teal": 176,
           "source": "contracts\\BiatecConfigProvider.algo.ts:86",
           "pc": [
             261,
@@ -1121,22 +1115,22 @@
           ]
         },
         {
-          "teal": 178,
+          "teal": 177,
           "source": "contracts\\BiatecConfigProvider.algo.ts:86",
           "pc": [
-            263
+            263,
+            264
           ]
         },
         {
-          "teal": 182,
-          "source": "contracts\\BiatecConfigProvider.algo.ts:87",
+          "teal": 178,
+          "source": "contracts\\BiatecConfigProvider.algo.ts:86",
           "pc": [
-            264,
             265
           ]
         },
         {
-          "teal": 183,
+          "teal": 182,
           "source": "contracts\\BiatecConfigProvider.algo.ts:87",
           "pc": [
             266,
@@ -1144,22 +1138,22 @@
           ]
         },
         {
-          "teal": 184,
+          "teal": 183,
           "source": "contracts\\BiatecConfigProvider.algo.ts:87",
           "pc": [
-            268
+            268,
+            269
           ]
         },
         {
-          "teal": 188,
-          "source": "contracts\\BiatecConfigProvider.algo.ts:88",
+          "teal": 184,
+          "source": "contracts\\BiatecConfigProvider.algo.ts:87",
           "pc": [
-            269,
             270
           ]
         },
         {
-          "teal": 189,
+          "teal": 188,
           "source": "contracts\\BiatecConfigProvider.algo.ts:88",
           "pc": [
             271,
@@ -1167,54 +1161,62 @@
           ]
         },
         {
+          "teal": 189,
+          "source": "contracts\\BiatecConfigProvider.algo.ts:88",
+          "pc": [
+            273,
+            274
+          ]
+        },
+        {
           "teal": 190,
           "source": "contracts\\BiatecConfigProvider.algo.ts:88",
           "pc": [
-            273
+            275
           ]
         },
         {
           "teal": 191,
           "source": "contracts\\BiatecConfigProvider.algo.ts:83",
           "pc": [
-            274
+            276
           ]
         },
         {
           "teal": 196,
           "source": "contracts\\BiatecConfigProvider.algo.ts:96",
           "pc": [
-            275,
-            276,
-            277
+            277,
+            278,
+            279
           ]
         },
         {
           "teal": 197,
           "source": "contracts\\BiatecConfigProvider.algo.ts:96",
           "pc": [
-            278
+            280
           ]
         },
         {
           "teal": 198,
           "source": "contracts\\BiatecConfigProvider.algo.ts:96",
           "pc": [
-            279
+            281
           ]
         },
         {
           "teal": 199,
           "source": "contracts\\BiatecConfigProvider.algo.ts:96",
           "pc": [
-            280
+            282
           ]
         },
         {
           "teal": 200,
           "source": "contracts\\BiatecConfigProvider.algo.ts:96",
           "pc": [
-            281
+            283
           ]
         },
         {
@@ -1222,68 +1224,68 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:96",
           "errorMessage": "argument 0 (a) for setAddressUdpater must be a address",
           "pc": [
-            282
+            284
           ]
         },
         {
           "teal": 206,
           "source": "contracts\\BiatecConfigProvider.algo.ts:96",
           "pc": [
-            283,
-            284,
-            285
+            285,
+            286,
+            287
           ]
         },
         {
           "teal": 207,
           "source": "contracts\\BiatecConfigProvider.algo.ts:96",
           "pc": [
-            286
+            288
           ]
         },
         {
           "teal": 208,
           "source": "contracts\\BiatecConfigProvider.algo.ts:96",
           "pc": [
-            287
+            289
           ]
         },
         {
           "teal": 216,
           "source": "contracts\\BiatecConfigProvider.algo.ts:96",
           "pc": [
-            288,
-            289,
-            290
+            290,
+            291,
+            292
           ]
         },
         {
           "teal": 220,
           "source": "contracts\\BiatecConfigProvider.algo.ts:97",
           "pc": [
-            291,
-            292
+            293,
+            294
           ]
         },
         {
           "teal": 221,
           "source": "contracts\\BiatecConfigProvider.algo.ts:97",
           "pc": [
-            293
+            295
           ]
         },
         {
           "teal": 222,
           "source": "contracts\\BiatecConfigProvider.algo.ts:97",
           "pc": [
-            294
+            296
           ]
         },
         {
           "teal": 223,
           "source": "contracts\\BiatecConfigProvider.algo.ts:97",
           "pc": [
-            295
+            297
           ]
         },
         {
@@ -1291,113 +1293,113 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:97",
           "errorMessage": "Only updater can change updater address",
           "pc": [
-            296
+            298
           ]
         },
         {
           "teal": 230,
           "source": "contracts\\BiatecConfigProvider.algo.ts:98",
           "pc": [
-            297
+            299
           ]
         },
         {
           "teal": 231,
           "source": "contracts\\BiatecConfigProvider.algo.ts:98",
           "pc": [
-            298,
-            299
+            300,
+            301
           ]
         },
         {
           "teal": 232,
           "source": "contracts\\BiatecConfigProvider.algo.ts:98",
           "pc": [
-            300
+            302
           ]
         },
         {
           "teal": 233,
           "source": "contracts\\BiatecConfigProvider.algo.ts:96",
           "pc": [
-            301
+            303
           ]
         },
         {
           "teal": 238,
           "source": "contracts\\BiatecConfigProvider.algo.ts:106",
           "pc": [
-            302,
-            303,
-            304
+            304,
+            305,
+            306
           ]
         },
         {
           "teal": 239,
           "source": "contracts\\BiatecConfigProvider.algo.ts:106",
           "pc": [
-            305
+            307
           ]
         },
         {
           "teal": 242,
           "source": "contracts\\BiatecConfigProvider.algo.ts:106",
           "pc": [
-            306,
-            307,
-            308
+            308,
+            309,
+            310
           ]
         },
         {
           "teal": 243,
           "source": "contracts\\BiatecConfigProvider.algo.ts:106",
           "pc": [
-            309
+            311
           ]
         },
         {
           "teal": 244,
           "source": "contracts\\BiatecConfigProvider.algo.ts:106",
           "pc": [
-            310
+            312
           ]
         },
         {
           "teal": 252,
           "source": "contracts\\BiatecConfigProvider.algo.ts:106",
           "pc": [
-            311,
-            312,
-            313
+            313,
+            314,
+            315
           ]
         },
         {
           "teal": 256,
           "source": "contracts\\BiatecConfigProvider.algo.ts:107",
           "pc": [
-            314,
-            315
+            316,
+            317
           ]
         },
         {
           "teal": 257,
           "source": "contracts\\BiatecConfigProvider.algo.ts:107",
           "pc": [
-            316
+            318
           ]
         },
         {
           "teal": 258,
           "source": "contracts\\BiatecConfigProvider.algo.ts:107",
           "pc": [
-            317
+            319
           ]
         },
         {
           "teal": 259,
           "source": "contracts\\BiatecConfigProvider.algo.ts:107",
           "pc": [
-            318
+            320
           ]
         },
         {
@@ -1405,19 +1407,11 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:107",
           "errorMessage": "Only updater can pause and unpause the biatec services",
           "pc": [
-            319
-          ]
-        },
-        {
-          "teal": 266,
-          "source": "contracts\\BiatecConfigProvider.algo.ts:108",
-          "pc": [
-            320,
             321
           ]
         },
         {
-          "teal": 267,
+          "teal": 266,
           "source": "contracts\\BiatecConfigProvider.algo.ts:108",
           "pc": [
             322,
@@ -1425,54 +1419,62 @@
           ]
         },
         {
+          "teal": 267,
+          "source": "contracts\\BiatecConfigProvider.algo.ts:108",
+          "pc": [
+            324,
+            325
+          ]
+        },
+        {
           "teal": 268,
           "source": "contracts\\BiatecConfigProvider.algo.ts:108",
           "pc": [
-            324
+            326
           ]
         },
         {
           "teal": 269,
           "source": "contracts\\BiatecConfigProvider.algo.ts:106",
           "pc": [
-            325
+            327
           ]
         },
         {
           "teal": 274,
           "source": "contracts\\BiatecConfigProvider.algo.ts:116",
           "pc": [
-            326,
-            327,
-            328
+            328,
+            329,
+            330
           ]
         },
         {
           "teal": 275,
           "source": "contracts\\BiatecConfigProvider.algo.ts:116",
           "pc": [
-            329
+            331
           ]
         },
         {
           "teal": 276,
           "source": "contracts\\BiatecConfigProvider.algo.ts:116",
           "pc": [
-            330
+            332
           ]
         },
         {
           "teal": 277,
           "source": "contracts\\BiatecConfigProvider.algo.ts:116",
           "pc": [
-            331
+            333
           ]
         },
         {
           "teal": 278,
           "source": "contracts\\BiatecConfigProvider.algo.ts:116",
           "pc": [
-            332
+            334
           ]
         },
         {
@@ -1480,68 +1482,68 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:116",
           "errorMessage": "argument 0 (a) for setAddressGov must be a address",
           "pc": [
-            333
+            335
           ]
         },
         {
           "teal": 284,
           "source": "contracts\\BiatecConfigProvider.algo.ts:116",
           "pc": [
-            334,
-            335,
-            336
+            336,
+            337,
+            338
           ]
         },
         {
           "teal": 285,
           "source": "contracts\\BiatecConfigProvider.algo.ts:116",
           "pc": [
-            337
+            339
           ]
         },
         {
           "teal": 286,
           "source": "contracts\\BiatecConfigProvider.algo.ts:116",
           "pc": [
-            338
+            340
           ]
         },
         {
           "teal": 294,
           "source": "contracts\\BiatecConfigProvider.algo.ts:116",
           "pc": [
-            339,
-            340,
-            341
+            341,
+            342,
+            343
           ]
         },
         {
           "teal": 298,
           "source": "contracts\\BiatecConfigProvider.algo.ts:117",
           "pc": [
-            342,
-            343
+            344,
+            345
           ]
         },
         {
           "teal": 299,
           "source": "contracts\\BiatecConfigProvider.algo.ts:117",
           "pc": [
-            344
+            346
           ]
         },
         {
           "teal": 300,
           "source": "contracts\\BiatecConfigProvider.algo.ts:117",
           "pc": [
-            345
+            347
           ]
         },
         {
           "teal": 301,
           "source": "contracts\\BiatecConfigProvider.algo.ts:117",
           "pc": [
-            346
+            348
           ]
         },
         {
@@ -1549,19 +1551,11 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:117",
           "errorMessage": "Only updater can change gov address",
           "pc": [
-            347
-          ]
-        },
-        {
-          "teal": 308,
-          "source": "contracts\\BiatecConfigProvider.algo.ts:118",
-          "pc": [
-            348,
             349
           ]
         },
         {
-          "teal": 309,
+          "teal": 308,
           "source": "contracts\\BiatecConfigProvider.algo.ts:118",
           "pc": [
             350,
@@ -1569,54 +1563,62 @@
           ]
         },
         {
+          "teal": 309,
+          "source": "contracts\\BiatecConfigProvider.algo.ts:118",
+          "pc": [
+            352,
+            353
+          ]
+        },
+        {
           "teal": 310,
           "source": "contracts\\BiatecConfigProvider.algo.ts:118",
           "pc": [
-            352
+            354
           ]
         },
         {
           "teal": 311,
           "source": "contracts\\BiatecConfigProvider.algo.ts:116",
           "pc": [
-            353
+            355
           ]
         },
         {
           "teal": 316,
           "source": "contracts\\BiatecConfigProvider.algo.ts:126",
           "pc": [
-            354,
-            355,
-            356
+            356,
+            357,
+            358
           ]
         },
         {
           "teal": 317,
           "source": "contracts\\BiatecConfigProvider.algo.ts:126",
           "pc": [
-            357
+            359
           ]
         },
         {
           "teal": 318,
           "source": "contracts\\BiatecConfigProvider.algo.ts:126",
           "pc": [
-            358
+            360
           ]
         },
         {
           "teal": 319,
           "source": "contracts\\BiatecConfigProvider.algo.ts:126",
           "pc": [
-            359
+            361
           ]
         },
         {
           "teal": 320,
           "source": "contracts\\BiatecConfigProvider.algo.ts:126",
           "pc": [
-            360
+            362
           ]
         },
         {
@@ -1624,68 +1626,68 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:126",
           "errorMessage": "argument 0 (a) for setAddressExecutive must be a address",
           "pc": [
-            361
+            363
           ]
         },
         {
           "teal": 326,
           "source": "contracts\\BiatecConfigProvider.algo.ts:126",
           "pc": [
-            362,
-            363,
-            364
+            364,
+            365,
+            366
           ]
         },
         {
           "teal": 327,
           "source": "contracts\\BiatecConfigProvider.algo.ts:126",
           "pc": [
-            365
+            367
           ]
         },
         {
           "teal": 328,
           "source": "contracts\\BiatecConfigProvider.algo.ts:126",
           "pc": [
-            366
+            368
           ]
         },
         {
           "teal": 336,
           "source": "contracts\\BiatecConfigProvider.algo.ts:126",
           "pc": [
-            367,
-            368,
-            369
+            369,
+            370,
+            371
           ]
         },
         {
           "teal": 340,
           "source": "contracts\\BiatecConfigProvider.algo.ts:127",
           "pc": [
-            370,
-            371
+            372,
+            373
           ]
         },
         {
           "teal": 341,
           "source": "contracts\\BiatecConfigProvider.algo.ts:127",
           "pc": [
-            372
+            374
           ]
         },
         {
           "teal": 342,
           "source": "contracts\\BiatecConfigProvider.algo.ts:127",
           "pc": [
-            373
+            375
           ]
         },
         {
           "teal": 343,
           "source": "contracts\\BiatecConfigProvider.algo.ts:127",
           "pc": [
-            374
+            376
           ]
         },
         {
@@ -1693,73 +1695,73 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:127",
           "errorMessage": "Only updater can change addressExecutive",
           "pc": [
-            375
+            377
           ]
         },
         {
           "teal": 350,
           "source": "contracts\\BiatecConfigProvider.algo.ts:128",
           "pc": [
-            376
+            378
           ]
         },
         {
           "teal": 351,
           "source": "contracts\\BiatecConfigProvider.algo.ts:128",
           "pc": [
-            377,
-            378
+            379,
+            380
           ]
         },
         {
           "teal": 352,
           "source": "contracts\\BiatecConfigProvider.algo.ts:128",
           "pc": [
-            379
+            381
           ]
         },
         {
           "teal": 353,
           "source": "contracts\\BiatecConfigProvider.algo.ts:126",
           "pc": [
-            380
+            382
           ]
         },
         {
           "teal": 358,
           "source": "contracts\\BiatecConfigProvider.algo.ts:136",
           "pc": [
-            381,
-            382,
-            383
+            383,
+            384,
+            385
           ]
         },
         {
           "teal": 359,
           "source": "contracts\\BiatecConfigProvider.algo.ts:136",
           "pc": [
-            384
+            386
           ]
         },
         {
           "teal": 360,
           "source": "contracts\\BiatecConfigProvider.algo.ts:136",
           "pc": [
-            385
+            387
           ]
         },
         {
           "teal": 361,
           "source": "contracts\\BiatecConfigProvider.algo.ts:136",
           "pc": [
-            386
+            388
           ]
         },
         {
           "teal": 362,
           "source": "contracts\\BiatecConfigProvider.algo.ts:136",
           "pc": [
-            387
+            389
           ]
         },
         {
@@ -1767,68 +1769,68 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:136",
           "errorMessage": "argument 0 (a) for setAddressExecutiveFee must be a address",
           "pc": [
-            388
+            390
           ]
         },
         {
           "teal": 368,
           "source": "contracts\\BiatecConfigProvider.algo.ts:136",
           "pc": [
-            389,
-            390,
-            391
+            391,
+            392,
+            393
           ]
         },
         {
           "teal": 369,
           "source": "contracts\\BiatecConfigProvider.algo.ts:136",
           "pc": [
-            392
+            394
           ]
         },
         {
           "teal": 370,
           "source": "contracts\\BiatecConfigProvider.algo.ts:136",
           "pc": [
-            393
+            395
           ]
         },
         {
           "teal": 378,
           "source": "contracts\\BiatecConfigProvider.algo.ts:136",
           "pc": [
-            394,
-            395,
-            396
+            396,
+            397,
+            398
           ]
         },
         {
           "teal": 382,
           "source": "contracts\\BiatecConfigProvider.algo.ts:137",
           "pc": [
-            397,
-            398
+            399,
+            400
           ]
         },
         {
           "teal": 383,
           "source": "contracts\\BiatecConfigProvider.algo.ts:137",
           "pc": [
-            399
+            401
           ]
         },
         {
           "teal": 384,
           "source": "contracts\\BiatecConfigProvider.algo.ts:137",
           "pc": [
-            400
+            402
           ]
         },
         {
           "teal": 385,
           "source": "contracts\\BiatecConfigProvider.algo.ts:137",
           "pc": [
-            401
+            403
           ]
         },
         {
@@ -1836,113 +1838,113 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:137",
           "errorMessage": "Only addressExecutive can change fee executor address",
           "pc": [
-            402
+            404
           ]
         },
         {
           "teal": 392,
           "source": "contracts\\BiatecConfigProvider.algo.ts:138",
           "pc": [
-            403
+            405
           ]
         },
         {
           "teal": 393,
           "source": "contracts\\BiatecConfigProvider.algo.ts:138",
           "pc": [
-            404,
-            405
+            406,
+            407
           ]
         },
         {
           "teal": 394,
           "source": "contracts\\BiatecConfigProvider.algo.ts:138",
           "pc": [
-            406
+            408
           ]
         },
         {
           "teal": 395,
           "source": "contracts\\BiatecConfigProvider.algo.ts:136",
           "pc": [
-            407
+            409
           ]
         },
         {
           "teal": 400,
           "source": "contracts\\BiatecConfigProvider.algo.ts:146",
           "pc": [
-            408,
-            409,
-            410
+            410,
+            411,
+            412
           ]
         },
         {
           "teal": 401,
           "source": "contracts\\BiatecConfigProvider.algo.ts:146",
           "pc": [
-            411
+            413
           ]
         },
         {
           "teal": 404,
           "source": "contracts\\BiatecConfigProvider.algo.ts:146",
           "pc": [
-            412,
-            413,
-            414
+            414,
+            415,
+            416
           ]
         },
         {
           "teal": 405,
           "source": "contracts\\BiatecConfigProvider.algo.ts:146",
           "pc": [
-            415
+            417
           ]
         },
         {
           "teal": 406,
           "source": "contracts\\BiatecConfigProvider.algo.ts:146",
           "pc": [
-            416
+            418
           ]
         },
         {
           "teal": 414,
           "source": "contracts\\BiatecConfigProvider.algo.ts:146",
           "pc": [
-            417,
-            418,
-            419
+            419,
+            420,
+            421
           ]
         },
         {
           "teal": 418,
           "source": "contracts\\BiatecConfigProvider.algo.ts:147",
           "pc": [
-            420,
-            421
+            422,
+            423
           ]
         },
         {
           "teal": 419,
           "source": "contracts\\BiatecConfigProvider.algo.ts:147",
           "pc": [
-            422
+            424
           ]
         },
         {
           "teal": 420,
           "source": "contracts\\BiatecConfigProvider.algo.ts:147",
           "pc": [
-            423
+            425
           ]
         },
         {
           "teal": 421,
           "source": "contracts\\BiatecConfigProvider.algo.ts:147",
           "pc": [
-            424
+            426
           ]
         },
         {
@@ -1950,19 +1952,11 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:147",
           "errorMessage": "Only updater can change appIdentityProvider",
           "pc": [
-            425
-          ]
-        },
-        {
-          "teal": 428,
-          "source": "contracts\\BiatecConfigProvider.algo.ts:148",
-          "pc": [
-            426,
             427
           ]
         },
         {
-          "teal": 429,
+          "teal": 428,
           "source": "contracts\\BiatecConfigProvider.algo.ts:148",
           "pc": [
             428,
@@ -1970,94 +1964,102 @@
           ]
         },
         {
+          "teal": 429,
+          "source": "contracts\\BiatecConfigProvider.algo.ts:148",
+          "pc": [
+            430,
+            431
+          ]
+        },
+        {
           "teal": 430,
           "source": "contracts\\BiatecConfigProvider.algo.ts:148",
           "pc": [
-            430
+            432
           ]
         },
         {
           "teal": 431,
           "source": "contracts\\BiatecConfigProvider.algo.ts:146",
           "pc": [
-            431
+            433
           ]
         },
         {
           "teal": 436,
           "source": "contracts\\BiatecConfigProvider.algo.ts:156",
           "pc": [
-            432,
-            433,
-            434
+            434,
+            435,
+            436
           ]
         },
         {
           "teal": 437,
           "source": "contracts\\BiatecConfigProvider.algo.ts:156",
           "pc": [
-            435
+            437
           ]
         },
         {
           "teal": 440,
           "source": "contracts\\BiatecConfigProvider.algo.ts:156",
           "pc": [
-            436,
-            437,
-            438
+            438,
+            439,
+            440
           ]
         },
         {
           "teal": 441,
           "source": "contracts\\BiatecConfigProvider.algo.ts:156",
           "pc": [
-            439
+            441
           ]
         },
         {
           "teal": 442,
           "source": "contracts\\BiatecConfigProvider.algo.ts:156",
           "pc": [
-            440
+            442
           ]
         },
         {
           "teal": 450,
           "source": "contracts\\BiatecConfigProvider.algo.ts:156",
           "pc": [
-            441,
-            442,
-            443
+            443,
+            444,
+            445
           ]
         },
         {
           "teal": 454,
           "source": "contracts\\BiatecConfigProvider.algo.ts:157",
           "pc": [
-            444,
-            445
+            446,
+            447
           ]
         },
         {
           "teal": 455,
           "source": "contracts\\BiatecConfigProvider.algo.ts:157",
           "pc": [
-            446
+            448
           ]
         },
         {
           "teal": 456,
           "source": "contracts\\BiatecConfigProvider.algo.ts:157",
           "pc": [
-            447
+            449
           ]
         },
         {
           "teal": 457,
           "source": "contracts\\BiatecConfigProvider.algo.ts:157",
           "pc": [
-            448
+            450
           ]
         },
         {
@@ -2065,19 +2067,11 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:157",
           "errorMessage": "Only updater can change appPoolProvider",
           "pc": [
-            449
-          ]
-        },
-        {
-          "teal": 464,
-          "source": "contracts\\BiatecConfigProvider.algo.ts:158",
-          "pc": [
-            450,
             451
           ]
         },
         {
-          "teal": 465,
+          "teal": 464,
           "source": "contracts\\BiatecConfigProvider.algo.ts:158",
           "pc": [
             452,
@@ -2085,54 +2079,62 @@
           ]
         },
         {
+          "teal": 465,
+          "source": "contracts\\BiatecConfigProvider.algo.ts:158",
+          "pc": [
+            454,
+            455
+          ]
+        },
+        {
           "teal": 466,
           "source": "contracts\\BiatecConfigProvider.algo.ts:158",
           "pc": [
-            454
+            456
           ]
         },
         {
           "teal": 467,
           "source": "contracts\\BiatecConfigProvider.algo.ts:156",
           "pc": [
-            455
+            457
           ]
         },
         {
           "teal": 472,
           "source": "contracts\\BiatecConfigProvider.algo.ts:170",
           "pc": [
-            456,
-            457,
-            458
+            458,
+            459,
+            460
           ]
         },
         {
           "teal": 473,
           "source": "contracts\\BiatecConfigProvider.algo.ts:170",
           "pc": [
-            459
+            461
           ]
         },
         {
           "teal": 474,
           "source": "contracts\\BiatecConfigProvider.algo.ts:170",
           "pc": [
-            460
+            462
           ]
         },
         {
           "teal": 475,
           "source": "contracts\\BiatecConfigProvider.algo.ts:170",
           "pc": [
-            461
+            463
           ]
         },
         {
           "teal": 476,
           "source": "contracts\\BiatecConfigProvider.algo.ts:170",
           "pc": [
-            462
+            464
           ]
         },
         {
@@ -2140,68 +2142,68 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:170",
           "errorMessage": "argument 0 (biatecFee) for setBiatecFee must be a uint256",
           "pc": [
-            463
+            465
           ]
         },
         {
           "teal": 482,
           "source": "contracts\\BiatecConfigProvider.algo.ts:170",
           "pc": [
-            464,
-            465,
-            466
+            466,
+            467,
+            468
           ]
         },
         {
           "teal": 483,
           "source": "contracts\\BiatecConfigProvider.algo.ts:170",
           "pc": [
-            467
+            469
           ]
         },
         {
           "teal": 484,
           "source": "contracts\\BiatecConfigProvider.algo.ts:170",
           "pc": [
-            468
+            470
           ]
         },
         {
           "teal": 496,
           "source": "contracts\\BiatecConfigProvider.algo.ts:170",
           "pc": [
-            469,
-            470,
-            471
+            471,
+            472,
+            473
           ]
         },
         {
           "teal": 500,
           "source": "contracts\\BiatecConfigProvider.algo.ts:171",
           "pc": [
-            472,
-            473
+            474,
+            475
           ]
         },
         {
           "teal": 501,
           "source": "contracts\\BiatecConfigProvider.algo.ts:171",
           "pc": [
-            474
+            476
           ]
         },
         {
           "teal": 502,
           "source": "contracts\\BiatecConfigProvider.algo.ts:171",
           "pc": [
-            475
+            477
           ]
         },
         {
           "teal": 503,
           "source": "contracts\\BiatecConfigProvider.algo.ts:171",
           "pc": [
-            476
+            478
           ]
         },
         {
@@ -2209,19 +2211,11 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:171",
           "errorMessage": "Only executive address can change fees",
           "pc": [
-            477
-          ]
-        },
-        {
-          "teal": 510,
-          "source": "contracts\\BiatecConfigProvider.algo.ts:172",
-          "pc": [
-            478,
             479
           ]
         },
         {
-          "teal": 511,
+          "teal": 510,
           "source": "contracts\\BiatecConfigProvider.algo.ts:172",
           "pc": [
             480,
@@ -2229,25 +2223,32 @@
           ]
         },
         {
+          "teal": 511,
+          "source": "contracts\\BiatecConfigProvider.algo.ts:172",
+          "pc": [
+            482
+          ]
+        },
+        {
           "teal": 512,
           "source": "contracts\\BiatecConfigProvider.algo.ts:172",
           "pc": [
-            482,
-            483
+            483,
+            484
           ]
         },
         {
           "teal": 513,
           "source": "contracts\\BiatecConfigProvider.algo.ts:172",
           "pc": [
-            484
+            485
           ]
         },
         {
           "teal": 514,
           "source": "contracts\\BiatecConfigProvider.algo.ts:172",
           "pc": [
-            485
+            486
           ]
         },
         {
@@ -2255,216 +2256,216 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:172",
           "errorMessage": "Biatec cannot set fees higher then 50% of lp fees",
           "pc": [
-            486
+            487
           ]
         },
         {
           "teal": 521,
           "source": "contracts\\BiatecConfigProvider.algo.ts:173",
           "pc": [
-            487,
-            488
+            488,
+            489
           ]
         },
         {
           "teal": 522,
           "source": "contracts\\BiatecConfigProvider.algo.ts:173",
           "pc": [
-            489,
-            490
+            490,
+            491
           ]
         },
         {
           "teal": 523,
           "source": "contracts\\BiatecConfigProvider.algo.ts:173",
           "pc": [
-            491
+            492
           ]
         },
         {
           "teal": 524,
           "source": "contracts\\BiatecConfigProvider.algo.ts:170",
           "pc": [
-            492
+            493
           ]
         },
         {
           "teal": 529,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            493,
             494,
-            495
+            495,
+            496
           ]
         },
         {
           "teal": 530,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            496
+            497
           ]
         },
         {
           "teal": 533,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            497,
             498,
-            499
+            499,
+            500
           ]
         },
         {
           "teal": 534,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            500
+            501
           ]
         },
         {
           "teal": 537,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            501,
             502,
-            503
+            503,
+            504
           ]
         },
         {
           "teal": 538,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            504
+            505
           ]
         },
         {
           "teal": 541,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            505,
             506,
-            507
+            507,
+            508
           ]
         },
         {
           "teal": 542,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            508
+            509
           ]
         },
         {
           "teal": 545,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            509,
             510,
-            511
+            511,
+            512
           ]
         },
         {
           "teal": 546,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            512,
             513,
-            514
+            514,
+            515
           ]
         },
         {
           "teal": 549,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            515,
             516,
-            517
+            517,
+            518
           ]
         },
         {
           "teal": 550,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            518,
             519,
-            520
+            520,
+            521
           ]
         },
         {
           "teal": 553,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            521,
             522,
-            523
+            523,
+            524
           ]
         },
         {
           "teal": 554,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            524,
             525,
-            526
+            526,
+            527
           ]
         },
         {
           "teal": 557,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            527,
             528,
-            529
+            529,
+            530
           ]
         },
         {
           "teal": 558,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            530
+            531
           ]
         },
         {
           "teal": 559,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            531
+            532
           ]
         },
         {
           "teal": 567,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            532,
             533,
-            534
+            534,
+            535
           ]
         },
         {
           "teal": 571,
           "source": "contracts\\BiatecConfigProvider.algo.ts:182",
           "pc": [
-            535,
-            536
+            536,
+            537
           ]
         },
         {
           "teal": 572,
           "source": "contracts\\BiatecConfigProvider.algo.ts:182",
           "pc": [
-            537
+            538
           ]
         },
         {
           "teal": 573,
           "source": "contracts\\BiatecConfigProvider.algo.ts:182",
           "pc": [
-            538
+            539
           ]
         },
         {
           "teal": 574,
           "source": "contracts\\BiatecConfigProvider.algo.ts:182",
           "pc": [
-            539
+            540
           ]
         },
         {
@@ -2472,282 +2473,282 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:182",
           "errorMessage": "Only fee executor setup in the config can take the collected fees",
           "pc": [
-            540
+            541
           ]
         },
         {
           "teal": 589,
           "source": "contracts\\BiatecConfigProvider.algo.ts:183",
           "pc": [
-            541
+            542
           ]
         },
         {
           "teal": 590,
           "source": "contracts\\BiatecConfigProvider.algo.ts:183",
           "pc": [
-            542,
-            543
+            543,
+            544
           ]
         },
         {
           "teal": 591,
           "source": "contracts\\BiatecConfigProvider.algo.ts:183",
           "pc": [
-            544,
-            545
+            545,
+            546
           ]
         },
         {
           "teal": 595,
           "source": "contracts\\BiatecConfigProvider.algo.ts:184",
           "pc": [
-            546,
-            547
+            547,
+            548
           ]
         },
         {
           "teal": 596,
           "source": "contracts\\BiatecConfigProvider.algo.ts:184",
           "pc": [
-            548,
-            549
+            549,
+            550
           ]
         },
         {
           "teal": 600,
           "source": "contracts\\BiatecConfigProvider.algo.ts:185",
           "pc": [
-            550,
-            551
+            551,
+            552
           ]
         },
         {
           "teal": 601,
           "source": "contracts\\BiatecConfigProvider.algo.ts:185",
           "pc": [
-            552,
-            553
+            553,
+            554
           ]
         },
         {
           "teal": 605,
           "source": "contracts\\BiatecConfigProvider.algo.ts:186",
           "pc": [
-            554,
-            555
+            555,
+            556
           ]
         },
         {
           "teal": 606,
           "source": "contracts\\BiatecConfigProvider.algo.ts:186",
           "pc": [
-            556,
-            557
+            557,
+            558
           ]
         },
         {
           "teal": 610,
           "source": "contracts\\BiatecConfigProvider.algo.ts:187",
           "pc": [
-            558,
-            559
+            559,
+            560
           ]
         },
         {
           "teal": 611,
           "source": "contracts\\BiatecConfigProvider.algo.ts:187",
           "pc": [
-            560,
-            561
+            561,
+            562
           ]
         },
         {
           "teal": 615,
           "source": "contracts\\BiatecConfigProvider.algo.ts:188",
           "pc": [
-            562,
-            563
+            563,
+            564
           ]
         },
         {
           "teal": 616,
           "source": "contracts\\BiatecConfigProvider.algo.ts:188",
           "pc": [
-            564,
-            565
+            565,
+            566
           ]
         },
         {
           "teal": 620,
           "source": "contracts\\BiatecConfigProvider.algo.ts:189",
           "pc": [
-            566,
-            567
+            567,
+            568
           ]
         },
         {
           "teal": 621,
           "source": "contracts\\BiatecConfigProvider.algo.ts:189",
           "pc": [
-            568,
-            569
+            569,
+            570
           ]
         },
         {
           "teal": 625,
           "source": "contracts\\BiatecConfigProvider.algo.ts:190",
           "pc": [
-            570,
-            571
+            571,
+            572
           ]
         },
         {
           "teal": 626,
           "source": "contracts\\BiatecConfigProvider.algo.ts:190",
           "pc": [
-            572,
-            573
+            573,
+            574
           ]
         },
         {
           "teal": 629,
           "source": "contracts\\BiatecConfigProvider.algo.ts:183",
           "pc": [
-            574
+            575
           ]
         },
         {
           "teal": 630,
           "source": "contracts\\BiatecConfigProvider.algo.ts:181",
           "pc": [
-            575
+            576
           ]
         },
         {
           "teal": 635,
           "source": "contracts\\BiatecConfigProvider.algo.ts:202",
           "pc": [
-            576,
             577,
             578,
             579,
             580,
-            581
+            581,
+            582
           ]
         },
         {
           "teal": 638,
           "source": "contracts\\BiatecConfigProvider.algo.ts:202",
           "pc": [
-            582,
             583,
-            584
+            584,
+            585
           ]
         },
         {
           "teal": 639,
           "source": "contracts\\BiatecConfigProvider.algo.ts:202",
           "pc": [
-            585
+            586
           ]
         },
         {
           "teal": 642,
           "source": "contracts\\BiatecConfigProvider.algo.ts:202",
           "pc": [
-            586,
             587,
-            588
+            588,
+            589
           ]
         },
         {
           "teal": 643,
           "source": "contracts\\BiatecConfigProvider.algo.ts:202",
           "pc": [
-            589
+            590
           ]
         },
         {
           "teal": 646,
           "source": "contracts\\BiatecConfigProvider.algo.ts:202",
           "pc": [
-            590,
             591,
-            592
+            592,
+            593
           ]
         },
         {
           "teal": 647,
           "source": "contracts\\BiatecConfigProvider.algo.ts:202",
           "pc": [
-            593
+            594
           ]
         },
         {
           "teal": 648,
           "source": "contracts\\BiatecConfigProvider.algo.ts:202",
           "pc": [
-            594
+            595
           ]
         },
         {
           "teal": 649,
           "source": "contracts\\BiatecConfigProvider.algo.ts:202",
           "pc": [
-            595
+            596
           ]
         },
         {
           "teal": 650,
           "source": "contracts\\BiatecConfigProvider.algo.ts:202",
           "pc": [
-            596
+            597
           ]
         },
         {
           "teal": 651,
           "source": "contracts\\BiatecConfigProvider.algo.ts:202",
           "pc": [
-            597
+            598
           ]
         },
         {
           "teal": 662,
           "source": "contracts\\BiatecConfigProvider.algo.ts:202",
           "pc": [
-            598,
             599,
-            600
+            600,
+            601
           ]
         },
         {
           "teal": 666,
           "source": "contracts\\BiatecConfigProvider.algo.ts:203",
           "pc": [
-            601,
-            602
+            602,
+            603
           ]
         },
         {
           "teal": 667,
           "source": "contracts\\BiatecConfigProvider.algo.ts:203",
           "pc": [
-            603
+            604
           ]
         },
         {
           "teal": 668,
           "source": "contracts\\BiatecConfigProvider.algo.ts:203",
           "pc": [
-            604
+            605
           ]
         },
         {
           "teal": 669,
           "source": "contracts\\BiatecConfigProvider.algo.ts:203",
           "pc": [
-            605
+            606
           ]
         },
         {
@@ -2755,311 +2756,311 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:203",
           "errorMessage": "Only fee executor setup in the config can take the collected fees",
           "pc": [
-            606
+            607
           ]
         },
         {
           "teal": 676,
           "source": "contracts\\BiatecConfigProvider.algo.ts:205",
           "pc": [
-            607,
-            608
+            608,
+            609
           ]
         },
         {
           "teal": 677,
           "source": "contracts\\BiatecConfigProvider.algo.ts:205",
           "pc": [
-            609,
-            610
+            610,
+            611
           ]
         },
         {
           "teal": 678,
           "source": "contracts\\BiatecConfigProvider.algo.ts:205",
           "pc": [
-            611,
-            612
+            612,
+            613
           ]
         },
         {
           "teal": 679,
           "source": "contracts\\BiatecConfigProvider.algo.ts:205",
           "pc": [
-            613,
             614,
-            615
+            615,
+            616
           ]
         },
         {
           "teal": 683,
           "source": "contracts\\BiatecConfigProvider.algo.ts:207",
           "pc": [
-            616,
-            617
+            617,
+            618
           ]
         },
         {
           "teal": 684,
           "source": "contracts\\BiatecConfigProvider.algo.ts:202",
           "pc": [
-            618
+            619
           ]
         },
         {
           "teal": 693,
           "source": "contracts\\BiatecConfigProvider.algo.ts:216",
           "pc": [
-            619,
             620,
-            621
+            621,
+            622
           ]
         },
         {
           "teal": 698,
           "source": "contracts\\BiatecConfigProvider.algo.ts:217",
           "pc": [
-            622,
-            623
+            623,
+            624
           ]
         },
         {
           "teal": 699,
           "source": "contracts\\BiatecConfigProvider.algo.ts:217",
           "pc": [
-            624
+            625
           ]
         },
         {
           "teal": 700,
           "source": "contracts\\BiatecConfigProvider.algo.ts:217",
           "pc": [
-            625
+            626
           ]
         },
         {
           "teal": 701,
           "source": "contracts\\BiatecConfigProvider.algo.ts:217",
           "pc": [
-            626,
             627,
-            628
+            628,
+            629
           ]
         },
         {
           "teal": 710,
           "source": "contracts\\BiatecConfigProvider.algo.ts:218",
           "pc": [
-            629
+            630
           ]
         },
         {
           "teal": 711,
           "source": "contracts\\BiatecConfigProvider.algo.ts:218",
           "pc": [
-            630
+            631
           ]
         },
         {
           "teal": 712,
           "source": "contracts\\BiatecConfigProvider.algo.ts:218",
           "pc": [
-            631,
-            632
+            632,
+            633
           ]
         },
         {
           "teal": 716,
           "source": "contracts\\BiatecConfigProvider.algo.ts:219",
           "pc": [
-            633,
-            634
+            634,
+            635
           ]
         },
         {
           "teal": 717,
           "source": "contracts\\BiatecConfigProvider.algo.ts:219",
           "pc": [
-            635,
-            636
+            636,
+            637
           ]
         },
         {
           "teal": 721,
           "source": "contracts\\BiatecConfigProvider.algo.ts:220",
           "pc": [
-            637,
-            638
+            638,
+            639
           ]
         },
         {
           "teal": 722,
           "source": "contracts\\BiatecConfigProvider.algo.ts:220",
           "pc": [
-            639,
-            640
+            640,
+            641
           ]
         },
         {
           "teal": 726,
           "source": "contracts\\BiatecConfigProvider.algo.ts:221",
           "pc": [
-            641
+            642
           ]
         },
         {
           "teal": 727,
           "source": "contracts\\BiatecConfigProvider.algo.ts:221",
           "pc": [
-            642,
-            643
+            643,
+            644
           ]
         },
         {
           "teal": 730,
           "source": "contracts\\BiatecConfigProvider.algo.ts:218",
           "pc": [
-            644
+            645
           ]
         },
         {
           "teal": 731,
           "source": "contracts\\BiatecConfigProvider.algo.ts:217",
           "pc": [
-            645,
             646,
-            647
+            647,
+            648
           ]
         },
         {
           "teal": 741,
           "source": "contracts\\BiatecConfigProvider.algo.ts:224",
           "pc": [
-            648
+            649
           ]
         },
         {
           "teal": 742,
           "source": "contracts\\BiatecConfigProvider.algo.ts:224",
           "pc": [
-            649,
-            650
+            650,
+            651
           ]
         },
         {
           "teal": 743,
           "source": "contracts\\BiatecConfigProvider.algo.ts:224",
           "pc": [
-            651,
-            652
+            652,
+            653
           ]
         },
         {
           "teal": 747,
           "source": "contracts\\BiatecConfigProvider.algo.ts:225",
           "pc": [
-            653,
-            654
+            654,
+            655
           ]
         },
         {
           "teal": 748,
           "source": "contracts\\BiatecConfigProvider.algo.ts:225",
           "pc": [
-            655,
-            656
+            656,
+            657
           ]
         },
         {
           "teal": 752,
           "source": "contracts\\BiatecConfigProvider.algo.ts:226",
           "pc": [
-            657,
-            658
+            658,
+            659
           ]
         },
         {
           "teal": 753,
           "source": "contracts\\BiatecConfigProvider.algo.ts:226",
           "pc": [
-            659,
-            660
+            660,
+            661
           ]
         },
         {
           "teal": 757,
           "source": "contracts\\BiatecConfigProvider.algo.ts:227",
           "pc": [
-            661,
-            662
+            662,
+            663
           ]
         },
         {
           "teal": 758,
           "source": "contracts\\BiatecConfigProvider.algo.ts:227",
           "pc": [
-            663,
-            664
+            664,
+            665
           ]
         },
         {
           "teal": 762,
           "source": "contracts\\BiatecConfigProvider.algo.ts:228",
           "pc": [
-            665
+            666
           ]
         },
         {
           "teal": 763,
           "source": "contracts\\BiatecConfigProvider.algo.ts:228",
           "pc": [
-            666,
-            667
+            667,
+            668
           ]
         },
         {
           "teal": 766,
           "source": "contracts\\BiatecConfigProvider.algo.ts:224",
           "pc": [
-            668
+            669
           ]
         },
         {
           "teal": 769,
           "source": "contracts\\BiatecConfigProvider.algo.ts:216",
           "pc": [
-            669
+            670
           ]
         },
         {
           "teal": 772,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            670,
             671,
             672,
             673,
             674,
-            675
+            675,
+            676
           ]
         },
         {
           "teal": 773,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            676,
             677,
-            678
+            678,
+            679
           ]
         },
         {
           "teal": 774,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            679,
             680,
             681,
-            682
+            682,
+            683
           ]
         },
         {
@@ -3067,155 +3068,154 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "errorMessage": "this contract does not implement the given ABI method for create NoOp",
           "pc": [
-            683
+            684
           ]
         },
         {
           "teal": 780,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            684,
             685,
             686,
             687,
             688,
-            689
+            689,
+            690
           ]
         },
         {
           "teal": 781,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            690,
             691,
             692,
             693,
             694,
-            695
+            695,
+            696
           ]
         },
         {
           "teal": 782,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            696,
             697,
             698,
             699,
             700,
-            701
+            701,
+            702
           ]
         },
         {
           "teal": 783,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            702,
             703,
             704,
             705,
             706,
-            707
+            707,
+            708
           ]
         },
         {
           "teal": 784,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            708,
             709,
             710,
             711,
             712,
-            713
+            713,
+            714
           ]
         },
         {
           "teal": 785,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            714,
             715,
             716,
             717,
             718,
-            719
+            719,
+            720
           ]
         },
         {
           "teal": 786,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            720,
             721,
             722,
             723,
             724,
-            725
+            725,
+            726
           ]
         },
         {
           "teal": 787,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            726,
             727,
             728,
             729,
             730,
-            731
+            731,
+            732
           ]
         },
         {
           "teal": 788,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            732,
             733,
             734,
             735,
             736,
-            737
+            737,
+            738
           ]
         },
         {
           "teal": 789,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            738,
             739,
             740,
             741,
             742,
-            743
+            743,
+            744
           ]
         },
         {
           "teal": 790,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            744,
             745,
             746,
             747,
             748,
-            749
+            749,
+            750
           ]
         },
         {
           "teal": 791,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            750,
             751,
-            752
+            752,
+            753
           ]
         },
         {
           "teal": 792,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            753,
             754,
             755,
             756,
@@ -3238,7 +3238,8 @@
             773,
             774,
             775,
-            776
+            776,
+            777
           ]
         },
         {
@@ -3246,38 +3247,38 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "errorMessage": "this contract does not implement the given ABI method for call NoOp",
           "pc": [
-            777
+            778
           ]
         },
         {
           "teal": 798,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            778,
             779,
             780,
             781,
             782,
-            783
+            783,
+            784
           ]
         },
         {
           "teal": 799,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            784,
             785,
-            786
+            786,
+            787
           ]
         },
         {
           "teal": 800,
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "pc": [
-            787,
             788,
             789,
-            790
+            790,
+            791
           ]
         },
         {
@@ -3285,7 +3286,7 @@
           "source": "contracts\\BiatecConfigProvider.algo.ts:6",
           "errorMessage": "this contract does not implement the given ABI method for call UpdateApplication",
           "pc": [
-            791
+            792
           ]
         }
       ],
@@ -3297,11 +3298,11 @@
     }
   },
   "source": {
-    "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCmludGNibG9jayAxIDMyIDAKYnl0ZWNibG9jayAweDc1IDB4NjU2NiAweDY1ICJCSUFURUMtQ09ORklHLTAxLTAyLTAxIiAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwM2I5YWNhMDAgMHgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAyIDB4NzM2Mzc2NjU3MiAweDY3IDB4NzMgMHg2NiAweDY5IDB4NzAKCi8vIFRoaXMgVEVBTCB3YXMgZ2VuZXJhdGVkIGJ5IFRFQUxTY3JpcHQgdjAuMTA3LjAKLy8gaHR0cHM6Ly9naXRodWIuY29tL2FsZ29yYW5kZm91bmRhdGlvbi9URUFMU2NyaXB0CgovLyBUaGlzIGNvbnRyYWN0IGlzIGNvbXBsaWFudCB3aXRoIGFuZC9vciBpbXBsZW1lbnRzIHRoZSBmb2xsb3dpbmcgQVJDczogWyBBUkM0IF0KCi8vIFRoZSBmb2xsb3dpbmcgdGVuIGxpbmVzIG9mIFRFQUwgaGFuZGxlIGluaXRpYWwgcHJvZ3JhbSBmbG93Ci8vIFRoaXMgcGF0dGVybiBpcyB1c2VkIHRvIG1ha2UgaXQgZWFzeSBmb3IgYW55b25lIHRvIHBhcnNlIHRoZSBzdGFydCBvZiB0aGUgcHJvZ3JhbSBhbmQgZGV0ZXJtaW5lIGlmIGEgc3BlY2lmaWMgYWN0aW9uIGlzIGFsbG93ZWQKLy8gSGVyZSwgYWN0aW9uIHJlZmVycyB0byB0aGUgT25Db21wbGV0ZSBpbiBjb21iaW5hdGlvbiB3aXRoIHdoZXRoZXIgdGhlIGFwcCBpcyBiZWluZyBjcmVhdGVkIG9yIGNhbGxlZAovLyBFdmVyeSBwb3NzaWJsZSBhY3Rpb24gZm9yIHRoaXMgY29udHJhY3QgaXMgcmVwcmVzZW50ZWQgaW4gdGhlIHN3aXRjaCBzdGF0ZW1lbnQKLy8gSWYgdGhlIGFjdGlvbiBpcyBub3QgaW1wbGVtZW50ZWQgaW4gdGhlIGNvbnRyYWN0LCBpdHMgcmVzcGVjdGl2ZSBicmFuY2ggd2lsbCBiZSAiKk5PVF9JTVBMRU1FTlRFRCIgd2hpY2gganVzdCBjb250YWlucyAiZXJyIgp0eG4gQXBwbGljYXRpb25JRAohCnB1c2hpbnQgNgoqCnR4biBPbkNvbXBsZXRpb24KKwpzd2l0Y2ggKmNhbGxfTm9PcCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqY2FsbF9VcGRhdGVBcHBsaWNhdGlvbiAqTk9UX0lNUExFTUVOVEVEICpjcmVhdGVfTm9PcCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQKCipOT1RfSU1QTEVNRU5URUQ6CgkvLyBUaGUgcmVxdWVzdGVkIGFjdGlvbiBpcyBub3QgaW1wbGVtZW50ZWQgaW4gdGhpcyBjb250cmFjdC4gQXJlIHlvdSB1c2luZyB0aGUgY29ycmVjdCBPbkNvbXBsZXRlPyBEaWQgeW91IHNldCB5b3VyIGFwcCBJRD8KCWVycgoKLy8gY3JlYXRlQXBwbGljYXRpb24oKXZvaWQKKmFiaV9yb3V0ZV9jcmVhdGVBcHBsaWNhdGlvbjoKCS8vIGV4ZWN1dGUgY3JlYXRlQXBwbGljYXRpb24oKXZvaWQKCWNhbGxzdWIgY3JlYXRlQXBwbGljYXRpb24KCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIGNyZWF0ZUFwcGxpY2F0aW9uKCk6IHZvaWQKLy8KLy8gSW5pdGlhbCBzZXR1cApjcmVhdGVBcHBsaWNhdGlvbjoKCXByb3RvIDAgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjYxCgkvLyB0aGlzLnZlcnNpb24udmFsdWUgPSB2ZXJzaW9uCglieXRlYyA2IC8vICAic2N2ZXIiCglieXRlYyAzIC8vICJCSUFURUMtQ09ORklHLTAxLTAyLTAxIgoJYXBwX2dsb2JhbF9wdXQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo2MgoJLy8gdGhpcy5hZGRyZXNzRXhlY3V0aXZlLnZhbHVlID0gdGhpcy50eG4uc2VuZGVyCglieXRlYyAyIC8vICAiZSIKCXR4biBTZW5kZXIKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NjMKCS8vIHRoaXMuYWRkcmVzc0dvdi52YWx1ZSA9IHRoaXMudHhuLnNlbmRlcgoJYnl0ZWMgNyAvLyAgImciCgl0eG4gU2VuZGVyCglhcHBfZ2xvYmFsX3B1dAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjY0CgkvLyB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlID0gdGhpcy50eG4uc2VuZGVyCglieXRlYyAwIC8vICAidSIKCXR4biBTZW5kZXIKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NjUKCS8vIHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZUZlZS52YWx1ZSA9IHRoaXMudHhuLnNlbmRlcgoJYnl0ZWMgMSAvLyAgImVmIgoJdHhuIFNlbmRlcgoJYXBwX2dsb2JhbF9wdXQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo2NgoJLy8gdGhpcy5zdXNwZW5kZWQudmFsdWUgPSAwCglieXRlYyA4IC8vICAicyIKCWludGMgMiAvLyAwCglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyB1cGRhdGVBcHBsaWNhdGlvbihieXRlW10pdm9pZAoqYWJpX3JvdXRlX3VwZGF0ZUFwcGxpY2F0aW9uOgoJLy8gbmV3VmVyc2lvbjogYnl0ZVtdCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglleHRyYWN0IDIgMAoKCS8vIGV4ZWN1dGUgdXBkYXRlQXBwbGljYXRpb24oYnl0ZVtdKXZvaWQKCWNhbGxzdWIgdXBkYXRlQXBwbGljYXRpb24KCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHVwZGF0ZUFwcGxpY2F0aW9uKG5ld1ZlcnNpb246IGJ5dGVzKTogdm9pZAovLwovLyBhZGRyZXNzVWRwYXRlciBmcm9tIGdsb2JhbCBiaWF0ZWMgY29uZmlndXJhdGlvbiBpcyBhbGxvd2VkIHRvIHVwZGF0ZSBhcHBsaWNhdGlvbgp1cGRhdGVBcHBsaWNhdGlvbjoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjczCgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSBhZGRyZXNzVWRwYXRlciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB1cGRhdGUgYXBwbGljYXRpb24nKQoJdHhuIFNlbmRlcgoJYnl0ZWMgMCAvLyAgInUiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBPbmx5IGFkZHJlc3NVZHBhdGVyIHNldHVwIGluIHRoZSBjb25maWcgY2FuIHVwZGF0ZSBhcHBsaWNhdGlvbgoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NzQKCS8vIGxvZyh2ZXJzaW9uKQoJYnl0ZWMgMyAvLyAiQklBVEVDLUNPTkZJRy0wMS0wMi0wMSIKCWxvZwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjc1CgkvLyBsb2cobmV3VmVyc2lvbikKCWZyYW1lX2RpZyAtMSAvLyBuZXdWZXJzaW9uOiBieXRlcwoJbG9nCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NzYKCS8vIHRoaXMudmVyc2lvbi52YWx1ZSA9IHZlcnNpb24KCWJ5dGVjIDYgLy8gICJzY3ZlciIKCWJ5dGVjIDMgLy8gIkJJQVRFQy1DT05GSUctMDEtMDItMDEiCglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBib290c3RyYXAodWludDI1Nix1aW50NjQsdWludDY0KXZvaWQKKmFiaV9yb3V0ZV9ib290c3RyYXA6CgkvLyBhcHBCaWF0ZWNQb29sUHJvdmlkZXI6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMwoJYnRvaQoKCS8vIGFwcEJpYXRlY0lkZW50aXR5UHJvdmlkZXI6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgoJYnRvaQoKCS8vIGJpYXRlY0ZlZTogdWludDI1NgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZHVwCglsZW4KCWludGMgMSAvLyAzMgoJPT0KCgkvLyBhcmd1bWVudCAyIChiaWF0ZWNGZWUpIGZvciBib290c3RyYXAgbXVzdCBiZSBhIHVpbnQyNTYKCWFzc2VydAoKCS8vIGV4ZWN1dGUgYm9vdHN0cmFwKHVpbnQyNTYsdWludDY0LHVpbnQ2NCl2b2lkCgljYWxsc3ViIGJvb3RzdHJhcAoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gYm9vdHN0cmFwKGJpYXRlY0ZlZTogdWludDI1NiwgYXBwQmlhdGVjSWRlbnRpdHlQcm92aWRlcjogQXBwSUQsIGFwcEJpYXRlY1Bvb2xQcm92aWRlcjogQXBwSUQpOiB2b2lkCi8vCi8vIFNldHVwIHRoZSBjb250cmFjdAovLyBAcGFyYW0gYmlhdGVjRmVlIEJpYXRlYyBmZWVzCmJvb3RzdHJhcDoKCXByb3RvIDMgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjg0CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjYWxsIGJvb3RzdHJhcCBtZXRob2QnKQoJdHhuIFNlbmRlcgoJYnl0ZWMgMCAvLyAgInUiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBPbmx5IHVwZGF0ZXIgY2FuIGNhbGwgYm9vdHN0cmFwIG1ldGhvZAoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6ODUKCS8vIGFzc2VydChiaWF0ZWNGZWUgPD0gKFNDQUxFIGFzIHVpbnQyNTYpIC8gMiwgJ0JpYXRlYyBjYW5ub3Qgc2V0IGZlZXMgaGlnaGVyIHRoZW4gNTAlIG9mIGxwIGZlZXMnKQoJZnJhbWVfZGlnIC0xIC8vIGJpYXRlY0ZlZTogdWludDI1NgoJYnl0ZWMgNCAvLyAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwM2I5YWNhMDAKCWJ5dGVjIDUgLy8gMHgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAyCgliLwoJYjw9CgoJLy8gQmlhdGVjIGNhbm5vdCBzZXQgZmVlcyBoaWdoZXIgdGhlbiA1MCUgb2YgbHAgZmVlcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6ODYKCS8vIHRoaXMuYmlhdGVjRmVlLnZhbHVlID0gYmlhdGVjRmVlCglieXRlYyA5IC8vICAiZiIKCWZyYW1lX2RpZyAtMSAvLyBiaWF0ZWNGZWU6IHVpbnQyNTYKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6ODcKCS8vIHRoaXMuYXBwQmlhdGVjSWRlbnRpdHlQcm92aWRlci52YWx1ZSA9IGFwcEJpYXRlY0lkZW50aXR5UHJvdmlkZXIKCWJ5dGVjIDEwIC8vICAiaSIKCWZyYW1lX2RpZyAtMiAvLyBhcHBCaWF0ZWNJZGVudGl0eVByb3ZpZGVyOiBBcHBJRAoJYXBwX2dsb2JhbF9wdXQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo4OAoJLy8gdGhpcy5hcHBCaWF0ZWNQb29sUHJvdmlkZXIudmFsdWUgPSBhcHBCaWF0ZWNQb29sUHJvdmlkZXIKCWJ5dGVjIDExIC8vICAicCIKCWZyYW1lX2RpZyAtMyAvLyBhcHBCaWF0ZWNQb29sUHJvdmlkZXI6IEFwcElECglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRBZGRyZXNzVWRwYXRlcihhZGRyZXNzKXZvaWQKKmFiaV9yb3V0ZV9zZXRBZGRyZXNzVWRwYXRlcjoKCS8vIGE6IGFkZHJlc3MKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWR1cAoJbGVuCglpbnRjIDEgLy8gMzIKCT09CgoJLy8gYXJndW1lbnQgMCAoYSkgZm9yIHNldEFkZHJlc3NVZHBhdGVyIG11c3QgYmUgYSBhZGRyZXNzCglhc3NlcnQKCgkvLyBleGVjdXRlIHNldEFkZHJlc3NVZHBhdGVyKGFkZHJlc3Mpdm9pZAoJY2FsbHN1YiBzZXRBZGRyZXNzVWRwYXRlcgoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gc2V0QWRkcmVzc1VkcGF0ZXIoYTogQWRkcmVzcyk6IHZvaWQKLy8KLy8gVG9wIHNlY3JldCBhY2NvdW50IHdpdGggd2hpY2ggaXQgaXMgcG9zc2libGUgdXBkYXRlIGNvbnRyYWN0cyBvciBpZGVudGl0eSBwcm92aWRlcgovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldEFkZHJlc3NVZHBhdGVyOgoJcHJvdG8gMSAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6OTcKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc1VkcGF0ZXIudmFsdWUsICdPbmx5IHVwZGF0ZXIgY2FuIGNoYW5nZSB1cGRhdGVyIGFkZHJlc3MnKQoJdHhuIFNlbmRlcgoJYnl0ZWMgMCAvLyAgInUiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBPbmx5IHVwZGF0ZXIgY2FuIGNoYW5nZSB1cGRhdGVyIGFkZHJlc3MKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjk4CgkvLyB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlID0gYQoJYnl0ZWMgMCAvLyAgInUiCglmcmFtZV9kaWcgLTEgLy8gYTogQWRkcmVzcwoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0UGF1c2VkKHVpbnQ2NCl2b2lkCiphYmlfcm91dGVfc2V0UGF1c2VkOgoJLy8gYTogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglidG9pCgoJLy8gZXhlY3V0ZSBzZXRQYXVzZWQodWludDY0KXZvaWQKCWNhbGxzdWIgc2V0UGF1c2VkCglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBzZXRQYXVzZWQoYTogdWludDY0KTogdm9pZAovLwovLyBLaWxsIHN3aXRjaC4gSW4gdGhlIGV4dHJlbWUgY2FzZSBhbGwgc2VydmljZXMgKGRlcG9zaXQsIHRyYWRpbmcsIHdpdGhkcmF3YWwsIGlkZW50aXR5IG1vZGlmaWNhdGlvbnMgYW5kIG1vcmUpIGNhbiBiZSBzdXNwZW5kZWQuCi8vCi8vIEBwYXJhbSBhIEFkZHJlc3MKc2V0UGF1c2VkOgoJcHJvdG8gMSAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTA3CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBwYXVzZSBhbmQgdW5wYXVzZSB0aGUgYmlhdGVjIHNlcnZpY2VzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBwYXVzZSBhbmQgdW5wYXVzZSB0aGUgYmlhdGVjIHNlcnZpY2VzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxMDgKCS8vIHRoaXMuc3VzcGVuZGVkLnZhbHVlID0gYQoJYnl0ZWMgOCAvLyAgInMiCglmcmFtZV9kaWcgLTEgLy8gYTogdWludDY0CglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRBZGRyZXNzR292KGFkZHJlc3Mpdm9pZAoqYWJpX3JvdXRlX3NldEFkZHJlc3NHb3Y6CgkvLyBhOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAxIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDAgKGEpIGZvciBzZXRBZGRyZXNzR292IG11c3QgYmUgYSBhZGRyZXNzCglhc3NlcnQKCgkvLyBleGVjdXRlIHNldEFkZHJlc3NHb3YoYWRkcmVzcyl2b2lkCgljYWxsc3ViIHNldEFkZHJlc3NHb3YKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNldEFkZHJlc3NHb3YoYTogQWRkcmVzcyk6IHZvaWQKLy8KLy8gRXhlY3V0aW9uIGFkZHJlc3Mgd2l0aCB3aGljaCBpdCBpcyBwb3NzaWJsZSB0byBvcHQgaW4gZm9yIGdvdmVybmFuY2UKLy8KLy8gQHBhcmFtIGEgQWRkcmVzcwpzZXRBZGRyZXNzR292OgoJcHJvdG8gMSAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTE3CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgZ292IGFkZHJlc3MnKQoJdHhuIFNlbmRlcgoJYnl0ZWMgMCAvLyAgInUiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBPbmx5IHVwZGF0ZXIgY2FuIGNoYW5nZSBnb3YgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTE4CgkvLyB0aGlzLmFkZHJlc3NHb3YudmFsdWUgPSBhCglieXRlYyA3IC8vICAiZyIKCWZyYW1lX2RpZyAtMSAvLyBhOiBBZGRyZXNzCglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRBZGRyZXNzRXhlY3V0aXZlKGFkZHJlc3Mpdm9pZAoqYWJpX3JvdXRlX3NldEFkZHJlc3NFeGVjdXRpdmU6CgkvLyBhOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAxIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDAgKGEpIGZvciBzZXRBZGRyZXNzRXhlY3V0aXZlIG11c3QgYmUgYSBhZGRyZXNzCglhc3NlcnQKCgkvLyBleGVjdXRlIHNldEFkZHJlc3NFeGVjdXRpdmUoYWRkcmVzcyl2b2lkCgljYWxsc3ViIHNldEFkZHJlc3NFeGVjdXRpdmUKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNldEFkZHJlc3NFeGVjdXRpdmUoYTogQWRkcmVzcyk6IHZvaWQKLy8KLy8gRXhlY3V0aW9uIGFkZHJlc3Mgd2l0aCB3aGljaCBpdCBpcyBwb3NzaWJsZSB0byBjaGFuZ2UgZ2xvYmFsIGJpYXRlYyBmZWVzCi8vCi8vIEBwYXJhbSBhIEFkZHJlc3MKc2V0QWRkcmVzc0V4ZWN1dGl2ZToKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjEyNwoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSwgJ09ubHkgdXBkYXRlciBjYW4gY2hhbmdlIGFkZHJlc3NFeGVjdXRpdmUnKQoJdHhuIFNlbmRlcgoJYnl0ZWMgMCAvLyAgInUiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBPbmx5IHVwZGF0ZXIgY2FuIGNoYW5nZSBhZGRyZXNzRXhlY3V0aXZlCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxMjgKCS8vIHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZS52YWx1ZSA9IGEKCWJ5dGVjIDIgLy8gICJlIgoJZnJhbWVfZGlnIC0xIC8vIGE6IEFkZHJlc3MKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNldEFkZHJlc3NFeGVjdXRpdmVGZWUoYWRkcmVzcyl2b2lkCiphYmlfcm91dGVfc2V0QWRkcmVzc0V4ZWN1dGl2ZUZlZToKCS8vIGE6IGFkZHJlc3MKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWR1cAoJbGVuCglpbnRjIDEgLy8gMzIKCT09CgoJLy8gYXJndW1lbnQgMCAoYSkgZm9yIHNldEFkZHJlc3NFeGVjdXRpdmVGZWUgbXVzdCBiZSBhIGFkZHJlc3MKCWFzc2VydAoKCS8vIGV4ZWN1dGUgc2V0QWRkcmVzc0V4ZWN1dGl2ZUZlZShhZGRyZXNzKXZvaWQKCWNhbGxzdWIgc2V0QWRkcmVzc0V4ZWN1dGl2ZUZlZQoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gc2V0QWRkcmVzc0V4ZWN1dGl2ZUZlZShhOiBBZGRyZXNzKTogdm9pZAovLwovLyBFeGVjdXRpb24gZmVlIGFkZHJlc3MgaXMgYWRkcmVzcyB3aGljaCBjYW4gdGFrZSBmZWVzIGZyb20gcG9vbHMuCi8vCi8vIEBwYXJhbSBhIEFkZHJlc3MKc2V0QWRkcmVzc0V4ZWN1dGl2ZUZlZToKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjEzNwoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzRXhlY3V0aXZlLnZhbHVlLCAnT25seSBhZGRyZXNzRXhlY3V0aXZlIGNhbiBjaGFuZ2UgZmVlIGV4ZWN1dG9yIGFkZHJlc3MnKQoJdHhuIFNlbmRlcgoJYnl0ZWMgMiAvLyAgImUiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBPbmx5IGFkZHJlc3NFeGVjdXRpdmUgY2FuIGNoYW5nZSBmZWUgZXhlY3V0b3IgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTM4CgkvLyB0aGlzLmFkZHJlc3NFeGVjdXRpdmVGZWUudmFsdWUgPSBhCglieXRlYyAxIC8vICAiZWYiCglmcmFtZV9kaWcgLTEgLy8gYTogQWRkcmVzcwoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QmlhdGVjSWRlbnRpdHkodWludDY0KXZvaWQKKmFiaV9yb3V0ZV9zZXRCaWF0ZWNJZGVudGl0eToKCS8vIGE6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJYnRvaQoKCS8vIGV4ZWN1dGUgc2V0QmlhdGVjSWRlbnRpdHkodWludDY0KXZvaWQKCWNhbGxzdWIgc2V0QmlhdGVjSWRlbnRpdHkKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNldEJpYXRlY0lkZW50aXR5KGE6IEFwcElEKTogdm9pZAovLwovLyBBcHAgaWRlbnRpdHkgc2V0dGVyCi8vCi8vIEBwYXJhbSBhIEFkZHJlc3MKc2V0QmlhdGVjSWRlbnRpdHk6Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxNDcKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc1VkcGF0ZXIudmFsdWUsICdPbmx5IHVwZGF0ZXIgY2FuIGNoYW5nZSBhcHBJZGVudGl0eVByb3ZpZGVyJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgYXBwSWRlbnRpdHlQcm92aWRlcgoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTQ4CgkvLyB0aGlzLmFwcEJpYXRlY0lkZW50aXR5UHJvdmlkZXIudmFsdWUgPSBhCglieXRlYyAxMCAvLyAgImkiCglmcmFtZV9kaWcgLTEgLy8gYTogQXBwSUQKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNldEJpYXRlY1Bvb2wodWludDY0KXZvaWQKKmFiaV9yb3V0ZV9zZXRCaWF0ZWNQb29sOgoJLy8gYTogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglidG9pCgoJLy8gZXhlY3V0ZSBzZXRCaWF0ZWNQb29sKHVpbnQ2NCl2b2lkCgljYWxsc3ViIHNldEJpYXRlY1Bvb2wKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNldEJpYXRlY1Bvb2woYTogQXBwSUQpOiB2b2lkCi8vCi8vIEFwcCBpZGVudGl0eSBzZXR0ZXIKLy8KLy8gQHBhcmFtIGEgQWRkcmVzcwpzZXRCaWF0ZWNQb29sOgoJcHJvdG8gMSAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTU3CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgYXBwUG9vbFByb3ZpZGVyJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgYXBwUG9vbFByb3ZpZGVyCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxNTgKCS8vIHRoaXMuYXBwQmlhdGVjUG9vbFByb3ZpZGVyLnZhbHVlID0gYQoJYnl0ZWMgMTEgLy8gICJwIgoJZnJhbWVfZGlnIC0xIC8vIGE6IEFwcElECglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRCaWF0ZWNGZWUodWludDI1Nil2b2lkCiphYmlfcm91dGVfc2V0QmlhdGVjRmVlOgoJLy8gYmlhdGVjRmVlOiB1aW50MjU2Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAxIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDAgKGJpYXRlY0ZlZSkgZm9yIHNldEJpYXRlY0ZlZSBtdXN0IGJlIGEgdWludDI1NgoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRCaWF0ZWNGZWUodWludDI1Nil2b2lkCgljYWxsc3ViIHNldEJpYXRlY0ZlZQoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gc2V0QmlhdGVjRmVlKGJpYXRlY0ZlZTogdWludDI1Nik6IHZvaWQKLy8KLy8gRmVlcyBpbiA5IGRlY2ltYWxzLiAxXzAwMF8wMDBfMDAwID0gMTAwJQovLyBGZWVzIGluIDkgZGVjaW1hbHMuIDEwXzAwMF8wMDAgPSAxJQovLyBGZWVzIGluIDkgZGVjaW1hbHMuIDEwMF8wMDAgPSAwLDAxJQovLwovLyBGZWVzIGFyZSByZXNwZWN0ZnVsIGZyb20gdGhlIGFsbCBmZWVzIHRha2VuIHRvIHRoZSBMUCBwcm92aWRlcnMuIElmIExQcyBjaGFyZ2UgMSUgZmVlLCBhbmQgYmlhdGVjIGNoYXJnZXMgMTAlIGZlZSwgTFAgd2lsbCByZWNlaXZlIDAuMDklIGZlZSBhbmQgYmlhdGVjIDAuMDElIGZlZQovLwovLyBAcGFyYW0gYmlhdGVjRmVlIEZlZQpzZXRCaWF0ZWNGZWU6Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxNzEKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZS52YWx1ZSwgJ09ubHkgZXhlY3V0aXZlIGFkZHJlc3MgY2FuIGNoYW5nZSBmZWVzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDIgLy8gICJlIgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSBleGVjdXRpdmUgYWRkcmVzcyBjYW4gY2hhbmdlIGZlZXMKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjE3MgoJLy8gYXNzZXJ0KGJpYXRlY0ZlZSA8PSAoU0NBTEUgYXMgdWludDI1NikgLyAyLCAnQmlhdGVjIGNhbm5vdCBzZXQgZmVlcyBoaWdoZXIgdGhlbiA1MCUgb2YgbHAgZmVlcycpCglmcmFtZV9kaWcgLTEgLy8gYmlhdGVjRmVlOiB1aW50MjU2CglieXRlYyA0IC8vIDB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAzYjlhY2EwMAoJYnl0ZWMgNSAvLyAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIKCWIvCgliPD0KCgkvLyBCaWF0ZWMgY2Fubm90IHNldCBmZWVzIGhpZ2hlciB0aGVuIDUwJSBvZiBscCBmZWVzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxNzMKCS8vIHRoaXMuYmlhdGVjRmVlLnZhbHVlID0gYmlhdGVjRmVlCglieXRlYyA5IC8vICAiZiIKCWZyYW1lX2RpZyAtMSAvLyBiaWF0ZWNGZWU6IHVpbnQyNTYKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24oYnl0ZVtdLGJ5dGVbXSxieXRlW10sdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0KXZvaWQKKmFiaV9yb3V0ZV9zZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uOgoJLy8gZmVlOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDcKCWJ0b2kKCgkvLyB2b3RlS2V5RGlsdXRpb246IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgNgoJYnRvaQoKCS8vIHZvdGVMYXN0OiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDUKCWJ0b2kKCgkvLyB2b3RlRmlyc3Q6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgNAoJYnRvaQoKCS8vIHN0YXRlUHJvb2ZQSzogYnl0ZVtdCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAzCglleHRyYWN0IDIgMAoKCS8vIHNlbGVjdGlvblBLOiBieXRlW10KCXR4bmEgQXBwbGljYXRpb25BcmdzIDIKCWV4dHJhY3QgMiAwCgoJLy8gdm90ZVBLOiBieXRlW10KCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWV4dHJhY3QgMiAwCgoJLy8gZXhlY3V0ZSBzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uKGJ5dGVbXSxieXRlW10sYnl0ZVtdLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCl2b2lkCgljYWxsc3ViIHNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24KCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24odm90ZVBLOiBieXRlcywgc2VsZWN0aW9uUEs6IGJ5dGVzLCBzdGF0ZVByb29mUEs6IGJ5dGVzLCB2b3RlRmlyc3Q6IHVpbnQ2NCwgdm90ZUxhc3Q6IHVpbnQ2NCwgdm90ZUtleURpbHV0aW9uOiB1aW50NjQsIGZlZTogdWludDY0KTogdm9pZAovLwovLyBhZGRyZXNzRXhlY3V0aXZlRmVlIGNhbiBwZXJmb20ga2V5IHJlZ2lzdHJhdGlvbiBmb3IgdGhpcyBMUCBwb29sCi8vCi8vIE9ubHkgYWRkcmVzc0V4ZWN1dGl2ZUZlZSBpcyBhbGxvd2VkIHRvIGV4ZWN1dGUgdGhpcyBtZXRob2QuCnNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb246Cglwcm90byA3IDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxODIKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZUZlZS52YWx1ZSwgJ09ubHkgZmVlIGV4ZWN1dG9yIHNldHVwIGluIHRoZSBjb25maWcgY2FuIHRha2UgdGhlIGNvbGxlY3RlZCBmZWVzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDEgLy8gICJlZiIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgZmVlIGV4ZWN1dG9yIHNldHVwIGluIHRoZSBjb25maWcgY2FuIHRha2UgdGhlIGNvbGxlY3RlZCBmZWVzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxODMKCS8vIHNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24oewoJLy8gICAgICAgc2VsZWN0aW9uUEs6IHNlbGVjdGlvblBLLAoJLy8gICAgICAgc3RhdGVQcm9vZlBLOiBzdGF0ZVByb29mUEssCgkvLyAgICAgICB2b3RlRmlyc3Q6IHZvdGVGaXJzdCwKCS8vICAgICAgIHZvdGVLZXlEaWx1dGlvbjogdm90ZUtleURpbHV0aW9uLAoJLy8gICAgICAgdm90ZUxhc3Q6IHZvdGVMYXN0LAoJLy8gICAgICAgdm90ZVBLOiB2b3RlUEssCgkvLyAgICAgICBmZWU6IGZlZSwKCS8vICAgICB9KQoJaXR4bl9iZWdpbgoJcHVzaGludCAyIC8vIGtleXJlZwoJaXR4bl9maWVsZCBUeXBlRW51bQoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjE4NAoJLy8gc2VsZWN0aW9uUEs6IHNlbGVjdGlvblBLCglmcmFtZV9kaWcgLTIgLy8gc2VsZWN0aW9uUEs6IGJ5dGVzCglpdHhuX2ZpZWxkIFNlbGVjdGlvblBLCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTg1CgkvLyBzdGF0ZVByb29mUEs6IHN0YXRlUHJvb2ZQSwoJZnJhbWVfZGlnIC0zIC8vIHN0YXRlUHJvb2ZQSzogYnl0ZXMKCWl0eG5fZmllbGQgU3RhdGVQcm9vZlBLCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTg2CgkvLyB2b3RlRmlyc3Q6IHZvdGVGaXJzdAoJZnJhbWVfZGlnIC00IC8vIHZvdGVGaXJzdDogdWludDY0CglpdHhuX2ZpZWxkIFZvdGVGaXJzdAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjE4NwoJLy8gdm90ZUtleURpbHV0aW9uOiB2b3RlS2V5RGlsdXRpb24KCWZyYW1lX2RpZyAtNiAvLyB2b3RlS2V5RGlsdXRpb246IHVpbnQ2NAoJaXR4bl9maWVsZCBWb3RlS2V5RGlsdXRpb24KCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxODgKCS8vIHZvdGVMYXN0OiB2b3RlTGFzdAoJZnJhbWVfZGlnIC01IC8vIHZvdGVMYXN0OiB1aW50NjQKCWl0eG5fZmllbGQgVm90ZUxhc3QKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxODkKCS8vIHZvdGVQSzogdm90ZVBLCglmcmFtZV9kaWcgLTEgLy8gdm90ZVBLOiBieXRlcwoJaXR4bl9maWVsZCBWb3RlUEsKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxOTAKCS8vIGZlZTogZmVlCglmcmFtZV9kaWcgLTcgLy8gZmVlOiB1aW50NjQKCWl0eG5fZmllbGQgRmVlCgoJLy8gU3VibWl0IGlubmVyIHRyYW5zYWN0aW9uCglpdHhuX3N1Ym1pdAoJcmV0c3ViCgovLyB3aXRoZHJhd0V4Y2Vzc0Fzc2V0cyh1aW50NjQsdWludDY0KXVpbnQ2NAoqYWJpX3JvdXRlX3dpdGhkcmF3RXhjZXNzQXNzZXRzOgoJLy8gVGhlIEFCSSByZXR1cm4gcHJlZml4CglwdXNoYnl0ZXMgMHgxNTFmN2M3NQoKCS8vIGFtb3VudDogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyAyCglidG9pCgoJLy8gYXNzZXQ6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJYnRvaQoKCS8vIGV4ZWN1dGUgd2l0aGRyYXdFeGNlc3NBc3NldHModWludDY0LHVpbnQ2NCl1aW50NjQKCWNhbGxzdWIgd2l0aGRyYXdFeGNlc3NBc3NldHMKCWl0b2IKCWNvbmNhdAoJbG9nCglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyB3aXRoZHJhd0V4Y2Vzc0Fzc2V0cyhhc3NldDogQXNzZXRJRCwgYW1vdW50OiB1aW50NjQpOiB1aW50NjQKLy8KLy8gSWYgc29tZW9uZSBkZXBvc2l0cyBleGNlc3MgYXNzZXRzIHRvIHRoaXMgc21hcnQgY29udHJhY3QgYmlhdGVjIGNhbiB1c2UgdGhlbS4KLy8KLy8gT25seSBhZGRyZXNzRXhlY3V0aXZlRmVlIGlzIGFsbG93ZWQgdG8gZXhlY3V0ZSB0aGlzIG1ldGhvZC4KLy8KLy8gQHBhcmFtIGFzc2V0IEFzc2V0IHRvIHdpdGhkcmF3LiBJZiBuYXRpdmUgdG9rZW4sIHRoZW4gemVybwovLyBAcGFyYW0gYW1vdW50IEFtb3VudCBvZiB0aGUgYXNzZXQgdG8gYmUgd2l0aGRyYXduCndpdGhkcmF3RXhjZXNzQXNzZXRzOgoJcHJvdG8gMiAxCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjAzCgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NFeGVjdXRpdmVGZWUudmFsdWUsICdPbmx5IGZlZSBleGVjdXRvciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB0YWtlIHRoZSBjb2xsZWN0ZWQgZmVlcycpCgl0eG4gU2VuZGVyCglieXRlYyAxIC8vICAiZWYiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBPbmx5IGZlZSBleGVjdXRvciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB0YWtlIHRoZSBjb2xsZWN0ZWQgZmVlcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjA1CgkvLyB0aGlzLmRvQXhmZXIodGhpcy50eG4uc2VuZGVyLCBhc3NldCwgYW1vdW50KQoJZnJhbWVfZGlnIC0yIC8vIGFtb3VudDogdWludDY0CglmcmFtZV9kaWcgLTEgLy8gYXNzZXQ6IEFzc2V0SUQKCXR4biBTZW5kZXIKCWNhbGxzdWIgZG9BeGZlcgoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIwNwoJLy8gcmV0dXJuIGFtb3VudDsKCWZyYW1lX2RpZyAtMiAvLyBhbW91bnQ6IHVpbnQ2NAoJcmV0c3ViCgovLyBkb0F4ZmVyKHJlY2VpdmVyOiBBZGRyZXNzLCBhc3NldDogQXNzZXRJRCwgYW1vdW50OiB1aW50NjQpOiB2b2lkCi8vCi8vIEV4ZWN1dGVzIHhmZXIgb2YgcGF5IHBheW1lbnQgbWV0aG9kcyB0byBzcGVjaWZpZWQgcmVjZWl2ZXIgZnJvbSBzbWFydCBjb250cmFjdCBhZ2dyZWdhdGVkIGFjY291bnQgd2l0aCBzcGVjaWZpZWQgYXNzZXQgYW5kIGFtb3VudCBpbiB0b2tlbnMgZGVjaW1hbHMKLy8gQHBhcmFtIHJlY2VpdmVyIFJlY2VpdmVyCi8vIEBwYXJhbSBhc3NldCBBc3NldC4gWmVybyBmb3IgYWxnbwovLyBAcGFyYW0gYW1vdW50IEFtb3VudCB0byB0cmFuc2Zlcgpkb0F4ZmVyOgoJcHJvdG8gMyAwCgoJLy8gKmlmMF9jb25kaXRpb24KCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIxNwoJLy8gYXNzZXQuaWQgPT09IDAKCWZyYW1lX2RpZyAtMiAvLyBhc3NldDogQXNzZXRJRAoJaW50YyAyIC8vIDAKCT09CglieiAqaWYwX2Vsc2UKCgkvLyAqaWYwX2NvbnNlcXVlbnQKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIxOAoJLy8gc2VuZFBheW1lbnQoewoJLy8gICAgICAgICByZWNlaXZlcjogcmVjZWl2ZXIsCgkvLyAgICAgICAgIGFtb3VudDogYW1vdW50LAoJLy8gICAgICAgICBmZWU6IDAsCgkvLyAgICAgICB9KQoJaXR4bl9iZWdpbgoJaW50YyAwIC8vICBwYXkKCWl0eG5fZmllbGQgVHlwZUVudW0KCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMTkKCS8vIHJlY2VpdmVyOiByZWNlaXZlcgoJZnJhbWVfZGlnIC0xIC8vIHJlY2VpdmVyOiBBZGRyZXNzCglpdHhuX2ZpZWxkIFJlY2VpdmVyCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjIwCgkvLyBhbW91bnQ6IGFtb3VudAoJZnJhbWVfZGlnIC0zIC8vIGFtb3VudDogdWludDY0CglpdHhuX2ZpZWxkIEFtb3VudAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIyMQoJLy8gZmVlOiAwCglpbnRjIDIgLy8gMAoJaXR4bl9maWVsZCBGZWUKCgkvLyBTdWJtaXQgaW5uZXIgdHJhbnNhY3Rpb24KCWl0eG5fc3VibWl0CgliICppZjBfZW5kCgoqaWYwX2Vsc2U6CgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMjQKCS8vIHNlbmRBc3NldFRyYW5zZmVyKHsKCS8vICAgICAgICAgYXNzZXRSZWNlaXZlcjogcmVjZWl2ZXIsCgkvLyAgICAgICAgIHhmZXJBc3NldDogYXNzZXQsCgkvLyAgICAgICAgIGFzc2V0QW1vdW50OiBhbW91bnQsCgkvLyAgICAgICAgIGZlZTogMCwKCS8vICAgICAgIH0pCglpdHhuX2JlZ2luCglwdXNoaW50IDQgLy8gYXhmZXIKCWl0eG5fZmllbGQgVHlwZUVudW0KCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMjUKCS8vIGFzc2V0UmVjZWl2ZXI6IHJlY2VpdmVyCglmcmFtZV9kaWcgLTEgLy8gcmVjZWl2ZXI6IEFkZHJlc3MKCWl0eG5fZmllbGQgQXNzZXRSZWNlaXZlcgoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIyNgoJLy8geGZlckFzc2V0OiBhc3NldAoJZnJhbWVfZGlnIC0yIC8vIGFzc2V0OiBBc3NldElECglpdHhuX2ZpZWxkIFhmZXJBc3NldAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIyNwoJLy8gYXNzZXRBbW91bnQ6IGFtb3VudAoJZnJhbWVfZGlnIC0zIC8vIGFtb3VudDogdWludDY0CglpdHhuX2ZpZWxkIEFzc2V0QW1vdW50CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjI4CgkvLyBmZWU6IDAKCWludGMgMiAvLyAwCglpdHhuX2ZpZWxkIEZlZQoKCS8vIFN1Ym1pdCBpbm5lciB0cmFuc2FjdGlvbgoJaXR4bl9zdWJtaXQKCippZjBfZW5kOgoJcmV0c3ViCgoqY3JlYXRlX05vT3A6CglwdXNoYnl0ZXMgMHhiODQ0N2IzNiAvLyBtZXRob2QgImNyZWF0ZUFwcGxpY2F0aW9uKCl2b2lkIgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAoJbWF0Y2ggKmFiaV9yb3V0ZV9jcmVhdGVBcHBsaWNhdGlvbgoKCS8vIHRoaXMgY29udHJhY3QgZG9lcyBub3QgaW1wbGVtZW50IHRoZSBnaXZlbiBBQkkgbWV0aG9kIGZvciBjcmVhdGUgTm9PcAoJZXJyCgoqY2FsbF9Ob09wOgoJcHVzaGJ5dGVzIDB4NDk1Y2U3ZWQgLy8gbWV0aG9kICJib290c3RyYXAodWludDI1Nix1aW50NjQsdWludDY0KXZvaWQiCglwdXNoYnl0ZXMgMHhiZmMyMDg2MCAvLyBtZXRob2QgInNldEFkZHJlc3NVZHBhdGVyKGFkZHJlc3Mpdm9pZCIKCXB1c2hieXRlcyAweDBjZGMxMGZjIC8vIG1ldGhvZCAic2V0UGF1c2VkKHVpbnQ2NCl2b2lkIgoJcHVzaGJ5dGVzIDB4NmI5NTVmNGIgLy8gbWV0aG9kICJzZXRBZGRyZXNzR292KGFkZHJlc3Mpdm9pZCIKCXB1c2hieXRlcyAweDhiMTg3YjNkIC8vIG1ldGhvZCAic2V0QWRkcmVzc0V4ZWN1dGl2ZShhZGRyZXNzKXZvaWQiCglwdXNoYnl0ZXMgMHg1MGUwN2Q4OCAvLyBtZXRob2QgInNldEFkZHJlc3NFeGVjdXRpdmVGZWUoYWRkcmVzcyl2b2lkIgoJcHVzaGJ5dGVzIDB4YmFiZTFlMTEgLy8gbWV0aG9kICJzZXRCaWF0ZWNJZGVudGl0eSh1aW50NjQpdm9pZCIKCXB1c2hieXRlcyAweGM1OGI5ZGE0IC8vIG1ldGhvZCAic2V0QmlhdGVjUG9vbCh1aW50NjQpdm9pZCIKCXB1c2hieXRlcyAweGNhMzQ0YTM0IC8vIG1ldGhvZCAic2V0QmlhdGVjRmVlKHVpbnQyNTYpdm9pZCIKCXB1c2hieXRlcyAweDRhZTZlOWNiIC8vIG1ldGhvZCAic2VuZE9ubGluZUtleVJlZ2lzdHJhdGlvbihieXRlW10sYnl0ZVtdLGJ5dGVbXSx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQpdm9pZCIKCXB1c2hieXRlcyAweDg3MjgzNzMwIC8vIG1ldGhvZCAid2l0aGRyYXdFeGNlc3NBc3NldHModWludDY0LHVpbnQ2NCl1aW50NjQiCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAwCgltYXRjaCAqYWJpX3JvdXRlX2Jvb3RzdHJhcCAqYWJpX3JvdXRlX3NldEFkZHJlc3NVZHBhdGVyICphYmlfcm91dGVfc2V0UGF1c2VkICphYmlfcm91dGVfc2V0QWRkcmVzc0dvdiAqYWJpX3JvdXRlX3NldEFkZHJlc3NFeGVjdXRpdmUgKmFiaV9yb3V0ZV9zZXRBZGRyZXNzRXhlY3V0aXZlRmVlICphYmlfcm91dGVfc2V0QmlhdGVjSWRlbnRpdHkgKmFiaV9yb3V0ZV9zZXRCaWF0ZWNQb29sICphYmlfcm91dGVfc2V0QmlhdGVjRmVlICphYmlfcm91dGVfc2VuZE9ubGluZUtleVJlZ2lzdHJhdGlvbiAqYWJpX3JvdXRlX3dpdGhkcmF3RXhjZXNzQXNzZXRzCgoJLy8gdGhpcyBjb250cmFjdCBkb2VzIG5vdCBpbXBsZW1lbnQgdGhlIGdpdmVuIEFCSSBtZXRob2QgZm9yIGNhbGwgTm9PcAoJZXJyCgoqY2FsbF9VcGRhdGVBcHBsaWNhdGlvbjoKCXB1c2hieXRlcyAweDY5MzZjNjJmIC8vIG1ldGhvZCAidXBkYXRlQXBwbGljYXRpb24oYnl0ZVtdKXZvaWQiCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAwCgltYXRjaCAqYWJpX3JvdXRlX3VwZGF0ZUFwcGxpY2F0aW9uCgoJLy8gdGhpcyBjb250cmFjdCBkb2VzIG5vdCBpbXBsZW1lbnQgdGhlIGdpdmVuIEFCSSBtZXRob2QgZm9yIGNhbGwgVXBkYXRlQXBwbGljYXRpb24KCWVycg==",
+    "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCmludGNibG9jayAxIDMyIDAKYnl0ZWNibG9jayAweDc1IDB4NjU2NiAweDY1IDB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAzYjlhY2EwMCAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIgIkJJQVRFQy1DT05GSUctMDEtMDItMDEiIDB4NzM2Mzc2NjU3MiAweDY3IDB4NzMgMHg2NiAweDY5IDB4NzAKCi8vIFRoaXMgVEVBTCB3YXMgZ2VuZXJhdGVkIGJ5IFRFQUxTY3JpcHQgdjAuMTA3LjAKLy8gaHR0cHM6Ly9naXRodWIuY29tL2FsZ29yYW5kZm91bmRhdGlvbi9URUFMU2NyaXB0CgovLyBUaGlzIGNvbnRyYWN0IGlzIGNvbXBsaWFudCB3aXRoIGFuZC9vciBpbXBsZW1lbnRzIHRoZSBmb2xsb3dpbmcgQVJDczogWyBBUkM0IF0KCi8vIFRoZSBmb2xsb3dpbmcgdGVuIGxpbmVzIG9mIFRFQUwgaGFuZGxlIGluaXRpYWwgcHJvZ3JhbSBmbG93Ci8vIFRoaXMgcGF0dGVybiBpcyB1c2VkIHRvIG1ha2UgaXQgZWFzeSBmb3IgYW55b25lIHRvIHBhcnNlIHRoZSBzdGFydCBvZiB0aGUgcHJvZ3JhbSBhbmQgZGV0ZXJtaW5lIGlmIGEgc3BlY2lmaWMgYWN0aW9uIGlzIGFsbG93ZWQKLy8gSGVyZSwgYWN0aW9uIHJlZmVycyB0byB0aGUgT25Db21wbGV0ZSBpbiBjb21iaW5hdGlvbiB3aXRoIHdoZXRoZXIgdGhlIGFwcCBpcyBiZWluZyBjcmVhdGVkIG9yIGNhbGxlZAovLyBFdmVyeSBwb3NzaWJsZSBhY3Rpb24gZm9yIHRoaXMgY29udHJhY3QgaXMgcmVwcmVzZW50ZWQgaW4gdGhlIHN3aXRjaCBzdGF0ZW1lbnQKLy8gSWYgdGhlIGFjdGlvbiBpcyBub3QgaW1wbGVtZW50ZWQgaW4gdGhlIGNvbnRyYWN0LCBpdHMgcmVzcGVjdGl2ZSBicmFuY2ggd2lsbCBiZSAiKk5PVF9JTVBMRU1FTlRFRCIgd2hpY2gganVzdCBjb250YWlucyAiZXJyIgp0eG4gQXBwbGljYXRpb25JRAohCnB1c2hpbnQgNgoqCnR4biBPbkNvbXBsZXRpb24KKwpzd2l0Y2ggKmNhbGxfTm9PcCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqY2FsbF9VcGRhdGVBcHBsaWNhdGlvbiAqTk9UX0lNUExFTUVOVEVEICpjcmVhdGVfTm9PcCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQKCipOT1RfSU1QTEVNRU5URUQ6CgkvLyBUaGUgcmVxdWVzdGVkIGFjdGlvbiBpcyBub3QgaW1wbGVtZW50ZWQgaW4gdGhpcyBjb250cmFjdC4gQXJlIHlvdSB1c2luZyB0aGUgY29ycmVjdCBPbkNvbXBsZXRlPyBEaWQgeW91IHNldCB5b3VyIGFwcCBJRD8KCWVycgoKLy8gY3JlYXRlQXBwbGljYXRpb24oKXZvaWQKKmFiaV9yb3V0ZV9jcmVhdGVBcHBsaWNhdGlvbjoKCS8vIGV4ZWN1dGUgY3JlYXRlQXBwbGljYXRpb24oKXZvaWQKCWNhbGxzdWIgY3JlYXRlQXBwbGljYXRpb24KCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIGNyZWF0ZUFwcGxpY2F0aW9uKCk6IHZvaWQKLy8KLy8gSW5pdGlhbCBzZXR1cApjcmVhdGVBcHBsaWNhdGlvbjoKCXByb3RvIDAgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjYxCgkvLyB0aGlzLnZlcnNpb24udmFsdWUgPSB2ZXJzaW9uCglieXRlYyA2IC8vICAic2N2ZXIiCglieXRlYyA1IC8vICJCSUFURUMtQ09ORklHLTAxLTAyLTAxIgoJYXBwX2dsb2JhbF9wdXQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo2MgoJLy8gdGhpcy5hZGRyZXNzRXhlY3V0aXZlLnZhbHVlID0gdGhpcy50eG4uc2VuZGVyCglieXRlYyAyIC8vICAiZSIKCXR4biBTZW5kZXIKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NjMKCS8vIHRoaXMuYWRkcmVzc0dvdi52YWx1ZSA9IHRoaXMudHhuLnNlbmRlcgoJYnl0ZWMgNyAvLyAgImciCgl0eG4gU2VuZGVyCglhcHBfZ2xvYmFsX3B1dAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjY0CgkvLyB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlID0gdGhpcy50eG4uc2VuZGVyCglieXRlYyAwIC8vICAidSIKCXR4biBTZW5kZXIKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NjUKCS8vIHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZUZlZS52YWx1ZSA9IHRoaXMudHhuLnNlbmRlcgoJYnl0ZWMgMSAvLyAgImVmIgoJdHhuIFNlbmRlcgoJYXBwX2dsb2JhbF9wdXQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo2NgoJLy8gdGhpcy5zdXNwZW5kZWQudmFsdWUgPSAwCglieXRlYyA4IC8vICAicyIKCWludGMgMiAvLyAwCglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyB1cGRhdGVBcHBsaWNhdGlvbihieXRlW10pdm9pZAoqYWJpX3JvdXRlX3VwZGF0ZUFwcGxpY2F0aW9uOgoJLy8gbmV3VmVyc2lvbjogYnl0ZVtdCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglleHRyYWN0IDIgMAoKCS8vIGV4ZWN1dGUgdXBkYXRlQXBwbGljYXRpb24oYnl0ZVtdKXZvaWQKCWNhbGxzdWIgdXBkYXRlQXBwbGljYXRpb24KCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHVwZGF0ZUFwcGxpY2F0aW9uKG5ld1ZlcnNpb246IGJ5dGVzKTogdm9pZAovLwovLyBhZGRyZXNzVWRwYXRlciBmcm9tIGdsb2JhbCBiaWF0ZWMgY29uZmlndXJhdGlvbiBpcyBhbGxvd2VkIHRvIHVwZGF0ZSBhcHBsaWNhdGlvbgp1cGRhdGVBcHBsaWNhdGlvbjoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjczCgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSBhZGRyZXNzVWRwYXRlciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB1cGRhdGUgYXBwbGljYXRpb24nKQoJdHhuIFNlbmRlcgoJYnl0ZWMgMCAvLyAgInUiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBPbmx5IGFkZHJlc3NVZHBhdGVyIHNldHVwIGluIHRoZSBjb25maWcgY2FuIHVwZGF0ZSBhcHBsaWNhdGlvbgoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NzQKCS8vIGxvZyh2ZXJzaW9uKQoJYnl0ZWMgNSAvLyAiQklBVEVDLUNPTkZJRy0wMS0wMi0wMSIKCWxvZwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjc1CgkvLyBsb2cobmV3VmVyc2lvbikKCWZyYW1lX2RpZyAtMSAvLyBuZXdWZXJzaW9uOiBieXRlcwoJbG9nCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6NzYKCS8vIHRoaXMudmVyc2lvbi52YWx1ZSA9IG5ld1ZlcnNpb24KCWJ5dGVjIDYgLy8gICJzY3ZlciIKCWZyYW1lX2RpZyAtMSAvLyBuZXdWZXJzaW9uOiBieXRlcwoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gYm9vdHN0cmFwKHVpbnQyNTYsdWludDY0LHVpbnQ2NCl2b2lkCiphYmlfcm91dGVfYm9vdHN0cmFwOgoJLy8gYXBwQmlhdGVjUG9vbFByb3ZpZGVyOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDMKCWJ0b2kKCgkvLyBhcHBCaWF0ZWNJZGVudGl0eVByb3ZpZGVyOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDIKCWJ0b2kKCgkvLyBiaWF0ZWNGZWU6IHVpbnQyNTYKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWR1cAoJbGVuCglpbnRjIDEgLy8gMzIKCT09CgoJLy8gYXJndW1lbnQgMiAoYmlhdGVjRmVlKSBmb3IgYm9vdHN0cmFwIG11c3QgYmUgYSB1aW50MjU2Cglhc3NlcnQKCgkvLyBleGVjdXRlIGJvb3RzdHJhcCh1aW50MjU2LHVpbnQ2NCx1aW50NjQpdm9pZAoJY2FsbHN1YiBib290c3RyYXAKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIGJvb3RzdHJhcChiaWF0ZWNGZWU6IHVpbnQyNTYsIGFwcEJpYXRlY0lkZW50aXR5UHJvdmlkZXI6IEFwcElELCBhcHBCaWF0ZWNQb29sUHJvdmlkZXI6IEFwcElEKTogdm9pZAovLwovLyBTZXR1cCB0aGUgY29udHJhY3QKLy8gQHBhcmFtIGJpYXRlY0ZlZSBCaWF0ZWMgZmVlcwpib290c3RyYXA6Cglwcm90byAzIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo4NAoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSwgJ09ubHkgdXBkYXRlciBjYW4gY2FsbCBib290c3RyYXAgbWV0aG9kJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjYWxsIGJvb3RzdHJhcCBtZXRob2QKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjg1CgkvLyBhc3NlcnQoYmlhdGVjRmVlIDw9IChTQ0FMRSBhcyB1aW50MjU2KSAvIDIsICdCaWF0ZWMgY2Fubm90IHNldCBmZWVzIGhpZ2hlciB0aGVuIDUwJSBvZiBscCBmZWVzJykKCWZyYW1lX2RpZyAtMSAvLyBiaWF0ZWNGZWU6IHVpbnQyNTYKCWJ5dGVjIDMgLy8gMHgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDNiOWFjYTAwCglieXRlYyA0IC8vIDB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMgoJYi8KCWI8PQoKCS8vIEJpYXRlYyBjYW5ub3Qgc2V0IGZlZXMgaGlnaGVyIHRoZW4gNTAlIG9mIGxwIGZlZXMKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjg2CgkvLyB0aGlzLmJpYXRlY0ZlZS52YWx1ZSA9IGJpYXRlY0ZlZQoJYnl0ZWMgOSAvLyAgImYiCglmcmFtZV9kaWcgLTEgLy8gYmlhdGVjRmVlOiB1aW50MjU2CglhcHBfZ2xvYmFsX3B1dAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjg3CgkvLyB0aGlzLmFwcEJpYXRlY0lkZW50aXR5UHJvdmlkZXIudmFsdWUgPSBhcHBCaWF0ZWNJZGVudGl0eVByb3ZpZGVyCglieXRlYyAxMCAvLyAgImkiCglmcmFtZV9kaWcgLTIgLy8gYXBwQmlhdGVjSWRlbnRpdHlQcm92aWRlcjogQXBwSUQKCWFwcF9nbG9iYWxfcHV0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6ODgKCS8vIHRoaXMuYXBwQmlhdGVjUG9vbFByb3ZpZGVyLnZhbHVlID0gYXBwQmlhdGVjUG9vbFByb3ZpZGVyCglieXRlYyAxMSAvLyAgInAiCglmcmFtZV9kaWcgLTMgLy8gYXBwQmlhdGVjUG9vbFByb3ZpZGVyOiBBcHBJRAoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QWRkcmVzc1VkcGF0ZXIoYWRkcmVzcyl2b2lkCiphYmlfcm91dGVfc2V0QWRkcmVzc1VkcGF0ZXI6CgkvLyBhOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAxIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDAgKGEpIGZvciBzZXRBZGRyZXNzVWRwYXRlciBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRBZGRyZXNzVWRwYXRlcihhZGRyZXNzKXZvaWQKCWNhbGxzdWIgc2V0QWRkcmVzc1VkcGF0ZXIKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNldEFkZHJlc3NVZHBhdGVyKGE6IEFkZHJlc3MpOiB2b2lkCi8vCi8vIFRvcCBzZWNyZXQgYWNjb3VudCB3aXRoIHdoaWNoIGl0IGlzIHBvc3NpYmxlIHVwZGF0ZSBjb250cmFjdHMgb3IgaWRlbnRpdHkgcHJvdmlkZXIKLy8KLy8gQHBhcmFtIGEgQWRkcmVzcwpzZXRBZGRyZXNzVWRwYXRlcjoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjk3CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgdXBkYXRlciBhZGRyZXNzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgdXBkYXRlciBhZGRyZXNzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czo5OAoJLy8gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSA9IGEKCWJ5dGVjIDAgLy8gICJ1IgoJZnJhbWVfZGlnIC0xIC8vIGE6IEFkZHJlc3MKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNldFBhdXNlZCh1aW50NjQpdm9pZAoqYWJpX3JvdXRlX3NldFBhdXNlZDoKCS8vIGE6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJYnRvaQoKCS8vIGV4ZWN1dGUgc2V0UGF1c2VkKHVpbnQ2NCl2b2lkCgljYWxsc3ViIHNldFBhdXNlZAoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gc2V0UGF1c2VkKGE6IHVpbnQ2NCk6IHZvaWQKLy8KLy8gS2lsbCBzd2l0Y2guIEluIHRoZSBleHRyZW1lIGNhc2UgYWxsIHNlcnZpY2VzIChkZXBvc2l0LCB0cmFkaW5nLCB3aXRoZHJhd2FsLCBpZGVudGl0eSBtb2RpZmljYXRpb25zIGFuZCBtb3JlKSBjYW4gYmUgc3VzcGVuZGVkLgovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldFBhdXNlZDoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjEwNwoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSwgJ09ubHkgdXBkYXRlciBjYW4gcGF1c2UgYW5kIHVucGF1c2UgdGhlIGJpYXRlYyBzZXJ2aWNlcycpCgl0eG4gU2VuZGVyCglieXRlYyAwIC8vICAidSIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgdXBkYXRlciBjYW4gcGF1c2UgYW5kIHVucGF1c2UgdGhlIGJpYXRlYyBzZXJ2aWNlcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTA4CgkvLyB0aGlzLnN1c3BlbmRlZC52YWx1ZSA9IGEKCWJ5dGVjIDggLy8gICJzIgoJZnJhbWVfZGlnIC0xIC8vIGE6IHVpbnQ2NAoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QWRkcmVzc0dvdihhZGRyZXNzKXZvaWQKKmFiaV9yb3V0ZV9zZXRBZGRyZXNzR292OgoJLy8gYTogYWRkcmVzcwoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZHVwCglsZW4KCWludGMgMSAvLyAzMgoJPT0KCgkvLyBhcmd1bWVudCAwIChhKSBmb3Igc2V0QWRkcmVzc0dvdiBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRBZGRyZXNzR292KGFkZHJlc3Mpdm9pZAoJY2FsbHN1YiBzZXRBZGRyZXNzR292CglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBzZXRBZGRyZXNzR292KGE6IEFkZHJlc3MpOiB2b2lkCi8vCi8vIEV4ZWN1dGlvbiBhZGRyZXNzIHdpdGggd2hpY2ggaXQgaXMgcG9zc2libGUgdG8gb3B0IGluIGZvciBnb3Zlcm5hbmNlCi8vCi8vIEBwYXJhbSBhIEFkZHJlc3MKc2V0QWRkcmVzc0dvdjoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjExNwoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSwgJ09ubHkgdXBkYXRlciBjYW4gY2hhbmdlIGdvdiBhZGRyZXNzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgZ292IGFkZHJlc3MKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjExOAoJLy8gdGhpcy5hZGRyZXNzR292LnZhbHVlID0gYQoJYnl0ZWMgNyAvLyAgImciCglmcmFtZV9kaWcgLTEgLy8gYTogQWRkcmVzcwoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QWRkcmVzc0V4ZWN1dGl2ZShhZGRyZXNzKXZvaWQKKmFiaV9yb3V0ZV9zZXRBZGRyZXNzRXhlY3V0aXZlOgoJLy8gYTogYWRkcmVzcwoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZHVwCglsZW4KCWludGMgMSAvLyAzMgoJPT0KCgkvLyBhcmd1bWVudCAwIChhKSBmb3Igc2V0QWRkcmVzc0V4ZWN1dGl2ZSBtdXN0IGJlIGEgYWRkcmVzcwoJYXNzZXJ0CgoJLy8gZXhlY3V0ZSBzZXRBZGRyZXNzRXhlY3V0aXZlKGFkZHJlc3Mpdm9pZAoJY2FsbHN1YiBzZXRBZGRyZXNzRXhlY3V0aXZlCglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBzZXRBZGRyZXNzRXhlY3V0aXZlKGE6IEFkZHJlc3MpOiB2b2lkCi8vCi8vIEV4ZWN1dGlvbiBhZGRyZXNzIHdpdGggd2hpY2ggaXQgaXMgcG9zc2libGUgdG8gY2hhbmdlIGdsb2JhbCBiaWF0ZWMgZmVlcwovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldEFkZHJlc3NFeGVjdXRpdmU6Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxMjcKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc1VkcGF0ZXIudmFsdWUsICdPbmx5IHVwZGF0ZXIgY2FuIGNoYW5nZSBhZGRyZXNzRXhlY3V0aXZlJykKCXR4biBTZW5kZXIKCWJ5dGVjIDAgLy8gICJ1IgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgYWRkcmVzc0V4ZWN1dGl2ZQoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTI4CgkvLyB0aGlzLmFkZHJlc3NFeGVjdXRpdmUudmFsdWUgPSBhCglieXRlYyAyIC8vICAiZSIKCWZyYW1lX2RpZyAtMSAvLyBhOiBBZGRyZXNzCglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRBZGRyZXNzRXhlY3V0aXZlRmVlKGFkZHJlc3Mpdm9pZAoqYWJpX3JvdXRlX3NldEFkZHJlc3NFeGVjdXRpdmVGZWU6CgkvLyBhOiBhZGRyZXNzCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglkdXAKCWxlbgoJaW50YyAxIC8vIDMyCgk9PQoKCS8vIGFyZ3VtZW50IDAgKGEpIGZvciBzZXRBZGRyZXNzRXhlY3V0aXZlRmVlIG11c3QgYmUgYSBhZGRyZXNzCglhc3NlcnQKCgkvLyBleGVjdXRlIHNldEFkZHJlc3NFeGVjdXRpdmVGZWUoYWRkcmVzcyl2b2lkCgljYWxsc3ViIHNldEFkZHJlc3NFeGVjdXRpdmVGZWUKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNldEFkZHJlc3NFeGVjdXRpdmVGZWUoYTogQWRkcmVzcyk6IHZvaWQKLy8KLy8gRXhlY3V0aW9uIGZlZSBhZGRyZXNzIGlzIGFkZHJlc3Mgd2hpY2ggY2FuIHRha2UgZmVlcyBmcm9tIHBvb2xzLgovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldEFkZHJlc3NFeGVjdXRpdmVGZWU6Cglwcm90byAxIDAKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxMzcKCS8vIGFzc2VydCh0aGlzLnR4bi5zZW5kZXIgPT09IHRoaXMuYWRkcmVzc0V4ZWN1dGl2ZS52YWx1ZSwgJ09ubHkgYWRkcmVzc0V4ZWN1dGl2ZSBjYW4gY2hhbmdlIGZlZSBleGVjdXRvciBhZGRyZXNzJykKCXR4biBTZW5kZXIKCWJ5dGVjIDIgLy8gICJlIgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSBhZGRyZXNzRXhlY3V0aXZlIGNhbiBjaGFuZ2UgZmVlIGV4ZWN1dG9yIGFkZHJlc3MKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjEzOAoJLy8gdGhpcy5hZGRyZXNzRXhlY3V0aXZlRmVlLnZhbHVlID0gYQoJYnl0ZWMgMSAvLyAgImVmIgoJZnJhbWVfZGlnIC0xIC8vIGE6IEFkZHJlc3MKCWFwcF9nbG9iYWxfcHV0CglyZXRzdWIKCi8vIHNldEJpYXRlY0lkZW50aXR5KHVpbnQ2NCl2b2lkCiphYmlfcm91dGVfc2V0QmlhdGVjSWRlbnRpdHk6CgkvLyBhOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWJ0b2kKCgkvLyBleGVjdXRlIHNldEJpYXRlY0lkZW50aXR5KHVpbnQ2NCl2b2lkCgljYWxsc3ViIHNldEJpYXRlY0lkZW50aXR5CglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBzZXRCaWF0ZWNJZGVudGl0eShhOiBBcHBJRCk6IHZvaWQKLy8KLy8gQXBwIGlkZW50aXR5IHNldHRlcgovLwovLyBAcGFyYW0gYSBBZGRyZXNzCnNldEJpYXRlY0lkZW50aXR5OgoJcHJvdG8gMSAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTQ3CgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NVZHBhdGVyLnZhbHVlLCAnT25seSB1cGRhdGVyIGNhbiBjaGFuZ2UgYXBwSWRlbnRpdHlQcm92aWRlcicpCgl0eG4gU2VuZGVyCglieXRlYyAwIC8vICAidSIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgdXBkYXRlciBjYW4gY2hhbmdlIGFwcElkZW50aXR5UHJvdmlkZXIKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjE0OAoJLy8gdGhpcy5hcHBCaWF0ZWNJZGVudGl0eVByb3ZpZGVyLnZhbHVlID0gYQoJYnl0ZWMgMTAgLy8gICJpIgoJZnJhbWVfZGlnIC0xIC8vIGE6IEFwcElECglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZXRCaWF0ZWNQb29sKHVpbnQ2NCl2b2lkCiphYmlfcm91dGVfc2V0QmlhdGVjUG9vbDoKCS8vIGE6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJYnRvaQoKCS8vIGV4ZWN1dGUgc2V0QmlhdGVjUG9vbCh1aW50NjQpdm9pZAoJY2FsbHN1YiBzZXRCaWF0ZWNQb29sCglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBzZXRCaWF0ZWNQb29sKGE6IEFwcElEKTogdm9pZAovLwovLyBBcHAgaWRlbnRpdHkgc2V0dGVyCi8vCi8vIEBwYXJhbSBhIEFkZHJlc3MKc2V0QmlhdGVjUG9vbDoKCXByb3RvIDEgMAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjE1NwoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzVWRwYXRlci52YWx1ZSwgJ09ubHkgdXBkYXRlciBjYW4gY2hhbmdlIGFwcFBvb2xQcm92aWRlcicpCgl0eG4gU2VuZGVyCglieXRlYyAwIC8vICAidSIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgdXBkYXRlciBjYW4gY2hhbmdlIGFwcFBvb2xQcm92aWRlcgoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTU4CgkvLyB0aGlzLmFwcEJpYXRlY1Bvb2xQcm92aWRlci52YWx1ZSA9IGEKCWJ5dGVjIDExIC8vICAicCIKCWZyYW1lX2RpZyAtMSAvLyBhOiBBcHBJRAoJYXBwX2dsb2JhbF9wdXQKCXJldHN1YgoKLy8gc2V0QmlhdGVjRmVlKHVpbnQyNTYpdm9pZAoqYWJpX3JvdXRlX3NldEJpYXRlY0ZlZToKCS8vIGJpYXRlY0ZlZTogdWludDI1NgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQoJZHVwCglsZW4KCWludGMgMSAvLyAzMgoJPT0KCgkvLyBhcmd1bWVudCAwIChiaWF0ZWNGZWUpIGZvciBzZXRCaWF0ZWNGZWUgbXVzdCBiZSBhIHVpbnQyNTYKCWFzc2VydAoKCS8vIGV4ZWN1dGUgc2V0QmlhdGVjRmVlKHVpbnQyNTYpdm9pZAoJY2FsbHN1YiBzZXRCaWF0ZWNGZWUKCWludGMgMCAvLyAxCglyZXR1cm4KCi8vIHNldEJpYXRlY0ZlZShiaWF0ZWNGZWU6IHVpbnQyNTYpOiB2b2lkCi8vCi8vIEZlZXMgaW4gOSBkZWNpbWFscy4gMV8wMDBfMDAwXzAwMCA9IDEwMCUKLy8gRmVlcyBpbiA5IGRlY2ltYWxzLiAxMF8wMDBfMDAwID0gMSUKLy8gRmVlcyBpbiA5IGRlY2ltYWxzLiAxMDBfMDAwID0gMCwwMSUKLy8KLy8gRmVlcyBhcmUgcmVzcGVjdGZ1bCBmcm9tIHRoZSBhbGwgZmVlcyB0YWtlbiB0byB0aGUgTFAgcHJvdmlkZXJzLiBJZiBMUHMgY2hhcmdlIDElIGZlZSwgYW5kIGJpYXRlYyBjaGFyZ2VzIDEwJSBmZWUsIExQIHdpbGwgcmVjZWl2ZSAwLjA5JSBmZWUgYW5kIGJpYXRlYyAwLjAxJSBmZWUKLy8KLy8gQHBhcmFtIGJpYXRlY0ZlZSBGZWUKc2V0QmlhdGVjRmVlOgoJcHJvdG8gMSAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTcxCgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NFeGVjdXRpdmUudmFsdWUsICdPbmx5IGV4ZWN1dGl2ZSBhZGRyZXNzIGNhbiBjaGFuZ2UgZmVlcycpCgl0eG4gU2VuZGVyCglieXRlYyAyIC8vICAiZSIKCWFwcF9nbG9iYWxfZ2V0Cgk9PQoKCS8vIE9ubHkgZXhlY3V0aXZlIGFkZHJlc3MgY2FuIGNoYW5nZSBmZWVzCglhc3NlcnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxNzIKCS8vIGFzc2VydChiaWF0ZWNGZWUgPD0gKFNDQUxFIGFzIHVpbnQyNTYpIC8gMiwgJ0JpYXRlYyBjYW5ub3Qgc2V0IGZlZXMgaGlnaGVyIHRoZW4gNTAlIG9mIGxwIGZlZXMnKQoJZnJhbWVfZGlnIC0xIC8vIGJpYXRlY0ZlZTogdWludDI1NgoJYnl0ZWMgMyAvLyAweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwM2I5YWNhMDAKCWJ5dGVjIDQgLy8gMHgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAyCgliLwoJYjw9CgoJLy8gQmlhdGVjIGNhbm5vdCBzZXQgZmVlcyBoaWdoZXIgdGhlbiA1MCUgb2YgbHAgZmVlcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTczCgkvLyB0aGlzLmJpYXRlY0ZlZS52YWx1ZSA9IGJpYXRlY0ZlZQoJYnl0ZWMgOSAvLyAgImYiCglmcmFtZV9kaWcgLTEgLy8gYmlhdGVjRmVlOiB1aW50MjU2CglhcHBfZ2xvYmFsX3B1dAoJcmV0c3ViCgovLyBzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uKGJ5dGVbXSxieXRlW10sYnl0ZVtdLHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCl2b2lkCiphYmlfcm91dGVfc2VuZE9ubGluZUtleVJlZ2lzdHJhdGlvbjoKCS8vIGZlZTogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyA3CglidG9pCgoJLy8gdm90ZUtleURpbHV0aW9uOiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDYKCWJ0b2kKCgkvLyB2b3RlTGFzdDogdWludDY0Cgl0eG5hIEFwcGxpY2F0aW9uQXJncyA1CglidG9pCgoJLy8gdm90ZUZpcnN0OiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDQKCWJ0b2kKCgkvLyBzdGF0ZVByb29mUEs6IGJ5dGVbXQoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMwoJZXh0cmFjdCAyIDAKCgkvLyBzZWxlY3Rpb25QSzogYnl0ZVtdCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAyCglleHRyYWN0IDIgMAoKCS8vIHZvdGVQSzogYnl0ZVtdCgl0eG5hIEFwcGxpY2F0aW9uQXJncyAxCglleHRyYWN0IDIgMAoKCS8vIGV4ZWN1dGUgc2VuZE9ubGluZUtleVJlZ2lzdHJhdGlvbihieXRlW10sYnl0ZVtdLGJ5dGVbXSx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQpdm9pZAoJY2FsbHN1YiBzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uCglpbnRjIDAgLy8gMQoJcmV0dXJuCgovLyBzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uKHZvdGVQSzogYnl0ZXMsIHNlbGVjdGlvblBLOiBieXRlcywgc3RhdGVQcm9vZlBLOiBieXRlcywgdm90ZUZpcnN0OiB1aW50NjQsIHZvdGVMYXN0OiB1aW50NjQsIHZvdGVLZXlEaWx1dGlvbjogdWludDY0LCBmZWU6IHVpbnQ2NCk6IHZvaWQKLy8KLy8gYWRkcmVzc0V4ZWN1dGl2ZUZlZSBjYW4gcGVyZm9tIGtleSByZWdpc3RyYXRpb24gZm9yIHRoaXMgTFAgcG9vbAovLwovLyBPbmx5IGFkZHJlc3NFeGVjdXRpdmVGZWUgaXMgYWxsb3dlZCB0byBleGVjdXRlIHRoaXMgbWV0aG9kLgpzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uOgoJcHJvdG8gNyAwCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTgyCgkvLyBhc3NlcnQodGhpcy50eG4uc2VuZGVyID09PSB0aGlzLmFkZHJlc3NFeGVjdXRpdmVGZWUudmFsdWUsICdPbmx5IGZlZSBleGVjdXRvciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB0YWtlIHRoZSBjb2xsZWN0ZWQgZmVlcycpCgl0eG4gU2VuZGVyCglieXRlYyAxIC8vICAiZWYiCglhcHBfZ2xvYmFsX2dldAoJPT0KCgkvLyBPbmx5IGZlZSBleGVjdXRvciBzZXR1cCBpbiB0aGUgY29uZmlnIGNhbiB0YWtlIHRoZSBjb2xsZWN0ZWQgZmVlcwoJYXNzZXJ0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTgzCgkvLyBzZW5kT25saW5lS2V5UmVnaXN0cmF0aW9uKHsKCS8vICAgICAgIHNlbGVjdGlvblBLOiBzZWxlY3Rpb25QSywKCS8vICAgICAgIHN0YXRlUHJvb2ZQSzogc3RhdGVQcm9vZlBLLAoJLy8gICAgICAgdm90ZUZpcnN0OiB2b3RlRmlyc3QsCgkvLyAgICAgICB2b3RlS2V5RGlsdXRpb246IHZvdGVLZXlEaWx1dGlvbiwKCS8vICAgICAgIHZvdGVMYXN0OiB2b3RlTGFzdCwKCS8vICAgICAgIHZvdGVQSzogdm90ZVBLLAoJLy8gICAgICAgZmVlOiBmZWUsCgkvLyAgICAgfSkKCWl0eG5fYmVnaW4KCXB1c2hpbnQgMiAvLyBrZXlyZWcKCWl0eG5fZmllbGQgVHlwZUVudW0KCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxODQKCS8vIHNlbGVjdGlvblBLOiBzZWxlY3Rpb25QSwoJZnJhbWVfZGlnIC0yIC8vIHNlbGVjdGlvblBLOiBieXRlcwoJaXR4bl9maWVsZCBTZWxlY3Rpb25QSwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjE4NQoJLy8gc3RhdGVQcm9vZlBLOiBzdGF0ZVByb29mUEsKCWZyYW1lX2RpZyAtMyAvLyBzdGF0ZVByb29mUEs6IGJ5dGVzCglpdHhuX2ZpZWxkIFN0YXRlUHJvb2ZQSwoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjE4NgoJLy8gdm90ZUZpcnN0OiB2b3RlRmlyc3QKCWZyYW1lX2RpZyAtNCAvLyB2b3RlRmlyc3Q6IHVpbnQ2NAoJaXR4bl9maWVsZCBWb3RlRmlyc3QKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoxODcKCS8vIHZvdGVLZXlEaWx1dGlvbjogdm90ZUtleURpbHV0aW9uCglmcmFtZV9kaWcgLTYgLy8gdm90ZUtleURpbHV0aW9uOiB1aW50NjQKCWl0eG5fZmllbGQgVm90ZUtleURpbHV0aW9uCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTg4CgkvLyB2b3RlTGFzdDogdm90ZUxhc3QKCWZyYW1lX2RpZyAtNSAvLyB2b3RlTGFzdDogdWludDY0CglpdHhuX2ZpZWxkIFZvdGVMYXN0CgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTg5CgkvLyB2b3RlUEs6IHZvdGVQSwoJZnJhbWVfZGlnIC0xIC8vIHZvdGVQSzogYnl0ZXMKCWl0eG5fZmllbGQgVm90ZVBLCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MTkwCgkvLyBmZWU6IGZlZQoJZnJhbWVfZGlnIC03IC8vIGZlZTogdWludDY0CglpdHhuX2ZpZWxkIEZlZQoKCS8vIFN1Ym1pdCBpbm5lciB0cmFuc2FjdGlvbgoJaXR4bl9zdWJtaXQKCXJldHN1YgoKLy8gd2l0aGRyYXdFeGNlc3NBc3NldHModWludDY0LHVpbnQ2NCl1aW50NjQKKmFiaV9yb3V0ZV93aXRoZHJhd0V4Y2Vzc0Fzc2V0czoKCS8vIFRoZSBBQkkgcmV0dXJuIHByZWZpeAoJcHVzaGJ5dGVzIDB4MTUxZjdjNzUKCgkvLyBhbW91bnQ6IHVpbnQ2NAoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgoJYnRvaQoKCS8vIGFzc2V0OiB1aW50NjQKCXR4bmEgQXBwbGljYXRpb25BcmdzIDEKCWJ0b2kKCgkvLyBleGVjdXRlIHdpdGhkcmF3RXhjZXNzQXNzZXRzKHVpbnQ2NCx1aW50NjQpdWludDY0CgljYWxsc3ViIHdpdGhkcmF3RXhjZXNzQXNzZXRzCglpdG9iCgljb25jYXQKCWxvZwoJaW50YyAwIC8vIDEKCXJldHVybgoKLy8gd2l0aGRyYXdFeGNlc3NBc3NldHMoYXNzZXQ6IEFzc2V0SUQsIGFtb3VudDogdWludDY0KTogdWludDY0Ci8vCi8vIElmIHNvbWVvbmUgZGVwb3NpdHMgZXhjZXNzIGFzc2V0cyB0byB0aGlzIHNtYXJ0IGNvbnRyYWN0IGJpYXRlYyBjYW4gdXNlIHRoZW0uCi8vCi8vIE9ubHkgYWRkcmVzc0V4ZWN1dGl2ZUZlZSBpcyBhbGxvd2VkIHRvIGV4ZWN1dGUgdGhpcyBtZXRob2QuCi8vCi8vIEBwYXJhbSBhc3NldCBBc3NldCB0byB3aXRoZHJhdy4gSWYgbmF0aXZlIHRva2VuLCB0aGVuIHplcm8KLy8gQHBhcmFtIGFtb3VudCBBbW91bnQgb2YgdGhlIGFzc2V0IHRvIGJlIHdpdGhkcmF3bgp3aXRoZHJhd0V4Y2Vzc0Fzc2V0czoKCXByb3RvIDIgMQoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIwMwoJLy8gYXNzZXJ0KHRoaXMudHhuLnNlbmRlciA9PT0gdGhpcy5hZGRyZXNzRXhlY3V0aXZlRmVlLnZhbHVlLCAnT25seSBmZWUgZXhlY3V0b3Igc2V0dXAgaW4gdGhlIGNvbmZpZyBjYW4gdGFrZSB0aGUgY29sbGVjdGVkIGZlZXMnKQoJdHhuIFNlbmRlcgoJYnl0ZWMgMSAvLyAgImVmIgoJYXBwX2dsb2JhbF9nZXQKCT09CgoJLy8gT25seSBmZWUgZXhlY3V0b3Igc2V0dXAgaW4gdGhlIGNvbmZpZyBjYW4gdGFrZSB0aGUgY29sbGVjdGVkIGZlZXMKCWFzc2VydAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIwNQoJLy8gdGhpcy5kb0F4ZmVyKHRoaXMudHhuLnNlbmRlciwgYXNzZXQsIGFtb3VudCkKCWZyYW1lX2RpZyAtMiAvLyBhbW91bnQ6IHVpbnQ2NAoJZnJhbWVfZGlnIC0xIC8vIGFzc2V0OiBBc3NldElECgl0eG4gU2VuZGVyCgljYWxsc3ViIGRvQXhmZXIKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMDcKCS8vIHJldHVybiBhbW91bnQ7CglmcmFtZV9kaWcgLTIgLy8gYW1vdW50OiB1aW50NjQKCXJldHN1YgoKLy8gZG9BeGZlcihyZWNlaXZlcjogQWRkcmVzcywgYXNzZXQ6IEFzc2V0SUQsIGFtb3VudDogdWludDY0KTogdm9pZAovLwovLyBFeGVjdXRlcyB4ZmVyIG9mIHBheSBwYXltZW50IG1ldGhvZHMgdG8gc3BlY2lmaWVkIHJlY2VpdmVyIGZyb20gc21hcnQgY29udHJhY3QgYWdncmVnYXRlZCBhY2NvdW50IHdpdGggc3BlY2lmaWVkIGFzc2V0IGFuZCBhbW91bnQgaW4gdG9rZW5zIGRlY2ltYWxzCi8vIEBwYXJhbSByZWNlaXZlciBSZWNlaXZlcgovLyBAcGFyYW0gYXNzZXQgQXNzZXQuIFplcm8gZm9yIGFsZ28KLy8gQHBhcmFtIGFtb3VudCBBbW91bnQgdG8gdHJhbnNmZXIKZG9BeGZlcjoKCXByb3RvIDMgMAoKCS8vICppZjBfY29uZGl0aW9uCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMTcKCS8vIGFzc2V0LmlkID09PSAwCglmcmFtZV9kaWcgLTIgLy8gYXNzZXQ6IEFzc2V0SUQKCWludGMgMiAvLyAwCgk9PQoJYnogKmlmMF9lbHNlCgoJLy8gKmlmMF9jb25zZXF1ZW50CgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMTgKCS8vIHNlbmRQYXltZW50KHsKCS8vICAgICAgICAgcmVjZWl2ZXI6IHJlY2VpdmVyLAoJLy8gICAgICAgICBhbW91bnQ6IGFtb3VudCwKCS8vICAgICAgICAgZmVlOiAwLAoJLy8gICAgICAgfSkKCWl0eG5fYmVnaW4KCWludGMgMCAvLyAgcGF5CglpdHhuX2ZpZWxkIFR5cGVFbnVtCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjE5CgkvLyByZWNlaXZlcjogcmVjZWl2ZXIKCWZyYW1lX2RpZyAtMSAvLyByZWNlaXZlcjogQWRkcmVzcwoJaXR4bl9maWVsZCBSZWNlaXZlcgoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIyMAoJLy8gYW1vdW50OiBhbW91bnQKCWZyYW1lX2RpZyAtMyAvLyBhbW91bnQ6IHVpbnQ2NAoJaXR4bl9maWVsZCBBbW91bnQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMjEKCS8vIGZlZTogMAoJaW50YyAyIC8vIDAKCWl0eG5fZmllbGQgRmVlCgoJLy8gU3VibWl0IGlubmVyIHRyYW5zYWN0aW9uCglpdHhuX3N1Ym1pdAoJYiAqaWYwX2VuZAoKKmlmMF9lbHNlOgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjI0CgkvLyBzZW5kQXNzZXRUcmFuc2Zlcih7CgkvLyAgICAgICAgIGFzc2V0UmVjZWl2ZXI6IHJlY2VpdmVyLAoJLy8gICAgICAgICB4ZmVyQXNzZXQ6IGFzc2V0LAoJLy8gICAgICAgICBhc3NldEFtb3VudDogYW1vdW50LAoJLy8gICAgICAgICBmZWU6IDAsCgkvLyAgICAgICB9KQoJaXR4bl9iZWdpbgoJcHVzaGludCA0IC8vIGF4ZmVyCglpdHhuX2ZpZWxkIFR5cGVFbnVtCgoJLy8gY29udHJhY3RzXEJpYXRlY0NvbmZpZ1Byb3ZpZGVyLmFsZ28udHM6MjI1CgkvLyBhc3NldFJlY2VpdmVyOiByZWNlaXZlcgoJZnJhbWVfZGlnIC0xIC8vIHJlY2VpdmVyOiBBZGRyZXNzCglpdHhuX2ZpZWxkIEFzc2V0UmVjZWl2ZXIKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMjYKCS8vIHhmZXJBc3NldDogYXNzZXQKCWZyYW1lX2RpZyAtMiAvLyBhc3NldDogQXNzZXRJRAoJaXR4bl9maWVsZCBYZmVyQXNzZXQKCgkvLyBjb250cmFjdHNcQmlhdGVjQ29uZmlnUHJvdmlkZXIuYWxnby50czoyMjcKCS8vIGFzc2V0QW1vdW50OiBhbW91bnQKCWZyYW1lX2RpZyAtMyAvLyBhbW91bnQ6IHVpbnQ2NAoJaXR4bl9maWVsZCBBc3NldEFtb3VudAoKCS8vIGNvbnRyYWN0c1xCaWF0ZWNDb25maWdQcm92aWRlci5hbGdvLnRzOjIyOAoJLy8gZmVlOiAwCglpbnRjIDIgLy8gMAoJaXR4bl9maWVsZCBGZWUKCgkvLyBTdWJtaXQgaW5uZXIgdHJhbnNhY3Rpb24KCWl0eG5fc3VibWl0CgoqaWYwX2VuZDoKCXJldHN1YgoKKmNyZWF0ZV9Ob09wOgoJcHVzaGJ5dGVzIDB4Yjg0NDdiMzYgLy8gbWV0aG9kICJjcmVhdGVBcHBsaWNhdGlvbigpdm9pZCIKCXR4bmEgQXBwbGljYXRpb25BcmdzIDAKCW1hdGNoICphYmlfcm91dGVfY3JlYXRlQXBwbGljYXRpb24KCgkvLyB0aGlzIGNvbnRyYWN0IGRvZXMgbm90IGltcGxlbWVudCB0aGUgZ2l2ZW4gQUJJIG1ldGhvZCBmb3IgY3JlYXRlIE5vT3AKCWVycgoKKmNhbGxfTm9PcDoKCXB1c2hieXRlcyAweDQ5NWNlN2VkIC8vIG1ldGhvZCAiYm9vdHN0cmFwKHVpbnQyNTYsdWludDY0LHVpbnQ2NCl2b2lkIgoJcHVzaGJ5dGVzIDB4YmZjMjA4NjAgLy8gbWV0aG9kICJzZXRBZGRyZXNzVWRwYXRlcihhZGRyZXNzKXZvaWQiCglwdXNoYnl0ZXMgMHgwY2RjMTBmYyAvLyBtZXRob2QgInNldFBhdXNlZCh1aW50NjQpdm9pZCIKCXB1c2hieXRlcyAweDZiOTU1ZjRiIC8vIG1ldGhvZCAic2V0QWRkcmVzc0dvdihhZGRyZXNzKXZvaWQiCglwdXNoYnl0ZXMgMHg4YjE4N2IzZCAvLyBtZXRob2QgInNldEFkZHJlc3NFeGVjdXRpdmUoYWRkcmVzcyl2b2lkIgoJcHVzaGJ5dGVzIDB4NTBlMDdkODggLy8gbWV0aG9kICJzZXRBZGRyZXNzRXhlY3V0aXZlRmVlKGFkZHJlc3Mpdm9pZCIKCXB1c2hieXRlcyAweGJhYmUxZTExIC8vIG1ldGhvZCAic2V0QmlhdGVjSWRlbnRpdHkodWludDY0KXZvaWQiCglwdXNoYnl0ZXMgMHhjNThiOWRhNCAvLyBtZXRob2QgInNldEJpYXRlY1Bvb2wodWludDY0KXZvaWQiCglwdXNoYnl0ZXMgMHhjYTM0NGEzNCAvLyBtZXRob2QgInNldEJpYXRlY0ZlZSh1aW50MjU2KXZvaWQiCglwdXNoYnl0ZXMgMHg0YWU2ZTljYiAvLyBtZXRob2QgInNlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24oYnl0ZVtdLGJ5dGVbXSxieXRlW10sdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0KXZvaWQiCglwdXNoYnl0ZXMgMHg4NzI4MzczMCAvLyBtZXRob2QgIndpdGhkcmF3RXhjZXNzQXNzZXRzKHVpbnQ2NCx1aW50NjQpdWludDY0IgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAoJbWF0Y2ggKmFiaV9yb3V0ZV9ib290c3RyYXAgKmFiaV9yb3V0ZV9zZXRBZGRyZXNzVWRwYXRlciAqYWJpX3JvdXRlX3NldFBhdXNlZCAqYWJpX3JvdXRlX3NldEFkZHJlc3NHb3YgKmFiaV9yb3V0ZV9zZXRBZGRyZXNzRXhlY3V0aXZlICphYmlfcm91dGVfc2V0QWRkcmVzc0V4ZWN1dGl2ZUZlZSAqYWJpX3JvdXRlX3NldEJpYXRlY0lkZW50aXR5ICphYmlfcm91dGVfc2V0QmlhdGVjUG9vbCAqYWJpX3JvdXRlX3NldEJpYXRlY0ZlZSAqYWJpX3JvdXRlX3NlbmRPbmxpbmVLZXlSZWdpc3RyYXRpb24gKmFiaV9yb3V0ZV93aXRoZHJhd0V4Y2Vzc0Fzc2V0cwoKCS8vIHRoaXMgY29udHJhY3QgZG9lcyBub3QgaW1wbGVtZW50IHRoZSBnaXZlbiBBQkkgbWV0aG9kIGZvciBjYWxsIE5vT3AKCWVycgoKKmNhbGxfVXBkYXRlQXBwbGljYXRpb246CglwdXNoYnl0ZXMgMHg2OTM2YzYyZiAvLyBtZXRob2QgInVwZGF0ZUFwcGxpY2F0aW9uKGJ5dGVbXSl2b2lkIgoJdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMAoJbWF0Y2ggKmFiaV9yb3V0ZV91cGRhdGVBcHBsaWNhdGlvbgoKCS8vIHRoaXMgY29udHJhY3QgZG9lcyBub3QgaW1wbGVtZW50IHRoZSBnaXZlbiBBQkkgbWV0aG9kIGZvciBjYWxsIFVwZGF0ZUFwcGxpY2F0aW9uCgllcnI=",
     "clear": "I3ByYWdtYSB2ZXJzaW9uIDEw"
   },
   "byteCode": {
-    "approval": "CiADASAAJgwBdQJlZgFlFkJJQVRFQy1DT05GSUctMDEtMDItMDEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADuaygAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIFc2N2ZXIBZwFzAWYBaQFwMRgUgQYLMRkIjQwCEQAAAAAAAAJvAAACAwAAAAAAAAAAAAAAiAACIkOKAAAnBitnKjEAZycHMQBnKDEAZykxAGcnCCRniTYaAVcCAIgAAiJDigEAMQAoZBJEK7CL/7AnBitniTYaAxc2GgIXNhoBSRUjEkSIAAIiQ4oDADEAKGQSRIv/JwQnBaKmRCcJi/9nJwqL/mcnC4v9Z4k2GgFJFSMSRIgAAiJDigEAMQAoZBJEKIv/Z4k2GgEXiAACIkOKAQAxAChkEkQnCIv/Z4k2GgFJFSMSRIgAAiJDigEAMQAoZBJEJweL/2eJNhoBSRUjEkSIAAIiQ4oBADEAKGQSRCqL/2eJNhoBSRUjEkSIAAIiQ4oBADEAKmQSRCmL/2eJNhoBF4gAAiJDigEAMQAoZBJEJwqL/2eJNhoBF4gAAiJDigEAMQAoZBJEJwuL/2eJNhoBSRUjEkSIAAIiQ4oBADEAKmQSRIv/JwQnBaKmRCcJi/9niTYaBxc2GgYXNhoFFzYaBBc2GgNXAgA2GgJXAgA2GgFXAgCIAAIiQ4oHADEAKWQSRLGBArIQi/6yC4v9sj+L/LIMi/qyDov7sg2L/7IKi/myAbOJgAQVH3x1NhoCFzYaAReIAAUWULAiQ4oCATEAKWQSRIv+i/8xAIgAA4v+iYoDAIv+JBJBABOxIrIQi/+yB4v9sggksgGzQgAVsYEEshCL/7IUi/6yEYv9shIksgGziYAEuER7NjYaAI4B/fEAgARJXOftgAS/wghggAQM3BD8gARrlV9LgASLGHs9gARQ4H2IgAS6vh4RgATFi52kgATKNEo0gARK5unLgASHKDcwNhoAjgv90/4K/iX+Pf5Z/nT+j/6n/r/+5P83AIAEaTbGLzYaAI4B/acA",
+    "approval": "CiADASAAJgwBdQJlZgFlIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA7msoAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACFkJJQVRFQy1DT05GSUctMDEtMDItMDEFc2N2ZXIBZwFzAWYBaQFwMRgUgQYLMRkIjQwCEgAAAAAAAAJwAAACBAAAAAAAAAAAAAAAiAACIkOKAAAnBicFZyoxAGcnBzEAZygxAGcpMQBnJwgkZ4k2GgFXAgCIAAIiQ4oBADEAKGQSRCcFsIv/sCcGi/9niTYaAxc2GgIXNhoBSRUjEkSIAAIiQ4oDADEAKGQSRIv/KycEoqZEJwmL/2cnCov+ZycLi/1niTYaAUkVIxJEiAACIkOKAQAxAChkEkQoi/9niTYaAReIAAIiQ4oBADEAKGQSRCcIi/9niTYaAUkVIxJEiAACIkOKAQAxAChkEkQnB4v/Z4k2GgFJFSMSRIgAAiJDigEAMQAoZBJEKov/Z4k2GgFJFSMSRIgAAiJDigEAMQAqZBJEKYv/Z4k2GgEXiAACIkOKAQAxAChkEkQnCov/Z4k2GgEXiAACIkOKAQAxAChkEkQnC4v/Z4k2GgFJFSMSRIgAAiJDigEAMQAqZBJEi/8rJwSipkQnCYv/Z4k2GgcXNhoGFzYaBRc2GgQXNhoDVwIANhoCVwIANhoBVwIAiAACIkOKBwAxAClkEkSxgQKyEIv+sguL/bI/i/yyDIv6sg6L+7INi/+yCov5sgGziYAEFR98dTYaAhc2GgEXiAAFFlCwIkOKAgExAClkEkSL/ov/MQCIAAOL/omKAwCL/iQSQQATsSKyEIv/sgeL/bIIJLIBs0IAFbGBBLIQi/+yFIv+shGL/bISJLIBs4mABLhEezY2GgCOAf3wAIAESVzn7YAEv8IIYIAEDNwQ/IAEa5VfS4AEixh7PYAEUOB9iIAEur4eEYAExYudpIAEyjRKNIAESubpy4AEhyg3MDYaAI4L/dX+C/4m/j7+Wv51/pD+qP7A/uT/NwCABGk2xi82GgCOAf2nAA==",
     "clear": "Cg=="
   },
   "compilerInfo": {

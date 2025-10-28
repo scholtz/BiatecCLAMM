@@ -932,6 +932,7 @@ export class BiatecClammPool extends Contract {
     increaseOpcodeBudget();
     increaseOpcodeBudget();
     increaseOpcodeBudget();
+    increaseOpcodeBudget();
     /// well formed swap
     this.checkAssetsAB(assetA, assetB);
     assert(assetA.id !== assetB.id, 'Swaps not allowed in staking pools');

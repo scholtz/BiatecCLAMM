@@ -397,7 +397,7 @@ export class BiatecPoolProvider extends Contract {
     const appId = this.itxn.createdApplicationID.id;
     this.pendingGroup.addPayment({
       receiver: AppID.fromUint64(appId).address,
-      amount: 400_000,
+      amount: 450_000,
       fee: 0,
       isFirstTxn: true,
     });
