@@ -1,5 +1,4 @@
 import algosdk, { assignGroupID, makePaymentTxnWithSuggestedParamsFromObject, SuggestedParams } from 'algosdk';
-import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
 import { BoxReference } from '@algorandfoundation/algokit-utils/types/app-manager';
 import { BiatecPoolProviderClient } from '../../../contracts/clients/BiatecPoolProviderClient';
@@ -55,7 +54,6 @@ const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.T
     appReferences: [clientBiatecPoolProvider.appId, appBiatecConfigProvider],
   });
   // expect(poolDeployTx.return).toBeGreaterThan(0n);
-  const signed: Uint8Array[] = [];
   const boxRefA: BoxReference = {
     appId: clientBiatecPoolProvider.appId,
     name: new Uint8Array([...Buffer.from('a', 'ascii'), ...algosdk.encodeUint64(assetA)]),
@@ -71,14 +69,14 @@ const clammCreateTxs = async (input: IClammBootstrapTxsInput): Promise<algosdk.T
   const txsToGroup = [
     ...(
       await clientBiatecPoolProvider.createTransaction.noop({
-        args: { i: 1 },
+        args: { _i: 1 },
         boxReferences: [...boxReferences, new Uint8Array(Buffer.from('13', 'ascii')), new Uint8Array(Buffer.from('14', 'ascii'))],
         sender,
       })
     ).transactions,
     ...(
       await clientBiatecPoolProvider.createTransaction.noop({
-        args: { i: 2 },
+        args: { _i: 2 },
         boxReferences: [new Uint8Array(Buffer.from('21', 'ascii')), new Uint8Array(Buffer.from('22', 'ascii')), new Uint8Array(Buffer.from('23', 'ascii')), new Uint8Array(Buffer.from('24', 'ascii'))],
         sender,
       })

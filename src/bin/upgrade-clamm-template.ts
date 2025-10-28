@@ -12,7 +12,7 @@ const biatecFee = BigInt(200_000_000);
 const algod = new algosdk.Algodv2(
   process.env.ALGOD_TOKEN ?? 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
   process.env.ALGOD_SERVER ?? 'http://localhost',
-  parseInt(process.env.ALGOD_PORT ?? '4001')
+  parseInt(process.env.ALGOD_PORT ?? '4001', 10)
 );
 const appBiatecConfigProvider = BigInt(process.env.appBiatecConfigProvider ?? '0');
 const appBiatecIdentityProvider = BigInt(process.env.appBiatecIdentityProvider ?? '0');
@@ -67,7 +67,7 @@ if (process.env.signer5) {
 }
 const deployerMsigParams: algosdk.MultisigMetadata = {
   addrs: accounts,
-  threshold: parseInt(process.env.msigThreshold ?? '3'),
+  threshold: parseInt(process.env.msigThreshold ?? '3', 10),
   version: 1,
 };
 
@@ -95,12 +95,12 @@ const signer: TransactionSignerAccount = {
 const algorand = AlgorandClient.fromConfig({
   algodConfig: {
     server: process.env.ALGOD_SERVER ?? '',
-    port: parseInt(process.env.ALGOD_PORT ?? '443'),
+    port: parseInt(process.env.ALGOD_PORT ?? '443', 10),
     token: process.env.ALGOD_TOKEN ?? '',
   },
   indexerConfig: {
     server: process.env.INDEXER_SERVER ?? '',
-    port: parseInt(process.env.INDEXER_PORT ?? '443'),
+    port: parseInt(process.env.INDEXER_PORT ?? '443', 10),
     token: process.env.INDEXER_TOKEN ?? '',
   },
 });
@@ -180,7 +180,7 @@ const app = async () => {
     const txsToGroup = [
       ...(
         await poolProviderClient.createTransaction.noop({
-          args: { i: 1 },
+          args: { _i: 1 },
           boxReferences: [
             new Uint8Array(Buffer.from('11', 'ascii')),
             new Uint8Array(Buffer.from('12', 'ascii')),
@@ -191,7 +191,7 @@ const app = async () => {
       ).transactions,
       ...(
         await poolProviderClient.createTransaction.noop({
-          args: { i: 2 },
+          args: { _i: 2 },
           boxReferences: [
             new Uint8Array(Buffer.from('21', 'ascii')),
             new Uint8Array(Buffer.from('22', 'ascii')),

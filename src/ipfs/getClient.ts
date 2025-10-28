@@ -1,9 +1,24 @@
+import fs from 'fs';
+import path from 'path';
 import { create, Options } from 'ipfs-http-client';
 import { Buffer } from 'buffer';
 import getLogger from '../common/getLogger';
 import IPFSConfiguration from '../interface/IPFSConfiguration';
 
-const config: IPFSConfiguration = require('../../.config/ipfs.json');
+const loadConfig = (): IPFSConfiguration | null => {
+  try {
+    const configPath = path.resolve(__dirname, '../../.config/ipfs.json');
+    if (!fs.existsSync(configPath)) {
+      return null;
+    }
+    const raw = fs.readFileSync(configPath, 'utf-8');
+    return JSON.parse(raw) as IPFSConfiguration;
+  } catch (error) {
+    const logger = getLogger();
+    logger.error(`Unable to read IPFS config: ${(error as Error).message}`);
+    return null;
+  }
+};
 /**
  * Returns ipfs client
  *
@@ -11,8 +26,9 @@ const config: IPFSConfiguration = require('../../.config/ipfs.json');
  */
 const getClient = () => {
   const logger = getLogger();
+  const config = loadConfig();
   try {
-    if (!config.clientSecret) {
+    if (!config || !config.clientSecret) {
       logger.error('IPFS not configured');
       return null;
     }

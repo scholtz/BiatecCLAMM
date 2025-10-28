@@ -1,4 +1,4 @@
-import algosdk, { AtomicTransactionComposer, SuggestedParams } from 'algosdk';
+import type { SuggestedParams, Transaction } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
@@ -19,7 +19,7 @@ interface IClammDistributeExcessAssetsTxsInput {
  * This method creates list of transactions to be signed
  * @returns List of transactions to sign
  */
-const clammDistributeExcessAssetsTxs = async (input: IClammDistributeExcessAssetsTxsInput): Promise<algosdk.Transaction[]> => {
+const clammDistributeExcessAssetsTxs = async (input: IClammDistributeExcessAssetsTxsInput): Promise<Transaction[]> => {
   const { clientBiatecClammPool, account, appBiatecConfigProvider, assetA, assetB, amountA, amountB } = input;
   const tx = await clientBiatecClammPool.createTransaction.distributeExcessAssets({
     args: {

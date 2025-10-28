@@ -1,4 +1,5 @@
 import getClient from './getClient';
+import getLogger from '../common/getLogger';
 
 /**
  * Uploads the string content to IPFS
@@ -13,7 +14,8 @@ const publishFileBuffer = async (content: Buffer): Promise<string> => {
       return added.path;
     }
   } catch (e) {
-    console.error(e);
+    const logger = getLogger();
+    logger.error(e);
   }
   return '';
 };

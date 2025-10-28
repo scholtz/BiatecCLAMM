@@ -1,5 +1,4 @@
-import algosdk, { AtomicTransactionComposer, SuggestedParams } from 'algosdk';
-import * as algokit from '@algorandfoundation/algokit-utils';
+import type { SuggestedParams, Transaction } from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
 
@@ -15,7 +14,10 @@ interface IClammSendOnlineKeyRegistrationTxsInput {
  * This method creates list of transactions to be signed
  * @returns List of transactions to sign
  */
-const clammSendOfflineKeyRegistrationTxs = async (input: IClammSendOnlineKeyRegistrationTxsInput): Promise<algosdk.Transaction[]> => {
+const clammSendOfflineKeyRegistrationTxs = async (input: IClammSendOnlineKeyRegistrationTxsInput): Promise<Transaction[]> => {
+  if (input) {
+    // Offline registration permanently disabled; argument acknowledged to satisfy lint
+  }
   throw new Error('Offline key registration is disabled atm');
   // const { clientBiatecClammPool, account, appBiatecConfigProvider } = input;
   // const tx = await clientBiatecClammPool.createTransaction.sendOfflineKeyRegistration({

@@ -1,7 +1,4 @@
-import algosdk from 'algosdk';
-import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
-import clammBootstrapTxs from '../txs/clammBootstrapTxs';
 
 interface IClammBootstrapSkInput {
   clientBiatecClammPool: BiatecClammPoolClient;

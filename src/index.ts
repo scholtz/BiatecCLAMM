@@ -22,7 +22,7 @@ import clammSendOnlineKeyRegistrationTxs from './biatecClamm/txs/clammSendOnline
 import clammSwapTxs from './biatecClamm/txs/clammSwapTxs';
 import clammWithdrawExcessAssetsTxs from './biatecClamm/txs/clammWithdrawExcessAssetsTxs';
 import getPools from './biatecClamm/getPools';
-import getConfig from './getConfig';
+import { getConfig } from './getConfig';
 import { BiatecClammPoolClient, BiatecClammPoolFactory, AmmStatus } from '../contracts/clients/BiatecClammPoolClient';
 import { BiatecConfigProviderClient, BiatecConfigProviderFactory } from '../contracts/clients/BiatecConfigProviderClient';
 import { BiatecIdentityProviderClient, BiatecIdentityProviderFactory, IdentityInfo, UserInfoV1, UserInfoShortV1 } from '../contracts/clients/BiatecIdentityProviderClient';

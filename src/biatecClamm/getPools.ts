@@ -1,5 +1,5 @@
 import algosdk, { Algodv2 } from 'algosdk';
-import { BiatecPoolProviderClient, FullConfig } from '../../contracts/clients/BiatecPoolProviderClient';
+import { FullConfig } from '../../contracts/clients/BiatecPoolProviderClient';
 
 interface IGetPoolsInput {
   assetId: bigint;
@@ -10,22 +10,18 @@ interface IGetPoolsInput {
 }
 function uint8ArrayToBigInt(bytes: Uint8Array) {
   let result = 0n;
-  for (const byte of bytes) {
-    result = (result << 8n) | BigInt(byte);
+  for (let i = 0; i < bytes.length; i += 1) {
+    result = result * 256n + BigInt(bytes[i]);
   }
   return Number(result);
 }
 const getPools = async (input: IGetPoolsInput): Promise<FullConfig[]> => {
   const ret: FullConfig[] = [];
   const keys = await input.algod.getApplicationBoxes(input.poolProviderAppId).do();
-  // const keys = await input.clientPoolProvider.algorand.client.indexer
-  //   .searchForApplicationBoxes(input.clientPoolProvider.appId)
-  //   .do();
-  console.log('keys', input.poolProviderAppId, keys);
-  for (const box of keys.boxes) {
+  keys.boxes.forEach((box) => {
     if (box.name) {
-      if (box.name.length == 59) {
-        if (Buffer.from(box.name.subarray(0, 2)).toString('ascii') == 'fc') {
+      if (box.name.length === 59) {
+        if (Buffer.from(box.name.subarray(0, 2)).toString('ascii') === 'fc') {
           // its pool config
 
           // type FullConfig = {
@@ -60,23 +56,7 @@ const getPools = async (input: IGetPoolsInput): Promise<FullConfig[]> => {
         }
       }
     }
-  }
-
-  // console.log('configs', configs);
-  // const configs = await input.clientPoolProvider.state.box.poolsByConfig.getMap();
-  // for (let config of configs.keys()) {
-  //   if (input.assetId != config.assetA && input.assetId != config.assetB) {
-  //     continue;
-  //   }
-  //   if (input.verificationClass !== undefined && input.verificationClass != config.verificationClass) {
-  //     continue;
-  //   }
-  //   if (input.fee !== undefined && input.fee != config.fee) {
-  //     continue;
-  //   }
-  //   ret.push(config);
-  // }
-  console.log('ret', ret);
+  });
   return ret;
 };
 export default getPools;

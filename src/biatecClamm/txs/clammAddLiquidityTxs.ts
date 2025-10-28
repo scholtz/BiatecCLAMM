@@ -1,4 +1,4 @@
-import algosdk, { assignGroupID, AtomicTransactionComposer, makeAssetTransferTxnWithSuggestedParamsFromObject, SuggestedParams } from 'algosdk';
+import algosdk, { assignGroupID, makeAssetTransferTxnWithSuggestedParamsFromObject, SuggestedParams } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
@@ -145,7 +145,7 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
         txOptin,
         ...(
           await input.clientBiatecPoolProvider.createTransaction.noop({
-            args: { i: 1 },
+            args: { _i: 1 },
             boxReferences: [boxFC, boxPriceFeed, boxIdentity],
             assetReferences: [BigInt(assetA), BigInt(assetB)],
             sender: account.addr,
@@ -157,7 +157,7 @@ const clammAddLiquidityTxs = async (input: IClammBootstrapTxsInput): Promise<alg
     : [
         ...(
           await input.clientBiatecPoolProvider.createTransaction.noop({
-            args: { i: 1 },
+            args: { _i: 1 },
             boxReferences: [boxFC, boxPriceFeed, boxIdentity],
             assetReferences: [BigInt(assetA), BigInt(assetB)],
             sender: account.addr,

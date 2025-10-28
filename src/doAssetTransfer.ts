@@ -17,6 +17,6 @@ const doAssetTransfer = async (input: IDoAssetTransferInput) => {
     suggestedParams: { ...params },
   });
   const signed = txn.signTxn(input.fromAccount.sk);
-  return await input.algod.sendRawTransaction(signed).do();
+  return input.algod.sendRawTransaction(signed).do();
 };
 export default doAssetTransfer;

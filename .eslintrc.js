@@ -9,6 +9,14 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
+  settings: {
+    'import/resolver': {
+      node: true,
+      typescript: {
+        project: ['./tsconfig.json'],
+      },
+    },
+  },
   plugins: ['@typescript-eslint'],
   rules: {
     // Match VS Code's Prettier formatting (tabWidth 2, printWidth 200) while tolerating Windows line endings
@@ -36,7 +44,7 @@ module.exports = {
     'import/no-extraneous-dependencies': [
       'error',
       {
-        devDependencies: ['**/*.test.ts'],
+        devDependencies: ['**/*.test.ts', '__test__/**/*.ts', 'jest.setup.ts'],
       },
     ],
   },
@@ -73,6 +81,10 @@ module.exports = {
         'no-shadow': 'off',
         // Allow mutation of tx objects in grouped transaction assembly inside tests
         'no-param-reassign': 'off',
+        'import/no-extraneous-dependencies': 'off',
+        'import/no-mutable-exports': 'off',
+        'no-loop-func': 'off',
+        'no-empty': 'off',
       },
     },
     {
@@ -86,6 +98,7 @@ module.exports = {
         'no-unused-vars': 'off',
         'no-shadow': 'off',
         'no-param-reassign': 'off',
+        'import/extensions': 'off',
       },
     },
     {
@@ -95,6 +108,25 @@ module.exports = {
         'no-param-reassign': 'off',
         'no-shadow': 'off',
         'no-restricted-syntax': 'off',
+      },
+    },
+    {
+      files: ['jest.setup.ts'],
+      rules: {
+        'no-extend-native': 'off',
+        'no-unused-vars': 'off',
+        'func-names': 'off',
+      },
+    },
+    {
+      files: ['src/createArc3Files*.ts'],
+      rules: {
+        camelcase: 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        eqeqeq: 'off',
+        'no-await-in-loop': 'off',
+        'no-restricted-syntax': 'off',
+        'no-console': 'off',
       },
     },
   ],

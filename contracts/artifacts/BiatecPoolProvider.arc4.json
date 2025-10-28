@@ -102,7 +102,7 @@
       "desc": "No op tx to increase the app call and box size limits",
       "args": [
         {
-          "name": "i",
+          "name": "_i",
           "type": "uint64"
         }
       ],

@@ -5,9 +5,9 @@ let loggerInstance: winston.Logger;
 /**
  * Returns logger
  */
-const { combine, timestamp, label, printf } = format;
+const { combine, timestamp: formatTimestamp, printf } = format;
 
-const myFormat = printf(({ level, message, timestamp }) => {
+const myFormat = printf(({ level, message, timestamp }: { level: string; message: string; timestamp: string }) => {
   return `${timestamp} [${level}]: ${message}`;
 });
 
@@ -15,7 +15,7 @@ const getLogger = () => {
   if (loggerInstance) return loggerInstance;
   const logger = winston.createLogger({
     level: 'info',
-    format: combine(timestamp(), myFormat),
+    format: combine(formatTimestamp(), myFormat),
     transports: [
       new DailyRotateFile({
         filename: 'logs/error-%DATE%.log',

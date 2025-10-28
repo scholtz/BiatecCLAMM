@@ -38,12 +38,11 @@ describe('BiatecPoolProvider recentPools ring buffer', () => {
 
     // read recentPools1..10 from pool provider global state
     const recent: bigint[] = [];
+    const stateAccessors = clientBiatecPoolProvider.appClient.state.global as Record<string, (...args: unknown[]) => unknown>;
     for (let i = 1; i <= 10; i += 1) {
       // keys are named recentPools1 .. recentPools10
       // use the generated state accessor methods (recentPools1(), recentPools2(), ...)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      // @ts-ignore
-      const accessor = (clientBiatecPoolProvider.appClient.state.global as any)[`recentPools${i}`];
+      const accessor = stateAccessors[`recentPools${i}`];
       if (typeof accessor === 'function') {
         const val = (await accessor.call(clientBiatecPoolProvider.appClient.state.global)) as bigint | undefined;
         if (val !== undefined) recent.push(val);

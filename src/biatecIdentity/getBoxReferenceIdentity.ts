@@ -1,5 +1,5 @@
 import { BoxReference } from '@algorandfoundation/algokit-utils/types/app-manager';
-import algosdk, { Address } from 'algosdk';
+import type { Address } from 'algosdk';
 
 interface IBoxReferencePoolByConfigInput {
   appBiatecIdentity: number | bigint;

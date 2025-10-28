@@ -73,7 +73,6 @@ describe('BiatecClammPool - liquidity', () => {
         // eslint-disable-next-line no-console
         console.log(`Testing TCP ${h}:${p} ...`);
         // eslint-disable-next-line no-await-in-loop
-        // @ts-ignore - runtime helper
         const r = await tryPort(h, p, 800);
         // eslint-disable-next-line no-console
         console.log(`  -> ${h}:${p} reachable=${r.ok} ${r.err ?? ''}`);
@@ -655,7 +654,7 @@ describe('BiatecClammPool - liquidity', () => {
       const assetDepositAForC = depositABase / scaleAFromBase;
       const assetDepositBForC = depositBBase / scaleBFromBase;
       if (assetDepositAForC <= 0n || assetDepositBForC <= 0n) {
-        throw new Error(`Computed asset deposit for account C is zero or negative (assetA=${assetDepositAForC}, assetB=${assetDepositBForC}). ` + 'Check portion scaling logic.');
+        throw new Error(`Computed asset deposit for account C is zero or negative (assetA=${assetDepositAForC}, assetB=${assetDepositBForC}). Check portion scaling logic.`);
       }
       // Diagnostic: log the shape of accountC.addr and the normalized address we will use
       // eslint-disable-next-line no-console

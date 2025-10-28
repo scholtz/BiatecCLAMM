@@ -41,21 +41,19 @@ const clammCreateSender = async (input: IClammBootstrapSkInput): Promise<BiatecC
     txs,
     txs.map((_, i) => i)
   );
-  const { txid } = await input.clientBiatecPoolProvider.algorand.client.algod.sendRawTransaction(signed).do();
+  await input.clientBiatecPoolProvider.algorand.client.algod.sendRawTransaction(signed).do();
   const lastTxId = txs[txs.length - 1].txID();
 
-  console.debug('lastTxId', lastTxId);
   const confirmation = await algosdk.waitForConfirmation(input.clientBiatecPoolProvider.algorand.client.algod, lastTxId, 4);
   if (!(confirmation.logs && confirmation.logs.length > 0)) {
     throw new Error(`Logs not found for${lastTxId}`);
   }
   const lastLog = confirmation.logs[confirmation.logs.length - 1];
-  if (lastLog.length != 12) {
+  if (lastLog.length !== 12) {
     throw new Error('Failed to parse the return value');
   }
   const poolAppId = BigInt(algosdk.decodeUint64(lastLog.subarray(4, 12)));
 
-  console.debug('poolAppId', poolAppId);
   const newClient = new BiatecClammPoolClient({
     algorand: input.clientBiatecPoolProvider.algorand,
     appId: poolAppId,

@@ -180,11 +180,11 @@ export const setupPool = async (input: SetupPoolInput): Promise<SetupPoolResult>
     });
 
     const noop1 = await clientBiatecPoolProvider.appClient.createTransaction.noop({
-      args: { i: 1 },
+      args: { _i: 1 },
       boxReferences: [new Uint8Array(Buffer.from('11', 'ascii')), new Uint8Array(Buffer.from('12', 'ascii')), new Uint8Array(Buffer.from('13', 'ascii')), new Uint8Array(Buffer.from('14', 'ascii'))],
     });
     const noop2 = await clientBiatecPoolProvider.appClient.createTransaction.noop({
-      args: { i: 2 },
+      args: { _i: 2 },
       boxReferences: [new Uint8Array(Buffer.from('21', 'ascii')), new Uint8Array(Buffer.from('22', 'ascii')), new Uint8Array(Buffer.from('23', 'ascii')), new Uint8Array(Buffer.from('24', 'ascii'))],
     });
 

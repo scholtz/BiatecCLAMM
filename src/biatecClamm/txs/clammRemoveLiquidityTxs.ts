@@ -1,11 +1,7 @@
-import algosdk, { assignGroupID, AtomicTransactionComposer, SuggestedParams } from 'algosdk';
+import algosdk, { assignGroupID, SuggestedParams } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
-import getBoxReferenceAggregated from '../../biatecPools/getBoxReferenceAggregated';
-import getBoxReferenceFullConfig from '../../biatecPools/getBoxReferenceFullConfig';
-import getBoxReferencePool from '../../biatecPools/getBoxReferencePool';
-import getBoxReferencePoolByConfig from '../../biatecPools/getBoxReferencePoolByConfig';
 import getBoxReferenceIdentity from '../../biatecIdentity/getBoxReferenceIdentity';
 
 interface IClammRemoveLiquidityTxsInput {

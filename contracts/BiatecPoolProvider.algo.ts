@@ -131,11 +131,6 @@ type FullConfig = {
   verificationClass: uint8;
 };
 
-type PoolRetVal = {
-  appId: AppID;
-  lpAssetId: AssetID;
-};
-
 export class BiatecPoolProvider extends Contract {
   /**
    * Each LP pool is registered in this contract. Each pool has custom box and stores there the trading stats.
@@ -327,7 +322,11 @@ export class BiatecPoolProvider extends Contract {
   /**
    * No op tx to increase the app call and box size limits
    */
-  noop(i: uint64): void {}
+  noop(_i: uint64): void {
+    if (_i) {
+      // Parameter intentionally acknowledged; no further action required
+    }
+  }
 
   /**
    * Anybody can call this method to bootstrap new clamm pool

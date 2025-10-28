@@ -1,4 +1,4 @@
-import algosdk, { AtomicTransactionComposer, SuggestedParams } from 'algosdk';
+import type { SuggestedParams, Transaction } from 'algosdk';
 import * as algokit from '@algorandfoundation/algokit-utils';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecConfigProviderClient } from '../../../contracts/clients/BiatecConfigProviderClient';
@@ -11,7 +11,7 @@ interface IConfigBootstrapTxsInput {
   appBiatecPoolProvider: bigint;
   biatecFee: bigint;
 }
-const bootstrapTxs = async (input: IConfigBootstrapTxsInput): Promise<algosdk.Transaction[]> => {
+const bootstrapTxs = async (input: IConfigBootstrapTxsInput): Promise<Transaction[]> => {
   const { clientBiatecConfigProvider, account, appBiatecIdentityProvider, appBiatecPoolProvider, biatecFee } = input;
   const tx = await clientBiatecConfigProvider.createTransaction.bootstrap({
     args: {
