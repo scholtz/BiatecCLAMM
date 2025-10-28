@@ -225,6 +225,7 @@ await clammRemoveLiquiditySender({
 Staking pools (B-ALGO, B-USDC, etc.) require trust in specific addresses and processes:
 
 1. **Executive Fee Address Control**: Only the `addressExecutiveFee` account configured in the Biatec Config Provider can distribute rewards via `distributeExcessAssets`. This address has significant power:
+
    - Can distribute rewards to all LP holders
    - Can influence timing of reward distribution
    - Must accurately calculate reward amounts
@@ -249,17 +250,21 @@ Staking pools have unique characteristics:
 ### Risk Factors
 
 1. **Reward Shortfall**: If rewards aren't distributed as expected, staking yields nothing
+
    - Mitigation: Monitor executive address activity and reward distribution schedule
-   
+
 2. **Accounting Errors**: Incorrect `distributeExcessAssets` calls could lock funds or distribute unfairly
+
    - Mitigation: Thoroughly test reward distribution calculations off-chain first
    - Mitigation: Use the base scale (9 decimals) for all calculations
-   
+
 3. **Governance Changes**: Executive fee address change affects control
+
    - Mitigation: Require timelock for address changes
    - Mitigation: Multi-sig governance for config updates
 
 4. **Price Validation**: Staking pools require `priceMin === priceMax === currentPrice`
+
    - The contract now enforces this validation in the `bootstrap` function
    - Error code: `E_STAKING_PRICE` if price range is not flat
 
@@ -282,13 +287,13 @@ Staking pools have unique characteristics:
 const rewardInTokenUnits = 1000n; // 1000 tokens
 const tokenDecimals = 6n; // USDC has 6 decimals
 const baseScale = 1_000_000_000n;
-const rewardInBaseScale = rewardInTokenUnits * (baseScale / (10n ** tokenDecimals));
+const rewardInBaseScale = rewardInTokenUnits * (baseScale / 10n ** tokenDecimals);
 
 // 2. Send tokens to pool first
 await algod.sendPaymentTransaction({
   from: executiveAddress,
   to: poolAddress,
-  amount: rewardInTokenUnits * (10n ** tokenDecimals), // In native units
+  amount: rewardInTokenUnits * 10n ** tokenDecimals, // In native units
 });
 
 // 3. Distribute via contract
