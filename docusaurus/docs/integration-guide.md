@@ -2,7 +2,7 @@
 
 This guide provides best practices and security considerations for integrating BiatecCLAMM concentrated liquidity pools into your application or protocol.
 
-## Table of Contents
+## Table of Contents {#-table-of-contents}
 
 - [Quick Start](#quick-start)
 - [Security Considerations](#security-considerations)
@@ -13,15 +13,15 @@ This guide provides best practices and security considerations for integrating B
 - [Error Handling](#error-handling)
 - [Testing Your Integration](#testing-your-integration)
 
-## Quick Start
+## Quick Start {#-quick-start}
 
-### Installation
+### Installation {#-installation}
 
 ```bash
 npm install biatec-concentrated-liquidity-amm
 ```
 
-### Basic Pool Interaction
+### Basic Pool Interaction {#-basic-pool-interaction}
 
 ```typescript
 import { clammSwapSender, clammAddLiquiditySender, clammRemoveLiquiditySender } from 'biatec-concentrated-liquidity-amm';
@@ -42,9 +42,9 @@ const swapResult = await clammSwapSender({
 });
 ```
 
-## Security Considerations
+## Security Considerations {#-security-considerations}
 
-### Critical Security Warnings
+### Critical Security Warnings {#-critical-security-warnings}
 
 ⚠️ **NEVER use CLAMM VWAP as the sole price source for high-value decisions**
 
@@ -56,7 +56,7 @@ The Volume Weighted Average Price (VWAP) can be manipulated by large single-bloc
 4. **Use Median Prices**: Take median of multiple CLAMM pools
 5. **Set Deviation Limits**: Reject prices that deviate too far from reference
 
-### Price Oracle Anti-Patterns
+### Price Oracle Anti-Patterns {#-price-oracle-anti-patterns}
 
 ❌ **DON'T DO THIS:**
 
@@ -89,7 +89,7 @@ if (collateralValue < debtValue * medianPrice) {
 }
 ```
 
-### Identity Verification
+### Identity Verification {#-identity-verification}
 
 All liquidity and swap operations require identity verification. Your integration must:
 
@@ -98,7 +98,7 @@ All liquidity and swap operations require identity verification. Your integratio
 3. **Cache Identity Data**: Consider caching identity lookups (with expiration)
 4. **Provide Clear Errors**: Inform users why operations fail (insufficient verification)
 
-### Slippage Protection
+### Slippage Protection {#-slippage-protection}
 
 ⚠️ **ALWAYS enforce minimum slippage protection**
 
@@ -114,9 +114,9 @@ function calculateMinimumReceive(expectedOutput: bigint, slippageBps: bigint): b
 }
 ```
 
-## Using CLAMM as Price Oracle
+## Using CLAMM as Price Oracle {#-using-clamm-as-price-oracle}
 
-### Safe Price Retrieval Pattern
+### Safe Price Retrieval Pattern {#-safe-price-retrieval-pattern}
 
 ```typescript
 interface PriceDataPoint {
@@ -180,7 +180,7 @@ class SafePriceOracle {
 }
 ```
 
-### Price Feed Health Monitoring
+### Price Feed Health Monitoring {#-price-feed-health-monitoring}
 
 Monitor your price feeds continuously:
 
@@ -213,9 +213,9 @@ setInterval(() => {
 }, 60000); // Every minute
 ```
 
-## Transaction Construction
+## Transaction Construction {#-transaction-construction}
 
-### Required Box References
+### Required Box References {#-required-box-references}
 
 When calling CLAMM methods, include these box references:
 
@@ -237,9 +237,9 @@ function encodeBoxName(prefix: string, ...params: (number | string)[]): Uint8Arr
 }
 ```
 
-### Transaction Group Patterns
+### Transaction Group Patterns {#-transaction-group-patterns}
 
-#### Simple Swap
+#### Simple Swap {#-simple-swap}
 
 ```typescript
 const group = [
@@ -261,7 +261,7 @@ const group = [
 algosdk.assignGroupID(group);
 ```
 
-#### Add Liquidity
+#### Add Liquidity {#-add-liquidity}
 
 ```typescript
 const group = [
@@ -283,7 +283,7 @@ const group = [
 ];
 ```
 
-### Gas (Fee) Estimation
+### Gas (Fee) Estimation {#-gas-fee-estimation}
 
 CLAMM operations can be complex and require adequate fees:
 
@@ -307,9 +307,9 @@ const txn = makeApplicationCallTxn(sender, poolId, 'swap', {
 });
 ```
 
-## Common Integration Patterns
+## Common Integration Patterns {#-common-integration-patterns}
 
-### DEX Aggregator Integration
+### DEX Aggregator Integration {#-dex-aggregator-integration}
 
 ```typescript
 interface PoolQuote {
@@ -348,7 +348,7 @@ class DEXAggregator {
 }
 ```
 
-### Lending Protocol Integration
+### Lending Protocol Integration {#-lending-protocol-integration}
 
 ```typescript
 interface CollateralPosition {
@@ -404,7 +404,7 @@ class LendingProtocol {
 }
 ```
 
-### Yield Aggregator Integration
+### Yield Aggregator Integration {#-yield-aggregator-integration}
 
 ```typescript
 interface YieldStrategy {
@@ -448,9 +448,9 @@ class YieldAggregator {
 }
 ```
 
-## Error Handling
+## Error Handling {#-error-handling}
 
-### Comprehensive Error Handling
+### Comprehensive Error Handling {#-comprehensive-error-handling}
 
 ```typescript
 async function safeSwap(params: SwapParams): Promise<SwapResult> {
@@ -494,7 +494,7 @@ class UserError extends Error {
 }
 ```
 
-### Retry Logic
+### Retry Logic {#-retry-logic}
 
 ```typescript
 async function swapWithRetry(params: SwapParams, maxRetries: number = 3): Promise<SwapResult> {
@@ -528,9 +528,9 @@ async function swapWithRetry(params: SwapParams, maxRetries: number = 3): Promis
 }
 ```
 
-## Testing Your Integration
+## Testing Your Integration {#-testing-your-integration}
 
-### Unit Tests
+### Unit Tests {#-unit-tests}
 
 ```typescript
 describe('CLAMM Integration', () => {
@@ -564,7 +564,7 @@ describe('CLAMM Integration', () => {
 });
 ```
 
-### Integration Tests
+### Integration Tests {#-integration-tests}
 
 Test against Algorand sandbox:
 
@@ -576,7 +576,7 @@ algokit localnet start
 npm run test:integration
 ```
 
-### Security Testing
+### Security Testing {#-security-testing}
 
 1. **Price Manipulation Tests**: Attempt large swaps and verify VWAP changes are detected
 2. **Slippage Tests**: Test with zero and insufficient slippage protection
@@ -584,7 +584,7 @@ npm run test:integration
 4. **Pause Tests**: Verify operations fail when protocol is paused
 5. **Overflow Tests**: Test with maximum uint64 values
 
-## Best Practices Checklist
+## Best Practices Checklist {#-best-practices-checklist}
 
 Before deploying your integration:
 
@@ -603,7 +603,7 @@ Before deploying your integration:
 - [ ] Load test with realistic volume
 - [ ] Verify fee estimation is adequate
 
-## Security Audit References
+## Security Audit References {#-security-audit-references}
 
 Multiple security audits have been conducted on BiatecCLAMM. Review these before integrating:
 
@@ -618,7 +618,7 @@ Key takeaways for integrators:
 - Implement circuit breakers
 - Test extensively before mainnet
 
-## Support and Resources
+## Support and Resources {#-support-and-resources}
 
 - **GitHub**: [https://github.com/scholtz/BiatecCLAMM](https://github.com/scholtz/BiatecCLAMM)
 - **Documentation**: See `docs/` folder for detailed guides
