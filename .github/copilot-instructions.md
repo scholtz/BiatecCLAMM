@@ -16,6 +16,7 @@
 - **Deployment & Scripts**: `npm run deploy` (ts-node) and shell scripts in the repo assume sandbox settings from `sandbox_/`; keep them updated when contract interfaces change.
 - **Logging**: Use `src/common/getLogger.ts` for Winston-based logging with rotating files if you need persistent logs in CLI scripts.
 - **Packaging**: Library consumers import from the built `dist` bundle created by `npm run build-package` (tsup). Exported surface is curated in `src/index.ts`; add new utilities there when you want them published.
+- **Documentation**: All project documentation should be written in the `docusaurus/docs/` folder using Markdown format. The documentation website is built from this location and published via Docusaurus. Use proper frontmatter, clear headings, and follow the existing documentation structure and style.
 - **Style & Lint**: Follow AirBnB + Prettier config via `npm run lint` / `npm run fix`. Most source files use BigInt literals (`1n`) and avoid floating math—stick with that convention.
 - **Typical Flow**: Deploy config/identity/pool apps, load CLAMM approval chunks through the pool provider, call `clammCreateTxs` to instantiate pools, run `bootstrapStep2`, then manage liquidity via `clammAddLiquiditySender`/`clammRemoveLiquiditySender` and swaps via `clammSwapSender`.
 - **Fixture Pattern**: `__test__/BiatecClammPool.test.ts` drives end-to-end flows through `setupPool`, which funds accounts, compiles approval programs in 1KB chunks, and calls `bootstrapStep2`. Mirror that sequence in new integration tests.
@@ -31,7 +32,7 @@
 - **Asset Staking**: Set both `assetA` and `assetB` to the same ASA ID to create a staking pool for that asset (e.g., B-USDC for staked USDC).
 - **Reward Distribution**: Use `clammDistributeExcessAssetsSender` to distribute rewards (staking rewards, interest, fees) that have accrued to the pool. Only the executive fee address can call this method. The rewards increase the pool's liquidity proportionally, so LPs receive more tokens when they withdraw.
 - **Testing Staking Pools**: See `__test__/pool/staking.test.ts` for examples of creating and testing staking pools, including reward distribution scenarios.
-- **Documentation**: Full staking pool documentation is available in `docs/staking-pools.md`, including use cases, examples, and security considerations.
+- **Documentation**: Full staking pool documentation is available in `docusaurus/docs/staking-pools.md`, including use cases, examples, and security considerations.
 
 ## Error handling
 
