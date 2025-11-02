@@ -236,13 +236,13 @@ export class BiatecClammPool extends Contract {
 
     this.assetA.value = assetA.id;
     this.assetB.value = assetB.id;
-    let nativeTokenNameBytes = appBiatecPoolProvider.globalState('nt') as bytes;
-    if (nativeTokenNameBytes.length >= 2 && substring3(nativeTokenNameBytes, 0, 1) === '\x00') {
-      nativeTokenNameBytes = substring3(nativeTokenNameBytes, 2, nativeTokenNameBytes.length);
-    }
-    if (nativeTokenNameBytes.length === 0) {
-      nativeTokenNameBytes = 'ALGO';
-    }
+    // let nativeTokenNameBytes = appBiatecPoolProvider.globalState('nt') as bytes;
+    // if (nativeTokenNameBytes.length >= 2 && substring3(nativeTokenNameBytes, 0, 1) === '\x00') {
+    //   nativeTokenNameBytes = substring3(nativeTokenNameBytes, 2, nativeTokenNameBytes.length);
+    // }
+    // if (nativeTokenNameBytes.length === 0) {
+    const nativeTokenNameBytes = 'ALGO';
+    // }
 
     this.assetLp.value = this.doCreatePoolToken(assetA, assetB, nativeTokenNameBytes).id;
     this.fee.value = fee;
