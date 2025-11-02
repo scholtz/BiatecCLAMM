@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import Translate, { translate } from '@docusaurus/Translate';
 import styles from '../../../src/pages/index.module.css';
 import HomepageFeatures from '../../../src/components/HomepageFeatures';
 
@@ -12,10 +13,10 @@ function HomepageHeader() {
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle">Concentrated Liquidity DEX na blockchaine Algorand</p>
+        <p className="hero__subtitle"><Translate id="tagline">Decentralized Exchange Protocol for Algorand</Translate></p>
         <div className={styles.buttons}>
           <Link className="button button--secondary button--lg" to="/docs/intro">
-            DEX Tutoriál - 5min ⏱️
+            <Translate id="button">Začnite s dokumentáciou</Translate>
           </Link>
         </div>
       </div>
@@ -26,7 +27,10 @@ function HomepageHeader() {
 export default function Home() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <Layout title={`Biatec | ${siteConfig.title}`} description="Biatec DEX - Concentrated Liquidity DEX na blockchaine Algorand">
+    <Layout 
+      title={translate({ id: 'title', message: `Vitajte v ${siteConfig.title}` })} 
+      description={translate({ id: 'description', message: 'Decentralized Exchange Protocol for Algorand' })}
+    >
       <HomepageHeader />
       <main>
         <HomepageFeatures />

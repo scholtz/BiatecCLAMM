@@ -325,5 +325,69 @@
   "theme.tags.tagsPageTitle": {
     "message": "Tags",
     "description": "The title of the tag list page"
+  },
+  "navbar.docs": {
+    "message": "Dokumentácia",
+    "description": "Navbar item for Docs"
+  },
+  "navbar.blog": {
+    "message": "Blog",
+    "description": "Navbar item for Blog"
+  },
+  "navbar.github": {
+    "message": "GitHub",
+    "description": "Navbar item for GitHub"
+  },
+  "footer.docs.title": {
+    "message": "Dokumentácia",
+    "description": "Footer section title for Docs"
+  },
+  "footer.docs.intro": {
+    "message": "Úvod",
+    "description": "Footer link for Intro"
+  },
+  "footer.community.title": {
+    "message": "Komunita",
+    "description": "Footer section title for Community"
+  },
+  "footer.community.discord": {
+    "message": "Discord",
+    "description": "Footer link for Discord"
+  },
+  "footer.community.twitter": {
+    "message": "Twitter",
+    "description": "Footer link for Twitter"
+  },
+  "footer.webs.title": {
+    "message": "Webové stránky",
+    "description": "Footer section title for Webs"
+  },
+  "footer.webs.biatec": {
+    "message": "Biatec",
+    "description": "Footer link for Biatec"
+  },
+  "footer.webs.dex": {
+    "message": "DEX",
+    "description": "Footer link for DEX"
+  },
+  "footer.webs.beta": {
+    "message": "Beta vydanie",
+    "description": "Footer link for Beta release"
+  },
+  "footer.more.title": {
+    "message": "Viac",
+    "description": "Footer section title for More"
+  },
+  "footer.more.blog": {
+    "message": "Blog",
+    "description": "Footer link for Blog"
+  },
+  "footer.more.github.contracts": {
+    "message": "GitHub Smart Contracts",
+    "description": "Footer link for GitHub Smart Contracts"
+  },
+  "footer.more.github.website": {
+    "message": "GitHub DEX Website",
+    "description": "Footer link for GitHub DEX Website"
   }
 }

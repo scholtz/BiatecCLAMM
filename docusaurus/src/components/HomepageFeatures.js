@@ -1,50 +1,83 @@
 import React from 'react';
 import clsx from 'clsx';
+import Translate from '@docusaurus/Translate';
 import styles from './HomepageFeatures.module.css';
-
-const FeatureList = [
-  {
-    title: 'Concentrated Liquidity',
-    description: (
-      <>Experience the power of concentrated liquidity AMM on Algorand. Provide liquidity within custom price ranges to earn higher yields and reduce impermanent loss compared to traditional AMMs.</>
-    ),
-  },
-  {
-    title: 'Algorand Native',
-    description: (
-      <>Built specifically for Algorand blockchain with optimized smart contracts. Leverage Algorand&apos;s speed, security, and low transaction costs for efficient decentralized trading.</>
-    ),
-  },
-  {
-    title: 'Staking Pools',
-    description: <>Create and manage staking pools for interest-bearing tokens. Support for both same-asset staking (B-ALGO, B-USDC) and traditional asset pairs with automated reward distribution.</>,
-  },
-  {
-    title: 'Identity & Compliance',
-    description: <>Integrated identity verification system with configurable verification classes. Enable KYC-compliant trading while maintaining decentralization and privacy.</>,
-  },
-  {
-    title: 'Flexible Fee Management',
-    description: <>Configurable fee structure with Biatec fee sharing. Liquidity providers earn from trading fees while the protocol collects a sustainable share for ecosystem development.</>,
-  },
-  {
-    title: 'Developer SDK',
-    description: <>Comprehensive TypeScript SDK with transaction builders, sender functions, and utilities. Easy integration for dApps, wallets, and trading interfaces with full type safety.</>,
-  },
-];
 
 function Feature({ title, description }) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center padding-horiz--md">
-        <h3>{title}</h3>
-        <p>{description}</p>
+        <h3><Translate id={title.id}>{title.defaultMessage}</Translate></h3>
+        <p><Translate id={description.id}>{description.defaultMessage}</Translate></p>
       </div>
     </div>
   );
 }
 
 export default function HomepageFeatures() {
+  const FeatureList = [
+    {
+      title: {
+        id: 'features.concentratedLiquidity.title',
+        defaultMessage: 'Concentrated Liquidity',
+      },
+      description: {
+        id: 'features.concentratedLiquidity.description',
+        defaultMessage: 'Efficiently provide liquidity within custom price ranges to maximize capital utilization and earning potential.',
+      },
+    },
+    {
+      title: {
+        id: 'features.algorandNative.title',
+        defaultMessage: 'Algorand Native',
+      },
+      description: {
+        id: 'features.algorandNative.description',
+        defaultMessage: 'Built specifically for Algorand blockchain with optimized smart contracts and seamless integration.',
+      },
+    },
+    {
+      title: {
+        id: 'features.stakingPools.title',
+        defaultMessage: 'Staking Pools',
+      },
+      description: {
+        id: 'features.stakingPools.description',
+        defaultMessage: 'Earn rewards by staking assets in specialized pools with automated yield distribution.',
+      },
+    },
+    {
+      title: {
+        id: 'features.identityCompliance.title',
+        defaultMessage: 'Identity Compliance',
+      },
+      description: {
+        id: 'features.identityCompliance.description',
+        defaultMessage: 'Integrated identity verification system ensuring regulatory compliance and secure transactions.',
+      },
+    },
+    {
+      title: {
+        id: 'features.flexibleFeeManagement.title',
+        defaultMessage: 'Flexible Fee Management',
+      },
+      description: {
+        id: 'features.flexibleFeeManagement.description',
+        defaultMessage: 'Configurable fee structures with automatic distribution between liquidity providers and protocol.',
+      },
+    },
+    {
+      title: {
+        id: 'features.developerSdk.title',
+        defaultMessage: 'Developer SDK',
+      },
+      description: {
+        id: 'features.developerSdk.description',
+        defaultMessage: 'Comprehensive TypeScript SDK for easy integration and development of DeFi applications.',
+      },
+    },
+  ];
+
   return (
     <section className={styles.features}>
       <div className="container">

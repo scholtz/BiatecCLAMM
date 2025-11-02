@@ -178,5 +178,53 @@
   "theme.tags.tagsPageTitle": {
     "message": "Tags",
     "description": "The title of the tag list page"
+  },
+  "features.concentratedLiquidity.title": {
+    "message": "Concentrated Liquidity",
+    "description": "Homepage feature title for Concentrated Liquidity"
+  },
+  "features.concentratedLiquidity.description": {
+    "message": "Experience the power of concentrated liquidity AMM on Algorand. Provide liquidity within custom price ranges to earn higher yields and reduce impermanent loss compared to traditional AMMs.",
+    "description": "Homepage feature description for Concentrated Liquidity"
+  },
+  "features.algorandNative.title": {
+    "message": "Algorand Native",
+    "description": "Homepage feature title for Algorand Native"
+  },
+  "features.algorandNative.description": {
+    "message": "Built specifically for Algorand blockchain with optimized smart contracts. Leverage Algorand's speed, security, and low transaction costs for efficient decentralized trading.",
+    "description": "Homepage feature description for Algorand Native"
+  },
+  "features.stakingPools.title": {
+    "message": "Staking Pools",
+    "description": "Homepage feature title for Staking Pools"
+  },
+  "features.stakingPools.description": {
+    "message": "Create and manage staking pools for interest-bearing tokens. Support for both same-asset staking (B-ALGO, B-USDC) and traditional asset pairs with automated reward distribution.",
+    "description": "Homepage feature description for Staking Pools"
+  },
+  "features.identityCompliance.title": {
+    "message": "Identity & Compliance",
+    "description": "Homepage feature title for Identity & Compliance"
+  },
+  "features.identityCompliance.description": {
+    "message": "Integrated identity verification system with configurable verification classes. Enable KYC-compliant trading while maintaining decentralization and privacy.",
+    "description": "Homepage feature description for Identity & Compliance"
+  },
+  "features.flexibleFeeManagement.title": {
+    "message": "Flexible Fee Management",
+    "description": "Homepage feature title for Flexible Fee Management"
+  },
+  "features.flexibleFeeManagement.description": {
+    "message": "Configurable fee structure with Biatec fee sharing. Liquidity providers earn from trading fees while the protocol collects a sustainable share for ecosystem development.",
+    "description": "Homepage feature description for Flexible Fee Management"
+  },
+  "features.developerSdk.title": {
+    "message": "Developer SDK",
+    "description": "Homepage feature title for Developer SDK"
+  },
+  "features.developerSdk.description": {
+    "message": "Comprehensive TypeScript SDK with transaction builders, sender functions, and utilities. Easy integration for dApps, wallets, and trading interfaces with full type safety.",
+    "description": "Homepage feature description for Developer SDK"
   }
 }

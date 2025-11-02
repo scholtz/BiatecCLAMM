@@ -62,16 +62,16 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
               type: 'doc',
               docId: 'intro',
               position: 'left',
-              label: 'Docs',
+              label: 'navbar.docs',
             },
-            { to: '/blog', label: 'Blog', position: 'left' },
+            { to: '/blog', label: 'navbar.blog', position: 'left' },
             {
               type: 'localeDropdown',
               position: 'left',
             },
             {
               href: 'https://github.com/scholtz/BiatecCLAMM',
-              label: 'GitHub',
+              label: 'navbar.github',
               position: 'right',
             },
           ],
@@ -80,57 +80,57 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
           style: 'dark',
           links: [
             {
-              title: 'Docs',
+              title: 'footer.docs.title',
               items: [
                 {
-                  label: 'Intro',
+                  label: 'footer.docs.intro',
                   to: '/docs/intro',
                 },
               ],
             },
             {
-              title: 'Community',
+              title: 'footer.community.title',
               items: [
                 {
-                  label: 'Discord',
+                  label: 'footer.community.discord',
                   href: 'https://discord.gg/gvGvmZ7c8s',
                 },
                 {
-                  label: 'Twitter',
+                  label: 'footer.community.twitter',
                   href: 'https://x.com/BiatecGroup',
                 },
               ],
             },
             {
-              title: 'Webs',
+              title: 'footer.webs.title',
               items: [
                 {
-                  label: 'Biatec',
+                  label: 'footer.webs.biatec',
                   href: 'https://www.biatec.io/',
                 },
                 {
-                  label: 'DEX',
+                  label: 'footer.webs.dex',
                   href: 'https://dex.biatec.io/',
                 },
                 {
-                  label: 'Beta release',
+                  label: 'footer.webs.beta',
                   href: 'https://beta.dex.biatec.io/',
                 },
               ],
             },
             {
-              title: 'More',
+              title: 'footer.more.title',
               items: [
                 {
-                  label: 'Blog',
+                  label: 'footer.more.blog',
                   to: '/blog',
                 },
                 {
-                  label: 'GitHub Smart Contracts',
+                  label: 'footer.more.github.contracts',
                   href: 'https://github.com/scholtz/BiatecCLAMM',
                 },
                 {
-                  label: 'GitHub DEX Website',
+                  label: 'footer.more.github.website',
                   href: 'https://github.com/scholtz/BiatecDEX',
                 },
               ],
