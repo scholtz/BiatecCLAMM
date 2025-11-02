@@ -97,4 +97,3 @@ Pripravení zažiť budúcnosť decentralizovaného obchodovania?
 ---
 
 _Postavené s ❤️ na Algorande pre decentralizovanú budúcnosť_
-

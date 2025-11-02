@@ -34,11 +34,7 @@ const signerAccount = {
   },
 };
 
-const {
-  configAppId: configProviderAppId,
-  identityAppId: identityProviderAppId,
-  poolProviderAppId,
-} = getConfig('testnet-v1.0');
+const { configAppId: configProviderAppId, identityAppId: identityProviderAppId, poolProviderAppId } = getConfig('testnet-v1.0');
 const poolProviderClient = new BiatecPoolProviderClient({
   algorand,
   appId: poolProviderAppId,
