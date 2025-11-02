@@ -34,6 +34,7 @@ Loss: 0.01 tokens (0.000001%)
 ```
 
 This tiny loss is acceptable because:
+
 - It prevents the pool from losing value
 - The loss is deterministic and bounded
 - Your LP tokens appreciate from trading fees
@@ -66,15 +67,15 @@ In `contracts/BiatecClammPool.algo.ts` I introduced helpers and small control fl
   // Pseudocode for the logic:
   projectedLiquidity = calculateCurrentLiquidity();
   if (projectedLiquidity >= oldLiquidity) {
-    Liquidity = projectedLiquidity;  // accept and write
+    Liquidity = projectedLiquidity; // accept and write
     return projectedLiquidity;
   } else {
     liquidityDrop = oldLiquidity - projectedLiquidity;
     if (liquidityDrop <= allowance) {
-      Liquidity = oldLiquidity;  // preserve monotonic state
+      Liquidity = oldLiquidity; // preserve monotonic state
       return oldLiquidity;
     } else {
-      assert("ERR-LIQ-DROP");  // real integrity failure
+      assert('ERR-LIQ-DROP'); // real integrity failure
     }
   }
   ```
