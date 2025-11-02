@@ -22,17 +22,19 @@ At the start of the audit report, clearly document:
 ```
 
 Example:
+
 ```markdown
 **Audit Type**: Human Review
 **Lead Auditor**: Jane Smith, CISSP, CEH
 **Company**: SecureChain Auditing Ltd.
 **Additional Auditors**:
-  - John Doe, Smart Contract Specialist
-  - Alice Johnson, DeFi Security Analyst
-**Audit Date**: 2025-10-27
-**Audit Duration**: 3 weeks (240 person-hours)
-**Commit Hash**: a46db71a1c7193324fa369cbfb2e3b735f8e4200
-**Commit Date**: 2025-10-27 21:36:52 UTC
+
+- John Doe, Smart Contract Specialist
+- Alice Johnson, DeFi Security Analyst
+  **Audit Date**: 2025-10-27
+  **Audit Duration**: 3 weeks (240 person-hours)
+  **Commit Hash**: a46db71a1c7193324fa369cbfb2e3b735f8e4200
+  **Commit Date**: 2025-10-27 21:36:52 UTC
 ```
 
 ### 2. Include Contract Bytecode Hashes
@@ -126,16 +128,19 @@ Read all documentation before code review:
 Before starting the audit, clarify:
 
 1. **Scope Boundaries**:
+
    - Which contracts are in scope?
    - Which integrations should be reviewed?
    - Are there known issues to be excluded?
 
 2. **Deployment Context**:
+
    - Target network (mainnet, testnet)?
    - Expected usage patterns?
    - Anticipated transaction volumes?
 
 3. **Risk Appetite**:
+
    - Critical business logic areas?
    - User fund custody model?
    - Upgrade procedures?
@@ -191,7 +196,9 @@ Document findings in a preliminary report.
 **Day 3-5: BiatecClammPool.algo.ts** (~2100 lines)
 
 Focus areas:
+
 1. **Mathematical Operations**:
+
    - Verify concentrated liquidity formulas
    - Check square root calculations
    - Validate scale conversions
@@ -199,6 +206,7 @@ Focus areas:
    - Analyze rounding behavior
 
 2. **Liquidity Management**:
+
    - Add liquidity flows
    - Remove liquidity flows
    - LP token minting/burning
@@ -206,6 +214,7 @@ Focus areas:
    - Staking pool logic
 
 3. **Swap Logic**:
+
    - Swap calculation accuracy
    - Price impact
    - Slippage protection
@@ -213,6 +222,7 @@ Focus areas:
    - Price bound enforcement
 
 4. **State Management**:
+
    - Global state consistency
    - State transition atomicity
    - Initialization security
@@ -231,6 +241,7 @@ Focus areas:
 - **FakePool.algo.ts**: Test utilities (if in scope)
 
 For each contract:
+
 - Map all external calls
 - Identify all state changes
 - List all assertions
@@ -240,6 +251,7 @@ For each contract:
 **Day 8-9: Integration Analysis**
 
 Review how contracts interact:
+
 - Cross-contract calls
 - Box storage usage
 - Transaction group construction
@@ -251,12 +263,14 @@ Review how contracts interact:
 Review client code in `src/`:
 
 1. **Transaction Builders** (`src/biatecClamm/txs/`):
+
    - Parameter validation
    - Transaction construction
    - Box reference management
    - Error handling
 
 2. **Sender Functions** (`src/biatecClamm/sender/`):
+
    - State fetching
    - Transaction signing
    - Result verification
@@ -272,11 +286,13 @@ Review client code in `src/`:
 #### Incentive Analysis
 
 1. **Fee Model**:
+
    - Are fees correctly calculated?
    - Can fees be avoided or extracted unfairly?
    - Is the fee split (user LP vs Biatec) correct?
 
 2. **Liquidity Incentives**:
+
    - Does the LP token model work as intended?
    - Can LPs be diluted unfairly?
    - Are rewards distributed fairly?
@@ -291,6 +307,7 @@ Review client code in `src/`:
 #### Game Theory Analysis
 
 Consider:
+
 - What would a rational attacker do?
 - What are the profit opportunities?
 - Are there perverse incentives?
@@ -314,6 +331,7 @@ npm run test -- --coverage --coverageDirectory=coverage
 ```
 
 Document:
+
 - Overall coverage percentages
 - Uncovered code branches
 - Edge cases not tested
@@ -323,6 +341,7 @@ Document:
 #### Test Quality Assessment
 
 Evaluate:
+
 - **Test Realism**: Do tests reflect real-world usage?
 - **Edge Cases**: Are boundary conditions tested?
 - **Error Paths**: Are failure scenarios covered?
@@ -334,6 +353,7 @@ Evaluate:
 #### Completeness Check
 
 For each feature:
+
 - [ ] Is it documented?
 - [ ] Are examples provided?
 - [ ] Are parameters explained?
@@ -343,6 +363,7 @@ For each feature:
 #### Accuracy Check
 
 Verify:
+
 - Code matches documentation
 - Examples are correct and working
 - Type signatures are accurate
@@ -351,6 +372,7 @@ Verify:
 #### User Safety Check
 
 Ensure documentation includes:
+
 - Risk disclosures
 - Best practices
 - Common pitfalls
@@ -364,6 +386,7 @@ Ensure documentation includes:
 Conduct a structured threat modeling session:
 
 1. **Identify Assets**:
+
    - User funds (ALGO, ASAs)
    - LP tokens
    - Pool liquidity
@@ -371,12 +394,14 @@ Conduct a structured threat modeling session:
    - Identity information
 
 2. **Identify Threat Actors**:
+
    - Malicious users
    - Compromised admin
    - External attackers
    - Insider threats
 
 3. **Identify Attack Vectors**:
+
    - Smart contract exploits
    - Economic attacks
    - Governance attacks
@@ -392,6 +417,7 @@ Conduct a structured threat modeling session:
 #### Proof of Concept Development
 
 For critical vulnerabilities:
+
 1. Create working exploit code
 2. Document exact steps to reproduce
 3. Measure impact (funds at risk, etc.)
@@ -411,6 +437,7 @@ Use the provided template (`YYYY-MM-DD-audit-template.md`):
 #### Report Quality Standards
 
 Ensure:
+
 - All findings are reproducible
 - Severity levels are justified
 - Recommendations are specific and actionable
@@ -423,6 +450,7 @@ Ensure:
 #### Initial Presentation
 
 Present findings to client:
+
 1. Executive summary presentation
 2. Walk through critical findings
 3. Demonstrate high-severity PoCs
@@ -432,6 +460,7 @@ Present findings to client:
 #### Revision Period
 
 After client feedback:
+
 1. Clarify misunderstandings
 2. Re-test ambiguous cases
 3. Update severity ratings if justified
@@ -441,6 +470,7 @@ After client feedback:
 #### Final Report
 
 Deliver:
+
 1. Complete audit report
 2. All PoC code
 3. Recommended patches (if agreed)
@@ -575,12 +605,14 @@ Deliver:
 ### Critical
 
 **Criteria**:
+
 - Direct theft of user funds
 - Permanent loss of funds
 - Protocol insolvency
 - Complete protocol shutdown
 
 **Examples**:
+
 - Reentrancy allowing fund drainage
 - LP token inflation without backing
 - Unauthorized admin access
@@ -590,12 +622,14 @@ Deliver:
 ### High
 
 **Criteria**:
+
 - Indirect theft under specific conditions
 - Temporary loss of availability
 - Significant economic manipulation
 - Major privilege escalation
 
 **Examples**:
+
 - Flash loan attack possible
 - Price manipulation via large trades
 - Identity verification bypass
@@ -605,12 +639,14 @@ Deliver:
 ### Medium
 
 **Criteria**:
+
 - Minor economic impact
 - Functionality degradation
 - Workarounds available
 - Requires specific conditions
 
 **Examples**:
+
 - Rounding errors favoring attacker slightly
 - Gas inefficiencies
 - Documentation mismatches
@@ -620,12 +656,14 @@ Deliver:
 ### Low
 
 **Criteria**:
+
 - Code quality issues
 - Minor UX problems
 - Best practice deviations
 - Unlikely scenarios
 
 **Examples**:
+
 - Missing input validation on non-critical path
 - Inconsistent error messages
 - Suboptimal code patterns
@@ -635,11 +673,13 @@ Deliver:
 ### Informational
 
 **Criteria**:
+
 - Suggestions for improvement
 - Best practice recommendations
 - Educational notes
 
 **Examples**:
+
 - Code style suggestions
 - Optimization opportunities
 - Additional test ideas
@@ -653,12 +693,14 @@ Deliver:
 ### Pattern 1: Rounding Errors
 
 **What to look for**:
+
 - Division operations
 - Scale conversions
 - Fee calculations
 - LP token minting
 
 **Questions**:
+
 - Does rounding favor the user or the pool?
 - Can rounding errors accumulate?
 - Are there magnitudes where rounding matters?
@@ -666,11 +708,13 @@ Deliver:
 ### Pattern 2: State Inconsistency
 
 **What to look for**:
+
 - Multiple state updates in one function
 - State read before write
 - Assumptions about state ordering
 
 **Questions**:
+
 - Can state become inconsistent?
 - Are all state updates atomic?
 - What happens if a transaction reverts?
@@ -678,11 +722,13 @@ Deliver:
 ### Pattern 3: Access Control Bypass
 
 **What to look for**:
+
 - Permission checks
 - Identity verification
 - Admin functions
 
 **Questions**:
+
 - Can checks be bypassed?
 - Are all paths protected?
 - What if external contracts are malicious?
@@ -690,12 +736,14 @@ Deliver:
 ### Pattern 4: Economic Exploits
 
 **What to look for**:
+
 - Fee calculations
 - Price calculations
 - Arbitrage opportunities
 - Incentive structures
 
 **Questions**:
+
 - Can an attacker profit unfairly?
 - Are there free option opportunities?
 - Can prices be manipulated?
@@ -703,12 +751,14 @@ Deliver:
 ### Pattern 5: Integer Issues
 
 **What to look for**:
+
 - Arithmetic operations
 - Type conversions
 - Comparisons
 - Bounds checking
 
 **Questions**:
+
 - Can overflow occur?
 - Can underflow occur?
 - Are types used consistently?
@@ -720,11 +770,13 @@ Deliver:
 ### Security Tools
 
 1. **Static Analysis**:
+
    - Custom TEALScript analyzers
    - General TypeScript linters (ESLint)
    - Dependency checkers (npm audit)
 
 2. **Dynamic Analysis**:
+
    - Algorand sandbox for testing
    - Test coverage tools (Jest)
    - Gas profiling tools
@@ -784,6 +836,7 @@ Deliver:
 ### Responsible Disclosure
 
 If critical vulnerabilities found:
+
 1. Immediately notify client
 2. Don't disclose publicly before fix
 3. Agree on disclosure timeline
@@ -804,6 +857,7 @@ If critical vulnerabilities found:
 ### Fix Verification
 
 If client fixes issues:
+
 1. Review all patches
 2. Verify fixes are complete
 3. Check for new issues introduced
@@ -813,6 +867,7 @@ If client fixes issues:
 ### Follow-Up Audit
 
 For major fixes:
+
 - Conduct focused re-audit
 - Review only changed areas
 - Verify previous findings resolved
@@ -886,17 +941,20 @@ After each audit:
 ### 3-Week Audit Timeline
 
 **Week 1: Analysis**
+
 - Day 1-2: Setup and automated analysis
 - Day 3-5: BiatecClammPool review
 - Day 6-7: Supporting contracts review
 
 **Week 2: Deep Dive**
+
 - Day 8-9: Integration analysis
 - Day 10: Client library review
 - Day 11-12: Economic analysis
 - Day 13-14: Test analysis
 
 **Week 3: Reporting**
+
 - Day 15-16: Documentation review
 - Day 17-18: Attack modeling and PoCs
 - Day 19-21: Report writing

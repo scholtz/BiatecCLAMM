@@ -42,7 +42,6 @@ function processContract(arc56Path: string): void {
     console.log(`- **Approval Program SHA256**: \`${approvalHash}\``);
     console.log(`- **Clear Program SHA256**: \`${clearHash}\``);
     console.log('');
-
   } catch (error) {
     console.error(`Error processing ${arc56Path}:`, error);
   }
@@ -50,16 +49,12 @@ function processContract(arc56Path: string): void {
 
 function main() {
   const artifactsDir = path.join(__dirname, '..', 'contracts', 'artifacts');
-  const contractFiles = [
-    'BiatecClammPool.arc56.json',
-    'BiatecConfigProvider.arc56.json',
-    'BiatecIdentityProvider.arc56.json',
-    'BiatecPoolProvider.arc56.json',
-    'FakePool.arc56.json'
-  ];
+  const contractFiles = ['BiatecClammPool.arc56.json', 'BiatecConfigProvider.arc56.json', 'BiatecIdentityProvider.arc56.json', 'BiatecPoolProvider.arc56.json', 'FakePool.arc56.json'];
 
   console.log('### Contract Bytecode Hashes\n');
-  console.log('The following SHA256 hashes verify the exact bytecode of the smart contracts audited. These hashes are computed from the base64-decoded approval and clear program bytecode in the generated ARC-56 JSON files.\n');
+  console.log(
+    'The following SHA256 hashes verify the exact bytecode of the smart contracts audited. These hashes are computed from the base64-decoded approval and clear program bytecode in the generated ARC-56 JSON files.\n'
+  );
 
   for (const file of contractFiles) {
     const filePath = path.join(artifactsDir, file);
@@ -70,7 +65,9 @@ function main() {
     }
   }
 
-  console.log('*Note: To compute these hashes, decode the base64 values from `byteCode.approval` and `byteCode.clear` in the respective `contracts/artifacts/*.arc56.json` files, then compute SHA256 of the raw bytes.*');
+  console.log(
+    '*Note: To compute these hashes, decode the base64 values from `byteCode.approval` and `byteCode.clear` in the respective `contracts/artifacts/*.arc56.json` files, then compute SHA256 of the raw bytes.*'
+  );
 }
 
 if (require.main === module) {

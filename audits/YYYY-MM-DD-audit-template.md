@@ -22,32 +22,38 @@
 The following SHA256 hashes verify the exact bytecode of the smart contracts audited. These hashes are computed from the base64-decoded approval and clear program bytecode in the generated ARC-56 JSON files.
 
 **BiatecClammPool.algo.ts**:
+
 - **Approval Program SHA256**: `[insert SHA256 hash of approval bytecode]`
 - **Clear Program SHA256**: `[insert SHA256 hash of clear bytecode]`
 
 **BiatecConfigProvider.algo.ts**:
+
 - **Approval Program SHA256**: `[insert SHA256 hash of approval bytecode]`
 - **Clear Program SHA256**: `[insert SHA256 hash of clear bytecode]`
 
 **BiatecIdentityProvider.algo.ts**:
+
 - **Approval Program SHA256**: `[insert SHA256 hash of approval bytecode]`
 - **Clear Program SHA256**: `[insert SHA256 hash of clear bytecode]`
 
 **BiatecPoolProvider.algo.ts**:
+
 - **Approval Program SHA256**: `[insert SHA256 hash of approval bytecode]`
 - **Clear Program SHA256**: `[insert SHA256 hash of clear bytecode]`
 
 **FakePool.algo.ts**:
+
 - **Approval Program SHA256**: `[insert SHA256 hash of approval bytecode]`
 - **Clear Program SHA256**: `[insert SHA256 hash of clear bytecode]`
 
-*Note: To compute these hashes, decode the base64 values from `byteCode.approval` and `byteCode.clear` in the respective `contracts/artifacts/*.arc56.json` files, then compute SHA256 of the raw bytes.*
+_Note: To compute these hashes, decode the base64 values from `byteCode.approval` and `byteCode.clear` in the respective `contracts/artifacts/_.arc56.json` files, then compute SHA256 of the raw bytes.\*
 
 ---
 
 ## Executive Summary
 
 [Provide a high-level overview of the audit findings, including:
+
 - Overall security posture
 - Number of critical/high/medium/low severity issues found
 - Key recommendations
@@ -60,6 +66,7 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 ### Audit Scope
 
 **Smart Contracts Reviewed**:
+
 - [ ] `contracts/BiatecClammPool.algo.ts`
 - [ ] `contracts/BiatecConfigProvider.algo.ts`
 - [ ] `contracts/BiatecIdentityProvider.algo.ts`
@@ -67,6 +74,7 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 - [ ] `contracts/FakePool.algo.ts`
 
 **Source Code Reviewed**:
+
 - [ ] TypeScript transaction builders (`src/biatecClamm/txs/`)
 - [ ] Sender functions (`src/biatecClamm/sender/`)
 - [ ] Common utilities (`src/common/`)
@@ -74,6 +82,7 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 - [ ] Other modules: [list any additional modules]
 
 **Documentation Reviewed**:
+
 - [ ] README.md
 - [ ] docs/staking-pools.md
 - [ ] docs/liquidity-fee-protection.md
@@ -83,6 +92,7 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 - [ ] .github/copilot-instructions.md
 
 **Test Coverage Reviewed**:
+
 - [ ] Test files in `__test__/`
 - [ ] Test coverage metrics
 - [ ] Edge case handling
@@ -90,6 +100,7 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 ### Methodology
 
 [Describe the audit approach, including:
+
 - Static code analysis techniques
 - Manual review process
 - Test execution and coverage analysis
@@ -105,9 +116,9 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 
 #### [C-01] Title of Critical Issue
 
-**Severity**: Critical  
-**Status**: [Open / Acknowledged / Fixed]  
-**Component**: [Contract/Module name]  
+**Severity**: Critical
+**Status**: [Open / Acknowledged / Fixed]
+**Component**: [Contract/Module name]
 **File**: [path/to/file.ts:line]
 
 **Description**:
@@ -117,6 +128,7 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 [Explanation of potential consequences if exploited]
 
 **Proof of Concept**:
+
 ```typescript
 // Example code demonstrating the vulnerability
 ```
@@ -125,6 +137,7 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 [Specific steps to fix the issue]
 
 **References**:
+
 - [Link to similar vulnerabilities or documentation]
 
 ---
@@ -133,9 +146,9 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 
 #### [H-01] Title of High Severity Issue
 
-**Severity**: High  
-**Status**: [Open / Acknowledged / Fixed]  
-**Component**: [Contract/Module name]  
+**Severity**: High
+**Status**: [Open / Acknowledged / Fixed]
+**Component**: [Contract/Module name]
 **File**: [path/to/file.ts:line]
 
 **Description**:
@@ -153,9 +166,9 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 
 #### [M-01] Title of Medium Severity Issue
 
-**Severity**: Medium  
-**Status**: [Open / Acknowledged / Fixed]  
-**Component**: [Contract/Module name]  
+**Severity**: Medium
+**Status**: [Open / Acknowledged / Fixed]
+**Component**: [Contract/Module name]
 **File**: [path/to/file.ts:line]
 
 **Description**:
@@ -173,9 +186,9 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 
 #### [L-01] Title of Low Severity Issue
 
-**Severity**: Low  
-**Status**: [Open / Acknowledged / Fixed]  
-**Component**: [Contract/Module name]  
+**Severity**: Low
+**Status**: [Open / Acknowledged / Fixed]
+**Component**: [Contract/Module name]
 **File**: [path/to/file.ts:line]
 
 **Description**:
@@ -193,9 +206,9 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 
 #### [I-01] Title of Informational Issue
 
-**Severity**: Informational  
-**Status**: [Open / Acknowledged / Fixed]  
-**Component**: [Contract/Module name]  
+**Severity**: Informational
+**Status**: [Open / Acknowledged / Fixed]
+**Component**: [Contract/Module name]
 **File**: [path/to/file.ts:line]
 
 **Description**:
@@ -211,6 +224,7 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 ### Identified Gaps in Test Coverage
 
 1. **Test Scenario**: [Description]
+
    - **Risk Level**: [High/Medium/Low]
    - **Current Coverage**: [None/Partial/Inadequate]
    - **Recommendation**: [What tests should be added]
@@ -227,6 +241,7 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 ### Missing or Incomplete Documentation
 
 1. **Area**: [Component or feature]
+
    - **Issue**: [What documentation is missing or unclear]
    - **Risk**: [How this affects users]
    - **Recommendation**: [What documentation should be added]
@@ -242,17 +257,17 @@ The following SHA256 hashes verify the exact bytecode of the smart contracts aud
 
 ### Current Implementation vs. Best Practices
 
-| Practice | Status | Notes |
-|----------|--------|-------|
-| Input validation | ✅/⚠️/❌ | [Comments] |
-| Access control | ✅/⚠️/❌ | [Comments] |
-| Reentrancy protection | ✅/⚠️/❌ | [Comments] |
+| Practice                   | Status   | Notes      |
+| -------------------------- | -------- | ---------- |
+| Input validation           | ✅/⚠️/❌ | [Comments] |
+| Access control             | ✅/⚠️/❌ | [Comments] |
+| Reentrancy protection      | ✅/⚠️/❌ | [Comments] |
 | Integer overflow/underflow | ✅/⚠️/❌ | [Comments] |
-| Error handling | ✅/⚠️/❌ | [Comments] |
-| Gas optimization | ✅/⚠️/❌ | [Comments] |
-| Event logging | ✅/⚠️/❌ | [Comments] |
-| Code documentation | ✅/⚠️/❌ | [Comments] |
-| Test coverage | ✅/⚠️/❌ | [Comments] |
+| Error handling             | ✅/⚠️/❌ | [Comments] |
+| Gas optimization           | ✅/⚠️/❌ | [Comments] |
+| Event logging              | ✅/⚠️/❌ | [Comments] |
+| Code documentation         | ✅/⚠️/❌ | [Comments] |
+| Test coverage              | ✅/⚠️/❌ | [Comments] |
 
 Legend: ✅ Implemented | ⚠️ Partially Implemented | ❌ Not Implemented
 
@@ -266,17 +281,18 @@ Legend: ✅ Implemented | ⚠️ Partially Implemented | ❌ Not Implemented
 
 ### Risk Breakdown
 
-| Category | Risk Level | Description |
-|----------|------------|-------------|
+| Category                | Risk Level                 | Description         |
+| ----------------------- | -------------------------- | ------------------- |
 | Smart Contract Security | [Critical/High/Medium/Low] | [Brief explanation] |
-| Economic Model | [Critical/High/Medium/Low] | [Brief explanation] |
-| Access Control | [Critical/High/Medium/Low] | [Brief explanation] |
-| Data Integrity | [Critical/High/Medium/Low] | [Brief explanation] |
-| User Safety | [Critical/High/Medium/Low] | [Brief explanation] |
+| Economic Model          | [Critical/High/Medium/Low] | [Brief explanation] |
+| Access Control          | [Critical/High/Medium/Low] | [Brief explanation] |
+| Data Integrity          | [Critical/High/Medium/Low] | [Brief explanation] |
+| User Safety             | [Critical/High/Medium/Low] | [Brief explanation] |
 
 ### Potential Attack Vectors
 
 1. **Attack Vector**: [Description]
+
    - **Likelihood**: [High/Medium/Low]
    - **Impact**: [Critical/High/Medium/Low]
    - **Mitigation**: [Current controls]
@@ -317,6 +333,7 @@ Legend: ✅ Implemented | ⚠️ Partially Implemented | ❌ Not Implemented
 ### Additional Test Scenarios Required
 
 1. **Scenario**: [Description]
+
    - **Purpose**: [What this tests]
    - **Priority**: [Critical/High/Medium/Low]
    - **Complexity**: [Simple/Medium/Complex]
@@ -365,6 +382,7 @@ Legend: ✅ Implemented | ⚠️ Partially Implemented | ❌ Not Implemented
 ### D. Contact Information
 
 For questions or clarifications regarding this audit:
+
 - **Auditor Contact**: [email/contact information]
 - **Report Version**: 1.0
 - **Last Updated**: YYYY-MM-DD
@@ -374,6 +392,7 @@ For questions or clarifications regarding this audit:
 ## Disclaimer
 
 [Standard audit disclaimer noting that:
+
 - This audit is a point-in-time assessment
 - No audit can guarantee 100% security
 - Code changes after audit require re-assessment

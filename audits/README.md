@@ -22,11 +22,13 @@ YYYY-MM-DD-audit-report-[type]-[auditor].md
 ```
 
 **Examples**:
+
 - `2025-10-27-audit-report-ai-claude.md`
 - `2025-11-15-audit-report-human-securechain.md`
 - `2025-12-01-audit-report-combined-certik.md`
 
 This naming convention ensures:
+
 - ✅ Natural chronological sorting
 - ✅ Easy identification of audit type
 - ✅ Clear auditor attribution
@@ -39,6 +41,7 @@ This naming convention ensures:
 **Purpose**: Leverage AI capabilities for comprehensive code analysis, pattern recognition, and vulnerability detection.
 
 **When to Use**:
+
 - Initial code review and analysis
 - Continuous security monitoring
 - Quick assessment of code changes
@@ -46,6 +49,7 @@ This naming convention ensures:
 - Documentation completeness checks
 
 **Requirements**:
+
 - Must specify exact AI model name and version
 - Must include model provider information
 - Must document analysis methodology
@@ -54,6 +58,7 @@ This naming convention ensures:
 **Instructions**: See [AI-AUDIT-INSTRUCTIONS.md](./AI-AUDIT-INSTRUCTIONS.md)
 
 **Example Models**:
+
 - Claude 3.5 Sonnet (claude-3-5-sonnet-20241022) by Anthropic
 - GPT-4 (gpt-4-0613) by OpenAI
 - Other specialized security analysis models
@@ -63,6 +68,7 @@ This naming convention ensures:
 **Purpose**: Expert human review providing deep contextual understanding, creative attack modeling, and business logic verification.
 
 **When to Use**:
+
 - Pre-mainnet deployment
 - After major protocol changes
 - For regulatory compliance
@@ -70,6 +76,7 @@ This naming convention ensures:
 - For final production verification
 
 **Requirements**:
+
 - Must specify all auditor names and credentials
 - Must include company/organization name
 - Must document person-hours invested
@@ -82,6 +89,7 @@ This naming convention ensures:
 **Purpose**: Leverage strengths of both AI and human analysis for maximum coverage.
 
 **Approach**:
+
 1. AI performs initial comprehensive analysis
 2. Human team reviews AI findings
 3. Human team performs targeted deep-dives
@@ -123,26 +131,28 @@ All audits should cover:
 
 All findings must be classified using these severity levels:
 
-| Severity | Description | Examples |
-|----------|-------------|----------|
-| **Critical** | Direct loss of funds, protocol insolvency | Reentrancy allowing drainage, unauthorized minting |
-| **High** | Indirect theft, significant manipulation | Flash loan attacks, price manipulation |
-| **Medium** | Minor economic impact, degraded functionality | Rounding errors, gas inefficiencies |
-| **Low** | Code quality, unlikely scenarios | Minor validation gaps, suboptimal patterns |
-| **Informational** | Suggestions, best practices | Code style, optimization opportunities |
+| Severity          | Description                                   | Examples                                           |
+| ----------------- | --------------------------------------------- | -------------------------------------------------- |
+| **Critical**      | Direct loss of funds, protocol insolvency     | Reentrancy allowing drainage, unauthorized minting |
+| **High**          | Indirect theft, significant manipulation      | Flash loan attacks, price manipulation             |
+| **Medium**        | Minor economic impact, degraded functionality | Rounding errors, gas inefficiencies                |
+| **Low**           | Code quality, unlikely scenarios              | Minor validation gaps, suboptimal patterns         |
+| **Informational** | Suggestions, best practices                   | Code style, optimization opportunities             |
 
 ## Required Metadata
 
 Every audit report must include:
 
 ### For All Audits
+
 ```markdown
 **Contract Bytecode Hashes**: SHA256 hashes of approval and clear programs for all audited contracts
 ```
 
-*Generate these hashes using: `npm run compute-bytecode-hashes`*
+_Generate these hashes using: `npm run compute-bytecode-hashes`_
 
 ### For AI Audits
+
 ```markdown
 **AI Model**: [Exact model name and version]
 **Provider**: [Company name]
@@ -152,6 +162,7 @@ Every audit report must include:
 ```
 
 ### For Human Audits
+
 ```markdown
 **Lead Auditor**: [Name], [Credentials]
 **Company**: [Audit firm name]
@@ -167,10 +178,12 @@ Every audit report must include:
 ### Step 1: Preparation
 
 1. Read the appropriate instructions:
+
    - AI auditors: [AI-AUDIT-INSTRUCTIONS.md](./AI-AUDIT-INSTRUCTIONS.md)
    - Human auditors: [HUMAN-AUDIT-INSTRUCTIONS.md](./HUMAN-AUDIT-INSTRUCTIONS.md)
 
 2. Set up the environment:
+
    ```bash
    git clone https://github.com/scholtz/BiatecCLAMM.git
    cd BiatecCLAMM
@@ -181,10 +194,12 @@ Every audit report must include:
    ```
 
 3. Generate contract bytecode hashes:
+
    ```bash
    npm run compute-bytecode-hashes
    ```
-   *Copy this output into the audit template*
+
+   _Copy this output into the audit template_
 
 4. Record the commit information:
    ```bash
@@ -194,6 +209,7 @@ Every audit report must include:
 ### Step 2: Use the Template
 
 1. Copy the template:
+
    ```bash
    cp audits/YYYY-MM-DD-audit-template.md \
       audits/$(date +%Y-%m-%d)-audit-report-[type]-[auditor].md
@@ -232,19 +248,20 @@ Before submitting:
 
 ## Audit History
 
-| Date | Type | Auditor | Commit | Status | Report |
-|------|------|---------|--------|--------|--------|
-| 2025-10-27 | AI | Claude 3.5 Sonnet | 65ea568a | Complete | [Link](./2025-10-27-audit-report-ai-claude.md) |
-| | | | | | |
+| Date       | Type | Auditor           | Commit   | Status   | Report                                         |
+| ---------- | ---- | ----------------- | -------- | -------- | ---------------------------------------------- |
+| 2025-10-27 | AI   | Claude 3.5 Sonnet | 65ea568a | Complete | [Link](./2025-10-27-audit-report-ai-claude.md) |
+|            |      |                   |          |          |                                                |
 
-*Update this table as new audits are completed*
+_Update this table as new audits are completed_
 
 ### Latest Audit Summary (2025-10-27)
 
-**Overall Risk**: Medium-High  
+**Overall Risk**: Medium-High
 **Findings**: 0 Critical, 2 High, 6 Medium, 8 Low, 12 Informational
 
 **Key Recommendations**:
+
 - Implement multi-signature admin controls (Critical)
 - Formal verification of mathematical operations (Critical)
 - Add timelock for admin functions (High)
@@ -292,6 +309,7 @@ See full report for detailed findings and recommendations.
 ## Contributing to Audit Standards
 
 If you have suggestions for improving:
+
 - The audit template
 - The instruction documents
 - The audit process
@@ -302,12 +320,14 @@ Please submit a PR or open an issue on the repository.
 ## Resources
 
 ### Documentation
+
 - [Project README](../README.md)
 - [Staking Pools](../docs/staking-pools.md)
 - [Liquidity Fee Protection](../docs/liquidity-fee-protection.md)
 - [Liquidity Rounding](../docs/liquidity-rounding.md)
 
 ### External Resources
+
 - [Algorand Developer Portal](https://developer.algorand.org/)
 - [TEALScript Documentation](https://tealscript.netlify.app/)
 - [Algorand Security Guidelines](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/security/)
@@ -316,6 +336,7 @@ Please submit a PR or open an issue on the repository.
 ## Contact
 
 For questions about the audit process:
+
 - Open an issue on GitHub
 - Contact the development team
 - Review existing audit reports for examples
