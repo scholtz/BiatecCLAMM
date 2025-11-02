@@ -25,7 +25,8 @@
     "fix": "eslint . --ext .ts --fix",
     "build-package": "tsup src/index.ts --format cjs,esm --clean --sourcemap index --dts src/index.ts --dts-resolve",
     "publish-package": "npm publish",
-    "deploy": "ts-node src/bin/deploy.ts"
+    "deploy": "ts-node src/bin/deploy.ts",
+    "compute-bytecode-hashes": "ts-node scripts/compute-bytecode-hashes.ts"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

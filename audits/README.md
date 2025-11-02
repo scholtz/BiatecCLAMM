@@ -135,6 +135,13 @@ All findings must be classified using these severity levels:
 
 Every audit report must include:
 
+### For All Audits
+```markdown
+**Contract Bytecode Hashes**: SHA256 hashes of approval and clear programs for all audited contracts
+```
+
+*Generate these hashes using: `npm run compute-bytecode-hashes`*
+
 ### For AI Audits
 ```markdown
 **AI Model**: [Exact model name and version]
@@ -173,7 +180,13 @@ Every audit report must include:
    npm run test
    ```
 
-3. Record the commit information:
+3. Generate contract bytecode hashes:
+   ```bash
+   npm run compute-bytecode-hashes
+   ```
+   *Copy this output into the audit template*
+
+4. Record the commit information:
    ```bash
    git log -1 --format="%H %cI"
    ```

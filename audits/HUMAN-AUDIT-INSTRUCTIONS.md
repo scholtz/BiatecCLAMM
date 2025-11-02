@@ -35,6 +35,18 @@ Example:
 **Commit Date**: 2025-10-27 21:36:52 UTC
 ```
 
+### 2. Include Contract Bytecode Hashes
+
+**MANDATORY REQUIREMENT**: Include SHA256 hashes of all contract bytecode in the audit header.
+
+Run the following command to generate the bytecode hashes:
+
+```bash
+npm run compute-bytecode-hashes
+```
+
+Copy the output directly into the "Contract Bytecode Hashes" section of the audit template. These hashes verify that the audit was performed on the exact bytecode that was reviewed and provide cryptographic proof of the code version audited.
+
 ---
 
 ## Pre-Audit Preparation

@@ -17,6 +17,32 @@
 - **Audit Duration**: [Time spent on audit]
 - **Audit Scope**: [Files, contracts, and areas reviewed]
 
+### Contract Bytecode Hashes
+
+The following SHA256 hashes verify the exact bytecode of the smart contracts audited. These hashes are computed from the base64-decoded approval and clear program bytecode in the generated ARC-56 JSON files.
+
+**BiatecClammPool.algo.ts**:
+- **Approval Program SHA256**: `[insert SHA256 hash of approval bytecode]`
+- **Clear Program SHA256**: `[insert SHA256 hash of clear bytecode]`
+
+**BiatecConfigProvider.algo.ts**:
+- **Approval Program SHA256**: `[insert SHA256 hash of approval bytecode]`
+- **Clear Program SHA256**: `[insert SHA256 hash of clear bytecode]`
+
+**BiatecIdentityProvider.algo.ts**:
+- **Approval Program SHA256**: `[insert SHA256 hash of approval bytecode]`
+- **Clear Program SHA256**: `[insert SHA256 hash of clear bytecode]`
+
+**BiatecPoolProvider.algo.ts**:
+- **Approval Program SHA256**: `[insert SHA256 hash of approval bytecode]`
+- **Clear Program SHA256**: `[insert SHA256 hash of clear bytecode]`
+
+**FakePool.algo.ts**:
+- **Approval Program SHA256**: `[insert SHA256 hash of approval bytecode]`
+- **Clear Program SHA256**: `[insert SHA256 hash of clear bytecode]`
+
+*Note: To compute these hashes, decode the base64 values from `byteCode.approval` and `byteCode.clear` in the respective `contracts/artifacts/*.arc56.json` files, then compute SHA256 of the raw bytes.*
+
 ---
 
 ## Executive Summary
