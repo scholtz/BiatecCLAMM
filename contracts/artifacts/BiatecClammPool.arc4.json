@@ -390,11 +390,44 @@
     },
     {
       "name": "sendOfflineKeyRegistration",
-      "desc": "addressExecutiveFee can perfom key unregistration for this LP pool\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
+      "desc": "addressExecutiveFee can perform key unregistration for this LP pool\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
       "args": [
         {
           "name": "appBiatecConfigProvider",
           "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "doAppCall",
+      "desc": "doAppCall can call any other smart contract. mainly created for the xgov calls.\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64"
+        },
+        {
+          "name": "appCallParams",
+          "type": "(uint64,address,uint64,uint64,string)"
+        },
+        {
+          "name": "apps",
+          "type": "uint64[]"
+        },
+        {
+          "name": "assets",
+          "type": "uint64[]"
+        },
+        {
+          "name": "accounts",
+          "type": "address[]"
+        },
+        {
+          "name": "appArgs",
+          "type": "byte[][]"
         }
       ],
       "returns": {

@@ -32,6 +32,14 @@ type AmmStatus = {
   verificationClass: uint64;
 };
 
+type AppCallParams = {
+  payAmount: uint64;
+  payToAddress: Address;
+  applicationID: AppID;
+  fee: uint64;
+  note: string;
+};
+
 // eslint-disable-next-line no-unused-vars
 export class BiatecClammPool extends Contract {
   // bootstrapped
@@ -1191,6 +1199,7 @@ export class BiatecClammPool extends Contract {
       this.doAxfer(this.txn.sender, assetB, amountB);
     }
 
+    // it is OK to check this after the tx as on AVM the whole transaction call must be executed and must succeed in order to write it to the blockchain
     if (assetA.id === 0) {
       assert(
         ((this.app.address.balance - 1_000_000) as uint256) * this.assetADecimalsScaleFromBase.value >= this.assetABalanceBaseScale.value,
@@ -1241,11 +1250,6 @@ export class BiatecClammPool extends Contract {
   }
 
   /**
-   * addressExecutiveFee can perfom key unregistration for this LP pool
-   *
-   * Only addressExecutiveFee is allowed to execute this method.
-   */
-  /**
    * addressExecutiveFee can perform key unregistration for this LP pool
    *
    * Only addressExecutiveFee is allowed to execute this method.
@@ -1262,6 +1266,99 @@ export class BiatecClammPool extends Contract {
       'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
     );
     sendOfflineKeyRegistration({ fee: 0 });
+  }
+
+  /**
+   * doAppCall can call any other smart contract. mainly created for the xgov calls.
+   *
+   * Only addressExecutiveFee is allowed to execute this method.
+   */
+  doAppCall(appBiatecConfigProvider: AppID, appCallParams: AppCallParams, apps: AppID[], assets: AssetID[], accounts: Address[], appArgs: bytes[]): void {
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
+
+    const paused = appBiatecConfigProvider.globalState('s') as uint64;
+    assert(paused === 0, 'E_PAUSED'); // services are paused at the moment
+
+    assert(
+      this.txn.sender === addressExecutiveFee,
+      'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
+    );
+
+    if (appCallParams.payAmount > 0 && apps.length === 0 && assets.length === 0) {
+      this.pendingGroup.addPayment({
+        receiver: appCallParams.payToAddress,
+        amount: appCallParams.payAmount,
+        fee: 0,
+        isFirstTxn: true,
+      });
+      this.pendingGroup.addAppCall({
+        applicationID: appCallParams.applicationID,
+        accounts: accounts,
+        applicationArgs: appArgs,
+        note: appCallParams.note,
+        fee: appCallParams.fee,
+        onCompletion: OnCompletion.NoOp,
+      });
+      this.pendingGroup.submit();
+    } else if (appCallParams.payAmount > 0) {
+      this.pendingGroup.addPayment({
+        receiver: appCallParams.payToAddress,
+        amount: appCallParams.payAmount,
+        fee: 0,
+        isFirstTxn: true,
+      });
+      this.pendingGroup.addAppCall({
+        applicationID: appCallParams.applicationID,
+        accounts: accounts,
+        applicationArgs: appArgs,
+        applications: apps,
+        assets: assets,
+        note: appCallParams.note,
+        fee: appCallParams.fee,
+        onCompletion: OnCompletion.NoOp,
+      });
+      this.pendingGroup.submit();
+    }
+    // else if (apps.length === 0 && assets.length === 0) {
+    //   this.pendingGroup.addAppCall({
+    //     applicationID: appCallParams.applicationID,
+    //     accounts: accounts,
+    //     applicationArgs: appArgs,
+    //     note: appCallParams.note,
+    //     fee: appCallParams.fee,
+    //     onCompletion: OnCompletion.NoOp,
+    //     isFirstTxn: true,
+    //   });
+    //   this.pendingGroup.submit();
+    // } else {
+    //   this.pendingGroup.addAppCall({
+    //     applicationID: appCallParams.applicationID,
+    //     accounts: accounts,
+    //     applicationArgs: appArgs,
+    //     applications: apps,
+    //     assets: assets,
+    //     note: appCallParams.note,
+    //     fee: appCallParams.fee,
+    //     onCompletion: OnCompletion.NoOp,
+    //     isFirstTxn: true,
+    //   });
+    //   this.pendingGroup.submit();
+    // }
+    // it is OK to check this after the tx as on AVM the whole transaction call must be executed and must succeed in order to write it to the blockchain
+    if (this.assetA.value === 0) {
+      assert(
+        ((this.app.address.balance - 1_000_000) as uint256) * this.assetADecimalsScaleFromBase.value >= this.assetABalanceBaseScale.value,
+        'E_A0_B' // 'It is not possible to set higher assetABalance in algos then is in the app balance'
+      );
+    }
+
+    if (this.assetB.value === 0) {
+      assert(
+        ((this.app.address.balance - 1_000_000) as uint256) * this.assetBDecimalsScaleFromBase.value >= this.assetBBalanceBaseScale.value,
+        'E_B0_B' // 'It is not possible to set higher assetBBalance in algos then is in the app balance'
+      );
+    }
   }
 
   /**
