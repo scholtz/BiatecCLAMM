@@ -13,7 +13,9 @@ function HomepageHeader() {
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle"><Translate id="tagline">Decentralized Exchange Protocol for Algorand</Translate></p>
+        <p className="hero__subtitle">
+          <Translate id="tagline">Decentralized Exchange Protocol for Algorand</Translate>
+        </p>
         <div className={styles.buttons}>
           <Link className="button button--secondary button--lg" to="/docs/intro">
             <Translate id="button">Začnite s dokumentáciou</Translate>
@@ -27,10 +29,7 @@ function HomepageHeader() {
 export default function Home() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <Layout 
-      title={translate({ id: 'title', message: `Vitajte v ${siteConfig.title}` })} 
-      description={translate({ id: 'description', message: 'Decentralized Exchange Protocol for Algorand' })}
-    >
+    <Layout title={translate({ id: 'title', message: `Vitajte v ${siteConfig.title}` })} description={translate({ id: 'description', message: 'Decentralized Exchange Protocol for Algorand' })}>
       <HomepageHeader />
       <main>
         <HomepageFeatures />
