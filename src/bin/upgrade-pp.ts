@@ -133,7 +133,7 @@ const app = async () => {
   await pool.send.update.updateApplication({
     args: {
       appBiatecConfigProvider,
-      newVersion: Buffer.from('BIATEC-PP-01-05-02', 'ascii'),
+      newVersion: Buffer.from('BIATEC-PP-01-05-03', 'ascii'),
     },
   });
 
