@@ -51,14 +51,14 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
     plugins: [
       // Add local search for development
       [
-        require.resolve("@easyops-cn/docusaurus-search-local"),
+        require.resolve('@easyops-cn/docusaurus-search-local'),
         {
           // `hashed` is recommended as long-term caching strategy for your search index
           hashed: true,
           // For Docs
-          docsRouteBasePath: "/docs",
+          docsRouteBasePath: '/docs',
           // For Blog
-          blogRouteBasePath: "/blog",
+          blogRouteBasePath: '/blog',
           // Whether to index blog pages
           indexBlog: true,
           // Whether to index docs pages
