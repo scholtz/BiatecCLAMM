@@ -4,14 +4,14 @@ Táto príručka poskytuje osvedčené postupy a bezpečnostné úvahy pre integ
 
 ## Obsah {#-obsah}
 
-- [Rýchly štart](#rychly-start)
-- [Bezpečnostné úvahy](#bezpecnostne-uvahy)
-- [Použitie CLAMM ako cenového orákla](#pouzitie-clamm-ako-cenoveho-orakla)
-- [Konštrukcia transakcií](#konstrukcia-transakcii)
-- [Box referencie](#box-referencie)
-- [Bežné integračné vzory](#bezne-integračne-vzory)
-- [Spracovanie chýb](#spracovanie-chyb)
-- [Testovanie vašej integrácie](#testovanie-vassej-integracie)
+- [Rýchly štart](#-rychly-start)
+- [Bezpečnostné úvahy](#-bezpecnostne-uvahy)
+- [Použitie CLAMM ako cenového orákla](#-pouzitie-clamm-ako-cenoveho-orakla)
+- [Konštrukcia transakcií](#-konstrukcia-transakcii)
+- [Box referencie](#-pozadovane-box-referencie)
+- [Bežné integračné vzory](#-bezne-integračne-vzory)
+- [Spracovanie chýb](#-spracovanie-chyb)
+- [Testovanie vašej integrácie](#-testovanie-vassej-integracie)
 
 ## Rýchly štart {#-rychly-start}
 

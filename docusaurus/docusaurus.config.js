@@ -10,7 +10,11 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
     url: 'https://beta.dex.biatec.io',
     baseUrl: '/',
     onBrokenLinks: 'throw',
-    onBrokenMarkdownLinks: 'warn',
+    markdown: {
+      hooks: {
+        onBrokenMarkdownLinks: 'warn',
+      },
+    },
     favicon: 'img/favicon.ico',
     organizationName: 'scholtz', // Usually your GitHub org/user name.
     projectName: 'BiatecCLAMM', // Usually your repo name.
@@ -113,7 +117,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
           // Optional: Algolia search parameters
           searchParameters: {},
           // Optional: path for search page that enabled by default (`false` to disable it)
-          searchPagePath: 'search',
+          searchPagePath: false,
         },
         navbar: {
           title: 'Home',

@@ -4,14 +4,14 @@ This guide provides best practices and security considerations for integrating B
 
 ## Table of Contents {#-table-of-contents}
 
-- [Quick Start](#quick-start)
-- [Security Considerations](#security-considerations)
-- [Using CLAMM as Price Oracle](#using-clamm-as-price-oracle)
-- [Transaction Construction](#transaction-construction)
-- [Box References](#box-references)
-- [Common Integration Patterns](#common-integration-patterns)
-- [Error Handling](#error-handling)
-- [Testing Your Integration](#testing-your-integration)
+- [Quick Start](#-quick-start)
+- [Security Considerations](#-security-considerations)
+- [Using CLAMM as Price Oracle](#-using-clamm-as-price-oracle)
+- [Transaction Construction](#-transaction-construction)
+- [Box References](#-required-box-references)
+- [Common Integration Patterns](#-common-integration-patterns)
+- [Error Handling](#-error-handling)
+- [Testing Your Integration](#-testing-your-integration)
 
 ## Quick Start {#-quick-start}
 
