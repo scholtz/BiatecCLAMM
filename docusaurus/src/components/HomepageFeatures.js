@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import Translate from '@docusaurus/Translate';
+import { translate } from '@docusaurus/Translate';
 import styles from './HomepageFeatures.module.css';
 
 function Feature({ title, description }) {
@@ -8,10 +8,10 @@ function Feature({ title, description }) {
     <div className={clsx('col col--4')}>
       <div className="text--center padding-horiz--md">
         <h3>
-          <Translate id={title.id}>{title.defaultMessage}</Translate>
+          {translate({ id: title.id, message: title.defaultMessage })}
         </h3>
         <p>
-          <Translate id={description.id}>{description.defaultMessage}</Translate>
+          {translate({ id: description.id, message: description.defaultMessage })}
         </p>
       </div>
     </div>

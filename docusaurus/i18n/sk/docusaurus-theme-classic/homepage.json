@@ -1,0 +1,99 @@
+{{
+
+  "features.concentratedLiquidity.title": {  "features.concentratedLiquidity.title": {
+
+    "message": "Koncentrovaná Likvidita",    "message": "Koncentrovaná Likvidita",
+
+    "description": "Title for concentrated liquidity feature"    "description": "Title for concentrated liquidity feature"
+
+  },  },
+
+  "features.concentratedLiquidity.description": {  "features.concentratedLiquidity.description": {
+
+    "message": "Zažite silu koncentrovanej likvidity AMM na Algorand. Poskytujte likviditu v rámci vlastných cenových rozsahov pre vyššie výnosy a zníženie impermanent loss v porovnaní s tradičnými AMM.",    "message": "Zažite silu koncentrovanej likvidity AMM na Algorand. Poskytujte likviditu v rámci vlastných cenových rozsahov pre vyššie výnosy a zníženie impermanent loss v porovnaní s tradičnými AMM.",
+
+    "description": "Description for concentrated liquidity feature"    "description": "Description for concentrated liquidity feature"
+
+  },  },
+
+  "features.algorandNative.title": {  "features.algorandNative.title": {
+
+    "message": "Natívne pre Algorand",    "message": "Natívne pre Algorand",
+
+    "description": "Title for Algorand native feature"    "description": "Title for Algorand native feature"
+
+  },  },
+
+  "features.algorandNative.description": {  "features.algorandNative.description": {
+
+    "message": "Postavené špecificky pre blockchain Algorand s optimalizovanými smart kontraktmi. Využite rýchlosť, bezpečnosť a nízke transakčné náklady Algorandu pre efektívne decentralizované obchodovanie.",    "message": "Postavené špecificky pre blockchain Algorand s optimalizovanými smart kontraktmi. Využite rýchlosť, bezpečnosť a nízke transakčné náklady Algorandu pre efektívne decentralizované obchodovanie.",
+
+    "description": "Description for Algorand native feature"    "description": "Description for Algorand native feature"
+
+  },  },
+
+  "features.stakingPools.title": {  "features.stakingPools.title": {
+
+    "message": "Staking Pooly",    "message": "Staking Pooly",
+
+    "description": "Title for staking pools feature"    "description": "Title for staking pools feature"
+
+  },  },
+
+  "features.stakingPools.description": {  "features.stakingPools.description": {
+
+    "message": "Vytvárajte a spravujte staking pooly pre úročené tokeny. Podpora pre rovnaké aktívum staking (B-ALGO, B-USDC) a tradičné páry aktív s automatickou distribúciou odmien.",    "message": "Vytvárajte a spravujte staking pooly pre úročené tokeny. Podpora pre rovnaké aktívum staking (B-ALGO, B-USDC) a tradičné páry aktív s automatickou distribúciou odmien.",
+
+    "description": "Description for staking pools feature"    "description": "Description for staking pools feature"
+
+  },  },
+
+  "features.identityCompliance.title": {  "features.identityCompliance.title": {
+
+    "message": "Identita a Compliance",    "message": "Identita a Compliance",
+
+    "description": "Title for identity compliance feature"    "description": "Title for identity compliance feature"
+
+  },  },
+
+  "features.identityCompliance.description": {  "features.identityCompliance.description": {
+
+    "message": "Integrovaný systém overenia identity s konfigurovateľnými triedami overenia. Umožnite KYC-compliant obchodovanie pri zachovaní decentralizácie a súkromia.",    "message": "Integrovaný systém overenia identity s konfigurovateľnými triedami overenia. Umožnite KYC-compliant obchodovanie pri zachovaní decentralizácie a súkromia.",
+
+    "description": "Description for identity compliance feature"    "description": "Description for identity compliance feature"
+
+  },  },
+
+  "features.flexibleFeeManagement.title": {  "features.flexibleFeeManagement.title": {
+
+    "message": "Flexibilné Spravovanie Poplatkov",    "message": "Flexibilné Spravovanie Poplatkov",
+
+    "description": "Title for flexible fee management feature"    "description": "Title for flexible fee management feature"
+
+  },  },
+
+  "features.flexibleFeeManagement.description": {  "features.flexibleFeeManagement.description": {
+
+    "message": "Konfigurovateľná štruktúra poplatkov s Biatec fee sharing. Poskytovatelia likvidity zarábajú z obchodných poplatkov, zatiaľ čo protokol zbierajú udržateľný podiel pre rozvoj ekosystému.",    "message": "Konfigurovateľná štruktúra poplatkov s Biatec fee sharing. Poskytovatelia likvidity zarábajú z obchodných poplatkov, zatiaľ čo protokol zbierajú udržateľný podiel pre rozvoj ekosystému.",
+
+    "description": "Description for flexible fee management feature"    "description": "Description for flexible fee management feature"
+
+  },  },
+
+  "features.developerSdk.title": {  "features.developerSdk.title": {
+
+    "message": "Developer SDK",    "message": "Developer SDK",
+
+    "description": "Title for developer SDK feature"    "description": "Title for developer SDK feature"
+
+  },  },
+
+  "features.developerSdk.description": {  "features.developerSdk.description": {
+
+    "message": "Komplexné TypeScript SDK s transaction buildermi, sender funkciami a utilitami. Ľahká integrácia pre dApps, peňaženky a obchodné rozhrania s plnou typovou bezpečnosťou.",    "message": "Komplexné TypeScript SDK s transaction buildermi, sender funkciami a utilitami. Ľahká integrácia pre dApps, peňaženky a obchodné rozhrania s plnou typovou bezpečnosťou.",
+
+    "description": "Description for developer SDK feature"    "description": "Description for developer SDK feature"
+
+  }  }
+
+}}

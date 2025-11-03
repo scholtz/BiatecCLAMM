@@ -1,0 +1,99 @@
+{{
+
+  "features.concentratedLiquidity.title": {  "features.concentratedLiquidity.title": {
+
+    "message": "Skoncentrowana Płynność",    "message": "Skoncentrowana Płynność",
+
+    "description": "Title for concentrated liquidity feature"    "description": "Title for concentrated liquidity feature"
+
+  },  },
+
+  "features.concentratedLiquidity.description": {  "features.concentratedLiquidity.description": {
+
+    "message": "Doświadcz siły skoncentrowanej płynności AMM na Algorand. Zapewniaj płynność w ramach własnych zakresów cenowych dla wyższych zysków i zmniejszenia impermanent loss w porównaniu z tradycyjnymi AMM.",    "message": "Doświadcz siły skoncentrowanej płynności AMM na Algorand. Zapewniaj płynność w ramach własnych zakresów cenowych dla wyższych zysków i zmniejszenia impermanent loss w porównaniu z tradycyjnymi AMM.",
+
+    "description": "Description for concentrated liquidity feature"    "description": "Description for concentrated liquidity feature"
+
+  },  },
+
+  "features.algorandNative.title": {  "features.algorandNative.title": {
+
+    "message": "Natywnie dla Algorand",    "message": "Natywnie dla Algorand",
+
+    "description": "Title for Algorand native feature"    "description": "Title for Algorand native feature"
+
+  },  },
+
+  "features.algorandNative.description": {  "features.algorandNative.description": {
+
+    "message": "Zbudowany specjalnie dla blockchainu Algorand z zoptymalizowanymi smart kontraktami. Wykorzystaj szybkość, bezpieczeństwo i niskie koszty transakcyjne Algorandu dla efektywnego handlu zdecentralizowanego.",    "message": "Zbudowany specjalnie dla blockchainu Algorand z zoptymalizowanymi smart kontraktami. Wykorzystaj szybkość, bezpieczeństwo i niskie koszty transakcyjne Algorandu dla efektywnego handlu zdecentralizowanego.",
+
+    "description": "Description for Algorand native feature"    "description": "Description for Algorand native feature"
+
+  },  },
+
+  "features.stakingPools.title": {  "features.stakingPools.title": {
+
+    "message": "Pule Stakingowe",    "message": "Pule Stakingowe",
+
+    "description": "Title for staking pools feature"    "description": "Title for staking pools feature"
+
+  },  },
+
+  "features.stakingPools.description": {  "features.stakingPools.description": {
+
+    "message": "Twórz i zarządzaj pulami stakingowymi dla tokenów oprocentowanych. Wsparcie dla stakingu tego samego aktywa (B-ALGO, B-USDC) i tradycyjnych par aktywów z automatyczną dystrybucją nagród.",    "message": "Twórz i zarządzaj pulami stakingowymi dla tokenów oprocentowanych. Wsparcie dla stakingu tego samego aktywa (B-ALGO, B-USDC) i tradycyjnych par aktywów z automatyczną dystrybucją nagród.",
+
+    "description": "Description for staking pools feature"    "description": "Description for staking pools feature"
+
+  },  },
+
+  "features.identityCompliance.title": {  "features.identityCompliance.title": {
+
+    "message": "Tożsamość i Zgodność",    "message": "Tożsamość i Zgodność",
+
+    "description": "Title for identity compliance feature"    "description": "Title for identity compliance feature"
+
+  },  },
+
+  "features.identityCompliance.description": {  "features.identityCompliance.description": {
+
+    "message": "Zintegrowany system weryfikacji tożsamości z konfigurowalnymi klasami weryfikacji. Umożliwiaj handel zgodny z KYC przy zachowaniu decentralizacji i prywatności.",    "message": "Zintegrowany system weryfikacji tożsamości z konfigurowalnymi klasami weryfikacji. Umożliwiaj handel zgodny z KYC przy zachowaniu decentralizacji i prywatności.",
+
+    "description": "Description for identity compliance feature"    "description": "Description for identity compliance feature"
+
+  },  },
+
+  "features.flexibleFeeManagement.title": {  "features.flexibleFeeManagement.title": {
+
+    "message": "Elastyczne Zarządzanie Opłatami",    "message": "Elastyczne Zarządzanie Opłatami",
+
+    "description": "Title for flexible fee management feature"    "description": "Title for flexible fee management feature"
+
+  },  },
+
+  "features.flexibleFeeManagement.description": {  "features.flexibleFeeManagement.description": {
+
+    "message": "Konfigurowalna struktura opłat z udziałem w opłatach Biatec. Dostawcy płynności zarabiają na opłatach handlowych, podczas gdy protokół gromadzi zrównoważony udział na rozwój ekosystemu.",    "message": "Konfigurowalna struktura opłat z udziałem w opłatach Biatec. Dostawcy płynności zarabiają na opłatach handlowych, podczas gdy protokół gromadzi zrównoważony udział na rozwój ekosystemu.",
+
+    "description": "Description for flexible fee management feature"    "description": "Description for flexible fee management feature"
+
+  },  },
+
+  "features.developerSdk.title": {  "features.developerSdk.title": {
+
+    "message": "Developer SDK",    "message": "Developer SDK",
+
+    "description": "Title for developer SDK feature"    "description": "Title for developer SDK feature"
+
+  },  },
+
+  "features.developerSdk.description": {  "features.developerSdk.description": {
+
+    "message": "Kompleksowe TypeScript SDK z konstruktorami transakcji, funkcjami wysyłania i narzędziami. Łatwa integracja dla dApps, portfeli i interfejsów handlowych z pełnym bezpieczeństwem typów.",    "message": "Kompleksowe TypeScript SDK z konstruktorami transakcji, funkcjami wysyłania i narzędziami. Łatwa integracja dla dApps, portfeli i interfejsów handlowych z pełnym bezpieczeństwem typów.",
+
+    "description": "Description for developer SDK feature"    "description": "Description for developer SDK feature"
+
+  }  }
+
+}}

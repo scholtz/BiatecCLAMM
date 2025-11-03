@@ -390,4 +390,53 @@
     "message": "GitHub DEX Website",
     "description": "Footer link for GitHub DEX Website"
   }
+  ,
+  "features.concentratedLiquidity.title": {
+    "message": "Skoncentrowana Płynność",
+    "description": "Homepage feature title Concentrated Liquidity"
+  },
+  "features.concentratedLiquidity.description": {
+    "message": "Efektywnie zapewniaj płynność w niestandardowych zakresach cenowych dla maksymalnego wykorzystania kapitału i potencjału zarobku.",
+    "description": "Homepage feature description Concentrated Liquidity"
+  },
+  "features.algorandNative.title": {
+    "message": "Natywnie dla Algorand",
+    "description": "Homepage feature title Algorand Native"
+  },
+  "features.algorandNative.description": {
+    "message": "Zbudowane specjalnie dla blockchainu Algorand z zoptymalizowanymi smart kontraktami i bezproblemową integracją.",
+    "description": "Homepage feature description Algorand Native"
+  },
+  "features.stakingPools.title": {
+    "message": "Pule Stakingowe",
+    "description": "Homepage feature title Staking Pools"
+  },
+  "features.stakingPools.description": {
+    "message": "Zarabiaj nagrody poprzez staking aktywów w wyspecjalizowanych pulach z automatyczną dystrybucją zysków.",
+    "description": "Homepage feature description Staking Pools"
+  },
+  "features.identityCompliance.title": {
+    "message": "Tożsamość i Zgodność",
+    "description": "Homepage feature title Identity Compliance"
+  },
+  "features.identityCompliance.description": {
+    "message": "Zintegrowany system weryfikacji tożsamości zapewniający zgodność regulacyjną i bezpieczne transakcje.",
+    "description": "Homepage feature description Identity Compliance"
+  },
+  "features.flexibleFeeManagement.title": {
+    "message": "Elastyczne Opłaty",
+    "description": "Homepage feature title Flexible Fee Management"
+  },
+  "features.flexibleFeeManagement.description": {
+    "message": "Konfigurowalna struktura opłat z automatycznym podziałem między dostawców płynności a protokół.",
+    "description": "Homepage feature description Flexible Fee Management"
+  },
+  "features.developerSdk.title": {
+    "message": "Developer SDK",
+    "description": "Homepage feature title Developer SDK"
+  },
+  "features.developerSdk.description": {
+    "message": "Kompleksowy TypeScript SDK dla łatwej integracji i rozwoju aplikacji DeFi.",
+    "description": "Homepage feature description Developer SDK"
+  }
 }

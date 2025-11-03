@@ -1,0 +1,18 @@
+{
+  "title": "Witaj w Biatec DEX",
+  "description": "Biatec DEX - Concentrated Liquidity DEX na blockchainie Algorand",
+  "tagline": "Protokół Decentralized Exchange dla Algorand",
+  "button": "Rozpocznij od dokumentacji",
+  "features.concentratedLiquidity.title": "Skoncentrowana Płynność",
+  "features.concentratedLiquidity.description": "Doświadcz siły skoncentrowanej płynności AMM na Algorand. Zapewniaj płynność w ramach własnych zakresów cenowych dla wyższych zysków i zmniejszenia impermanent loss w porównaniu z tradycyjnymi AMM.",
+  "features.algorandNative.title": "Natywnie dla Algorand",
+  "features.algorandNative.description": "Zbudowany specjalnie dla blockchainu Algorand z zoptymalizowanymi smart kontraktami. Wykorzystaj szybkość, bezpieczeństwo i niskie koszty transakcyjne Algorandu dla efektywnego handlu zdecentralizowanego.",
+  "features.stakingPools.title": "Pule Stakingowe",
+  "features.stakingPools.description": "Twórz i zarządzaj pulami stakingowymi dla tokenów oprocentowanych. Wsparcie dla stakingu tego samego aktywa (B-ALGO, B-USDC) i tradycyjnych par aktywów z automatyczną dystrybucją nagród.",
+  "features.identityCompliance.title": "Tożsamość i Zgodność",
+  "features.identityCompliance.description": "Zintegrowany system weryfikacji tożsamości z konfigurowalnymi klasami weryfikacji. Umożliwiaj handel zgodny z KYC przy zachowaniu decentralizacji i prywatności.",
+  "features.flexibleFeeManagement.title": "Elastyczne Zarządzanie Opłatami",
+  "features.flexibleFeeManagement.description": "Konfigurowalna struktura opłat z udziałem w opłatach Biatec. Dostawcy płynności zarabiają na opłatach handlowych, podczas gdy protokół gromadzi zrównoważony udział na rozwój ekosystemu.",
+  "features.developerSdk.title": "Developer SDK",
+  "features.developerSdk.description": "Kompleksowe TypeScript SDK z konstruktorami transakcji, funkcjami wysyłania i narzędziami. Łatwa integracja dla dApps, portfeli i interfejsów handlowych z pełnym bezpieczeństwem typów."
+}

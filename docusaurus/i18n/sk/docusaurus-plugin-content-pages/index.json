@@ -3,30 +3,16 @@
   "description": "Biatec DEX - Concentrated Liquidity DEX na blockchaine Algorand",
   "tagline": "Concentrated Liquidity DEX na blockchaine Algorand",
   "button": "DEX Tutoriál - 5min ⏱️",
-  "features": {
-    "concentratedLiquidity": {
-      "title": "Koncentrovaná Likvidita",
-      "description": "Zažite silu koncentrovanej likvidity AMM na Algorand. Poskytujte likviditu v rámci vlastných cenových rozsahov pre vyššie výnosy a zníženie impermanent loss v porovnaní s tradičnými AMM."
-    },
-    "algorandNative": {
-      "title": "Natívne pre Algorand",
-      "description": "Postavené špecificky pre blockchain Algorand s optimalizovanými smart kontraktmi. Využite rýchlosť, bezpečnosť a nízke transakčné náklady Algorandu pre efektívne decentralizované obchodovanie."
-    },
-    "stakingPools": {
-      "title": "Staking Pooly",
-      "description": "Vytvárajte a spravujte staking pooly pre úročené tokeny. Podpora pre rovnaké aktívum staking (B-ALGO, B-USDC) a tradičné páry aktív s automatickou distribúciou odmien."
-    },
-    "identityCompliance": {
-      "title": "Identita a Compliance",
-      "description": "Integrovaný systém overenia identity s konfigurovateľnými triedami overenia. Umožnite KYC-compliant obchodovanie pri zachovaní decentralizácie a súkromia."
-    },
-    "flexibleFeeManagement": {
-      "title": "Flexibilné Spravovanie Poplatkov",
-      "description": "Konfigurovateľná štruktúra poplatkov s Biatec fee sharing. Poskytovatelia likvidity zarábajú z obchodných poplatkov, zatiaľ čo protokol zbierajú udržateľný podiel pre rozvoj ekosystému."
-    },
-    "developerSdk": {
-      "title": "Developer SDK",
-      "description": "Komplexné TypeScript SDK s transaction buildermi, sender funkciami a utilitami. Ľahká integrácia pre dApps, peňaženky a obchodné rozhrania s plnou typovou bezpečnosťou."
-    }
-  }
+  "features.concentratedLiquidity.title": "Koncentrovaná Likvidita",
+  "features.concentratedLiquidity.description": "Zažite silu koncentrovanej likvidity AMM na Algorand. Poskytujte likviditu v rámci vlastných cenových rozsahov pre vyššie výnosy a zníženie impermanent loss v porovnaní s tradičnými AMM.",
+  "features.algorandNative.title": "Natívne pre Algorand",
+  "features.algorandNative.description": "Postavené špecificky pre blockchain Algorand s optimalizovanými smart kontraktmi. Využite rýchlosť, bezpečnosť a nízke transakčné náklady Algorandu pre efektívne decentralizované obchodovanie.",
+  "features.stakingPools.title": "Staking Pooly",
+  "features.stakingPools.description": "Vytvárajte a spravujte staking pooly pre úročené tokeny. Podpora pre rovnaké aktívum staking (B-ALGO, B-USDC) a tradičné páry aktív s automatickou distribúciou odmien.",
+  "features.identityCompliance.title": "Identita a Compliance",
+  "features.identityCompliance.description": "Integrovaný systém overenia identity s konfigurovateľnými triedami overenia. Umožnite KYC-compliant obchodovanie pri zachovaní decentralizácie a súkromia.",
+  "features.flexibleFeeManagement.title": "Flexibilné Spravovanie Poplatkov",
+  "features.flexibleFeeManagement.description": "Konfigurovateľná štruktúra poplatkov s Biatec fee sharing. Poskytovatelia likvidity zarábajú z obchodných poplatkov, zatiaľ čo protokol zbierajú udržateľný podiel pre rozvoj ekosystému.",
+  "features.developerSdk.title": "Developer SDK",
+  "features.developerSdk.description": "Komplexné TypeScript SDK s transaction buildermi, sender funkciami a utilitami. Ľahká integrácia pre dApps, peňaženky a obchodné rozhrania s plnou typovou bezpečnosťou."
 }

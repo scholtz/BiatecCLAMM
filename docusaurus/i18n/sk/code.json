@@ -390,4 +390,53 @@
     "message": "GitHub DEX Website",
     "description": "Footer link for GitHub DEX Website"
   }
+  ,
+  "features.concentratedLiquidity.title": {
+    "message": "Koncentrovaná Likvidita",
+    "description": "Homepage feature title Concentrated Liquidity"
+  },
+  "features.concentratedLiquidity.description": {
+    "message": "Poskytujte likviditu v rámci vlastných cenových rozsahov pre vyššiu efektivitu kapitálu a potenciál výnosu.",
+    "description": "Homepage feature description Concentrated Liquidity"
+  },
+  "features.algorandNative.title": {
+    "message": "Natívne pre Algorand",
+    "description": "Homepage feature title Algorand Native"
+  },
+  "features.algorandNative.description": {
+    "message": "Postavené špeciálne pre blockchain Algorand s optimalizovanými smart kontraktmi.",
+    "description": "Homepage feature description Algorand Native"
+  },
+  "features.stakingPools.title": {
+    "message": "Staking Pooly",
+    "description": "Homepage feature title Staking Pools"
+  },
+  "features.stakingPools.description": {
+    "message": "Zarábajte odmeny stakovaním aktív v špecializovaných pooloch s automatickou distribúciou výnosu.",
+    "description": "Homepage feature description Staking Pools"
+  },
+  "features.identityCompliance.title": {
+    "message": "Identita a Compliance",
+    "description": "Homepage feature title Identity Compliance"
+  },
+  "features.identityCompliance.description": {
+    "message": "Integrované overenie identity zabezpečujúce regulačnú zhodu a bezpečné transakcie.",
+    "description": "Homepage feature description Identity Compliance"
+  },
+  "features.flexibleFeeManagement.title": {
+    "message": "Flexibilné Poplatky",
+    "description": "Homepage feature title Flexible Fee Management"
+  },
+  "features.flexibleFeeManagement.description": {
+    "message": "Konfigurovateľná štruktúra poplatkov s automatickou distribúciou medzi poskytovateľov likvidity a protokol.",
+    "description": "Homepage feature description Flexible Fee Management"
+  },
+  "features.developerSdk.title": {
+    "message": "Developer SDK",
+    "description": "Homepage feature title Developer SDK"
+  },
+  "features.developerSdk.description": {
+    "message": "Komplexné TypeScript SDK pre jednoduchú integráciu a vývoj DeFi aplikácií.",
+    "description": "Homepage feature description Developer SDK"
+  }
 }
