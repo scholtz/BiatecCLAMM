@@ -1,3 +1,7 @@
+---
+sidebar_label: Network Fees
+---
+
 # Network Fees
 
 This document explains the fee structure and mechanics in BiatecCLAMM concentrated liquidity pools.
