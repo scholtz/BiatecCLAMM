@@ -48,9 +48,52 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
       ],
     ],
 
+    plugins: [
+      // Add local search for development
+      [
+        require.resolve("@easyops-cn/docusaurus-search-local"),
+        {
+          // `hashed` is recommended as long-term caching strategy for your search index
+          hashed: true,
+          // For Docs
+          docsRouteBasePath: "/docs",
+          // For Blog
+          blogRouteBasePath: "/blog",
+          // Whether to index blog pages
+          indexBlog: true,
+          // Whether to index docs pages
+          indexDocs: true,
+          // Whether to index static pages
+          // /404.html
+          indexPages: false,
+        },
+      ],
+    ],
+
     themeConfig:
       /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
       ({
+        // Enable Algolia DocSearch
+        algolia: {
+          // The application ID provided by Algolia
+          appId: 'YOUR_ALGOLIA_APP_ID',
+          // Public API key: it is safe to commit it
+          apiKey: 'YOUR_ALGOLIA_SEARCH_API_KEY',
+          indexName: 'biatec-dex',
+          // Optional: see doc section below
+          contextualSearch: true,
+          // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
+          externalUrlRegex: 'external\\.com|domain\\.com',
+          // Optional: Replace parts of the item URLs from Algolia. Useful when using the same search index for multiple deployments using a different baseUrl. You can use regexp or string in the `from` param. For example: localhost:3000 vs myCompany.com/docs
+          replaceSearchResultPathname: {
+            from: '/docs/', // or as RegExp: /\/docs\//
+            to: '/',
+          },
+          // Optional: Algolia search parameters
+          searchParameters: {},
+          // Optional: path for search page that enabled by default (`false` to disable it)
+          searchPagePath: 'search',
+        },
         navbar: {
           title: 'Home',
           logo: {

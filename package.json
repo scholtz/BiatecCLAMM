@@ -36,6 +36,7 @@
   ],
   "dependencies": {
     "@algorandfoundation/algokit-utils": "^9.1.2",
+    "@easyops-cn/docusaurus-search-local": "^0.52.1",
     "algosdk": "^3.5.2",
     "crypto-js": "^4.2.0",
     "ipfs-http-client": "^60.0.1",
