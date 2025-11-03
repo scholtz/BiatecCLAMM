@@ -68,6 +68,27 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
           indexPages: false,
         },
       ],
+      // API Documentation with TypeDoc
+      [
+        'docusaurus-plugin-typedoc',
+        {
+          id: 'api',
+          plugin: ['typedoc-plugin-markdown'],
+          out: 'docs/api',
+          entryPoints: ['../src/index.ts'],
+          tsconfig: '../tsconfig.json',
+          readme: 'none',
+          includeVersion: false,
+          excludeExternals: true,
+          excludePrivate: true,
+          excludeProtected: true,
+          excludeInternal: true,
+          hideGenerator: true,
+          disableSources: true,
+          sort: ['source-order'],
+          skipErrorChecking: true,
+        },
+      ],
     ],
 
     themeConfig:
