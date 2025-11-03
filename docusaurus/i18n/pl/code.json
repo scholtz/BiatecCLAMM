@@ -389,8 +389,7 @@
   "footer.more.github.website": {
     "message": "GitHub DEX Website",
     "description": "Footer link for GitHub DEX Website"
-  }
-  ,
+  },
   "features.concentratedLiquidity.title": {
     "message": "Skoncentrowana Płynność",
     "description": "Homepage feature title Concentrated Liquidity"

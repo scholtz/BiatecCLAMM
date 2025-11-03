@@ -7,12 +7,8 @@ function Feature({ title, description }) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center padding-horiz--md">
-        <h3>
-          {translate({ id: title.id, message: title.defaultMessage })}
-        </h3>
-        <p>
-          {translate({ id: description.id, message: description.defaultMessage })}
-        </p>
+        <h3>{translate({ id: title.id, message: title.defaultMessage })}</h3>
+        <p>{translate({ id: description.id, message: description.defaultMessage })}</p>
       </div>
     </div>
   );
