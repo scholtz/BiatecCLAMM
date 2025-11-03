@@ -20,13 +20,16 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
     projectName: 'BiatecCLAMM', // Usually your repo name.
     i18n: {
       defaultLocale: 'en',
-      locales: ['en', 'sk'],
+      locales: ['en', 'sk', 'pl'],
       localeConfigs: {
         en: {
           label: 'English',
         },
         sk: {
           label: 'Slovensky',
+        },
+        pl: {
+          label: 'Polski',
         },
       },
     },
