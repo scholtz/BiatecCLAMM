@@ -156,6 +156,7 @@ if (biatecFee === 0n) {
 - Applied as multiplier to base LP fees
 
 **Activity-Based Determination**:
+
 - **Anonymous Users**: 2.0x multiplier (double fees)
 - **Verified Basic**: 1.5x multiplier (50% surcharge)
 - **Verified Advanced**: 1.2x multiplier (20% surcharge)
