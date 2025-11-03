@@ -1,6 +1,9 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
+// Load environment variables from .env file
+require('dotenv').config();
+
 // With JSDoc @type annotations, IDEs can provide config autocompletion
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 (
@@ -56,25 +59,6 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
     ],
 
     plugins: [
-      // Add local search for development
-      [
-        require.resolve('@easyops-cn/docusaurus-search-local'),
-        {
-          // `hashed` is recommended as long-term caching strategy for your search index
-          hashed: true,
-          // For Docs
-          docsRouteBasePath: '/docs',
-          // For Blog
-          blogRouteBasePath: '/blog',
-          // Whether to index blog pages
-          indexBlog: true,
-          // Whether to index docs pages
-          indexDocs: true,
-          // Whether to index static pages
-          // /404.html
-          indexPages: false,
-        },
-      ],
       // API Documentation with TypeDoc
       [
         'docusaurus-plugin-typedoc',
@@ -104,10 +88,10 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
         // Enable Algolia DocSearch
         algolia: {
           // The application ID provided by Algolia
-          appId: 'YOUR_ALGOLIA_APP_ID',
+          appId: process.env.appId,
           // Public API key: it is safe to commit it
-          apiKey: 'YOUR_ALGOLIA_SEARCH_API_KEY',
-          indexName: 'biatec-dex',
+          apiKey: process.env.apiKey,
+          indexName: process.env.indexName || 'biatec-dex',
           // Optional: see doc section below
           contextualSearch: true,
           // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
