@@ -34,12 +34,12 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
           docs: {
             sidebarPath: require.resolve('./sidebars.js'),
             // Please change this to your repo.
-            editUrl: 'https://github.com/scholtz/BiatecCLAMM/edit/main/docasaurs/',
+            editUrl: 'https://github.com/scholtz/BiatecCLAMM/edit/main/docusaurus/',
           },
           blog: {
             showReadingTime: true,
             // Please change this to your repo.
-            editUrl: 'https://github.com/scholtz/BiatecCLAMM/edit/main/docasaurs/blog/',
+            editUrl: 'https://github.com/scholtz/BiatecCLAMM/edit/main/docusaurus/blog/',
           },
           theme: {
             customCss: require.resolve('./src/css/custom.css'),
