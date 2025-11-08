@@ -112,7 +112,7 @@ const app = async () => {
   if (t) {
     // return;
   }
-  var pools = await getPools({ algod: algorand.client.algod, assetId: 0n, poolProviderAppId: appBiatecPoolProvider });
+  const pools = await getPools({ algod: algorand.client.algod, assetId: 0n, poolProviderAppId: appBiatecPoolProvider });
   console.log(`Found ${pools.length} pools`);
 
   for (const pool of pools) {

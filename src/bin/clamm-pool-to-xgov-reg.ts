@@ -2,8 +2,8 @@
 import algosdk, { Transaction } from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { AlgorandClient, microAlgo, microAlgos } from '@algorandfoundation/algokit-utils';
-import { BiatecClammPoolClient } from '../../dist';
 import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
+import { BiatecClammPoolClient } from '../../dist';
 
 const signers: algosdk.Account[] = [];
 const accounts: string[] = [];

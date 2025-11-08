@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
-import { setupPool, SCALE, algosdk, algokit } from './shared-setup';
 import { makePaymentTxnWithSuggestedParamsFromObject } from 'algosdk';
+import { setupPool, SCALE, algosdk, algokit } from './shared-setup';
 
 const COUNTER_KEY_B64 = Buffer.from('counter', 'ascii').toString('base64');
 
