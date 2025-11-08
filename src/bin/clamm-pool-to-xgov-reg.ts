@@ -1,23 +1,10 @@
 /* eslint-disable no-console */
-import algosdk, { assignGroupID, makePaymentTxnWithSuggestedParamsFromObject, Transaction } from 'algosdk';
+import algosdk, { Transaction } from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
-import { AlgorandClient } from '@algorandfoundation/algokit-utils';
-import { BiatecConfigProviderClient, BiatecConfigProviderFactory } from '../../contracts/clients/BiatecConfigProviderClient';
-import { BiatecIdentityProviderClient, BiatecIdentityProviderFactory } from '../../contracts/clients/BiatecIdentityProviderClient';
-import { BiatecPoolProviderClient, BiatecPoolProviderFactory } from '../../contracts/clients/BiatecPoolProviderClient';
-import { BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
+import { AlgorandClient, microAlgo, microAlgos } from '@algorandfoundation/algokit-utils';
 import { BiatecClammPoolClient } from '../../dist';
+import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
 
-const biatecFee = BigInt(200_000_000);
-
-const algod = new algosdk.Algodv2(
-  process.env.ALGOD_TOKEN ?? 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-  process.env.ALGOD_SERVER ?? 'http://localhost',
-  parseInt(process.env.ALGOD_PORT ?? '4001', 10)
-);
-const appBiatecConfigProvider = BigInt(process.env.appBiatecConfigProvider ?? '0');
-const appBiatecIdentityProvider = BigInt(process.env.appBiatecIdentityProvider ?? '0');
-const appBiatecPoolProvider = BigInt(process.env.appBiatecPoolProvider ?? '0');
 const signers: algosdk.Account[] = [];
 const accounts: string[] = [];
 if (process.env.signer1) {
@@ -121,7 +108,7 @@ const app = async () => {
   if (!appBiatecClammPool) {
     throw new Error('Please set appBiatecClammPool env variables');
   }
-  console.log('upgrading single pool: ', appBiatecClammPool.toString());
+  console.log(`registering pool ${appBiatecClammPool} to xGov`);
 
   const pool = new BiatecClammPoolClient({
     appId: appBiatecClammPool,
@@ -130,11 +117,49 @@ const app = async () => {
     defaultSigner: signer.signer,
   });
 
-  await pool.send.update.updateApplication({
+  const address = 'RT5KAKAZZS7IPGTDXKP27LS7I2M5VBX336YA3VP4UKEDS2UVOWHPTKR5QE';
+  // watch address at biatec wallet. for example 3FXLX4X6WP3NVGOXXZDIFKO6HSPV25EV6AZ6H2T66WUID3PIH4AAXH5IXE
+  // then connect with this address to xgov portal and signup at https://xgov.algorand.co/profile/3FXLX4X6WP3NVGOXXZDIFKO6HSPV25EV6AZ6H2T66WUID3PIH4AAXH5IXE
+  // then copy tx content here to signUpTxs variable
+  const signUpTxs = [
+    'iqNhbXTOAJiWgKNmZWXNA+iiZnbOA0zFYaNnZW6sbWFpbm5ldC12MS4womdoxCDAYcTY/B293tLXYEvkVo4/bQQZh6w3veS2ILWrOSSK36NncnDEIFCde6VFDcaFY/mpQc0+5t1qvD/75tExl2yJRUW2d7Poomx2zgNMyUmjcmN2xCA0f0fh6qin8iMFAZCcT2tZ85VtsWWDdufyuAAtOe28JqNzbmTEIIz6oCgZzL6HmmO6n6+uX0aZ2ob737AN1fyiiDlqlXWOpHR5cGWjcGF5',
+    'i6RhcGFhksQEoILO+MQgjPqgKBnMvoeaY7qfr65fRpnahvvfsA3V/KKIOWqVdY6kYXBieJGBoW7EIXiM+qAoGcy+h5pjup+vrl9GmdqG+9+wDdX8oog5apV1jqRhcGlkzrufdJKjZmVlzQPoomZ2zgNMxWGjZ2VurG1haW5uZXQtdjEuMKJnaMQgwGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit+jZ3JwxCBQnXulRQ3GhWP5qUHNPubdarw/++bRMZdsiUVFtnez6KJsds4DTMXZo3NuZMQgjPqgKBnMvoeaY7qfr65fRpnahvvfsA3V/KKIOWqVdY6kdHlwZaRhcHBs',
+  ];
+
+  const decodedTxs = signUpTxs.map((s) => Buffer.from(s, 'base64'));
+  const decodedAlgoTxs = decodedTxs.map((dt) => algosdk.decodeUnsignedTransaction(dt));
+  console.log('args', {
+    appBiatecConfigProvider,
+    accounts: decodedAlgoTxs[1].applicationCall?.accounts.map((a) => a.toString()) ?? [],
+    appArgs: decodedAlgoTxs[1].applicationCall?.appArgs?.map((a) => a) ?? [],
+    appCallParams: {
+      applicationId: decodedAlgoTxs[1].applicationCall?.appIndex ?? 0n,
+      fee: decodedAlgoTxs[1].fee,
+      note: Buffer.from(decodedAlgoTxs[1].note).toString('utf-8'),
+      payAmount: decodedAlgoTxs[0].payment?.amount ?? 0n,
+      payToAddress: decodedAlgoTxs[0].payment?.receiver.publicKey ?? algosdk.decodeAddress(address).publicKey,
+    },
+    apps: decodedAlgoTxs[1].applicationCall?.foreignApps?.map((a) => a) ?? [],
+    assets: decodedAlgoTxs[1].applicationCall?.foreignAssets?.map((a) => a) ?? [],
+  });
+  await pool.send.doAppCall({
     args: {
       appBiatecConfigProvider,
-      newVersion: Buffer.from('BIATEC-CLAMM-01-05-05', 'ascii'),
+      accounts: decodedAlgoTxs[1].applicationCall?.accounts.map((a) => a.toString()) ?? [],
+      appArgs: decodedAlgoTxs[1].applicationCall?.appArgs?.map((a) => a) ?? [],
+      appCallParams: {
+        applicationId: decodedAlgoTxs[1].applicationCall?.appIndex ?? 0n,
+        fee: decodedAlgoTxs[1].fee,
+        note: Buffer.from(decodedAlgoTxs[1].note).toString('utf-8'),
+        payAmount: decodedAlgoTxs[0].payment?.amount ?? 0n,
+        payToAddress: decodedAlgoTxs[0].payment?.receiver.publicKey ?? algosdk.decodeAddress(address).publicKey,
+      },
+      apps: decodedAlgoTxs[1].applicationCall?.foreignApps?.map((a) => a) ?? [],
+      assets: decodedAlgoTxs[1].applicationCall?.foreignAssets?.map((a) => a) ?? [],
     },
+    accountReferences: [address],
+    appReferences: [appBiatecClammPool, decodedAlgoTxs[1].applicationCall?.appIndex ?? 0n],
+    staticFee: AlgoAmount.MicroAlgo(3_000),
   });
 
   console.log(`${Date()} Deploy DONE`);

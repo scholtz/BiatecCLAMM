@@ -411,7 +411,7 @@
         },
         {
           "name": "appCallParams",
-          "type": "(uint64,address,uint64,uint64,string)"
+          "type": "(uint64,byte[32],uint64,uint64,string)"
         },
         {
           "name": "apps",

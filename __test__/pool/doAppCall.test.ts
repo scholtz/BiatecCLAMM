@@ -106,7 +106,7 @@ describe('BiatecClammPool - doAppCall', () => {
           fee: 0n,
           note: 'doAppCall-test',
           payAmount: 1000000n,
-          payToAddress: 'ALGONAUTSPIUHDCX3SLFXOFDUKOE4VY36XV4JX2JHQTWJNKVBKPEBQACRY',
+          payToAddress: algosdk.decodeAddress('ALGONAUTSPIUHDCX3SLFXOFDUKOE4VY36XV4JX2JHQTWJNKVBKPEBQACRY').publicKey,
         },
         apps: [],
         assets: [],

@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-05-05';
+const version = 'BIATEC-CLAMM-01-06-01';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
@@ -34,7 +34,7 @@ type AmmStatus = {
 
 type AppCallParams = {
   payAmount: uint64;
-  payToAddress: Address;
+  payToAddress: bytes32;
   applicationID: AppID;
   fee: uint64;
   note: string;
@@ -1284,18 +1284,16 @@ export class BiatecClammPool extends Contract {
       this.txn.sender === addressExecutiveFee,
       'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
     );
-
-    if (appCallParams.payAmount > 0 && apps.length === 0 && assets.length === 0) {
+    if (appCallParams.payAmount > 0 && apps.length === 0 && assets.length === 0 && accounts.length === 0) {
       this.pendingGroup.addPayment({
-        receiver: appCallParams.payToAddress,
+        receiver: Address.fromBytes(appCallParams.payToAddress),
         amount: appCallParams.payAmount,
         fee: 0,
         isFirstTxn: true,
       });
       this.pendingGroup.addAppCall({
         applicationID: appCallParams.applicationID,
-        accounts: accounts,
-        applicationArgs: appArgs,
+        applicationArgs: [appArgs[0], appArgs[1]],
         note: appCallParams.note,
         fee: appCallParams.fee,
         onCompletion: OnCompletion.NoOp,
@@ -1303,7 +1301,7 @@ export class BiatecClammPool extends Contract {
       this.pendingGroup.submit();
     } else if (appCallParams.payAmount > 0) {
       this.pendingGroup.addPayment({
-        receiver: appCallParams.payToAddress,
+        receiver: Address.fromBytes(appCallParams.payToAddress),
         amount: appCallParams.payAmount,
         fee: 0,
         isFirstTxn: true,
@@ -1311,7 +1309,7 @@ export class BiatecClammPool extends Contract {
       this.pendingGroup.addAppCall({
         applicationID: appCallParams.applicationID,
         accounts: accounts,
-        applicationArgs: appArgs,
+        applicationArgs: [appArgs[0], appArgs[1]],
         applications: apps,
         assets: assets,
         note: appCallParams.note,
