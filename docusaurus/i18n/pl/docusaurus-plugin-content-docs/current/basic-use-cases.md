@@ -62,7 +62,7 @@ const SCALE = 1_000_000_000n;
 await poolProviderClient.send.setNativeTokenName({
   args: {
     appBiatecConfigProvider: configProviderAppId,
-    nativeTokenName: 'ALGO',
+    nativeTokenName: 'Algo',
   },
   appReferences: [configProviderAppId],
 });
@@ -243,7 +243,7 @@ const SCALE = 1_000_000_000n;
 await poolProviderClient.send.setNativeTokenName({
   args: {
     appBiatecConfigProvider: configProviderAppId,
-    nativeTokenName: 'ALGO',
+    nativeTokenName: 'Algo',
   },
   appReferences: [configProviderAppId],
 });
@@ -424,7 +424,7 @@ const SCALE = 1_000_000_000n;
 await poolProviderClient.send.setNativeTokenName({
   args: {
     appBiatecConfigProvider: configProviderAppId,
-    nativeTokenName: 'ALGO',
+    nativeTokenName: 'Algo',
   },
   appReferences: [configProviderAppId],
 });

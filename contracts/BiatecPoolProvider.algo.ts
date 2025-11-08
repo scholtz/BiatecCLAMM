@@ -260,7 +260,7 @@ export class BiatecPoolProvider extends Contract {
     this.recentPools9.value = 0;
     this.recentPools10.value = 0;
     this.version.value = version;
-    this.nativeTokenName.value = 'ALGO';
+    this.nativeTokenName.value = 'Algo';
   }
 
   /**

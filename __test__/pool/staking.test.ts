@@ -21,7 +21,7 @@ describe('BiatecClammPool - Staking Pools', () => {
         p: BigInt(SCALE),
         p1: BigInt(SCALE),
         p2: BigInt(SCALE),
-        nativeTokenName: 'ALGO',
+        nativeTokenName: 'Algo',
         useProvidedAssets: true,
       });
 
@@ -38,8 +38,8 @@ describe('BiatecClammPool - Staking Pools', () => {
       console.log('LP raw name bytes', rawNameBuffer.toString('hex'));
       // eslint-disable-next-line no-console
       console.log('LP name/unit', lpTokenInfo.params.name, lpTokenInfo.params.unitName);
-      expect(lpTokenInfo.params.name).toBe('bALGO');
-      expect(lpTokenInfo.params.unitName).toBe('ALGO');
+      expect(lpTokenInfo.params.name).toBe('bAlgo');
+      expect(lpTokenInfo.params.unitName).toBe('Algo');
     } catch (e: any) {
       // eslint-disable-next-line no-console
       console.error(e);
@@ -165,7 +165,7 @@ describe('BiatecClammPool - Staking Pools', () => {
         p: BigInt(SCALE),
         p1: BigInt(SCALE),
         p2: BigInt(SCALE),
-        nativeTokenName: 'ALGO',
+        nativeTokenName: 'Algo',
         useProvidedAssets: true,
       });
 

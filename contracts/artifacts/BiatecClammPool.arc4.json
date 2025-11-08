@@ -281,7 +281,7 @@
     },
     {
       "name": "distributeExcessAssets",
-      "desc": "If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.\nIf someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.\n\n\nThis method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
+      "desc": "If someone deposits excess assets to the LP pool, addressExecutiveFee can either distribute them to the lp tokens or withdraw it, depending on the use case.\nIf someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.\n\n\nThis method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.\n\n\nAmount for A or B which is equal exactly to 1 is special usecase and means full distribution which is possible for the specific asset.\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
       "args": [
         {
           "name": "appBiatecConfigProvider",

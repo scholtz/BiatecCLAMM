@@ -34,11 +34,7 @@ const signerAccount = {
   },
 };
 
-const {
-  configAppId: configProviderAppId,
-  identityAppId: identityProviderAppId,
-  poolProviderAppId,
-} = getConfig('testnet-v1.0');
+const { configAppId: configProviderAppId, identityAppId: identityProviderAppId, poolProviderAppId } = getConfig('testnet-v1.0');
 const poolProviderClient = new BiatecPoolProviderClient({
   algorand,
   appId: poolProviderAppId,
@@ -66,7 +62,7 @@ const SCALE = 1_000_000_000n;
 await poolProviderClient.send.setNativeTokenName({
   args: {
     appBiatecConfigProvider: configProviderAppId,
-    nativeTokenName: 'ALGO',
+    nativeTokenName: 'Algo',
   },
   appReferences: [configProviderAppId],
 });

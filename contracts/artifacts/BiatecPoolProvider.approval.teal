@@ -234,9 +234,9 @@ createApplication:
 	app_global_put
 
 	// contracts\BiatecPoolProvider.algo.ts:263
-	// this.nativeTokenName.value = 'ALGO'
+	// this.nativeTokenName.value = 'Algo'
 	bytec 30 //  "nt"
-	pushbytes 0x414c474f // "ALGO"
+	pushbytes 0x416c676f // "Algo"
 	app_global_put
 	retsub
 

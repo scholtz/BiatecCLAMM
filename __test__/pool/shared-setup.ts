@@ -203,6 +203,9 @@ export const setupPool = async (input: ISetup) => {
       },
       appReferences: [clientBiatecConfigProvider.appClient.appId],
     });
+    const poolState = await clientBiatecPoolProvider.appClient.state.global.getAll();
+    // eslint-disable-next-line no-console
+    console.log('pool nativeTokenName', poolState.nativeTokenName);
   }
   console.log('apps PP,Identity,Config', clientBiatecPoolProvider.appClient.appId, clientBiatecIdentityProvider.appClient.appId, clientBiatecConfigProvider.appClient.appId);
   console.log('clammPoolApprovalProgram.length', clammPoolApprovalProgram.length);
@@ -389,6 +392,35 @@ export const setupPool = async (input: ISetup) => {
   if (!(confirmation.logs && confirmation.logs.length > 0)) {
     throw new Error('Logs not found');
   }
+  const decodeLogEntry = (entry: string | Uint8Array) => (typeof entry === 'string' ? Buffer.from(entry, 'base64') : Buffer.from(entry));
+  const toPrintableString = (buffer: Buffer) => {
+    const text = buffer.toString('utf8');
+    return /^[\x20-\x7E]*$/.test(text) ? text : `0x${buffer.toString('hex')}`;
+  };
+  const topLevelLogs = confirmation.logs?.map((log: string | Uint8Array) => toPrintableString(decodeLogEntry(log))) ?? [];
+  console.log('confirmation keys', Object.keys(confirmation));
+  console.log('confirmation logs', topLevelLogs);
+  const innerLogs: string[] = [];
+  const innerTxns = (confirmation as any)['inner-txns'] as Array<{ logs?: (string | Uint8Array)[]; ['inner-txns']?: any[] }> | undefined;
+  const collectInnerLogs = (txns?: Array<{ logs?: (string | Uint8Array)[]; ['inner-txns']?: any[] }>) => {
+    txns?.forEach((txn) => {
+      txn.logs?.forEach((log) => innerLogs.push(toPrintableString(decodeLogEntry(log))));
+      collectInnerLogs((txn as any)['inner-txns']);
+    });
+  };
+  collectInnerLogs(innerTxns);
+  console.log('inner logs', innerLogs);
+  innerTxns?.forEach((txn, index) => {
+    const innerTxn = txn as any;
+    const params = innerTxn?.txn?.apar;
+    if (params) {
+      const decode = (value?: string) => (typeof value === 'string' ? Buffer.from(value, 'base64').toString('utf8') : undefined);
+      console.log('inner asset params', index, {
+        name: decode(params.an),
+        unitName: decode(params.un),
+      });
+    }
+  });
   const lastLog = confirmation.logs[confirmation.logs.length - 1];
   expect(lastLog.length).toBe(12);
   const poolAppId = algosdk.decodeUint64(lastLog.subarray(4, 12));

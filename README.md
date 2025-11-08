@@ -129,7 +129,7 @@ import { clammCreateSender } from 'biatec-concentrated-liquidity-amm';
 await poolProviderClient.send.setNativeTokenName({
   args: {
     appBiatecConfigProvider: configAppId,
-    nativeTokenName: 'ALGO',
+    nativeTokenName: 'Algo',
   },
   appReferences: [configAppId],
 });
@@ -191,16 +191,19 @@ For complete documentation, see [docs/staking-pools.md](docs/staking-pools.md).
 Comprehensive documentation is available in the `docs/` folder:
 
 ### Core Documentation
+
 - **[Basic Use Cases](docs/basic-use-cases.md)** - Getting started with pools, swaps, and liquidity
 - **[Staking Pools](docs/staking-pools.md)** - Create B-ALGO, B-USDC interest-bearing tokens
 - **[Integration Guide](docs/integration-guide.md)** - Best practices for integrating CLAMM into your application
 
 ### Technical Details
+
 - **[Liquidity Fee Protection](docs/liquidity-fee-protection.md)** - How fee accounting protects LPs
 - **[Liquidity Rounding](docs/liquidity-rounding.md)** - Rounding behavior and user expectations
 - **[Error Codes](docs/error-codes.md)** - Complete reference of all error messages
 
 ### Security
+
 - **[Security Audits](audits/)** - Multiple AI-powered security audit reports
 - **[Integration Security](docs/integration-guide.md#security-considerations)** - Critical warnings for developers
 

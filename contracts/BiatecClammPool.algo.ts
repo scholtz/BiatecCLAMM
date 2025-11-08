@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-06-01';
+const version = 'BIATEC-CLAMM-01-06-02';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
@@ -241,7 +241,7 @@ export class BiatecClammPool extends Contract {
     //   nativeTokenNameBytes = substring3(nativeTokenNameBytes, 2, nativeTokenNameBytes.length);
     // }
     // if (nativeTokenNameBytes.length === 0) {
-    const nativeTokenNameBytes = 'ALGO';
+    const nativeTokenNameBytes = 'Algo';
     // }
 
     this.assetLp.value = this.doCreatePoolToken(assetA, assetB, nativeTokenNameBytes).id;
@@ -324,7 +324,7 @@ export class BiatecClammPool extends Contract {
   private doCreatePoolToken(assetA: AssetID, assetB: AssetID, nativeTokenName: bytes): AssetID {
     let defaultNativeTokenName = nativeTokenName;
     if (defaultNativeTokenName.length === 0) {
-      defaultNativeTokenName = 'ALGO';
+      defaultNativeTokenName = 'Algo';
     }
 
     const nameAssetABytes = assetA.id > 0 ? assetA.unitName : defaultNativeTokenName;
@@ -367,6 +367,22 @@ export class BiatecClammPool extends Contract {
   private checkAssets(assetA: AssetID, assetB: AssetID, assetLp: AssetID) {
     this.checkAssetsAB(assetA, assetB);
     assert(assetLp.id === this.assetLp.value, 'assetLp does not match');
+  }
+
+  private ensureAssetBalanceMatchesState(assetId: uint64, scaleFromBase: uint256, recorded: uint256, errorNative: string, errorAsa: string): void {
+    if (assetId === <uint64>0) {
+      const nativeAvailable = ((this.app.address.balance - <uint64>1_000_000) as uint256) * scaleFromBase;
+      assert(nativeAvailable >= recorded, errorNative);
+    } else {
+      const assetRef = AssetID.fromUint64(assetId);
+      const assetAvailable = (this.app.address.assetBalance(assetRef) as uint256) * scaleFromBase;
+      assert(assetAvailable >= recorded, errorAsa);
+    }
+  }
+
+  private ensurePoolBalancesWithinHoldings(assetAId: uint64, assetBId: uint64): void {
+    this.ensureAssetBalanceMatchesState(assetAId, this.assetADecimalsScaleFromBase.value, this.assetABalanceBaseScale.value, 'E_A0_B', 'E_A_B');
+    this.ensureAssetBalanceMatchesState(assetBId, this.assetBDecimalsScaleFromBase.value, this.assetBBalanceBaseScale.value, 'E_B0_B', 'E_B_B');
   }
 
   /**
@@ -1089,6 +1105,8 @@ export class BiatecClammPool extends Contract {
    *
    * This method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.
    *
+   * Amount for A or B which is equal exactly to 1 is special usecase and means full distribution which is possible for the specific asset.
+   *
    * Only addressExecutiveFee is allowed to execute this method.
    *
    * @param appBiatecConfigProvider Biatec config app. Only addressExecutiveFee is allowed to execute this method.
@@ -1113,30 +1131,26 @@ export class BiatecClammPool extends Contract {
       'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
     );
 
+    if (amountA === <uint256>1) {
+      // special case for asset A to distribute all available balance
+      if (assetA.id === <uint64>0) {
+        amountA = ((this.app.address.balance - <uint64>1_000_000) as uint256) * this.assetADecimalsScaleFromBase.value;
+      } else {
+        amountA = (this.app.address.assetBalance(assetA) as uint256) * this.assetADecimalsScaleFromBase.value;
+      }
+    }
+    if (amountB === <uint256>1) {
+      // special case for asset B to distribute all available balance
+      if (assetB.id === <uint64>0) {
+        amountB = ((this.app.address.balance - <uint64>1_000_000) as uint256) * this.assetBDecimalsScaleFromBase.value;
+      } else {
+        amountB = (this.app.address.assetBalance(assetB) as uint256) * this.assetBDecimalsScaleFromBase.value;
+      }
+    }
+
     this.assetABalanceBaseScale.value = this.assetABalanceBaseScale.value + amountA;
     this.assetBBalanceBaseScale.value = this.assetBBalanceBaseScale.value + amountB;
-    if (assetA.id === 0) {
-      assert(
-        ((this.app.address.balance - 1_000_000) as uint256) * this.assetADecimalsScaleFromBase.value >= this.assetABalanceBaseScale.value,
-        'E_A0_B' // 'It is not possible to set higher assetABalance in algos then is in the app balance'
-      );
-    } else {
-      assert(
-        (this.app.address.assetBalance(assetA) as uint256) * this.assetADecimalsScaleFromBase.value >= this.assetABalanceBaseScale.value,
-        'E_A_B' // 'It is not possible to set higher assetABalance then is in the app balance'
-      );
-    }
-    if (assetB.id === 0) {
-      assert(
-        ((this.app.address.balance - 1_000_000) as uint256) * this.assetBDecimalsScaleFromBase.value >= this.assetBBalanceBaseScale.value,
-        'E_B0_B' // 'It is not possible to set higher assetBBalance in algos then is in the app balance'
-      );
-    } else {
-      assert(
-        (this.app.address.assetBalance(assetB) as uint256) * this.assetBDecimalsScaleFromBase.value >= this.assetBBalanceBaseScale.value,
-        'E_B_B' // 'It is not possible to set higher assetBBalance then is in the app balance'
-      );
-    }
+    this.ensurePoolBalancesWithinHoldings(assetA.id, assetB.id);
     const oldL = this.Liquidity.value; // old liquidity before the deposit
     const newL = this.setCurrentLiquidityNonDecreasing(oldL); // set the new liquidity after the deposit
     // liquidity increase is the result of the asset a and asset b deposit
@@ -1200,28 +1214,7 @@ export class BiatecClammPool extends Contract {
     }
 
     // it is OK to check this after the tx as on AVM the whole transaction call must be executed and must succeed in order to write it to the blockchain
-    if (assetA.id === 0) {
-      assert(
-        ((this.app.address.balance - 1_000_000) as uint256) * this.assetADecimalsScaleFromBase.value >= this.assetABalanceBaseScale.value,
-        'E_A0_B' // 'It is not possible to set higher assetABalance in algos then is in the app balance'
-      );
-    } else {
-      assert(
-        (this.app.address.assetBalance(assetA) as uint256) * this.assetADecimalsScaleFromBase.value >= this.assetABalanceBaseScale.value,
-        'E_A_B' // 'It is not possible to set higher assetABalance then is in the app balance'
-      );
-    }
-    if (assetB.id === 0) {
-      assert(
-        ((this.app.address.balance - 1_000_000) as uint256) * this.assetBDecimalsScaleFromBase.value >= this.assetBBalanceBaseScale.value,
-        'E_B0_B' // 'It is not possible to set higher assetBBalance in algos then is in the app balance'
-      );
-    } else {
-      assert(
-        (this.app.address.assetBalance(assetB) as uint256) * this.assetBDecimalsScaleFromBase.value >= this.assetBBalanceBaseScale.value,
-        'E_B_B' // 'It is not possible to set higher assetBBalance then is in the app balance'
-      );
-    }
+    this.ensurePoolBalancesWithinHoldings(assetA.id, assetB.id);
 
     return amountA + amountB;
   }
@@ -1344,19 +1337,7 @@ export class BiatecClammPool extends Contract {
     //   this.pendingGroup.submit();
     // }
     // it is OK to check this after the tx as on AVM the whole transaction call must be executed and must succeed in order to write it to the blockchain
-    if (this.assetA.value === 0) {
-      assert(
-        ((this.app.address.balance - 1_000_000) as uint256) * this.assetADecimalsScaleFromBase.value >= this.assetABalanceBaseScale.value,
-        'E_A0_B' // 'It is not possible to set higher assetABalance in algos then is in the app balance'
-      );
-    }
-
-    if (this.assetB.value === 0) {
-      assert(
-        ((this.app.address.balance - 1_000_000) as uint256) * this.assetBDecimalsScaleFromBase.value >= this.assetBBalanceBaseScale.value,
-        'E_B0_B' // 'It is not possible to set higher assetBBalance in algos then is in the app balance'
-      );
-    }
+    this.ensurePoolBalancesWithinHoldings(this.assetA.value, this.assetB.value);
   }
 
   /**

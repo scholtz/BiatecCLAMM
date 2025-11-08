@@ -42,12 +42,12 @@ const { clientBiatecClammPoolProvider } = await setupPool({
   p: BigInt(1 * SCALE), // Cena = 1:1
   p1: BigInt(1 * SCALE), // Min cena = 1
   p2: BigInt(1 * SCALE), // Max cena = 1
-  nativeTokenName: 'ALGO', // Opcjonalny parametr pomocniczy zapewnia zgodność globalnego stanu providera
+  nativeTokenName: 'Algo', // Opcjonalny parametr pomocniczy zapewnia zgodność globalnego stanu providera
 });
 
 // Przy ręcznym konstruowaniu transakcji, skonfiguruj provider raz przez:
 // await poolProviderClient.send.setNativeTokenName({
-//   args: { appBiatecConfigProvider: configAppId, nativeTokenName: 'ALGO' },
+//   args: { appBiatecConfigProvider: configAppId, nativeTokenName: 'Algo' },
 //   appReferences: [configAppId],
 });
 ```
@@ -154,7 +154,7 @@ const pool = await setupPool({
   p: BigInt(SCALE),
   p1: BigInt(SCALE),
   p2: BigInt(SCALE),
-  nativeTokenName: 'ALGO',
+  nativeTokenName: 'Algo',
 });
 
 // Stakuj 100 ALGO
