@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-06-02';
+const version = 'BIATEC-CLAMM-01-06-03';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
@@ -1130,26 +1130,27 @@ export class BiatecClammPool extends Contract {
       this.txn.sender === addressExecutiveFee,
       'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
     );
-
+    let distributedAmountA = this.assetABalanceBaseScale.value + amountA;
+    let distributedAmountB = this.assetBBalanceBaseScale.value + amountB;
     if (amountA === <uint256>1) {
       // special case for asset A to distribute all available balance
       if (assetA.id === <uint64>0) {
-        amountA = ((this.app.address.balance - <uint64>1_000_000) as uint256) * this.assetADecimalsScaleFromBase.value;
+        distributedAmountA = ((this.app.address.balance - <uint64>1_000_000) as uint256) * this.assetADecimalsScaleFromBase.value;
       } else {
-        amountA = (this.app.address.assetBalance(assetA) as uint256) * this.assetADecimalsScaleFromBase.value;
+        distributedAmountA = (this.app.address.assetBalance(assetA) as uint256) * this.assetADecimalsScaleFromBase.value;
       }
     }
     if (amountB === <uint256>1) {
       // special case for asset B to distribute all available balance
       if (assetB.id === <uint64>0) {
-        amountB = ((this.app.address.balance - <uint64>1_000_000) as uint256) * this.assetBDecimalsScaleFromBase.value;
+        distributedAmountB = ((this.app.address.balance - <uint64>1_000_000) as uint256) * this.assetBDecimalsScaleFromBase.value;
       } else {
-        amountB = (this.app.address.assetBalance(assetB) as uint256) * this.assetBDecimalsScaleFromBase.value;
+        distributedAmountB = (this.app.address.assetBalance(assetB) as uint256) * this.assetBDecimalsScaleFromBase.value;
       }
     }
 
-    this.assetABalanceBaseScale.value = this.assetABalanceBaseScale.value + amountA;
-    this.assetBBalanceBaseScale.value = this.assetBBalanceBaseScale.value + amountB;
+    this.assetABalanceBaseScale.value = distributedAmountA;
+    this.assetBBalanceBaseScale.value = distributedAmountB;
     this.ensurePoolBalancesWithinHoldings(assetA.id, assetB.id);
     const oldL = this.Liquidity.value; // old liquidity before the deposit
     const newL = this.setCurrentLiquidityNonDecreasing(oldL); // set the new liquidity after the deposit
