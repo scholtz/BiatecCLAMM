@@ -128,7 +128,7 @@ const app = async () => {
     await poolClient.send.update.updateApplication({
       args: {
         appBiatecConfigProvider,
-        newVersion: Buffer.from('BIATEC-CLAMM-01-05-05', 'ascii'),
+        newVersion: Buffer.from('BIATEC-CLAMM-01-06-03', 'ascii'),
       },
     });
   }
