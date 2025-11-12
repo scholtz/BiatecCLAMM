@@ -43,43 +43,52 @@
 English is the canonical source. Localized files must never introduce content that doesn't first exist in English.
 
 ### Workflow (Chunked Translation)
+
 1. Identify a single logical chunk (heading section, paragraph group, list, or table) in the English file under `docusaurus/docs/`.
 2. Translate only that chunk for the target locale path: `docusaurus/i18n/<locale>/docusaurus-plugin-content-docs/current/<same-relative-path>.md`.
 3. Immediately remove any temporary bilingual duplication; the localized file must contain only the translated prose (keep code, identifiers, product names in English where appropriate).
 4. Repeat chunk-by-chunk until the file is complete. Avoid large unreviewed machine translations.
 
 ### Frontmatter & Structure
+
 - Preserve frontmatter keys (`id`, `sidebar_position`, etc.). Translate only human-facing `title` / descriptions; never change `id`.
 - Keep heading hierarchy identical to English unless a section is intentionally omitted (document the omission in commit message).
 
 ### Code Blocks & Inline Elements
+
 - Do NOT translate code, variable names, CLI commands, or JSON keys. Translate only explanatory comments or surrounding prose.
-- Maintain language specifiers (```ts, ```sh). Do not alter indentation.
+- Maintain language specifiers (`ts, `sh). Do not alter indentation.
 
 ### Links, Images, and Assets
+
 - Translate link text; keep URLs unless a locale-specific page exists.
 - Translate image alt text; reuse the same image file unless a localized graphic is necessary.
 
 ### Glossary & Consistency
+
 - Maintain a per-locale glossary at `docusaurus/i18n/<locale>/glossary.md` (create if absent).
 - Update glossary first when introducing new product terms, then propagate.
 
 ### Cleaning Up Translations
+
 - Delete any leftover English sentences after translating a chunk—no side-by-side paragraphs in committed files.
 - Remove machine translation notes, placeholders like `[TODO-TRANSLATE]`, and reviewer annotations before commit.
 
 ### Updating After English Changes
+
 1. Diff English vs localized file.
 2. For each changed English chunk: re-translate that chunk, replace the old localized chunk, ensure no duplicated text remains.
 3. Commit with message pattern: `docs(<locale>): sync <file> <heading>`.
 
 ### Common Pitfalls
+
 - Leaving both English and localized paragraph (fix: delete English in localized file).
 - Translating identifiers inside code blocks (keep them).
 - Altering frontmatter IDs (breaks links).
 - Large unreviewed bulk translations (prefer incremental chunks).
 
 ### Commit Hygiene
+
 - One locale per commit unless the change is trivial across all locales.
 - Keep commits focused: translation only vs refactor. Refactor always happens in English first.
 
