@@ -962,13 +962,23 @@ export class BiatecClammPool extends Contract {
         realSwapBDecimals = realSwapBDecimals - <uint256>1; // rounding issue.. do not allow the LP to bleed
         realSwapBaseDecimals = realSwapBDecimals * this.assetBDecimalsScaleFromBase.value;
       }
-      const toSwapBDecimals = realSwapBDecimals as uint64;
+      let toSwapBDecimals = realSwapBDecimals as uint64;
       ret = toSwapBDecimals;
       if (minimumToReceive > 0) {
         // if minimumToReceive == 0, do not restrict the price
         assert(toSwapBDecimals >= minimumToReceive, 'Minimum to receive is not met');
       }
+
       amountBForStatsInAssetDecimals = toSwapBDecimals;
+      const realAmountB = this.getRealAssetBalance(assetB);
+      if (realAmountB < toSwapBDecimals) {
+        // in case of small overpay, send only what is available
+        // profit from the overpay goes to the LPs
+        // users should use the minimumToReceive to protect themselves from such situations when this is not intended
+        // keep the statistics correct (amountBForStatsInAssetDecimals) so that it does not produce incorrect price quotes
+        toSwapBDecimals = realAmountB;
+      }
+
       this.doAxfer(this.txn.sender, assetB, toSwapBDecimals);
 
       this.assetABalanceBaseScale.value = this.assetABalanceBaseScale.value + inAssetInBaseScale;
@@ -1001,13 +1011,21 @@ export class BiatecClammPool extends Contract {
         realSwapADecimals = realSwapADecimals - <uint256>1; // rounding issue.. do not allow the LP to bleed
         realSwapBaseDecimals = realSwapADecimals * this.assetADecimalsScaleFromBase.value;
       }
-      const toSwapADecimals = realSwapADecimals as uint64;
+      let toSwapADecimals = realSwapADecimals as uint64;
       ret = toSwapADecimals;
       if (minimumToReceive > 0) {
         // if minimumToReceive == 0, do not restrict the price
         assert(toSwapADecimals >= minimumToReceive, 'Minimum to receive is not met');
       }
       amountAForStatsInAssetDecimals = toSwapADecimals;
+      const realAmountA = this.getRealAssetBalance(assetA);
+      if (realAmountA < toSwapADecimals) {
+        // in case of small overpay, send only what is available
+        // profit from the overpay goes to the LPs
+        // users should use the minimumToReceive to protect themselves from such situations when this is not intended
+        // keep the statistics correct (amountAForStatsInAssetDecimals) so that it does not produce incorrect price quotes
+        toSwapADecimals = realAmountA;
+      }
       this.doAxfer(this.txn.sender, assetA, toSwapADecimals);
 
       this.assetBBalanceBaseScale.value = this.assetBBalanceBaseScale.value + inAssetInBaseScale;
@@ -1704,6 +1722,10 @@ export class BiatecClammPool extends Contract {
     return inAmountA;
   }
 
+  getRealAssetBalance(asset: AssetID): uint64 {
+    return asset.id === 0 ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance : globals.currentApplicationAddress.assetBalance(asset);
+  }
+
   @abi.readonly
   status(appBiatecConfigProvider: AppID, assetA: AssetID, assetB: AssetID, assetLp: AssetID): AmmStatus {
     assert(
@@ -1714,8 +1736,8 @@ export class BiatecClammPool extends Contract {
     assert(assetB.id === this.assetB.value);
     assert(this.assetLp.value === assetLp.id, 'E_LP'); // 'LP asset does not match');
     const biatecFee = this.appBiatecConfigProvider.value.globalState('f') as uint256;
-    const realBalanceA = assetA.id === 0 ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance : globals.currentApplicationAddress.assetBalance(assetA);
-    const realBalanceB = assetB.id === 0 ? globals.currentApplicationAddress.balance - globals.currentApplicationAddress.minBalance : globals.currentApplicationAddress.assetBalance(assetB);
+    const realBalanceA = this.getRealAssetBalance(assetA);
+    const realBalanceB = this.getRealAssetBalance(assetB);
     return {
       assetA: this.assetA.value,
       assetB: this.assetB.value,
