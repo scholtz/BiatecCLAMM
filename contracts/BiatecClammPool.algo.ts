@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-06-03';
+const version = 'BIATEC-CLAMM-01-06-04';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
@@ -892,10 +892,10 @@ export class BiatecClammPool extends Contract {
     increaseOpcodeBudget();
     /// well formed swap
     this.checkAssetsAB(assetA, assetB);
-    assert(assetA.id !== assetB.id, 'Swaps not allowed in staking pools');
+    assert(assetA.id !== assetB.id, 'E_S_N'); // Swaps not allowed in staking pools
 
     if (txSwap.typeEnum === TransactionType.Payment) {
-      assert(assetA.id === 0 || assetB.id === 0, 'Payment can be done only when one of the pool assets is native token'); // only native token can be swapped
+      assert(assetA.id === 0 || assetB.id === 0, 'E_N_ONLY'); // Payment can be done only when one of the pool assets is native token
 
       verifyPayTxn(txSwap, {
         amount: { greaterThan: 0 },
@@ -947,7 +947,7 @@ export class BiatecClammPool extends Contract {
       inAssetInBaseScale = (assetInAssetDecimals * this.assetADecimalsScaleFromBase.value) as uint256;
       const inAssetAfterFee = (inAssetInBaseScale * feesMultiplier) / s;
 
-      const toSwap = this.calculateAssetBWithdrawOnAssetADeposit(
+      let toSwap = this.calculateAssetBWithdrawOnAssetADeposit(
         inAssetAfterFee,
         this.assetABalanceBaseScale.value,
         this.assetBBalanceBaseScale.value,
@@ -955,6 +955,12 @@ export class BiatecClammPool extends Contract {
         this.priceMaxSqrt.value,
         this.Liquidity.value
       );
+      if (toSwap > this.assetBBalanceBaseScale.value) {
+        // in case of small overpay, send only what is available
+        // profit from the overpay goes to the LPs
+        // users should use the minimumToReceive to protect themselves from such situations when this is not intended
+        toSwap = this.assetBBalanceBaseScale.value;
+      }
       realSwapBaseDecimals = toSwap;
       let realSwapBDecimals = (toSwap / this.assetBDecimalsScaleFromBase.value) as uint256;
 
@@ -970,14 +976,6 @@ export class BiatecClammPool extends Contract {
       }
 
       amountBForStatsInAssetDecimals = toSwapBDecimals;
-      const realAmountB = this.getRealAssetBalance(assetB);
-      if (realAmountB < toSwapBDecimals) {
-        // in case of small overpay, send only what is available
-        // profit from the overpay goes to the LPs
-        // users should use the minimumToReceive to protect themselves from such situations when this is not intended
-        // keep the statistics correct (amountBForStatsInAssetDecimals) so that it does not produce incorrect price quotes
-        toSwapBDecimals = realAmountB;
-      }
 
       this.doAxfer(this.txn.sender, assetB, toSwapBDecimals);
 
@@ -996,7 +994,7 @@ export class BiatecClammPool extends Contract {
       }
       inAssetInBaseScale = (assetInAssetDecimals * this.assetBDecimalsScaleFromBase.value) as uint256;
       const inAssetAfterFee = (inAssetInBaseScale * feesMultiplier) / s;
-      const toSwap = this.calculateAssetAWithdrawOnAssetBDeposit(
+      let toSwap = this.calculateAssetAWithdrawOnAssetBDeposit(
         inAssetAfterFee,
         this.assetABalanceBaseScale.value,
         this.assetBBalanceBaseScale.value,
@@ -1004,6 +1002,12 @@ export class BiatecClammPool extends Contract {
         this.priceMaxSqrt.value,
         this.Liquidity.value
       );
+      if (toSwap > this.assetABalanceBaseScale.value) {
+        // in case of small overpay, send only what is available
+        // profit from the overpay goes to the LPs
+        // users should use the minimumToReceive to protect themselves from such situations when this is not intended
+        toSwap = this.assetABalanceBaseScale.value;
+      }
       realSwapBaseDecimals = toSwap;
       let realSwapADecimals = toSwap / this.assetADecimalsScaleFromBase.value;
 
@@ -1018,14 +1022,6 @@ export class BiatecClammPool extends Contract {
         assert(toSwapADecimals >= minimumToReceive, 'Minimum to receive is not met');
       }
       amountAForStatsInAssetDecimals = toSwapADecimals;
-      const realAmountA = this.getRealAssetBalance(assetA);
-      if (realAmountA < toSwapADecimals) {
-        // in case of small overpay, send only what is available
-        // profit from the overpay goes to the LPs
-        // users should use the minimumToReceive to protect themselves from such situations when this is not intended
-        // keep the statistics correct (amountAForStatsInAssetDecimals) so that it does not produce incorrect price quotes
-        toSwapADecimals = realAmountA;
-      }
       this.doAxfer(this.txn.sender, assetA, toSwapADecimals);
 
       this.assetBBalanceBaseScale.value = this.assetBBalanceBaseScale.value + inAssetInBaseScale;
