@@ -23,6 +23,23 @@ When you provide liquidity, you are essentially saying: _"I am willing to sell A
 
 In exchange for providing this service, you earn trading fees. 🚀 The goal is for the fees to outweigh any "Impermanent Loss" (the difference between holding the tokens and providing liquidity).
 
+## Traditional AMM vs. Concentrated Liquidity (CLAMM)
+
+To understand why Biatec is different, we need to compare it to traditional AMMs (like PactFi or Tinyman or Uniswap v2).
+
+In a **Traditional AMM**, your liquidity is spread out across every possible price, from 0 to infinity. This means 99% of your capital is sitting idle, waiting for the price to drop to $0 or go to $1,000,000. It's incredibly inefficient.
+
+In a **Concentrated Liquidity AMM (CLAMM)** like Biatec, you choose a specific price range (e.g., $0.90 - $1.10). Your capital is only used when the price is within that range. This makes your capital up to **4000x more efficient**, meaning you earn significantly more fees with the same deposit.
+
+### The Restaurant Analogy
+
+Imagine that you run a restaurant.
+
+- **The Traditional AMM Restaurant** cooks a bit of every dish on the menu all day long, even when nobody orders it. Most of that food sits cold and is wasted, and you earn less profit because your resources are spread too thin.
+- **The Biatec DEX Restaurant** is smarter. We cook and prepare food only at the tables where customers actually sit and order. No wasted ingredients, no empty preparation.
+
+Because of this, we serve faster, waste less, and make more money from the same kitchen.
+
 ## Use Case 1: The Forex & Stablecoin Yield Farmer (EUR/USD)
 
 **Scenario:** You hold Euros (e.g., EURS) and Dollars (e.g., USDC). You expect the exchange rate to fluctuate slightly but generally stay stable.
