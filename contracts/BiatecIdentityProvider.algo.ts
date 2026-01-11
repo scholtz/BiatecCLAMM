@@ -273,7 +273,11 @@ export class BiatecIdentityProvider extends Contract {
     assert(info.feeMultiplier === ((2 * SCALE) as uint64), 'Initial fee multiplier must be set to 2 * SCALE');
     this.identities(user).value = info;
   }
-
+  /**
+   * This method can set fees, verification class, engagement class .. Only engagementSetter is allowed to execute this method.
+   * @param user User address to set info for
+   * @param info Data to be set
+   */
   setInfo(user: Address, info: IdentityInfo) {
     assert(this.txn.sender === this.engagementSetter.value);
     assert(info.feeMultiplierBase === SCALE, 'FeeMultiplierBase must be set properly');
