@@ -542,10 +542,14 @@ selfRegistration:
 	return
 
 // setInfo(user: Address, info: IdentityInfo): void
+//
+// This method can set fees, verification class, engagement class .. Only engagementSetter is allowed to execute this method.
+// @param user User address to set info for
+// @param info Data to be set
 setInfo:
 	proto 2 0
 
-	// contracts\BiatecIdentityProvider.algo.ts:278
+	// contracts\BiatecIdentityProvider.algo.ts:282
 	// assert(this.txn.sender === this.engagementSetter.value)
 	txn Sender
 	bytec 15 //  "e"
@@ -553,7 +557,7 @@ setInfo:
 	==
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:279
+	// contracts\BiatecIdentityProvider.algo.ts:283
 	// assert(info.feeMultiplierBase === SCALE, 'FeeMultiplierBase must be set properly')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -566,7 +570,7 @@ setInfo:
 	// FeeMultiplierBase must be set properly
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:280
+	// contracts\BiatecIdentityProvider.algo.ts:284
 	// assert(info.verificationClass <= 4, 'Verification class out of bounds')
 	frame_dig -2 // info: IdentityInfo
 	store 255 // full array
@@ -579,7 +583,7 @@ setInfo:
 	// Verification class out of bounds
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:281
+	// contracts\BiatecIdentityProvider.algo.ts:285
 	// this.identities(user).value = info
 	bytec 3 //  "i"
 	frame_dig -1 // user: Address
@@ -642,7 +646,7 @@ sendOnlineKeyRegistration:
 	bytec 0 // 0x
 	dup
 
-	// contracts\BiatecIdentityProvider.algo.ts:290
+	// contracts\BiatecIdentityProvider.algo.ts:294
 	// assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match')
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	bytec 4 //  "B"
@@ -652,7 +656,7 @@ sendOnlineKeyRegistration:
 	// Configuration app does not match
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:291
+	// contracts\BiatecIdentityProvider.algo.ts:295
 	// addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	bytec 12 //  "ef"
@@ -662,7 +666,7 @@ sendOnlineKeyRegistration:
 	assert
 	frame_bury 0 // addressExecutiveFee: address
 
-	// contracts\BiatecIdentityProvider.algo.ts:292
+	// contracts\BiatecIdentityProvider.algo.ts:296
 	// assert(this.txn.sender === addressExecutiveFee, 'Only fee executor setup in the config can take the collected fees')
 	txn Sender
 	frame_dig 0 // addressExecutiveFee: address
@@ -671,7 +675,7 @@ sendOnlineKeyRegistration:
 	// Only fee executor setup in the config can take the collected fees
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:293
+	// contracts\BiatecIdentityProvider.algo.ts:297
 	// paused = appBiatecConfigProvider.globalState('s') as uint64
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	bytec 5 //  "s"
@@ -681,7 +685,7 @@ sendOnlineKeyRegistration:
 	assert
 	frame_bury 1 // paused: uint64
 
-	// contracts\BiatecIdentityProvider.algo.ts:294
+	// contracts\BiatecIdentityProvider.algo.ts:298
 	// assert(paused === 0, 'ERR_PAUSED')
 	frame_dig 1 // paused: uint64
 	intc 0 // 0
@@ -690,7 +694,7 @@ sendOnlineKeyRegistration:
 	// ERR_PAUSED
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:295
+	// contracts\BiatecIdentityProvider.algo.ts:299
 	// sendOnlineKeyRegistration({
 	//       selectionPK: selectionPK,
 	//       stateProofPK: stateProofPK,
@@ -704,37 +708,37 @@ sendOnlineKeyRegistration:
 	intc 3 //  keyreg
 	itxn_field TypeEnum
 
-	// contracts\BiatecIdentityProvider.algo.ts:296
+	// contracts\BiatecIdentityProvider.algo.ts:300
 	// selectionPK: selectionPK
 	frame_dig -3 // selectionPK: bytes
 	itxn_field SelectionPK
 
-	// contracts\BiatecIdentityProvider.algo.ts:297
+	// contracts\BiatecIdentityProvider.algo.ts:301
 	// stateProofPK: stateProofPK
 	frame_dig -4 // stateProofPK: bytes
 	itxn_field StateProofPK
 
-	// contracts\BiatecIdentityProvider.algo.ts:298
+	// contracts\BiatecIdentityProvider.algo.ts:302
 	// voteFirst: voteFirst
 	frame_dig -5 // voteFirst: uint64
 	itxn_field VoteFirst
 
-	// contracts\BiatecIdentityProvider.algo.ts:299
+	// contracts\BiatecIdentityProvider.algo.ts:303
 	// voteKeyDilution: voteKeyDilution
 	frame_dig -7 // voteKeyDilution: uint64
 	itxn_field VoteKeyDilution
 
-	// contracts\BiatecIdentityProvider.algo.ts:300
+	// contracts\BiatecIdentityProvider.algo.ts:304
 	// voteLast: voteLast
 	frame_dig -6 // voteLast: uint64
 	itxn_field VoteLast
 
-	// contracts\BiatecIdentityProvider.algo.ts:301
+	// contracts\BiatecIdentityProvider.algo.ts:305
 	// votePK: votePK
 	frame_dig -2 // votePK: bytes
 	itxn_field VotePK
 
-	// contracts\BiatecIdentityProvider.algo.ts:302
+	// contracts\BiatecIdentityProvider.algo.ts:306
 	// fee: fee
 	frame_dig -8 // fee: uint64
 	itxn_field Fee
@@ -789,7 +793,7 @@ getUser:
 	bytec 0 // 0x
 	dupn 2
 
-	// contracts\BiatecIdentityProvider.algo.ts:314
+	// contracts\BiatecIdentityProvider.algo.ts:318
 	// assert(v === 1, "Currently supported version of the data structure is '1'")
 	frame_dig -2 // v: uint8
 	intc 1 // 1
@@ -799,7 +803,7 @@ getUser:
 	assert
 
 	// *if0_condition
-	// contracts\BiatecIdentityProvider.algo.ts:315
+	// contracts\BiatecIdentityProvider.algo.ts:319
 	// !this.identities(user).exists
 	bytec 3 //  "i"
 	frame_dig -1 // user: Address
@@ -811,7 +815,7 @@ getUser:
 	bz *if0_end
 
 	// *if0_consequent
-	// contracts\BiatecIdentityProvider.algo.ts:316
+	// contracts\BiatecIdentityProvider.algo.ts:320
 	// retNoIdentity: UserInfoV1 = {
 	//         version: v,
 	//         base: SCALE as uint64,
@@ -886,20 +890,20 @@ getUser:
 	concat // concat head and tail
 	frame_bury 0 // retNoIdentity: UserInfoV1
 
-	// contracts\BiatecIdentityProvider.algo.ts:336
+	// contracts\BiatecIdentityProvider.algo.ts:340
 	// return retNoIdentity;
 	frame_dig 0 // retNoIdentity: UserInfoV1
 	b *getUser*return
 
 *if0_end:
-	// contracts\BiatecIdentityProvider.algo.ts:338
+	// contracts\BiatecIdentityProvider.algo.ts:342
 	// identity = this.identities(user).value
 	bytec 3 //  "i"
 	frame_dig -1 // user: Address
 	concat
 	frame_bury 1 // storage key//identity
 
-	// contracts\BiatecIdentityProvider.algo.ts:340
+	// contracts\BiatecIdentityProvider.algo.ts:344
 	// ret: UserInfoV1 = {
 	//       version: v,
 	//       base: identity.feeMultiplierBase,
@@ -1158,7 +1162,7 @@ getUser:
 	concat // concat head and tail
 	frame_bury 2 // ret: UserInfoV1
 
-	// contracts\BiatecIdentityProvider.algo.ts:360
+	// contracts\BiatecIdentityProvider.algo.ts:364
 	// return ret;
 	frame_dig 2 // ret: UserInfoV1
 
@@ -1216,7 +1220,7 @@ getUserShort:
 	bytec 0 // 0x
 	dupn 2
 
-	// contracts\BiatecIdentityProvider.algo.ts:371
+	// contracts\BiatecIdentityProvider.algo.ts:375
 	// assert(v === 1, "Currently supported version of the data structure is '1'")
 	frame_dig -2 // v: uint8
 	intc 1 // 1
@@ -1226,7 +1230,7 @@ getUserShort:
 	assert
 
 	// *if1_condition
-	// contracts\BiatecIdentityProvider.algo.ts:372
+	// contracts\BiatecIdentityProvider.algo.ts:376
 	// !this.identities(user).exists
 	bytec 3 //  "i"
 	frame_dig -1 // user: Address
@@ -1238,7 +1242,7 @@ getUserShort:
 	bz *if1_end
 
 	// *if1_consequent
-	// contracts\BiatecIdentityProvider.algo.ts:373
+	// contracts\BiatecIdentityProvider.algo.ts:377
 	// retNoIdentity: UserInfoShortV1 = {
 	//         version: v,
 	//         base: SCALE as uint64,
@@ -1262,20 +1266,20 @@ getUserShort:
 	concat
 	frame_bury 0 // retNoIdentity: UserInfoShortV1
 
-	// contracts\BiatecIdentityProvider.algo.ts:380
+	// contracts\BiatecIdentityProvider.algo.ts:384
 	// return retNoIdentity;
 	frame_dig 0 // retNoIdentity: UserInfoShortV1
 	b *getUserShort*return
 
 *if1_end:
-	// contracts\BiatecIdentityProvider.algo.ts:382
+	// contracts\BiatecIdentityProvider.algo.ts:386
 	// identity = this.identities(user).value
 	bytec 3 //  "i"
 	frame_dig -1 // user: Address
 	concat
 	frame_bury 1 // storage key//identity
 
-	// contracts\BiatecIdentityProvider.algo.ts:384
+	// contracts\BiatecIdentityProvider.algo.ts:388
 	// ret: UserInfoShortV1 = {
 	//       version: v,
 	//       base: identity.feeMultiplierBase,
@@ -1334,7 +1338,7 @@ getUserShort:
 	concat
 	frame_bury 2 // ret: UserInfoShortV1
 
-	// contracts\BiatecIdentityProvider.algo.ts:391
+	// contracts\BiatecIdentityProvider.algo.ts:395
 	// return ret;
 	frame_dig 2 // ret: UserInfoShortV1
 
@@ -1387,7 +1391,7 @@ withdrawExcessAssets:
 	bytec 0 // 0x
 	dup
 
-	// contracts\BiatecIdentityProvider.algo.ts:404
+	// contracts\BiatecIdentityProvider.algo.ts:408
 	// assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'Configuration app does not match')
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	bytec 4 //  "B"
@@ -1397,7 +1401,7 @@ withdrawExcessAssets:
 	// Configuration app does not match
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:405
+	// contracts\BiatecIdentityProvider.algo.ts:409
 	// addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	bytec 12 //  "ef"
@@ -1407,7 +1411,7 @@ withdrawExcessAssets:
 	assert
 	frame_bury 0 // addressExecutiveFee: address
 
-	// contracts\BiatecIdentityProvider.algo.ts:406
+	// contracts\BiatecIdentityProvider.algo.ts:410
 	// paused = appBiatecConfigProvider.globalState('s') as uint64
 	frame_dig -1 // appBiatecConfigProvider: AppID
 	bytec 5 //  "s"
@@ -1417,7 +1421,7 @@ withdrawExcessAssets:
 	assert
 	frame_bury 1 // paused: uint64
 
-	// contracts\BiatecIdentityProvider.algo.ts:407
+	// contracts\BiatecIdentityProvider.algo.ts:411
 	// assert(paused === 0, 'ERR_PAUSED')
 	frame_dig 1 // paused: uint64
 	intc 0 // 0
@@ -1426,7 +1430,7 @@ withdrawExcessAssets:
 	// ERR_PAUSED
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:408
+	// contracts\BiatecIdentityProvider.algo.ts:412
 	// assert(this.txn.sender === addressExecutiveFee, 'Only fee executor setup in the config can take the collected fees')
 	txn Sender
 	frame_dig 0 // addressExecutiveFee: address
@@ -1435,14 +1439,14 @@ withdrawExcessAssets:
 	// Only fee executor setup in the config can take the collected fees
 	assert
 
-	// contracts\BiatecIdentityProvider.algo.ts:410
+	// contracts\BiatecIdentityProvider.algo.ts:414
 	// this.doAxfer(this.txn.sender, asset, amount)
 	frame_dig -3 // amount: uint64
 	frame_dig -2 // asset: AssetID
 	txn Sender
 	callsub doAxfer
 
-	// contracts\BiatecIdentityProvider.algo.ts:412
+	// contracts\BiatecIdentityProvider.algo.ts:416
 	// return amount;
 	frame_dig -3 // amount: uint64
 
@@ -1463,7 +1467,7 @@ doAxfer:
 	proto 3 0
 
 	// *if2_condition
-	// contracts\BiatecIdentityProvider.algo.ts:422
+	// contracts\BiatecIdentityProvider.algo.ts:426
 	// asset.id === 0
 	frame_dig -2 // asset: AssetID
 	intc 0 // 0
@@ -1471,7 +1475,7 @@ doAxfer:
 	bz *if2_else
 
 	// *if2_consequent
-	// contracts\BiatecIdentityProvider.algo.ts:423
+	// contracts\BiatecIdentityProvider.algo.ts:427
 	// sendPayment({
 	//         receiver: receiver,
 	//         amount: amount,
@@ -1481,17 +1485,17 @@ doAxfer:
 	intc 1 //  pay
 	itxn_field TypeEnum
 
-	// contracts\BiatecIdentityProvider.algo.ts:424
+	// contracts\BiatecIdentityProvider.algo.ts:428
 	// receiver: receiver
 	frame_dig -1 // receiver: Address
 	itxn_field Receiver
 
-	// contracts\BiatecIdentityProvider.algo.ts:425
+	// contracts\BiatecIdentityProvider.algo.ts:429
 	// amount: amount
 	frame_dig -3 // amount: uint64
 	itxn_field Amount
 
-	// contracts\BiatecIdentityProvider.algo.ts:426
+	// contracts\BiatecIdentityProvider.algo.ts:430
 	// fee: 0
 	intc 0 // 0
 	itxn_field Fee
@@ -1501,7 +1505,7 @@ doAxfer:
 	b *if2_end
 
 *if2_else:
-	// contracts\BiatecIdentityProvider.algo.ts:429
+	// contracts\BiatecIdentityProvider.algo.ts:433
 	// sendAssetTransfer({
 	//         assetReceiver: receiver,
 	//         xferAsset: asset,
@@ -1512,22 +1516,22 @@ doAxfer:
 	intc 7 //  axfer
 	itxn_field TypeEnum
 
-	// contracts\BiatecIdentityProvider.algo.ts:430
+	// contracts\BiatecIdentityProvider.algo.ts:434
 	// assetReceiver: receiver
 	frame_dig -1 // receiver: Address
 	itxn_field AssetReceiver
 
-	// contracts\BiatecIdentityProvider.algo.ts:431
+	// contracts\BiatecIdentityProvider.algo.ts:435
 	// xferAsset: asset
 	frame_dig -2 // asset: AssetID
 	itxn_field XferAsset
 
-	// contracts\BiatecIdentityProvider.algo.ts:432
+	// contracts\BiatecIdentityProvider.algo.ts:436
 	// assetAmount: amount
 	frame_dig -3 // amount: uint64
 	itxn_field AssetAmount
 
-	// contracts\BiatecIdentityProvider.algo.ts:433
+	// contracts\BiatecIdentityProvider.algo.ts:437
 	// fee: 0
 	intc 0 // 0
 	itxn_field Fee

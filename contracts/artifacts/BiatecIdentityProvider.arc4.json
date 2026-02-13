@@ -71,14 +71,17 @@
     },
     {
       "name": "setInfo",
+      "desc": "This method can set fees, verification class, engagement class .. Only engagementSetter is allowed to execute this method.",
       "args": [
         {
           "name": "user",
-          "type": "address"
+          "type": "address",
+          "desc": "User address to set info for"
         },
         {
           "name": "info",
-          "type": "(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool)"
+          "type": "(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool)",
+          "desc": "Data to be set"
         }
       ],
       "returns": {
