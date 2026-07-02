@@ -294,7 +294,7 @@ position:
 ```ts
 import { suggestTickTypeForRange } from 'biatec-concentrated-liquidity-amm';
 
-suggestTickTypeForRange(0.9, 1.0); // 'narrow'  (~10 bins of 0.01 → focused shape)
+suggestTickTypeForRange(0.9, 1.0); // 'normal'  (widest fit: exactly 1 tick of 0.1)
 suggestTickTypeForRange(1, 1);     // null      (wall / single-price position)
 suggestTickTypeForRange(0.9, 1.0, { minBins: 2, maxBins: 40 }); // tune the bin bounds
 ```

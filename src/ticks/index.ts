@@ -144,24 +144,27 @@ export const snapPriceToTick = (
 
 /** Options for {@link suggestTickTypeForRange}. */
 export interface SuggestTickTypeOptions {
-  /** Minimum number of ticks the range must span to qualify (default 2). */
+  /** Minimum number of ticks the range must span to qualify (default 1). */
   minBins?: number;
   /** Maximum number of ticks before a width is considered too fine (default 40). */
   maxBins?: number;
 }
 
 /**
- * Pick the tick width that represents a price range `[low, high]` as a movable,
- * multi-bin selection — i.e. "focused" liquidity spread over several nearby ticks
- * rather than a single bin. Returns `null` for a degenerate range (`high <= low`,
- * a single-price / wall position) or when no width fits the bin bounds.
+ * Pick the tick width that represents a price range `[low, high]`.
  *
- * Widest-first: the coarsest width that still spans at least `minBins` (and no more
- * than `maxBins`) ticks is chosen, so the user gets the fewest, most movable bins.
+ * **Widest-first** (coarsest ticks / lowest precision first): the widest width where
+ * the range still spans at least `minBins` (and no more than `maxBins`) ticks is
+ * returned. Because it defaults to `minBins: 1`, an existing pool's `[min, max]` maps
+ * to a *single* tick at its native (widest fitting) precision — so pre-filling an "add
+ * liquidity" form with it keeps the exact range and adds to that same pool instead of
+ * splitting it into finer, brand-new pools. Users can still slide into neighbouring
+ * bins from there. Returns `null` for a degenerate range (`high <= low`, a wall /
+ * single-price position) or when no width fits.
  *
  * @example
- * suggestTickTypeForRange(0.9, 1.0); // 'normal'  (~10 bins of 0.01)
- * suggestTickTypeForRange(1, 1);     // null       (wall / single price)
+ * suggestTickTypeForRange(0.9, 1.0); // 'normal'  (exactly 1 tick of 0.1 → native grid)
+ * suggestTickTypeForRange(1, 1);     // null      (wall / single price)
  */
 export const suggestTickTypeForRange = (
   low: number,
@@ -169,10 +172,11 @@ export const suggestTickTypeForRange = (
   options: SuggestTickTypeOptions = {}
 ): TickType | null => {
   if (!Number.isFinite(low) || !Number.isFinite(high) || low <= 0 || high <= low) return null;
-  const minBins = options.minBins ?? 2;
+  const minBins = options.minBins ?? 1;
   const maxBins = options.maxBins ?? 40;
   // Geometric mid is the representative price for a logarithmic grid.
   const mid = Math.sqrt(low * high);
+  // TICK_TYPES is ordered widest → narrowest, so this returns the widest fit.
   for (const type of TICK_TYPES) {
     const tick = getTickSize(mid, type);
     if (!Number.isFinite(tick) || tick <= 0) continue;

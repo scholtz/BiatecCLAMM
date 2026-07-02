@@ -166,9 +166,9 @@ describe('suggestTickTypeForRange', () => {
     expect(suggestTickTypeForRange(Number.NaN, 1)).toBeNull();
   });
 
-  test('picks a multi-bin width for a real range', () => {
-    // 0.9..1.0: wide=1 & normal=0.1 -> too few bins, narrow=0.01 -> 10 bins
-    expect(suggestTickTypeForRange(0.9, 1.0)).toBe('narrow');
+  test('prefers the widest fitting width (range = 1 tick at its native grid)', () => {
+    // 0.9..1.0: wide=1 -> 0 bins (too coarse), normal=0.1 -> exactly 1 tick → picked
+    expect(suggestTickTypeForRange(0.9, 1.0)).toBe('normal');
   });
 
   test('the chosen width spans between minBins and maxBins ticks', () => {
@@ -181,9 +181,15 @@ describe('suggestTickTypeForRange', () => {
       expect(type).not.toBeNull();
       const mid = Math.sqrt(low * high);
       const bins = Math.round((high - low) / getTickSize(mid, type as TickType));
-      expect(bins).toBeGreaterThanOrEqual(2);
+      expect(bins).toBeGreaterThanOrEqual(1);
       expect(bins).toBeLessThanOrEqual(40);
     }
+  });
+
+  test('a wider width is preferred over a narrower one when both fit', () => {
+    // widest-first: never returns a narrower width if a wider one already spans >= 1 tick
+    const type = suggestTickTypeForRange(0.9, 1.0);
+    expect(type).not.toBe('narrow');
   });
 
   test('respects custom bin bounds', () => {
