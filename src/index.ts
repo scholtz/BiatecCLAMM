@@ -34,6 +34,25 @@ import getBoxReferencePool from './biatecPools/getBoxReferencePool';
 import getBoxReferencePoolByConfig from './biatecPools/getBoxReferencePoolByConfig';
 import getBoxReferenceIdentity from './biatecIdentity/getBoxReferenceIdentity';
 
+import {
+  TICK_TYPES,
+  DEFAULT_TICK_TYPE,
+  TICK_TYPE_TO_PRECISION,
+  PRECISION_TO_TICK_TYPE,
+  precisionForTickType,
+  tickTypeForPrecision,
+  tickDecimals,
+  cleanLogTick,
+  getTickSize,
+  getTickDecimals,
+  snapPriceToTick,
+  initPriceDecimals,
+  priceTickDecimals,
+  toFixedBigInt,
+  fromFixedBigInt,
+} from './ticks';
+import type { TickType, TickRounding, IInitPriceDecimalsReturn } from './ticks';
+
 export {
   clientBiatecClammPool,
   clammAddLiquiditySender,
@@ -79,3 +98,23 @@ export {
 };
 export { getBoxReferenceAggregated, getBoxReferenceFullConfig, getBoxReferencePool, getBoxReferencePoolByConfig, getBoxReferenceIdentity };
 export type { BiatecNetworkConfig } from './getConfig';
+// Logarithmic tick system — shared by the Biatec DEX frontend and available to any
+// integrator so everyone snaps prices to the same ticks. See README "Ticks".
+export {
+  TICK_TYPES,
+  DEFAULT_TICK_TYPE,
+  TICK_TYPE_TO_PRECISION,
+  PRECISION_TO_TICK_TYPE,
+  precisionForTickType,
+  tickTypeForPrecision,
+  tickDecimals,
+  cleanLogTick,
+  getTickSize,
+  getTickDecimals,
+  snapPriceToTick,
+  initPriceDecimals,
+  priceTickDecimals,
+  toFixedBigInt,
+  fromFixedBigInt,
+};
+export type { TickType, TickRounding, IInitPriceDecimalsReturn };
