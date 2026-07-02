@@ -61,6 +61,7 @@ Biatec CLAMM revolutionizes decentralized exchange (DEX) functionality by implem
 ## 📚 Documentation Overview {#--documentation-overview}
 
 - **[Basic Use Cases](./basic-use-cases)**: Common trading and liquidity scenarios
+- **[Tick System](./tick-system)**: Logarithmic ticks for pricing, snapping, and range selection
 - **[Staking Pools](./staking-pools)**: Interest-bearing token functionality
 - **[Liquidity Fee Protection](./liquidity-fee-protection)**: Advanced fee management
 - **[Liquidity Rounding](./liquidity-rounding)**: Mathematical precision details
