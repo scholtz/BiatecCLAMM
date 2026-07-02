@@ -286,5 +286,18 @@ function buildRange(priceLow: number, priceHigh: number, tickType: TickType) {
 buildRange(0.91, 1.02, 'wide'); // { priceMin: 0.9, priceMax: 1.1 }
 ```
 
+Pick the tick width that turns an existing position's `[min, max]` into a movable,
+multi-bin ("focused") selection — e.g. when pre-filling an "add liquidity" form so the
+user can slide the range and seed nearby bins. Returns `null` for a single-price / wall
+position:
+
+```ts
+import { suggestTickTypeForRange } from 'biatec-concentrated-liquidity-amm';
+
+suggestTickTypeForRange(0.9, 1.0); // 'normal'  (~10 bins of 0.01 → focused shape)
+suggestTickTypeForRange(1, 1);     // null      (wall / single-price position)
+suggestTickTypeForRange(0.9, 1.0, { minBins: 2, maxBins: 40 }); // tune the bin bounds
+```
+
 Low-level primitives (`initPriceDecimals`, `priceTickDecimals`, `cleanLogTick`,
 `tickDecimals`) are also exported if you need to build a full price distribution.

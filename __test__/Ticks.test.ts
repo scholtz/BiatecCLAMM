@@ -11,6 +11,7 @@ import {
   getTickSize,
   getTickDecimals,
   snapPriceToTick,
+  suggestTickTypeForRange,
   initPriceDecimals,
   priceTickDecimals,
   toFixedBigInt,
@@ -150,5 +151,38 @@ describe('initPriceDecimals / priceTickDecimals (primitives)', () => {
     expect(fromFixedBigInt(res.tick)).toBeGreaterThan(0);
     expect(fromFixedBigInt(res.fitPrice)).toBeLessThanOrEqual(0.9);
     expect(fromFixedBigInt(res.fitPrice)).toBeGreaterThan(0);
+  });
+});
+
+describe('suggestTickTypeForRange', () => {
+  test('returns null for a degenerate / wall range', () => {
+    expect(suggestTickTypeForRange(1, 1)).toBeNull();
+    expect(suggestTickTypeForRange(1.1, 1)).toBeNull();
+    expect(suggestTickTypeForRange(0, 1)).toBeNull();
+    expect(suggestTickTypeForRange(Number.NaN, 1)).toBeNull();
+  });
+
+  test('picks a multi-bin width for a real range', () => {
+    // 0.9..1.0: wide=0.1 -> 1 bin (too few), normal=0.01 -> 10 bins
+    expect(suggestTickTypeForRange(0.9, 1.0)).toBe('normal');
+  });
+
+  test('the chosen width spans between minBins and maxBins ticks', () => {
+    for (const [low, high] of [
+      [0.9, 1.0],
+      [100, 110],
+      [0.001, 0.0012],
+    ] as const) {
+      const type = suggestTickTypeForRange(low, high);
+      expect(type).not.toBeNull();
+      const mid = Math.sqrt(low * high);
+      const bins = Math.round((high - low) / getTickSize(mid, type as TickType));
+      expect(bins).toBeGreaterThanOrEqual(2);
+      expect(bins).toBeLessThanOrEqual(40);
+    }
+  });
+
+  test('respects custom bin bounds', () => {
+    expect(suggestTickTypeForRange(0.9, 1.0, { minBins: 50 })).toBeNull();
   });
 });

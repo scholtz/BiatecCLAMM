@@ -142,5 +142,45 @@ export const snapPriceToTick = (
   return Number(Math.max(0, snapped).toFixed(decimals));
 };
 
+/** Options for {@link suggestTickTypeForRange}. */
+export interface SuggestTickTypeOptions {
+  /** Minimum number of ticks the range must span to qualify (default 2). */
+  minBins?: number;
+  /** Maximum number of ticks before a width is considered too fine (default 40). */
+  maxBins?: number;
+}
+
+/**
+ * Pick the tick width that represents a price range `[low, high]` as a movable,
+ * multi-bin selection — i.e. "focused" liquidity spread over several nearby ticks
+ * rather than a single bin. Returns `null` for a degenerate range (`high <= low`,
+ * a single-price / wall position) or when no width fits the bin bounds.
+ *
+ * Widest-first: the coarsest width that still spans at least `minBins` (and no more
+ * than `maxBins`) ticks is chosen, so the user gets the fewest, most movable bins.
+ *
+ * @example
+ * suggestTickTypeForRange(0.9, 1.0); // 'normal'  (~10 bins of 0.01)
+ * suggestTickTypeForRange(1, 1);     // null       (wall / single price)
+ */
+export const suggestTickTypeForRange = (
+  low: number,
+  high: number,
+  options: SuggestTickTypeOptions = {}
+): TickType | null => {
+  if (!Number.isFinite(low) || !Number.isFinite(high) || low <= 0 || high <= low) return null;
+  const minBins = options.minBins ?? 2;
+  const maxBins = options.maxBins ?? 40;
+  // Geometric mid is the representative price for a logarithmic grid.
+  const mid = Math.sqrt(low * high);
+  for (const type of TICK_TYPES) {
+    const tick = getTickSize(mid, type);
+    if (!Number.isFinite(tick) || tick <= 0) continue;
+    const bins = Math.round((high - low) / tick);
+    if (bins >= minBins && bins <= maxBins) return type;
+  }
+  return null;
+};
+
 export { initPriceDecimals, priceTickDecimals, toFixedBigInt, fromFixedBigInt };
 export type { IInitPriceDecimalsReturn };

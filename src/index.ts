@@ -46,12 +46,18 @@ import {
   getTickSize,
   getTickDecimals,
   snapPriceToTick,
+  suggestTickTypeForRange,
   initPriceDecimals,
   priceTickDecimals,
   toFixedBigInt,
   fromFixedBigInt,
 } from './ticks';
-import type { TickType, TickRounding, IInitPriceDecimalsReturn } from './ticks';
+import type {
+  TickType,
+  TickRounding,
+  IInitPriceDecimalsReturn,
+  SuggestTickTypeOptions,
+} from './ticks';
 
 export {
   clientBiatecClammPool,
@@ -112,9 +118,10 @@ export {
   getTickSize,
   getTickDecimals,
   snapPriceToTick,
+  suggestTickTypeForRange,
   initPriceDecimals,
   priceTickDecimals,
   toFixedBigInt,
   fromFixedBigInt,
 };
-export type { TickType, TickRounding, IInitPriceDecimalsReturn };
+export type { TickType, TickRounding, IInitPriceDecimalsReturn, SuggestTickTypeOptions };
