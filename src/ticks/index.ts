@@ -8,9 +8,9 @@ import priceTickDecimals from './priceTickDecimals';
  * Instead of asking integrators to reason about the raw numeric `precision`, expose a
  * small set of named tick widths. Lower precision → wider ticks.
  *
- * - `wide`   – coarse ticks, few price levels (≈10% steps).
- * - `normal` – balanced ticks (≈1% steps). Good default.
- * - `narrow` – fine ticks, many price levels (≈0.1% steps).
+ * - `wide`   – very coarse ticks, few price levels (≈100% steps, precision 0).
+ * - `normal` – coarse ticks (≈10% steps, precision 1). Good default.
+ * - `narrow` – balanced ticks, many price levels (≈1% steps, precision 2).
  */
 export type TickType = 'wide' | 'normal' | 'narrow';
 
@@ -22,16 +22,16 @@ export const DEFAULT_TICK_TYPE: TickType = 'normal';
 
 /** Maps a {@link TickType} to the numeric precision used by the tick math. */
 export const TICK_TYPE_TO_PRECISION: Readonly<Record<TickType, number>> = {
-  wide: 1,
-  normal: 2,
-  narrow: 3,
+  wide: 0,
+  normal: 1,
+  narrow: 2,
 };
 
 /** Reverse of {@link TICK_TYPE_TO_PRECISION}. */
 export const PRECISION_TO_TICK_TYPE: Readonly<Record<number, TickType>> = {
-  1: 'wide',
-  2: 'normal',
-  3: 'narrow',
+  0: 'wide',
+  1: 'normal',
+  2: 'narrow',
 };
 
 /** Numeric precision for a tick type. */

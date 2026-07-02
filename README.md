@@ -233,11 +233,11 @@ price, so a sensible tick exists at any magnitude (both at `1000` and at `0.001`
 tick width is chosen with a `precision` value, exposed to integrators as three friendly
 tick types so nobody has to reason about raw numbers:
 
-| Tick type | Precision | Approx. step | Use it for               |
-| --------- | --------- | ------------ | ------------------------ |
-| `wide`    | 1         | ~10%         | few, coarse price levels |
-| `normal`  | 2         | ~1%          | balanced default         |
-| `narrow`  | 3         | ~0.1%        | many, fine price levels  |
+| Tick type | Precision | Approx. step | Use it for                    |
+| --------- | --------- | ------------ | ----------------------------- |
+| `wide`    | 0         | ~100%        | very few, very coarse levels  |
+| `normal`  | 1         | ~10%         | balanced default              |
+| `narrow`  | 2         | ~1%          | many, finer price levels      |
 
 Everyone — the Biatec DEX frontend and any integrator — should snap prices with these
 helpers so pools land on the same canonical ticks.
@@ -258,18 +258,18 @@ import {
 const tickType: TickType = 'wide';
 
 // 2) Size / decimals for the current price (correct at any magnitude)
-getTickSize(0.9, 'wide'); // 0.1   (not the raw 0.09)
-getTickSize(10000, 'normal'); // 100
-getTickDecimals(0.001, 'narrow'); // 6
+getTickSize(0.9, 'normal'); // 0.1   (not the raw 0.09)
+getTickSize(10000, 'normal'); // 1000
+getTickDecimals(0.001, 'narrow'); // 5
 
 // 3) Snap a price a user typed onto the shared grid before creating a pool
-snapPriceToTick(0.94, 'wide'); // 0.9
-snapPriceToTick(0.96, 'wide'); // 1
-snapPriceToTick(10123, 'normal', 'up'); // 10200  ('down' | 'up' | 'nearest')
+snapPriceToTick(0.94, 'normal'); // 0.9
+snapPriceToTick(0.96, 'normal'); // 1
+snapPriceToTick(10123, 'normal', 'up'); // 11000  ('down' | 'up' | 'nearest')
 
 // 4) Map an asset-derived numeric precision (e.g. 4) to a tick type
 tickTypeForPrecision(4); // 'narrow'
-precisionForTickType('normal'); // 2
+precisionForTickType('normal'); // 1
 ```
 
 Building a min/max price range for a concentrated position:
@@ -283,7 +283,7 @@ function buildRange(priceLow: number, priceHigh: number, tickType: TickType) {
     priceMax: snapPriceToTick(priceHigh, tickType, 'up'),
   };
 }
-buildRange(0.91, 1.02, 'wide'); // { priceMin: 0.9, priceMax: 1.1 }
+buildRange(0.91, 1.02, 'narrow'); // { priceMin: 0.91, priceMax: 1.02 }
 ```
 
 Pick the tick width that turns an existing position's `[min, max]` into a movable,
@@ -294,7 +294,7 @@ position:
 ```ts
 import { suggestTickTypeForRange } from 'biatec-concentrated-liquidity-amm';
 
-suggestTickTypeForRange(0.9, 1.0); // 'normal'  (~10 bins of 0.01 → focused shape)
+suggestTickTypeForRange(0.9, 1.0); // 'narrow'  (~10 bins of 0.01 → focused shape)
 suggestTickTypeForRange(1, 1);     // null      (wall / single-price position)
 suggestTickTypeForRange(0.9, 1.0, { minBins: 2, maxBins: 40 }); // tune the bin bounds
 ```

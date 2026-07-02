@@ -66,18 +66,21 @@ describe('tickDecimals', () => {
 
 describe('cleanLogTick / getTickSize', () => {
   test('produces clean 1/2/5x10^k ticks and is reasonable at any magnitude', () => {
-    // the classic broken case: raw tick would be 0.09, clean tick is 0.1
-    expect(cleanLogTick(0.9, 'wide')).toBeCloseTo(0.1, 12);
-    expect(getTickSize(0.9, 'wide')).toBeCloseTo(0.1, 12);
+    // the classic clean-tick case at 'normal' (raw would be 0.09, clean is 0.1)
+    expect(cleanLogTick(0.9, 'normal')).toBeCloseTo(0.1, 12);
+    expect(getTickSize(0.9, 'normal')).toBeCloseTo(0.1, 12);
     // reasonable ticks far from 1
-    expect(getTickSize(10000, 'normal')).toBeCloseTo(100, 6);
-    expect(getTickSize(10000, 'wide')).toBeCloseTo(1000, 6);
-    expect(getTickSize(0.001, 'normal')).toBeCloseTo(0.00001, 12);
-    expect(getTickSize(1000, 'wide')).toBeCloseTo(100, 6);
+    expect(getTickSize(10000, 'normal')).toBeCloseTo(1000, 6);
+    expect(getTickSize(10000, 'wide')).toBeCloseTo(10000, 6);
+    expect(getTickSize(0.001, 'normal')).toBeCloseTo(0.0001, 12);
+    expect(getTickSize(1000, 'wide')).toBeCloseTo(1000, 6);
   });
 
   test('accepts a raw numeric precision too', () => {
-    expect(cleanLogTick(10000, 2)).toBeCloseTo(getTickSize(10000, 'normal'), 6);
+    expect(cleanLogTick(10000, precisionForTickType('normal'))).toBeCloseTo(
+      getTickSize(10000, 'normal'),
+      6
+    );
   });
 
   test('returns 0 for invalid prices', () => {
@@ -104,14 +107,15 @@ describe('getTickDecimals', () => {
 
 describe('snapPriceToTick', () => {
   test('snaps to the nearest tick by default', () => {
-    // wide tick near 0.9 is 0.1
-    expect(snapPriceToTick(0.94, 'wide')).toBeCloseTo(0.9, 12);
-    expect(snapPriceToTick(0.96, 'wide')).toBeCloseTo(1, 12);
+    // normal tick near 0.9 is 0.1
+    expect(snapPriceToTick(0.94, 'normal')).toBeCloseTo(0.9, 12);
+    expect(snapPriceToTick(0.96, 'normal')).toBeCloseTo(1, 12);
   });
 
   test('supports down / up rounding', () => {
-    expect(snapPriceToTick(10123, 'normal', 'down')).toBeCloseTo(10100, 6);
-    expect(snapPriceToTick(10123, 'normal', 'up')).toBeCloseTo(10200, 6);
+    // normal tick near 10000 is 1000
+    expect(snapPriceToTick(10123, 'normal', 'down')).toBeCloseTo(10000, 6);
+    expect(snapPriceToTick(10123, 'normal', 'up')).toBeCloseTo(11000, 6);
   });
 
   test('a snapped price is stable (idempotent)', () => {
@@ -163,8 +167,8 @@ describe('suggestTickTypeForRange', () => {
   });
 
   test('picks a multi-bin width for a real range', () => {
-    // 0.9..1.0: wide=0.1 -> 1 bin (too few), normal=0.01 -> 10 bins
-    expect(suggestTickTypeForRange(0.9, 1.0)).toBe('normal');
+    // 0.9..1.0: wide=1 & normal=0.1 -> too few bins, narrow=0.01 -> 10 bins
+    expect(suggestTickTypeForRange(0.9, 1.0)).toBe('narrow');
   });
 
   test('the chosen width spans between minBins and maxBins ticks', () => {
