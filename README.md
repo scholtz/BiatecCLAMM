@@ -195,6 +195,7 @@ Comprehensive documentation is available in the `docs/` folder:
 - **[Basic Use Cases](docs/basic-use-cases.md)** - Getting started with pools, swaps, and liquidity
 - **[Staking Pools](docs/staking-pools.md)** - Create B-ALGO, B-USDC interest-bearing tokens
 - **[Integration Guide](docs/integration-guide.md)** - Best practices for integrating CLAMM into your application
+- **[Publishing](docs/publishing.md)** - How the npm package is published via GitHub Actions and how to set up the `NPM_TOKEN` secret
 
 ### Technical Details
 
@@ -224,3 +225,79 @@ Comprehensive documentation is available in the `docs/` folder:
 4. **LP Token Rounding**: Small rounding losses (< 0.0001%) are expected. See [liquidity-rounding.md](docs/liquidity-rounding.md).
 
 Multiple security audits have been conducted. Review the `audits/` folder before mainnet deployment.
+
+## Ticks
+
+Biatec CLAMM uses a **logarithmic tick system**: a tick is a fixed fraction of the
+price, so a sensible tick exists at any magnitude (both at `1000` and at `0.001`). The
+tick width is chosen with a `precision` value, exposed to integrators as three friendly
+tick types so nobody has to reason about raw numbers:
+
+| Tick type | Precision | Approx. step | Use it for                    |
+| --------- | --------- | ------------ | ----------------------------- |
+| `wide`    | 0         | ~100%        | very few, very coarse levels  |
+| `normal`  | 1         | ~10%         | balanced default              |
+| `narrow`  | 2         | ~1%          | many, finer price levels      |
+
+Everyone — the Biatec DEX frontend and any integrator — should snap prices with these
+helpers so pools land on the same canonical ticks.
+
+```ts
+import {
+  TICK_TYPES, // ['wide','normal','narrow'] — build a selector from this
+  DEFAULT_TICK_TYPE, // 'normal'
+  TickType,
+  getTickSize, // tick size for a price + tick type
+  getTickDecimals, // decimals to display for a price + tick type
+  snapPriceToTick, // snap an arbitrary price onto the tick grid
+  tickTypeForPrecision, // map a raw/asset precision to the nearest tick type
+  precisionForTickType,
+} from 'biatec-concentrated-liquidity-amm';
+
+// 1) Let a user pick a tick width (e.g. render TICK_TYPES as buttons)
+const tickType: TickType = 'wide';
+
+// 2) Size / decimals for the current price (correct at any magnitude)
+getTickSize(0.9, 'normal'); // 0.1   (not the raw 0.09)
+getTickSize(10000, 'normal'); // 1000
+getTickDecimals(0.001, 'narrow'); // 5
+
+// 3) Snap a price a user typed onto the shared grid before creating a pool
+snapPriceToTick(0.94, 'normal'); // 0.9
+snapPriceToTick(0.96, 'normal'); // 1
+snapPriceToTick(10123, 'normal', 'up'); // 11000  ('down' | 'up' | 'nearest')
+
+// 4) Map an asset-derived numeric precision (e.g. 4) to a tick type
+tickTypeForPrecision(4); // 'narrow'
+precisionForTickType('normal'); // 1
+```
+
+Building a min/max price range for a concentrated position:
+
+```ts
+import { snapPriceToTick, TickType } from 'biatec-concentrated-liquidity-amm';
+
+function buildRange(priceLow: number, priceHigh: number, tickType: TickType) {
+  return {
+    priceMin: snapPriceToTick(priceLow, tickType, 'down'),
+    priceMax: snapPriceToTick(priceHigh, tickType, 'up'),
+  };
+}
+buildRange(0.91, 1.02, 'narrow'); // { priceMin: 0.91, priceMax: 1.02 }
+```
+
+Pick the tick width that turns an existing position's `[min, max]` into a movable,
+multi-bin ("focused") selection — e.g. when pre-filling an "add liquidity" form so the
+user can slide the range and seed nearby bins. Returns `null` for a single-price / wall
+position:
+
+```ts
+import { suggestTickTypeForRange } from 'biatec-concentrated-liquidity-amm';
+
+suggestTickTypeForRange(0.9, 1.0); // 'normal'  (widest fit: exactly 1 tick of 0.1)
+suggestTickTypeForRange(1, 1);     // null      (wall / single-price position)
+suggestTickTypeForRange(0.9, 1.0, { minBins: 2, maxBins: 40 }); // tune the bin bounds
+```
+
+Low-level primitives (`initPriceDecimals`, `priceTickDecimals`, `cleanLogTick`,
+`tickDecimals`) are also exported if you need to build a full price distribution.
