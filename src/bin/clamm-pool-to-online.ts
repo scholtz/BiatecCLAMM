@@ -132,18 +132,19 @@ const app = async () => {
 
   // first find the app address .. for 3131562667 is 3FXLX4X6WP3NVGOXXZDIFKO6HSPV25EV6AZ6H2T66WUID3PIH4AAXH5IXE
   // then issue the participation key: ADDRESS=3FXLX4X6WP3NVGOXXZDIFKO6HSPV25EV6AZ6H2T66WUID3PIH4AAXH5IXE ROUNDS=16777215 ./create-participation-key.sh
-  const participatiDetails = `Participation ID:          YIOBBK3PKPPJ7PBNMKVRHSO3NDGLGHOJDP2UQUOCBEAMZES7L6MQ
-Parent address:            3FXLX4X6WP3NVGOXXZDIFKO6HSPV25EV6AZ6H2T66WUID3PIH4AAXH5IXE
+  // 3136517663 # ADDRESS=RT5KAKAZZS7IPGTDXKP27LS7I2M5VBX336YA3VP4UKEDS2UVOWHPTKR5QE ROUNDS=16777215 ./create-participation-key.sh
+  const participatiDetails = `Participation ID:          DGXTWH62MSI53SAJZWAL56SRDXK2J7XWVJOWZUFLQMJNPAAV6HOQ
+Parent address:            RT5KAKAZZS7IPGTDXKP27LS7I2M5VBX336YA3VP4UKEDS2UVOWHPTKR5QE
 Last vote round:           N/A
 Last block proposal round: N/A
 Effective first round:     N/A
 Effective last round:      N/A
-First round:               55313050
-Last round:                72090265
+First round:               62467305
+Last round:                79244520
 Key dilution:              4096
-Selection key:             lpYZ4kaeEk7uBeLEAE2LODRs7wc7dgs4dOUEwMLuO9k=
-Voting key:                7PXBeZ+naNB83w8FVKJKDRYDwTkVhyI8VEH1pNCHAuM=
-State proof key:           nyeiJ/5V3tq2QeW2bIt+aiMITIlwLW9LoURoIs9/ySvmuoDfbYMXR39wZ04MBpnXvdgPsg6gzFPHReXK8pHs1A==`;
+Selection key:             BTqwPB4eFweNWkFka1sPR37l0N364qrBa7MgLUTPO1k=
+Voting key:                yh7eCP+DVHdUrE9ohaCFvTLwLsOjx0C9OAoCpTS+W4E=
+State proof key:           ZFrYcFuav8L+Z+xQkkB4TvBqB4UJnpl2ZS7H/BkylEG92SD1fjUAhG6QE78Kdl14b0DfftN4P9pkjtuHjwAXWQ==`;
 
   // Parse participatiDetails
   const parseDetail = (label: string) => {
