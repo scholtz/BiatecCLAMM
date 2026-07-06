@@ -57,6 +57,34 @@ npm run compute-bytecode-hashes
 
 Copy the output directly into the "Contract Bytecode Hashes" section of the audit template. These hashes verify that the audit was performed on the exact bytecode that was reviewed.
 
+### 3. Run the Full Test Suite (MANDATORY)
+
+**MANDATORY REQUIREMENT**: Every audit MUST build the contracts and run the complete test suite, and MUST report the actual result in the audit. Do not rely on stale `jest-results.json` files or previously recorded runs — always execute the tests fresh against the commit being audited so the audit reflects the current state of the code.
+
+An Algorand LocalNet must be running for the on-chain tests. Start it if needed:
+
+```bash
+# Start LocalNet (required for the on-chain tests)
+algokit localnet start
+# Verify it is up
+docker ps
+```
+
+Then build and run the entire suite:
+
+```bash
+# Builds the contracts (compile + generate client) and runs every test
+npm run test
+```
+
+Record in the audit report:
+
+- The exact command(s) executed.
+- The final Jest summary line (e.g. `Tests: X passed, Y failed, Z total`) and the suite pass/fail status.
+- Any failing test names, with a short analysis of whether each failure is a test-harness issue or a real contract defect.
+
+If the suite cannot be run (for example, no LocalNet is available), this MUST be stated explicitly in the report's "Verification Notes / Limitations" section, together with the reason. An audit that silently skips the tests is considered incomplete.
+
 ### 2. Repository Context Gathering
 
 Execute these steps in order:
@@ -184,10 +212,15 @@ Review transaction builders and helper functions:
 
 ### Phase 3: Test Coverage Analysis
 
+**MANDATORY**: Run the full suite (see "Run the Full Test Suite" in Audit Preparation) and confirm the current pass/fail status before writing conclusions. The audit's claims about behavior must be consistent with a fresh test run, not with cached results.
+
 Analyze test files in `__test__/`:
 
 ```bash
-# Run existing tests
+# Full build + all tests (authoritative — run this and report the result)
+npm run test
+
+# Fast iteration once contracts are already built
 npm run test:nobuild
 
 # Check test coverage
@@ -664,6 +697,7 @@ Before submitting the audit:
 - [ ] All template sections completed
 - [ ] AI model version clearly documented
 - [ ] Commit hash verified and included
+- [ ] Full test suite (`npm run test`) executed fresh and its result reported (or inability to run explicitly documented)
 - [ ] All findings have severity classifications
 - [ ] Each finding has a clear recommendation
 - [ ] Test gaps are documented
