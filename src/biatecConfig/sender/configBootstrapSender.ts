@@ -2,6 +2,7 @@ import algosdk from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecConfigProviderClient } from '../../../contracts/clients/BiatecConfigProviderClient';
 import bootstrapTxs from '../txs/configBootstrapTxs';
+import sendRawTransactionWithErrorDecoding from '../../common/sendRawTransactionWithErrorDecoding';
 
 interface IConfigBootstrapSkInput {
   clientBiatecConfigProvider: BiatecConfigProviderClient;
@@ -25,7 +26,6 @@ const configBootstrapSender = async (input: IConfigBootstrapSkInput): Promise<st
     Array.from(Array(txs.length), (_, i) => i)
   );
 
-  const { txid } = await input.algod.sendRawTransaction(signed).do();
-  return txid;
+  return sendRawTransactionWithErrorDecoding(input.algod, signed, input.clientBiatecConfigProvider.appClient);
 };
 export default configBootstrapSender;

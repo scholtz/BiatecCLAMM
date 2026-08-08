@@ -2,6 +2,7 @@ import algosdk from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
 import clammWithdrawExcessAssetsTxs from '../txs/clammWithdrawExcessAssetsTxs';
+import sendRawTransactionWithErrorDecoding from '../../common/sendRawTransactionWithErrorDecoding';
 
 interface IClammRemoveLiquidityInput {
   clientBiatecClammPool: BiatecClammPoolClient;
@@ -29,7 +30,6 @@ const clammWithdrawExcessAssetsSender = async (input: IClammRemoveLiquidityInput
     txs,
     Array.from(Array(txs.length), (_, i) => i)
   );
-  const { txid } = await input.algod.sendRawTransaction(signed).do();
-  return txid;
+  return sendRawTransactionWithErrorDecoding(input.algod, signed, input.clientBiatecClammPool.appClient);
 };
 export default clammWithdrawExcessAssetsSender;

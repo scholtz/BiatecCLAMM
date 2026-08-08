@@ -3,6 +3,7 @@ import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/type
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
 import clammSendOnlineKeyRegistrationTxs from '../txs/clammSendOnlineKeyRegistrationTxs';
 import { ICustomOnlineKeyRegParams } from '../../interface/ICustomOnlineKeyRegParams';
+import sendRawTransactionWithErrorDecoding from '../../common/sendRawTransactionWithErrorDecoding';
 
 interface IClammRemoveLiquidityInput {
   clientBiatecClammPool: BiatecClammPoolClient;
@@ -28,7 +29,6 @@ const clammSendOnlineKeyRegistrationSender = async (input: IClammRemoveLiquidity
     txs,
     Array.from(Array(txs.length), (_, i) => i)
   );
-  const { txid } = await input.algod.sendRawTransaction(signed).do();
-  return txid;
+  return sendRawTransactionWithErrorDecoding(input.algod, signed, input.clientBiatecClammPool.appClient);
 };
 export default clammSendOnlineKeyRegistrationSender;

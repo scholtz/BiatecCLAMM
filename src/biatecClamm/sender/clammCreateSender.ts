@@ -4,6 +4,7 @@ import { AlgoAmount } from '@algorandfoundation/algokit-utils/types/amount';
 import clammCreateTxs from '../txs/clammCreateTxs';
 import { BiatecPoolProviderClient } from '../../../contracts/clients/BiatecPoolProviderClient';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
+import sendRawTransactionWithErrorDecoding from '../../common/sendRawTransactionWithErrorDecoding';
 
 interface IClammBootstrapSkInput {
   transactionSigner: TransactionSignerAccount;
@@ -41,7 +42,7 @@ const clammCreateSender = async (input: IClammBootstrapSkInput): Promise<BiatecC
     txs,
     txs.map((_, i) => i)
   );
-  await input.clientBiatecPoolProvider.algorand.client.algod.sendRawTransaction(signed).do();
+  await sendRawTransactionWithErrorDecoding(input.clientBiatecPoolProvider.algorand.client.algod, signed, input.clientBiatecPoolProvider.appClient);
   const lastTxId = txs[txs.length - 1].txID();
 
   const confirmation = await algosdk.waitForConfirmation(input.clientBiatecPoolProvider.algorand.client.algod, lastTxId, 4);

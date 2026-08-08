@@ -2,6 +2,7 @@ import algosdk from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
 import clammDistributeExcessAssetsTxs from '../txs/clammDistributeExcessAssetsTxs';
+import sendRawTransactionWithErrorDecoding from '../../common/sendRawTransactionWithErrorDecoding';
 
 interface IClammDistributeExcessAssetsInput {
   clientBiatecClammPool: BiatecClammPoolClient;
@@ -29,7 +30,6 @@ const clammDistributeExcessAssetsSender = async (input: IClammDistributeExcessAs
     txs,
     Array.from(Array(txs.length), (_, i) => i)
   );
-  const { txid } = await input.algod.sendRawTransaction(signed).do();
-  return txid;
+  return sendRawTransactionWithErrorDecoding(input.algod, signed, input.clientBiatecClammPool.appClient);
 };
 export default clammDistributeExcessAssetsSender;

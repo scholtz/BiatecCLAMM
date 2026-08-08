@@ -3,6 +3,7 @@ import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/type
 import { BiatecClammPoolClient } from '../../../contracts/clients/BiatecClammPoolClient';
 import clammAddLiquidityTxs from '../txs/clammAddLiquidityTxs';
 import { BiatecPoolProviderClient } from '../../../contracts/clients/BiatecPoolProviderClient';
+import sendRawTransactionWithErrorDecoding from '../../common/sendRawTransactionWithErrorDecoding';
 
 interface IClammBootstrapSkInput {
   clientBiatecClammPool: BiatecClammPoolClient;
@@ -48,7 +49,6 @@ const clammAddLiquiditySender = async (input: IClammBootstrapSkInput): Promise<s
     txs,
     Array.from(Array(txs.length), (_, i) => i)
   );
-  const { txid } = await input.algod.sendRawTransaction(signed).do();
-  return txid;
+  return sendRawTransactionWithErrorDecoding(input.algod, signed, input.clientBiatecClammPool.appClient);
 };
 export default clammAddLiquiditySender;
