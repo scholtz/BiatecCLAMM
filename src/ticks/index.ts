@@ -1,16 +1,20 @@
 import initPriceDecimals, { IInitPriceDecimalsReturn, toFixedBigInt, fromFixedBigInt } from './initPriceDecimals';
 import priceTickDecimals from './priceTickDecimals';
+import { tickDecimals } from './tickDecimals';
+import { TICK_GRID_ANCHORS, MAX_TICK_GRID_BOUNDARIES, tickGridBoundaryBelow, tickGridBoundaryAbove, nextTickGridBoundary, prevTickGridBoundary, tickGridWidthAt, tickGridBoundaries } from './tickGrid';
 
 /**
  * Human friendly tick selection.
  *
- * The Biatec CLAMM uses logarithmic ticks (a tick is a fixed fraction of the price).
- * Instead of asking integrators to reason about the raw numeric `precision`, expose a
- * small set of named tick widths. Lower precision → wider ticks.
+ * The Biatec CLAMM uses a logarithmic tick grid (see `tickGrid.ts`): boundaries are an
+ * absolute, canonical set of "nice" prices (`1, 2, 5 × 10^k`, subdivided per precision),
+ * so a bin's width is roughly a fixed fraction of the price. Instead of asking
+ * integrators to reason about the raw numeric `precision`, expose a small set of named
+ * tick widths. Lower precision → wider ticks.
  *
- * - `wide`   – very coarse ticks, few price levels (≈100% steps, precision 0).
- * - `normal` – coarse ticks (≈10% steps, precision 1). Good default.
- * - `narrow` – balanced ticks, many price levels (≈1% steps, precision 2).
+ * - `wide`   – one bin per anchor segment: `[1,2)`, `[2,5)`, `[5,10)` × 10^k (≈100% steps, precision 0).
+ * - `normal` – 35 bins per decade, 4%–10% of the price (precision 1). Good default.
+ * - `narrow` – 350 bins per decade, 0.4%–1% of the price (precision 2).
  */
 export type TickType = 'wide' | 'normal' | 'narrow';
 
@@ -44,102 +48,73 @@ export const precisionForTickType = (tickType: TickType): number => TICK_TYPE_TO
 export const tickTypeForPrecision = (precision: number): TickType => {
   const exact = PRECISION_TO_TICK_TYPE[precision];
   if (exact) return exact;
-  let best: TickType = DEFAULT_TICK_TYPE;
-  let bestDiff = Number.POSITIVE_INFINITY;
-  for (const type of TICK_TYPES) {
+  return TICK_TYPES.reduce<TickType>((best, type) => {
     const diff = Math.abs(TICK_TYPE_TO_PRECISION[type] - precision);
-    if (diff < bestDiff) {
-      bestDiff = diff;
-      best = type;
-    }
-  }
-  return best;
+    const bestDiff = Math.abs(TICK_TYPE_TO_PRECISION[best] - precision);
+    return diff < bestDiff ? type : best;
+  }, DEFAULT_TICK_TYPE);
 };
 
-const toPrecision = (precisionOrType: number | TickType): number =>
-  typeof precisionOrType === 'string' ? precisionForTickType(precisionOrType) : precisionOrType;
+const toPrecision = (precisionOrType: number | TickType): number => (typeof precisionOrType === 'string' ? precisionForTickType(precisionOrType) : precisionOrType);
 
 /**
- * Number of decimal places needed to represent a tick. Mirrors the logarithmic scheme
- * of {@link priceTickDecimals}: a wide tick like `100` needs `0` decimals while a tiny
- * tick like `1e-6` needs `6`.
- */
-export const tickDecimals = (tick: number): number => {
-  if (!Number.isFinite(tick) || tick <= 0) return 0;
-  return Math.max(0, -Math.floor(Math.log10(tick) + 1e-9));
-};
-
-/**
- * Clean logarithmic tick for a price, rounded to a "nice" 1/2/5×10^k value.
+ * Width of the canonical grid bin containing `price` — the tick size at that price.
  *
- * Use this for UI steppers and for snapping: it fixes the raw sub-1 ticks
- * ({@link initPriceDecimals} gives `0.09` at price `0.9`) to clean values (`0.1`), and
- * is correct at any magnitude (`10000` at `normal`/precision 2 → `100`).
+ * Correct at any magnitude (`10000` at `normal` → `1000`, `0.001` at `normal` →
+ * `0.0001`). Because the grid is absolute, this is the exact distance to the next
+ * boundary, not an approximation of "some fraction of the price".
  *
  * @param price - The price to compute a tick for.
  * @param precisionOrType - A {@link TickType} or a raw numeric precision.
  */
-export const cleanLogTick = (price: number, precisionOrType: number | TickType): number => {
-  if (!Number.isFinite(price) || price <= 0) return 0;
-  const precision = toPrecision(precisionOrType);
-  const raw = fromFixedBigInt(initPriceDecimals(toFixedBigInt(price), BigInt(precision)).tick);
-  if (!Number.isFinite(raw) || raw <= 0) return 0;
-  const exp = Math.floor(Math.log10(raw));
-  const frac = raw / 10 ** exp;
-  const nice = frac < 1.5 ? 1 : frac < 3.5 ? 2 : frac < 7.5 ? 5 : 10;
-  return nice * 10 ** exp;
-};
+export const cleanLogTick = (price: number, precisionOrType: number | TickType): number => tickGridWidthAt(price, toPrecision(precisionOrType));
 
 /**
  * Tick size for a price and tick type — the developer-friendly entry point.
  * Alias of {@link cleanLogTick} keyed by {@link TickType}.
  *
  * @example
- * getTickSize(0.9, 'wide');    // 0.1
- * getTickSize(10000, 'normal'); // 100
+ * getTickSize(0.9, 'normal');   // 0.05  (bin [0.9, 0.95))
+ * getTickSize(1500, 'wide');    // 1000  (bin [1000, 2000))
+ * getTickSize(10000, 'normal'); // 1000  (bin [10000, 11000))
  */
-export const getTickSize = (price: number, tickType: TickType): number =>
-  cleanLogTick(price, tickType);
+export const getTickSize = (price: number, tickType: TickType): number => cleanLogTick(price, tickType);
 
 /** Number of decimals to display for a price at a given tick type. */
-export const getTickDecimals = (price: number, tickType: TickType): number =>
-  tickDecimals(getTickSize(price, tickType));
+export const getTickDecimals = (price: number, tickType: TickType): number => tickDecimals(getTickSize(price, tickType));
 
 /** Rounding mode when snapping a price to the tick grid. */
 export type TickRounding = 'nearest' | 'down' | 'up';
 
 /**
- * Snap a price onto the tick grid for the given tick type.
+ * Snap a price onto the canonical tick grid for the given tick type.
  *
  * This is what a UI should call when a user types an arbitrary price, and what an
  * integrator should call before creating a pool so its bounds land on canonical ticks
- * shared across the whole ecosystem.
+ * shared across the whole ecosystem. A price already on the grid is returned as is,
+ * whatever the rounding mode.
  *
  * @param price - Arbitrary price to snap.
  * @param tickType - Desired tick width.
- * @param rounding - `nearest` (default), `down`, or `up`.
- * @returns The snapped price (never negative), rounded to the tick's decimals to avoid
- *          floating point noise.
+ * @param rounding - `nearest` (default; ties round up), `down`, or `up`.
+ * @returns The snapped price (never negative). `0` for an unusable price.
  *
  * @example
- * snapPriceToTick(0.94, 'wide');        // 0.9
- * snapPriceToTick(0.96, 'wide');        // 1
- * snapPriceToTick(10123, 'normal', 'up'); // 10200
+ * snapPriceToTick(0.94, 'normal');        // 0.95
+ * snapPriceToTick(0.91, 'normal');        // 0.9
+ * snapPriceToTick(1500, 'wide');          // 2000  (nearest of 1000 / 2000)
+ * snapPriceToTick(1500, 'wide', 'down');  // 1000
+ * snapPriceToTick(10123, 'normal', 'up'); // 11000
  */
-export const snapPriceToTick = (
-  price: number,
-  tickType: TickType,
-  rounding: TickRounding = 'nearest'
-): number => {
+export const snapPriceToTick = (price: number, tickType: TickType, rounding: TickRounding = 'nearest'): number => {
   if (!Number.isFinite(price) || price <= 0) return 0;
-  const tick = getTickSize(price, tickType);
-  if (!Number.isFinite(tick) || tick <= 0) return price;
-  const units = price / tick;
-  const snappedUnits =
-    rounding === 'down' ? Math.floor(units) : rounding === 'up' ? Math.ceil(units) : Math.round(units);
-  const snapped = snappedUnits * tick;
-  const decimals = tickDecimals(tick);
-  return Number(Math.max(0, snapped).toFixed(decimals));
+  const precision = precisionForTickType(tickType);
+  const below = tickGridBoundaryBelow(price, precision);
+  if (below === price) return price;
+  const above = tickGridBoundaryAbove(price, precision);
+  if (rounding === 'down') return below;
+  if (rounding === 'up') return above;
+  return price - below < above - price ? below : above;
 };
 
 /** Options for {@link suggestTickTypeForRange}. */
@@ -151,40 +126,66 @@ export interface SuggestTickTypeOptions {
 }
 
 /**
+ * Number of canonical bins between two on-grid boundaries (`0` when `high <= low`),
+ * capped at `limit` so a huge range never walks forever.
+ */
+const countBinsBetween = (low: number, high: number, precision: number, limit: number): number => {
+  if (!(high > low)) return 0;
+  let boundary = low;
+  let bins = 0;
+  while (boundary < high && bins <= limit) {
+    boundary = nextTickGridBoundary(boundary, precision);
+    bins += 1;
+    if (!(boundary > 0)) break;
+  }
+  return bins;
+};
+
+/**
  * Pick the tick width that represents a price range `[low, high]`.
  *
  * **Widest-first** (coarsest ticks / lowest precision first): the widest width where
- * the range still spans at least `minBins` (and no more than `maxBins`) ticks is
- * returned. Because it defaults to `minBins: 1`, an existing pool's `[min, max]` maps
- * to a *single* tick at its native (widest fitting) precision — so pre-filling an "add
- * liquidity" form with it keeps the exact range and adds to that same pool instead of
- * splitting it into finer, brand-new pools. Users can still slide into neighbouring
- * bins from there. Returns `null` for a degenerate range (`high <= low`, a wall /
- * single-price position) or when no width fits.
+ * the range, snapped to that width's grid, still spans at least `minBins` (and no more
+ * than `maxBins`) bins is returned. Because it defaults to `minBins: 1`, an existing
+ * pool's `[min, max]` maps to a *single* bin at its native (widest fitting) width — so
+ * pre-filling an "add liquidity" form with it keeps the exact range and adds to that
+ * same pool instead of splitting it into finer, brand-new pools. Users can still slide
+ * into neighbouring bins from there. Returns `null` for a degenerate range
+ * (`high <= low`, a wall / single-price position) or when no width fits.
  *
  * @example
- * suggestTickTypeForRange(0.9, 1.0); // 'normal'  (exactly 1 tick of 0.1 → native grid)
- * suggestTickTypeForRange(1, 1);     // null      (wall / single price)
+ * suggestTickTypeForRange(1000, 2000); // 'wide'   (exactly one wide bin)
+ * suggestTickTypeForRange(0.9, 1.0);   // 'normal' (two normal bins of 0.05)
+ * suggestTickTypeForRange(1, 1);       // null     (wall / single price)
  */
-export const suggestTickTypeForRange = (
-  low: number,
-  high: number,
-  options: SuggestTickTypeOptions = {}
-): TickType | null => {
+export const suggestTickTypeForRange = (low: number, high: number, options: SuggestTickTypeOptions = {}): TickType | null => {
   if (!Number.isFinite(low) || !Number.isFinite(high) || low <= 0 || high <= low) return null;
   const minBins = options.minBins ?? 1;
   const maxBins = options.maxBins ?? 40;
-  // Geometric mid is the representative price for a logarithmic grid.
-  const mid = Math.sqrt(low * high);
   // TICK_TYPES is ordered widest → narrowest, so this returns the widest fit.
-  for (const type of TICK_TYPES) {
-    const tick = getTickSize(mid, type);
-    if (!Number.isFinite(tick) || tick <= 0) continue;
-    const bins = Math.round((high - low) / tick);
-    if (bins >= minBins && bins <= maxBins) return type;
-  }
-  return null;
+  const fit = TICK_TYPES.find((type) => {
+    const precision = precisionForTickType(type);
+    const snappedLow = snapPriceToTick(low, type);
+    const snappedHigh = snapPriceToTick(high, type);
+    const bins = countBinsBetween(snappedLow, snappedHigh, precision, maxBins);
+    return bins >= minBins && bins <= maxBins;
+  });
+  return fit ?? null;
 };
 
-export { initPriceDecimals, priceTickDecimals, toFixedBigInt, fromFixedBigInt };
+export {
+  initPriceDecimals,
+  priceTickDecimals,
+  toFixedBigInt,
+  fromFixedBigInt,
+  tickDecimals,
+  TICK_GRID_ANCHORS,
+  MAX_TICK_GRID_BOUNDARIES,
+  tickGridBoundaryBelow,
+  tickGridBoundaryAbove,
+  nextTickGridBoundary,
+  prevTickGridBoundary,
+  tickGridWidthAt,
+  tickGridBoundaries,
+};
 export type { IInitPriceDecimalsReturn };

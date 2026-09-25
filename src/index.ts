@@ -51,13 +51,16 @@ import {
   priceTickDecimals,
   toFixedBigInt,
   fromFixedBigInt,
+  TICK_GRID_ANCHORS,
+  MAX_TICK_GRID_BOUNDARIES,
+  tickGridBoundaryBelow,
+  tickGridBoundaryAbove,
+  nextTickGridBoundary,
+  prevTickGridBoundary,
+  tickGridWidthAt,
+  tickGridBoundaries,
 } from './ticks';
-import type {
-  TickType,
-  TickRounding,
-  IInitPriceDecimalsReturn,
-  SuggestTickTypeOptions,
-} from './ticks';
+import type { TickType, TickRounding, IInitPriceDecimalsReturn, SuggestTickTypeOptions } from './ticks';
 
 export {
   clientBiatecClammPool,
@@ -123,5 +126,14 @@ export {
   priceTickDecimals,
   toFixedBigInt,
   fromFixedBigInt,
+  // Canonical (absolute, anchor-independent) grid — see src/ticks/tickGrid.ts.
+  TICK_GRID_ANCHORS,
+  MAX_TICK_GRID_BOUNDARIES,
+  tickGridBoundaryBelow,
+  tickGridBoundaryAbove,
+  nextTickGridBoundary,
+  prevTickGridBoundary,
+  tickGridWidthAt,
+  tickGridBoundaries,
 };
 export type { TickType, TickRounding, IInitPriceDecimalsReturn, SuggestTickTypeOptions };
