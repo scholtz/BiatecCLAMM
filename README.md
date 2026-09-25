@@ -236,19 +236,20 @@ absolute — they never depend on the current price, on a window, or on a previo
 computation — pools created on different days at different prices land in exactly the
 same bins and their liquidity aggregates instead of fragmenting.
 
-Every decade `[10^k, 10^(k+1))` is anchored at `1, 2, 5` (`…, 100, 200, 500, 1000, 2000,
-5000, …`). Each anchor segment (`[1,2)`, `[2,5)`, `[5,10)`, times `10^k`) is subdivided per
-tick width:
+The grid is decade-periodic — one table of mantissas per tick width, repeated in every
+decade `[10^k, 10^(k+1))` — and follows the **log10 tick rule**: the tick at a price is
+`10^-precision` of the price rounded to one significant digit, so a bin is always roughly
+the same fraction of the price:
 
-| Tick type | Precision | Bins per decade | Bin width                        | Boundaries around 1500              |
-| --------- | --------- | --------------- | -------------------------------- | ----------------------------------- |
-| `wide`    | 0         | 3               | one bin per anchor segment (~100%) | 1000, 2000, 5000                  |
-| `normal`  | 1         | 35              | 4% – 10% of the price            | 1000, 1100, …, 1900, 2000, 2200, …  |
-| `narrow`  | 2         | 350             | 0.4% – 1% of the price           | 1000, 1010, …, 1990, 2000, 2020, …  |
+| Tick type | Precision | Rule                               | Boundaries in one decade (× 10^k)                                                |
+| --------- | --------- | ---------------------------------- | -------------------------------------------------------------------------------- |
+| `wide`    | 0         | anchors `1, 2, 5` (~100 % steps)   | 1, 2, 5, 10                                                                      |
+| `normal`  | 1         | tick ≈ 10 % of the price           | 1, 1.1, 1.2, 1.3, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.7, 3, 3.3, 3.6, 4, 4.4, 5, 6, 7, 8, 9, 10 |
+| `narrow`  | 2         | tick ≈ 1 % of the price            | 1, 1.01, …, 1.49, 1.5, 1.52, …, 2.48, 2.52, 2.55, …, 10                          |
 
-For precision ≥ 1 the bin width inside a segment is `anchor × 10^(k-precision)` — always a
-"nice" `1`, `2` or `5 × 10^n` number. `wide` is the one special case: a whole anchor
-segment is a single bin, so its widths are `1`, `3` and `5 × 10^k`.
+So `0.9 → 1` is exactly one `normal` tick, `1500` sits in the `normal` bin `[1400, 1600]`
+and in the `wide` bin `[1000, 2000]` — on every visit, at every market price.
+`tickGridDecadeMantissas(precision)` returns the table.
 
 ```ts
 import {
@@ -268,12 +269,13 @@ const tickType: TickType = 'wide';
 
 // 2) Size / decimals for the current price (correct at any magnitude)
 getTickSize(1500, 'wide'); // 1000   (bin [1000, 2000))
-getTickSize(0.9, 'normal'); // 0.05  (bin [0.9, 0.95))
+getTickSize(0.9, 'normal'); // 0.1   (bin [0.9, 1))
 getTickSize(10000, 'normal'); // 1000
 getTickDecimals(0.001, 'narrow'); // 5
 
 // 3) Snap a price a user typed onto the shared grid before creating a pool
-snapPriceToTick(0.94, 'normal'); // 0.95
+snapPriceToTick(0.94, 'normal'); // 0.9
+snapPriceToTick(0.96, 'normal'); // 1
 snapPriceToTick(1500, 'wide'); // 2000   (nearest)
 snapPriceToTick(1500, 'wide', 'down'); // 1000
 snapPriceToTick(10123, 'normal', 'up'); // 11000  ('down' | 'up' | 'nearest')
@@ -311,12 +313,12 @@ position:
 import { suggestTickTypeForRange } from 'biatec-concentrated-liquidity-amm';
 
 suggestTickTypeForRange(1000, 2000); // 'wide'   (exactly one wide bin)
-suggestTickTypeForRange(0.9, 1.0); // 'normal' (two normal bins of 0.05)
+suggestTickTypeForRange(0.9, 1.0); // 'normal' (exactly one normal tick of 0.1)
 suggestTickTypeForRange(1, 1); // null     (wall / single-price position)
 suggestTickTypeForRange(0.9, 1.0, { minBins: 2, maxBins: 40 }); // tune the bin bounds
 ```
 
-Grid primitives (`tickGridBoundaryBelow` / `tickGridBoundaryAbove`, `nextTickGridBoundary` /
+Grid primitives (`tickGridDecadeMantissas`, `tickGridBoundaryBelow` / `tickGridBoundaryAbove`, `nextTickGridBoundary` /
 `prevTickGridBoundary`, `tickGridWidthAt`, `tickGridBoundaries`, `TICK_GRID_ANCHORS`) and the
 fixed-point `initPriceDecimals` (`fitPrice` = bin start, `tick` = bin width, both on the
 same canonical grid) are also exported if you need to build a full price distribution.

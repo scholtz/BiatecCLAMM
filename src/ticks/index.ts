@@ -126,27 +126,11 @@ export interface SuggestTickTypeOptions {
 }
 
 /**
- * Number of canonical bins between two on-grid boundaries (`0` when `high <= low`),
- * capped at `limit` so a huge range never walks forever.
- */
-const countBinsBetween = (low: number, high: number, precision: number, limit: number): number => {
-  if (!(high > low)) return 0;
-  let boundary = low;
-  let bins = 0;
-  while (boundary < high && bins <= limit) {
-    boundary = nextTickGridBoundary(boundary, precision);
-    bins += 1;
-    if (!(boundary > 0)) break;
-  }
-  return bins;
-};
-
-/**
  * Pick the tick width that represents a price range `[low, high]`.
  *
- * **Widest-first** (coarsest ticks / lowest precision first): the widest width where
- * the range, snapped to that width's grid, still spans at least `minBins` (and no more
- * than `maxBins`) bins is returned. Because it defaults to `minBins: 1`, an existing
+ * **Widest-first** (coarsest ticks / lowest precision first): the widest width whose bin
+ * at the range's geometric mid fits into the range at least `minBins` (and no more than
+ * `maxBins`) times is returned. Because it defaults to `minBins: 1`, an existing
  * pool's `[min, max]` maps to a *single* bin at its native (widest fitting) width — so
  * pre-filling an "add liquidity" form with it keeps the exact range and adds to that
  * same pool instead of splitting it into finer, brand-new pools. Users can still slide
@@ -163,11 +147,14 @@ export const suggestTickTypeForRange = (low: number, high: number, options: Sugg
   const minBins = options.minBins ?? 1;
   const maxBins = options.maxBins ?? 40;
   // TICK_TYPES is ordered widest → narrowest, so this returns the widest fit.
+  // Geometric mid is the representative price for a logarithmic grid: the number of
+  // bins of that width the range spans decides (not a snapped range, which for a range
+  // narrower than a wide bin would collapse to a whole different bin).
+  const mid = Math.sqrt(low * high);
   const fit = TICK_TYPES.find((type) => {
-    const precision = precisionForTickType(type);
-    const snappedLow = snapPriceToTick(low, type);
-    const snappedHigh = snapPriceToTick(high, type);
-    const bins = countBinsBetween(snappedLow, snappedHigh, precision, maxBins);
+    const tick = tickGridWidthAt(mid, precisionForTickType(type));
+    if (!(tick > 0)) return false;
+    const bins = Math.round((high - low) / tick);
     return bins >= minBins && bins <= maxBins;
   });
   return fit ?? null;
@@ -189,3 +176,4 @@ export {
   tickGridBoundaries,
 };
 export type { IInitPriceDecimalsReturn };
+export { tickGridDecadeMantissas } from './tickGrid';

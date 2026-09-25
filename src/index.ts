@@ -137,3 +137,4 @@ export {
   tickGridBoundaries,
 };
 export type { TickType, TickRounding, IInitPriceDecimalsReturn, SuggestTickTypeOptions };
+export { tickGridDecadeMantissas } from './ticks';
