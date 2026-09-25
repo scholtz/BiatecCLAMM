@@ -228,28 +228,38 @@ Multiple security audits have been conducted. Review the `audits/` folder before
 
 ## Ticks
 
-Biatec CLAMM uses a **logarithmic tick system**: a tick is a fixed fraction of the
-price, so a sensible tick exists at any magnitude (both at `1000` and at `0.001`). The
-tick width is chosen with a `precision` value, exposed to integrators as three friendly
-tick types so nobody has to reason about raw numbers:
+Biatec CLAMM uses a **canonical logarithmic tick grid**: an absolute set of price
+boundaries, fixed once and for all, that every integrator (and the Biatec DEX frontend)
+snaps to. A bin's width is roughly a fixed fraction of the price, so sensible bins exist
+at any magnitude (both at `1000` and at `0.001`), and because the boundaries are
+absolute — they never depend on the current price, on a window, or on a previous
+computation — pools created on different days at different prices land in exactly the
+same bins and their liquidity aggregates instead of fragmenting.
 
-| Tick type | Precision | Approx. step | Use it for                    |
-| --------- | --------- | ------------ | ----------------------------- |
-| `wide`    | 0         | ~100%        | very few, very coarse levels  |
-| `normal`  | 1         | ~10%         | balanced default              |
-| `narrow`  | 2         | ~1%          | many, finer price levels      |
+The grid is decade-periodic — one table of mantissas per tick width, repeated in every
+decade `[10^k, 10^(k+1))` — and follows the **log10 tick rule**: the tick at a price is
+`10^-precision` of the price rounded to one significant digit, so a bin is always roughly
+the same fraction of the price:
 
-Everyone — the Biatec DEX frontend and any integrator — should snap prices with these
-helpers so pools land on the same canonical ticks.
+| Tick type | Precision | Rule                               | Boundaries in one decade (× 10^k)                                                |
+| --------- | --------- | ---------------------------------- | -------------------------------------------------------------------------------- |
+| `wide`    | 0         | anchors `1, 2, 5` (~100 % steps)   | 1, 2, 5, 10                                                                      |
+| `normal`  | 1         | tick ≈ 10 % of the price           | 1, 1.1, 1.2, 1.3, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.7, 3, 3.3, 3.6, 4, 4.4, 5, 6, 7, 8, 9, 10 |
+| `narrow`  | 2         | tick ≈ 1 % of the price            | 1, 1.01, …, 1.49, 1.5, 1.52, …, 2.48, 2.52, 2.55, …, 10                          |
+
+So `0.9 → 1` is exactly one `normal` tick, `1500` sits in the `normal` bin `[1400, 1600]`
+and in the `wide` bin `[1000, 2000]` — on every visit, at every market price.
+`tickGridDecadeMantissas(precision)` returns the table.
 
 ```ts
 import {
   TICK_TYPES, // ['wide','normal','narrow'] — build a selector from this
   DEFAULT_TICK_TYPE, // 'normal'
   TickType,
-  getTickSize, // tick size for a price + tick type
+  getTickSize, // width of the bin containing a price, for a tick type
   getTickDecimals, // decimals to display for a price + tick type
-  snapPriceToTick, // snap an arbitrary price onto the tick grid
+  snapPriceToTick, // snap an arbitrary price onto the grid
+  tickGridBoundaries, // all boundaries covering a price window
   tickTypeForPrecision, // map a raw/asset precision to the nearest tick type
   precisionForTickType,
 } from 'biatec-concentrated-liquidity-amm';
@@ -258,16 +268,23 @@ import {
 const tickType: TickType = 'wide';
 
 // 2) Size / decimals for the current price (correct at any magnitude)
-getTickSize(0.9, 'normal'); // 0.1   (not the raw 0.09)
+getTickSize(1500, 'wide'); // 1000   (bin [1000, 2000))
+getTickSize(0.9, 'normal'); // 0.1   (bin [0.9, 1))
 getTickSize(10000, 'normal'); // 1000
 getTickDecimals(0.001, 'narrow'); // 5
 
 // 3) Snap a price a user typed onto the shared grid before creating a pool
 snapPriceToTick(0.94, 'normal'); // 0.9
 snapPriceToTick(0.96, 'normal'); // 1
+snapPriceToTick(1500, 'wide'); // 2000   (nearest)
+snapPriceToTick(1500, 'wide', 'down'); // 1000
 snapPriceToTick(10123, 'normal', 'up'); // 11000  ('down' | 'up' | 'nearest')
 
-// 4) Map an asset-derived numeric precision (e.g. 4) to a tick type
+// 4) The full grid over a window — identical for every caller, whatever the window
+tickGridBoundaries(536, 2140, precisionForTickType('wide')); // [500, 1000, 2000, 5000]
+tickGridBoundaries(1080, 2160, precisionForTickType('wide')); // [1000, 2000, 5000]
+
+// 5) Map an asset-derived numeric precision (e.g. 4) to a tick type
 tickTypeForPrecision(4); // 'narrow'
 precisionForTickType('normal'); // 1
 ```
@@ -284,6 +301,7 @@ function buildRange(priceLow: number, priceHigh: number, tickType: TickType) {
   };
 }
 buildRange(0.91, 1.02, 'narrow'); // { priceMin: 0.91, priceMax: 1.02 }
+buildRange(1200, 1800, 'wide'); // { priceMin: 1000, priceMax: 2000 }
 ```
 
 Pick the tick width that turns an existing position's `[min, max]` into a movable,
@@ -294,10 +312,13 @@ position:
 ```ts
 import { suggestTickTypeForRange } from 'biatec-concentrated-liquidity-amm';
 
-suggestTickTypeForRange(0.9, 1.0); // 'normal'  (widest fit: exactly 1 tick of 0.1)
-suggestTickTypeForRange(1, 1);     // null      (wall / single-price position)
+suggestTickTypeForRange(1000, 2000); // 'wide'   (exactly one wide bin)
+suggestTickTypeForRange(0.9, 1.0); // 'normal' (exactly one normal tick of 0.1)
+suggestTickTypeForRange(1, 1); // null     (wall / single-price position)
 suggestTickTypeForRange(0.9, 1.0, { minBins: 2, maxBins: 40 }); // tune the bin bounds
 ```
 
-Low-level primitives (`initPriceDecimals`, `priceTickDecimals`, `cleanLogTick`,
-`tickDecimals`) are also exported if you need to build a full price distribution.
+Grid primitives (`tickGridDecadeMantissas`, `tickGridBoundaryBelow` / `tickGridBoundaryAbove`, `nextTickGridBoundary` /
+`prevTickGridBoundary`, `tickGridWidthAt`, `tickGridBoundaries`, `TICK_GRID_ANCHORS`) and the
+fixed-point `initPriceDecimals` (`fitPrice` = bin start, `tick` = bin width, both on the
+same canonical grid) are also exported if you need to build a full price distribution.
