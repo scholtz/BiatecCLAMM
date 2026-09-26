@@ -239,6 +239,36 @@
       }
     },
     {
+      "name": "reconcileLiquidity",
+      "desc": "Books liquidity which is owned neither by LP token holders nor by the fee accounts\n(Liquidity - distributedLp - LiquidityUsersFromFees - LiquidityBiatecFromFees).\n\n\nPools deployed with BIATEC-CLAMM-01-06-04 and earlier could accumulate such liquidity in addLiquidity.\nWhile LP tokens are in circulation the amount is credited to the LP holders (LiquidityUsersFromFees).\nIf no LP token is in circulation it is credited to biatec (LiquidityBiatecFromFees) so that it can be\nwithdrawn with removeLiquidityAdmin and returned to the affected liquidity providers.\n\n\nOnly addressExecutiveFee is allowed to execute this method.",
+      "args": [
+        {
+          "name": "appBiatecConfigProvider",
+          "type": "uint64",
+          "desc": "Biatec config app"
+        },
+        {
+          "name": "assetA",
+          "type": "uint64",
+          "desc": "Asset A"
+        },
+        {
+          "name": "assetB",
+          "type": "uint64",
+          "desc": "Asset B"
+        },
+        {
+          "name": "assetLp",
+          "type": "uint64",
+          "desc": "LP token"
+        }
+      ],
+      "returns": {
+        "type": "uint256",
+        "desc": "Liquidity credited (base scale)"
+      }
+    },
+    {
       "name": "swap",
       "desc": "Swap Asset A to Asset B or Asset B to Asst A",
       "args": [

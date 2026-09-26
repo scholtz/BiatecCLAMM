@@ -33,6 +33,7 @@ describe('BiatecClammPool - Staking Pools', () => {
       expect(lpTokenId).toBeGreaterThan(0n);
 
       const lpTokenInfo = await algod.getAssetByID(Number(lpTokenId)).do();
+      if (!lpTokenInfo.params) throw new Error('LP token params missing');
       // eslint-disable-next-line no-console
       const rawNameBuffer = typeof lpTokenInfo.params.nameB64 === 'string' ? Buffer.from(lpTokenInfo.params.nameB64, 'base64') : Buffer.from(lpTokenInfo.params.nameB64 ?? new Uint8Array());
       console.log('LP raw name bytes', rawNameBuffer.toString('hex'));
@@ -69,6 +70,7 @@ describe('BiatecClammPool - Staking Pools', () => {
       expect(lpTokenId).toBeGreaterThan(0n);
 
       const lpTokenInfo = await algod.getAssetByID(Number(lpTokenId)).do();
+      if (!lpTokenInfo.params) throw new Error('LP token params missing');
       expect(lpTokenInfo.params.name).toBe('bAlgo');
       expect(lpTokenInfo.params.unitName).toBe('Algo');
     } catch (e: any) {
@@ -111,8 +113,8 @@ describe('BiatecClammPool - Staking Pools', () => {
 
       const lpTokenInfo = await algod.getAssetByID(Number(lpTokenId)).do();
       const testAssetInfo = await algod.getAssetByID(Number(testAssetId)).do();
-      expect(lpTokenInfo.params.name).toBe(`b${testAssetInfo.params.unitName}`);
-      expect(lpTokenInfo.params.unitName).toBe(testAssetInfo.params.unitName);
+      expect(lpTokenInfo.params?.name).toBe(`b${testAssetInfo.params?.unitName}`);
+      expect(lpTokenInfo.params?.unitName).toBe(testAssetInfo.params?.unitName);
     } catch (e: any) {
       // eslint-disable-next-line no-console
       console.error(e);

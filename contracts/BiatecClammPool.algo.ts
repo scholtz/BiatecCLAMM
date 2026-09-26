@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-06-04';
+const version = 'BIATEC-CLAMM-01-06-05';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
@@ -629,45 +629,40 @@ export class BiatecClammPool extends Contract {
     const newLiquidity = this.setCurrentLiquidityNonDecreasing(oldLiquidity);
 
     if (send) {
+      // Accounting invariant of the pool: Liquidity == distributedLp + LiquidityUsersFromFees + LiquidityBiatecFromFees
+      //
+      // Every circulating LP token (D = distributedBefore) is backed by (D + Lu) / D units of liquidity, because the
+      // users' fee liquidity Lu is shared pro rata by all LP tokens on removeLiquidity. A depositor who adds
+      // liquidityDelta must therefore receive X = liquidityDelta * D / (D + Lu) LP tokens, and the remainder
+      // liquidityDelta - X is booked into Lu. Then
+      //   newcomer claim:  X * (D + Lu + liquidityDelta) / (D + X) == liquidityDelta   (exactly what was deposited)
+      //   incumbents:      D * (D + Lu + liquidityDelta) / (D + X) == D + Lu           (they keep all historic fees)
+      // so nobody can harvest historic fees and no liquidity is left without an owner.
+      //
+      // The previous implementation minted min(liquidityDelta, quadratic root) LP tokens and did not account for the
+      // difference anywhere. That difference became liquidity owned by nobody - it could never be withdrawn by LP
+      // holders nor by biatec (mainnet pool 3720188642 kept 57.26 L after all LP tokens were redeemed).
       const liquidityDelta = newLiquidity - oldLiquidity;
       let lpDeltaBase = liquidityDelta;
       if (lpDeltaBase > <uint256>0) {
         // Base-scaled LP currently circulating outside the app account
         const distributedBefore = ((Uint<256>(TOTAL_SUPPLY) as uint256) - (this.app.address.assetBalance(assetLp) as uint256)) * assetLpDelicmalScale2Scale;
-        if (distributedBefore > <uint256>0) {
-          let contributionScaled = <uint256>0;
-          if (realAssetADeposit > <uint256>0) {
-            // Estimate caller share using whichever side contributed funds
-            contributionScaled = (realAssetADeposit * newLiquidity) / this.assetABalanceBaseScale.value;
-          } else if (realAssetBDeposit > <uint256>0) {
-            contributionScaled = (realAssetBDeposit * newLiquidity) / this.assetBBalanceBaseScale.value;
-          }
-          if (contributionScaled > <uint256>0) {
-            const usersFeeLiquidity = this.LiquidityUsersFromFees.value;
-            const sumDistributedAndFees = distributedBefore + usersFeeLiquidity;
-            // Solve X^2 + X(sumDistributedAndFees - contributionScaled) - contributionScaled*distributedBefore = 0
-            const diff = sumDistributedAndFees >= contributionScaled ? sumDistributedAndFees - contributionScaled : contributionScaled - sumDistributedAndFees;
-            const discriminant = diff * diff + <uint256>4 * contributionScaled * distributedBefore;
-            const sqrtTerm = sqrt(discriminant);
-            let numerator = <uint256>0;
-            if (contributionScaled >= sumDistributedAndFees) {
-              numerator = sqrtTerm + (contributionScaled - sumDistributedAndFees);
-            } else {
-              numerator = sqrtTerm - (sumDistributedAndFees - contributionScaled);
-            }
-            const solution = numerator / <uint256>2;
-            // Floor the root to keep rounding drift inside the pool
-            if (solution > <uint256>0 && solution < lpDeltaBase) {
-              lpDeltaBase = solution;
-            }
-          }
+        const usersFeeLiquidity = this.LiquidityUsersFromFees.value;
+        if (distributedBefore > <uint256>0 && usersFeeLiquidity > <uint256>0) {
+          lpDeltaBase = (liquidityDelta * distributedBefore) / (distributedBefore + usersFeeLiquidity);
         }
       }
-      let lpTokensToSend = (lpDeltaBase / assetLpDelicmalScale2Scale) as uint64;
-      if (lpTokensToSend === 0 && lpDeltaBase > <uint256>0) {
-        lpTokensToSend = 1;
-      }
+      // Floor to LP token decimals. A deposit which does not reach one LP micro-unit is rejected instead of being
+      // rounded up to one LP token (audit 2026-09-07 H-01: rounding must never favour the depositor).
+      const lpTokensToSend = (lpDeltaBase / assetLpDelicmalScale2Scale) as uint64;
       assert(lpTokensToSend > 0, 'LP-ZERO-ERR');
+      // The part of the deposit which is not minted because existing LP tokens already carry fee liquidity
+      // (liquidityDelta - lpDeltaBase, zero while no fees were collected) stays with the current LP token holders.
+      // The sub-micro-LP flooring remainder (< 1e-6 LP) is plain rounding in favour of the pool; it is not booked as
+      // fee income and can be swept by reconcileLiquidity.
+      if (liquidityDelta > lpDeltaBase) {
+        this.LiquidityUsersFromFees.value = this.LiquidityUsersFromFees.value + (liquidityDelta - lpDeltaBase);
+      }
       this.doAxfer(this.txn.sender, assetLp, lpTokensToSend);
       return lpTokensToSend as uint64;
     }
@@ -751,6 +746,19 @@ export class BiatecClammPool extends Contract {
       lpDeltaWithFees = lpDeltaBase + myPortionOfFeesCollected;
       this.LiquidityUsersFromFees.value = this.LiquidityUsersFromFees.value - myPortionOfFeesCollected;
     }
+    const sentSomething = this.payOutLiquidity(lpDeltaWithFees, assetA, assetB);
+    // assert(aToSend64 > 0 || bToSend64 > 0, 'Removal of the liquidity would lead to zero withdrawal');
+    assert(sentSomething, 'ERR-REM-ZERO');
+    return lpDeltaWithFees / assetLpDelicmalScale2Scale;
+  }
+
+  /**
+   * Sends the pro rata share of asset A and asset B for the given liquidity to the sender, reduces the tracked
+   * balances and recalculates the liquidity. Shared by removeLiquidity and removeLiquidityAdmin.
+   *
+   * @returns true if at least one asset was sent
+   */
+  private payOutLiquidity(lpDeltaWithFees: uint256, assetA: AssetID, assetB: AssetID): boolean {
     const aToSend = this.calculateAssetAWithdrawOnLpDeposit(lpDeltaWithFees, this.assetABalanceBaseScale.value, this.Liquidity.value);
     const aToSend64 = (aToSend / this.assetADecimalsScaleFromBase.value) as uint64;
     if (aToSend64 > 0) {
@@ -761,16 +769,10 @@ export class BiatecClammPool extends Contract {
     if (bToSend64 > 0) {
       this.doAxfer(this.txn.sender, assetB, bToSend64);
     }
-
-    // assert(aToSend64 > 0 || bToSend64 > 0, 'Removal of the liquidity would lead to zero withdrawal');
-    assert(aToSend64 > 0 || bToSend64 > 0, 'ERR-REM-ZERO');
-
-    const newAssetA = this.assetABalanceBaseScale.value - aToSend;
-    const newAssetB = this.assetBBalanceBaseScale.value - bToSend;
-    this.assetABalanceBaseScale.value = newAssetA;
-    this.assetBBalanceBaseScale.value = newAssetB;
+    this.assetABalanceBaseScale.value = this.assetABalanceBaseScale.value - aToSend;
+    this.assetBBalanceBaseScale.value = this.assetBBalanceBaseScale.value - bToSend;
     this.setCurrentLiquidity();
-    return lpDeltaWithFees / assetLpDelicmalScale2Scale;
+    return aToSend64 > 0 || bToSend64 > 0;
   }
 
   /**
@@ -814,23 +816,44 @@ export class BiatecClammPool extends Contract {
       'ERR-TOO-MUCH' // 'Biatec cannot take more lp then is collected in fees'
     );
     this.LiquidityBiatecFromFees.value = this.LiquidityBiatecFromFees.value - lpDeltaWithFees;
-    const aToSend = this.calculateAssetAWithdrawOnLpDeposit(lpDeltaWithFees, this.assetABalanceBaseScale.value, this.Liquidity.value);
-    const aToSend64 = (aToSend / this.assetADecimalsScaleFromBase.value) as uint64;
-    if (aToSend64 > 0) {
-      this.doAxfer(this.txn.sender, assetA, aToSend64);
-    }
-    const bToSend = this.calculateAssetAWithdrawOnLpDeposit(lpDeltaWithFees, this.assetBBalanceBaseScale.value, this.Liquidity.value);
-    const bToSend64 = (bToSend / this.assetBDecimalsScaleFromBase.value) as uint64;
-    if (bToSend64 > 0) {
-      this.doAxfer(this.txn.sender, assetB, bToSend64);
-    }
-
-    const newAssetA = this.assetABalanceBaseScale.value - aToSend;
-    const newAssetB = this.assetBBalanceBaseScale.value - bToSend;
-    this.assetABalanceBaseScale.value = newAssetA;
-    this.assetBBalanceBaseScale.value = newAssetB;
-    this.setCurrentLiquidity();
+    this.payOutLiquidity(lpDeltaWithFees, assetA, assetB);
     return lpDeltaWithFees / assetLpDelicmalScale2Scale;
+  }
+
+  /**
+   * Books liquidity which is owned neither by LP token holders nor by the fee accounts
+   * (Liquidity - distributedLp - LiquidityUsersFromFees - LiquidityBiatecFromFees).
+   *
+   * Pools deployed with BIATEC-CLAMM-01-06-04 and earlier could accumulate such liquidity in addLiquidity.
+   * While LP tokens are in circulation the amount is credited to the LP holders (LiquidityUsersFromFees).
+   * If no LP token is in circulation it is credited to biatec (LiquidityBiatecFromFees) so that it can be
+   * withdrawn with removeLiquidityAdmin and returned to the affected liquidity providers.
+   *
+   * Only addressExecutiveFee is allowed to execute this method.
+   *
+   * @param appBiatecConfigProvider Biatec config app
+   * @param assetA Asset A
+   * @param assetB Asset B
+   * @param assetLp LP token
+   * @returns Liquidity credited (base scale)
+   */
+  reconcileLiquidity(appBiatecConfigProvider: AppID, assetA: AssetID, assetB: AssetID, assetLp: AssetID): uint256 {
+    this.checkAssets(assetA, assetB, assetLp);
+    assert(appBiatecConfigProvider === this.appBiatecConfigProvider.value, 'E_CONFIG');
+    const addressExecutiveFee = appBiatecConfigProvider.globalState('ef') as Address;
+    assert(this.txn.sender === addressExecutiveFee, 'ERR-EXEC-ONLY');
+    const distributed = this.calculateDistributedLiquidity(assetLp, <uint256>0);
+    const owned = distributed + this.LiquidityUsersFromFees.value + this.LiquidityBiatecFromFees.value;
+    if (this.Liquidity.value <= owned) {
+      return <uint256>0;
+    }
+    const unowned = this.Liquidity.value - owned;
+    if (distributed > <uint256>0) {
+      this.LiquidityUsersFromFees.value = this.LiquidityUsersFromFees.value + unowned;
+    } else {
+      this.LiquidityBiatecFromFees.value = this.LiquidityBiatecFromFees.value + unowned;
+    }
+    return unowned;
   }
 
   /**

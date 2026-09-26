@@ -46,6 +46,13 @@ This directory contains the organized test suite for the BiatecCLAMM pool functi
   - Algo vs ASA pool tests
   - NPM method tests (getPools)
 
+- **mainnet-replay-3720188642.test.ts** (1 test, ~1 minute)
+  - Replays the complete mainnet history of pool app 3720188642 (Gold/GoldDAO) from `../test-data/mainnet-pool-3720188642.json`
+    (3 deposits, 238 swaps by two aggregators with their recorded identity fee multipliers, full LP redemption)
+  - Asserts the accounting invariant `L == distributedLp + Lu + Lb` after every liquidity operation, that swaps reproduce the
+    mainnet outputs exactly and that only Biatec's fee share remains after all LP tokens are redeemed
+  - `REPLAY_STRICT=0` reproduces the history without the invariant assertions (useful to compare a contract build against mainnet)
+
 ### Supporting Files
 
 - **shared-setup.ts**

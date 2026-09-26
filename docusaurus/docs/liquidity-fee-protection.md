@@ -1,56 +1,68 @@
 # Protecting fee accrual when new LPs join
 
-Date: 2025-10-26
+Date: 2025-10-26, revised 2026-09-26
 Repository: BiatecCLAMM (projects/BiatecCLAMM)
 Primary file: `contracts/BiatecClammPool.algo.ts`
 
 ## Background {#-background}
 
-Once a pool collects swap fees, the on-chain state tracks them as additional liquidity (`LiquidityUsersFromFees`) without minting extra LP tokens. The previous add-liquidity flow minted new LP tokens from the raw liquidity delta (`newLiquidity - oldLiquidity`). As a result, a newcomer could add liquidity and immediately remove it to harvest a pro-rata share of historic fees that should belong to incumbent LPs.
+Once a pool collects swap fees, the on-chain state tracks them as additional liquidity (`LiquidityUsersFromFees`, `Lu`) without minting extra LP tokens. The original add-liquidity flow minted new LP tokens from the raw liquidity delta (`newLiquidity - oldLiquidity`). As a result, a newcomer could add liquidity and immediately remove it to harvest a pro-rata share of historic fees that should belong to incumbent LPs.
 
 The regression surfaced in the pool test "new liquidity provider does not scoop pre-existing fees" where account C adds liquidity after a swap-fee scenario and removes it straight away. The expected behaviour is that the account receives exactly what it deposited (net zero profit).
 
+## Accounting invariant {#-accounting-invariant}
+
+Every unit of pool liquidity must be owned by somebody:
+
+```
+Liquidity == distributedLp + LiquidityUsersFromFees + LiquidityBiatecFromFees
+```
+
+- `distributedLp` (`D`) is the LP supply circulating outside the pool account, scaled to the base precision,
+- `Lu` is fee liquidity owned pro rata by all LP token holders (paid out by `removeLiquidity`),
+- `Lb` is fee liquidity owned by Biatec (paid out by `removeLiquidityAdmin`).
+
+`swap` keeps the invariant because the whole liquidity increment is split between `Lu` and `Lb`.
+
 ## Fix summary {#-fix-summary}
 
-`processAddLiquidity` now solves the quadratic relation enforced by immediate withdrawal parity and floors the positive root before minting LP tokens:
+Each circulating LP token is backed by `(D + Lu) / D` units of liquidity. A depositor who adds `delta` liquidity therefore receives
 
 ```
-X^2 + X(sumDistributedAndFees − Q) − Q * distributedBefore = 0
+X = delta * D / (D + Lu)
 ```
 
-where:
+LP tokens (floored to LP token decimals), and the fee-dilution share `delta - X` is booked into `Lu` (it is exactly 0 while the pool has not collected any fee). With `Lu' = Lu + delta - X`:
 
-- `distributedBefore` is the previously distributed LP supply (scaled to the base precision),
-- `LiquidityUsersFromFees` captures historic fee liquidity still owned by incumbents,
-- `Q = depositShare * newLiquidity` with `depositShare` derived from the caller's base-scale contribution,
-- `X` is the base-scale LP delta we solve for.
+- newcomer claim on exit: `X * (D + Lu + delta) / (D + X) == delta` - exactly what was deposited, no historic fees,
+- incumbents: `D * (D + Lu + delta) / (D + X) == D + Lu` - they keep all historic fees,
+- invariant: `D + X + Lu' == D + Lu + delta` - no liquidity is left without an owner.
 
-By flooring the root (and therefore rounding in favour of the pool) we ensure newcomers never mint enough LP to unlock pre-existing fees. When the pool has no accrued fees the quadratic collapses to the original "mint the liquidity delta" behaviour.
+When the pool has no accrued fees the formula collapses to the original "mint the liquidity delta" behaviour.
 
-The same proportional arithmetic is reused on exit: fee shares are calculated with a single multiply/divide pass so rounding drift remains predictable and always benefits the contract.
+### Why the quadratic variant was replaced {#-why-the-quadratic-variant-was-replaced}
+
+Between 2025-10-26 and 2026-09-26 the contract minted `min(delta, root)` where `root` solved `X^2 + X(D + Lu - Q) - Q * D = 0` and `Q = depositA * newLiquidity / assetABalance` (or the asset B share when no asset A was deposited). Two problems:
+
+1. `Q` is a single-sided estimate. For a deposit that is not in the pool's current ratio (which is allowed and moves the pool price) it is below the real liquidity added, so the depositor was minted fewer LP tokens than the liquidity they contributed.
+2. The difference `delta - X` was not booked anywhere. It increased `Liquidity` but was owned neither by LP holders nor by Biatec, so it could never be withdrawn.
+
+Mainnet pool `3720188642` (Gold/GoldDAO, range 128-256, LP fee 0.1%, Biatec share 20%) demonstrates this: three deposits, 238 swaps and a redemption of 100% of the LP tokens left `L = 57.3` (about 1.04 Gold and 61.6 GoldDAO) in the pool while Biatec's fee share was only `Lb = 0.045`. The complete history is replayed in `__test__/pool/mainnet-replay-3720188642.test.ts` from `__test__/test-data/mainnet-pool-3720188642.json`; with the corrected formula the redemption returns the whole position and only `Lb` remains.
+
+### Further changes in 01-06-05 {#-further-changes}
+
+- A deposit which does not reach one LP micro-unit (1e-6 LP) is rejected with `LP-ZERO-ERR`. Previously it was rounded up to one LP token, which let a depositor of 1 base unit redeem more than deposited (audit 2026-09-07, H-01).
+- `reconcileLiquidity` (fee executor only) books liquidity that older pools left without an owner; see [Repairing live pools](./live-pool-reconciliation).
+- `removeLiquidity` and `removeLiquidityAdmin` share one payout routine (`payOutLiquidity`); behaviour is unchanged.
 
 ## Rounding expectations {#-rounding-expectations}
 
-- Withdrawals may trail deposits by a few base units due to the mandatory flooring step. The difference is bounded by a fraction of the asset's scale (≤ 20% of the base scale in current tests) and remains inside the pool, favouring existing LPs.
-- The Jest suite now asserts that the newcomer’s balance never increases and only tolerates a tiny deficit. Any widening gap will fail the test, giving early warning if the maths regresses.
-
-## Observable effects {#-observable-effects}
-
-- A fresh LP who adds and immediately removes liquidity now receives the exact amounts deposited (up to expected integer rounding), so they no longer inherit historic fees.
-- Incumbent LPs retain full ownership of `LiquidityUsersFromFees`. Fees accrued after the newcomer joins are still shared fairly because the quadratic solution only neutralises the pre-existing component.
-
-## Test coverage {#-test-coverage}
-
-- `npm run test:1:build` (and the focused Jest case "new liquidity provider does not scoop pre-existing fees") now passes with the updated contract and relaxed rounding tolerance.
-- Other liquidity tests remain green because the adjustment preserves the original behaviour when the pool has no accrued user fees.
+- LP tokens are floored to 6 decimals; the sub-micro-LP remainder (< 1e-6 LP per deposit) stays in the pool as rounding in favour of the pool. It is deliberately not booked as fee income, so `liquidityUsersFromFees` stays 0 until the first swap; `reconcileLiquidity` can sweep accumulated rounding to the LP holders.
+- `removeLiquidity` still floors the asset amounts sent out, so withdrawals may trail deposits by a few base units which remain in the pool.
+- The Jest suite asserts that the newcomer's balance never increases and only tolerates a tiny deficit, and the mainnet replay asserts the invariant after every liquidity operation with a tolerance of one LP micro-unit per operation.
 
 ## Operational notes {#-operational-notes}
 
 - Any contract change requires recomputing TEAL artifacts (`npm run compile-contract`) and regenerating clients (`npm run generate-client` or `npm run build`) before publishing packages.
-- Off-chain helpers or simulations that relied on the raw `newLiquidity - oldLiquidity` mint formula must be updated to mirror the quadratic solution to avoid drift between client-side estimates and on-chain results.
-- Pool deployments must now use the pool provider's registered configuration app ID. The pool provider enforces this on-chain, so double-check the `B` global state key before initiating a deploy.
-
-## Next steps {#-next-steps}
-
-- Extend off-chain math utilities in `src/biatecClamm/` to expose the same LP token calculation so front-end previews stay accurate.
-- Add regression tests to cover asymmetric deposits and scenarios with non-zero `LiquidityBiatecFromFees` to ensure the formula generalises.
+- Off-chain helpers or simulations that estimate minted LP tokens must use `delta * D / (D + Lu)` to stay in sync with the chain.
+- Pools deployed with `BIATEC-CLAMM-01-06-04` or earlier should be upgraded; liquidity already orphaned in such pools is not recovered automatically by the upgrade.

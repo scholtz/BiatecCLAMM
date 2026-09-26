@@ -777,8 +777,13 @@ describe('BiatecClammPool - liquidity', () => {
         deltaA,
         deltaB,
       });
-      const deltaAllowanceA = scaleAFromBase > 0n ? scaleAFromBase / 5n : 0n;
-      const deltaAllowanceB = scaleBFromBase > 0n ? scaleBFromBase / 5n : 0n;
+      // The minted LP amount is floored to LP token decimals (1 LP micro-unit = 1000 base liquidity units), the fee share
+      // on exit and the withdrawal amounts are floored as well, so the newcomer may trail the deposit by the value of one
+      // LP micro-unit of liquidity in each asset plus two asset units - never more.
+      const lpMicroUnitBase = 1000n;
+      const deltaAllowanceA = (lpMicroUnitBase * reservesAAfter) / liquidityAfter / scaleAFromBase + 2n;
+      const deltaAllowanceB = (lpMicroUnitBase * reservesBAfter) / liquidityAfter / scaleBFromBase + 2n;
+      console.log('Allowed rounding deficit for account C:', { deltaAllowanceA, deltaAllowanceB });
       expect(deltaA <= 0n).toBe(true);
       expect(deltaA >= -deltaAllowanceA).toBe(true);
       expect(deltaB <= 0n).toBe(true);

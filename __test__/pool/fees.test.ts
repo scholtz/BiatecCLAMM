@@ -413,7 +413,7 @@ describe('BiatecClammPool - fees', () => {
         const poolTokenId = await clientBiatecClammPoolProvider.appClient.getLpTokenId();
         expect(poolTokenId).toBeGreaterThan(0);
         const token = await algod.getAssetByID(poolTokenId).do();
-        expect(token.params.name).toEqual('B-EUR-USD');
+        expect(token.params?.name).toEqual('B-EUR-USD');
         const optinToTheLPToken = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           amount: 0,
           assetIndex: Number(poolTokenId),

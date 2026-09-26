@@ -1,0 +1,4917 @@
+{
+ "source": {
+  "network": "mainnet",
+  "appId": 3720188642,
+  "appAddress": "4ULW7MCCWTT53BZXY2HKMCOACJPCMKNMJ52QMPL3C2SZONJQ7KYNYGV2MI",
+  "assetA": 1241944285,
+  "assetB": 1241945177,
+  "assetLp": 3720188645,
+  "assetADecimals": 6,
+  "assetBDecimals": 6,
+  "lpFee": "1000000",
+  "biatecFee": "200000000",
+  "priceMin": "128000000000",
+  "priceMax": "256000000000",
+  "initialPrice": "155277661638",
+  "finalOnChain": {
+   "assetABalance": 1043946,
+   "assetBBalance": 61623528,
+   "lpInPool": "18000000000000000000",
+   "L": "57307353500",
+   "Lu": "5812497",
+   "Lb": "45326961",
+   "ab": "1043945350",
+   "bb": "61623527649",
+   "price": "153487933857"
+  },
+  "identityApp": 3074197744,
+  "identities": {
+   "6WKNXOXAVK5NEGPLMJ5MT6QA4EC2W2MAEW5FOWMD6URHTWPVB4BGIUCR2A": {
+    "verificationClass": "0",
+    "feeMultiplier": "2000000000",
+    "base": "1000000000",
+    "isLocked": false
+   },
+   "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4": {
+    "verificationClass": "1",
+    "feeMultiplier": "1000000000",
+    "base": "1000000000",
+    "isLocked": false
+   },
+   "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE": {
+    "verificationClass": "0",
+    "feeMultiplier": "2000000000",
+    "base": "1000000000",
+    "isLocked": false
+   }
+  }
+ },
+ "ops": [
+  {
+   "round": 65377565,
+   "txId": "NRBHKBMQPWS5WNCZJ5E75JCPPGXSHNOI3PPTWALMN2PFLBI34PQQ",
+   "method": "bootstrap",
+   "stateAfter": {
+    "a": "1241944285",
+    "ab": "0",
+    "ad": "1000",
+    "b": "1241945177",
+    "bb": "0",
+    "bc": "3074197827",
+    "bd": "1000",
+    "c": "0",
+    "f": "1000000",
+    "lp": "3720188645",
+    "pMax": "256000000000",
+    "pMaxS": "16000000000",
+    "pMin": "128000000000",
+    "pMinS": "11313708498",
+    "price": "155277661638"
+   }
+  },
+  {
+   "round": 65377568,
+   "txId": "54653QQP4BHJAPR6XW4TR2QGK7EFEE6GR5F6EY4XNIO5PYCZRPSA",
+   "method": "bootstrapStep2",
+   "stateAfter": {
+    "s": "128"
+   },
+   "sender": "6WKNXOXAVK5NEGPLMJ5MT6QA4EC2W2MAEW5FOWMD6URHTWPVB4BGIUCR2A",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65377579,
+   "txId": "CV7KAMKZTDUCUHGTVATWAZ5JTOB32RSYEVBPNS4ZYZ24CQPAZZSQ",
+   "method": "addLiquidity",
+   "stateAfter": {
+    "L": "35565429287",
+    "ab": "631777000",
+    "bb": "40729849000",
+    "price": "155224624725"
+   },
+   "assetADeposit": "631777",
+   "assetBDeposit": "40729849",
+   "lpTokensReceived": "35565429",
+   "sender": "6WKNXOXAVK5NEGPLMJ5MT6QA4EC2W2MAEW5FOWMD6URHTWPVB4BGIUCR2A",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65377655,
+   "txId": "DTKK3MD6SVNECIJVP2SXA2UO6GWVSCOXB4NXQ3FY5SWZGNSU5Y5Q",
+   "method": "addLiquidity",
+   "stateAfter": {
+    "L": "175815464951",
+    "ab": "3108358000",
+    "bb": "203643926000",
+    "price": "155550552304"
+   },
+   "assetADeposit": "2476581",
+   "assetBDeposit": "162914077",
+   "lpTokensReceived": "140080788",
+   "sender": "6WKNXOXAVK5NEGPLMJ5MT6QA4EC2W2MAEW5FOWMD6URHTWPVB4BGIUCR2A",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65377687,
+   "txId": "NHW2GFOVERWGS5PPODCEAS4PZX6M3SXH36M2774QBUQNG3L5A2HA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "175817571186",
+    "Lb": "421247",
+    "Lu": "1684988",
+    "ab": "3161388000",
+    "bb": "195434183000",
+    "price": "154387636956"
+   },
+   "fromAsset": "A",
+   "amountIn": "53030",
+   "amountOut": "8209743",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65377687,
+   "txId": "XZSB5O7RJPR2HOFZIIG3C64B6WQTXQBEEI3625L2XMOYKUHY5FOA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "175818906770",
+    "Lb": "688364",
+    "Lu": "2753455",
+    "ab": "3195053000",
+    "bb": "190254234000",
+    "price": "153656152196"
+   },
+   "fromAsset": "A",
+   "amountIn": "33665",
+   "amountOut": "5179949",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65378310,
+   "txId": "A2IDV2QUDKLP7DVYE2FI5PPS5UOFTP7XEGAOHY4VZ3YPXF7DYBRA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "175819073995",
+    "Lb": "721809",
+    "Lu": "2887235",
+    "ab": "3199258000",
+    "bb": "189608949000",
+    "price": "153565150816"
+   },
+   "fromAsset": "A",
+   "amountIn": "4205",
+   "amountOut": "645285",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386485,
+   "txId": "AMZ3CWEWEFVMWUQBSTYLNJUFJCVFW4DSQHZG3AWOZIYJOLRSC5MA",
+   "method": "addLiquidity",
+   "stateAfter": {
+    "L": "1325069425055",
+    "ab": "18201693000",
+    "bb": "2389608949000",
+    "price": "172058114569"
+   },
+   "assetADeposit": "15002435",
+   "assetBDeposit": "2200000000",
+   "lpTokensReceived": "1092163385",
+   "sender": "6WKNXOXAVK5NEGPLMJ5MT6QA4EC2W2MAEW5FOWMD6URHTWPVB4BGIUCR2A",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386487,
+   "txId": "4GZFBIYCZCYBE74I5ZBOEFO4ZZQYR3WHKHL3EGNCZ6LQQIWYQJQA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325071010775",
+    "Lb": "1038953",
+    "Lu": "4155811",
+    "ab": "18220894000",
+    "bb": "2386312495000",
+    "price": "171992799888"
+   },
+   "fromAsset": "A",
+   "amountIn": "19201",
+   "amountOut": "3296454",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386488,
+   "txId": "KJCUJJZPK7LF4G44DSCCB26WZIUMDKWXXQH2C6WFKJZRQHQVI5LQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325072453843",
+    "Lb": "1327567",
+    "Lu": "5310265",
+    "ab": "18255847000",
+    "bb": "2380308919000",
+    "price": "171873930941"
+   },
+   "fromAsset": "A",
+   "amountIn": "34953",
+   "amountOut": "6003576",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386489,
+   "txId": "PFFNRNRIIZFJAEOBOM7Y3X4ICHYJ2XTCRRRDR3Y33X5IJXQPWRYQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325073819850",
+    "Lb": "1600769",
+    "Lu": "6403070",
+    "ab": "18272394000",
+    "bb": "2377471074000",
+    "price": "171817732605"
+   },
+   "fromAsset": "A",
+   "amountIn": "16547",
+   "amountOut": "2837845",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386491,
+   "txId": "QGRFHCKA2LFUKQ3RF4FENB63OT75FPFMN55NB7D2TRW6FUWM4C5A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325075304589",
+    "Lb": "1897717",
+    "Lu": "7590861",
+    "ab": "18290382000",
+    "bb": "2374387147000",
+    "price": "171756671605"
+   },
+   "fromAsset": "A",
+   "amountIn": "17988",
+   "amountOut": "3083927",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386492,
+   "txId": "Q4WSDSLGPNUWUPU23SQGDPW6HKG32NHLW2V6WLR3KVUZMTRU64FA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325076744828",
+    "Lb": "2185765",
+    "Lu": "8743052",
+    "ab": "18325289000",
+    "bb": "2368399699000",
+    "price": "171638203956"
+   },
+   "fromAsset": "A",
+   "amountIn": "34907",
+   "amountOut": "5987448",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386493,
+   "txId": "44EBYNAOZSRF3HNE7PFNO5PSA4GNQHCNIH26HRM5I5OQF4OJCISQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325078068213",
+    "Lb": "2450442",
+    "Lu": "9801760",
+    "ab": "18341328000",
+    "bb": "2365652736000",
+    "price": "171583842918"
+   },
+   "fromAsset": "A",
+   "amountIn": "16039",
+   "amountOut": "2746963",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386494,
+   "txId": "AXPXT4M4D4IXVHMTGOBI2RL3LP3HGGZ64QJHYZPG3LID2BFQGZBA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325079505558",
+    "Lb": "2737911",
+    "Lu": "10951636",
+    "ab": "18376182000",
+    "bb": "2359680390000",
+    "price": "171465733911"
+   },
+   "fromAsset": "A",
+   "amountIn": "34854",
+   "amountOut": "5972346",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386495,
+   "txId": "ZSHPONDPO5OTTYZA4PV7PHAQ7AQEL4AVVIIGQMRTZP5L5EO4YMIA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325080780743",
+    "Lb": "2992948",
+    "Lu": "11971784",
+    "ab": "18391644000",
+    "bb": "2357034894000",
+    "price": "171413407264"
+   },
+   "fromAsset": "A",
+   "amountIn": "15462",
+   "amountOut": "2645496",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386496,
+   "txId": "KGJYMK4AFWGJHDUON3TLACBEWGZ2WDOHAM2XOJSZUVIGTASGGCYA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325082215565",
+    "Lb": "3279913",
+    "Lu": "13119641",
+    "ab": "18426452000",
+    "bb": "2351076351000",
+    "price": "171295630124"
+   },
+   "fromAsset": "A",
+   "amountIn": "34808",
+   "amountOut": "5958543",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386497,
+   "txId": "OLKO3BDNGW4IL2TCWUN343RQJMQBCW3M7PIOSU2EBXYAGKTHSIQQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325083364330",
+    "Lb": "3509666",
+    "Lu": "14038653",
+    "ab": "18440386000",
+    "bb": "2348694620000",
+    "price": "171248543853"
+   },
+   "fromAsset": "A",
+   "amountIn": "13934",
+   "amountOut": "2381731",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386498,
+   "txId": "YG5WRI7S3VO2W2GETHEHWGORSH3DZGGUDPHO3X44EZ22FACEUTTQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325084750596",
+    "Lb": "3786920",
+    "Lu": "15147665",
+    "ab": "18457204000",
+    "bb": "2345820800000",
+    "price": "171191737815"
+   },
+   "fromAsset": "A",
+   "amountIn": "16818",
+   "amountOut": "2873820",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386500,
+   "txId": "65TKEZBJVCXJHK42YCI3B7UGXOGUEWTSIA23MSVR63ALHRDZ526A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325086184405",
+    "Lb": "4073682",
+    "Lu": "16294712",
+    "ab": "18492002000",
+    "bb": "2339871671000",
+    "price": "171074223340"
+   },
+   "fromAsset": "A",
+   "amountIn": "34798",
+   "amountOut": "5949129",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386502,
+   "txId": "PTYKKSX4J4RIILGKASTB6J32YNWUKLY5Y5ZVJRBILO35IOKKZDVQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325087581954",
+    "Lb": "4353192",
+    "Lu": "17412751",
+    "ab": "18508963000",
+    "bb": "2336976370000",
+    "price": "171017022141"
+   },
+   "fromAsset": "A",
+   "amountIn": "16961",
+   "amountOut": "2895301",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386503,
+   "txId": "SFFGSVFNFHRDYAJPIOBPOGTRFB4WMUN7IURIAPIUZO4HBJWBNXXA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325089015010",
+    "Lb": "4639804",
+    "Lu": "18559195",
+    "ab": "18543761000",
+    "bb": "2331033311000",
+    "price": "170899687893"
+   },
+   "fromAsset": "A",
+   "amountIn": "34798",
+   "amountOut": "5943059",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386504,
+   "txId": "7ILEWDTTX6ONE52ZLO5LKE5AD2FASUOBILSIBGKKAHKUQQYG54BA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325090275473",
+    "Lb": "4891897",
+    "Lu": "19567565",
+    "ab": "18559065000",
+    "bb": "2328423488000",
+    "price": "170848152890"
+   },
+   "fromAsset": "A",
+   "amountIn": "15304",
+   "amountOut": "2609823",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386506,
+   "txId": "B5P5DCXVYBWJMXFXL2A67TNBJHPL6GZN3FSHCFXBYGX6L4MC6ETA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325091493823",
+    "Lb": "5135567",
+    "Lu": "20542245",
+    "ab": "18573861000",
+    "bb": "2325901043000",
+    "price": "170798350779"
+   },
+   "fromAsset": "A",
+   "amountIn": "14796",
+   "amountOut": "2522445",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386507,
+   "txId": "PZDW3JAEJYUN2TBDILZT7SCTVOWTWUSFFTI2V4TVFRTAG6RCNPFQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325092925632",
+    "Lb": "5421929",
+    "Lu": "21687692",
+    "ab": "18608647000",
+    "bb": "2319967628000",
+    "price": "170681282373"
+   },
+   "fromAsset": "A",
+   "amountIn": "34786",
+   "amountOut": "5933415",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386508,
+   "txId": "PC4IFMB4DAO4NPGXETMCSPRRVJPX64DKUSMW6IHX2TBBIHBOQD2A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325094343737",
+    "Lb": "5705550",
+    "Lu": "22822176",
+    "ab": "18625875000",
+    "bb": "2317033511000",
+    "price": "170623381639"
+   },
+   "fromAsset": "A",
+   "amountIn": "17228",
+   "amountOut": "2934117",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386510,
+   "txId": "N2MNTVTVLLAYMR2BZHR37WSU6JULCPHAH63ZN5BBXI3QGBNPSYMA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325095648107",
+    "Lb": "5966424",
+    "Lu": "23865672",
+    "ab": "18641725000",
+    "bb": "2314334961000",
+    "price": "170570138270"
+   },
+   "fromAsset": "A",
+   "amountIn": "15850",
+   "amountOut": "2698550",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386513,
+   "txId": "JCLOO3QQNJKTCIRNMERKEAG4KSC5VEMYQ6UQS2F5COLGY4AFDKKA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325095961834",
+    "Lb": "6029170",
+    "Lu": "24116653",
+    "ab": "18645533000",
+    "bb": "2313686755000",
+    "price": "170557350169"
+   },
+   "fromAsset": "A",
+   "amountIn": "3808",
+   "amountOut": "648206",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386515,
+   "txId": "UKC4GZA6UE67AWZE676BYY3XW626RWR6WR66XGA3FVF6HB6XK2KQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325097206123",
+    "Lb": "6278028",
+    "Lu": "25112084",
+    "ab": "18660653000",
+    "bb": "2311113470000",
+    "price": "170506588071"
+   },
+   "fromAsset": "A",
+   "amountIn": "15120",
+   "amountOut": "2573285",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386517,
+   "txId": "GCGQI3YAKT3JPMOURC3HPO4RN7XCMOHJTTYXTWK4BYQXU7LXWZLQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325098349238",
+    "Lb": "6506651",
+    "Lu": "26026576",
+    "ab": "18674546000",
+    "bb": "2308749684000",
+    "price": "170459965408"
+   },
+   "fromAsset": "A",
+   "amountIn": "13893",
+   "amountOut": "2363786",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386521,
+   "txId": "SMMJWOOP2SH4VWKFBVL4FVCHMTFZWBIUXZSW3HZYN46RX4CGZNEA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325099649889",
+    "Lb": "6766782",
+    "Lu": "27067096",
+    "ab": "18690357000",
+    "bb": "2306060351000",
+    "price": "170406929591"
+   },
+   "fromAsset": "A",
+   "amountIn": "15811",
+   "amountOut": "2689333",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386523,
+   "txId": "6ZLQ4DNQPMFVGZDT5LFCCVTYZV6RE44M6GXIDS2IAY4BRJ7X2LQQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325100796430",
+    "Lb": "6996091",
+    "Lu": "27984328",
+    "ab": "18704294000",
+    "bb": "2303690466000",
+    "price": "170360200462"
+   },
+   "fromAsset": "A",
+   "amountIn": "13937",
+   "amountOut": "2369885",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386525,
+   "txId": "L5UMWZQPSDZLE5XRIR6QIXBYJLYAUOUNP33ZJC7CRY3AVEJB7WWQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325101937552",
+    "Lb": "7224316",
+    "Lu": "28897225",
+    "ab": "18718167000",
+    "bb": "2301332109000",
+    "price": "170313705074"
+   },
+   "fromAsset": "A",
+   "amountIn": "13873",
+   "amountOut": "2358357",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386527,
+   "txId": "CAWL45DVGJR5RLCCFZ5D7TGN6CFW7A4RETE4GPQES5CUO5VRUCKQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325103066814",
+    "Lb": "7450169",
+    "Lu": "29800634",
+    "ab": "18731898000",
+    "bb": "2298998525000",
+    "price": "170267704413"
+   },
+   "fromAsset": "A",
+   "amountIn": "13731",
+   "amountOut": "2333584",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386529,
+   "txId": "ELHKXVDRVDTMOBPE77IICXVBIGBKM5QMVL7UTTQDZW6W3HJNVKNA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325104205312",
+    "Lb": "7677869",
+    "Lu": "30711432",
+    "ab": "18745742000",
+    "bb": "2296646375000",
+    "price": "170221344126"
+   },
+   "fromAsset": "A",
+   "amountIn": "13844",
+   "amountOut": "2352150",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386530,
+   "txId": "MUYD2INUWDNFHNQXEC4PND6VCMMX6DXXKAYT3EEOJTYNM26TQX5Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325105633705",
+    "Lb": "7963548",
+    "Lu": "31854146",
+    "ab": "18780496000",
+    "bb": "2290738439000",
+    "price": "170104977086"
+   },
+   "fromAsset": "A",
+   "amountIn": "34754",
+   "amountOut": "5907936",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386531,
+   "txId": "TTGDZX3BYQSPXXLJPYRSUHCJCU2BGDLECK33WQFUB3RBTIPXNHZQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325106774150",
+    "Lb": "8191637",
+    "Lu": "32766502",
+    "ab": "18794370000",
+    "bb": "2288383445000",
+    "price": "170058583147"
+   },
+   "fromAsset": "A",
+   "amountIn": "13874",
+   "amountOut": "2354994",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386533,
+   "txId": "YZ6DMACK37UXYIJUQ43NNQOJLGEVZDAJIUFT6OFKJWWGQBNCXLRQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325107696919",
+    "Lb": "8376191",
+    "Lu": "33504717",
+    "ab": "18805597000",
+    "bb": "2286478227000",
+    "price": "170021054586"
+   },
+   "fromAsset": "A",
+   "amountIn": "11227",
+   "amountOut": "1905218",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386533,
+   "txId": "QRNLCDVMHW5QT2EDCAMJ3HIE7NUZGVF3IIMJ66TAR7JP7JNZAT5A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325108791861",
+    "Lb": "8595180",
+    "Lu": "34380670",
+    "ab": "18818919000",
+    "bb": "2284218034000",
+    "price": "169976539236"
+   },
+   "fromAsset": "A",
+   "amountIn": "13322",
+   "amountOut": "2260193",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386535,
+   "txId": "FIGYWBFEK7EDT4VPBQ2LK5OBQLKP4TYCVHAZNM5CCBEJNU3NHKJQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325109999310",
+    "Lb": "8836670",
+    "Lu": "35346629",
+    "ab": "18833612000",
+    "bb": "2281725925000",
+    "price": "169927463050"
+   },
+   "fromAsset": "A",
+   "amountIn": "14693",
+   "amountOut": "2492109",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386537,
+   "txId": "IH2TX3KJF6IUJU3GGNCSDYQQAIPTG27KM5IRCHVGVLUSUBC367DA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325111119102",
+    "Lb": "9060629",
+    "Lu": "36242462",
+    "ab": "18847241000",
+    "bb": "2279414926000",
+    "price": "169881959806"
+   },
+   "fromAsset": "A",
+   "amountIn": "13629",
+   "amountOut": "2310999",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386539,
+   "txId": "RHY6WYXAOEWDWGW27H7XRUS5CWNRCO4JNITT4UERHCLVKXTLGXOA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325112007857",
+    "Lb": "9238380",
+    "Lu": "36953466",
+    "ab": "18858057000",
+    "bb": "2277581354000",
+    "price": "169845861409"
+   },
+   "fromAsset": "A",
+   "amountIn": "10816",
+   "amountOut": "1833572",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386539,
+   "txId": "BWZEMNJF2HMRIOXODL7CBYWDDZRPJNSCPLOGGHU6AJTUUWOFKDLA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325113061678",
+    "Lb": "9449145",
+    "Lu": "37796522",
+    "ab": "18870885000",
+    "bb": "2275407204000",
+    "price": "169803062930"
+   },
+   "fromAsset": "A",
+   "amountIn": "12828",
+   "amountOut": "2174150",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386542,
+   "txId": "2NIRVXL6FG6YJSDQGXZGBSWFLQTMZLEUZEWBJTXSKKM6ZNNEMYGQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325114137099",
+    "Lb": "9664230",
+    "Lu": "38656858",
+    "ab": "18883977000",
+    "bb": "2273188875000",
+    "price": "169759400401"
+   },
+   "fromAsset": "A",
+   "amountIn": "13092",
+   "amountOut": "2218329",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386544,
+   "txId": "KUQPRZDWVLWL4WF2MJEKKYHZFD5TIFAPR6E4Z42MFQ7Q2ZU6MOEQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325115202665",
+    "Lb": "9877344",
+    "Lu": "39509310",
+    "ab": "18896949000",
+    "bb": "2270991442000",
+    "price": "169716154756"
+   },
+   "fromAsset": "A",
+   "amountIn": "12972",
+   "amountOut": "2197433",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386546,
+   "txId": "GONAEIFXAPLYTH4LRLQRTQPEODS362MKP4LZQKWYYF2KX24DYVQA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325116255926",
+    "Lb": "10087997",
+    "Lu": "40351918",
+    "ab": "18909773000",
+    "bb": "2268819630000",
+    "price": "169673418812"
+   },
+   "fromAsset": "A",
+   "amountIn": "12824",
+   "amountOut": "2171812",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386548,
+   "txId": "4AN52NTJHRVYW422Z5Q3MMJKFFADMGMIFUT6Z2G7XM6QTRY6AKHQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325117455110",
+    "Lb": "10327834",
+    "Lu": "41311265",
+    "ab": "18924377000",
+    "bb": "2266347031000",
+    "price": "169624770748"
+   },
+   "fromAsset": "A",
+   "amountIn": "14604",
+   "amountOut": "2472599",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386550,
+   "txId": "LGGR2GNZMPL2RDFDLIQTFKOZFGMGEI2NHVKLEGSBWETT5XJ3FQRQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325118487898",
+    "Lb": "10534392",
+    "Lu": "42137495",
+    "ab": "18936955000",
+    "bb": "2264218022000",
+    "price": "169582888424"
+   },
+   "fromAsset": "A",
+   "amountIn": "12578",
+   "amountOut": "2129009",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386551,
+   "txId": "AOF2PIGJGMBW6IXROXP6GMGDKEW6U5LU42EMWOWXWZBXLFDPLAJA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325119913387",
+    "Lb": "10819490",
+    "Lu": "43277886",
+    "ab": "18971693000",
+    "bb": "2258334950000",
+    "price": "169467230419"
+   },
+   "fromAsset": "A",
+   "amountIn": "34738",
+   "amountOut": "5883072",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386553,
+   "txId": "JMYPQ7DH57PXZRXUP4JJP4TJZLCNDYALODNCOQYUHCPKQYNSD2FA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325120961477",
+    "Lb": "11029108",
+    "Lu": "44116358",
+    "ab": "18984464000",
+    "bb": "2256175284000",
+    "price": "169424764965"
+   },
+   "fromAsset": "A",
+   "amountIn": "12771",
+   "amountOut": "2159666",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386555,
+   "txId": "5P3E53SUIPSQKODG7YVOTUTBICNGTDZCVFIN3FV5RFOSDNTCHUUA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325121950824",
+    "Lb": "11226978",
+    "Lu": "44907835",
+    "ab": "18996518000",
+    "bb": "2254137365000",
+    "price": "169384698350"
+   },
+   "fromAsset": "A",
+   "amountIn": "12054",
+   "amountOut": "2037919",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386573,
+   "txId": "VPVSJBWOZP2G4TK42VK7FP4C6W33Z2L734EFQLTB7WMTVJTGS7CA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325123373332",
+    "Lb": "11511480",
+    "Lu": "46045841",
+    "ab": "19031196000",
+    "bb": "2248271314000",
+    "price": "169269442807"
+   },
+   "fromAsset": "A",
+   "amountIn": "34678",
+   "amountOut": "5866051",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386576,
+   "txId": "XV4DG4SB2ZN76FBIGWS2R3WYUNT6D6COT77DVYBV53SN3RKC6HWQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325124613388",
+    "Lb": "11759492",
+    "Lu": "47037885",
+    "ab": "19046314000",
+    "bb": "2245717796000",
+    "price": "169219263233"
+   },
+   "fromAsset": "A",
+   "amountIn": "15118",
+   "amountOut": "2553518",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386578,
+   "txId": "XPQMKI6PHKU3VID5DSY47CGSPOJHIU7PPBEOHFVUTGALXFOZMYMQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325125485810",
+    "Lb": "11933977",
+    "Lu": "47735822",
+    "ab": "19056949000",
+    "bb": "2243921937000",
+    "price": "169183977032"
+   },
+   "fromAsset": "A",
+   "amountIn": "10635",
+   "amountOut": "1795859",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386579,
+   "txId": "3X3RWHBFD3R5D5KVO4S4NQ67UEJZUZUEJEEGJYGXHKCDFVD5PUXA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325126455104",
+    "Lb": "12127836",
+    "Lu": "48511257",
+    "ab": "19068766000",
+    "bb": "2241926921000",
+    "price": "169144782032"
+   },
+   "fromAsset": "A",
+   "amountIn": "11817",
+   "amountOut": "1995016",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386580,
+   "txId": "EBYF23GLBK2E6NY5E7BAM2BPLLTHXMXUGMTXQIFBRH6D5J4MLB5Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325127417956",
+    "Lb": "12320407",
+    "Lu": "49281538",
+    "ab": "19080507000",
+    "bb": "2239945193000",
+    "price": "169105852645"
+   },
+   "fromAsset": "A",
+   "amountIn": "11741",
+   "amountOut": "1981728",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386581,
+   "txId": "KFAMLPN26H7E6PFBSWHKQ7KO5NHNYUGLL776N5A3CPWILBC27CEQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325128266364",
+    "Lb": "12490089",
+    "Lu": "49960264",
+    "ab": "19090853000",
+    "bb": "2238199301000",
+    "price": "169071559815"
+   },
+   "fromAsset": "A",
+   "amountIn": "10346",
+   "amountOut": "1745892",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386582,
+   "txId": "K6LGSLALZR7DPBD7WOMY3S56Z72Q3OHJ7WORHXBBDLHO5JED5UGA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325129219399",
+    "Lb": "12680696",
+    "Lu": "50722692",
+    "ab": "19102474000",
+    "bb": "2236238675000",
+    "price": "169033053363"
+   },
+   "fromAsset": "A",
+   "amountIn": "11621",
+   "amountOut": "1960626",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386584,
+   "txId": "ZSLLIXKIOFS6BZ2DRMTUQFDWVGA6BARUB745TMO5TQO5TIKAFFOA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325130178906",
+    "Lb": "12872598",
+    "Lu": "51490297",
+    "ab": "19114176000",
+    "bb": "2234264834000",
+    "price": "168994291856"
+   },
+   "fromAsset": "A",
+   "amountIn": "11702",
+   "amountOut": "1973841",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386585,
+   "txId": "APTKYOL5OAKHYGSG2DVERVVJHJGVBJ5APAK2QGA6YWW3TCYRCFZQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325130952039",
+    "Lb": "13027225",
+    "Lu": "52108803",
+    "ab": "19123604000",
+    "bb": "2232674891000",
+    "price": "168963072450"
+   },
+   "fromAsset": "A",
+   "amountIn": "9428",
+   "amountOut": "1589943",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386588,
+   "txId": "VCMJ4OOUYV5CV7GB3TUEKGQKHKQHCUEO7EO47GCSIQTNGMTEL7BA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325131924802",
+    "Lb": "13221778",
+    "Lu": "52887013",
+    "ab": "19135471000",
+    "bb": "2230674050000",
+    "price": "168923788991"
+   },
+   "fromAsset": "A",
+   "amountIn": "11867",
+   "amountOut": "2000841",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386590,
+   "txId": "EXNK4VGSNOPCGQKHSM7HDMOYXUJGVVGP54MNH3RBCWYHUV5CYTTQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325132991436",
+    "Lb": "13435105",
+    "Lu": "53740320",
+    "ab": "19148484000",
+    "bb": "2228480522000",
+    "price": "168880727726"
+   },
+   "fromAsset": "A",
+   "amountIn": "13013",
+   "amountOut": "2193528",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386593,
+   "txId": "EIWZBWW6ZKLFYRJTYAWSCGNQTWA7HSXVLKXOSEXR6RB3MZTZZ4SQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325133923525",
+    "Lb": "13621523",
+    "Lu": "54485991",
+    "ab": "19159855000",
+    "bb": "2226564235000",
+    "price": "168843113533"
+   },
+   "fromAsset": "A",
+   "amountIn": "11371",
+   "amountOut": "1916287",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386594,
+   "txId": "NTN3KVWQHY5D6FU6TG2QXZOD7RJYGQYA4PSOPDZWDSGND52WX2DA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325135343042",
+    "Lb": "13905427",
+    "Lu": "55621604",
+    "ab": "19194507000",
+    "bb": "2220721319000",
+    "price": "168728497703"
+   },
+   "fromAsset": "A",
+   "amountIn": "34652",
+   "amountOut": "5842916",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386596,
+   "txId": "LBTNBFTA3W6GQMD4VOD2Y24ILITB45OA6M7OEBQMFPLXUBTVPMZQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325136263117",
+    "Lb": "14089442",
+    "Lu": "56357664",
+    "ab": "19205735000",
+    "bb": "2218830834000",
+    "price": "168691406826"
+   },
+   "fromAsset": "A",
+   "amountIn": "11228",
+   "amountOut": "1890485",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386598,
+   "txId": "YK7TRF2FQ7DB7RPJ4PQXX3NIMHVNM5A7EQ6BU5PNO3EX2J56Q5HQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325137174695",
+    "Lb": "14271758",
+    "Lu": "57086926",
+    "ab": "19216862000",
+    "bb": "2216957764000",
+    "price": "168654661698"
+   },
+   "fromAsset": "A",
+   "amountIn": "11127",
+   "amountOut": "1873070",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386601,
+   "txId": "EXVSS3PJWMX2GJAFE3K4LAV77GASTYY26TC3J662N6VB2PY5GQ3Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325138095467",
+    "Lb": "14455913",
+    "Lu": "57823543",
+    "ab": "19228101000",
+    "bb": "2215066255000",
+    "price": "168617558948"
+   },
+   "fromAsset": "A",
+   "amountIn": "11239",
+   "amountOut": "1891509",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386604,
+   "txId": "OEMAFYGCFW3MJPLAXRQFUNOIKD4SFMXRLWWEW72NDOKXFVBTDB5A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325139027325",
+    "Lb": "14642285",
+    "Lu": "58569029",
+    "ab": "19239478000",
+    "bb": "2213151944000",
+    "price": "168580013136"
+   },
+   "fromAsset": "A",
+   "amountIn": "11377",
+   "amountOut": "1914311",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386609,
+   "txId": "TTXR7LEAJCWA25HS2V5N77KPUGKOOO3IM5D5NMZTNEH7MASEWSXA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325139926983",
+    "Lb": "14822217",
+    "Lu": "59288755",
+    "ab": "19250461000",
+    "bb": "2211304333000",
+    "price": "168543779531"
+   },
+   "fromAsset": "A",
+   "amountIn": "10983",
+   "amountOut": "1847611",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386611,
+   "txId": "SCV7LEC36AICBPN2YN4BJNXBYVTTSKUBYVC6VHPW6Z3KSGD6EXKA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325140846890",
+    "Lb": "15006199",
+    "Lu": "60024680",
+    "ab": "19261692000",
+    "bb": "2209415413000",
+    "price": "168506739886"
+   },
+   "fromAsset": "A",
+   "amountIn": "11231",
+   "amountOut": "1888920",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386613,
+   "txId": "J6ZCZS6D4WEAVKNETKZEUEBMT4ZEK7GVZKG3RNDWFJQWKHNSMPKA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325141765451",
+    "Lb": "15189912",
+    "Lu": "60759528",
+    "ab": "19272910000",
+    "bb": "2207529093000",
+    "price": "168469755340"
+   },
+   "fromAsset": "A",
+   "amountIn": "11218",
+   "amountOut": "1886320",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386615,
+   "txId": "2GXW6VFWV4G2E5WNGMCSHWBKCNCVQJN5R5BQERE6O5GNP6GPKQOA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325142653717",
+    "Lb": "15367566",
+    "Lu": "61470140",
+    "ab": "19283758000",
+    "bb": "2205705383000",
+    "price": "168434002272"
+   },
+   "fromAsset": "A",
+   "amountIn": "10848",
+   "amountOut": "1823710",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386616,
+   "txId": "KF4JWBUHVTGZWLLHEDN5NHNV2IS7OVIALN7ED462L7CLZHVEGRCA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325144070392",
+    "Lb": "15650901",
+    "Lu": "62603480",
+    "ab": "19318373000",
+    "bb": "2199882844000",
+    "price": "168319925694"
+   },
+   "fromAsset": "A",
+   "amountIn": "34615",
+   "amountOut": "5822539",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386617,
+   "txId": "WAOX6RLCFBNM5KRKQ3DDSPBK5TXZ3PEI7CZ5YWFVZGQD2D5423GQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325145104846",
+    "Lb": "15857792",
+    "Lu": "63431043",
+    "ab": "19331011000",
+    "bb": "2197760135000",
+    "price": "168278329925"
+   },
+   "fromAsset": "A",
+   "amountIn": "12638",
+   "amountOut": "2122709",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386619,
+   "txId": "MO5B7TVRKWYLDV2XKBDN5EXVF6NQRDT77YAGSFTYRKFRKJAOHTZQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325146072910",
+    "Lb": "16051405",
+    "Lu": "64205494",
+    "ab": "19342838000",
+    "bb": "2195774119000",
+    "price": "168239417444"
+   },
+   "fromAsset": "A",
+   "amountIn": "11827",
+   "amountOut": "1986016",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386621,
+   "txId": "MAVZXGT7ZEROFBKH5FFSAF2K3W2K2SBH4Q3QIVRKRSESWAOCAVXA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325146936769",
+    "Lb": "16224177",
+    "Lu": "64896581",
+    "ab": "19353392000",
+    "bb": "2194002256000",
+    "price": "168204704752"
+   },
+   "fromAsset": "A",
+   "amountIn": "10554",
+   "amountOut": "1771863",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386623,
+   "txId": "VSUSP7UFMV25HNX5QX65QHNHH42UXWPFJ5IY3COE52J4IBZYOHTQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325147625102",
+    "Lb": "16361844",
+    "Lu": "65447247",
+    "ab": "19361803000",
+    "bb": "2192590433000",
+    "price": "168177048227"
+   },
+   "fromAsset": "A",
+   "amountIn": "8411",
+   "amountOut": "1411823",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386624,
+   "txId": "3IYNEKEWYLOLWMFKRNBA6XAHSX4D5YNAUDDVS3ALYRPQTFVD7E2Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325148482698",
+    "Lb": "16533364",
+    "Lu": "66133323",
+    "ab": "19372284000",
+    "bb": "2190831476000",
+    "price": "168142594833"
+   },
+   "fromAsset": "A",
+   "amountIn": "10481",
+   "amountOut": "1758957",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386625,
+   "txId": "EU6UBJBRNQXK6VILAXXHMJO4Z7MGUT2SM4BBFUISHRU4JTFSD2UA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325149278776",
+    "Lb": "16692580",
+    "Lu": "66770185",
+    "ab": "19382013000",
+    "bb": "2189199045000",
+    "price": "168110622947"
+   },
+   "fromAsset": "A",
+   "amountIn": "9729",
+   "amountOut": "1632431",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386627,
+   "txId": "OCL7XK5VDR76RP2T6CEMU5UMDUFAEN67CWNAZTPRZ6YRIGGBWWMQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325150212914",
+    "Lb": "16879408",
+    "Lu": "67517495",
+    "ab": "19393430000",
+    "bb": "2187283780000",
+    "price": "168073115551"
+   },
+   "fromAsset": "A",
+   "amountIn": "11417",
+   "amountOut": "1915265",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386630,
+   "txId": "75UVPS4OWDXJVB2FYIWP5REAA4O2H6RWOQA3HZCXP5E3RXXDOSEA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325151188959",
+    "Lb": "17074617",
+    "Lu": "68298331",
+    "ab": "19405361000",
+    "bb": "2185282745000",
+    "price": "168033933013"
+   },
+   "fromAsset": "A",
+   "amountIn": "11931",
+   "amountOut": "2001035",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386632,
+   "txId": "SQRMVSEAAOZKYPCIMJXVP4EJ3COK5KKLRSD3D7F4NI7UT2GZL7UQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325151987549",
+    "Lb": "17234335",
+    "Lu": "68937203",
+    "ab": "19415124000",
+    "bb": "2183645668000",
+    "price": "168001880623"
+   },
+   "fromAsset": "A",
+   "amountIn": "9763",
+   "amountOut": "1637077",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386634,
+   "txId": "K6IGDM5TA2MW6BR3CVR2EWKJXPWRVNVP2SQ2CMUTU2VU5XWPFWMQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325152789827",
+    "Lb": "17394791",
+    "Lu": "69579025",
+    "ab": "19424931000",
+    "bb": "2182001528000",
+    "price": "167969693053"
+   },
+   "fromAsset": "A",
+   "amountIn": "9807",
+   "amountOut": "1644140",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386636,
+   "txId": "ZFYPLBYO6LBMV2XPZT5YXMTOUO2YXXP7SSFZI6VUHUVGO2Q54OOQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325153588960",
+    "Lb": "17554618",
+    "Lu": "70218331",
+    "ab": "19434701000",
+    "bb": "2180363904000",
+    "price": "167937636152"
+   },
+   "fromAsset": "A",
+   "amountIn": "9770",
+   "amountOut": "1637624",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386638,
+   "txId": "ESWM3MFIXNRUDKH27PBA35CV3WPFXOM2AGYANTZWVHFQD67XC7SA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325155002956",
+    "Lb": "17837418",
+    "Lu": "71349527",
+    "ab": "19469295000",
+    "bb": "2174562041000",
+    "price": "167824133629"
+   },
+   "fromAsset": "A",
+   "amountIn": "34594",
+   "amountOut": "5801863",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386638,
+   "txId": "565DV43QTJ7Y22OQK45J64HLPFDFHBAAICXWQYPPGKPZ4N3YRTYQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325155907361",
+    "Lb": "18018299",
+    "Lu": "72073051",
+    "ab": "19480358000",
+    "bb": "2172709317000",
+    "price": "167787882189"
+   },
+   "fromAsset": "A",
+   "amountIn": "11063",
+   "amountOut": "1852724",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386641,
+   "txId": "PNTJEW7H2373DOFSOKHMJ7MTWQ4SYIPT6Z6A5EADGVEX6ZPGHH3Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325156785657",
+    "Lb": "18193959",
+    "Lu": "72775687",
+    "ab": "19491101000",
+    "bb": "2170910567000",
+    "price": "167752690623"
+   },
+   "fromAsset": "A",
+   "amountIn": "10743",
+   "amountOut": "1798750",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386643,
+   "txId": "S5OMWEE24XTGP644BYCPZ6S42YM2WAPY6WJQLVDLBSNZ6ZO3ZDBA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325157593100",
+    "Lb": "18355448",
+    "Lu": "73421641",
+    "ab": "19500977000",
+    "bb": "2169257316000",
+    "price": "167720348955"
+   },
+   "fromAsset": "A",
+   "amountIn": "9876",
+   "amountOut": "1653251",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386645,
+   "txId": "HY44VKHC5WQGECEU7AZTK6XN7WEOIXTPRINBGHUNWSHZUXVSOT7A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325158224605",
+    "Lb": "18481749",
+    "Lu": "73926845",
+    "ab": "19508701000",
+    "bb": "2167964534000",
+    "price": "167695061146"
+   },
+   "fromAsset": "A",
+   "amountIn": "7724",
+   "amountOut": "1292782",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386645,
+   "txId": "QHZ7Q2EW45SRCR7U7NQV24TR26DSI2AXVU34QH2UBCZR4XJ5YLJA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325159011699",
+    "Lb": "18639168",
+    "Lu": "74556520",
+    "ab": "19518331000",
+    "bb": "2166353013000",
+    "price": "167663541263"
+   },
+   "fromAsset": "A",
+   "amountIn": "9630",
+   "amountOut": "1611521",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386647,
+   "txId": "BEBDC3NZSP3EEHACQHVYLMANJH52L2PD77L6XOE6M7UFQ6UYRSHQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325159926416",
+    "Lb": "18822112",
+    "Lu": "75288293",
+    "ab": "19529524000",
+    "bb": "2164480314000",
+    "price": "167626916743"
+   },
+   "fromAsset": "A",
+   "amountIn": "11193",
+   "amountOut": "1872699",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386649,
+   "txId": "JKPU62FJLROTLZV4OB2O77VZ4GACGDR5NXH4BVJYHMJOJMABQVAQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325160692726",
+    "Lb": "18975374",
+    "Lu": "75901341",
+    "ab": "19538899000",
+    "bb": "2162912100000",
+    "price": "167596250168"
+   },
+   "fromAsset": "A",
+   "amountIn": "9375",
+   "amountOut": "1568214",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386652,
+   "txId": "ZQNPIPD2DPVZQKW73XH46MKS7Z5Q2OCSFUYYOJFE5UQA2JB7DW4A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325161448427",
+    "Lb": "19126515",
+    "Lu": "76505901",
+    "ab": "19548146000",
+    "bb": "2161365578000",
+    "price": "167566010565"
+   },
+   "fromAsset": "A",
+   "amountIn": "9247",
+   "amountOut": "1546522",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386655,
+   "txId": "RC2ETSDE3DUAARF7CAMISFET4L5ARKBKK4WHDW2RGWCMQBLLJE4Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325162226688",
+    "Lb": "19282168",
+    "Lu": "77128509",
+    "ab": "19557671000",
+    "bb": "2159772853000",
+    "price": "167534870427"
+   },
+   "fromAsset": "A",
+   "amountIn": "9525",
+   "amountOut": "1592725",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386657,
+   "txId": "YZJFNKVILV5BJJC76XDKZGOJGYT5U2MSFHLAGCT4CLL6HD3DJERQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325162962637",
+    "Lb": "19429358",
+    "Lu": "77717268",
+    "ab": "19566678000",
+    "bb": "2158267018000",
+    "price": "167505431810"
+   },
+   "fromAsset": "A",
+   "amountIn": "9007",
+   "amountOut": "1505835",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386659,
+   "txId": "KNKQN3YHWWVYL4FHSPB6UPNSJRI366NM4NKDK4XTRM5T67IUX3PQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325163764477",
+    "Lb": "19589726",
+    "Lu": "78358740",
+    "ab": "19576492000",
+    "bb": "2156626566000",
+    "price": "167473364449"
+   },
+   "fromAsset": "A",
+   "amountIn": "9814",
+   "amountOut": "1640452",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386660,
+   "txId": "ZJ34XG324BD4IGEGQKG75QYPM3R3AKJ6WG4M252EQOGK5L245DSQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325165176287",
+    "Lb": "19872088",
+    "Lu": "79488188",
+    "ab": "19611070000",
+    "bb": "2150843415000",
+    "price": "167360385733"
+   },
+   "fromAsset": "A",
+   "amountIn": "34578",
+   "amountOut": "5783151",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386661,
+   "txId": "TT365Y7X3P65UT2IIXTMO5NQMDZ6GGSRFVOPHKHW46CTX5CHTQWA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325165928894",
+    "Lb": "20022610",
+    "Lu": "80090273",
+    "ab": "19620285000",
+    "bb": "2149304413000",
+    "price": "167330314564"
+   },
+   "fromAsset": "A",
+   "amountIn": "9215",
+   "amountOut": "1539002",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386663,
+   "txId": "VR7LQ72GFJBBOP33FYETR6ZYRLXCZ7WKE4BU4ILG7GBXKGVHPH7A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325166655254",
+    "Lb": "20167882",
+    "Lu": "80671361",
+    "ab": "19629178000",
+    "bb": "2147819451000",
+    "price": "167301301891"
+   },
+   "fromAsset": "A",
+   "amountIn": "8893",
+   "amountOut": "1484962",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386665,
+   "txId": "BWK3MMPRFQ6HHMXPLFOM57F5TTP74WYZ7ROQPBOEH4YIFMMFILYA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325167374583",
+    "Lb": "20311748",
+    "Lu": "81246824",
+    "ab": "19637986000",
+    "bb": "2146348936000",
+    "price": "167272573988"
+   },
+   "fromAsset": "A",
+   "amountIn": "8808",
+   "amountOut": "1470515",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386667,
+   "txId": "KN2L36X2WIOPYUCGXFNXG3RGVPRAZRSYLDNGB5KAPIJGCMKKUK5A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325168082295",
+    "Lb": "20453291",
+    "Lu": "81812993",
+    "ab": "19646651000",
+    "bb": "2144902542000",
+    "price": "167244319743"
+   },
+   "fromAsset": "A",
+   "amountIn": "8665",
+   "amountOut": "1446394",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386669,
+   "txId": "ZCYKIZ5NJOCB3DAYL7JKBCVJVEJABGBJS5DULUTYJGRCZCLZVDBQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325168958986",
+    "Lb": "20628630",
+    "Lu": "82514345",
+    "ab": "19657389000",
+    "bb": "2143110453000",
+    "price": "167209315957"
+   },
+   "fromAsset": "A",
+   "amountIn": "10738",
+   "amountOut": "1792089",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386673,
+   "txId": "P5FP3LQPZRX6YWHLX3PAVPLHDD3OBSQJGQVD43EHCXMDYSXJXXFA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325169666647",
+    "Lb": "20770163",
+    "Lu": "83080473",
+    "ab": "19666055000",
+    "bb": "2141664439000",
+    "price": "167181074539"
+   },
+   "fromAsset": "A",
+   "amountIn": "8666",
+   "amountOut": "1446014",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386681,
+   "txId": "BG6PMPP6MBKGBV6JWWMOOUSJ6TT4TXVAD7TVUUVOD55LNJ4GCKNA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325171075189",
+    "Lb": "21051872",
+    "Lu": "84207306",
+    "ab": "19700577000",
+    "bb": "2135900726000",
+    "price": "167068574580"
+   },
+   "fromAsset": "A",
+   "amountIn": "34522",
+   "amountOut": "5763713",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386683,
+   "txId": "SVLLKQGCZJPTQZH5ZZY2BPU2ZO6HGML4XX7UO24OFLCITAU5NRKA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325171841801",
+    "Lb": "21205195",
+    "Lu": "84820595",
+    "ab": "19709969000",
+    "bb": "2134334901000",
+    "price": "167038006293"
+   },
+   "fromAsset": "A",
+   "amountIn": "9392",
+   "amountOut": "1565825",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386685,
+   "txId": "57VVTMD66O775RCS2N3ROKG6W43PN3HWIBIW3SVCJPKS5N4RKGLQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325172536481",
+    "Lb": "21344131",
+    "Lu": "85376339",
+    "ab": "19718479000",
+    "bb": "2132916370000",
+    "price": "167010315941"
+   },
+   "fromAsset": "A",
+   "amountIn": "8510",
+   "amountOut": "1418531",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386687,
+   "txId": "GPSFVVLFKOAMMYUCS6SQU2UVUIBNEOCDFKUOBUKIUONRH5L2QPGQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325173319557",
+    "Lb": "21500747",
+    "Lu": "86002799",
+    "ab": "19728074000",
+    "bb": "2131317262000",
+    "price": "166979103435"
+   },
+   "fromAsset": "A",
+   "amountIn": "9595",
+   "amountOut": "1599108",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386690,
+   "txId": "SOIRTUHXA6Q5PUGYPFD4HSXWIUN6CZUGDTU32KPXU743RX2GDWAQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325174011749",
+    "Lb": "21639186",
+    "Lu": "86556552",
+    "ab": "19736555000",
+    "bb": "2129904063000",
+    "price": "166951522085"
+   },
+   "fromAsset": "A",
+   "amountIn": "8481",
+   "amountOut": "1413199",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386692,
+   "txId": "AZ6XY5HNYQOKLM2KCXLYBIFNAJWWAUIVDCFPIPJVTXMLKNAAA2UA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325174781286",
+    "Lb": "21793094",
+    "Lu": "87172181",
+    "ab": "19745987000",
+    "bb": "2128332671000",
+    "price": "166920856002"
+   },
+   "fromAsset": "A",
+   "amountIn": "9432",
+   "amountOut": "1571392",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386696,
+   "txId": "WUXYL7EBHALSOJW4X4HCCSMAKN6ZY73O43YZTMGVH7DGNOGB26QQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325175431282",
+    "Lb": "21923094",
+    "Lu": "87692177",
+    "ab": "19753952000",
+    "bb": "2127005910000",
+    "price": "166894966161"
+   },
+   "fromAsset": "A",
+   "amountIn": "7965",
+   "amountOut": "1326761",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386698,
+   "txId": "7BN35AYFPNCGJUIXOWCMDDWGFPMY4UJANKH7R5SV3OSVYGM3QQKQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325176080720",
+    "Lb": "22052982",
+    "Lu": "88211727",
+    "ab": "19761912000",
+    "bb": "2125680187000",
+    "price": "166869098609"
+   },
+   "fromAsset": "A",
+   "amountIn": "7960",
+   "amountOut": "1325723",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386700,
+   "txId": "CDSNRNXHSF6XSAK7M5DMFFYKIOVM66UUBZXXVKMRLQRZWT6T477Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325176721764",
+    "Lb": "22181191",
+    "Lu": "88724562",
+    "ab": "19769768000",
+    "bb": "2124371987000",
+    "price": "166843574951"
+   },
+   "fromAsset": "A",
+   "amountIn": "7856",
+   "amountOut": "1308200",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386703,
+   "txId": "LSB3JGGZSJFC2QF6WFVGPFBPR6P4CLBUGBSDLCIO2XAJIOWXA7XA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325177362238",
+    "Lb": "22309286",
+    "Lu": "89236941",
+    "ab": "19777619000",
+    "bb": "2123064819000",
+    "price": "166818073405"
+   },
+   "fromAsset": "A",
+   "amountIn": "7851",
+   "amountOut": "1307168",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386704,
+   "txId": "CSLDMCAH6RYCOXS5NP7WI5HBWIEVGHIMCHVVWP3FMPOTOPXVLCBQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325178768396",
+    "Lb": "22590518",
+    "Lu": "90361867",
+    "ab": "19812111000",
+    "bb": "2117318615000",
+    "price": "166706037967"
+   },
+   "fromAsset": "A",
+   "amountIn": "34492",
+   "amountOut": "5746204",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386705,
+   "txId": "ZLGCFXN6RIV3MLCZTIST6HSCJOVOKV66QJHUC2IMAWQ5WZUOTNLA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325179411758",
+    "Lb": "22719191",
+    "Lu": "90876556",
+    "ab": "19819999000",
+    "bb": "2116006370000",
+    "price": "166680448025"
+   },
+   "fromAsset": "A",
+   "amountIn": "7888",
+   "amountOut": "1312245",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386707,
+   "txId": "W6BRFXJ7D6YZ7ZGSMCDM3OMQGGFSSGZ6PSASVDJHMXLXQHF55TNQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325180032116",
+    "Lb": "22843263",
+    "Lu": "91372842",
+    "ab": "19827607000",
+    "bb": "2114740896000",
+    "price": "166655772044"
+   },
+   "fromAsset": "A",
+   "amountIn": "7608",
+   "amountOut": "1265474",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386709,
+   "txId": "MZG4HAQSBSWYD4X6TAP7LKJQFIKB46UY5QJ6M3LBUF3FCSUCGOBQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325180668996",
+    "Lb": "22970639",
+    "Lu": "91882346",
+    "ab": "19835418000",
+    "bb": "2113441851000",
+    "price": "166630443372"
+   },
+   "fromAsset": "A",
+   "amountIn": "7811",
+   "amountOut": "1299045",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386711,
+   "txId": "MIH762S47QW32P3JNYZD3S4PBD4K4J6QPDIUFORYQESQRYAKXK7A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325181296191",
+    "Lb": "23096078",
+    "Lu": "92384102",
+    "ab": "19843110000",
+    "bb": "2112162790000",
+    "price": "166605506248"
+   },
+   "fromAsset": "A",
+   "amountIn": "7692",
+   "amountOut": "1279061",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386713,
+   "txId": "QMSNIL2BRYMBZMFB2HCIATWWGJSHBSKIAHIAHC5MPPZEHBHSK55Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325181900897",
+    "Lb": "23217020",
+    "Lu": "92867866",
+    "ab": "19850526000",
+    "bb": "2110929805000",
+    "price": "166581469225"
+   },
+   "fromAsset": "A",
+   "amountIn": "7416",
+   "amountOut": "1232985",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386715,
+   "txId": "KRADKJEKMR6I2S45Z2DPVD2QPK463PHEWZRQI5UP4J7GAANX5FZA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325182585422",
+    "Lb": "23353925",
+    "Lu": "93415486",
+    "ab": "19858923000",
+    "bb": "2109533933000",
+    "price": "166554258846"
+   },
+   "fromAsset": "A",
+   "amountIn": "8397",
+   "amountOut": "1395872",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386718,
+   "txId": "Z4HILTL3WNAHFQWDAGMFVFA5AGBXWUPQFOTT6DY623BL6GAOMCLA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325183218470",
+    "Lb": "23480535",
+    "Lu": "93921924",
+    "ab": "19866689000",
+    "bb": "2108243158000",
+    "price": "166529099171"
+   },
+   "fromAsset": "A",
+   "amountIn": "7766",
+   "amountOut": "1290775",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386721,
+   "txId": "VFEITV3OBSD7NFD5PS3RTXJQI6JMSHNAVAGNFPLLGUKFVI44ZDFA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325183916845",
+    "Lb": "23620210",
+    "Lu": "94480624",
+    "ab": "19875257000",
+    "bb": "2106819310000",
+    "price": "166501347881"
+   },
+   "fromAsset": "A",
+   "amountIn": "8568",
+   "amountOut": "1423848",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386723,
+   "txId": "R2L4I25JAIDDFNCH2AXG7MNZQACHXJDN7KWFFH2G3XXOIGH7EFQQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325184607303",
+    "Lb": "23758302",
+    "Lu": "95032990",
+    "ab": "19883726000",
+    "bb": "2105412148000",
+    "price": "166473924097"
+   },
+   "fromAsset": "A",
+   "amountIn": "8469",
+   "amountOut": "1407162",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386725,
+   "txId": "NIS6RIU4Y3JO22CFMGCBUVSWZT7PKHMGRQMQVWQAPCHUWS3KAWPQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325186011667",
+    "Lb": "24039175",
+    "Lu": "96156481",
+    "ab": "19918201000",
+    "bb": "2099680622000",
+    "price": "166362291061"
+   },
+   "fromAsset": "A",
+   "amountIn": "34475",
+   "amountOut": "5731526",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386725,
+   "txId": "KV53DRTQECZ3DEO2V3ATJZ6OP4D5MOOBRYS6MZREYRQ7IIAWJBJA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325186722660",
+    "Lb": "24181374",
+    "Lu": "96725275",
+    "ab": "19926927000",
+    "bb": "2098231972000",
+    "price": "166334070671"
+   },
+   "fromAsset": "A",
+   "amountIn": "8726",
+   "amountOut": "1448650",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386727,
+   "txId": "KCIEMWRZX7KDAYI7EDAKJIN3IHEZF7AQ3SDAN45WLBZ6QP7HPV3A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325187409512",
+    "Lb": "24318745",
+    "Lu": "97274756",
+    "ab": "19935357000",
+    "bb": "2096832696000",
+    "price": "166306814409"
+   },
+   "fromAsset": "A",
+   "amountIn": "8430",
+   "amountOut": "1399276",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386730,
+   "txId": "SCTO3RB5RATVMKUJUNQKO2L6TFGKNVSMDVFLTGQQNFN7GLEPEWDA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325188039529",
+    "Lb": "24444749",
+    "Lu": "97778769",
+    "ab": "19943090000",
+    "bb": "2095549315000",
+    "price": "166281817633"
+   },
+   "fromAsset": "A",
+   "amountIn": "7733",
+   "amountOut": "1283381",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386732,
+   "txId": "3IJOYZLP7QKCHACA2ZUYNSTRSKZUDNSEYT7QCPXKOIKQZ77YP4YQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325188742840",
+    "Lb": "24585412",
+    "Lu": "98341417",
+    "ab": "19951721000",
+    "bb": "2094117129000",
+    "price": "166253924778"
+   },
+   "fromAsset": "A",
+   "amountIn": "8631",
+   "amountOut": "1432186",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386734,
+   "txId": "PCNPQCUN76FF6OQBDAVWMSUL3XYGDDQCLW2ZSUPQVWM2TR7VJFGA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325189374882",
+    "Lb": "24711821",
+    "Lu": "98847050",
+    "ab": "19959479000",
+    "bb": "2092830009000",
+    "price": "166228859209"
+   },
+   "fromAsset": "A",
+   "amountIn": "7758",
+   "amountOut": "1287120",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386736,
+   "txId": "EYUOYUHWDR3YVACG3TCGBXC3VUCSURIRDKGXBVBYOWSVNLABDZKQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325190024996",
+    "Lb": "24841844",
+    "Lu": "99367141",
+    "ab": "19967458000",
+    "bb": "2091506426000",
+    "price": "166203085547"
+   },
+   "fromAsset": "A",
+   "amountIn": "7979",
+   "amountOut": "1323583",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386739,
+   "txId": "XYQFXAGPUCD4GF3ZH2GY4HEOLB6SZKPUZECIX57EPK3OAKWDPWDQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325190668178",
+    "Lb": "24970481",
+    "Lu": "99881686",
+    "ab": "19975353000",
+    "bb": "2090196979000",
+    "price": "166177589140"
+   },
+   "fromAsset": "A",
+   "amountIn": "7895",
+   "amountOut": "1309447",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386741,
+   "txId": "42Z52YURJ5MCGPG6P5TUUMWZ4FAUSDKMIIZSNE3PNEOKBQ5RQ5WQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325191303648",
+    "Lb": "25097575",
+    "Lu": "100390062",
+    "ab": "19983153000",
+    "bb": "2088903486000",
+    "price": "166152405316"
+   },
+   "fromAsset": "A",
+   "amountIn": "7800",
+   "amountOut": "1293493",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386743,
+   "txId": "F32D3A5IWI63CPOVTM42AXNMA5M4ENZKSRAREOLYARIO4KQLD45Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325191945889",
+    "Lb": "25226024",
+    "Lu": "100903854",
+    "ab": "19991038000",
+    "bb": "2087596096000",
+    "price": "166126952888"
+   },
+   "fromAsset": "A",
+   "amountIn": "7885",
+   "amountOut": "1307390",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386745,
+   "txId": "TGIZSPCH7ASFG4GJJVX5BIHJ666VZ6NEEIMLHAHCCFKEPSAJFZNQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325192565349",
+    "Lb": "25349916",
+    "Lu": "101399422",
+    "ab": "19998643000",
+    "bb": "2086335322000",
+    "price": "166102409853"
+   },
+   "fromAsset": "A",
+   "amountIn": "7605",
+   "amountOut": "1260774",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386747,
+   "txId": "AS5VXJAP7ZGZCTAYQQAAPOJBDEE2ZYKJTWWGMETHCXGUYDUFE53Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325193967640",
+    "Lb": "25630375",
+    "Lu": "102521254",
+    "ab": "20033097000",
+    "bb": "2080620067000",
+    "price": "165991218977"
+   },
+   "fromAsset": "A",
+   "amountIn": "34454",
+   "amountOut": "5715255",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386747,
+   "txId": "FBEZ6SKLJADRVYDK3ZOX7XNS5BCCVOU75EZV4ZGFMVLZQJH3HAAQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325194509457",
+    "Lb": "25738739",
+    "Lu": "102954707",
+    "ab": "20039752000",
+    "bb": "2079517677000",
+    "price": "165969767896"
+   },
+   "fromAsset": "A",
+   "amountIn": "6655",
+   "amountOut": "1102390",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386749,
+   "txId": "HPGRQRVYNBZNOHUJTB2C2YRAK5JGVTDIP7YZH4SHYCN25I4MJR4Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325195006721",
+    "Lb": "25838192",
+    "Lu": "103352518",
+    "ab": "20045859000",
+    "bb": "2078506188000",
+    "price": "165950086863"
+   },
+   "fromAsset": "A",
+   "amountIn": "6107",
+   "amountOut": "1011489",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386750,
+   "txId": "GI3JGEJZZXMJGCEBOJHCTA3GFUIBSRDROZY4CJG57NV3B6HKGYCA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325195529909",
+    "Lb": "25942830",
+    "Lu": "103771068",
+    "ab": "20052283000",
+    "bb": "2077442325000",
+    "price": "165929388033"
+   },
+   "fromAsset": "A",
+   "amountIn": "6424",
+   "amountOut": "1063863",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386752,
+   "txId": "UZVM3IVVOY4LJCMRFM6INZKYTDPFDDN4JWOWORTB26ZZOMJN23PA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325196011478",
+    "Lb": "26039144",
+    "Lu": "104156323",
+    "ab": "20058198000",
+    "bb": "2076462873000",
+    "price": "165910332688"
+   },
+   "fromAsset": "A",
+   "amountIn": "5915",
+   "amountOut": "979452",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386753,
+   "txId": "Z6VWZNOWR32TD2Q7EUFGNHG5ZZF47ZLWLBH7PHYLQGM6RD3QMACA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325196498285",
+    "Lb": "26136506",
+    "Lu": "104545768",
+    "ab": "20064178000",
+    "bb": "2075472772000",
+    "price": "165891071291"
+   },
+   "fromAsset": "A",
+   "amountIn": "5980",
+   "amountOut": "990101",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386755,
+   "txId": "CTPI2WG3J6E3ZN2J2I22SNGLXAHT6KCCJLMBB6E5HPJYL2JQAGAA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325197060390",
+    "Lb": "26248927",
+    "Lu": "104995452",
+    "ab": "20071083000",
+    "bb": "2074329663000",
+    "price": "165868834687"
+   },
+   "fromAsset": "A",
+   "amountIn": "6905",
+   "amountOut": "1143109",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386757,
+   "txId": "K7ECQWUJENLJT67563AFFUP2SMDGWYZMXXA4JCPA2WFR7AP266WQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325197535069",
+    "Lb": "26343863",
+    "Lu": "105375195",
+    "ab": "20076914000",
+    "bb": "2073364472000",
+    "price": "165850060249"
+   },
+   "fromAsset": "A",
+   "amountIn": "5831",
+   "amountOut": "965191",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386760,
+   "txId": "CGDG4PNZUWUOARV67CALRNF6JMTJEEPCXGUDZLA6U24UVYDZCOSA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325198078781",
+    "Lb": "26452606",
+    "Lu": "105810164",
+    "ab": "20083593000",
+    "bb": "2072259048000",
+    "price": "165828559386"
+   },
+   "fromAsset": "A",
+   "amountIn": "6679",
+   "amountOut": "1105424",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386763,
+   "txId": "W34JTQBMFZ3DDIDFLNTOSVC2VZTLM57TORFMKPRXZZZDFFIYTFZA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325198562114",
+    "Lb": "26549273",
+    "Lu": "106196830",
+    "ab": "20089530000",
+    "bb": "2071276551000",
+    "price": "165809450674"
+   },
+   "fromAsset": "A",
+   "amountIn": "5937",
+   "amountOut": "982497",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386765,
+   "txId": "KDIOZTKVWUY2ZUWYD7L3QR3SCM6R2C76Z4YPFJUQ2DLGFRLHWDXQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325199082719",
+    "Lb": "26653394",
+    "Lu": "106613314",
+    "ab": "20095927000",
+    "bb": "2070218056000",
+    "price": "165788865121"
+   },
+   "fromAsset": "A",
+   "amountIn": "6397",
+   "amountOut": "1058495",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386767,
+   "txId": "WCW5OGIE5KMPL2ZLXTM66W4KQATOXGINLDUUL3JND2725UDL4CTA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325199656754",
+    "Lb": "26768201",
+    "Lu": "107072542",
+    "ab": "20102980000",
+    "bb": "2069051167000",
+    "price": "165766173020"
+   },
+   "fromAsset": "A",
+   "amountIn": "7053",
+   "amountOut": "1166889",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386769,
+   "txId": "XVN6BVATTSYOOI63ZTB3ILSBKTTKS5ZPA5KJJOYCJZPZB372ZXSQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325201056739",
+    "Lb": "27048198",
+    "Lu": "108192530",
+    "ab": "20137404000",
+    "bb": "2063352444000",
+    "price": "165655416906"
+   },
+   "fromAsset": "A",
+   "amountIn": "34424",
+   "amountOut": "5698723",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386769,
+   "txId": "M46R2O4F63UKI5ZBHHA35NMPHY7327DQ4T7HRT3K4CUVYY2GBTZQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325201573664",
+    "Lb": "27151583",
+    "Lu": "108606070",
+    "ab": "20143757000",
+    "bb": "2062302206000",
+    "price": "165635001504"
+   },
+   "fromAsset": "A",
+   "amountIn": "6353",
+   "amountOut": "1050238",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386771,
+   "txId": "WPFK26XFZR35FR6IOABIJ3YGNAXHQMNQGTSBGYWFRMYAGKIREU4Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325202025424",
+    "Lb": "27241935",
+    "Lu": "108967478",
+    "ab": "20149308000",
+    "bb": "2061384656000",
+    "price": "165617166442"
+   },
+   "fromAsset": "A",
+   "amountIn": "5551",
+   "amountOut": "917550",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386773,
+   "txId": "OXU6GCUW7FAP324BYWWQ4P3EGQHW5W7IDZT6YDWJC2IPWS3PF4BA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325202511736",
+    "Lb": "27339198",
+    "Lu": "109356527",
+    "ab": "20155286000",
+    "bb": "2060396635000",
+    "price": "165597962677"
+   },
+   "fromAsset": "A",
+   "amountIn": "5978",
+   "amountOut": "988021",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386775,
+   "txId": "KBTNWDATZDVVTLHYVDIL6PHQ7UXLZMLTNWSWV4QMO7MCJ2Q3HIQA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325202963884",
+    "Lb": "27429628",
+    "Lu": "109718245",
+    "ab": "20160842000",
+    "bb": "2059478464000",
+    "price": "165580117562"
+   },
+   "fromAsset": "A",
+   "amountIn": "5556",
+   "amountOut": "918171",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386777,
+   "txId": "2YMSHE2SVWC2OOHQBM2QIHXCZAWYGBXAC3IB4NGFWLP5BUKSQMTA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325203536523",
+    "Lb": "27544156",
+    "Lu": "110176356",
+    "ab": "20167880000",
+    "bb": "2058315523000",
+    "price": "165557516618"
+   },
+   "fromAsset": "A",
+   "amountIn": "7038",
+   "amountOut": "1162941",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386779,
+   "txId": "7UMACJ3FLZ3MY57TTX6FYMX5KTVH6S4TBFD2FBIGPWREXOWMC4IQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325204019050",
+    "Lb": "27640662",
+    "Lu": "110562377",
+    "ab": "20173811000",
+    "bb": "2057335623000",
+    "price": "165538474160"
+   },
+   "fromAsset": "A",
+   "amountIn": "5931",
+   "amountOut": "979900",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386782,
+   "txId": "EKYBIJOUHVCDGA32QYJFPIMZO35Y5YZL5QYLSDVZ4ZZHDLV5JDLA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325204593451",
+    "Lb": "27755543",
+    "Lu": "111021897",
+    "ab": "20180872000",
+    "bb": "2056169175000",
+    "price": "165515807949"
+   },
+   "fromAsset": "A",
+   "amountIn": "7061",
+   "amountOut": "1166448",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386784,
+   "txId": "LWSVAYARCUBJOR7TBN5CBEP5GWYOZBR4AFAQXUVMEHVGULQK7BCQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325205062458",
+    "Lb": "27849345",
+    "Lu": "111397102",
+    "ab": "20186638000",
+    "bb": "2055216774000",
+    "price": "165497302225"
+   },
+   "fromAsset": "A",
+   "amountIn": "5766",
+   "amountOut": "952401",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386786,
+   "txId": "K2COOEDVRIMBVLCKAKIZCTD5NCP2HOVWGV4RQ73F4NZQAMNR2H2A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325205596543",
+    "Lb": "27956162",
+    "Lu": "111824370",
+    "ab": "20193203000",
+    "bb": "2054132528000",
+    "price": "165476235946"
+   },
+   "fromAsset": "A",
+   "amountIn": "6565",
+   "amountOut": "1084246",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386789,
+   "txId": "UWARKX6KTDPLQZNNQARYVHPJKAFKLF7BMPLNZ7S2DFPV2IHZ4HRA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325206080383",
+    "Lb": "28052930",
+    "Lu": "112211442",
+    "ab": "20199151000",
+    "bb": "2053150302000",
+    "price": "165457153029"
+   },
+   "fromAsset": "A",
+   "amountIn": "5948",
+   "amountOut": "982226",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386791,
+   "txId": "ME5SX5OJGEVCZPP3AQGHKLEPNBGA3EYK3I42VHRZZIFAOWCHQRHA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325207478736",
+    "Lb": "28332601",
+    "Lu": "113330124",
+    "ab": "20233561000",
+    "bb": "2047464513000",
+    "price": "165346752127"
+   },
+   "fromAsset": "A",
+   "amountIn": "34410",
+   "amountOut": "5685789",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386792,
+   "txId": "CFA6QOZ6PZIGSWHMHDBGTY5WG7IKKUZYJ43Y6PUJ2EHKJ6GACROQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325207952060",
+    "Lb": "28427266",
+    "Lu": "113708783",
+    "ab": "20239382000",
+    "bb": "2046504010000",
+    "price": "165328098608"
+   },
+   "fromAsset": "A",
+   "amountIn": "5821",
+   "amountOut": "960503",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386794,
+   "txId": "NER64BHPFQRTKVWCBZQA7GMNKIDTPF2BX5N5TY4YD3KYDVWEZYZA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325208433234",
+    "Lb": "28523501",
+    "Lu": "114093722",
+    "ab": "20245298000",
+    "bb": "2045527943000",
+    "price": "165309143911"
+   },
+   "fromAsset": "A",
+   "amountIn": "5916",
+   "amountOut": "976067",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386796,
+   "txId": "J2SHWFWP4N4Z2NW7ZIA4SQQQPEQRYKUDO5QGHVNWXUYTIGYV2MXA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325208878456",
+    "Lb": "28612546",
+    "Lu": "114449899",
+    "ab": "20250773000",
+    "bb": "2044624735000",
+    "price": "165291605079"
+   },
+   "fromAsset": "A",
+   "amountIn": "5475",
+   "amountOut": "903208",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386798,
+   "txId": "5VAMPZZDRSTQ6U7MNQ7DN7KM3A2JFUZW43GKGFB4SZMJ4HAN5QHQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325209336551",
+    "Lb": "28704165",
+    "Lu": "114816375",
+    "ab": "20256406000",
+    "bb": "2043695562000",
+    "price": "165273563030"
+   },
+   "fromAsset": "A",
+   "amountIn": "5633",
+   "amountOut": "929173",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386800,
+   "txId": "HGDDCAMQRRF37TR7VFH7L24DEE5OYYVSVN6TB5H267I2HJYMLCZQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325209817115",
+    "Lb": "28800278",
+    "Lu": "115200826",
+    "ab": "20262317000",
+    "bb": "2042720641000",
+    "price": "165254633752"
+   },
+   "fromAsset": "A",
+   "amountIn": "5911",
+   "amountOut": "974921",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386802,
+   "txId": "AHMN6JF3564JMU3NPEUPV456Z65LM5MLWWDNHKEIFA3DOQJ3QYMQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325210262503",
+    "Lb": "28889356",
+    "Lu": "115557136",
+    "ab": "20267795000",
+    "bb": "2041817236000",
+    "price": "165237094022"
+   },
+   "fromAsset": "A",
+   "amountIn": "5478",
+   "amountOut": "903405",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386805,
+   "txId": "N6RGH5WDYIPV6B3KGNDLQICPCJV4MAWPVREDNC6VADNEOKKD7ILQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325210724924",
+    "Lb": "28981841",
+    "Lu": "115927072",
+    "ab": "20273484000",
+    "bb": "2040879135000",
+    "price": "165218881665"
+   },
+   "fromAsset": "A",
+   "amountIn": "5689",
+   "amountOut": "938101",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386807,
+   "txId": "4J4KMBQR5TDFOFPUBJGNNV75HKGBJP4YWY5NHHBZFHK7OCFTVNTA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325211181118",
+    "Lb": "29073080",
+    "Lu": "116292027",
+    "ab": "20279094000",
+    "bb": "2039954163000",
+    "price": "165200925182"
+   },
+   "fromAsset": "A",
+   "amountIn": "5610",
+   "amountOut": "924972",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386810,
+   "txId": "Q6CSTCJTZ2OHOSYSXXO7T6SR7QQ7TCMJ56WYXRL7UBMP3NCMICMA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325211638892",
+    "Lb": "29164635",
+    "Lu": "116658246",
+    "ab": "20284726000",
+    "bb": "2039025664000",
+    "price": "165182901228"
+   },
+   "fromAsset": "A",
+   "amountIn": "5632",
+   "amountOut": "928499",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386813,
+   "txId": "IXKLQSITLQ2MCXFPLACC6PSA4PUCYJLCCPBIPEQJXODBKBW5AKZA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325213035415",
+    "Lb": "29443940",
+    "Lu": "117775464",
+    "ab": "20319108000",
+    "bb": "2033353916000",
+    "price": "165072864941"
+   },
+   "fromAsset": "A",
+   "amountIn": "34382",
+   "amountOut": "5671748",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386813,
+   "txId": "CDLHGOCHKT5KAU3JJS65A3LYTMCWSNPOB55GL6PYFCBAX6BTOAPQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325213478965",
+    "Lb": "29532650",
+    "Lu": "118130304",
+    "ab": "20324567000",
+    "bb": "2032454634000",
+    "price": "165055414960"
+   },
+   "fromAsset": "A",
+   "amountIn": "5459",
+   "amountOut": "899282",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386815,
+   "txId": "CWRM6SIPMY3VRSIJ43CWUY3ELJ4BXGVJA3B4OYVHW5MFPZDSCEWQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325213931632",
+    "Lb": "29623184",
+    "Lu": "118492437",
+    "ab": "20330137000",
+    "bb": "2031537165000",
+    "price": "165037613030"
+   },
+   "fromAsset": "A",
+   "amountIn": "5570",
+   "amountOut": "917469",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386817,
+   "txId": "IJXBOTVFAPL7WGIUFYXN7BN5DPOE2CL6DHNOFLYP56PGXLNE2T7A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325214471757",
+    "Lb": "29731209",
+    "Lu": "118924537",
+    "ab": "20336785000",
+    "bb": "2030442261000",
+    "price": "165016369551"
+   },
+   "fromAsset": "A",
+   "amountIn": "6648",
+   "amountOut": "1094904",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386819,
+   "txId": "ZYNCF62D5DFGTQWBSVM4UFGW3DXIIKRECDGC43D3ETNQF6H57CLA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325214924134",
+    "Lb": "29821685",
+    "Lu": "119286438",
+    "ab": "20342353000",
+    "bb": "2029525338000",
+    "price": "164998580346"
+   },
+   "fromAsset": "A",
+   "amountIn": "5568",
+   "amountOut": "916923",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386822,
+   "txId": "ME4MFMSB6TC7HRAUEOSLTR5ROY5VUZYWLJTGNX3PSDBKGY5EMKGQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325216318857",
+    "Lb": "30100630",
+    "Lu": "120402216",
+    "ab": "20376709000",
+    "bb": "2023864200000",
+    "price": "164888811614"
+   },
+   "fromAsset": "A",
+   "amountIn": "34356",
+   "amountOut": "5661138",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386822,
+   "txId": "U7F2HYZTAOD4LLMCUF5MKGJPXVJZWCI6YXLF4TFM5ZG5Z4WFVLEQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325216761573",
+    "Lb": "30189174",
+    "Lu": "120756388",
+    "ab": "20382160000",
+    "bb": "2022967237000",
+    "price": "164871416432"
+   },
+   "fromAsset": "A",
+   "amountIn": "5451",
+   "amountOut": "896963",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386824,
+   "txId": "57OKWPU2DTBDXZFHDKUZV3PMYP65EAVK7PLAZYFAG2IQQ3EKNEPQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325217182004",
+    "Lb": "30273261",
+    "Lu": "121092732",
+    "ab": "20387335000",
+    "bb": "2022115778000",
+    "price": "164854904582"
+   },
+   "fromAsset": "A",
+   "amountIn": "5175",
+   "amountOut": "851459",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386826,
+   "txId": "FDSJYI7COFFHVSYWFBZZTWKIURJXANS7RPKFMR7WUK44K5SLAT4Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325217504171",
+    "Lb": "30337695",
+    "Lu": "121350465",
+    "ab": "20391300000",
+    "bb": "2021463462000",
+    "price": "164842255162"
+   },
+   "fromAsset": "A",
+   "amountIn": "3965",
+   "amountOut": "652316",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386826,
+   "txId": "62ZGGSUDEQ3N7BGBTI34VSQJKPMQY5SUNOWZD7XLD6ZCK43GJWQQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325217825222",
+    "Lb": "30401906",
+    "Lu": "121607305",
+    "ab": "20395250000",
+    "bb": "2020813664000",
+    "price": "164829655054"
+   },
+   "fromAsset": "A",
+   "amountIn": "3950",
+   "amountOut": "649798",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386826,
+   "txId": "QX6UCH3FPXCIWVM5WI52V2LM4O6PHCAXZAE3YZH236ONBSWOLVYQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325218145050",
+    "Lb": "30465872",
+    "Lu": "121863167",
+    "ab": "20399185000",
+    "bb": "2020166383000",
+    "price": "164817104238"
+   },
+   "fromAsset": "A",
+   "amountIn": "3935",
+   "amountOut": "647281",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386826,
+   "txId": "HKNCZHASZV3M33WQJEF4O4YTFHUJM7RJKO7SLRH3JUYIKV6XXFSA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325218530455",
+    "Lb": "30542953",
+    "Lu": "122171491",
+    "ab": "20403930000",
+    "bb": "2019385927000",
+    "price": "164801971800"
+   },
+   "fromAsset": "A",
+   "amountIn": "4745",
+   "amountOut": "780456",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386828,
+   "txId": "VGXZP6NOXMCRMJOPVA4RJYNP6WSWQ6OB4KBZOS5EXE5SMZRPXAFQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325219009061",
+    "Lb": "30638675",
+    "Lu": "122554375",
+    "ab": "20409823000",
+    "bb": "2018416748000",
+    "price": "164783181148"
+   },
+   "fromAsset": "A",
+   "amountIn": "5893",
+   "amountOut": "969179",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386830,
+   "txId": "TPMR6V7S6WVUZMVUXHHEDXRN7BBGRDV5J2WDL2AGBADXZZQVGBDQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325219374836",
+    "Lb": "30711830",
+    "Lu": "122846995",
+    "ab": "20414326000",
+    "bb": "2017676247000",
+    "price": "164768824883"
+   },
+   "fromAsset": "A",
+   "amountIn": "4503",
+   "amountOut": "740501",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386832,
+   "txId": "KEQYIXRYSFCXQQBAE7BLCKTCHXN2BHUPH6H5SWSSWF2JZWBONJRQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325219795897",
+    "Lb": "30796043",
+    "Lu": "123183843",
+    "ab": "20419510000",
+    "bb": "2016823838000",
+    "price": "164752299816"
+   },
+   "fromAsset": "A",
+   "amountIn": "5184",
+   "amountOut": "852409",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386834,
+   "txId": "QI7YI2NOECIDKBKVRGYWZZH6P25VTZMNEVBWU5K7ZUUR23NNS33Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325220161522",
+    "Lb": "30869168",
+    "Lu": "123476343",
+    "ab": "20424012000",
+    "bb": "2016083640000",
+    "price": "164737950787"
+   },
+   "fromAsset": "A",
+   "amountIn": "4502",
+   "amountOut": "740198",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386834,
+   "txId": "3Z2IR3EOXBCZSHC2GB6PA2IFTQ6TBCX3TQMTRXBJZ6GOWJU6VG7A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325221552927",
+    "Lb": "31147449",
+    "Lu": "124589467",
+    "ab": "20458307000",
+    "bb": "2010441475000",
+    "price": "164628636996"
+   },
+   "fromAsset": "A",
+   "amountIn": "34295",
+   "amountOut": "5642165",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386835,
+   "txId": "FXADFHMD7TXNOHDECD3BHTDBCZRRFHRTY6TJA44ZK6NA33SMOMZA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325221994441",
+    "Lb": "31235752",
+    "Lu": "124942678",
+    "ab": "20463744000",
+    "bb": "2009548228000",
+    "price": "164611327686"
+   },
+   "fromAsset": "A",
+   "amountIn": "5437",
+   "amountOut": "893247",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386836,
+   "txId": "ZIGLJART32T4VYE33B4UPRS5R4NC6246ZG5ODKF74NMBGO5UFEWQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325222373041",
+    "Lb": "31311472",
+    "Lu": "125245558",
+    "ab": "20468406000",
+    "bb": "2008782381000",
+    "price": "164596487861"
+   },
+   "fromAsset": "A",
+   "amountIn": "4662",
+   "amountOut": "765847",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386838,
+   "txId": "PKMZD4FPORNDTP26W65IN5BXIT3LRUGGYHZWB63PD6NVVNWA3Q5Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325222774186",
+    "Lb": "31391701",
+    "Lu": "125566474",
+    "ab": "20473346000",
+    "bb": "2007970941000",
+    "price": "164580765321"
+   },
+   "fromAsset": "A",
+   "amountIn": "4940",
+   "amountOut": "811440",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386841,
+   "txId": "DSE3LAV3WQGB2GLZBJHRSO3P54B44EAFOKBU3373NOMR5YLYNHCQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325223136806",
+    "Lb": "31464225",
+    "Lu": "125856570",
+    "ab": "20477811000",
+    "bb": "2007237591000",
+    "price": "164566556510"
+   },
+   "fromAsset": "A",
+   "amountIn": "4465",
+   "amountOut": "733350",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386843,
+   "txId": "HVLDYJKI3HTLJ5GG7VX3FF3BOJSZXY2GDT4QYE3TO6U3WQP6CS3A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325223528006",
+    "Lb": "31542465",
+    "Lu": "126169530",
+    "ab": "20482630000",
+    "bb": "2006446169000",
+    "price": "164551223244"
+   },
+   "fromAsset": "A",
+   "amountIn": "4819",
+   "amountOut": "791422",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386845,
+   "txId": "GU6B4TLMJUMKE2EA43ZNG7BMEJJELO2UTRBQ6DANK2MJTCLV7OUA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325223922987",
+    "Lb": "31621462",
+    "Lu": "126485514",
+    "ab": "20487494000",
+    "bb": "2005647432000",
+    "price": "164535748984"
+   },
+   "fromAsset": "A",
+   "amountIn": "4864",
+   "amountOut": "798737",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386849,
+   "txId": "KXYVP3UBPUCKN6E5MXVMMKH6ZRLAFBKPNNZMQ7LOZ7BYGBF5BNGQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325224304392",
+    "Lb": "31697743",
+    "Lu": "126790638",
+    "ab": "20492193000",
+    "bb": "2004875861000",
+    "price": "164520801724"
+   },
+   "fromAsset": "A",
+   "amountIn": "4699",
+   "amountOut": "771571",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386851,
+   "txId": "GHTTFEH74YA3Q5DUFGTTWKNKCZY5H4YQBXE2HACAKCCNGZCYOPPQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325224695669",
+    "Lb": "31775999",
+    "Lu": "127103659",
+    "ab": "20497013000",
+    "bb": "2004084495000",
+    "price": "164505471698"
+   },
+   "fromAsset": "A",
+   "amountIn": "4820",
+   "amountOut": "791366",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386854,
+   "txId": "LSPNYJFAVSROOGW37Y3L6VHZKTXFG32I476OELOA5DKA5XKYNMSQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325225053064",
+    "Lb": "31847478",
+    "Lu": "127389575",
+    "ab": "20501414000",
+    "bb": "2003361987000",
+    "price": "164491476189"
+   },
+   "fromAsset": "A",
+   "amountIn": "4401",
+   "amountOut": "722508",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386856,
+   "txId": "TUZITUKKZUIMFRORJKDYUIKLR2IMO353HRLDGTIZCDXU3X4ZUQQQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325225369859",
+    "Lb": "31910837",
+    "Lu": "127643011",
+    "ab": "20505317000",
+    "bb": "2002721286000",
+    "price": "164479065849"
+   },
+   "fromAsset": "A",
+   "amountIn": "3903",
+   "amountOut": "640701",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386857,
+   "txId": "TTWM45Q7Y3GB3Z2K3U6SDNSIBX3M3MOI5ZSQ2H6KBXITXLZIBWPA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325226760236",
+    "Lb": "32188913",
+    "Lu": "128755312",
+    "ab": "20539602000",
+    "bb": "1997089629000",
+    "price": "164370042046"
+   },
+   "fromAsset": "A",
+   "amountIn": "34285",
+   "amountOut": "5631657",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386858,
+   "txId": "7RN4ZEZM563SHIUOVDQG7LK7OKCAO7M2FDCBPTVGCSBQKXUEAJPQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325227151081",
+    "Lb": "32267082",
+    "Lu": "129067988",
+    "ab": "20544419000",
+    "bb": "1996299480000",
+    "price": "164354742677"
+   },
+   "fromAsset": "A",
+   "amountIn": "4817",
+   "amountOut": "790149",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386860,
+   "txId": "53OS6XEPOODIGAE5262G2GR4VRAEU2U6YLN7IK6KUXFOU4NDJCPQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325227506339",
+    "Lb": "32338134",
+    "Lu": "129352194",
+    "ab": "20548796000",
+    "bb": "1995581570000",
+    "price": "164340842667"
+   },
+   "fromAsset": "A",
+   "amountIn": "4377",
+   "amountOut": "717910",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386861,
+   "txId": "RODELAOUYOSHWSOAJRGIGBGK6USOSXUZRSJVXXCV4LRPOMPTCSVQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325228893464",
+    "Lb": "32615559",
+    "Lu": "130461894",
+    "ab": "20583014000",
+    "bb": "1989965637000",
+    "price": "164232169216"
+   },
+   "fromAsset": "A",
+   "amountIn": "34218",
+   "amountOut": "5615933",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386862,
+   "txId": "5E5U4PVED37AASGDSOQSVMAMNEXBS2BUM3RTNHCEL67TEGM3ACLQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325229265121",
+    "Lb": "32689891",
+    "Lu": "130759219",
+    "ab": "20587594000",
+    "bb": "1989214993000",
+    "price": "164217640900"
+   },
+   "fromAsset": "A",
+   "amountIn": "4580",
+   "amountOut": "750644",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386863,
+   "txId": "6YIKBJSQMYBY2DDWK26ZLTMDMVFXCJBBIPCUDCIOZJBYXC7LFKKQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325230651002",
+    "Lb": "32967068",
+    "Lu": "131867923",
+    "ab": "20621793000",
+    "bb": "1983606384000",
+    "price": "164109150104"
+   },
+   "fromAsset": "A",
+   "amountIn": "34199",
+   "amountOut": "5608609",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386865,
+   "txId": "ZE7FBZAGZGK6YD7XSP2DQGCS5VGMX4JIKGUMMYPNULXF4B6UIRIA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325231033923",
+    "Lb": "33043653",
+    "Lu": "132174259",
+    "ab": "20626514000",
+    "bb": "1982833211000",
+    "price": "164094191419"
+   },
+   "fromAsset": "A",
+   "amountIn": "4721",
+   "amountOut": "773173",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386868,
+   "txId": "LM5X5ZDSFZLDTNGRISRF4BIGIT4QGPFCXJGLCJNDLXNJPDFATZVA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325232420664",
+    "Lb": "33321002",
+    "Lu": "133283651",
+    "ab": "20660743000",
+    "bb": "1977223903000",
+    "price": "163985728156"
+   },
+   "fromAsset": "A",
+   "amountIn": "34229",
+   "amountOut": "5609308",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386868,
+   "txId": "2UIVNJ75IZ7NKFJHUOJND45QIHKI7C4347EGIZXPCNHWZEIDGLPQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325232742158",
+    "Lb": "33385301",
+    "Lu": "133540846",
+    "ab": "20664707000",
+    "bb": "1976575190000",
+    "price": "163973182131"
+   },
+   "fromAsset": "A",
+   "amountIn": "3964",
+   "amountOut": "648713",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386871,
+   "txId": "T7OEYWYG34W533UNWCIRSS3LZO5YQG7G5YXU4AB2J6WRDAJE6RWA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325233064161",
+    "Lb": "33449702",
+    "Lu": "133798448",
+    "ab": "20668678000",
+    "bb": "1975925381000",
+    "price": "163960615396"
+   },
+   "fromAsset": "A",
+   "amountIn": "3971",
+   "amountOut": "649809",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386872,
+   "txId": "FH3FK3N53HMWFCEC2PTGF4WO63JS6BYDFTAM7AD2RHVIGFWEOE5Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325234448969",
+    "Lb": "33726664",
+    "Lu": "134906294",
+    "ab": "20702865000",
+    "bb": "1970327514000",
+    "price": "163852417675"
+   },
+   "fromAsset": "A",
+   "amountIn": "34187",
+   "amountOut": "5597867",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386874,
+   "txId": "RMDF2O5ITGJIJEGCMWLNXABCUKCPBJUDVETE5BATVBD2N2BCHPLQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325235833336",
+    "Lb": "34003538",
+    "Lu": "136013787",
+    "ab": "20737052000",
+    "bb": "1964733340000",
+    "price": "163744327221"
+   },
+   "fromAsset": "A",
+   "amountIn": "34187",
+   "amountOut": "5594174",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386875,
+   "txId": "VWV6VKWGK5BMLB7EV4SU25MNRFNIL3IDQPATFTPQ6G5456YHR56A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325236151093",
+    "Lb": "34067090",
+    "Lu": "136267992",
+    "ab": "20740973000",
+    "bb": "1964092608000",
+    "price": "163731944752"
+   },
+   "fromAsset": "A",
+   "amountIn": "3921",
+   "amountOut": "640732",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386876,
+   "txId": "I3ZA7EC34AONDLTCQ67NVIAOVI3CZLAJH2ZTGTKQQXP6WUYAQ7OQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325237532240",
+    "Lb": "34343320",
+    "Lu": "137372909",
+    "ab": "20775091000",
+    "bb": "1958513825000",
+    "price": "163624191521"
+   },
+   "fromAsset": "A",
+   "amountIn": "34118",
+   "amountOut": "5578783",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386877,
+   "txId": "GZNR6JVFR6GAMOFCESFJUAW3VWNMCPQYDJ56NCC7ND3DWG53CRZQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325237808211",
+    "Lb": "34398515",
+    "Lu": "137593685",
+    "ab": "20778497000",
+    "bb": "1957957655000",
+    "price": "163613447207"
+   },
+   "fromAsset": "A",
+   "amountIn": "3406",
+   "amountOut": "556170",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386879,
+   "txId": "5H4G3AT533F3PZWYJFUM7DPDX2HOVNKVLITLZEYAMBKQGDSLMP2Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325239192485",
+    "Lb": "34675370",
+    "Lu": "138701104",
+    "ab": "20812698000",
+    "bb": "1952369352000",
+    "price": "163505549439"
+   },
+   "fromAsset": "A",
+   "amountIn": "34201",
+   "amountOut": "5588303",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386879,
+   "txId": "LWVMF6CBBZZEMNQGATMLRL2NAA3V2YP4NIIYXDCPRU2YKYRNDJSA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325239483410",
+    "Lb": "34733555",
+    "Lu": "138933844",
+    "ab": "20816288000",
+    "bb": "1951783563000",
+    "price": "163494237079"
+   },
+   "fromAsset": "A",
+   "amountIn": "3590",
+   "amountOut": "585789",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65386884,
+   "txId": "YMEJHDPJXY4J3CNOB4UYZ44GVY6WU5RU3FTRAT6BQ6CGYDOAR7SA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325240868222",
+    "Lb": "35010518",
+    "Lu": "140041693",
+    "ab": "20850514000",
+    "bb": "1946195250000",
+    "price": "163386378686"
+   },
+   "fromAsset": "A",
+   "amountIn": "34226",
+   "amountOut": "5588313",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386886,
+   "txId": "YM2UP4DYXGXQ4QYC5DQHOIOFGCYT3N2RC3GP7ADF3YMXSAQAZMYA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325242248715",
+    "Lb": "35286617",
+    "Lu": "141146087",
+    "ab": "20884643000",
+    "bb": "1940626445000",
+    "price": "163278932422"
+   },
+   "fromAsset": "A",
+   "amountIn": "34129",
+   "amountOut": "5568805",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386888,
+   "txId": "4YWACYTGRRN52FMXYSYXEDFQ62ZTUYAX3MQZSHBTF42GN4UDW2TA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325243628228",
+    "Lb": "35562520",
+    "Lu": "142249697",
+    "ab": "20918754000",
+    "bb": "1935064236000",
+    "price": "163171648907"
+   },
+   "fromAsset": "A",
+   "amountIn": "34111",
+   "amountOut": "5562209",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386893,
+   "txId": "KOVBKRDCUZB74ROJG3TVVUKJWHYIIBJSKTI46MVSMZMFICQSSJLQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325245008939",
+    "Lb": "35838663",
+    "Lu": "143354265",
+    "ab": "20952900000",
+    "bb": "1929499980000",
+    "price": "163064361391"
+   },
+   "fromAsset": "A",
+   "amountIn": "34146",
+   "amountOut": "5564256",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386898,
+   "txId": "VH72HDO242IZNRG5NS76BUXKIAZH4AHNWGEIO4TBP2TXLSZH6UVQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325246387361",
+    "Lb": "36114348",
+    "Lu": "144457002",
+    "ab": "20986998000",
+    "bb": "1923947196000",
+    "price": "162957330453"
+   },
+   "fromAsset": "A",
+   "amountIn": "34098",
+   "amountOut": "5552784",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386900,
+   "txId": "N63CHE7BIBQBEJFTPHFAQ4R2CQ6GQAWFZZQUDC56FJGKZTJL5GRA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325247765906",
+    "Lb": "36390057",
+    "Lu": "145559838",
+    "ab": "21021110000",
+    "bb": "1918395778000",
+    "price": "162850361180"
+   },
+   "fromAsset": "A",
+   "amountIn": "34112",
+   "amountOut": "5551418",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386905,
+   "txId": "IGIRTQ3RZ6RPLAHXQ5QNRURALPZF6GKCSS7PCF2P7EWDGXH5ACKQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325249145266",
+    "Lb": "36665929",
+    "Lu": "146663326",
+    "ab": "21055249000",
+    "bb": "1912843614000",
+    "price": "162743412864"
+   },
+   "fromAsset": "A",
+   "amountIn": "34139",
+   "amountOut": "5552164",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386907,
+   "txId": "L7WB7OD7KSGHO7JGDFHTKSKFSZPKNDNYSQLQ46N4WUNXUDHEC6LQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325250522848",
+    "Lb": "36941446",
+    "Lu": "147765391",
+    "ab": "21089350000",
+    "bb": "1907301270000",
+    "price": "162636688946"
+   },
+   "fromAsset": "A",
+   "amountIn": "34101",
+   "amountOut": "5542344",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386911,
+   "txId": "VE3OJ27LBUA5OT6IPST5AR5WCNSOPQLCYF23NKFBZ7XI3XL7JK6Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325251897224",
+    "Lb": "37216322",
+    "Lu": "148864891",
+    "ab": "21123380000",
+    "bb": "1901774088000",
+    "price": "162530292057"
+   },
+   "fromAsset": "A",
+   "amountIn": "34030",
+   "amountOut": "5527182",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386919,
+   "txId": "XE33MH3MIGGIVE3H2XHZZS65W7DPC6QFZ5TBRTBPR3LHNPQWHOQQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325253273658",
+    "Lb": "37491609",
+    "Lu": "149966038",
+    "ab": "21157471000",
+    "bb": "1896240623000",
+    "price": "162423809301"
+   },
+   "fromAsset": "A",
+   "amountIn": "34091",
+   "amountOut": "5533465",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386921,
+   "txId": "IH5DRMUD2QURFHN4LL2DPK3DOVHKI7G6EFUDNHKFS6AJ4T6OUMUA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325254648106",
+    "Lb": "37766499",
+    "Lu": "151065596",
+    "ab": "21191521000",
+    "bb": "1890717431000",
+    "price": "162317559233"
+   },
+   "fromAsset": "A",
+   "amountIn": "34050",
+   "amountOut": "5523192",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386923,
+   "txId": "YMLVJNXLVH7QRBPNHGECTHRHJZISV6XUR762D6MXH432SEEWDUUQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325256021379",
+    "Lb": "38041154",
+    "Lu": "152164214",
+    "ab": "21225552000",
+    "bb": "1885200930000",
+    "price": "162211472787"
+   },
+   "fromAsset": "A",
+   "amountIn": "34031",
+   "amountOut": "5516501",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386925,
+   "txId": "JBRA5YHGGG3BWFBJ22DZZK35VF7QCRJNWEJKUYFUD4EHY74ZHIBA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325257392981",
+    "Lb": "38315475",
+    "Lu": "153261495",
+    "ab": "21259549000",
+    "bb": "1879693540000",
+    "price": "162105596348"
+   },
+   "fromAsset": "A",
+   "amountIn": "33997",
+   "amountOut": "5507390",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386929,
+   "txId": "J5VCNELYX6KNRVE2TSQYIF6XOMD3S7U25ZZBFDI5KNSEN3NKHOUA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325258766726",
+    "Lb": "38590224",
+    "Lu": "154360491",
+    "ab": "21293604000",
+    "bb": "1874180358000",
+    "price": "161999643381"
+   },
+   "fromAsset": "A",
+   "amountIn": "34055",
+   "amountOut": "5513182",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386933,
+   "txId": "23SQRCKXE6VJGPK4C5HOE3MKA2J3NLFNV7Z4EEMDGCFO4IFFSVDA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325260137763",
+    "Lb": "38864432",
+    "Lu": "155457320",
+    "ab": "21327600000",
+    "bb": "1868680321000",
+    "price": "161893977753"
+   },
+   "fromAsset": "A",
+   "amountIn": "33996",
+   "amountOut": "5500037",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386986,
+   "txId": "65NURK25BSEC53FVVD4D5EE2UGGRPWOBOIRTJTMQ4SP5XKBCVR2A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325261508981",
+    "Lb": "39138676",
+    "Lu": "156554294",
+    "ab": "21361611000",
+    "bb": "1863181446000",
+    "price": "161788369116"
+   },
+   "fromAsset": "A",
+   "amountIn": "34011",
+   "amountOut": "5498875",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65386994,
+   "txId": "KEAFLM3Y43XXOXUCRH62BSIPX6JIEFORTRRZTRIIXTTWH4ELCL3A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325262881295",
+    "Lb": "39413139",
+    "Lu": "157652145",
+    "ab": "21395653000",
+    "bb": "1857681151000",
+    "price": "161682767876"
+   },
+   "fromAsset": "A",
+   "amountIn": "34042",
+   "amountOut": "5500295",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65387004,
+   "txId": "KTX2F6FR4FNSX4YXNWYLHJUIECPAFIFK3TZ6G7TRQNUC4AGRI77A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325264253166",
+    "Lb": "39687514",
+    "Lu": "158749641",
+    "ab": "21429695000",
+    "bb": "1852184445000",
+    "price": "161577270189"
+   },
+   "fromAsset": "A",
+   "amountIn": "34042",
+   "amountOut": "5496706",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65387715,
+   "txId": "7PSKUMMXQ7I5SZ4RXLEABWXSFRIRNALKYCZDTHHAMG2IN6VHF5GA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325265622919",
+    "Lb": "39961465",
+    "Lu": "159845443",
+    "ab": "21463692000",
+    "bb": "1846698584000",
+    "price": "161472015179"
+   },
+   "fromAsset": "A",
+   "amountIn": "33997",
+   "amountOut": "5485861",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65390499,
+   "txId": "DTNFEDSFJCKLOETFCQ4Y6JSI4IKWBUXWCZ67CKEHDATR2RQJTOSQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325266994554",
+    "Lb": "40235792",
+    "Lu": "160942751",
+    "ab": "21497743000",
+    "bb": "1841207591000",
+    "price": "161366696247"
+   },
+   "fromAsset": "A",
+   "amountIn": "34051",
+   "amountOut": "5490993",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65392652,
+   "txId": "OZYGFJVOS7DWPXDQUO63BZ25BLDJYTNKI4DVXSEZKNNCSBLSCQOQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325275038870",
+    "Lb": "41844656",
+    "Lu": "167378203",
+    "ab": "21697743000",
+    "bb": "1809028155000",
+    "price": "160750179676"
+   },
+   "fromAsset": "A",
+   "amountIn": "200000",
+   "amountOut": "32179436",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65392660,
+   "txId": "2A4FQLPAUVMVFNKHVKPFE2Z2HNCVAITGSGUPNBO2553BWKWG5PJQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325276417759",
+    "Lb": "42120434",
+    "Lu": "168481314",
+    "ab": "21732025000",
+    "bb": "1803524633000",
+    "price": "160644858109"
+   },
+   "fromAsset": "A",
+   "amountIn": "34282",
+   "amountOut": "5503522",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65392677,
+   "txId": "5C4ULWU7CVJ2BTL7YXGSZTFD4R36E3FF5C7NMHHAYNPOD6U46RGQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325284449893",
+    "Lb": "43726861",
+    "Lu": "174907021",
+    "ab": "21932025000",
+    "bb": "1771489007000",
+    "price": "160032477819"
+   },
+   "fromAsset": "A",
+   "amountIn": "200000",
+   "amountOut": "32035626",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65392934,
+   "txId": "PGD4N5NTNI6WCLK252A7KWK7EHNUCAWGA2HMNOORFR6RILXBEU3A",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325284819277",
+    "Lb": "43800738",
+    "Lu": "175202528",
+    "ab": "21924447000",
+    "bb": "1772703293000",
+    "price": "160055650961"
+   },
+   "fromAsset": "B",
+   "amountIn": "1214286",
+   "amountOut": "7578",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65392965,
+   "txId": "PYTSLHO3R7Z4P6CN4VFGS2UZ6XCXGT4AYXHEKYC2NY4FIMOYX5TA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "1325285184753",
+    "Lb": "43873834",
+    "Lu": "175494908",
+    "ab": "21916884000",
+    "bb": "1773915338000",
+    "price": "160078783078"
+   },
+   "fromAsset": "B",
+   "amountIn": "1212045",
+   "amountOut": "7563",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65393080,
+   "txId": "IRWUAL44W3LKHQCXSTBHMFIAUW2FIETPYYOYP2JQULVWLF6NWOLQ",
+   "method": "removeLiquidity",
+   "stateAfter": {
+    "L": "57300087876",
+    "Lu": "0",
+    "ab": "947599350",
+    "bb": "76697080649"
+   },
+   "lpTokensSent": "1267809602",
+   "assetAReceived": "20969284",
+   "assetBReceived": "1697218257",
+   "sender": "6WKNXOXAVK5NEGPLMJ5MT6QA4EC2W2MAEW5FOWMD6URHTWPVB4BGIUCR2A",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65393159,
+   "txId": "6XCHHMGE27GTKCFW7WNZTWMSISMS67U2INQTKFEUJI2PPYKOBBUA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "57300505301",
+    "Lb": "43957319",
+    "Lu": "333940",
+    "ab": "957998350",
+    "bb": "75037893649",
+    "price": "159346662555"
+   },
+   "fromAsset": "A",
+   "amountIn": "10399",
+   "amountOut": "1659187",
+   "sender": "ZLJ5EMU7PPLZDQOJXAOAOIXVXIH4FRNOAMLRODY55PAKXV3HHVA7PVP3P4",
+   "feeMultiplier": "1000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "1"
+  },
+  {
+   "round": 65393189,
+   "txId": "IQ7YWFZQOYY2PVBLOXBKZHZX2KFVXQ4HTPYR5VKUTAKNM5KL2EGQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "57301486920",
+    "Lb": "44153643",
+    "Lu": "1119235",
+    "ab": "970253350",
+    "bb": "73094244649",
+    "price": "158490894066"
+   },
+   "fromAsset": "A",
+   "amountIn": "12255",
+   "amountOut": "1943649",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65393194,
+   "txId": "SFV7Z225ZVUSSXIRYRRKWS4ZPYIU2ORUTTZXTDNGUHE2EIMCSZQA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "57302731685",
+    "Lb": "44402596",
+    "Lu": "2115047",
+    "ab": "985830350",
+    "bb": "70638757649",
+    "price": "157413101990"
+   },
+   "fromAsset": "A",
+   "amountIn": "15577",
+   "amountOut": "2455487",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65393200,
+   "txId": "SJUV5I5KCP63ZG3NYTR2R4BHCYPIXEHDDXH6FUY3WDXYJO2KFXZA",
+   "method": "swap",
+   "stateAfter": {
+    "L": "57303544516",
+    "Lb": "44565163",
+    "Lu": "2765311",
+    "ab": "996014350",
+    "bb": "69042422649",
+    "price": "156714414789"
+   },
+   "fromAsset": "A",
+   "amountIn": "10184",
+   "amountOut": "1596335",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65393201,
+   "txId": "3RBNCJHASES3QXG272CP7ICHYBIAVLNNLFCU7J7Z3TSZHMLKV5LQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "57305027700",
+    "Lb": "44861800",
+    "Lu": "3951858",
+    "ab": "1014646350",
+    "bb": "66140150649",
+    "price": "155448171254"
+   },
+   "fromAsset": "A",
+   "amountIn": "18632",
+   "amountOut": "2902272",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65393212,
+   "txId": "OIMEODGD2FQ5DGCO45JUSXAUL7WVIYANW3A2NIDO7XAU5PLIT7LQ",
+   "method": "swap",
+   "stateAfter": {
+    "L": "57306440484",
+    "Lb": "45144357",
+    "Lu": "5082085",
+    "ab": "1032434350",
+    "bb": "63391187649",
+    "price": "154253608320"
+   },
+   "fromAsset": "A",
+   "amountIn": "17788",
+   "amountOut": "2748963",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  },
+  {
+   "round": 65395175,
+   "txId": "QHXMH5LZGUKF65JLTHFIPPUC7ZUVZHJ7Y372R7KOJPONX2GJFI6Q",
+   "method": "swap",
+   "stateAfter": {
+    "L": "57307353500",
+    "Lb": "45326961",
+    "Lu": "5812497",
+    "ab": "1043945350",
+    "bb": "61623527649",
+    "price": "153487933857"
+   },
+   "fromAsset": "A",
+   "amountIn": "11511",
+   "amountOut": "1767660",
+   "sender": "6UQON4ISACLZPHXI5VCURUHXQUCO6NP4J47UEAK6IQQJBT4JFY5SM3UBSE",
+   "feeMultiplier": "2000000000",
+   "feeMultiplierBase": "1000000000",
+   "verificationClass": "0"
+  }
+ ]
+}

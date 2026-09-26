@@ -17,7 +17,7 @@ Primary file: `contracts/BiatecClammPool.algo.ts`
 
 ### Why This Happens {#-why-this-happens}
 
-The pool uses a quadratic equation to account for accumulated fees when minting LP tokens. The positive root is floored to ensure rounding always favors the pool over individual users. This prevents attackers from extracting value through repeated small operations.
+When minting LP tokens the pool accounts for accumulated fees: a deposit of `delta` liquidity is minted `delta * distributedLp / (distributedLp + usersFeeLiquidity)` LP tokens, floored to LP token decimals (6). The fee-dilution share `delta - X` is credited to the existing LP holders (`LiquidityUsersFromFees`); the sub-micro-LP flooring remainder stays in the pool, so rounding always favors the pool over the individual depositor. This prevents attackers from extracting value through repeated small operations. See [Liquidity Fee Protection](./liquidity-fee-protection) for the derivation.
 
 ### Mitigation Strategies {#-mitigation-strategies}
 

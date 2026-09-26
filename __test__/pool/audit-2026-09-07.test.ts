@@ -4,7 +4,10 @@ import clammAddLiquiditySender from '../../src/biatecClamm/sender/clammAddLiquid
 import clammRemoveLiquiditySender from '../../src/biatecClamm/sender/clammRemoveLiquiditySender';
 
 describe('Fresh audit 2026-09-07 reproductions', () => {
-  test('minimum LP mint permits an eight-decimal deposit to redeem more asset A', async () => {
+  // H-01: a deposit smaller than one LP micro-unit used to be rounded UP to one LP token. In an 8-decimal pool a
+  // deposit of 1 base unit of asset A then redeemed 49 units. Such deposits are now rejected (LP-ZERO-ERR) and a
+  // deposit which reaches one LP micro-unit never redeems more than it deposited.
+  test('minimum LP mint no longer lets an eight-decimal deposit redeem more asset A', async () => {
     const { algod, clientBiatecClammPoolProvider, clientBiatecConfigProvider, clientBiatecIdentityProvider, clientBiatecPoolProvider } = await setupPool({
       assetA: 1n,
       biatecFee: 0n,
@@ -28,11 +31,23 @@ describe('Fresh audit 2026-09-07 reproductions', () => {
     await clammAddLiquiditySender({ ...common, clientBiatecPoolProvider: clientBiatecPoolProvider.appClient, assetADeposit: 100_000_000n, assetBDeposit: 1_000_000n });
     const before = await algod.accountAssetInformation(deployer.addr, assetAId).do();
     const lpBefore = await algod.accountAssetInformation(deployer.addr, assetLp).do();
-    await clammAddLiquiditySender({ ...common, clientBiatecPoolProvider: clientBiatecPoolProvider.appClient, assetADeposit: 1n, assetBDeposit: 0n });
+
+    // 1 base unit of the 8-decimal asset A is worth less than one LP micro-unit -> rejected
+    await expect(clammAddLiquiditySender({ ...common, clientBiatecPoolProvider: clientBiatecPoolProvider.appClient, assetADeposit: 1n, assetBDeposit: 0n })).rejects.toThrow(/LP-ZERO-ERR/);
+    const lpAfterRejected = await algod.accountAssetInformation(deployer.addr, assetLp).do();
+    expect(lpAfterRejected.assetHolding!.amount).toBe(lpBefore.assetHolding!.amount);
+
+    // in this flat 1:1 pool 1 base-scale unit of asset A adds 1 unit of liquidity, so 120 units of the 8-decimal asset A
+    // (1200 base-scale units) add 1.2 LP micro-units: exactly one LP micro-unit is minted, the remainder stays with the LP holders
+    await clammAddLiquiditySender({ ...common, clientBiatecPoolProvider: clientBiatecPoolProvider.appClient, assetADeposit: 120n, assetBDeposit: 0n });
     const lpAfter = await algod.accountAssetInformation(deployer.addr, assetLp).do();
-    expect(lpAfter.assetHolding!.amount - lpBefore.assetHolding!.amount).toBe(1n);
-    await clammRemoveLiquiditySender({ ...common, lpToSend: 1n });
+    const minted = lpAfter.assetHolding!.amount - lpBefore.assetHolding!.amount;
+    expect(minted).toBe(1n);
+    await clammRemoveLiquiditySender({ ...common, lpToSend: minted });
     const after = await algod.accountAssetInformation(deployer.addr, assetAId).do();
-    expect(after.assetHolding!.amount - before.assetHolding!.amount).toBe(49n);
+    // the depositor must never get back more than deposited
+    expect(after.assetHolding!.amount - before.assetHolding!.amount).toBeLessThanOrEqual(0n);
+    // one LP micro-unit redeems ~50 units of A and ~5 units of B; the 20 units of rounding remainder stay with the pool
+    expect(after.assetHolding!.amount - before.assetHolding!.amount).toBeGreaterThanOrEqual(-120n);
   });
 });
