@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import path from 'path';
 import algosdk, { assignGroupID, makePaymentTxnWithSuggestedParamsFromObject, Transaction } from 'algosdk';
 import { TransactionSignerAccount } from '@algorandfoundation/algokit-utils/types/account';
 import { AlgorandClient } from '@algorandfoundation/algokit-utils';
@@ -7,8 +8,13 @@ import { BiatecIdentityProviderClient, BiatecIdentityProviderFactory } from '../
 import { BiatecPoolProviderClient, BiatecPoolProviderFactory } from '../../contracts/clients/BiatecPoolProviderClient';
 import { BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
 import { BiatecClammPoolClient } from '../../dist';
+import getContractVersion from '../common/getContractVersion';
 
 const biatecFee = BigInt(200_000_000);
+
+// Read straight from the freshly built approval program instead of a hand-copied literal, so this script can
+// never upgrade a pool to a version string that does not match the bytecode it just deployed.
+const clammPoolVersion = getContractVersion(path.join(__dirname, '../../contracts/artifacts/BiatecClammPool.approval.teal'));
 
 const algod = new algosdk.Algodv2(
   process.env.ALGOD_TOKEN ?? 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
@@ -121,7 +127,7 @@ const app = async () => {
   if (!appBiatecClammPool) {
     throw new Error('Please set appBiatecClammPool env variables');
   }
-  console.log('upgrading single pool: ', appBiatecClammPool.toString());
+  console.log('upgrading single pool: ', appBiatecClammPool.toString(), 'to version', clammPoolVersion);
 
   const pool = new BiatecClammPoolClient({
     appId: appBiatecClammPool,
@@ -133,7 +139,7 @@ const app = async () => {
   await pool.send.update.updateApplication({
     args: {
       appBiatecConfigProvider,
-      newVersion: Buffer.from('BIATEC-CLAMM-01-06-03', 'ascii'),
+      newVersion: Buffer.from(clammPoolVersion, 'ascii'),
     },
   });
 
