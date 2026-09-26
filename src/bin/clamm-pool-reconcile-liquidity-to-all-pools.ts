@@ -176,6 +176,14 @@ const app = async () => {
           assetLp: assetLp ?? 0n,
         },
         staticFee: AlgoAmount.MicroAlgos(3000),
+        // appBiatecConfigProvider/assetA/assetB/assetLp are plain uint64 on the ABI wire (TEALScript's
+        // AppID/AssetID types do not surface as ARC4 reference types), so the SDK cannot auto-derive foreign
+        // references from the method args alone. Supplying them explicitly lets us skip algokit's
+        // resource-population simulate probe, which builds its own zero-fee transaction that algod rejects for
+        // insufficient fee, independently of the staticFee set above on the real transaction.
+        populateAppCallResources: false,
+        appReferences: [appBiatecConfigProvider],
+        assetReferences: [assetA ?? 0n, assetB ?? 0n, assetLp ?? 0n].filter((id) => id !== 0n),
       });
       const credited = ret.return ?? 0n;
       console.log(`pool ${appBiatecClammPool} reconciled, liquidity credited (base scale): ${credited}`);

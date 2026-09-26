@@ -39,6 +39,7 @@
     "@algorandfoundation/algokit-utils": "^9.2.0",
     "@easyops-cn/docusaurus-search-local": "^0.52.3",
     "algosdk": "^3.6.0",
+    "biatec-router": "^1.0.1",
     "crypto-js": "^4.2.0",
     "ipfs-http-client": "^60.0.1",
     "sharp": "^0.34.5",
