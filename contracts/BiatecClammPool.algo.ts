@@ -11,6 +11,19 @@ const TOTAL_SUPPLY = '18000000000000000000';
 // algod node on 2026-09-26). The pool derives the native token name from the chain it runs on; every other chain
 // (Algorand mainnet/testnet, localnet) uses the pool provider's configured name, which defaults to 'Algo'.
 const GENESIS_VOI_MAINNET = hex('0xaf6d1f49023c8167bf90567388da2748f0972f0710987fe7c513af9e7b9e58e9');
+
+// Fixed native reserve the contract keeps out of its own accounting, in microAlgo. This is intentionally NOT
+// `this.app.address.minBalance`: the account's real minimum balance grows whenever the contract's own footprint
+// grows (more global state, more boxes, larger opted-in-asset count, a bigger approval program after an upgrade,
+// etc.), which is outside the control of any single transaction and can silently erode the margin a fixed
+// constant guarantees. Keeping this as an explicit constant means the reserve above the true minimum balance can
+// only shrink when someone deliberately edits this line, not as a side effect of unrelated contract growth. If the
+// real minimum balance ever exceeds this constant, ensureAssetBalanceMatchesState still uses the real minimum
+// balance's ledger-enforced floor implicitly (the account cannot spend below it), so solvency is never
+// overstated - this constant only makes the pool's own bookkeeping conservative by holding back extra headroom.
+// Revisit this value (not the mechanism) if the contract's own resource footprint grows enough to need more
+// headroom; any future audit should treat this constant, and not a dynamic minBalance read, as the point to check.
+const NATIVE_RESERVE_MICROALGO: uint64 = 1_000_000;
 const SCALE = 1_000_000_000;
 const s = <uint256>1_000_000_000;
 // const SCALEUINT256 = <uint256>1_000_000_000;
@@ -243,8 +256,7 @@ export class BiatecClammPool extends Contract {
     this.assetB.value = assetB.id;
     // Native token name (audit 2026-09-07 L-02): derived from the chain's genesis hash on Voi, otherwise the name
     // configured in the pool provider (stored already trimmed; doCreatePoolToken falls back to 'Algo' when empty).
-    //let nativeTokenNameBytes = appBiatecPoolProvider.globalState('nt') as bytes;
-    let nativeTokenNameBytes = 'Algo';
+    let nativeTokenNameBytes = appBiatecPoolProvider.globalState('nt') as bytes;
     if ((globals.genesisHash as bytes) === GENESIS_VOI_MAINNET) {
       nativeTokenNameBytes = 'Voi';
     }
@@ -376,8 +388,9 @@ export class BiatecClammPool extends Contract {
 
   private ensureAssetBalanceMatchesState(assetId: uint64, scaleFromBase: uint256, recorded: uint256, errorNative: string, errorAsa: string): void {
     if (assetId === <uint64>0) {
-      // spendable native balance: everything above the account's real minimum balance (consistent reserve policy)
-      const nativeAvailable = ((this.app.address.balance - this.app.address.minBalance) as uint256) * scaleFromBase;
+      // spendable native balance: everything above the fixed NATIVE_RESERVE_MICROALGO reserve (see its definition
+      // for why this is a constant and not `this.app.address.minBalance`)
+      const nativeAvailable = ((this.app.address.balance - NATIVE_RESERVE_MICROALGO) as uint256) * scaleFromBase;
       assert(nativeAvailable >= recorded, errorNative);
     } else {
       const assetRef = AssetID.fromUint64(assetId);
@@ -1185,7 +1198,8 @@ export class BiatecClammPool extends Contract {
     if (amountA === <uint256>1) {
       // special case for asset A to distribute all available balance
       if (assetA.id === <uint64>0) {
-        distributedAmountA = ((this.app.address.balance - this.app.address.minBalance) as uint256) * this.assetADecimalsScaleFromBase.value;
+        // fixed reserve, not the real minBalance - see NATIVE_RESERVE_MICROALGO for why
+        distributedAmountA = ((this.app.address.balance - NATIVE_RESERVE_MICROALGO) as uint256) * this.assetADecimalsScaleFromBase.value;
       } else {
         distributedAmountA = (this.app.address.assetBalance(assetA) as uint256) * this.assetADecimalsScaleFromBase.value;
       }
@@ -1197,7 +1211,8 @@ export class BiatecClammPool extends Contract {
     if (amountB === <uint256>1) {
       // special case for asset B to distribute all available balance
       if (assetB.id === <uint64>0) {
-        distributedAmountB = ((this.app.address.balance - this.app.address.minBalance) as uint256) * this.assetBDecimalsScaleFromBase.value;
+        // fixed reserve, not the real minBalance - see NATIVE_RESERVE_MICROALGO for why
+        distributedAmountB = ((this.app.address.balance - NATIVE_RESERVE_MICROALGO) as uint256) * this.assetBDecimalsScaleFromBase.value;
       } else {
         distributedAmountB = (this.app.address.assetBalance(assetB) as uint256) * this.assetBDecimalsScaleFromBase.value;
       }

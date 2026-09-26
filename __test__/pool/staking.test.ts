@@ -216,11 +216,16 @@ describe('BiatecClammPool - Staking Pools', () => {
       const liquidityBefore = BigInt(stateBefore.liquidity ?? 0n);
 
       const rewardsAmount = 100n * BigInt(SCALE_ALGO);
+      // The pool keeps a fixed 1 ALGO native reserve out of its own accounting (NATIVE_RESERVE_MICROALGO in
+      // BiatecClammPool.algo.ts), deliberately not the account's real (and growable) minBalance. A same-asset native
+      // pool's aggregate liability check (audit 2026-09-07 H-02) therefore needs slightly more physical ALGO on hand
+      // than exactly principal + reward: send a small untracked buffer alongside the reward so the reserve is covered.
+      const untrackedBuffer = 2n * BigInt(SCALE_ALGO);
       const poolAddress = algosdk.getApplicationAddress(Number(clientBiatecClammPoolProvider.appClient.appId));
       const paymentTx = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
         sender: deployer.addr,
         receiver: poolAddress,
-        amount: rewardsAmount,
+        amount: rewardsAmount + untrackedBuffer,
         suggestedParams: await algod.getTransactionParams().do(),
       });
       const signedPayment = paymentTx.signTxn(deployer.sk);
