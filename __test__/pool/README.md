@@ -64,8 +64,8 @@ fixed behaviour.
 - **audit-2026-09-07-h02-same-asset-backing.test.ts** (5 tests) - aggregate liabilities of same-asset (staking) pools versus the single physical holding across add / distribute / withdrawExcess / remove, including the `amountA = 1` "distribute everything" sentinel
 - **audit-2026-09-07-m02-provider-authority.test.ts** (4 tests) - creator versus updater authority after `setAddressUdpater` rotation; re-running a provider `bootstrap` requires the current config updater (`E_UPDATER`)
 - **audit-2026-09-07-m03-identity-policy.test.ts** (4 tests) - pause, locked identity, verification class and the (not enforced) identity expiry
-- **audit-2026-09-07-l01-doAppCall-shapes.test.ts** (4 tests) - proxy call shapes verified on the target application: one to three arguments, with or without payment, other counts rejected with `E_ARGS`
-- **audit-2026-09-07-l02-native-token-name.test.ts** (3 tests) - non-default native token name in LP token metadata (on localnet the pool provider's configured name is used; on Voi mainnet the pool derives `Voi` from the genesis hash)
+- **audit-2026-09-07-l01-doAppCall-shapes.test.ts** (4 tests) - proxy call shapes verified on the target application: one or two arguments, with or without payment, other counts rejected with `E_ARGS`
+- **audit-2026-09-07-l02-native-token-name.test.ts** (3 tests) - LP token native name is derived purely from `globals.genesisHash` (`Voi` on Voi mainnet, `Aramid` on Aramid mainnet, `Algo` everywhere else including localnet), never from the pool provider's mutable `nativeTokenName` config; the two mainnet hashes are checked against the compiled approval program since they cannot be reached from a local test network
 - **../audit-2026-09-07-l03-optin-sender.test.ts** (2 tests, 1 `failing`) - SDK unit test of the LP opt-in decision in `clammAddLiquiditySender`; the `test.failing` case pins the still open L-03 defect and must be switched to `test` once fixed
 
 ### Supporting Files

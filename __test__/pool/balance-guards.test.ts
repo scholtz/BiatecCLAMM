@@ -42,10 +42,10 @@ const getPoolErrorMessage = async (error: any, algod: algosdk.Algodv2) => {
  * "assert failed pc=" message whenever BiatecClammPool changes (the ASA and the native assert each have one pc).
  */
 const ERROR_FRAGMENTS: Record<string, string[]> = {
-  E_A_B: ['E_A_B', 'pc=1560'],
-  E_B_B: ['E_B_B', 'pc=1560'],
-  E_A0_B: ['E_A0_B', 'pc=1534'],
-  E_B0_B: ['E_B0_B', 'pc=1534'],
+  E_A_B: ['E_A_B', 'pc=1612'],
+  E_B_B: ['E_B_B', 'pc=1612'],
+  E_A0_B: ['E_A0_B', 'pc=1586'],
+  E_B0_B: ['E_B0_B', 'pc=1586'],
 };
 
 const expectLogicError = async (send: () => Promise<unknown>, algod: algosdk.Algodv2, errorCode: string) => {

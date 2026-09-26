@@ -2,15 +2,24 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-06-06';
+const version = 'BIATEC-CLAMM-01-06-07';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
 
-// Genesis hash of the Voi mainnet (voimain-v1.0, r20fSQI8gWe/kFZziNonSPCXLwcQmH/nxROvnnueWOk=, fetched from a public
-// algod node on 2026-09-26). The pool derives the native token name from the chain it runs on; every other chain
-// (Algorand mainnet/testnet, localnet) uses the pool provider's configured name, which defaults to 'Algo'.
+// Genesis hashes of the chains this contract recognizes by name (audit 2026-09-07 L-02). The native token name is
+// derived purely from `globals.genesisHash` at bootstrap time - it is NOT read from BiatecPoolProvider's
+// `nativeTokenName` global state, so a provider misconfiguration can never make a pool mint an incorrect native
+// asset name, and the name is fixed forever once a pool is created on a given chain.
+// Source: https://raw.githubusercontent.com/scholtz/AlgorandPublicData/refs/heads/main/genesis/genesis-list.json
+// (fetched 2026-09-26). Algorand mainnet/testnet are intentionally NOT special-cased: their native token is already
+// correctly named 'Algo' by the fallback default below, so listing their hashes would only be dead weight in the
+// compiled program. Add a new `GENESIS_*` constant and an `else if` branch in bootstrap() when Biatec deploys to a
+// further chain whose native token is not called Algo.
+// Voi Mainnet (voimain-v1.0, chainId 416101): r20fSQI8gWe/kFZziNonSPCXLwcQmH/nxROvnnueWOk=
 const GENESIS_VOI_MAINNET = hex('0xaf6d1f49023c8167bf90567388da2748f0972f0710987fe7c513af9e7b9e58e9');
+// Aramid Mainnet (aramidmain-v1.0, chainId 101003): PgeQVJJgx/LYKJfIEz7dbfNPuXmDyJ+O7FwQ4XL9tE8=
+const GENESIS_ARAMID_MAINNET = hex('0x3e0790549260c7f2d82897c8133edd6df34fb97983c89f8eec5c10e172fdb44f');
 
 // Fixed native reserve the contract keeps out of its own accounting, in microAlgo. This is intentionally NOT
 // `this.app.address.minBalance`: the account's real minimum balance grows whenever the contract's own footprint
@@ -254,11 +263,18 @@ export class BiatecClammPool extends Contract {
 
     this.assetA.value = assetA.id;
     this.assetB.value = assetB.id;
-    // Native token name (audit 2026-09-07 L-02): derived from the chain's genesis hash on Voi, otherwise the name
-    // configured in the pool provider (stored already trimmed; doCreatePoolToken falls back to 'Algo' when empty).
-    let nativeTokenNameBytes = appBiatecPoolProvider.globalState('nt') as bytes;
-    if ((globals.genesisHash as bytes) === GENESIS_VOI_MAINNET) {
+    // Native token name (audit 2026-09-07 L-02): derived purely from the chain's genesis hash (see the GENESIS_*
+    // constants above), never from BiatecPoolProvider's configurable `nativeTokenName`. This is the raw chain name
+    // ('Algo', 'Voi', 'Aramid', ...) that doCreatePoolToken below turns into the LP asset's name/unit, e.g. the
+    // 'b' + name convention for a native staking pool (assetA == assetB == 0) yields 'bAlgo' on Algorand, 'bVoi' on
+    // Voi and 'bAramid' on Aramid. Algorand mainnet/testnet fall through to the 'Algo' default, as does any chain
+    // not listed here (e.g. localnet), so an unrecognized chain never mints a wrong non-Algo name.
+    const genesisHash = globals.genesisHash as bytes;
+    let nativeTokenNameBytes = 'Algo';
+    if (genesisHash === GENESIS_VOI_MAINNET) {
       nativeTokenNameBytes = 'Voi';
+    } else if (genesisHash === GENESIS_ARAMID_MAINNET) {
+      nativeTokenNameBytes = 'Aramid';
     }
 
     this.assetLp.value = this.doCreatePoolToken(assetA, assetB, nativeTokenNameBytes).id;
@@ -1352,7 +1368,10 @@ export class BiatecClammPool extends Contract {
     );
     // Audit 2026-09-07 L-01: the requested shape is executed exactly or rejected, never silently reshaped.
     // TEALScript cannot forward a dynamic bytes[] as individual application arguments (it would pass the raw array
-    // as a single argument), so the supported argument counts are spelled out and any other count is rejected.
+    // as a single argument), so the supported argument counts are spelled out and any other count is rejected with
+    // E_ARGS instead of being truncated. One and two arguments cover every known caller (the xgov sign-up/vote
+    // scripts in src/bin use two); extend this if a genuine three-argument caller is ever added, mindful of the
+    // approval program's byte budget.
     // Resources (accounts, apps, assets) are available to the inner call through group resource sharing.
     // A request without a payment leads with a zero self-payment so both shapes share one inner group layout.
     let payTo = this.app.address;
@@ -1376,19 +1395,11 @@ export class BiatecClammPool extends Contract {
         fee: fee,
         onCompletion: OnCompletion.NoOp,
       });
-    } else if (appArgs.length === 2) {
+    } else {
+      assert(appArgs.length === 2, 'E_ARGS');
       this.pendingGroup.addAppCall({
         applicationID: targetApp,
         applicationArgs: [appArgs[0], appArgs[1]],
-        note: note,
-        fee: fee,
-        onCompletion: OnCompletion.NoOp,
-      });
-    } else {
-      assert(appArgs.length === 3, 'E_ARGS');
-      this.pendingGroup.addAppCall({
-        applicationID: targetApp,
-        applicationArgs: [appArgs[0], appArgs[1], appArgs[2]],
         note: note,
         fee: fee,
         onCompletion: OnCompletion.NoOp,

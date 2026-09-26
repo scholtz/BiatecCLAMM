@@ -3,9 +3,11 @@
  * "Proxy calls either execute the requested shape or reject clearly"
  *
  * L-01: doAppCall used to forward only when a payment was attached and always forwarded exactly appArgs[0] and
- * appArgs[1]. It now executes one to three arguments exactly, with or without a payment, and rejects other counts
- * with E_ARGS. The target application below records how many arguments it actually received, so target-side effects
- * are verified instead of trusting the outer call's success.
+ * appArgs[1]. It now executes one or two arguments exactly, with or without a payment, and rejects other counts with
+ * E_ARGS instead of truncating them. Two is the only count any known caller (the xgov sign-up/vote scripts in
+ * src/bin) ever uses; a genuine three-argument case would need a new branch, at the cost of approval program bytes.
+ * The target application below records how many arguments it actually received, so target-side effects are verified
+ * instead of trusting the outer call's success.
  *
  * The defects documented here were fixed on 2026-09-26; these tests now guard the fixed behaviour.
  */
@@ -112,18 +114,18 @@ describe('Audit 2026-09-07 L-01 - doAppCall executes the requested shape or reje
     expect(await p.readTarget()).toEqual({ nargs: 2n, counter: 42n });
   });
 
-  test('one and three arguments are forwarded exactly', async () => {
+  test('a single argument is forwarded exactly, with or without payment', async () => {
     const p = await build();
-    await p.proxy(1_000n, [arg(1), arg(2), arg(3)]);
-    expect(await p.readTarget()).toEqual({ nargs: 3n, counter: 1n });
     await p.proxy(0n, [arg(9)]);
     expect(await p.readTarget()).toEqual({ nargs: 1n, counter: 9n });
+    await p.proxy(1_000n, [arg(11)]);
+    expect(await p.readTarget()).toEqual({ nargs: 1n, counter: 11n });
   });
 
   test('unsupported argument counts are rejected and leave the target untouched', async () => {
     const p = await build();
     await p.proxy(1_000n, [arg(5), arg(6)]);
-    await expect(p.proxy(1_000n, [arg(1), arg(2), arg(3), arg(4)])).rejects.toThrow(/E_ARGS/);
+    await expect(p.proxy(1_000n, [arg(1), arg(2), arg(3)])).rejects.toThrow(/E_ARGS/);
     await expect(p.proxy(1_000n, [])).rejects.toThrow(/E_ARGS/);
     expect(await p.readTarget()).toEqual({ nargs: 2n, counter: 5n });
   });

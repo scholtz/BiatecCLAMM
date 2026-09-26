@@ -168,6 +168,13 @@ export class BiatecPoolProvider extends Contract {
 
   // period6 = GlobalStateKey<uint64>({ key: 'p6' });
 
+  /**
+   * Historical native token name configuration. Audit 2026-09-07 L-02: BiatecClammPool.bootstrap no longer reads
+   * this value - the LP token's native name is now derived purely from `globals.genesisHash` inside
+   * BiatecClammPool.algo.ts (see its GENESIS_* constants), so a stale or wrong value here can never mislabel a
+   * pool's LP asset. Kept only so `setNativeTokenName` remains callable for any off-chain consumer that still
+   * reads it; do not reintroduce a read of this field into BiatecClammPool.bootstrap.
+   */
   nativeTokenName = GlobalStateKey<bytes>({ key: 'nt' });
 
   /**
