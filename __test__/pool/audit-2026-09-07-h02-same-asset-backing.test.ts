@@ -7,8 +7,7 @@
  * physical asset must not exceed its spendable holding. In a same-asset (staking) pool both accounting sides
  * (assetABalanceBaseScale and assetBBalanceBaseScale) are claims on ONE physical holding, so they have to be summed.
  *
- * Tests marked `test.failing` document defects confirmed against the current contract. They pass while the defect
- * exists and start failing once it is fixed - at that point switch them to a plain `test`.
+ * The defects documented here were fixed on 2026-09-26; these tests now guard the fixed behaviour.
  */
 import { describe, expect, test } from '@jest/globals';
 import { setupPool, deployer, deployerSigner, SCALE, fixture, algokit } from './shared-setup';
@@ -140,7 +139,7 @@ describe('Audit 2026-09-07 H-02 - aggregate same-asset liabilities remain backed
     expect(rows[0].liabilities).toBeLessThan(10n);
   });
 
-  test.failing('distributeExcessAssets rejects a same-asset allocation that fits each side separately but not their sum (native)', async () => {
+  test('distributeExcessAssets rejects a same-asset allocation that fits each side separately but not their sum (native)', async () => {
     const p = await stakingPool(0n);
     await p.add(deployerSigner, 10n * MICRO, 10n * MICRO);
     const [before] = await p.backing();
@@ -150,7 +149,7 @@ describe('Audit 2026-09-07 H-02 - aggregate same-asset liabilities remain backed
     await expectRejectedOrBacked(() => p.distribute(10n * MICRO * TO_BASE, 0n), p.backing);
   });
 
-  test.failing('distributeExcessAssets rejects a same-asset allocation that fits each side separately but not their sum (ASA)', async () => {
+  test('distributeExcessAssets rejects a same-asset allocation that fits each side separately but not their sum (ASA)', async () => {
     await fixture.newScope();
     const treasury = await fixture.context.generateAccount({ initialFunds: algokit.microAlgos(10_000_000) });
     const tokenId = BigInt(await createToken({ account: treasury, algod: fixture.context.algod, name: 'STK', decimals: 6 }));
@@ -165,7 +164,7 @@ describe('Audit 2026-09-07 H-02 - aggregate same-asset liabilities remain backed
     await expectRejectedOrBacked(() => p.distribute(10n * MICRO * TO_BASE, 0n), p.backing);
   });
 
-  test.failing('withdrawExcessAssets rejects taking native funds that back the other accounting side', async () => {
+  test('withdrawExcessAssets rejects taking native funds that back the other accounting side', async () => {
     const p = await stakingPool(0n);
     await p.add(deployerSigner, 10n * MICRO, 10n * MICRO);
     await p.donate(5n * MICRO); // 5 ALGO of genuine excess
@@ -173,21 +172,21 @@ describe('Audit 2026-09-07 H-02 - aggregate same-asset liabilities remain backed
     await expectRejectedOrBacked(() => p.withdrawExcess(10n * MICRO, 0n), p.backing);
   });
 
-  test.failing('the "distribute everything" sentinel (amountA = 1) books only the true excess of a same-asset pool', async () => {
+  test('the "distribute everything" sentinel (amountA = 1) books only the true excess of a same-asset pool', async () => {
     const p = await stakingPool(0n);
     const { account: second, signer: secondSigner } = await newFundedAccount(p.algod, deployer, 200n * MICRO, []);
     await p.add(deployerSigner, 20n * MICRO, 20n * MICRO);
     await p.add(secondSigner, 80n * MICRO, 80n * MICRO);
     await p.donate(10n * MICRO);
     // documented staking flow: amountA = 1 distributes the whole spendable balance as side A. In a same-asset pool
-    // side B already claims 100 ALGO of that same balance, so the pool ends up owing ~310 ALGO with ~211 on hand.
+    // side B already claims 100 ALGO of that same balance; only the remaining ~11 ALGO may be booked as reward.
     let rejected = false;
     try {
       await p.distribute(1n, 0n);
     } catch {
       rejected = true;
     }
-    if (rejected) return;
+    expect(rejected).toBe(false);
     const [row] = await p.backing();
     // consequence when the aggregate check is missing: the first provider to leave over-collects (fair share is the
     // 40 ALGO principal plus 20% of the 10 ALGO reward = 42 ALGO) and the last one cannot redeem at all
@@ -204,5 +203,7 @@ describe('Audit 2026-09-07 H-02 - aggregate same-asset liabilities remain backed
     console.log(`sentinel distribution: liabilities ${row.liabilities} vs spendable ${row.available}; first exit received ${received} microAlgo (fair ~42000000); second exit ${secondExit}`);
     expect(row.liabilities).toBeLessThanOrEqual(row.available);
     expect(received).toBeLessThanOrEqual(43n * MICRO);
+    expect(received).toBeGreaterThanOrEqual(41n * MICRO);
+    expect(secondExit).toBe('succeeded');
   });
 });

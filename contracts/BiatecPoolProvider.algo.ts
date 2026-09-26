@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { BiatecClammPool } from './BiatecClammPool.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-PP-01-05-03';
+const version = 'BIATEC-PP-01-05-04';
 const SCALE = 1_000_000_000;
 
 type AppPoolInfo = {
@@ -220,7 +220,15 @@ export class BiatecPoolProvider extends Contract {
    * @param appBiatecConfigProvider Biatec amm provider
    */
   bootstrap(appBiatecConfigProvider: AppID): void {
-    assert(this.txn.sender === this.app.creator, 'Only creator of the app can set it up');
+    if (this.appBiatecConfigProvider.exists) {
+      // Audit 2026-09-07 M-02: once set up, only the updater of the currently trusted configuration may reconfigure;
+      // the original creator keeps no residual authority.
+      const currentConfig = this.appBiatecConfigProvider.value as AppID;
+      const addressUdpater = currentConfig.globalState('u') as Address;
+      assert(this.txn.sender === addressUdpater, 'E_UPDATER');
+    } else {
+      assert(this.txn.sender === this.app.creator, 'Only creator of the app can set it up');
+    }
     this.appBiatecConfigProvider.value = appBiatecConfigProvider;
     const paused = appBiatecConfigProvider.globalState('s') as uint64;
     assert(paused === 0, 'ERR_PAUSED'); // services are paused at the moment

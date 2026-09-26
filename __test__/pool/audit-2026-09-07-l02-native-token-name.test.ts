@@ -5,8 +5,7 @@
  * L-02: the pool provider exposes setNativeTokenName, but BiatecClammPool.bootstrap hardcodes 'Algo' when it names
  * the LP token. The existing "custom name" test used the default 'Algo' and therefore could not tell the two apart.
  *
- * Tests marked `test.failing` document defects confirmed against the current contract. They pass while the defect
- * exists and start failing once it is fixed - at that point switch them to a plain `test`.
+ * The defects documented here were fixed on 2026-09-26; these tests now guard the fixed behaviour.
  */
 import { describe, expect, test } from '@jest/globals';
 import { setupPool, SCALE } from './shared-setup';
@@ -37,7 +36,7 @@ describe('Audit 2026-09-07 L-02 - non-default native token names survive pool cr
     expect(decode(state.nativeTokenName)).toBe('Voi');
   });
 
-  test.failing('a native staking pool names its LP token after the configured native token', async () => {
+  test('a native staking pool names its LP token after the configured native token', async () => {
     const ctx = await setupPool({
       assetA: 0n,
       assetB: 0n,
@@ -52,7 +51,7 @@ describe('Audit 2026-09-07 L-02 - non-default native token names survive pool cr
     expect(await lpTokenParams(ctx)).toEqual({ name: 'bVoi', unitName: 'Voi' });
   });
 
-  test.failing('a native/ASA liquidity pool names its LP token after the configured native token', async () => {
+  test('a native/ASA liquidity pool names its LP token after the configured native token', async () => {
     const ctx = await setupPool({
       assetA: 0n,
       biatecFee: 0n,

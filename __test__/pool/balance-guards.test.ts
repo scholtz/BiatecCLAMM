@@ -36,11 +36,16 @@ const getPoolErrorMessage = async (error: any, algod: algosdk.Algodv2) => {
   }
 };
 
+/**
+ * The four codes are runtime parameters of the shared subroutine ensureAssetBalanceMatchesState, so the ARC56 source
+ * map cannot resolve them and the failing program counter is matched instead. Refresh the offsets from the
+ * "assert failed pc=" message whenever BiatecClammPool changes (the ASA and the native assert each have one pc).
+ */
 const ERROR_FRAGMENTS: Record<string, string[]> = {
-  E_A_B: ['pc=1495'],
-  E_B_B: ['pc=1495'],
-  E_A0_B: ['pc=1469'],
-  E_B0_B: ['pc=1469'],
+  E_A_B: ['E_A_B', 'pc=1560'],
+  E_B_B: ['E_B_B', 'pc=1560'],
+  E_A0_B: ['E_A0_B', 'pc=1534'],
+  E_B0_B: ['E_B0_B', 'pc=1534'],
 };
 
 const expectLogicError = async (send: () => Promise<unknown>, algod: algosdk.Algodv2, errorCode: string) => {
@@ -165,7 +170,7 @@ describe('BiatecClammPool - balance guards', () => {
     });
   });
 
-  test('emits E_B0_B when recorded ALGO balanceB exceeds holdings', async () => {
+  test('emits the aggregate E_A0_B when recorded ALGO balanceB exceeds holdings of a same-asset pool', async () => {
     await setAssetAId(0n);
     const { algod } = fixture.context;
     const { clientBiatecClammPoolProvider, clientBiatecConfigProvider } = await setupPool({
@@ -200,7 +205,8 @@ describe('BiatecClammPool - balance guards', () => {
       assetB: 0n,
       amountA: 0n,
       amountB: 10n * BigInt(SCALE),
-      errorCode: 'E_B0_B',
+      // a native pool has asset A == asset B == 0, so both sides are checked as one aggregate claim (audit 2026-09-07 H-02)
+      errorCode: 'E_A0_B',
     });
   });
 });

@@ -2,10 +2,15 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-06-05';
+const version = 'BIATEC-CLAMM-01-06-06';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
+
+// Genesis hash of the Voi mainnet (voimain-v1.0, r20fSQI8gWe/kFZziNonSPCXLwcQmH/nxROvnnueWOk=, fetched from a public
+// algod node on 2026-09-26). The pool derives the native token name from the chain it runs on; every other chain
+// (Algorand mainnet/testnet, localnet) uses the pool provider's configured name, which defaults to 'Algo'.
+const GENESIS_VOI_MAINNET = hex('0xaf6d1f49023c8167bf90567388da2748f0972f0710987fe7c513af9e7b9e58e9');
 const SCALE = 1_000_000_000;
 const s = <uint256>1_000_000_000;
 // const SCALEUINT256 = <uint256>1_000_000_000;
@@ -236,13 +241,13 @@ export class BiatecClammPool extends Contract {
 
     this.assetA.value = assetA.id;
     this.assetB.value = assetB.id;
-    // let nativeTokenNameBytes = appBiatecPoolProvider.globalState('nt') as bytes;
-    // if (nativeTokenNameBytes.length >= 2 && substring3(nativeTokenNameBytes, 0, 1) === '\x00') {
-    //   nativeTokenNameBytes = substring3(nativeTokenNameBytes, 2, nativeTokenNameBytes.length);
-    // }
-    // if (nativeTokenNameBytes.length === 0) {
-    const nativeTokenNameBytes = 'Algo';
-    // }
+    // Native token name (audit 2026-09-07 L-02): derived from the chain's genesis hash on Voi, otherwise the name
+    // configured in the pool provider (stored already trimmed; doCreatePoolToken falls back to 'Algo' when empty).
+    //let nativeTokenNameBytes = appBiatecPoolProvider.globalState('nt') as bytes;
+    let nativeTokenNameBytes = 'Algo';
+    if ((globals.genesisHash as bytes) === GENESIS_VOI_MAINNET) {
+      nativeTokenNameBytes = 'Voi';
+    }
 
     this.assetLp.value = this.doCreatePoolToken(assetA, assetB, nativeTokenNameBytes).id;
     this.fee.value = fee;
@@ -371,7 +376,8 @@ export class BiatecClammPool extends Contract {
 
   private ensureAssetBalanceMatchesState(assetId: uint64, scaleFromBase: uint256, recorded: uint256, errorNative: string, errorAsa: string): void {
     if (assetId === <uint64>0) {
-      const nativeAvailable = ((this.app.address.balance - <uint64>1_000_000) as uint256) * scaleFromBase;
+      // spendable native balance: everything above the account's real minimum balance (consistent reserve policy)
+      const nativeAvailable = ((this.app.address.balance - this.app.address.minBalance) as uint256) * scaleFromBase;
       assert(nativeAvailable >= recorded, errorNative);
     } else {
       const assetRef = AssetID.fromUint64(assetId);
@@ -381,8 +387,14 @@ export class BiatecClammPool extends Contract {
   }
 
   private ensurePoolBalancesWithinHoldings(assetAId: uint64, assetBId: uint64): void {
-    this.ensureAssetBalanceMatchesState(assetAId, this.assetADecimalsScaleFromBase.value, this.assetABalanceBaseScale.value, 'E_A0_B', 'E_A_B');
-    this.ensureAssetBalanceMatchesState(assetBId, this.assetBDecimalsScaleFromBase.value, this.assetBBalanceBaseScale.value, 'E_B0_B', 'E_B_B');
+    if (assetAId === assetBId) {
+      // Same-asset (staking) pool: both accounting sides are claims on ONE physical holding, so their sum must be
+      // backed (audit 2026-09-07 H-02). Both sides share the same decimal scale in this case.
+      this.ensureAssetBalanceMatchesState(assetAId, this.assetADecimalsScaleFromBase.value, this.assetABalanceBaseScale.value + this.assetBBalanceBaseScale.value, 'E_A0_B', 'E_A_B');
+    } else {
+      this.ensureAssetBalanceMatchesState(assetAId, this.assetADecimalsScaleFromBase.value, this.assetABalanceBaseScale.value, 'E_A0_B', 'E_A_B');
+      this.ensureAssetBalanceMatchesState(assetBId, this.assetBDecimalsScaleFromBase.value, this.assetBBalanceBaseScale.value, 'E_B0_B', 'E_B_B');
+    }
   }
 
   /**
@@ -991,7 +1003,7 @@ export class BiatecClammPool extends Contract {
         realSwapBDecimals = realSwapBDecimals - <uint256>1; // rounding issue.. do not allow the LP to bleed
         realSwapBaseDecimals = realSwapBDecimals * this.assetBDecimalsScaleFromBase.value;
       }
-      let toSwapBDecimals = realSwapBDecimals as uint64;
+      const toSwapBDecimals = realSwapBDecimals as uint64;
       ret = toSwapBDecimals;
       if (minimumToReceive > 0) {
         // if minimumToReceive == 0, do not restrict the price
@@ -1038,7 +1050,7 @@ export class BiatecClammPool extends Contract {
         realSwapADecimals = realSwapADecimals - <uint256>1; // rounding issue.. do not allow the LP to bleed
         realSwapBaseDecimals = realSwapADecimals * this.assetADecimalsScaleFromBase.value;
       }
-      let toSwapADecimals = realSwapADecimals as uint64;
+      const toSwapADecimals = realSwapADecimals as uint64;
       ret = toSwapADecimals;
       if (minimumToReceive > 0) {
         // if minimumToReceive == 0, do not restrict the price
@@ -1169,20 +1181,28 @@ export class BiatecClammPool extends Contract {
     );
     let distributedAmountA = this.assetABalanceBaseScale.value + amountA;
     let distributedAmountB = this.assetBBalanceBaseScale.value + amountB;
+    const isSameAssetPool = assetA.id === assetB.id;
     if (amountA === <uint256>1) {
       // special case for asset A to distribute all available balance
       if (assetA.id === <uint64>0) {
-        distributedAmountA = ((this.app.address.balance - <uint64>1_000_000) as uint256) * this.assetADecimalsScaleFromBase.value;
+        distributedAmountA = ((this.app.address.balance - this.app.address.minBalance) as uint256) * this.assetADecimalsScaleFromBase.value;
       } else {
         distributedAmountA = (this.app.address.assetBalance(assetA) as uint256) * this.assetADecimalsScaleFromBase.value;
+      }
+      if (isSameAssetPool) {
+        // the same holding also backs side B (audit 2026-09-07 H-02); underflow rejects an over-booked pool
+        distributedAmountA = distributedAmountA - this.assetBBalanceBaseScale.value;
       }
     }
     if (amountB === <uint256>1) {
       // special case for asset B to distribute all available balance
       if (assetB.id === <uint64>0) {
-        distributedAmountB = ((this.app.address.balance - <uint64>1_000_000) as uint256) * this.assetBDecimalsScaleFromBase.value;
+        distributedAmountB = ((this.app.address.balance - this.app.address.minBalance) as uint256) * this.assetBDecimalsScaleFromBase.value;
       } else {
         distributedAmountB = (this.app.address.assetBalance(assetB) as uint256) * this.assetBDecimalsScaleFromBase.value;
+      }
+      if (isSameAssetPool) {
+        distributedAmountB = distributedAmountB - distributedAmountA;
       }
     }
 
@@ -1315,65 +1335,51 @@ export class BiatecClammPool extends Contract {
       this.txn.sender === addressExecutiveFee,
       'E_SENDER' // 'Only fee executor setup in the config can take the collected fees'
     );
-    if (appCallParams.payAmount > 0 && apps.length === 0 && assets.length === 0 && accounts.length === 0) {
-      this.pendingGroup.addPayment({
-        receiver: Address.fromBytes(appCallParams.payToAddress),
-        amount: appCallParams.payAmount,
-        fee: 0,
-        isFirstTxn: true,
-      });
-      this.pendingGroup.addAppCall({
-        applicationID: appCallParams.applicationID,
-        applicationArgs: [appArgs[0], appArgs[1]],
-        note: appCallParams.note,
-        fee: appCallParams.fee,
-        onCompletion: OnCompletion.NoOp,
-      });
-      this.pendingGroup.submit();
-    } else if (appCallParams.payAmount > 0) {
-      this.pendingGroup.addPayment({
-        receiver: Address.fromBytes(appCallParams.payToAddress),
-        amount: appCallParams.payAmount,
-        fee: 0,
-        isFirstTxn: true,
-      });
-      this.pendingGroup.addAppCall({
-        applicationID: appCallParams.applicationID,
-        accounts: accounts,
-        applicationArgs: [appArgs[0], appArgs[1]],
-        applications: apps,
-        assets: assets,
-        note: appCallParams.note,
-        fee: appCallParams.fee,
-        onCompletion: OnCompletion.NoOp,
-      });
-      this.pendingGroup.submit();
+    // Audit 2026-09-07 L-01: the requested shape is executed exactly or rejected, never silently reshaped.
+    // TEALScript cannot forward a dynamic bytes[] as individual application arguments (it would pass the raw array
+    // as a single argument), so the supported argument counts are spelled out and any other count is rejected.
+    // Resources (accounts, apps, assets) are available to the inner call through group resource sharing.
+    // A request without a payment leads with a zero self-payment so both shapes share one inner group layout.
+    let payTo = this.app.address;
+    if (appCallParams.payAmount > 0) {
+      payTo = Address.fromBytes(appCallParams.payToAddress);
     }
-    // else if (apps.length === 0 && assets.length === 0) {
-    //   this.pendingGroup.addAppCall({
-    //     applicationID: appCallParams.applicationID,
-    //     accounts: accounts,
-    //     applicationArgs: appArgs,
-    //     note: appCallParams.note,
-    //     fee: appCallParams.fee,
-    //     onCompletion: OnCompletion.NoOp,
-    //     isFirstTxn: true,
-    //   });
-    //   this.pendingGroup.submit();
-    // } else {
-    //   this.pendingGroup.addAppCall({
-    //     applicationID: appCallParams.applicationID,
-    //     accounts: accounts,
-    //     applicationArgs: appArgs,
-    //     applications: apps,
-    //     assets: assets,
-    //     note: appCallParams.note,
-    //     fee: appCallParams.fee,
-    //     onCompletion: OnCompletion.NoOp,
-    //     isFirstTxn: true,
-    //   });
-    //   this.pendingGroup.submit();
-    // }
+    const targetApp = appCallParams.applicationID;
+    const note = appCallParams.note;
+    const fee = appCallParams.fee;
+    this.pendingGroup.addPayment({
+      receiver: payTo,
+      amount: appCallParams.payAmount,
+      fee: 0,
+      isFirstTxn: true,
+    });
+    if (appArgs.length === 1) {
+      this.pendingGroup.addAppCall({
+        applicationID: targetApp,
+        applicationArgs: [appArgs[0]],
+        note: note,
+        fee: fee,
+        onCompletion: OnCompletion.NoOp,
+      });
+    } else if (appArgs.length === 2) {
+      this.pendingGroup.addAppCall({
+        applicationID: targetApp,
+        applicationArgs: [appArgs[0], appArgs[1]],
+        note: note,
+        fee: fee,
+        onCompletion: OnCompletion.NoOp,
+      });
+    } else {
+      assert(appArgs.length === 3, 'E_ARGS');
+      this.pendingGroup.addAppCall({
+        applicationID: targetApp,
+        applicationArgs: [appArgs[0], appArgs[1], appArgs[2]],
+        note: note,
+        fee: fee,
+        onCompletion: OnCompletion.NoOp,
+      });
+    }
+    this.pendingGroup.submit();
     // it is OK to check this after the tx as on AVM the whole transaction call must be executed and must succeed in order to write it to the blockchain
     this.ensurePoolBalancesWithinHoldings(this.assetA.value, this.assetB.value);
   }

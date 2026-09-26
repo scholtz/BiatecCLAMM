@@ -55,18 +55,18 @@ This directory contains the organized test suite for the BiatecCLAMM pool functi
 
 ### Audit 2026-09-07 acceptance tests
 
-Derived from the "Missing Test Scenarios" table of `audits/2026-09-07-audit-report-ai-github-copilot.md`.
-Tests declared with `test.failing` pin a defect that is confirmed against the current contracts: they pass while the
-defect exists and start failing once it is fixed, at which point they must be switched to a plain `test`.
+Derived from the "Missing Test Scenarios" table of `audits/2026-09-07-audit-report-ai-github-copilot.md`. The
+defects they uncovered (H-02, M-02, L-01, L-02) were fixed in the contracts on 2026-09-26; the tests now guard the
+fixed behaviour.
 
 - **audit-2026-09-07-helpers.ts** - shared helpers (pool accounting reader, aggregate backing check, funded accounts, identity records)
 - **audit-2026-09-07-h01-lp-entitlement.test.ts** (2 tests) - LP minting never exceeds the conservative entitlement, also with pre-existing fee liquidity; sub-unit deposits are rejected atomically
-- **audit-2026-09-07-h02-same-asset-backing.test.ts** (5 tests, 4 `failing`) - aggregate liabilities of same-asset (staking) pools versus the single physical holding across add / distribute / withdrawExcess / remove
-- **audit-2026-09-07-m02-provider-authority.test.ts** (4 tests, 2 `failing`) - creator versus updater authority after `setAddressUdpater` rotation
+- **audit-2026-09-07-h02-same-asset-backing.test.ts** (5 tests) - aggregate liabilities of same-asset (staking) pools versus the single physical holding across add / distribute / withdrawExcess / remove, including the `amountA = 1` "distribute everything" sentinel
+- **audit-2026-09-07-m02-provider-authority.test.ts** (4 tests) - creator versus updater authority after `setAddressUdpater` rotation; re-running a provider `bootstrap` requires the current config updater (`E_UPDATER`)
 - **audit-2026-09-07-m03-identity-policy.test.ts** (4 tests) - pause, locked identity, verification class and the (not enforced) identity expiry
-- **audit-2026-09-07-l01-doAppCall-shapes.test.ts** (4 tests, 3 `failing`) - proxy call shapes verified on the target application
-- **audit-2026-09-07-l02-native-token-name.test.ts** (3 tests, 2 `failing`) - non-default native token name in LP token metadata
-- **../audit-2026-09-07-l03-optin-sender.test.ts** (2 tests, 1 `failing`) - SDK unit test of the LP opt-in decision in `clammAddLiquiditySender`
+- **audit-2026-09-07-l01-doAppCall-shapes.test.ts** (4 tests) - proxy call shapes verified on the target application: one to three arguments, with or without payment, other counts rejected with `E_ARGS`
+- **audit-2026-09-07-l02-native-token-name.test.ts** (3 tests) - non-default native token name in LP token metadata (on localnet the pool provider's configured name is used; on Voi mainnet the pool derives `Voi` from the genesis hash)
+- **../audit-2026-09-07-l03-optin-sender.test.ts** (2 tests, 1 `failing`) - SDK unit test of the LP opt-in decision in `clammAddLiquiditySender`; the `test.failing` case pins the still open L-03 defect and must be switched to `test` once fixed
 
 ### Supporting Files
 

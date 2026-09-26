@@ -5,12 +5,11 @@
  * Acceptance criterion from M-02: after setup and authority rotation, the retired creator cannot change provider
  * configuration or identity roles; the documented current authority can perform supported changes.
  *
- * Tests marked `test.failing` document defects confirmed against the current contracts. They pass while the defect
- * exists and start failing once it is fixed - at that point switch them to a plain `test`.
+ * The defects documented here were fixed on 2026-09-26; these tests now guard the fixed behaviour.
  */
 import { describe, expect, test } from '@jest/globals';
 import { setupPool, deployer, SCALE, AlgorandClient, BiatecConfigProviderFactory } from './shared-setup';
-import { decodeStateBytes as decodeName, expectLogicError, newFundedAccount } from './audit-2026-09-07-helpers';
+import { decodeStateBytes as decodeName, expectLogicError, newFundedAccount, signerFor } from './audit-2026-09-07-helpers';
 
 const standardPool = () =>
   setupPool({
@@ -22,7 +21,7 @@ const standardPool = () =>
     p2: BigInt(SCALE),
   });
 
-const NOT_AUTHORIZED = /Only creator|Only addressUdpater|Only updater|assert failed|logic eval error|rejected/;
+const NOT_AUTHORIZED = /E_UPDATER|Only creator|Only addressUdpater|Only updater|assert failed|logic eval error|rejected/;
 
 describe('Audit 2026-09-07 M-02 - provider bootstrap authority after governance handover', () => {
   test('accounts other than the creator can never (re)bootstrap the providers', async () => {
@@ -80,7 +79,7 @@ describe('Audit 2026-09-07 M-02 - provider bootstrap authority after governance 
     await clientBiatecConfigProvider.appClient.send.setPaused({ args: { a: 0n }, sender: newUpdater.addr, signer: signer.signer });
   });
 
-  test.failing('a retired creator cannot re-point the pool provider at a different configuration', async () => {
+  test('a retired creator cannot re-point the pool provider at a different configuration', async () => {
     const { algod, clientBiatecPoolProvider, clientBiatecConfigProvider } = await standardPool();
     const originalConfigId = BigInt(clientBiatecConfigProvider.appClient.appId);
     const { account: newUpdater } = await newFundedAccount(algod, deployer, 5_000_000n, []);
@@ -97,44 +96,35 @@ describe('Audit 2026-09-07 M-02 - provider bootstrap authority after governance 
     const rogueConfigId = BigInt(rogue.appClient.appId);
     expect(rogueConfigId).not.toBe(originalConfigId);
 
-    // ... and re-runs bootstrap, which only checks the app creator, not the current updater
-    let rejected = false;
-    try {
-      await clientBiatecPoolProvider.appClient.send.bootstrap({ args: { appBiatecConfigProvider: rogueConfigId } });
-    } catch {
-      rejected = true;
-    }
-    if (!rejected) {
-      const state = await clientBiatecPoolProvider.appClient.state.global.getAll();
-      // the pool provider must still trust the governance-approved configuration
-      expect(BigInt(state.appBiatecConfigProvider ?? 0n)).toBe(originalConfigId);
-    }
+    // ... and re-runs bootstrap: after setup only the updater of the currently trusted configuration may do that
+    await expectLogicError(() => clientBiatecPoolProvider.appClient.send.bootstrap({ args: { appBiatecConfigProvider: rogueConfigId } }), /E_UPDATER/);
+    const state = await clientBiatecPoolProvider.appClient.state.global.getAll();
+    // the pool provider still trusts the governance-approved configuration
+    expect(BigInt(state.appBiatecConfigProvider ?? 0n)).toBe(originalConfigId);
   });
 
-  test.failing('a retired creator cannot overwrite the identity provider roles', async () => {
+  test('a retired creator cannot overwrite the identity provider roles', async () => {
     const { algod, clientBiatecIdentityProvider, clientBiatecConfigProvider } = await standardPool();
     const configId = clientBiatecConfigProvider.appClient.appId;
     const { account: newUpdater } = await newFundedAccount(algod, deployer, 5_000_000n, []);
     const { account: stranger } = await newFundedAccount(algod, deployer, 1_000_000n, []);
     await clientBiatecConfigProvider.appClient.send.setAddressUdpater({ args: { a: newUpdater.addr.toString() } });
 
-    let rejected = false;
-    try {
-      await clientBiatecIdentityProvider.appClient.send.bootstrap({
-        args: {
-          appBiatecConfigProvider: configId,
-          governor: stranger.addr.toString(),
-          verificationSetter: stranger.addr.toString(),
-          engagementSetter: stranger.addr.toString(),
-        },
-      });
-    } catch {
-      rejected = true;
-    }
-    if (!rejected) {
-      const state = await clientBiatecIdentityProvider.appClient.state.global.getAll();
-      expect(String(state.engagementSetter)).toBe(deployer.addr.toString());
-      expect(String(state.governor)).toBe(deployer.addr.toString());
-    }
+    const roles = {
+      appBiatecConfigProvider: configId,
+      governor: stranger.addr.toString(),
+      verificationSetter: stranger.addr.toString(),
+      engagementSetter: stranger.addr.toString(),
+    };
+    await expectLogicError(() => clientBiatecIdentityProvider.appClient.send.bootstrap({ args: roles }), /E_UPDATER/);
+    const state = await clientBiatecIdentityProvider.appClient.state.global.getAll();
+    expect(String(state.engagementSetter)).toBe(deployer.addr.toString());
+    expect(String(state.governor)).toBe(deployer.addr.toString());
+
+    // the documented current authority can rotate the roles
+    const updaterSigner = signerFor(newUpdater);
+    await clientBiatecIdentityProvider.appClient.send.bootstrap({ args: roles, sender: newUpdater.addr, signer: updaterSigner.signer });
+    const rotated = await clientBiatecIdentityProvider.appClient.state.global.getAll();
+    expect(String(rotated.engagementSetter)).toBe(stranger.addr.toString());
   });
 });

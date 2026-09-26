@@ -1,7 +1,7 @@
 import { Contract } from '@algorandfoundation/tealscript';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-IDENT-01-03-01';
+const version = 'BIATEC-IDENT-01-03-02';
 const SCALE = 1_000_000_000;
 
 type IdentityInfo = {
@@ -212,7 +212,15 @@ export class BiatecIdentityProvider extends Contract {
    * @param appBiatecConfigProvider Biatec amm provider
    */
   bootstrap(appBiatecConfigProvider: AppID, governor: Address, verificationSetter: Address, engagementSetter: Address): void {
-    assert(this.txn.sender === this.app.creator, 'Only creator of the app can set it up');
+    if (this.appBiatecConfigProvider.exists) {
+      // Audit 2026-09-07 M-02: once set up, only the updater of the currently trusted configuration may change the
+      // configuration reference or the role addresses; the original creator keeps no residual authority.
+      const currentConfig = this.appBiatecConfigProvider.value as AppID;
+      const addressUdpater = currentConfig.globalState('u') as Address;
+      assert(this.txn.sender === addressUdpater, 'E_UPDATER');
+    } else {
+      assert(this.txn.sender === this.app.creator, 'Only creator of the app can set it up');
+    }
     this.appBiatecConfigProvider.value = appBiatecConfigProvider;
     this.governor.value = governor;
     this.verificationSetter.value = verificationSetter;
@@ -273,6 +281,7 @@ export class BiatecIdentityProvider extends Contract {
     assert(info.feeMultiplier === ((2 * SCALE) as uint64), 'Initial fee multiplier must be set to 2 * SCALE');
     this.identities(user).value = info;
   }
+
   /**
    * This method can set fees, verification class, engagement class .. Only engagementSetter is allowed to execute this method.
    * @param user User address to set info for

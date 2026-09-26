@@ -2,12 +2,12 @@
  * Audit 2026-09-07, missing test scenario (Low):
  * "Proxy calls either execute the requested shape or reject clearly"
  *
- * L-01: doAppCall only forwards when a payment is attached and always forwards exactly appArgs[0] and appArgs[1].
- * The target application below records how many arguments it actually received, so target-side effects are verified
- * instead of trusting the outer call's success.
+ * L-01: doAppCall used to forward only when a payment was attached and always forwarded exactly appArgs[0] and
+ * appArgs[1]. It now executes one to three arguments exactly, with or without a payment, and rejects other counts
+ * with E_ARGS. The target application below records how many arguments it actually received, so target-side effects
+ * are verified instead of trusting the outer call's success.
  *
- * Tests marked `test.failing` document defects confirmed against the current contract. They pass while the defect
- * exists and start failing once it is fixed - at that point switch them to a plain `test`.
+ * The defects documented here were fixed on 2026-09-26; these tests now guard the fixed behaviour.
  */
 import { describe, expect, test } from '@jest/globals';
 import { setupPool, SCALE, algosdk, algokit, makePaymentTxnWithSuggestedParamsFromObject } from './shared-setup';
@@ -106,48 +106,25 @@ describe('Audit 2026-09-07 L-01 - doAppCall executes the requested shape or reje
     expect(await p.readTarget()).toEqual({ nargs: 2n, counter: 7n });
   });
 
-  test.failing('a request without payment either reaches the target or is rejected, never silently dropped', async () => {
+  test('a request without payment reaches the target instead of being silently dropped', async () => {
     const p = await build();
-    let rejected = false;
-    try {
-      await p.proxy(0n, [arg(42), arg(42)]);
-    } catch {
-      rejected = true;
-    }
-    if (!rejected) {
-      // the outer call succeeded, so the target must have been invoked
-      expect(await p.readTarget()).toEqual({ nargs: 2n, counter: 42n });
-    }
+    await p.proxy(0n, [arg(42), arg(42)]);
+    expect(await p.readTarget()).toEqual({ nargs: 2n, counter: 42n });
   });
 
-  test.failing('all supplied arguments are forwarded, not only the first two', async () => {
+  test('one and three arguments are forwarded exactly', async () => {
     const p = await build();
-    let rejected = false;
-    try {
-      await p.proxy(1_000n, [arg(1), arg(2), arg(3)]);
-    } catch {
-      rejected = true;
-    }
-    if (!rejected) {
-      expect((await p.readTarget()).nargs).toBe(3n);
-    }
+    await p.proxy(1_000n, [arg(1), arg(2), arg(3)]);
+    expect(await p.readTarget()).toEqual({ nargs: 3n, counter: 1n });
+    await p.proxy(0n, [arg(9)]);
+    expect(await p.readTarget()).toEqual({ nargs: 1n, counter: 9n });
   });
 
-  test.failing('a single-argument request is forwarded as one argument or rejected, never padded', async () => {
+  test('unsupported argument counts are rejected and leave the target untouched', async () => {
     const p = await build();
     await p.proxy(1_000n, [arg(5), arg(6)]);
-    let rejected = false;
-    try {
-      await p.proxy(1_000n, [arg(9)]);
-    } catch {
-      rejected = true;
-    }
-    if (rejected) {
-      expect(await p.readTarget()).toEqual({ nargs: 2n, counter: 5n });
-    } else {
-      // the contract reads appArgs[1] past the end of the array; today this yields an empty byte string and the
-      // target receives two arguments instead of one
-      expect(await p.readTarget()).toEqual({ nargs: 1n, counter: 9n });
-    }
+    await expect(p.proxy(1_000n, [arg(1), arg(2), arg(3), arg(4)])).rejects.toThrow(/E_ARGS/);
+    await expect(p.proxy(1_000n, [])).rejects.toThrow(/E_ARGS/);
+    expect(await p.readTarget()).toEqual({ nargs: 2n, counter: 5n });
   });
 });
