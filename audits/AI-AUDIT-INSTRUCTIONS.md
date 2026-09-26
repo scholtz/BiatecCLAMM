@@ -23,6 +23,19 @@ Before conducting the audit, ensure you have:
 
 ## Audit Preparation
 
+### Independence, Evidence, and Safety
+
+- For a fresh audit, do not open prior reports, finding summaries, or historical reproduction tests as discovery material. Derive findings from the current implementation; disclose any findings or tests supplied in the request as prior exposure.
+- Record the initial worktree status, exact revision, tool versions, commands, and reviewed file boundaries. A commit hash alone does not identify uncommitted source changes.
+- Identify the assistant truthfully. If the underlying model/version is unavailable, say so instead of guessing.
+- Keep contract fixes separate from the audit unless explicitly requested. Never hand-edit generated clients or revert pre-existing changes.
+- Use isolated LocalNet accounts only. Do not access production funds, print secrets, reset a shared LocalNet without approval, or execute exploit reproductions. Prefer defensive invariant checks and remediation-oriented analysis.
+- For every finding, record the violated invariant, source location, prerequisites, impact, confidence, and remediation. Distinguish static evidence, fresh runtime observations, supplied evidence, and unverified hypotheses.
+- Assess severity from demonstrated impact and reachable conditions, not a vulnerability label alone. Distinguish authorized governance powers from authorization defects and transaction rejection from state corruption.
+- Maintain a coverage matrix. Explicitly mark partially reviewed and unreviewed components, skipped tests, environmental blockers, and unresolved assumptions. A partial test run must never be described as a full-suite pass.
+- Bytecode hashes identify artifacts only. Record whether compilation succeeded and whether hashes came from fresh or pre-existing artifacts; do not claim source-to-bytecode or deployment equivalence without independently checking it.
+- The hash helper logs missing or malformed artifacts without necessarily failing the process. Verify that every expected artifact has both hashes before declaring this gate complete.
+
 ### 1. Document Your Identity
 
 At the start of the audit report, clearly document:
@@ -55,7 +68,7 @@ Run the following command to generate the bytecode hashes:
 npm run compute-bytecode-hashes
 ```
 
-Copy the output directly into the "Contract Bytecode Hashes" section of the audit template. These hashes verify that the audit was performed on the exact bytecode that was reviewed.
+Record the output in the "Contract Bytecode Hashes" section of the audit template. These hashes fingerprint the artifacts; they do not prove that the source, compiled program, and deployed application are equivalent. Compute them after the fresh build and disclose the installed compiler version, dependency-range mismatches, and any fallback hash command.
 
 ### 3. Run the Full Test Suite (MANDATORY)
 
@@ -85,7 +98,7 @@ Record in the audit report:
 
 If the suite cannot be run (for example, no LocalNet is available), this MUST be stated explicitly in the report's "Verification Notes / Limitations" section, together with the reason. An audit that silently skips the tests is considered incomplete.
 
-### 2. Repository Context Gathering
+### 4. Repository Context Gathering
 
 Execute these steps in order:
 
@@ -104,7 +117,7 @@ find __test__ -name "*.test.ts" -exec wc -l {} + | tail -1
 
 ---
 
-### 3. Audit report naming structure
+### 5. Audit report naming structure
 
 Write audit to folder audits.
 
@@ -119,7 +132,6 @@ File name must contain date, context, ai to identify ai audit, and model name. `
 Review each contract file systematically:
 
 1. **BiatecClammPool.algo.ts** (Main AMM logic - ~2100 lines)
-
    - Liquidity management functions
    - Swap calculations
    - Fee accounting
@@ -128,13 +140,11 @@ Review each contract file systematically:
    - Staking pool support
 
 2. **BiatecConfigProvider.algo.ts** (~200 lines)
-
    - Configuration management
    - Fee parameters
    - Administrative controls
 
 3. **BiatecIdentityProvider.algo.ts** (~450 lines)
-
    - Identity verification
    - KYC/compliance integration
    - Verification class management
@@ -192,14 +202,12 @@ Review each contract file systematically:
 Review transaction builders and helper functions:
 
 1. **Transaction Builders** (`src/biatecClamm/txs/`)
-
    - [ ] Parameter validation
    - [ ] Transaction group construction
    - [ ] Box reference inclusion
    - [ ] App call resource population
 
 2. **Sender Functions** (`src/biatecClamm/sender/`)
-
    - [ ] Error handling
    - [ ] State fetching
    - [ ] Transaction signing
@@ -250,14 +258,12 @@ npm run test -- --coverage
 Review all documentation for:
 
 1. **Completeness**:
-
    - [ ] All features documented
    - [ ] API documentation clear
    - [ ] Examples provided
    - [ ] Security considerations mentioned
 
 2. **Accuracy**:
-
    - [ ] Code matches documentation
    - [ ] Examples are correct
    - [ ] Warnings are appropriate
@@ -282,6 +288,8 @@ Use this checklist to systematically identify vulnerabilities:
 - [ ] **Division by Zero**: Are denominators validated before division?
 - [ ] **Access Control**: Are privileged functions properly protected?
 - [ ] **State Consistency**: Can state become inconsistent?
+- [ ] **Initialization Lifecycle**: Is bootstrap one-shot, and does authority rotation retire all intended deployment privileges?
+- [ ] **Signed Output Bounds**: Can callers bind minimum outputs for deposits and withdrawals as well as swaps?
 - [ ] **Asset Safety**: Are asset transfers always correct?
 - [ ] **Price Manipulation**: Can prices be manipulated?
 - [ ] **Flash Loan Attacks**: Is the protocol vulnerable to flash loans?
@@ -294,6 +302,9 @@ Use this checklist to systematically identify vulnerabilities:
 - [ ] **App Call Resources**: Are all resources properly referenced?
 - [ ] **Transaction Groups**: Are groups atomic and properly ordered?
 - [ ] **Minimum Balance**: Are minimum balance requirements enforced?
+- [ ] **Physical Asset Backing**: For same-asset pools, do total liabilities across both accounting sides fit within the single physical holding?
+- [ ] **Privileged Spending**: Do payments and inner fees preserve recorded backing and the native reserve policy?
+- [ ] **Pause Matrix**: Are paused behavior and emergency exceptions defined and checked for every mutating method?
 - [ ] **Opt-In Requirements**: Are asset opt-ins handled correctly?
 - [ ] **Inner Transactions**: Are inner transaction limits respected?
 - [ ] **Global State Limits**: Are global state size limits considered?
@@ -434,14 +445,12 @@ Follow the audit template structure exactly:
 ### Static Analysis
 
 1. **Code Flow Analysis**:
-
    - Trace execution paths
    - Identify all exit points
    - Map state changes
    - Document side effects
 
 2. **Data Flow Analysis**:
-
    - Track variable lifecycle
    - Identify data dependencies
    - Check validation at boundaries
@@ -457,14 +466,12 @@ Follow the audit template structure exactly:
 For AMM calculations:
 
 1. **Verify Formulas**:
-
-   - Concentrated liquidity formula: `L = sqrt(x * y)`
-   - Price calculation: `price = y/x`
+   - Derive the implemented invariant for fixed-price, bounded-price, and same-asset pools separately. `L = sqrt(x * y)` describes the unshifted constant-product case, not general concentrated liquidity.
+   - Derive price using the appropriate virtual reserves and decimal scales; do not assume raw `y/x` applies to bounded-price pools.
    - Fee distribution formulas
    - LP minting quadratic equation
 
 2. **Check Invariants**:
-
    - Liquidity should never decrease from fees alone
    - Price should stay within bounds
    - Total LP supply should match distributed tokens
@@ -480,14 +487,12 @@ For AMM calculations:
 Consider these attack scenarios:
 
 1. **Economic Attacks**:
-
    - Sandwich attacks
    - Price manipulation
    - Fee harvesting
    - LP token dilution
 
 2. **Technical Attacks**:
-
    - Reentrancy
    - Overflow/underflow
    - State inconsistency
@@ -618,22 +623,18 @@ Questions to ask:
 ### Algorand-Specific
 
 1. **Box Reference Missing**:
-
    - Check that all box accesses have corresponding references
    - Verify box name construction is consistent
 
 2. **App Reference Missing**:
-
    - Verify all cross-app calls include app references
    - Check foreign app array is populated
 
 3. **Asset Opt-In**:
-
    - Confirm contracts opt into assets before receiving
    - Handle duplicate opt-in attempts
 
 4. **Inner Transaction Budget**:
-
    - Count total inner transactions
    - Verify within Algorand limits (256 per group)
 
@@ -644,12 +645,10 @@ Questions to ask:
 ### TEALScript-Specific
 
 1. **Type Conversions**:
-
    - Check uint64 ↔ uint256 conversions
    - Verify no precision loss
 
 2. **Assert Statements**:
-
    - Ensure all asserts are reachable
    - Check error messages are meaningful
 
@@ -660,12 +659,10 @@ Questions to ask:
 ### General DeFi
 
 1. **Price Oracle Manipulation**:
-
    - Check if external price sources can be manipulated
    - Verify internal price calculation integrity
 
 2. **Flash Loan Attacks**:
-
    - Consider attacks enabled by temporary capital
    - Verify atomic transaction protection
 
@@ -713,52 +710,32 @@ Before submitting the audit:
 ## Example Finding Format
 
 ```markdown
-### [H-01] Potential Integer Overflow in Liquidity Calculation
+### [ID] Finding Title
 
-**Severity**: High
-**Status**: Open
-**Component**: BiatecClammPool
-**File**: contracts/BiatecClammPool.algo.ts:456
+**Severity**: Impact-based rating with justification
+**Status**: Open / policy clarification / resolved with evidence
+**Confidence**: Static evidence / runtime observation / unverified hypothesis
+**Location**: Verified source path, symbol, and current line number
 
-**Description**:
-The function `calculateLiquidityForDeposit()` multiplies two uint256 values
-without checking for overflow. When both assetA and assetB amounts are near
-their maximum values, the intermediate calculation can overflow, leading to
-incorrect liquidity values.
+**Invariant**: State the intended property and its units.
 
-**Impact**:
-An attacker could potentially exploit this by providing specific input values
-that cause overflow, resulting in:
+**Evidence**: Trace the current implementation and relevant guards. Identify
+which statements were observed at runtime and which follow only from source.
+For arithmetic issues, establish reachable input bounds and whether the AVM
+rejects, truncates, or otherwise transforms the intermediate result. Do not
+equate a rejected atomic group with committed state corruption.
 
-- Incorrect LP token minting
-- Loss of funds for other liquidity providers
-- Pool state corruption
+**Prerequisites and Impact**: Identify required privileges, state, supported
+asset characteristics, and trust assumptions. Do not invent loss estimates.
 
-**Proof of Concept**:
-\`\`\`typescript
-// When assetAAmount and assetBAmount are both > 2^128
-const liquidity = assetAAmount \* assetBAmount; // This can overflow
-const sqrtLiquidity = sqrt(liquidity); // Operating on wrong value
-\`\`\`
+**Recommendation**: Give a concrete corrective invariant or validation rule,
+including compatibility and generated-client implications where relevant.
 
-**Recommendation**:
+**Defensive Acceptance Criteria**: Specify allowed/rejected behavior and
+post-state assertions using isolated fixtures, without exploit instructions.
 
-1. Add overflow checks before multiplication
-2. Use safe math libraries for uint256 operations
-3. Consider splitting large calculations into multiple steps
-4. Add assertion to verify result is within expected range
-
-Example fix:
-\`\`\`typescript
-assert(assetAAmount <= MAX_SAFE_UINT128);
-assert(assetBAmount <= MAX_SAFE_UINT128);
-const liquidity = assetAAmount \* assetBAmount;
-\`\`\`
-
-**References**:
-
-- https://docs.algorand.foundation/docs/avm/teal/opcodes/#arithmetic
-- Similar vulnerability: [Link to similar case if applicable]
+**Limitations**: Record unverified reachability, policy questions, and any
+missing runtime or deployment evidence.
 ```
 
 ---
@@ -796,6 +773,6 @@ After completing the audit:
 
 ---
 
-**Version**: 1.0
-**Last Updated**: 2025-10-27
+**Version**: 1.1
+**Last Updated**: 2026-09-07
 **Maintained by**: BiatecCLAMM Team
