@@ -53,6 +53,21 @@ This directory contains the organized test suite for the BiatecCLAMM pool functi
     mainnet outputs exactly and that only Biatec's fee share remains after all LP tokens are redeemed
   - `REPLAY_STRICT=0` reproduces the history without the invariant assertions (useful to compare a contract build against mainnet)
 
+### Audit 2026-09-07 acceptance tests
+
+Derived from the "Missing Test Scenarios" table of `audits/2026-09-07-audit-report-ai-github-copilot.md`.
+Tests declared with `test.failing` pin a defect that is confirmed against the current contracts: they pass while the
+defect exists and start failing once it is fixed, at which point they must be switched to a plain `test`.
+
+- **audit-2026-09-07-helpers.ts** - shared helpers (pool accounting reader, aggregate backing check, funded accounts, identity records)
+- **audit-2026-09-07-h01-lp-entitlement.test.ts** (2 tests) - LP minting never exceeds the conservative entitlement, also with pre-existing fee liquidity; sub-unit deposits are rejected atomically
+- **audit-2026-09-07-h02-same-asset-backing.test.ts** (5 tests, 4 `failing`) - aggregate liabilities of same-asset (staking) pools versus the single physical holding across add / distribute / withdrawExcess / remove
+- **audit-2026-09-07-m02-provider-authority.test.ts** (4 tests, 2 `failing`) - creator versus updater authority after `setAddressUdpater` rotation
+- **audit-2026-09-07-m03-identity-policy.test.ts** (4 tests) - pause, locked identity, verification class and the (not enforced) identity expiry
+- **audit-2026-09-07-l01-doAppCall-shapes.test.ts** (4 tests, 3 `failing`) - proxy call shapes verified on the target application
+- **audit-2026-09-07-l02-native-token-name.test.ts** (3 tests, 2 `failing`) - non-default native token name in LP token metadata
+- **../audit-2026-09-07-l03-optin-sender.test.ts** (2 tests, 1 `failing`) - SDK unit test of the LP opt-in decision in `clammAddLiquiditySender`
+
 ### Supporting Files
 
 - **shared-setup.ts**

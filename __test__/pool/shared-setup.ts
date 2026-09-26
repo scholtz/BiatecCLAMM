@@ -63,9 +63,10 @@ export interface ISetup {
   lpFee: bigint;
   nativeTokenName?: string; // Optional: name for native token (default: 'ALGO')
   useProvidedAssets?: boolean; // When true, re-use provided asset IDs instead of minting
+  verificationClass?: number; // Optional: minimum identity verification class required by the pool (default: 0)
 }
 export const setupPool = async (input: ISetup) => {
-  const { algod: algodInput, p1, p2, p, assetA, assetB: assetBInput, biatecFee, lpFee, nativeTokenName, useProvidedAssets = false } = input;
+  const { algod: algodInput, p1, p2, p, assetA, assetB: assetBInput, biatecFee, lpFee, nativeTokenName, useProvidedAssets = false, verificationClass = 0 } = input;
   const algorand = await AlgorandClient.fromEnvironment();
   await fixture.newScope();
 
@@ -365,7 +366,7 @@ export const setupPool = async (input: ISetup) => {
     params: await algod.getTransactionParams().do(),
     priceMax: p2,
     priceMin: p1,
-    verificationClass: 0,
+    verificationClass,
   });
   txsClammCreateTxs
     .filter((txn) => txn.type === 'appl')
