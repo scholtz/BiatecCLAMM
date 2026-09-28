@@ -2,7 +2,7 @@ import { Contract } from '@algorandfoundation/tealscript';
 import { UserInfoShortV1 } from './BiatecIdentityProvider.algo';
 
 // eslint-disable-next-line no-unused-vars
-const version = 'BIATEC-CLAMM-01-06-07';
+const version = 'BIATEC-CLAMM-01-06-08';
 const LP_TOKEN_DECIMALS = 6;
 // const TOTAL_SUPPLY = 18_000_000_000_000_000_000n;
 const TOTAL_SUPPLY = '18000000000000000000';
@@ -190,8 +190,12 @@ export class BiatecClammPool extends Contract {
 
   /**
    * Only Biatec Pool Provider can deploy and bootsrap this smart contract
-   * @param assetA Asset A ID must be lower then Asset B ID, or can be equal to Asset B ID for staking pools
-   * @param assetB Asset B
+   * @param assetA Asset A. Can be equal to Asset B for staking pools. For standard liquidity pools, asset A and
+   * asset B are not required to be ordered by asset id - a pair can be created as ALGO<>USDC or as USDC<>ALGO.
+   * By convention asset B should be the stronger / quote asset that the pair is normally priced against
+   * (e.g. USDC in ALGO<>USDC, USD in EUR<>USD or in VOTE<>USD), so currentPrice reads as "asset A price in
+   * asset B".
+   * @param assetB Asset B, conventionally the quote asset the pair is priced against (see assetA)
    * @param appBiatecConfigProvider Biatec amm provider
    * @param appBiatecPoolProvider Pool provider
    * @param txSeed Seed transaction so that smart contract can opt in to the assets
@@ -225,10 +229,11 @@ export class BiatecClammPool extends Contract {
       // Staking pools (same-asset) must have flat price range
       assert(priceMin === priceMax, 'E_STAKING_PRICE'); // 'Same-asset pools require flat price range'
     } else {
-      // Standard liquidity pools require an ordered pair and an expanding price interval
-      if (assetA.id > 0 && assetB.id > 0) {
-        assert(assetA.id < assetB.id, 'E_ASSET_ORDER'); // 'Asset A must be less than Asset B'
-      }
+      // Standard liquidity pools require an expanding price interval. Asset A and asset B are NOT
+      // required to be ordered by asset id: a pool can be created as ALGO<>USDC or as USDC<>ALGO.
+      // By convention the stronger / quote asset (the one the price is denominated in, e.g. USDC in
+      // ALGO<>USDC, USD in EUR<>USD or in VOTE<>USD) should be asset B, so that currentPrice reads as
+      // "how much of asset B one unit of asset A is worth", matching how the pair is normally quoted.
       assert(priceMin <= priceMax, 'E_PRICE_RANGE');
     }
     assert(fee <= SCALE / 10); // fee must be lower then 10%

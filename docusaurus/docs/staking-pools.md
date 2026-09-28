@@ -268,9 +268,9 @@ Staking pools have unique characteristics:
    - The contract now enforces this validation in the `bootstrap` function
    - Error code: `E_STAKING_PRICE` if price range is not flat
 
-5. **Asset Order Validation**: Standard pools now enforce `assetA.id < assetB.id` for non-staking pools
-   - Staking pools bypass this check when `assetA.id === assetB.id`
-   - Error code: `E_ASSET_ORDER` if order is wrong in standard pools
+5. **Asset Order**: Standard pools do NOT require `assetA.id < assetB.id` - a pair can be created either way, e.g. ALGO&lt;&gt;USDC or USDC&lt;&gt;ALGO
+   - Staking pools additionally allow `assetA.id === assetB.id`
+   - Convention: asset B should be the stronger/quote asset the pair is normally priced against (e.g. USDC in ALGO&lt;&gt;USDC, USD in EUR&lt;&gt;USD or in VOTE&lt;&gt;USD), so `currentPrice` reads as "asset A price in asset B"
 
 ### Reward Distribution Best Practices {#-reward-distribution-best-practices}
 

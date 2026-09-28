@@ -26,7 +26,6 @@ Chybové kódy sledujú konzistentný formát:
 | `E_PAUSED`        | Služby pozastavené          | Protokol je momentálne pozastavený adminom                 | Počkajte na unpause alebo kontaktujte admina        |
 | `E_STAKING_PRICE` | Neplatná cena staking poolu | Same-asset pooly vyžadujú plochý cenový rozsah             | Nastavte priceMin === priceMax pre staking pooly    |
 | `E_PRICE_RANGE`   | Neplatný cenový interval    | Štandardné pooly vyžadujú priceMin < priceMax              | Použite rozširujúce cenové hranice                  |
-| `E_ASSET_ORDER`   | Neplatné poradie aktív      | Asset A musí byť menšie ako Asset B                        | Zaistite assetA.id < assetB.id                      |
 
 #### Chyby likvidity a bilancií {#-chyby-likvidity-a-bilancii}
 

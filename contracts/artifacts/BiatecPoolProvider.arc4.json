@@ -117,12 +117,12 @@
         {
           "name": "assetA",
           "type": "uint64",
-          "desc": "Asset A ID must be lower then Asset B ID"
+          "desc": "Asset A. Not required to be ordered by id relative to Asset B (ALGOUSDC and USDCALGO are both valid);\nby convention Asset B is the stronger / quote asset the pair is normally priced against (e.g. USDC, USD)."
         },
         {
           "name": "assetB",
           "type": "uint64",
-          "desc": "Asset B"
+          "desc": "Asset B, conventionally the quote asset"
         },
         {
           "name": "appBiatecConfigProvider",
@@ -358,7 +358,7 @@
         {
           "name": "assetA",
           "type": "uint64",
-          "desc": "Asset A must be less than Asset B"
+          "desc": "Asset A, in the same order the pool was registered with (asset order is not constrained by id)"
         },
         {
           "name": "assetB",

@@ -26,7 +26,6 @@ A hibakódok egységes névkonvenciót követnek:
 | `E_PAUSED`        | Szolgáltatások szüneteltetve | Az admin ideiglenesen szüneteltette a protokollt         | Várjon a folytatásig vagy keresse az admint        |
 | `E_STAKING_PRICE` | Érvénytelen staking pool ár  | Azonos eszközű pool csak sík ársávval működhet           | Állítsa be a priceMin === priceMax feltételt       |
 | `E_PRICE_RANGE`   | Érvénytelen ársáv            | Standard poolnál priceMin < priceMax szükséges           | Használjon táguló ársáv határokat                 |
-| `E_ASSET_ORDER`   | Érvénytelen eszköz sorrend   | Az Asset A azonosítónak kisebbnek kell lennie Asset B-nél | Biztosítsa, hogy assetA.id < assetB.id            |
 
 #### Likviditás és egyenleg hibák {#-liquidity-and-balance-errors}
 

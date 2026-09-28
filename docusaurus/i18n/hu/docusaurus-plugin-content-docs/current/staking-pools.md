@@ -258,9 +258,9 @@ A staking poolok sajátosságai:
    - A bootstrap függvény most ezt ellenőrzi
    - Hibakód: `E_STAKING_PRICE` eltérés esetén
 
-5. **Eszköz sorrend validáció**: Standard pooloknál `assetA.id < assetB.id` elvárás
-   - Staking pooloknál elengedjük, ha `assetA.id === assetB.id`
-   - Hibakód: `E_ASSET_ORDER` standard pooloknál helytelen sorrend esetén
+5. **Eszköz sorrend**: Standard pooloknál NEM követelmény, hogy `assetA.id < assetB.id` legyen - egy pár bármelyik irányban létrehozható, pl. ALGO&lt;&gt;USDC vagy USDC&lt;&gt;ALGO
+   - Staking pooloknál emellett megengedett, hogy `assetA.id === assetB.id`
+   - Konvenció: az Asset B legyen az erősebb/kvótaeszköz, amihez a párt szokás árazni (pl. USDC az ALGO&lt;&gt;USDC párban, USD az EUR&lt;&gt;USD vagy VOTE&lt;&gt;USD párban), így a `currentPrice` "az Asset A ára Asset B-ben" jelentéssel olvasható
 
 ### Jutalomszétosztás bevált gyakorlatok {#-reward-distribution-best-practices}
 

@@ -30,7 +30,6 @@ Kody błędów śledzą spójny format:
 | `E_PAUSED`        | Usługi wstrzymane                     | Protokół jest obecnie wstrzymany przez admina               | Poczekaj na unpause lub skontaktuj się z adminem    |
 | `E_STAKING_PRICE` | Nieprawidłowa cena puli stakingowej   | Same-asset pule wymagają płaskiego zakresu cenowego         | Ustaw priceMin === priceMax dla pul stakingowych    |
 | `E_PRICE_RANGE`   | Nieprawidłowy zakres cenowy           | Standardowe pule wymagają priceMin < priceMax               | Użyj rozszerzających granic cenowych                |
-| `E_ASSET_ORDER`   | Nieprawidłowa kolejność aktywów       | Asset A musi być mniejszy niż Asset B                       | Zapewnij assetA.id < assetB.id                      |
 
 #### Błędy płynności i bilansów {#-bledy-plynności-i-bilansow}
 

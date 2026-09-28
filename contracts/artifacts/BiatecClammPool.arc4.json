@@ -58,12 +58,12 @@
         {
           "name": "assetA",
           "type": "uint64",
-          "desc": "Asset A ID must be lower then Asset B ID, or can be equal to Asset B ID for staking pools"
+          "desc": "Asset A. Can be equal to Asset B for staking pools. For standard liquidity pools, asset A and\nasset B are not required to be ordered by asset id - a pair can be created as ALGOUSDC or as USDCALGO.\nBy convention asset B should be the stronger / quote asset that the pair is normally priced against\n(e.g. USDC in ALGOUSDC, USD in EURUSD or in VOTEUSD), so currentPrice reads as \"asset A price in\nasset B\"."
         },
         {
           "name": "assetB",
           "type": "uint64",
-          "desc": "Asset B"
+          "desc": "Asset B, conventionally the quote asset the pair is priced against (see assetA)"
         },
         {
           "name": "appBiatecConfigProvider",

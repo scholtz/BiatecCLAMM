@@ -268,9 +268,9 @@ Staking pools majú unikátne charakteristiky:
    - Kontrakt teraz vynucuje túto validáciu v `bootstrap` funkcii
    - Kód chyby: `E_STAKING_PRICE` ak cenový rozsah nie je plochý
 
-5. **Validácia poradia aktív**: Štandardné pools teraz vynucujú `assetA.id < assetB.id` pre non-staking pools
-   - Staking pools obchádzajú túto kontrolu keď `assetA.id === assetB.id`
-   - Kód chyby: `E_ASSET_ORDER` ak je poradie nesprávne v štandardných pooloch
+5. **Poradie aktív**: Štandardné pools NEVYŽADUJÚ `assetA.id < assetB.id` - pár je možné vytvoriť v ľubovoľnom poradí, napr. ALGO&lt;&gt;USDC alebo USDC&lt;&gt;ALGO
+   - Staking pools navyše povoľujú `assetA.id === assetB.id`
+   - Konvencia: Asset B by malo byť silnejšie/kótovacie aktívum, voči ktorému sa pár bežne oceňuje (napr. USDC v páre ALGO&lt;&gt;USDC, USD v páre EUR&lt;&gt;USD alebo VOTE&lt;&gt;USD), takže `currentPrice` sa dá čítať ako "cena Asset A v Asset B"
 
 ### Osvedčené postupy distribúcie odmien {#-osvedcene-postupy-distribucie-odmien}
 

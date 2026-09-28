@@ -268,9 +268,9 @@ Pule stakingowe mają unikalne charakterystyki:
    - Kontrakt teraz wymusza tę walidację w funkcji `bootstrap`
    - Kod błędu: `E_STAKING_PRICE` jeśli zakres cenowy nie jest płaski
 
-5. **Walidacja kolejności aktywów**: Pule standardowe teraz wymuszają `assetA.id < assetB.id` dla pul non-staking
-   - Pule stakingowe omijają tę kontrolę kiedy `assetA.id === assetB.id`
-   - Kod błędu: `E_ASSET_ORDER` jeśli kolejność jest nieprawidłowa w pulach standardowych
+5. **Kolejność aktywów**: Pule standardowe NIE wymagają `assetA.id < assetB.id` - parę można utworzyć w dowolnej kolejności, np. ALGO&lt;&gt;USDC lub USDC&lt;&gt;ALGO
+   - Pule stakingowe dodatkowo dopuszczają `assetA.id === assetB.id`
+   - Konwencja: Asset B powinien być silniejszym/kwotowanym aktywem, względem którego para jest zwykle wyceniana (np. USDC w parze ALGO&lt;&gt;USDC, USD w parze EUR&lt;&gt;USD lub VOTE&lt;&gt;USD), dzięki czemu `currentPrice` oznacza "cenę Asset A w Asset B"
 
 ### Sprawdzone praktyki dystrybucji nagród
 

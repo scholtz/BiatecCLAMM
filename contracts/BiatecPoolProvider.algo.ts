@@ -346,8 +346,9 @@ export class BiatecPoolProvider extends Contract {
   /**
    * Anybody can call this method to bootstrap new clamm pool
    *
-   * @param assetA Asset A ID must be lower then Asset B ID
-   * @param assetB Asset B
+   * @param assetA Asset A. Not required to be ordered by id relative to Asset B (ALGO<>USDC and USDC<>ALGO are both valid);
+   * by convention Asset B is the stronger / quote asset the pair is normally priced against (e.g. USDC, USD).
+   * @param assetB Asset B, conventionally the quote asset
    * @param appBiatecConfigProvider Biatec amm provider
    * @param appBiatecPoolProvider Pool provider
    * @param txSeed Seed transaction so that smart contract can opt in to the assets
@@ -1148,7 +1149,7 @@ export class BiatecPoolProvider extends Contract {
 
   /**
    * Retuns the full price info for the asset pair. If app pool is defined, then it returns the pool info.
-   * @param assetA Asset A must be less than Asset B
+   * @param assetA Asset A, in the same order the pool was registered with (asset order is not constrained by id)
    * @param assetB Asset B
    * @param appPoolId Liquidity pool app id. If zero, then aggregated price info is returned.
    * @returns AppPoolInfo with the price info for the asset pair
