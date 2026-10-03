@@ -9,6 +9,7 @@ import { BiatecPoolProviderClient, BiatecPoolProviderFactory } from '../../contr
 import { BiatecClammPoolFactory } from '../../contracts/clients/BiatecClammPoolClient';
 import { BiatecClammPoolClient } from '../../dist';
 import getContractVersion from '../common/getContractVersion';
+import { getOnChainApprovalSha256, loadApprovalFromArc56, verifyDeployedApproval } from '../common/verifyApprovalProgram';
 
 const biatecFee = BigInt(200_000_000);
 
@@ -129,6 +130,16 @@ const app = async () => {
   }
   console.log('upgrading single pool: ', appBiatecClammPool.toString(), 'to version', clammPoolVersion);
 
+  const expectedApproval = loadApprovalFromArc56(path.join(__dirname, '../../contracts/artifacts/BiatecClammPool.arc56.json'));
+  console.log('Approval program to be deployed sha256:', expectedApproval.sha256);
+
+  const currentSha256 = await getOnChainApprovalSha256(algorand.client.algod, appBiatecClammPool);
+  if (currentSha256 === expectedApproval.sha256) {
+    console.log(`pool ${appBiatecClammPool} already runs approval program ${currentSha256}, nothing to upgrade`);
+    return;
+  }
+  console.log('current on chain approval sha256:', currentSha256);
+
   const pool = new BiatecClammPoolClient({
     appId: appBiatecClammPool,
     algorand,
@@ -142,6 +153,8 @@ const app = async () => {
       newVersion: Buffer.from(clammPoolVersion, 'ascii'),
     },
   });
+
+  await verifyDeployedApproval(algorand.client.algod, appBiatecClammPool, expectedApproval);
 
   console.log(`${Date()} Deploy DONE`);
 };
