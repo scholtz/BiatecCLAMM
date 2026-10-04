@@ -30,7 +30,7 @@ This page is the reference for CoinGecko / GeckoTerminal reviewers and for anyon
 | `GET /pair?id=POOL_APP_ID` | Metadata of a pool (a trading pair). |
 | `GET /events?fromBlock=FROM&toBlock=TO` | Swap, join and exit events of a block range. |
 
-The examples below use the MainNet base URL (replace it with the TestNet one for TestNet) and real responses captured on 2026-10-04. Block numbers and reserves move on, and the values of an old example are exactly what a historical request returns again.
+The examples below use the MainNet base URL (replace it with the TestNet one for TestNet) and real responses captured on 2026-10-04. Block numbers and reserves move on; a historical request returns the same events again (see [Guarantees](#-guarantees) for the one exception).
 
 ### latest-block {#-latest-block}
 
@@ -87,7 +87,7 @@ curl "https://api.algorand.scan.biatec.io/api/coingecko/pair?id=3136517663"
 
 - A pair is one Biatec CLAMM **pool**. Its `id` is the application id of the pool contract, so the same two assets with a different fee tier or a different price range are different pairs.
 - `asset0Id` is the pool's asset A and `asset1Id` its asset B, in the **on-chain order** of the pool contract; the adapter never reorders them (so ALGO, id `0`, can be `asset1Id` as above). The order never changes.
-- `feeBps` is the pool's LP fee in basis points (`1` = 0.01 %). It is a JSON number that can be **fractional** (a 0.005 % fee is `0.5`), and the key is **absent** when the fee is not known.
+- `feeBps` is the pool's LP fee in basis points (`1` = 0.01 %). It is a JSON number that can be **fractional** (a 0.005 % fee is `0.5`), and the key is **absent** when the fee is not known or is outside the range 0 to 100 %.
 - Unknown pools and pools labelled as scam are `404`; a pool that exists but cannot be described right now is a retryable `503`.
 
 ### events {#-events}
@@ -139,12 +139,12 @@ Both bounds are **inclusive**. A request may span at most **1000 blocks** (`toBl
 | `eventType` | `swap`, `join` (liquidity deposit) or `exit` (liquidity withdrawal). |
 | `asset0In` + `asset1Out` or `asset1In` + `asset0Out` | A swap has exactly one direction: what the trader paid and what the trader received, in whole units of each asset. |
 | `amount0`, `amount1` | The amounts of a `join` / `exit`, in whole units. |
-| `priceNative` | The executed price of the swap: **asset1 per one asset0** (in the swap above 0.1515 ALGO per Vote). It is always greater than zero and is the ratio of the two swapped amounts, rounded to at most 28 decimal places, so compare it with a tolerance. |
+| `priceNative` | The executed price of the swap: **asset1 per one asset0** (in the swap above 0.1515 ALGO per Vote). It is always greater than zero and is the ratio of the two swapped amounts, a decimal quotient with the precision of a .NET `decimal` (about 28 significant digits, written with at most 28 decimal places), so compare it with a tolerance instead of an exact equality. |
 | `reserves` | The pool reserves of both assets **after** the event. |
-| `metadata.fees0In` / `fees1In` | The LP fee paid on a swap: the input amount multiplied by the pool's fee, on the side of the input asset. The whole `metadata` object is **optional**: it is absent when the pool's fee is zero or not known. |
+| `metadata.fees0In` / `fees1In` | The **nominal** LP fee of a swap: the input amount multiplied by the pool's base fee, on the side of the input asset. The contract can scale the fee actually charged to a trader (a trader with a fee discount pays less than the nominal fee), so treat this as the pool fee rate applied to the input, not as an audited per-trader amount. The whole `metadata` object is **optional**: it is absent when the pool's fee is zero, outside the range 0 to 1, or not known. |
 | `block` | `blockNumber` and `blockTimestamp` (unix seconds) of the block that holds the transaction. |
 | `txnId` | The id of the top-level transaction (a swap routed through an inner transaction is reported under the transaction the user signed). |
-| `txnIndex`, `eventIndex` | The position of the transaction in the block and of the event inside the transaction. Together with the block number they are unique and define the order. |
+| `txnIndex`, `eventIndex` | The position of the transaction in the block and of the event inside the transaction. Together with the block number they are **unique and deterministic**, and they define the order. For the oldest events, stored before the real position was recorded, the position is a deterministic stand-in placed after the real transactions of that block, so do not use it to look an event up on chain: use `txnId`. |
 | `maker` | The account that sent the transaction. |
 | `pairId` | The pool application id; resolves through `/pair`. |
 
@@ -181,13 +181,14 @@ Errors raised by the adapter are JSON objects of the form `{ "error": "..." }`. 
 | `200` | Success (a range without events is a success with an empty list). |
 | `400` | Missing or malformed parameter, `toBlock` smaller than `fromBlock`, a range wider than 1000 blocks (both bounds inclusive: `toBlock - fromBlock` is at most 999), a range that holds more events than one response may carry (request a smaller range), or a **single block** that alone holds more events than the API can return (a smaller range cannot help; this is deterministic and never succeeds on retry). Retrying the same request cannot help. |
 | `404` | Unknown (or destroyed / scam-labelled) asset or pair; also every endpoint on a deployment where the adapter is switched off (empty body). |
+| `429` | The per-IP rate limit was exceeded. The body is `{ "error": "Rate limit exceeded. Try again later." }` and the response carries `Retry-After: 60`: wait that long before the next request. A poller that asks every 2 seconds stays far below the limit. |
 | `503` | **Retryable**, on every endpoint including `asset` and `pair`. `toBlock` is beyond the latest indexed block, or storage / lookup trouble (an asset or pool that cannot be read right now is never reported as unknown). The response carries `Retry-After: 2`. The adapter never answers with a partial list and never caches a partial answer. |
 
 A consumer should treat `503` as "ask again in a moment, keep your position", and must not treat a `503` for an `asset` or `pair` as "does not exist".
 
 ## Guarantees {#-guarantees}
 
-- **Immutability.** An answer for a range of blocks at or below `latest-block` does not change afterwards: repeated requests return identical bytes, and a historical event keeps its price, amounts, reserves, order and fees. A pair's asset order and fee never change. The one deliberate exception is the publishing decision itself: if a pool is later classified as scam (a high scam rating), its events leave the feed from then on, and a range that is recomputed after its cached copy expired reflects that.
+- **Immutability.** An answer for a range of blocks at or below `latest-block` does not change afterwards: repeated requests return identical bytes, and a historical event keeps its price, amounts, reserves, order and fees. A pair's asset order never changes, and its fee is the one set when the pool was created. The one deliberate exception is the publishing decision itself: if a pool is later classified as scam (a high scam rating), its events leave the feed from then on, and a range that is recomputed after its cached copy expired reflects that.
 - **Completeness.** Every confirmed Biatec swap up to `latest-block` that can be expressed is in `events`, and so is every join and exit that can be expressed with both reserves; the events skipped as described in [What is published](#-what-is-published) are the only exceptions. A range is never answered before all of its blocks are stored.
 - **Consistency across replicas.** All replicas report the same `latest-block`, so a consumer that is load-balanced between them sees one history.
 - **Efficiency.** Asset and pair answers come from in-memory caches; `events` ranges are cached in memory and Redis once computed and concurrent identical requests are collapsed into one query.
@@ -199,6 +200,10 @@ The adapter is tested against GeckoTerminal's published standard on every change
 - A strict schema validator rejects any deviation from the standard (field names, formats, ordering, uniqueness of `(txnIndex, eventIndex)`, price and amount consistency).
 - A live conformance suite runs against the real API after each rollout (and every few hours afterwards): schema, no gaps while following the chain like the indexer does, immutability against recorded **golden data** (historical events and pairs must be reproduced exactly), the error contract, latency budgets (`latest-block` and cached ranges under 800 ms at the 95th percentile, a cold 1000-block range under 8 s) and a burst of 50 concurrent pollers (100 requests) and 150 back-to-back requests without a single `429`.
 - A deployment to MainNet is promoted only after the same suite passed on the TestNet stage, and the suite runs again on MainNet right after the rollout.
+
+## Source of truth {#-source-of-truth}
+
+The adapter is implemented in the [AVMTradeReporter](https://github.com/scholtz/AVMTradeReporter) repository (`Controllers/CoinGeckoController.cs`, `Services/CoinGecko/`; its `docs/GECKOTERMINAL.md` is the operations guide of the safety net). Limits such as the 1000-block span, the rate limit and the cache lifetimes are settings of that service; this page lists the values the Biatec deployments run with. The Swagger UI above is generated from the running service.
 
 ## Related documents {#-related-documents}
 
