@@ -60,7 +60,7 @@ curl "https://api.algorand.scan.biatec.io/api/coingecko/asset?id=452399768"
 ```
 
 - ALGO is asset id `0`: `{"asset":{"id":"0","name":"Algorand","symbol":"ALGO","decimals":6,"totalSupply":"10000000000", ...}}`.
-- `totalSupply` is the supply in whole units (already divided by `10^decimals`).
+- `totalSupply` is the supply in whole units (already divided by `10^decimals`); it is absent when the chain does not report one. `metadata.type` is the asset kind (`ASA` for a standard asset) and `metadata.url` is present only when the asset has a URL. An empty asset name falls back to the unit name (and the other way round), then to the text "Asset" followed by the id.
 - Only assets of **published pools** are answered, so the endpoint cannot be used to make the service look up arbitrary assets. An unknown or destroyed asset is `404`; an asset that cannot be read right now is a retryable `503` (see [Error contract](#-error-contract)), never a `404`.
 
 ### pair {#-pair}
@@ -92,7 +92,7 @@ curl "https://api.algorand.scan.biatec.io/api/coingecko/pair?id=3136517663"
 curl "https://api.algorand.scan.biatec.io/api/coingecko/events?fromBlock=65666403&toBlock=65666675"
 ```
 
-Both bounds are **inclusive**. A request may span at most **1000 blocks**. The response is `{ "events": [...] }`, sorted by block number, then `txnIndex`, then `eventIndex`; a range without events is `{ "events": [] }`.
+Both bounds are **inclusive**. A request may span at most **1000 blocks** (`toBlock - fromBlock` at most 999). The response is `{ "events": [...] }`, sorted by block number, then `txnIndex`, then `eventIndex`; a range without events is `{ "events": [] }`.
 
 **Swap**
 
@@ -135,9 +135,9 @@ Both bounds are **inclusive**. A request may span at most **1000 blocks**. The r
 | `eventType` | `swap`, `join` (liquidity deposit) or `exit` (liquidity withdrawal). |
 | `asset0In` + `asset1Out` or `asset1In` + `asset0Out` | A swap has exactly one direction: what the trader paid and what the trader received, in whole units of each asset. |
 | `amount0`, `amount1` | The amounts of a `join` / `exit`, in whole units. |
-| `priceNative` | The executed price of the swap: **asset1 per one asset0** (in the swap above 0.1515 ALGO per Vote). It is always greater than zero and is the ratio of the two swapped amounts, rounded to decimal precision (at most 28 significant digits), so compare it with a tolerance. |
+| `priceNative` | The executed price of the swap: **asset1 per one asset0** (in the swap above 0.1515 ALGO per Vote). It is always greater than zero and is the ratio of the two swapped amounts, rounded to at most 28 decimal places, so compare it with a tolerance. |
 | `reserves` | The pool reserves of both assets **after** the event. |
-| `metadata.fees0In` / `fees1In` | The LP fee paid on a swap: the input amount multiplied by the pool's fee. |
+| `metadata.fees0In` / `fees1In` | The LP fee paid on a swap: the input amount multiplied by the pool's fee, on the side of the input asset. The whole `metadata` object is **optional**: it is absent when the pool's fee is zero or not known. |
 | `block` | `blockNumber` and `blockTimestamp` (unix seconds) of the block that holds the transaction. |
 | `txnId` | The id of the top-level transaction (a swap routed through an inner transaction is reported under the transaction the user signed). |
 | `txnIndex`, `eventIndex` | The position of the transaction in the block and of the event inside the transaction. Together with the block number they are unique and define the order. |
@@ -152,10 +152,10 @@ Amounts are **decimal strings** in whole units (the raw amount divided by `10^de
 - Only **confirmed** swaps and liquidity changes.
 - An event that cannot be expressed per the standard is **skipped** (and logged on the server side) instead of being sent. GeckoTerminal stops indexing a DEX on the first invalid event, so the adapter prefers a missing event over a wrong one. The cases are:
   - a swap with a zero input or output amount, or with both reserves zero after it, or whose price rounds to zero or cannot be represented;
-  - a `join` / `exit` without any amount, or after which the reserve of either asset is zero (for example the very first deposit into an empty pool, or removing the last liquidity);
+  - a `join` / `exit` without any amount, or one for which the reserves of **both** assets are not known from the transaction. A concentrated-liquidity position above or below the current price is **single-sided**: it changes only one reserve, the other is not part of the transaction's state change, and the adapter will not report a reserve it cannot prove. Single-sided deposits and withdrawals (and the first deposit into an empty pool or the removal of the last liquidity) are therefore **not** published as `join` / `exit`. This never hides trading volume: every swap carries the authoritative reserves of the pool after it;
   - an event of a pool or asset that is unknown or does not match the pool, and an event without a sender or transaction id.
 
-  If you reconcile the feed against on-chain transactions, expect these differences and nothing else.
+  If you reconcile the feed against on-chain transactions, expect these differences: swaps are complete, `join` / `exit` events only cover liquidity changes that touch both assets of the pool.
 
 ## How to consume it {#-how-to-consume-it}
 
@@ -163,7 +163,7 @@ The pattern GeckoTerminal's indexer uses, and the one we test against:
 
 1. Call `latest-block`.
 2. Call `events` for `(lastIndexedBlock + 1) .. latest`, in slices of at most 1000 blocks.
-3. For every `pairId` you have not seen, call `pair`; for every asset of that pair, call `asset`. Pair and asset data is immutable apart from the supply, so it can be cached.
+3. For every `pairId` you have not seen, call `pair`; for every asset of that pair, call `asset`. A pair is immutable, and an asset is immutable apart from its supply, so both can be cached.
 4. Wait about 2 seconds and repeat.
 
 Requesting a range whose `toBlock` is beyond `latest-block` answers a retryable `503` (see below). Splitting a range in two returns exactly the events of the whole range, so a consumer can walk the chain in slices of any size.
@@ -175,7 +175,7 @@ Errors raised by the adapter are JSON objects of the form `{ "error": "..." }`. 
 | Status | When |
 |---|---|
 | `200` | Success (a range without events is a success with an empty list). |
-| `400` | Missing or malformed parameter, `toBlock` smaller than `fromBlock`, more than 1000 blocks, or a range that holds more events than one response may carry (use a smaller range). Retrying the same request cannot help. |
+| `400` | Missing or malformed parameter, `toBlock` smaller than `fromBlock`, a range wider than 1000 blocks (both bounds inclusive: `toBlock - fromBlock` is at most 999), a range that holds more events than one response may carry (request a smaller range), or a **single block** that alone holds more events than the API can return (a smaller range cannot help; this is deterministic and never succeeds on retry). Retrying the same request cannot help. |
 | `404` | Unknown (or destroyed / scam-labelled) asset or pair; also every endpoint on a deployment where the adapter is switched off (empty body). |
 | `503` | **Retryable**, on every endpoint including `asset` and `pair`. `toBlock` is beyond the latest indexed block, or storage / lookup trouble (an asset or pool that cannot be read right now is never reported as unknown). The response carries `Retry-After: 2`. The adapter never answers with a partial list and never caches a partial answer. |
 
@@ -183,8 +183,8 @@ A consumer should treat `503` as "ask again in a moment, keep your position", an
 
 ## Guarantees {#-guarantees}
 
-- **Immutability.** An answer for a range of blocks at or below `latest-block` does not change afterwards: repeated requests return identical bytes, and a historical event keeps its price, amounts, reserves, order and fees. A pair's asset order and fee never change.
-- **Completeness.** Every confirmed Biatec swap, join and exit up to `latest-block` is in `events`, except the events skipped as described in [What is published](#-what-is-published); a range is never answered before all of its blocks are stored.
+- **Immutability.** An answer for a range of blocks at or below `latest-block` does not change afterwards: repeated requests return identical bytes, and a historical event keeps its price, amounts, reserves, order and fees. A pair's asset order and fee never change. The one deliberate exception is the publishing decision itself: if a pool is later classified as scam (a high scam rating), its events leave the feed from then on, and a range that is recomputed after its cached copy expired reflects that.
+- **Completeness.** Every confirmed Biatec swap up to `latest-block` is in `events`, and so is every join and exit that can be expressed with both reserves; the events skipped as described in [What is published](#-what-is-published) are the only exceptions. A range is never answered before all of its blocks are stored.
 - **Consistency across replicas.** All replicas report the same `latest-block`, so a consumer that is load-balanced between them sees one history.
 - **Efficiency.** Asset and pair answers come from in-memory caches; `events` ranges are cached in memory and Redis once computed and concurrent identical requests are collapsed into one query.
 
