@@ -1,3 +1,7 @@
+---
+sidebar_label: GeckoTerminal DEX Adapter
+---
+
 # GeckoTerminal DEX Adapter
 
 Biatec DEX publishes its swaps and liquidity changes to [GeckoTerminal](https://www.geckoterminal.com) (CoinGecko) through a **DEX adapter API** that follows the *GeckoTerminal Integration API Standards v0.1* for non-EVM chains. The adapter is served by the Biatec trade reporter (AVMTradeReporter), the same service that powers [Biatec Scan](https://scan.biatec.io), so it reads the data the Biatec DEX itself shows.
@@ -26,7 +30,7 @@ This page is the reference for CoinGecko / GeckoTerminal reviewers and for anyon
 | `GET /pair?id=POOL_APP_ID` | Metadata of a pool (a trading pair). |
 | `GET /events?fromBlock=FROM&toBlock=TO` | Swap, join and exit events of a block range. |
 
-The examples below use the MainNet base URL; replace it with the TestNet one for TestNet.
+The examples below use the MainNet base URL (replace it with the TestNet one for TestNet) and real responses captured on 2026-10-04. Block numbers and reserves move on, and the values of an old example are exactly what a historical request returns again.
 
 ### latest-block {#-latest-block}
 
@@ -82,7 +86,7 @@ curl "https://api.algorand.scan.biatec.io/api/coingecko/pair?id=3136517663"
 ```
 
 - A pair is one Biatec CLAMM **pool**. Its `id` is the application id of the pool contract, so the same two assets with a different fee tier or a different price range are different pairs.
-- `asset0Id` is the pool's asset A and `asset1Id` its asset B, in the **on-chain order**. The order never changes.
+- `asset0Id` is the pool's asset A and `asset1Id` its asset B, in the **on-chain order** of the pool contract; the adapter never reorders them (so ALGO, id `0`, can be `asset1Id` as above). The order never changes.
 - `feeBps` is the pool's LP fee in basis points (`1` = 0.01 %). It is a JSON number that can be **fractional** (a 0.005 % fee is `0.5`), and the key is **absent** when the fee is not known.
 - Unknown pools and pools labelled as scam are `404`; a pool that exists but cannot be described right now is a retryable `503`.
 
@@ -155,7 +159,7 @@ Amounts are **decimal strings** in whole units (the raw amount divided by `10^de
   - a `join` / `exit` without any amount, or one for which the reserves of **both** assets are not known from the transaction. A concentrated-liquidity position above or below the current price is **single-sided**: it changes only one reserve, the other is not part of the transaction's state change, and the adapter will not report a reserve it cannot prove. Single-sided deposits and withdrawals (and the first deposit into an empty pool or the removal of the last liquidity) are therefore **not** published as `join` / `exit`. This never hides trading volume: every swap carries the authoritative reserves of the pool after it;
   - an event of a pool or asset that is unknown or does not match the pool, and an event without a sender or transaction id.
 
-  If you reconcile the feed against on-chain transactions, expect these differences: swaps are complete, `join` / `exit` events only cover liquidity changes that touch both assets of the pool.
+  If you reconcile the feed against on-chain transactions, expect these differences: a swap is missing only in the rare cases listed above (an unusable amount or price), and `join` / `exit` events only cover liquidity changes that touch both assets of the pool.
 
 ## How to consume it {#-how-to-consume-it}
 
@@ -163,10 +167,10 @@ The pattern GeckoTerminal's indexer uses, and the one we test against:
 
 1. Call `latest-block`.
 2. Call `events` for `(lastIndexedBlock + 1) .. latest`, in slices of at most 1000 blocks.
-3. For every `pairId` you have not seen, call `pair`; for every asset of that pair, call `asset`. A pair is immutable, and an asset is immutable apart from its supply, so both can be cached.
+3. For every `pairId` you have not seen, call `pair`; for every asset of that pair, call `asset`. A pair is immutable, and an asset is immutable apart from its `totalSupply` (which can change for a mintable asset), so both can be cached; refresh the supply occasionally if you display it.
 4. Wait about 2 seconds and repeat.
 
-Requesting a range whose `toBlock` is beyond `latest-block` answers a retryable `503` (see below). Splitting a range in two returns exactly the events of the whole range, so a consumer can walk the chain in slices of any size.
+Requesting a range whose `toBlock` is beyond `latest-block` answers a retryable `503` (see below). Splitting a range in two returns exactly the events of the whole range, so a consumer can walk the chain in slices of up to 1000 blocks and pick the slice size freely. If a slice answers `400` because it holds too many events, halve it and retry; only a single block that alone is too large can never be served (it is reported as such, not as a `503`).
 
 ## Error contract {#-error-contract}
 
@@ -184,7 +188,7 @@ A consumer should treat `503` as "ask again in a moment, keep your position", an
 ## Guarantees {#-guarantees}
 
 - **Immutability.** An answer for a range of blocks at or below `latest-block` does not change afterwards: repeated requests return identical bytes, and a historical event keeps its price, amounts, reserves, order and fees. A pair's asset order and fee never change. The one deliberate exception is the publishing decision itself: if a pool is later classified as scam (a high scam rating), its events leave the feed from then on, and a range that is recomputed after its cached copy expired reflects that.
-- **Completeness.** Every confirmed Biatec swap up to `latest-block` is in `events`, and so is every join and exit that can be expressed with both reserves; the events skipped as described in [What is published](#-what-is-published) are the only exceptions. A range is never answered before all of its blocks are stored.
+- **Completeness.** Every confirmed Biatec swap up to `latest-block` that can be expressed is in `events`, and so is every join and exit that can be expressed with both reserves; the events skipped as described in [What is published](#-what-is-published) are the only exceptions. A range is never answered before all of its blocks are stored.
 - **Consistency across replicas.** All replicas report the same `latest-block`, so a consumer that is load-balanced between them sees one history.
 - **Efficiency.** Asset and pair answers come from in-memory caches; `events` ranges are cached in memory and Redis once computed and concurrent identical requests are collapsed into one query.
 
@@ -193,7 +197,7 @@ A consumer should treat `503` as "ask again in a moment, keep your position", an
 The adapter is tested against GeckoTerminal's published standard on every change and after every deployment:
 
 - A strict schema validator rejects any deviation from the standard (field names, formats, ordering, uniqueness of `(txnIndex, eventIndex)`, price and amount consistency).
-- A live conformance suite runs against the real API after each rollout (and every few hours afterwards): schema, no gaps while following the chain like the indexer does, immutability against recorded **golden data** (historical events and pairs must be reproduced exactly), the error contract, latency budgets (`latest-block` and cached ranges under 800 ms at the 95th percentile, a cold 1000-block range under 8 s) and 50 concurrent pollers without rate limiting.
+- A live conformance suite runs against the real API after each rollout (and every few hours afterwards): schema, no gaps while following the chain like the indexer does, immutability against recorded **golden data** (historical events and pairs must be reproduced exactly), the error contract, latency budgets (`latest-block` and cached ranges under 800 ms at the 95th percentile, a cold 1000-block range under 8 s) and a burst of 50 concurrent pollers (100 requests) and 150 back-to-back requests without a single `429`.
 - A deployment to MainNet is promoted only after the same suite passed on the TestNet stage, and the suite runs again on MainNet right after the rollout.
 
 ## Related documents {#-related-documents}
