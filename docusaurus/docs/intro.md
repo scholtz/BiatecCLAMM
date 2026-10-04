@@ -62,6 +62,7 @@ Biatec CLAMM revolutionizes decentralized exchange (DEX) functionality by implem
 
 - **[Basic Use Cases](./basic-use-cases)**: Common trading and liquidity scenarios
 - **[Tick System](./tick-system)**: Logarithmic ticks for pricing, snapping, and range selection
+- **[GeckoTerminal DEX Adapter](./geckoterminal-integration)**: Public API that publishes Biatec DEX swaps and liquidity changes to GeckoTerminal / CoinGecko
 - **[Staking Pools](./staking-pools)**: Interest-bearing token functionality
 - **[Liquidity Fee Protection](./liquidity-fee-protection)**: Advanced fee management
 - **[Liquidity Rounding](./liquidity-rounding)**: Mathematical precision details
