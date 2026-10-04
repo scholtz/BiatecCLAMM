@@ -207,6 +207,6 @@ The adapter is implemented in the [AVMTradeReporter](https://github.com/scholtz/
 
 ## Related documents {#-related-documents}
 
-- [Integration Guide](./integration-guide.md) for integrating Biatec CLAMM pools on chain.
-- [Logarithmic Tick System](./tick-system.md) for how the price range of a pool is defined.
+- [Integration Guide](./integration-guide) for integrating Biatec CLAMM pools on chain.
+- [Logarithmic Tick System](./tick-system) for how the price range of a pool is defined.
 - The full API of the trade reporter (including the endpoints that need authentication) is in the Swagger UI linked above.
