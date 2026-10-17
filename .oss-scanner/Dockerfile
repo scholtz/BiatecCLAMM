@@ -24,7 +24,8 @@ RUN npm ci --include=dev
 # TEALScript compiles TEAL through an algod `/v2/teal/compile` endpoint, so the build needs network access to a node
 # (it is only used as a stateless compiler; a clean checkout has no .env). Network is available during this build only.
 ARG ALGOD_SERVER=https://mainnet-api.4160.nodely.dev
-RUN ALGOD_PORT=443 ALGOD_TOKEN="" npm run build
+ARG ALGOD_PORT=443
+RUN for i in 1 2 3; do ALGOD_TOKEN="" npm run build && exit 0; echo "build attempt $i failed, retrying"; sleep 10; done; exit 1
 
 # Run the tests that need no running Algorand node (tick math, SDK helpers, packaging). The full contract suite
 # (__test__/clamm, __test__/pool, BiatecIdentity) needs an Algorand LocalNet (algod/kmd/indexer on 4001/4002/8980,
