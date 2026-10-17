@@ -1,11 +1,10 @@
 # Build environment for the Anthropic OSS Scanner (https://red.anthropic.com/oss-scanner).
 # The scanner builds this with the repository root as the build context.
 FROM node:24-bookworm
-ENV DEBIAN_FRONTEND=noninteractive \
-    CI=true \
+ENV CI=true \
     npm_config_fund=false \
     npm_config_audit=false
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       ca-certificates git python3 python3-pip pipx build-essential pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
@@ -24,7 +23,8 @@ RUN npm ci --include=dev
 # typed TypeScript clients, exactly as maintainers do.
 # TEALScript compiles TEAL through an algod `/v2/teal/compile` endpoint, so the build needs network access to a node
 # (it is only used as a stateless compiler; a clean checkout has no .env). Network is available during this build only.
-RUN ALGOD_SERVER=https://mainnet-api.4160.nodely.dev ALGOD_PORT=443 ALGOD_TOKEN="" npm run build
+ARG ALGOD_SERVER=https://mainnet-api.4160.nodely.dev
+RUN ALGOD_PORT=443 ALGOD_TOKEN="" npm run build
 
 # Run the tests that need no running Algorand node (tick math, SDK helpers, packaging). The full contract suite
 # (__test__/clamm, __test__/pool, BiatecIdentity) needs an Algorand LocalNet (algod/kmd/indexer on 4001/4002/8980,
