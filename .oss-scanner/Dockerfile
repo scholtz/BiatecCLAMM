@@ -5,7 +5,7 @@ ENV CI=true \
     npm_config_fund=false \
     npm_config_audit=false
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      ca-certificates git python3 python3-pip pipx build-essential pkg-config \
+      ca-certificates git python3 pipx build-essential pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
 # AlgoKit CLI: used by `npm run generate-client` to emit the typed contract clients.
