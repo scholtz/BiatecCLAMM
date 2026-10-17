@@ -322,3 +322,7 @@ Grid primitives (`tickGridDecadeMantissas`, `tickGridBoundaryBelow` / `tickGridB
 `prevTickGridBoundary`, `tickGridWidthAt`, `tickGridBoundaries`, `TICK_GRID_ANCHORS`) and the
 fixed-point `initPriceDecimals` (`fitPrice` = bin start, `tick` = bin width, both on the
 same canonical grid) are also exported if you need to build a full price distribution.
+
+## License
+
+Released under the [GNU Affero General Public License v3.0](LICENSE), with the trademark Additional Terms (AGPL v3.0 Section 7e) in [LICENSE-ADDITIONAL-TERMS.md](LICENSE-ADDITIONAL-TERMS.md).
