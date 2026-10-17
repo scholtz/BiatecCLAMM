@@ -5,7 +5,7 @@ Biatec DEX (https://dex.biatec.io) is a concentrated-liquidity AMM (Uniswap-v3-s
 
 The repository holds:
 - **Smart contracts** in `contracts/*.algo.ts` (TEALScript, compiled to AVM TEAL in `contracts/artifacts/`):
-  - `BiatecClammPool` - one app per pool. Entry points: `addLiquidity`, `removeLiquidity`, `swap`, `reconcileLiquidity`, `removeLiquidityAdmin`, `distributeExcessAssets`, `withdrawExcessAssets`, online/offline key registration, `updateApplication`. Also the fixed-point math (`calculate*`) with uint256 arithmetic, sqrt prices and rounding.
+  - `BiatecClammPool` - one app per pool. Entry points: `addLiquidity`, `removeLiquidity`, `swap`, `reconcileLiquidity`, `removeLiquidityAdmin`, `distributeExcessAssets`, `withdrawExcessAssets`, online/offline key registration, `updateApplication`, plus read-only getters/`status`. Pools report trades to the pool provider (`registerTrade`). Also the fixed-point math (`calculate*`) with uint256 arithmetic, sqrt prices and rounding.
   - `BiatecPoolProvider` - registry and statistics of pools, pool deployment (`loadCLAMMContractData`, `registerPool`), `registerTrade`, boxes.
   - `BiatecConfigProvider` - global configuration and role addresses (updater, governor, executive, fee executor), pause flag, protocol fee.
   - `BiatecIdentityProvider` - KYC/engagement identity records per user (boxes) used to gate pool access and fee tiers.
@@ -28,14 +28,16 @@ Most important:
 Less important but in scope: operator CLI scripts in `src/bin`, `scripts/` and `*.sh`. They read operator mnemonics from the environment, which is expected. Report issues there (injection, secret leakage) at lower severity.
 
 Out of scope:
-- `node_modules/`, `dist/`, `docusaurus/` (documentation site), `contracts/artifacts/` and `contracts/clients/` (generated output; report the bug in the TypeScript source instead).
-- `contracts/FakePool.algo.ts` and everything under `__test__/` (test code only).
+- `node_modules/`, `dist/`, `docusaurus/` (documentation site), `contracts/artifacts/` and `contracts/clients/` (generated from the contracts by `npm run build`, although committed; report the bug in the contract source or generator inputs instead, but do flag hand-edits that differ from generator output).
+- `contracts/FakePool.algo.ts` and test code under `__test__/` (not deployed). Tests marked `test.failing` document known open SDK issues (e.g. `clammAddLiquiditySender` always keeping `optinSender` true); do not re-report those.
 - `audits/` and the markdown summaries (prior audit reports; read them for context on already-fixed issues, do not re-report them).
 - Vulnerabilities in third-party dependencies (algosdk, algokit-utils, the TEALScript compiler, the Algorand protocol/AVM itself) unless this repository uses them in a clearly unsafe way.
 
+Authorisation expectations: `registerTrade` only logs a trade event and requires the calling application to be the `appPoolId` it names, so any app can emit events for itself; events from it must not be treated as proof that the caller is a genuine Biatec pool (report only if on-chain state or funds depend on it). `withdrawExcessAssets` and `sendOnlineKeyRegistration` on the config, identity and pool-provider contracts must only be callable by the fee executor set in the config provider, and those contracts are not expected to hold user funds. Pool-level `withdrawExcessAssets` must never touch user liquidity. Config setters are callable only by the updater, except the fee and fee-executor setters, which are gated to the executive.
+
 ## How to exercise it
 - `npm ci && npm run build` has already been run in the image: TEALScript compiled `contracts/*.algo.ts` into `contracts/artifacts/` (TEAL, ARC-4/32/56 JSON) and typed clients were generated in `contracts/clients/`.
-- Offline unit tests that need no node: `npx jest __test__/Ticks.test.ts __test__/common`.
+- Offline unit tests that need no node: `npx jest __test__/Ticks.test.ts __test__/common __test__/audit-2026-09-07-l03-optin-sender.test.ts`.
 - The contract test suites (`__test__/clamm`, `__test__/pool`, `__test__/BiatecIdentity.test.ts`) need an **Algorand LocalNet** (algod :4001, kmd :4002, indexer :8980, normally started with `algokit localnet start`, which needs Docker) and cannot run in the scanner VM. Instead: (a) reason from the TypeScript contract source and the generated TEAL; (b) re-implement the `calculate*` fixed-point math in a small script to probe rounding, overflow and zero-liquidity edge cases and invariants (rounding never creates value, liquidity never decreases on a swap, deposit then withdraw never returns more than deposited); (c) use `__test__/clamm/math.test.ts` and `__test__/Ticks.test.ts` as examples of how the pool math is called. In `contracts/BiatecClammPool.algo.ts`, `calculateLiquidityFlatPrice`, `calculateLiquidityD`, `calculatePrice`, `calculateAssetBWithdrawOnAssetADeposit` and friends are the arithmetic core.
 - `audits/` contains prior audit reports and `AUDIT_FIXES_SUMMARY.md` describes fixes. Code comments such as "audit 2026-09-07 H-01" mark hardened spots. Use them to avoid duplicate reports and to check that a fix cannot be bypassed through a sibling code path.
 

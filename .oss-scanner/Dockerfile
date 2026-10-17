@@ -11,14 +11,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # AlgoKit CLI: used by `npm run generate-client` to emit the typed contract clients.
 ENV PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin
-RUN pipx install algokit
+RUN pipx install algokit==2.10.2
 
 # scanner contract: the checkout lives inside the image, at /src
 COPY . /src
 WORKDIR /src
 
 # Install the exact locked dependencies (TEALScript compiler, algosdk, algokit utils, jest, ...).
-RUN npm ci
+RUN npm ci --include=dev
 
 # Compile the TEALScript contracts (contracts/*.algo.ts -> TEAL + ARC-4/32/56 artifacts) and regenerate the
 # typed TypeScript clients, exactly as maintainers do.
@@ -28,5 +28,5 @@ RUN npm run build
 # (__test__/clamm, __test__/pool, BiatecIdentity) needs an Algorand LocalNet (algod/kmd/indexer on 4001/4002/8980,
 # normally started with `algokit localnet start`, which needs Docker) and therefore cannot run inside the scanner VM.
 # Do not let failures abort the build.
-RUN npx jest __test__/Ticks.test.ts __test__/common --testTimeout 120000 \
+RUN npx jest __test__/Ticks.test.ts __test__/common __test__/audit-2026-09-07-l03-optin-sender.test.ts --testTimeout 120000 \
     || echo "WARNING: offline jest tests reported failures"
