@@ -1,0 +1,9 @@
+**/node_modules
+**/dist
+**/coverage
+**/build
+**/.docusaurus
+**/.env
+**/.env.*
+!**/.env.example
+**/.npmrc
