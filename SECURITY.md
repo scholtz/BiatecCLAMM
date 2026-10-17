@@ -9,7 +9,7 @@ Biatec DEX (BiatecCLAMM) is a concentrated-liquidity AMM whose smart contracts c
 Report privately by either:
 
 - GitHub private vulnerability reporting: <https://github.com/scholtz/BiatecCLAMM/security/advisories/new>
-- Email: [scholtz-oss-scanner@biatec.io](mailto:scholtz-oss-scanner@biatec.io)
+- Email: [security@biatec.io](mailto:security@biatec.io)
 
 Please include:
 
