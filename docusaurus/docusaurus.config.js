@@ -17,10 +17,12 @@ require('dotenv').config();
     baseUrl: '/',
     onBrokenLinks: 'throw',
     markdown: {
+      mermaid: true,
       hooks: {
         onBrokenMarkdownLinks: 'warn',
       },
     },
+    themes: ['@docusaurus/theme-mermaid'],
     stylesheets: [
       {
         href: 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css',
