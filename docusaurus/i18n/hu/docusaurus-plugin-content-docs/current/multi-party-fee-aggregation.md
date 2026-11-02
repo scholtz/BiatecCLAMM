@@ -90,27 +90,27 @@ Tekintsünk két független likviditásszolgáltatót — **A fél (Meglévő LP
 
 ```mermaid
 sequenceDiagram
-    participant Alice as Party A (LP 1)
-    participant Trader as Swappers
+    participant Alice as A fél (LP 1)
+    participant Trader as Kereskedők
     participant Pool as BiatecClammPool
-    participant Bob as Party B (LP 2)
+    participant Bob as B fél (LP 2)
 
-    Note over Alice,Pool: Epoch 1 (t0): Initial Liquidity
+    Note over Alice,Pool: 1. korszak (t0): Kezdeti likviditás
     Alice->>Pool: addLiquidity(ΔL_A)
-    Pool-->>Alice: Mint D_A = ΔL_A LP tokens (Lu = 0)
+    Pool-->>Alice: D_A = ΔL_A LP token mintelése (Lu = 0)
 
-    Note over Trader,Pool: Epoch 2 (t1): Swaps Accrue Fees F_1
+    Note over Trader,Pool: 2. korszak (t1): A swapok F_1 díjat halmoznak fel
     Trader->>Pool: swap()
-    Note over Pool: L increases by F_1 + B_1<br/>Lu = F_1 (100% belongs to Party A)<br/>Lb = B_1 (belongs to Biatec)
+    Note over Pool: L növekszik F_1 + B_1 értékkel<br/>Lu = F_1 (100% az A félhez tartozik)<br/>Lb = B_1 (a Biatechez tartozik)
 
-    Note over Bob,Pool: Epoch 3 (t2): Party B Joins Pool
+    Note over Bob,Pool: 3. korszak (t2): A B fél csatlakozik a poolhoz
     Bob->>Pool: addLiquidity(ΔL_B)
     Note over Pool: X = floor(ΔL_B * D_A / (D_A + F_1))<br/>Lu' = F_1 + (ΔL_B - X)
-    Pool-->>Bob: Mint D_B = floor(X / 1000) * 1000 LP tokens
+    Pool-->>Bob: D_B = floor(X / 1000) * 1000 LP token mintelése
 
-    Note over Trader,Pool: Epoch 4 (t3): Swaps Accrue Fees F_2
+    Note over Trader,Pool: 4. korszak (t3): A swapok F_2 díjat halmoznak fel
     Trader->>Pool: swap()
-    Note over Pool: Lu'' = Lu' + F_2<br/>F_2 shared in ratio (D_A + F_1) : ΔL_B
+    Note over Pool: Lu'' = Lu' + F_2<br/>F_2 megoszlik (D_A + F_1) : ΔL_B arányban
 ```
 
 ### 1. lépés ($t_0$): Az A fél kezdeti likviditást biztosít {#-step-1-t0-party-a-supplies-initial-liquidity}
@@ -251,17 +251,17 @@ Amikor a bent maradó $j \ne i$ fél kivonja $D_j$ LP tokenjeit $t_5$-ben:
 
 ```mermaid
 sequenceDiagram
-    participant A as Party A
+    participant A as A fél
     participant P as Pool
-    participant B as Party B
-    participant T as Traders
-    A->>P: t0: deposit ΔL_A (mint D_A LP)
-    T->>P: t1: swaps accrue fees F_1 → L_u
-    B->>P: t2: deposit ΔL_B (LP minted at fee-adjusted rate)
-    T->>P: t3: swaps accrue fees F_2 → L_u
-    A->>P: t4: removeLiquidity (D_A + pro-rata L_u)
-    B->>P: t5: removeLiquidity (D_B + pro-rata L_u)
-    Note over A,B: Result is independent of withdrawal order
+    participant B as B fél
+    participant T as Kereskedők
+    A->>P: t0: ΔL_A befizetés (D_A LP mintelése)
+    T->>P: t1: swapok F_1 díjat halmoznak fel → L_u
+    B->>P: t2: ΔL_B befizetés (díjkorrigált LP mintelés)
+    T->>P: t3: swapok F_2 díjat halmoznak fel → L_u
+    A->>P: t4: removeLiquidity (D_A + arányos L_u)
+    B->>P: t5: removeLiquidity (D_B + arányos L_u)
+    Note over A,B: Az eredmény független a kivonási sorrendtől
 ```
 
 ## 4. Konkrét számszerű példa {#-4-concrete-numerical-example}

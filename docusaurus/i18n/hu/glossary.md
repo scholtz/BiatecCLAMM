@@ -6,7 +6,7 @@
 | Liquidity Provider (LP) | Likviditásszolgáltató (LP) | Az `LP` és `LP token` kifejezések megtarthatók |
 | Pool / Liquidity Pool | Pool / Likviditási pool | |
 | Staking Pool | Staking pool | Kamatot termelő, azonos eszközű pool (`assetA === assetB`) |
-|Pool Provider (`BiatecPoolProvider`) | Pool szolgáltató (`BiatecPoolProvider`) | Az okosszerződés neve kódban változatlan |
+| Pool Provider (`BiatecPoolProvider`) | Pool szolgáltató (`BiatecPoolProvider`) | Az okosszerződés neve kódban változatlan |
 | Config Provider (`BiatecConfigProvider`) | Konfigurációs szolgáltató (`BiatecConfigProvider`) | |
 | Identity Provider (`BiatecIdentityProvider`) | Identitásszolgáltató (`BiatecIdentityProvider`) | |
 | Base Scale (`SCALE = 1e9`) | Alaplépték (`SCALE = 1e9`) | 9 tizedesjegyű belső fixpontos skála |
