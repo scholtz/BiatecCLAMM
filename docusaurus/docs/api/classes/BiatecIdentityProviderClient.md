@@ -150,6 +150,8 @@ The call params
 
 Makes a call to the BiatecIdentityProvider smart contract using the `setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void` ABI method.
 
+This method can set fees, verification class, engagement class .. Only engagementSetter is allowed to execute this method.
+
 ##### Parameters
 
 ###### params
@@ -362,6 +364,8 @@ The call transaction
 
 Makes a call to the BiatecIdentityProvider smart contract using the `setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void` ABI method.
 
+This method can set fees, verification class, engagement class .. Only engagementSetter is allowed to execute this method.
+
 ##### Parameters
 
 ###### params
@@ -573,6 +577,8 @@ The call result
 > **setInfo**: (`params`) => `Promise`\<\{ `return`: `void` \| `undefined`; \}\>
 
 Makes a call to the BiatecIdentityProvider smart contract using the `setInfo(address,(uint64,bool,uint64,uint64,uint64,uint64,uint64,bool,string,string,uint64,uint64,uint64,uint64,uint64,uint64,bool))void` ABI method.
+
+This method can set fees, verification class, engagement class .. Only engagementSetter is allowed to execute this method.
 
 ##### Parameters
 

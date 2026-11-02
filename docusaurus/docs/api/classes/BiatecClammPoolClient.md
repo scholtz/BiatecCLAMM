@@ -280,6 +280,36 @@ The params for the smart contract call
 
 The call params: LP position reduced
 
+#### reconcileLiquidity()
+
+> **reconcileLiquidity**: (`params`) => `Promise`\<`AppCallMethodCall`\>
+
+Makes a call to the BiatecClammPool smart contract using the `reconcileLiquidity(uint64,uint64,uint64,uint64)uint256` ABI method.
+
+Books liquidity which is owned neither by LP token holders nor by the fee accounts
+(Liquidity - distributedLp - LiquidityUsersFromFees - LiquidityBiatecFromFees).
+
+Pools deployed with BIATEC-CLAMM-01-06-04 and earlier could accumulate such liquidity in addLiquidity.
+While LP tokens are in circulation the amount is credited to the LP holders (LiquidityUsersFromFees).
+If no LP token is in circulation it is credited to biatec (LiquidityBiatecFromFees) so that it can be
+withdrawn with removeLiquidityAdmin and returned to the affected liquidity providers.
+
+Only addressExecutiveFee is allowed to execute this method.
+
+##### Parameters
+
+###### params
+
+`object` & `object`
+
+The params for the smart contract call
+
+##### Returns
+
+`Promise`\<`AppCallMethodCall`\>
+
+The call params: Liquidity credited (base scale)
+
 #### swap()
 
 > **swap**: (`params`) => `Promise`\<`AppCallMethodCall`\>
@@ -312,6 +342,8 @@ If someone deposits excess assets to the LP pool, addressExecutiveFee can either
 If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
 
 This method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.
+
+Amount for A or B which is equal exactly to 1 is special usecase and means full distribution which is possible for the specific asset.
 
 Only addressExecutiveFee is allowed to execute this method.
 
@@ -408,7 +440,7 @@ The call params
 
 > **doAppCall**: (`params`) => `Promise`\<`AppCallMethodCall`\>
 
-Makes a call to the BiatecClammPool smart contract using the `doAppCall(uint64,(uint64,address,uint64,uint64,string),uint64[],uint64[],address[],byte[][])void` ABI method.
+Makes a call to the BiatecClammPool smart contract using the `doAppCall(uint64,(uint64,byte[32],uint64,uint64,string),uint64[],uint64[],address[],byte[][])void` ABI method.
 
 doAppCall can call any other smart contract. mainly created for the xgov calls.
 
@@ -672,6 +704,26 @@ The params for the smart contract call
 
 The call params: Amount of asset A to be deposited. The result is in Base decimals (9)
 
+#### getRealAssetBalance()
+
+> **getRealAssetBalance**: (`params`) => `Promise`\<`AppCallMethodCall`\>
+
+Makes a call to the BiatecClammPool smart contract using the `getRealAssetBalance(uint64)uint64` ABI method.
+
+##### Parameters
+
+###### params
+
+`object` & `object`
+
+The params for the smart contract call
+
+##### Returns
+
+`Promise`\<`AppCallMethodCall`\>
+
+The call params
+
 #### status()
 
 > **status**: (`params`) => `Promise`\<`AppCallMethodCall`\>
@@ -926,6 +978,36 @@ The params for the smart contract call
 
 The call transaction: LP position reduced
 
+#### reconcileLiquidity()
+
+> **reconcileLiquidity**: (`params`) => `Promise`\<\{ \}\>
+
+Makes a call to the BiatecClammPool smart contract using the `reconcileLiquidity(uint64,uint64,uint64,uint64)uint256` ABI method.
+
+Books liquidity which is owned neither by LP token holders nor by the fee accounts
+(Liquidity - distributedLp - LiquidityUsersFromFees - LiquidityBiatecFromFees).
+
+Pools deployed with BIATEC-CLAMM-01-06-04 and earlier could accumulate such liquidity in addLiquidity.
+While LP tokens are in circulation the amount is credited to the LP holders (LiquidityUsersFromFees).
+If no LP token is in circulation it is credited to biatec (LiquidityBiatecFromFees) so that it can be
+withdrawn with removeLiquidityAdmin and returned to the affected liquidity providers.
+
+Only addressExecutiveFee is allowed to execute this method.
+
+##### Parameters
+
+###### params
+
+`object` & `object`
+
+The params for the smart contract call
+
+##### Returns
+
+`Promise`\<\{ \}\>
+
+The call transaction: Liquidity credited (base scale)
+
 #### swap()
 
 > **swap**: (`params`) => `Promise`\<\{ \}\>
@@ -958,6 +1040,8 @@ If someone deposits excess assets to the LP pool, addressExecutiveFee can either
 If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
 
 This method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.
+
+Amount for A or B which is equal exactly to 1 is special usecase and means full distribution which is possible for the specific asset.
 
 Only addressExecutiveFee is allowed to execute this method.
 
@@ -1054,7 +1138,7 @@ The call transaction
 
 > **doAppCall**: (`params`) => `Promise`\<\{ \}\>
 
-Makes a call to the BiatecClammPool smart contract using the `doAppCall(uint64,(uint64,address,uint64,uint64,string),uint64[],uint64[],address[],byte[][])void` ABI method.
+Makes a call to the BiatecClammPool smart contract using the `doAppCall(uint64,(uint64,byte[32],uint64,uint64,string),uint64[],uint64[],address[],byte[][])void` ABI method.
 
 doAppCall can call any other smart contract. mainly created for the xgov calls.
 
@@ -1318,6 +1402,26 @@ The params for the smart contract call
 
 The call transaction: Amount of asset A to be deposited. The result is in Base decimals (9)
 
+#### getRealAssetBalance()
+
+> **getRealAssetBalance**: (`params`) => `Promise`\<\{ \}\>
+
+Makes a call to the BiatecClammPool smart contract using the `getRealAssetBalance(uint64)uint64` ABI method.
+
+##### Parameters
+
+###### params
+
+`object` & `object`
+
+The params for the smart contract call
+
+##### Returns
+
+`Promise`\<\{ \}\>
+
+The call transaction
+
 #### status()
 
 > **status**: (`params`) => `Promise`\<\{ \}\>
@@ -1572,6 +1676,36 @@ The params for the smart contract call
 
 The call result: LP position reduced
 
+#### reconcileLiquidity()
+
+> **reconcileLiquidity**: (`params`) => `Promise`\<\{ `return`: `bigint` \| `undefined`; \}\>
+
+Makes a call to the BiatecClammPool smart contract using the `reconcileLiquidity(uint64,uint64,uint64,uint64)uint256` ABI method.
+
+Books liquidity which is owned neither by LP token holders nor by the fee accounts
+(Liquidity - distributedLp - LiquidityUsersFromFees - LiquidityBiatecFromFees).
+
+Pools deployed with BIATEC-CLAMM-01-06-04 and earlier could accumulate such liquidity in addLiquidity.
+While LP tokens are in circulation the amount is credited to the LP holders (LiquidityUsersFromFees).
+If no LP token is in circulation it is credited to biatec (LiquidityBiatecFromFees) so that it can be
+withdrawn with removeLiquidityAdmin and returned to the affected liquidity providers.
+
+Only addressExecutiveFee is allowed to execute this method.
+
+##### Parameters
+
+###### params
+
+`object` & `SendParams` & `object`
+
+The params for the smart contract call
+
+##### Returns
+
+`Promise`\<\{ `return`: `bigint` \| `undefined`; \}\>
+
+The call result: Liquidity credited (base scale)
+
 #### swap()
 
 > **swap**: (`params`) => `Promise`\<\{ `return`: `bigint` \| `undefined`; \}\>
@@ -1604,6 +1738,8 @@ If someone deposits excess assets to the LP pool, addressExecutiveFee can either
 If someone sent there assets in fault, the withrawing can be use to return them back. If the pool received assets for example for having its algo stake online and recieved rewards it is prefered to distribute them to the current LP holders.
 
 This method is used to distribute amount a and amount b of asset a and asset b to holders as the fee income.
+
+Amount for A or B which is equal exactly to 1 is special usecase and means full distribution which is possible for the specific asset.
 
 Only addressExecutiveFee is allowed to execute this method.
 
@@ -1700,7 +1836,7 @@ The call result
 
 > **doAppCall**: (`params`) => `Promise`\<\{ `return`: `void` \| `undefined`; \}\>
 
-Makes a call to the BiatecClammPool smart contract using the `doAppCall(uint64,(uint64,address,uint64,uint64,string),uint64[],uint64[],address[],byte[][])void` ABI method.
+Makes a call to the BiatecClammPool smart contract using the `doAppCall(uint64,(uint64,byte[32],uint64,uint64,string),uint64[],uint64[],address[],byte[][])void` ABI method.
 
 doAppCall can call any other smart contract. mainly created for the xgov calls.
 
@@ -1963,6 +2099,26 @@ The params for the smart contract call
 `Promise`\<\{ `return`: `bigint` \| `undefined`; \}\>
 
 The call result: Amount of asset A to be deposited. The result is in Base decimals (9)
+
+#### getRealAssetBalance()
+
+> **getRealAssetBalance**: (`params`) => `Promise`\<\{ `return`: `bigint` \| `undefined`; \}\>
+
+Makes a call to the BiatecClammPool smart contract using the `getRealAssetBalance(uint64)uint64` ABI method.
+
+##### Parameters
+
+###### params
+
+`object` & `SendParams` & `object`
+
+The params for the smart contract call
+
+##### Returns
+
+`Promise`\<\{ `return`: `bigint` \| `undefined`; \}\>
+
+The call result
 
 #### status()
 
@@ -2302,7 +2458,7 @@ Checks for decode errors on the given return value and maps the return value to 
 
 ##### TSignature
 
-`TSignature` *extends* `"getCurrentPrice()uint64"` \| `"getCurrentPrice"` \| `"getPriceDivider()uint64"` \| `"getPriceDivider"` \| `"getLPTokenId()uint64"` \| `"getLPTokenId"` \| `"bootstrap(uint64,uint64,uint64,uint64,pay,uint64,uint64,uint64,uint64,uint64)uint64"` \| `"bootstrap"` \| `"addLiquidity(uint64,uint64,txn,txn,uint64,uint64,uint64)uint64"` \| `"addLiquidity"` \| `"removeLiquidity(uint64,uint64,axfer,uint64,uint64,uint64)uint256"` \| `"removeLiquidity"` \| `"removeLiquidityAdmin(uint64,uint64,uint64,uint64,uint256)uint256"` \| `"removeLiquidityAdmin"` \| `"swap(uint64,uint64,uint64,txn,uint64,uint64,uint64)uint256"` \| `"swap"` \| `"distributeExcessAssets(uint64,uint64,uint64,uint256,uint256)uint256"` \| `"distributeExcessAssets"` \| `"withdrawExcessAssets(uint64,uint64,uint64,uint64,uint64)uint64"` \| `"withdrawExcessAssets"` \| `"calculateDistributedLiquidity(uint64,uint256)uint256"` \| `"calculateDistributedLiquidity"` \| `"calculateLiquidityFlatPrice(uint256,uint256,uint256)uint256"` \| `"calculateLiquidityFlatPrice"` \| `"calculateLiquidityD(uint256,uint256,uint256,uint256,uint256,uint256)uint256"` \| `"calculateLiquidityD"` \| `"calculateLiquidityWithD(uint256,uint256,uint256,uint256,uint256)uint256"` \| `"calculateLiquidityWithD"` \| `"calculatePrice(uint256,uint256,uint256,uint256,uint256)uint256"` \| `"calculatePrice"` \| `"calculateAssetBWithdrawOnAssetADeposit(uint256,uint256,uint256,uint256,uint256,uint256)uint256"` \| `"calculateAssetBWithdrawOnAssetADeposit"` \| `"calculateAssetAWithdrawOnAssetBDeposit(uint256,uint256,uint256,uint256,uint256,uint256)uint256"` \| `"calculateAssetAWithdrawOnAssetBDeposit"` \| `"calculateAssetAWithdrawOnLpDeposit(uint256,uint256,uint256)uint256"` \| `"calculateAssetAWithdrawOnLpDeposit"` \| `"calculateAssetBDepositOnAssetADeposit(uint256,uint256,uint256,uint256)uint256"` \| `"calculateAssetBDepositOnAssetADeposit"` \| `"calculateAssetADepositOnAssetBDeposit(uint256,uint256,uint256,uint256)uint256"` \| `"calculateAssetADepositOnAssetBDeposit"` \| `"status(uint64,uint64,uint64,uint64)(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)"` \| `"status"`
+`TSignature` *extends* `"getCurrentPrice()uint64"` \| `"getCurrentPrice"` \| `"getPriceDivider()uint64"` \| `"getPriceDivider"` \| `"getLPTokenId()uint64"` \| `"getLPTokenId"` \| `"bootstrap(uint64,uint64,uint64,uint64,pay,uint64,uint64,uint64,uint64,uint64)uint64"` \| `"bootstrap"` \| `"addLiquidity(uint64,uint64,txn,txn,uint64,uint64,uint64)uint64"` \| `"addLiquidity"` \| `"removeLiquidity(uint64,uint64,axfer,uint64,uint64,uint64)uint256"` \| `"removeLiquidity"` \| `"removeLiquidityAdmin(uint64,uint64,uint64,uint64,uint256)uint256"` \| `"removeLiquidityAdmin"` \| `"reconcileLiquidity(uint64,uint64,uint64,uint64)uint256"` \| `"reconcileLiquidity"` \| `"swap(uint64,uint64,uint64,txn,uint64,uint64,uint64)uint256"` \| `"swap"` \| `"distributeExcessAssets(uint64,uint64,uint64,uint256,uint256)uint256"` \| `"distributeExcessAssets"` \| `"withdrawExcessAssets(uint64,uint64,uint64,uint64,uint64)uint64"` \| `"withdrawExcessAssets"` \| `"calculateDistributedLiquidity(uint64,uint256)uint256"` \| `"calculateDistributedLiquidity"` \| `"calculateLiquidityFlatPrice(uint256,uint256,uint256)uint256"` \| `"calculateLiquidityFlatPrice"` \| `"calculateLiquidityD(uint256,uint256,uint256,uint256,uint256,uint256)uint256"` \| `"calculateLiquidityD"` \| `"calculateLiquidityWithD(uint256,uint256,uint256,uint256,uint256)uint256"` \| `"calculateLiquidityWithD"` \| `"calculatePrice(uint256,uint256,uint256,uint256,uint256)uint256"` \| `"calculatePrice"` \| `"calculateAssetBWithdrawOnAssetADeposit(uint256,uint256,uint256,uint256,uint256,uint256)uint256"` \| `"calculateAssetBWithdrawOnAssetADeposit"` \| `"calculateAssetAWithdrawOnAssetBDeposit(uint256,uint256,uint256,uint256,uint256,uint256)uint256"` \| `"calculateAssetAWithdrawOnAssetBDeposit"` \| `"calculateAssetAWithdrawOnLpDeposit(uint256,uint256,uint256)uint256"` \| `"calculateAssetAWithdrawOnLpDeposit"` \| `"calculateAssetBDepositOnAssetADeposit(uint256,uint256,uint256,uint256)uint256"` \| `"calculateAssetBDepositOnAssetADeposit"` \| `"calculateAssetADepositOnAssetBDeposit(uint256,uint256,uint256,uint256)uint256"` \| `"calculateAssetADepositOnAssetBDeposit"` \| `"getRealAssetBalance(uint64)uint64"` \| `"getRealAssetBalance"` \| `"status(uint64,uint64,uint64,uint64)(uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)"` \| `"status"`
 
 #### Parameters
 

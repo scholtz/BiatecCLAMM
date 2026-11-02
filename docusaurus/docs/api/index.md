@@ -11,6 +11,11 @@
 - [BiatecPoolProviderFactory](classes/BiatecPoolProviderFactory.md)
 - [BiatecPoolProviderClient](classes/BiatecPoolProviderClient.md)
 
+## Interfaces
+
+- [SuggestTickTypeOptions](interfaces/SuggestTickTypeOptions.md)
+- [IInitPriceDecimalsReturn](interfaces/IInitPriceDecimalsReturn.md)
+
 ## Type Aliases
 
 - [AmmStatus](type-aliases/AmmStatus.md)
@@ -21,6 +26,17 @@
 - [PoolConfig](type-aliases/PoolConfig.md)
 - [FullConfig](type-aliases/FullConfig.md)
 - [BiatecNetworkConfig](type-aliases/BiatecNetworkConfig.md)
+- [TickType](type-aliases/TickType.md)
+- [TickRounding](type-aliases/TickRounding.md)
+
+## Variables
+
+- [TICK\_TYPES](variables/TICK_TYPES.md)
+- [DEFAULT\_TICK\_TYPE](variables/DEFAULT_TICK_TYPE.md)
+- [TICK\_TYPE\_TO\_PRECISION](variables/TICK_TYPE_TO_PRECISION.md)
+- [PRECISION\_TO\_TICK\_TYPE](variables/PRECISION_TO_TICK_TYPE.md)
+- [TICK\_GRID\_ANCHORS](variables/TICK_GRID_ANCHORS.md)
+- [MAX\_TICK\_GRID\_BOUNDARIES](variables/MAX_TICK_GRID_BOUNDARIES.md)
 
 ## Functions
 
@@ -52,3 +68,22 @@
 - [getBoxReferencePool](functions/getBoxReferencePool.md)
 - [getBoxReferencePoolByConfig](functions/getBoxReferencePoolByConfig.md)
 - [getConfig](functions/getConfig.md)
+- [precisionForTickType](functions/precisionForTickType.md)
+- [tickTypeForPrecision](functions/tickTypeForPrecision.md)
+- [cleanLogTick](functions/cleanLogTick.md)
+- [getTickSize](functions/getTickSize.md)
+- [getTickDecimals](functions/getTickDecimals.md)
+- [snapPriceToTick](functions/snapPriceToTick.md)
+- [suggestTickTypeForRange](functions/suggestTickTypeForRange.md)
+- [toFixedBigInt](functions/toFixedBigInt.md)
+- [fromFixedBigInt](functions/fromFixedBigInt.md)
+- [initPriceDecimals](functions/initPriceDecimals.md)
+- [priceTickDecimals](functions/priceTickDecimals.md)
+- [tickDecimals](functions/tickDecimals.md)
+- [tickGridDecadeMantissas](functions/tickGridDecadeMantissas.md)
+- [tickGridBoundaryBelow](functions/tickGridBoundaryBelow.md)
+- [tickGridBoundaryAbove](functions/tickGridBoundaryAbove.md)
+- [nextTickGridBoundary](functions/nextTickGridBoundary.md)
+- [prevTickGridBoundary](functions/prevTickGridBoundary.md)
+- [tickGridWidthAt](functions/tickGridWidthAt.md)
+- [tickGridBoundaries](functions/tickGridBoundaries.md)

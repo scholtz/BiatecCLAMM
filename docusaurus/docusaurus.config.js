@@ -7,7 +7,10 @@ require('dotenv').config();
 // With JSDoc @type annotations, IDEs can provide config autocompletion
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 (
-  module.exports = {
+  module.exports = (async () => {
+    const remarkMath = (await import('remark-math')).default;
+    const rehypeKatex = (await import('rehype-katex')).default;
+    return {
     title: 'Biatec DEX',
     tagline: 'Concentrated Liquidity DEX on the Algorand Blockchain',
     url: 'https://beta.dex.biatec.io',
@@ -18,6 +21,12 @@ require('dotenv').config();
         onBrokenMarkdownLinks: 'warn',
       },
     },
+    stylesheets: [
+      {
+        href: 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css',
+        type: 'text/css',
+      },
+    ],
     favicon: 'img/favicon.ico',
     organizationName: 'scholtz', // Usually your GitHub org/user name.
     projectName: 'BiatecCLAMM', // Usually your repo name.
@@ -43,11 +52,15 @@ require('dotenv').config();
         ({
           docs: {
             sidebarPath: require.resolve('./sidebars.js'),
+            remarkPlugins: [remarkMath],
+            rehypePlugins: [rehypeKatex],
             // Please change this to your repo.
             editUrl: 'https://github.com/scholtz/BiatecCLAMM/edit/main/docusaurus/',
           },
           blog: {
             showReadingTime: true,
+            remarkPlugins: [remarkMath],
+            rehypePlugins: [rehypeKatex],
             // Please change this to your repo.
             editUrl: 'https://github.com/scholtz/BiatecCLAMM/edit/main/docusaurus/blog/',
           },
@@ -203,5 +216,6 @@ require('dotenv').config();
           darkTheme: darkCodeTheme,
         },
       }),
-  }
+    };
+  })()
 );
