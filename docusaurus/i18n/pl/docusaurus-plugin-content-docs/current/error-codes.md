@@ -1,7 +1,3 @@
-# Referencia chybových kódov BiatecCLAMM
-
-Tento dokument poskytuje komplexnú referenciu všetkých chybových kódov používaných v systéme smart kontraktov BiatecCLAMM. Pochopenie týchto chybových kódov pomôže vývojárom debugovať problémy a poskytovať lepšie používateľské skúsenosti.
-
 # Referencja kodów błędów BiatecCLAMM
 
 Ten dokument zawiera kompleksową referencję wszystkich kodów błędów używanych w systemie smart kontraktów BiatecCLAMM. Zrozumienie tych kodów błędów pomoże deweloperom debugować problemy i zapewniać lepsze doświadczenia użytkowników.

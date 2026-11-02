@@ -61,10 +61,13 @@ Biatec CLAMM rewolucjonizuje funkcjonalność zdecentralizowanej giełdy (DEX) p
 ## 📚 Przegląd dokumentacji {#--przeglad-dokumentacji}
 
 - **[Podstawowe przypadki użycia](./basic-use-cases)**: Powszechne scenariusze handlowe i płynnościowe
+- **[System ticków](./tick-system)**: Logarytmiczne ticki do wyceny, przyciągania do siatki i wyboru zakresów
+- **[Adapter DEX GeckoTerminal](./geckoterminal-integration)**: Publiczne API publikujące swapy i zmiany płynności Biatec DEX do GeckoTerminal / CoinGecko
 - **[Pule stakingowe](./staking-pools)**: Funkcjonalność tokenów oprocentowanych
 - **[Ochrona opłat płynności](./liquidity-fee-protection)**: Zaawansowane zarządzanie opłatami
+- **[Agregacja opłat wielu podmiotów i dowód uczciwości](./multi-party-fee-aggregation)**: Dowód matematyczny i weryfikacja testowa potwierdzające uczciwe zachowanie opłat przy agregacji płynności wielu użytkowników w różnym czasie
 - **[Zaokrąglanie płynności](./liquidity-rounding)**: Szczegóły matematyczne precyzji
-- **[Audity bezpieczeństwa](https://github.com/scholtz/BiatecCLAMM/tree/main/audits)**: Niezależne oceny bezpieczeństwa
+- **[Audyty bezpieczeństwa](https://github.com/scholtz/BiatecCLAMM/tree/main/audits)**: Niezależne oceny bezpieczeństwa
 
 ## 🔒 Bezpieczeństwo i zgodność {#--bezpieczenstwo-i-zgodnosc}
 
