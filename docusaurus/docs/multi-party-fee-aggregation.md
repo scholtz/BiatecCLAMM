@@ -247,6 +247,23 @@ When the remaining Party $j \ne i$ withdraws their LP tokens $D_j$ at $t_5$:
 
 ---
 
+### Lifecycle Overview
+
+```mermaid
+sequenceDiagram
+    participant A as Party A
+    participant P as Pool
+    participant B as Party B
+    participant T as Traders
+    A->>P: t0: deposit ΔL_A (mint D_A LP)
+    T->>P: t1: swaps accrue fees F_1 → L_u
+    B->>P: t2: deposit ΔL_B (LP minted at fee-adjusted rate)
+    T->>P: t3: swaps accrue fees F_2 → L_u
+    A->>P: t4: removeLiquidity (D_A + pro-rata L_u)
+    B->>P: t5: removeLiquidity (D_B + pro-rata L_u)
+    Note over A,B: Result is independent of withdrawal order
+```
+
 ## 4. Concrete Numerical Example {#-4-concrete-numerical-example}
 
 Suppose a flat-price pool ($P = 1.0$, $\text{biatecFee} = 10\%$) undergoes the following sequence:
