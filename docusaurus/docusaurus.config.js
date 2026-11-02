@@ -34,7 +34,7 @@ require('dotenv').config();
     projectName: 'BiatecCLAMM', // Usually your repo name.
     i18n: {
       defaultLocale: 'en',
-      locales: ['en', 'sk', 'pl'],
+      locales: ['en', 'sk', 'pl', 'hu'],
       localeConfigs: {
         en: {
           label: 'English',
@@ -44,6 +44,9 @@ require('dotenv').config();
         },
         pl: {
           label: 'Polski',
+        },
+        hu: {
+          label: 'Magyar',
         },
       },
     },
