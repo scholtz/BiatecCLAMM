@@ -90,27 +90,27 @@ Uvažujme dvoch nezávislých poskytovateľov likvidity — **Stranu A (Existuj�
 
 ```mermaid
 sequenceDiagram
-    participant Alice as Party A (LP 1)
-    participant Trader as Swappers
+    participant Alice as Strana A (LP 1)
+    participant Trader as Obchodníci
     participant Pool as BiatecClammPool
-    participant Bob as Party B (LP 2)
+    participant Bob as Strana B (LP 2)
 
-    Note over Alice,Pool: Epoch 1 (t0): Initial Liquidity
+    Note over Alice,Pool: Epocha 1 (t0): Počiatočná likvidita
     Alice->>Pool: addLiquidity(ΔL_A)
-    Pool-->>Alice: Mint D_A = ΔL_A LP tokens (Lu = 0)
+    Pool-->>Alice: Namintuj D_A = ΔL_A LP tokenov (Lu = 0)
 
-    Note over Trader,Pool: Epoch 2 (t1): Swaps Accrue Fees F_1
+    Note over Trader,Pool: Epocha 2 (t1): Swapy nahromadia poplatky F_1
     Trader->>Pool: swap()
-    Note over Pool: L increases by F_1 + B_1<br/>Lu = F_1 (100% belongs to Party A)<br/>Lb = B_1 (belongs to Biatec)
+    Note over Pool: L sa zvýši o F_1 + B_1<br/>Lu = F_1 (100% patrí Strane A)<br/>Lb = B_1 (patrí Biatec)
 
-    Note over Bob,Pool: Epoch 3 (t2): Party B Joins Pool
+    Note over Bob,Pool: Epocha 3 (t2): Strana B vstúpi do poolu
     Bob->>Pool: addLiquidity(ΔL_B)
     Note over Pool: X = floor(ΔL_B * D_A / (D_A + F_1))<br/>Lu' = F_1 + (ΔL_B - X)
-    Pool-->>Bob: Mint D_B = floor(X / 1000) * 1000 LP tokens
+    Pool-->>Bob: Namintuj D_B = floor(X / 1000) * 1000 LP tokenov
 
-    Note over Trader,Pool: Epoch 4 (t3): Swaps Accrue Fees F_2
+    Note over Trader,Pool: Epocha 4 (t3): Swapy nahromadia poplatky F_2
     Trader->>Pool: swap()
-    Note over Pool: Lu'' = Lu' + F_2<br/>F_2 shared in ratio (D_A + F_1) : ΔL_B
+    Note over Pool: Lu'' = Lu' + F_2<br/>F_2 rozdelené v pomere (D_A + F_1) : ΔL_B
 ```
 
 ### Krok 1 ($t_0$): Strana A dodá počiatočnú likviditu {#-step-1-t0-party-a-supplies-initial-liquidity}
@@ -251,17 +251,17 @@ Keď zostávajúca Strana $j \ne i$ vyberie svoje LP tokeny $D_j$ v čase $t_5$:
 
 ```mermaid
 sequenceDiagram
-    participant A as Party A
+    participant A as Strana A
     participant P as Pool
-    participant B as Party B
-    participant T as Traders
-    A->>P: t0: deposit ΔL_A (mint D_A LP)
-    T->>P: t1: swaps accrue fees F_1 → L_u
-    B->>P: t2: deposit ΔL_B (LP minted at fee-adjusted rate)
-    T->>P: t3: swaps accrue fees F_2 → L_u
-    A->>P: t4: removeLiquidity (D_A + pro-rata L_u)
-    B->>P: t5: removeLiquidity (D_B + pro-rata L_u)
-    Note over A,B: Result is independent of withdrawal order
+    participant B as Strana B
+    participant T as Obchodníci
+    A->>P: t0: vklad ΔL_A (mint D_A LP)
+    T->>P: t1: swapy nahromadia poplatky F_1 → L_u
+    B->>P: t2: vklad ΔL_B (LP namintované v poplatkovo upravenom pomere)
+    T->>P: t3: swapy nahromadia poplatky F_2 → L_u
+    A->>P: t4: removeLiquidity (D_A + pomerné L_u)
+    B->>P: t5: removeLiquidity (D_B + pomerné L_u)
+    Note over A,B: Výsledok je nezávislý od poradia výberov
 ```
 
 ## 4. Konkrétny číselný príklad {#-4-concrete-numerical-example}
