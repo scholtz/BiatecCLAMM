@@ -65,6 +65,7 @@ Biatec CLAMM revolutionizes decentralized exchange (DEX) functionality by implem
 - **[GeckoTerminal DEX Adapter](./geckoterminal-integration)**: Public API that publishes Biatec DEX swaps and liquidity changes to GeckoTerminal / CoinGecko
 - **[Staking Pools](./staking-pools)**: Interest-bearing token functionality
 - **[Liquidity Fee Protection](./liquidity-fee-protection)**: Advanced fee management
+- **[Multi-Party Fee Aggregation & Fairness Proof](./multi-party-fee-aggregation)**: Mathematical proof and test verification that multi-user liquidity aggregation at different times preserves all fees fairly
 - **[Liquidity Rounding](./liquidity-rounding)**: Mathematical precision details
 - **[Security Audits](https://github.com/scholtz/BiatecCLAMM/tree/main/audits)**: Independent security assessments
 

@@ -66,3 +66,4 @@ Mainnet pool `3720188642` (Gold/GoldDAO, range 128-256, LP fee 0.1%, Biatec shar
 - Any contract change requires recomputing TEAL artifacts (`npm run compile-contract`) and regenerating clients (`npm run generate-client` or `npm run build`) before publishing packages.
 - Off-chain helpers or simulations that estimate minted LP tokens must use `delta * D / (D + Lu)` to stay in sync with the chain.
 - Pools deployed with `BIATEC-CLAMM-01-06-04` or earlier should be upgraded; liquidity already orphaned in such pools is not recovered automatically by the upgrade.
+- For the complete multi-epoch mathematical proof, concrete numerical walkthroughs, and multi-party test suite coverage (`__test__/pool/multi-party-fee-aggregation.test.ts`), see [Multi-Party Liquidity Aggregation & Fee Fairness Proof](./multi-party-fee-aggregation).
