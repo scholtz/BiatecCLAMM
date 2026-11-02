@@ -17,7 +17,7 @@ Elsődleges fájl: `contracts/BiatecClammPool.algo.ts`
 
 ### Miért történik ez {#-why-this-happens}
 
-A pool egy másodfokú egyenletet használ a felhalmozott díjak figyelembevételéhez az LP tokenek mintelésekor. A pozitív gyök értékét lefelé kerekítjük, így a kerekítés mindig a poolt részesíti előnyben az egyes felhasználókkal szemben. Ez megakadályozza, hogy támadók ismétlődő apró műveletekkel értéket szívjanak ki.
+Az LP tokenek mintelésekor a pool figyelembe veszi a felhalmozott díjakat: egy `delta` likviditású betétre `delta * distributedLp / (distributedLp + usersFeeLiquidity)` LP tokent mintel, az LP token tizedesjegyeire (6) lefelé kerekítve. A `delta - X` díjhígulási rész a meglévő LP-tulajdonosok javára (`LiquidityUsersFromFees`) kerül jóváírásra; a mikro-LP alatti lefelé kerekítési maradék a poolban marad, így a kerekítés mindig a poolnak kedvez az egyes befizetőkkel szemben. Ez megakadályozza, hogy támadók ismételt apró műveletekkel értéket szívjanak ki. A levezetéshez lásd: [Likviditási díjak védelme](./liquidity-fee-protection).
 
 ### Enyhítési stratégiák {#-mitigation-strategies}
 

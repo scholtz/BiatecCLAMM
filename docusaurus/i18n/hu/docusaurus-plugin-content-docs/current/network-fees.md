@@ -209,13 +209,13 @@ A protokoll díjait a kijelölt executive fee cím vonhatja ki a `distributeExce
 
 ### Új LP védelem
 
-Az új likviditásszolgáltatók ne tudják felvenni a korábbi díjakat, ezért a protokoll másodfokú formulát használ LP token minteléskor:
+Hogy az új likviditásszolgáltatók ne tudják felvenni a korábbi díjakat, a protokoll a meglévő díjaránnyal diszkontálja a mintelt LP tokeneket, a különbözetet pedig a `LiquidityUsersFromFees` számlára könyveli:
 
 ```
-X^2 + X(sumDistributedAndFees − Q) − Q * distributedBefore = 0
+X = delta * distributedLp / (distributedLp + LiquidityUsersFromFees)
 ```
 
-Ez garantálja, hogy az új belépők ne vehessenek fel azonnal olyan díjakat, amelyek a meglévő szolgáltatókat illetik.
+Ez garantálja, hogy az új belépők ne vehessenek fel azonnal olyan díjakat, amelyek a meglévő szolgáltatókat illetik (lásd: [Díjvédelem](./liquidity-fee-protection) és [Több szereplős díjaggregáció](./multi-party-fee-aggregation)).
 
 ### Kerekítési viselkedés
 

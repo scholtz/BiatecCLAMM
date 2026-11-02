@@ -1,0 +1,50 @@
+{
+  "features.concentratedLiquidity.title": {
+    "message": "Koncentrált Likviditás",
+    "description": "Title for concentrated liquidity feature"
+  },
+  "features.concentratedLiquidity.description": {
+    "message": "Tapasztalja meg a koncentrált likviditású AMM erejét az Algorandon. Biztosítson likviditást egyedi ársávokban a magasabb hozam és a hagyományos AMM-ekhez képest alacsonyabb impermanent loss érdekében.",
+    "description": "Description for concentrated liquidity feature"
+  },
+  "features.algorandNative.title": {
+    "message": "Algorand Natív",
+    "description": "Title for Algorand native feature"
+  },
+  "features.algorandNative.description": {
+    "message": "Kifejezetten az Algorand blokkláncra építve, optimalizált okosszerződésekkel. Használja ki az Algorand sebességét, biztonságát és alacsony tranzakciós költségeit a hatékony decentralizált kereskedéshez.",
+    "description": "Description for Algorand native feature"
+  },
+  "features.stakingPools.title": {
+    "message": "Staking Poolok",
+    "description": "Title for staking pools feature"
+  },
+  "features.stakingPools.description": {
+    "message": "Hozzon létre és kezeljen staking poolokat kamatozó tokenekhez. Támogatás azonos eszközű stakinghez (B-ALGO, B-USDC) és hagyományos eszközpárokhoz automatizált jutalomszétosztással.",
+    "description": "Description for staking pools feature"
+  },
+  "features.identityCompliance.title": {
+    "message": "Identitás és Megfelelés",
+    "description": "Title for identity compliance feature"
+  },
+  "features.identityCompliance.description": {
+    "message": "Integrált személyazonosság-ellenőrzési rendszer konfigurálható verifikációs osztályokkal. Tegye lehetővé a KYC-kompatibilis kereskedést a decentralizáció és az adatvédelem megőrzése mellett.",
+    "description": "Description for identity compliance feature"
+  },
+  "features.flexibleFeeManagement.title": {
+    "message": "Rugalmas Díjkezelés",
+    "description": "Title for flexible fee management feature"
+  },
+  "features.flexibleFeeManagement.description": {
+    "message": "Konfigurálható díjstruktúra Biatec díjmegosztással. A likviditásszolgáltatók a kereskedési díjakból részesülnek, miközben a protokoll fenntartható részesedést gyűjt az ökoszisztéma fejlesztésére.",
+    "description": "Description for flexible fee management feature"
+  },
+  "features.developerSdk.title": {
+    "message": "Fejlesztői SDK",
+    "description": "Title for developer SDK feature"
+  },
+  "features.developerSdk.description": {
+    "message": "Átfogó TypeScript SDK tranzakció-összeállítókkal, küldő függvényekkel és segédeszközökkel. Könnyű integráció dAppokhoz, tárcákhoz és kereskedési felületekhez teljes típusbiztonsággal.",
+    "description": "Description for developer SDK feature"
+  }
+}
