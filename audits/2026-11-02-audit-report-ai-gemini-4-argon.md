@@ -18,7 +18,7 @@
   - **TypeScript**: `5.9.3` (note: `@typescript-eslint/typescript-estree` declares `<5.6.0` support range)
   - **Test Runner**: `jest` `29.7.0` with `@algorandfoundation/algokit-utils` `^9.2.0` against isolated Algorand LocalNet (`algokit_sandbox_algod`)
 - **Prior Exposure & Independence Disclosure**:
-  - The audit request supplied the external concern: *"I have concerns over an exploit in Biatec that cause fee loss"* and requested verification of the mathematics governing fee collection and multi-party liquidity aggregation across different times.
+  - The audit request supplied the external concern: _"I have concerns over an exploit in Biatec that cause fee loss"_ and requested verification of the mathematics governing fee collection and multi-party liquidity aggregation across different times.
   - Per `audits/AI-AUDIT-INSTRUCTIONS.md`, no prior audit reports (`audits/2025-*.md`, `audits/2026-*.md`), historical finding summaries (`AUDIT_FIXES_SUMMARY.md`, `IMPLEMENTATION_SUMMARY.md`), or historical audit reproduction tests (`__test__/audit-*.test.ts`, `__test__/pool/audit-*.ts`) were opened during discovery. All findings and proofs were derived directly from the current source implementation.
 - **Audit Scope**:
   - Smart contracts (`contracts/*.algo.ts` — 3,375 lines across 5 contracts)
@@ -85,13 +85,13 @@ This audit evaluated the BiatecCLAMM smart contract suite (`BIATEC-CLAMM-01-06-0
 
 No **Critical** or **High** severity vulnerabilities were identified in the current contracts. Two **Medium**, three **Low**, and two **Informational** findings were identified:
 
-| Severity | Count | IDs & Titles |
-| :--- | :---: | :--- |
-| **Critical** | 0 | — |
-| **High** | 0 | — |
-| **Medium** | 2 | **[M-01]** Out-of-ratio `addLiquidity` followed by `removeLiquidity` executes a synthetic curve rebalance without charging swap fees (foregone fee revenue)<br/>**[M-02]** Potential `uint256` underflow in `payOutLiquidity` on 100% final redemption when downward curve rounding makes `Liquidity < D + Lu + Lb` (`unowned < 0`) |
-| **Low** | 3 | **[L-01]** `clammAddLiquiditySender` initializes `optinSender = true`, prepending a redundant LP opt-in transaction on every deposit<br/>**[L-02]** `BiatecClammPool.status()` casts `uint256` liquidity and balance fields to `uint64`, which traps on pools exceeding $1.844 \times 10^{19}$ base units<br/>**[L-03]** `payOutLiquidity` deducts base-scale `aToSend`/`bToSend` rather than transferred `aToSend64 * scaleA`, shifting sub-asset-unit remainders into untracked excess holdings |
-| **Informational** | 2 | **[I-01]** Pause matrix differences across admin methods (`reconcileLiquidity`, `sendOnlineKeyRegistration`, `loadCLAMMContractData`) and duplicate-txid risk in `clammDistributeExcessAssetsTxs`<br/>**[I-02]** Stale quadratic LP-minting note in `.github/copilot-instructions.md` and legacy tuple layout in `src/biatecPools/parseStats.ts` |
+| Severity          | Count | IDs & Titles                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| :---------------- | :---: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Critical**      |   0   | —                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **High**          |   0   | —                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **Medium**        |   2   | **[M-01]** Out-of-ratio `addLiquidity` followed by `removeLiquidity` executes a synthetic curve rebalance without charging swap fees (foregone fee revenue)<br/>**[M-02]** Potential `uint256` underflow in `payOutLiquidity` on 100% final redemption when downward curve rounding makes `Liquidity < D + Lu + Lb` (`unowned < 0`)                                                                                                                                                               |
+| **Low**           |   3   | **[L-01]** `clammAddLiquiditySender` initializes `optinSender = true`, prepending a redundant LP opt-in transaction on every deposit<br/>**[L-02]** `BiatecClammPool.status()` casts `uint256` liquidity and balance fields to `uint64`, which traps on pools exceeding $1.844 \times 10^{19}$ base units<br/>**[L-03]** `payOutLiquidity` deducts base-scale `aToSend`/`bToSend` rather than transferred `aToSend64 * scaleA`, shifting sub-asset-unit remainders into untracked excess holdings |
+| **Informational** |   2   | **[I-01]** Pause matrix differences across admin methods (`reconcileLiquidity`, `sendOnlineKeyRegistration`, `loadCLAMMContractData`) and duplicate-txid risk in `clammDistributeExcessAssetsTxs`<br/>**[I-02]** Stale quadratic LP-minting note in `.github/copilot-instructions.md` and legacy tuple layout in `src/biatecPools/parseStats.ts`                                                                                                                                                  |
 
 ---
 
@@ -99,17 +99,17 @@ No **Critical** or **High** severity vulnerabilities were identified in the curr
 
 ### Audit Scope & Coverage Matrix
 
-| Component | File(s) | Lines | Coverage Status | Verification Method |
-| :--- | :--- | :---: | :--- | :--- |
-| Core CLAMM Pool Contract | `contracts/BiatecClammPool.algo.ts` | 1,138 | ✅ Fully Reviewed | Static analysis, algebraic proof, full LocalNet Jest suite |
-| Configuration Provider | `contracts/BiatecConfigProvider.algo.ts` | 228 | ✅ Fully Reviewed | Static analysis, LocalNet integration tests |
-| Identity Provider | `contracts/BiatecIdentityProvider.algo.ts` | 428 | ✅ Fully Reviewed | Static analysis, `BiatecIdentity.test.ts` & pool tests |
-| Pool Provider & Oracle | `contracts/BiatecPoolProvider.algo.ts` | 773 | ✅ Fully Reviewed | Static analysis, deployment, stats & ring-buffer tests |
-| Test Harness Contract | `contracts/FakePool.algo.ts` | 14 | ✅ Fully Reviewed | Static analysis, `deployment.test.ts` |
-| Tx Builders & Senders | `src/biatecClamm/txs/*.ts`, `src/biatecClamm/sender/*.ts` | 812 | ✅ Fully Reviewed | Static analysis, LocalNet end-to-end tests |
-| Common & Box Utilities | `src/common/*.ts`, `src/biatecPools/*.ts`, `src/boxes/*.ts`, `src/ticks/*.ts` | 2,410 | ✅ Fully Reviewed | Static analysis, unit & integration tests |
-| Operational CLI Scripts | `src/bin/*.ts` | 2,371 | ⚠️ Static Review Only | Static review (live multisig/MainNet scripts not executed) |
-| Documentation | `README.md`, `docusaurus/docs/*.md`, `.github/copilot-instructions.md` | — | ✅ Fully Reviewed | Cross-checked against contract implementation |
+| Component                | File(s)                                                                       | Lines | Coverage Status       | Verification Method                                        |
+| :----------------------- | :---------------------------------------------------------------------------- | :---: | :-------------------- | :--------------------------------------------------------- |
+| Core CLAMM Pool Contract | `contracts/BiatecClammPool.algo.ts`                                           | 1,138 | ✅ Fully Reviewed     | Static analysis, algebraic proof, full LocalNet Jest suite |
+| Configuration Provider   | `contracts/BiatecConfigProvider.algo.ts`                                      |  228  | ✅ Fully Reviewed     | Static analysis, LocalNet integration tests                |
+| Identity Provider        | `contracts/BiatecIdentityProvider.algo.ts`                                    |  428  | ✅ Fully Reviewed     | Static analysis, `BiatecIdentity.test.ts` & pool tests     |
+| Pool Provider & Oracle   | `contracts/BiatecPoolProvider.algo.ts`                                        |  773  | ✅ Fully Reviewed     | Static analysis, deployment, stats & ring-buffer tests     |
+| Test Harness Contract    | `contracts/FakePool.algo.ts`                                                  |  14   | ✅ Fully Reviewed     | Static analysis, `deployment.test.ts`                      |
+| Tx Builders & Senders    | `src/biatecClamm/txs/*.ts`, `src/biatecClamm/sender/*.ts`                     |  812  | ✅ Fully Reviewed     | Static analysis, LocalNet end-to-end tests                 |
+| Common & Box Utilities   | `src/common/*.ts`, `src/biatecPools/*.ts`, `src/boxes/*.ts`, `src/ticks/*.ts` | 2,410 | ✅ Fully Reviewed     | Static analysis, unit & integration tests                  |
+| Operational CLI Scripts  | `src/bin/*.ts`                                                                | 2,371 | ⚠️ Static Review Only | Static review (live multisig/MainNet scripts not executed) |
+| Documentation            | `README.md`, `docusaurus/docs/*.md`, `.github/copilot-instructions.md`        |   —   | ✅ Fully Reviewed     | Cross-checked against contract implementation              |
 
 ### Full Test Suite Execution (Mandatory Gate)
 
@@ -211,19 +211,23 @@ In `BiatecClammPool.addLiquidity()` (lines 332–355), the deposit ratio enforce
 4. Thus, $(x_1', y_1')$ lies on the **exact same constant-liquidity curve $L(x, y) = L_1$** as $(x_1, y_1)$. The caller has net-deposited $\Delta y_{\text{eff}} = y_1' - y_1$ and net-received $\Delta x_{\text{eff}} = x_1 - x_1'$ (the exact zero-fee swap output along $L = L_1$) without paying `this.fee` or `biatecFee` and without triggering `registerTrade`.
 
 **Prerequisites and Impact**:
+
 - Requires a non-empty pool (`assetA !== assetB`) where the caller passes identity verification (`verifyIdentity`) and holds sufficient capital to execute an `addLiquidity` + `removeLiquidity` pair.
 - **What is NOT affected**: Incumbent LPs' liquidity $L_1$, pre-existing user fees $L_u$, and protocol fees $L_b$ are **never reduced** ($L(x_1', y_1') = L_1$).
 - **What IS affected**: The pool and protocol forego the swap fee (`fee` and `biatecFee`) that would otherwise have been earned on the trade from $(x_1, y_1)$ to $(x_1', y_1')$, and the trade is not logged in `BiatecPoolProvider` volume statistics.
 
 **Recommendation**:
 When `this.Liquidity.value > 0` and `(this.assetABalanceBaseScale.value > 0 || this.assetBBalanceBaseScale.value > 0)`:
+
 1. Enforce proportional deposits matching the current reserve ratio $(x : y)$ (returning any excess deposit or rejecting out-of-ratio deposits beyond a small rounding tolerance), **or**
 2. Deduct the pool's swap fee rate on the imbalanced portion of the deposit so that single-sided/unbalanced liquidity additions accrue the equivalent swap fee into `LiquidityUsersFromFees` and `LiquidityBiatecFromFees`.
 
 **Defensive Acceptance Criteria**:
+
 - Any sequence of `addLiquidity` followed by immediate `removeLiquidity` that shifts the pool's reserve ratio $(x:y)$ must either be rejected as out-of-ratio or leave the pool with strictly greater liquidity $L_{\text{after}} > L_{\text{before}}$ commensurate with the swap fee on the net asset exchange.
 
 **Limitations**:
+
 - Fixing this changes the current intentional design choice ("allow user to deposit any combination of asset A and asset B" on line 356) and should be coordinated with front-end deposit flows.
 
 ---
@@ -240,6 +244,7 @@ When `this.Liquidity.value > 0` and `(this.assetABalanceBaseScale.value > 0 || t
 Holders of all remaining circulating LP tokens $D$ and the protocol fee executor holding $L_b$ must always be able to redeem their full balance (`lpToSend = lpHeld` or `removeLiquidityAdmin(amount = 0)`) without arithmetic underflow, even if cumulative integer floor truncations in `calculateCurrentLiquidity()` cause `this.Liquidity.value` to trail $D + L_u + L_b$ by a few base units (`unowned < 0`).
 
 **Evidence**:
+
 1. In `payOutLiquidity` (lines 476–490):
    ```ts
    const aToSend = this.calculateAssetAWithdrawOnLpDeposit(lpDeltaWithFees, this.assetABalanceBaseScale.value, this.Liquidity.value);
@@ -256,12 +261,14 @@ Holders of all remaining circulating LP tokens $D$ and the protocol fee executor
 6. When `lpDeltaWithFees > this.Liquidity.value`, `aToSend = (assetABalanceBaseScale * lpDeltaWithFees) / Liquidity > assetABalanceBaseScale`, causing `this.assetABalanceBaseScale.value - aToSend` on line 486 to **underflow `uint256` and revert the transaction**.
 
 **Prerequisites and Impact**:
+
 - Occurs only when a pool has `unowned < 0` (`Liquidity < D + Lu + Lb`) AND the very last withdrawer attempts to redeem 100% of the remaining claim in full (`lpDeltaWithFees > Liquidity`).
 - **Operational Workaround (No Contract Upgrade Required)**:
   - For an LP holder: redeeming `lpHeld - 1` micro-LP (or leaving $\lceil |\text{unowned}| / 1000 \rceil$ micro-LP, worth $< 0.003$ LP units) keeps `lpDeltaWithFees <= Liquidity` and succeeds.
   - For `removeLiquidityAdmin`: passing `amount = min(LiquidityBiatecFromFees, Liquidity)` instead of `amount = 0` succeeds and withdraws 100% of the pool's remaining tracked reserves.
 
 **Recommendation**:
+
 1. **On-Chain (`BiatecClammPool.algo.ts` — `payOutLiquidity`)**: Clamp `lpDeltaWithFees` to `this.Liquidity.value` before computing `aToSend` and `bToSend`:
    ```ts
    const effectiveLpDelta = lpDeltaWithFees > this.Liquidity.value ? this.Liquidity.value : lpDeltaWithFees;
@@ -269,9 +276,11 @@ Holders of all remaining circulating LP tokens $D$ and the protocol fee executor
 2. **Off-Chain (`src/common/calculateFeeWithdrawal.ts` and `src/bin/clamm-pool-withdraw-biatec-fees-to-all-pools.ts`)**: When `liquidityBiatecFromFees > liquidity`, pass `amount = liquidity` (instead of `0n`) to `removeLiquidityAdmin` and clamp `effectiveLb = liquidityBiatecFromFees > liquidity ? liquidity : liquidityBiatecFromFees` in `calculateFeeWithdrawal`.
 
 **Defensive Acceptance Criteria**:
+
 - On a pool where `D + Lu + Lb > Liquidity` by up to `getLiquidityRoundingAllowance()`, sequential 100% redemptions by all LP holders (`removeLiquidity`) and the fee executor (`removeLiquidityAdmin(amount = 0)`) must complete without `uint256` underflow and reduce `assetABalanceBaseScale` and `assetBBalanceBaseScale` cleanly to `0`.
 
 **Limitations**:
+
 - Only affects the final 100% dust-emptying withdrawal when `unowned < 0`; normal partial withdrawals where `lpDeltaWithFees <= Liquidity` are unaffected.
 
 ---
@@ -291,6 +300,7 @@ Holders of all remaining circulating LP tokens $D$ and the protocol fee executor
 
 **Evidence**:
 In `src/biatecClamm/sender/clammAddLiquiditySender.ts` (lines 31–35):
+
 ```ts
 let optinSender: boolean = true;
 const acocunt = await input.algod.accountInformation(input.account.addr.toString()).do();
@@ -298,10 +308,12 @@ if (!acocunt.assets?.find((a) => a.assetId === input.assetLp)) {
   optinSender = true;
 }
 ```
+
 Because `optinSender` is initialized to `true` and never set to `false`, `optinSender` is unconditionally `true` on every call. Every call to `clammAddLiquiditySender` therefore prepends a 0-amount self-transfer of `assetLp`, costing an extra 1,000 µAlgo network fee and consuming an extra transaction slot in the atomic group even when the user is already opted in.
 
 **Recommendation**:
 Initialize `let optinSender = false;` before the `if (!acocunt.assets?.find(...))` check:
+
 ```ts
 const accountInfo = await input.algod.accountInformation(input.account.addr.toString()).do();
 const optinSender = !accountInfo.assets?.some((a) => BigInt(a.assetId) === input.assetLp);
@@ -342,12 +354,14 @@ Update `src/bin/clamm-pool-distribute-staking-to-all-pools.ts` (and any other of
 **Evidence**:
 In `swap()` (lines 618–633), the contract converts `toSwap` to asset decimals (`realSwapBDecimals`) and sets `realSwapBaseDecimals = realSwapBDecimals * scaleB` before subtracting from `assetBBalanceBaseScale`, keeping `assetBBalanceBaseScale` an exact multiple of `scaleB` and retaining the sub-unit truncation inside active curve liquidity.
 In `payOutLiquidity()` (lines 476–488), however:
+
 ```ts
 const aToSend = this.calculateAssetAWithdrawOnLpDeposit(lpDeltaWithFees, this.assetABalanceBaseScale.value, this.Liquidity.value);
 const aToSend64 = (aToSend / this.assetADecimalsScaleFromBase.value) as uint64;
 ...
 this.assetABalanceBaseScale.value = this.assetABalanceBaseScale.value - aToSend;
 ```
+
 The contract transfers `aToSend64` (worth `aToSend64 * scaleA` base units), but subtracts the unrounded `aToSend` from `assetABalanceBaseScale`. The remainder `aToSend % scaleA` ($< 1$ atomic unit of Asset A) remains physically in the contract account (`realABalance`), but is removed from `assetABalanceBaseScale` (becoming untracked excess balance until `distributeExcessAssets(1, 1)` is called).
 
 **Recommendation**:
@@ -363,16 +377,19 @@ Subtract `(aToSend64 as uint256) * this.assetADecimalsScaleFromBase.value` and `
 **Status**: Open / Policy Clarification
 **Component**: `BiatecClammPool`, `BiatecConfigProvider`, `BiatecPoolProvider`, and `src/biatecClamm/txs/clammDistributeExcessAssetsTxs.ts`
 **Location**:
+
 - `contracts/BiatecClammPool.algo.ts`: `reconcileLiquidity()` (line 535), `sendOnlineKeyRegistration()` (line 849)
 - `contracts/BiatecPoolProvider.algo.ts`: `loadCLAMMContractData()` (line 253)
 - `contracts/BiatecConfigProvider.algo.ts`: `sendOnlineKeyRegistration()` (line 187), `withdrawExcessAssets()` (line 202)
 - `src/biatecClamm/txs/clammDistributeExcessAssetsTxs.ts` (lines 22–38)
 
 **Description**:
+
 1. **Pause Matrix**: Most user and admin methods check `appBiatecConfigProvider.globalState('s') === 0` (`E_PAUSED` / `ERR_PAUSED`). However, `BiatecClammPool.reconcileLiquidity`, `BiatecClammPool.sendOnlineKeyRegistration`, `BiatecPoolProvider.loadCLAMMContractData`, and `BiatecConfigProvider.withdrawExcessAssets` do not assert `paused === 0`. Note that `reconcileLiquidity` and `loadCLAMMContractData` being callable while `s === 1` is **required** by the maintenance runbook in `docusaurus/docs/live-pool-reconciliation.md` (Steps 2–5: pause protocol, upgrade pools, run `reconcileLiquidity`, then unpause).
 2. **Duplicate TxID on Repeated `clammDistributeExcessAssetsTxs` Calls**: `clammDistributeExcessAssetsTxs` does not accept an optional `note` field. If an operator script calls `clammDistributeExcessAssetsSender` twice for the same pool with `amountA: 1n, amountB: 1n` within the same `firstValid`/`lastValid` round window (e.g. on LocalNet or fast blocks), Algod rejects the second call with `TransactionPool.Remember: transaction already in ledger`.
 
 **Recommendation**:
+
 1. Document the explicit Pause Matrix in `docusaurus/docs/error-codes.md` so operators know which maintenance methods remain active during a pause.
 2. Add an optional `note?: Uint8Array` parameter to `clammDistributeExcessAssetsTxs` / `clammDistributeExcessAssetsSender`.
 
@@ -386,7 +403,8 @@ Subtract `(aToSend64 as uint256) * this.assetADecimalsScaleFromBase.value` and `
 **Location**: `.github/copilot-instructions.md` (line 11) and `src/biatecPools/parseStats.ts` (lines 1–195)
 
 **Description**:
-1. `.github/copilot-instructions.md` line 11 still states: *"LP Minting vs Fees: `processAddLiquidity` solves the quadratic that discounts historic `LiquidityUsersFromFees` and floors the positive root before minting LP tokens."* In `BIATEC-CLAMM-01-06-05+`, the quadratic formula was replaced by the exact linear pro-rata formula `lpDeltaBase = (liquidityDelta * distributedBefore) / (distributedBefore + usersFeeLiquidity)`.
+
+1. `.github/copilot-instructions.md` line 11 still states: _"LP Minting vs Fees: `processAddLiquidity` solves the quadratic that discounts historic `LiquidityUsersFromFees` and floors the positive root before minting LP tokens."_ In `BIATEC-CLAMM-01-06-05+`, the quadratic formula was replaced by the exact linear pro-rata formula `lpDeltaBase = (liquidityDelta * distributedBefore) / (distributedBefore + usersFeeLiquidity)`.
 2. `src/biatecPools/parseStats.ts` expects a 54-element array including `isVerified`, `period5*`, and `period6*`, whereas `BiatecPoolProvider.algo.ts`'s `AppPoolInfo` struct has 38 fields (periods 1–4, no `isVerified`). Generated clients (`BiatecPoolProviderClient.getPrice` / `getCurrentStatus`) decode the ARC-4 struct accurately and should be preferred over `parseStats`.
 
 **Recommendation**:
@@ -426,7 +444,7 @@ During this audit, we identified that while single-LP fee flows (`__test__/pool/
 
 To ensure complete transparency and mathematical certainty regarding fee collection and multi-party liquidity aggregation, the following documentation was created and integrated into Docusaurus during this audit:
 
-1. **`docusaurus/docs/multi-party-fee-aggregation.md`** (*Multi-Party Liquidity Aggregation & Fee Fairness Proof*):
+1. **`docusaurus/docs/multi-party-fee-aggregation.md`** (_Multi-Party Liquidity Aggregation & Fee Fairness Proof_):
    - Formal definitions of $L, D, L_u, L_b$ and the conservation invariant $L = D + L_u + L_b + U$.
    - Step-by-step proofs of **Theorem 1** (No Fee Scooping by Late Joiners), **Theorem 2** (100% Incumbent Principal & Fee Preservation), automatic fee compounding across epochs, and withdrawal order independence.
    - Complete numerical walkthrough with exact base-scale figures and Mermaid sequence diagram.
@@ -440,17 +458,17 @@ To ensure complete transparency and mathematical certainty regarding fee collect
 
 ### Current Implementation vs. Best Practices
 
-| Practice | Status | Notes |
-| :--- | :---: | :--- |
-| Input validation | ✅ | Asset IDs, transaction types, receivers, price bounds, and verification classes are validated in every entry point. |
-| Access control | ✅ | Role separation (`addressUdpater`, `addressExecutive`, `addressExecutiveFee`, `engagementSetter`) enforced across Config, Identity, Pool Provider, and Pool contracts. |
-| Reentrancy protection | ✅ | AVM atomic group model + inner transactions only call trusted Config/Identity/PoolProvider contracts (or `addressExecutiveFee`-authorized `doAppCall` with post-call balance checks). |
-| Integer overflow/underflow | ⚠️ | `uint256` used for all intermediate curve and fee math; see `[M-02]` for potential underflow on final withdrawal if `unowned < 0` and `[L-02]` for `uint64` casts in `status()`. |
-| Error handling | ✅ | Concise, deterministic assertion codes (`E_CONFIG`, `ERR-LOW-VER`, `LP-ZERO-ERR`, `ERR-LIQ-DROP`, `E_A_B`, etc.). |
-| Rounding & precision safety | ✅ | `LP-ZERO-ERR` prevents sub-micro-LP minting; `swap` steps down non-integer output by 1 unit; `setCurrentLiquidityNonDecreasing` maintains monotonic $L$. |
-| Event & stats logging | ✅ | `BiatecPoolProvider.registerTrade` logs ARC-28 `tradeEvent` and updates 4 rolling VWAP/volume/fee periods per pool and per asset pair. |
-| Code documentation | ✅ | Comprehensive Docusaurus documentation covering fee protection, multi-party aggregation proofs, rounding, reconciliation, and staking pools. |
-| Test coverage | ✅ | 35 test suites (160 tests) passing against live Algorand LocalNet, including full 242-op MainNet pool replay and multi-party fee aggregation suites. |
+| Practice                    | Status | Notes                                                                                                                                                                                 |
+| :-------------------------- | :----: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Input validation            |   ✅   | Asset IDs, transaction types, receivers, price bounds, and verification classes are validated in every entry point.                                                                   |
+| Access control              |   ✅   | Role separation (`addressUdpater`, `addressExecutive`, `addressExecutiveFee`, `engagementSetter`) enforced across Config, Identity, Pool Provider, and Pool contracts.                |
+| Reentrancy protection       |   ✅   | AVM atomic group model + inner transactions only call trusted Config/Identity/PoolProvider contracts (or `addressExecutiveFee`-authorized `doAppCall` with post-call balance checks). |
+| Integer overflow/underflow  |   ⚠️   | `uint256` used for all intermediate curve and fee math; see `[M-02]` for potential underflow on final withdrawal if `unowned < 0` and `[L-02]` for `uint64` casts in `status()`.      |
+| Error handling              |   ✅   | Concise, deterministic assertion codes (`E_CONFIG`, `ERR-LOW-VER`, `LP-ZERO-ERR`, `ERR-LIQ-DROP`, `E_A_B`, etc.).                                                                     |
+| Rounding & precision safety |   ✅   | `LP-ZERO-ERR` prevents sub-micro-LP minting; `swap` steps down non-integer output by 1 unit; `setCurrentLiquidityNonDecreasing` maintains monotonic $L$.                              |
+| Event & stats logging       |   ✅   | `BiatecPoolProvider.registerTrade` logs ARC-28 `tradeEvent` and updates 4 rolling VWAP/volume/fee periods per pool and per asset pair.                                                |
+| Code documentation          |   ✅   | Comprehensive Docusaurus documentation covering fee protection, multi-party aggregation proofs, rounding, reconciliation, and staking pools.                                          |
+| Test coverage               |   ✅   | 35 test suites (160 tests) passing against live Algorand LocalNet, including full 242-op MainNet pool replay and multi-party fee aggregation suites.                                  |
 
 Legend: ✅ Implemented | ⚠️ Partially Implemented | ❌ Not Implemented
 
@@ -464,13 +482,13 @@ Legend: ✅ Implemented | ⚠️ Partially Implemented | ❌ Not Implemented
 
 ### Risk Breakdown
 
-| Category | Risk Level | Description |
-| :--- | :--- | :--- |
-| Smart Contract Security | Low | Access controls, initialization guards (`setupFinished`, `priceMax === 0`), and physical balance backing checks (`ensurePoolBalancesWithinHoldings`) are sound. |
-| Economic & Fee Model | Low–Medium | Pre-existing fees ($L_u, L_b$) and incumbent principal ($D$) are strictly protected against dilution and scooping when multiple LPs join at different times. Out-of-ratio deposit + withdrawal (`[M-01]`) can bypass swap fees on synthetic rebalances. |
-| Access Control | Low | Privileged roles are properly gated via `BiatecConfigProvider` state reads and verified against `this.appBiatecConfigProvider.value`. |
-| Data Integrity | Low | `L == D + Lu + Lb + U` invariant holds across swaps, deposits, reward distributions, and withdrawals; `[M-02]` recommends clamping `lpDeltaWithFees <= Liquidity` in `payOutLiquidity`. |
-| User Safety | Low | Identity verification, pause switch (`s`), minimum swap output (`minimumToReceive`), and `LP-ZERO-ERR` protect users. |
+| Category                | Risk Level | Description                                                                                                                                                                                                                                             |
+| :---------------------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Smart Contract Security | Low        | Access controls, initialization guards (`setupFinished`, `priceMax === 0`), and physical balance backing checks (`ensurePoolBalancesWithinHoldings`) are sound.                                                                                         |
+| Economic & Fee Model    | Low–Medium | Pre-existing fees ($L_u, L_b$) and incumbent principal ($D$) are strictly protected against dilution and scooping when multiple LPs join at different times. Out-of-ratio deposit + withdrawal (`[M-01]`) can bypass swap fees on synthetic rebalances. |
+| Access Control          | Low        | Privileged roles are properly gated via `BiatecConfigProvider` state reads and verified against `this.appBiatecConfigProvider.value`.                                                                                                                   |
+| Data Integrity          | Low        | `L == D + Lu + Lb + U` invariant holds across swaps, deposits, reward distributions, and withdrawals; `[M-02]` recommends clamping `lpDeltaWithFees <= Liquidity` in `payOutLiquidity`.                                                                 |
+| User Safety             | Low        | Identity verification, pause switch (`s`), minimum swap output (`minimumToReceive`), and `LP-ZERO-ERR` protect users.                                                                                                                                   |
 
 ---
 

@@ -11,7 +11,7 @@ This document provides the complete mathematical proof, accounting model, numeri
 Specifically, this guide proves that:
 
 1. **No Fee Loss**: 100% of swap fees and distributed staking rewards are captured on-chain and partitioned between liquidity providers (`LiquidityUsersFromFees`) and the protocol (`LiquidityBiatecFromFees`) with zero unallocated leakage.
-2. **No Fee Scooping by Late Joiners**: A liquidity provider who joins a pool *after* fees have accrued cannot extract any portion of the fees earned prior to their deposit.
+2. **No Fee Scooping by Late Joiners**: A liquidity provider who joins a pool _after_ fees have accrued cannot extract any portion of the fees earned prior to their deposit.
 3. **No Dilution of Incumbent LPs**: Existing liquidity providers retain 100% of their principal and 100% of their previously accrued fees when new liquidity providers join the pool, and their accrued fees automatically compound as active liquidity for subsequent trades.
 4. **Order-Independent Withdrawals**: When multiple liquidity providers exit a pool, the payout to each participant is independent of who withdraws first (up to $\le 2$ atomic asset units of integer division flooring, which always rounds in favor of the remaining pool).
 
@@ -21,12 +21,12 @@ Specifically, this guide proves that:
 
 Every `BiatecClammPool` contract maintains four core liquidity quantities in 9-decimal base scale ($\text{SCALE} = 10^9$):
 
-| Symbol | Contract State / Formula | Description |
-| :--- | :--- | :--- |
-| $L$ | `Liquidity` (`L`) | Total concentrated liquidity derived from tracked reserves $(x, y) = (\text{assetABalanceBaseScale}, \text{assetBBalanceBaseScale})$. |
-| $D$ | `distributedLp` | Circulating LP tokens held outside the pool account, scaled to 9 decimals: $D = (\text{TOTAL\_SUPPLY} - \text{poolLpBalance}) \times 1000$. |
-| $L_u$ | `LiquidityUsersFromFees` (`Lu`) | Accumulated fee/reward liquidity owned pro rata by circulating LP token holders. |
-| $L_b$ | `LiquidityBiatecFromFees` (`Lb`) | Accumulated protocol fee liquidity owned by the Biatec fee executor (`addressExecutiveFee`). |
+| Symbol | Contract State / Formula         | Description                                                                                                                                 |
+| :----- | :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| $L$    | `Liquidity` (`L`)                | Total concentrated liquidity derived from tracked reserves $(x, y) = (\text{assetABalanceBaseScale}, \text{assetBBalanceBaseScale})$.       |
+| $D$    | `distributedLp`                  | Circulating LP tokens held outside the pool account, scaled to 9 decimals: $D = (\text{TOTAL\_SUPPLY} - \text{poolLpBalance}) \times 1000$. |
+| $L_u$  | `LiquidityUsersFromFees` (`Lu`)  | Accumulated fee/reward liquidity owned pro rata by circulating LP token holders.                                                            |
+| $L_b$  | `LiquidityBiatecFromFees` (`Lb`) | Accumulated protocol fee liquidity owned by the Biatec fee executor (`addressExecutiveFee`).                                                |
 
 ### Fundamental Conservation Invariant {#-fundamental-conservation-invariant}
 
@@ -293,13 +293,13 @@ Suppose a flat-price pool ($P = 1.0$, $\text{biatecFee} = 10\%$) undergoes the f
 
 All multi-party fee and liquidity aggregation invariants are continuously verified against a live Algorand LocalNet AVM in the Jest test suite:
 
-| Test File | Verified Scenarios |
-| :--- | :--- |
+| Test File                                           | Verified Scenarios                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| :-------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `__test__/pool/multi-party-fee-aggregation.test.ts` | **1.** Two LPs joining at different times across two swap epochs share fees strictly by active liquidity $(D_A + L_{u,1}) : \Delta L_B$.<br/>**2.** Withdrawal order independence (Alice first vs Bob first) and Biatec protocol fee ($L_b$) isolation.<br/>**3.** Three LPs (Alice, Bob, Charlie) joining at three different times with partial (50%) and full withdrawals.<br/>**4.** Staking / excess-asset reward distribution (`distributeExcessAssets`) across multiple LPs joining at different times.<br/>**5.** Rapid 5x deposit/withdraw cycling by a second party never siphons fees or reduces pool physical holdings. |
-| `__test__/pool/liquidity.test.ts` | New liquidity provider joining after two-way swaps and immediately withdrawing cannot scoop pre-existing fees (`deltaA <= 0`, `deltaB <= 0`). |
-| `__test__/pool/mainnet-replay-3720188642.test.ts` | Full 242-transaction MainNet history replay of Gold/GoldDAO pool `3720188642` verifying $L = D + L_u + L_b$ conservation after every deposit, swap, and full redemption. |
-| `__test__/pool/reconcile-liquidity.test.ts` | Verification that sub-micro-LP flooring dust is swept to $L_u$ when $D > 0$ and to $L_b$ when $D = 0$, and that `reconcileLiquidity` is restricted to `addressExecutiveFee`. |
-| `__test__/pool/fees.test.ts` | Deterministic swap fee accrual, LP withdrawal with fees, `removeLiquidityAdmin` protocol fee collection, and `distributeExcessAssets` across price ranges. |
+| `__test__/pool/liquidity.test.ts`                   | New liquidity provider joining after two-way swaps and immediately withdrawing cannot scoop pre-existing fees (`deltaA <= 0`, `deltaB <= 0`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `__test__/pool/mainnet-replay-3720188642.test.ts`   | Full 242-transaction MainNet history replay of Gold/GoldDAO pool `3720188642` verifying $L = D + L_u + L_b$ conservation after every deposit, swap, and full redemption.                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `__test__/pool/reconcile-liquidity.test.ts`         | Verification that sub-micro-LP flooring dust is swept to $L_u$ when $D > 0$ and to $L_b$ when $D = 0$, and that `reconcileLiquidity` is restricted to `addressExecutiveFee`.                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `__test__/pool/fees.test.ts`                        | Deterministic swap fee accrual, LP withdrawal with fees, `removeLiquidityAdmin` protocol fee collection, and `distributeExcessAssets` across price ranges.                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 
 ### Running the Verification Suite Locally {#-running-the-verification-suite-locally}
 
