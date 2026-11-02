@@ -17,7 +17,7 @@ Primárny súbor: `contracts/BiatecClammPool.algo.ts`
 
 ### Prečo sa to deje {#-why-this-happens}
 
-Pool používa kvadratickú rovnicu na zohľadnenie nahromadených poplatkov pri razení LP tokenov. Pozitívny koreň sa zaokrúhľuje nadol, aby sa zabezpečilo, že zaokrúhľovanie vždy uprednostňuje pool pred jednotlivými používateľmi. Toto zabraňuje útočníkom extrahovať hodnotu prostredníctvom opakovaných malých operácií.
+Pri mintovaní LP tokenov pool zohľadňuje nahromadené poplatky: vklad likvidity `delta` namintuje `delta * distributedLp / (distributedLp + usersFeeLiquidity)` LP tokenov, zaokrúhlených nadol na desatinné miesta LP tokenu (6). Podiel riedenia poplatkov `delta - X` sa pripíše existujúcim držiteľom LP (`LiquidityUsersFromFees`); zvyšok zo zaokrúhlenia pod úrovňou mikro-LP zostáva v poole, takže zaokrúhľovanie vždy uprednostňuje pool pred jednotlivým vkladateľom. To zabraňuje útočníkom odčerpávať hodnotu prostredníctvom opakovaných malých operácií. Odvodenie nájdete v časti [Ochrana likviditných poplatkov](./liquidity-fee-protection).
 
 ### Stratégie zmiernenia {#-mitigation-strategies}
 
