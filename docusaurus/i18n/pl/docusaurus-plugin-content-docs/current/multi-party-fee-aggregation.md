@@ -90,27 +90,27 @@ Rozważmy dwóch niezależnych dostawców płynności — **Stronę A (Dotychcza
 
 ```mermaid
 sequenceDiagram
-    participant Alice as Party A (LP 1)
-    participant Trader as Swappers
+    participant Alice as Strona A (LP 1)
+    participant Trader as Traderzy
     participant Pool as BiatecClammPool
-    participant Bob as Party B (LP 2)
+    participant Bob as Strona B (LP 2)
 
-    Note over Alice,Pool: Epoch 1 (t0): Initial Liquidity
+    Note over Alice,Pool: Epoka 1 (t0): Początkowa płynność
     Alice->>Pool: addLiquidity(ΔL_A)
-    Pool-->>Alice: Mint D_A = ΔL_A LP tokens (Lu = 0)
+    Pool-->>Alice: Wymintuj D_A = ΔL_A tokenów LP (Lu = 0)
 
-    Note over Trader,Pool: Epoch 2 (t1): Swaps Accrue Fees F_1
+    Note over Trader,Pool: Epoka 2 (t1): Swapy naliczają opłaty F_1
     Trader->>Pool: swap()
-    Note over Pool: L increases by F_1 + B_1<br/>Lu = F_1 (100% belongs to Party A)<br/>Lb = B_1 (belongs to Biatec)
+    Note over Pool: L wzrasta o F_1 + B_1<br/>Lu = F_1 (100% należy do Strony A)<br/>Lb = B_1 (należy do Biatec)
 
-    Note over Bob,Pool: Epoch 3 (t2): Party B Joins Pool
+    Note over Bob,Pool: Epoka 3 (t2): Strona B dołącza do puli
     Bob->>Pool: addLiquidity(ΔL_B)
     Note over Pool: X = floor(ΔL_B * D_A / (D_A + F_1))<br/>Lu' = F_1 + (ΔL_B - X)
-    Pool-->>Bob: Mint D_B = floor(X / 1000) * 1000 LP tokens
+    Pool-->>Bob: Wymintuj D_B = floor(X / 1000) * 1000 tokenów LP
 
-    Note over Trader,Pool: Epoch 4 (t3): Swaps Accrue Fees F_2
+    Note over Trader,Pool: Epoka 4 (t3): Swapy naliczają opłaty F_2
     Trader->>Pool: swap()
-    Note over Pool: Lu'' = Lu' + F_2<br/>F_2 shared in ratio (D_A + F_1) : ΔL_B
+    Note over Pool: Lu'' = Lu' + F_2<br/>F_2 dzielone w proporcji (D_A + F_1) : ΔL_B
 ```
 
 ### Krok 1 ($t_0$): Strona A dostarcza początkową płynność {#-step-1-t0-party-a-supplies-initial-liquidity}
@@ -251,17 +251,17 @@ Gdy pozostała Strona $j \ne i$ wypłaca swoje tokeny LP $D_j$ w chwili $t_5$:
 
 ```mermaid
 sequenceDiagram
-    participant A as Party A
-    participant P as Pool
-    participant B as Party B
-    participant T as Traders
-    A->>P: t0: deposit ΔL_A (mint D_A LP)
-    T->>P: t1: swaps accrue fees F_1 → L_u
-    B->>P: t2: deposit ΔL_B (LP minted at fee-adjusted rate)
-    T->>P: t3: swaps accrue fees F_2 → L_u
-    A->>P: t4: removeLiquidity (D_A + pro-rata L_u)
-    B->>P: t5: removeLiquidity (D_B + pro-rata L_u)
-    Note over A,B: Result is independent of withdrawal order
+    participant A as Strona A
+    participant P as Pula
+    participant B as Strona B
+    participant T as Traderzy
+    A->>P: t0: depozyt ΔL_A (mint D_A LP)
+    T->>P: t1: swapy naliczają opłaty F_1 → L_u
+    B->>P: t2: depozyt ΔL_B (LP mintowane po kursie skorygowanym o opłaty)
+    T->>P: t3: swapy naliczają opłaty F_2 → L_u
+    A->>P: t4: removeLiquidity (D_A + proporcjonalne L_u)
+    B->>P: t5: removeLiquidity (D_B + proporcjonalne L_u)
+    Note over A,B: Wynik jest niezależny od kolejności wypłat
 ```
 
 ## 4. Konkretny przykład liczbowy {#-4-concrete-numerical-example}

@@ -566,13 +566,13 @@ describe('CLAMM Integration', () => {
 
 ### Testy integracyjne {#-testy-integracyjne}
 
-Test against Algorand sandbox:
+Testuj przeciwko środowisku Algorand sandbox:
 
 ```bash
-# Start sandbox
+# Uruchomienie sandboxa
 algokit localnet start
 
-# Run integration tests
+# Uruchomienie testów integracyjnych
 npm run test:integration
 ```
 
