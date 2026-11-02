@@ -49,7 +49,7 @@ const { clientBiatecClammPoolProvider } = await setupPool({
 // await poolProviderClient.send.setNativeTokenName({
 //   args: { appBiatecConfigProvider: configAppId, nativeTokenName: 'Algo' },
 //   appReferences: [configAppId],
-});
+// });
 ```
 
 ### 2. Dodawanie płynności (Staking)

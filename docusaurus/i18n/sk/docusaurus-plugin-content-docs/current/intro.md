@@ -19,7 +19,7 @@ Biatec CLAMM revolucionizuje funkcionalitu decentralizovanej burzy (DEX) impleme
 - **💰 Flexible Fee Management**: Udržateľná štruktúra poplatkov s protokolovým zdieľaním príjmov
 - **🛠️ Developer SDK**: Komplexné TypeScript knižnice pre bezproblémovú integráciu
 
-## 🌟 Prečo si vybrať Biatec CLAMM? {#-- preco-si-vybrat-biatec-clamm}
+## 🌟 Prečo si vybrať Biatec CLAMM? {#--preco-si-vybrat-biatec-clamm}
 
 ### Pre poskytovateľov likvidity {#-pre-poskytovatelov-likvidity}
 
@@ -61,8 +61,11 @@ Biatec CLAMM revolucionizuje funkcionalitu decentralizovanej burzy (DEX) impleme
 ## 📚 Prehľad dokumentácie {#--prehlad-dokumentacie}
 
 - **[Základné prípady použitia](./basic-use-cases)**: Bežné obchodné a likviditné scenáre
+- **[Systém tickov](./tick-system)**: Logaritmické ticky pre oceňovanie, prichytávanie na mriežku a výber rozsahov
+- **[GeckoTerminal DEX Adaptér](./geckoterminal-integration)**: Verejné API, ktoré publikuje swapy a zmeny likvidity Biatec DEX do GeckoTerminal / CoinGecko
 - **[Staking Pools](./staking-pools)**: Funkcionalita úročených tokenov
 - **[Ochrana likviditných poplatkov](./liquidity-fee-protection)**: Pokročilá správa poplatkov
+- **[Agregácia poplatkov viacerých strán a dôkaz spravodlivosti](./multi-party-fee-aggregation)**: Matematický dôkaz a testovacie overenie, že agregácia likvidity viacerých používateľov v rôznych časoch spravodlivo zachováva všetky poplatky
 - **[Likviditné zaokrúhľovanie](./liquidity-rounding)**: Matematické detaily presnosti
 - **[Bezpečnostné audity](https://github.com/scholtz/BiatecCLAMM/tree/main/audits)**: Nezávislé bezpečnostné hodnotenia
 

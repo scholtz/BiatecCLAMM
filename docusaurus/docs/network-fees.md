@@ -209,13 +209,13 @@ Protocol fees can be withdrawn by the designated executive fee address using `di
 
 ### New LP Protection
 
-To prevent new liquidity providers from claiming historical fees, the protocol uses a quadratic formula when minting LP tokens:
+To prevent new liquidity providers from claiming historical fees, the protocol discounts minted LP tokens by the existing fee ratio and books the unminted difference into `LiquidityUsersFromFees`:
 
 ```
-X^2 + X(sumDistributedAndFees − Q) − Q * distributedBefore = 0
+X = delta * distributedLp / (distributedLp + LiquidityUsersFromFees)
 ```
 
-This ensures new LPs cannot immediately withdraw historical fees that belong to existing providers.
+This ensures new LPs cannot immediately withdraw historical fees that belong to existing providers (see [Liquidity Fee Protection](./liquidity-fee-protection) and [Multi-Party Fee Aggregation](./multi-party-fee-aggregation)).
 
 ### Rounding Behavior
 

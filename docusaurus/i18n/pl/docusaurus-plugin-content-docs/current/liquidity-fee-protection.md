@@ -1,56 +1,69 @@
 # Ochrona akumulacji opłat gdy dołączają nowi LP
 
-Data: 2025-10-26
+Data: 2025-10-26, zaktualizowano: 2026-09-26
 Repozytorium: BiatecCLAMM (projects/BiatecCLAMM)
 Główny plik: `contracts/BiatecClammPool.algo.ts`
 
-## Tło {#-tlo}
+## Tło {#-background}
 
-Gdy pula zbiera opłaty swap, stan on-chain śledzi je jako dodatkową płynność (`LiquidityUsersFromFees`) bez mintowania dodatkowych tokenów LP. Poprzedni flow add-liquidity mintował nowe tokeny LP z surowego delty płynności (`newLiquidity - oldLiquidity`). Rezultatem było to, że nowicjusz mógł dodać płynność i natychmiast ją usunąć, aby zebrać proporcjonalny udział z historycznych opłat, które powinny należeć do incumbent LP.
+Gdy pula zbiera opłaty ze swapów, stan on-chain śledzi je jako dodatkową płynność (`LiquidityUsersFromFees`, `Lu`) bez mintowania dodatkowych tokenów LP. Pierwotny przepływ dodawania płynności mintował nowe tokeny LP bezpośrednio z surowego przyrostu płynności (`newLiquidity - oldLiquidity`). W rezultacie nowy uczestnik mógł dodać płynność i natychmiast ją wycofać, przejmując proporcjonalny udział w historycznych opłatach, które powinny należeć do dotychczasowych dostawców płynności (LP).
 
-Regresja pojawiła się w teście puli "new liquidity provider does not scoop pre-existing fees" gdzie konto C dodaje płynność po scenariuszu opłat swap i usuwa ją bezpośrednio. Oczekiwane zachowanie to, że konto otrzyma dokładnie to, co wpłaciło (net zero profit).
+Regresja ujawniła się w teście puli „new liquidity provider does not scoop pre-existing fees”, w którym konto C dodaje płynność po scenariuszu z opłatami swap i natychmiast ją wycofuje. Oczekiwanym zachowaniem jest to, że konto otrzymuje dokładnie tyle, ile wpłaciło (zerowy zysk netto).
 
-## Podsumowanie naprawy {#-podsumowanie-naprawy}
+## Niezmiennik księgowy {#-accounting-invariant}
 
-`processAddLiquidity` teraz rozwiązuje równanie kwadratyczne wymuszone przez natychmiastową parzystość wypłaty i flooruje dodatni pierwiastek przed mintowaniem tokenów LP:
+Każda jednostka płynności puli musi mieć właściciela:
 
 ```
-X^2 + X(sumDistributedAndFees − Q) − Q * distributedBefore = 0
+Liquidity == distributedLp + LiquidityUsersFromFees + LiquidityBiatecFromFees
 ```
 
-gdzie:
+- `distributedLp` (`D`) to podaż LP będąca w obiegu poza kontem puli, przeskalowana do precyzji bazowej,
+- `Lu` to płynność z opłat należąca proporcjonalnie (pro rata) do wszystkich posiadaczy tokenów LP (wypłacana przez `removeLiquidity`),
+- `Lb` to płynność z opłat należąca do Biatec (wypłacana przez `removeLiquidityAdmin`).
 
-- `distributedBefore` to wcześniej dystrybuowany supply LP (skalowany na precyzję bazową),
-- `LiquidityUsersFromFees` wychwytuje historyczną płynność opłat wciąż własności incumbents,
-- `Q = depositShare * newLiquidity` z `depositShare` wyprowadzonym z wkładu bazowej skali wywołującego,
-- `X` to delta LP bazowej skali, którą rozwiązujemy.
+Metoda `swap` zachowuje ten niezmiennik, ponieważ cały przyrost płynności jest dzielony pomiędzy `Lu` oraz `Lb`.
 
-Floorowaniem pierwiastka (a tym samym zaokrąglaniem na korzyść puli) zapewniamy, że nowicjusze nigdy nie mintują wystarczająco LP aby odblokować pre-istniejące opłaty. Gdy pula nie ma nagromadzonych opłat, równanie kwadratowe rozpada się na oryginalne zachowanie "mint the liquidity delta".
+## Podsumowanie poprawki {#-fix-summary}
 
-Ta sama proporcjonalna arytmetyka jest ponownie używana na wyjście: udziały opłat są kalkulowane z pojedynczym przejściem mnożenia/dzielenia tak że drift zaokrąglania pozostaje przewidywalny i zawsze benefituje kontrakt.
+Każdy będący w obiegu token LP ma pokrycie w `(D + Lu) / D` jednostkach płynności, ponieważ płynność opłat użytkowników `Lu` jest dzielona proporcjonalnie przez wszystkie tokeny LP przy wywołaniu `removeLiquidity`. Deponent dodający płynność `delta` otrzymuje zatem
 
-## Oczekiwania zaokrąglania {#-oczekiwania-zaokraglania}
+```
+X = delta * D / (D + Lu)
+```
 
-- Wypłaty mogą trailować wpłaty o kilka jednostek bazowych z powodu obowiązkowego kroku floorowania. Różnica jest ograniczona frakcją skali aktywa (≤ 20% z bazowej skali w obecnych testach) i pozostaje w puli, faworyzując istniejących LP.
-- Suita Jest teraz assertuje, że saldo nowicjusza nigdy nie wzrośnie i toleruje tylko tiny deficit. Jakiekolwiek rozszerzenie gapu zawiedzie test, dając wczesne ostrzeżenie jeśli matematyka zregreduje.
+tokenów LP (zaokrąglonych w dół do miejsc dziesiętnych tokenu LP), a część odpowiadająca rozwodnieniu opłat `delta - X` zostaje zaksięgowana w `Lu` (wynosi ona dokładnie 0, dopóki pula nie zebrała żadnych opłat). Przy `Lu' = Lu + delta - X`:
 
-## Obserwowalne efekty {#-obserwowalne-efekty}
+- roszczenie nowego uczestnika przy wyjściu: `X * (D + Lu + delta) / (D + X) == delta` — dokładnie tyle, ile wpłacono, bez historycznych opłat,
+- dotychczasowi LP: `D * (D + Lu + delta) / (D + X) == D + Lu` — zachowują wszystkie historyczne opłaty,
+- niezmiennik: `D + X + Lu' == D + Lu + delta` — żadna płynność nie pozostaje bez właściciela.
 
-- Śwież LP kto doda i natychmiast usunie płynność teraz otrzyma dokładne ilości wpłacone (aż do oczekiwanego zaokrąglania integer), więc już nie dziedziczy historycznych opłat.
-- Incumbent LP zachowują pełne własności `LiquidityUsersFromFees`. Opłaty nagromadzone po tym, jak nowicjusz dołączy są wciąż dzielone fair, ponieważ rozwiązanie kwadratowe tylko neutralizuje pre-istniejącą komponentę.
+Gdy pula nie ma naliczonych opłat, wzór redukuje się do pierwotnego zachowania „wymintuj przyrost płynności”.
 
-## Pokrycie testami {#-pokrycie-testami}
+### Dlaczego zastąpiono wariant kwadratowy {#-why-the-quadratic-variant-was-replaced}
 
-- `npm run test:1:build` (i skupiony przypadek Jest "new liquidity provider does not scoop pre-existing fees") teraz przechodzi z zaktualizowanym kontraktem i relaksowaną tolerancją zaokrąglania.
-- Inne testy płynności pozostają zielone ponieważ adjustment zachowuje oryginalne zachowanie gdy pula nie ma accrued user fees.
+Między 2025-10-26 a 2026-09-26 kontrakt mintował `min(delta, root)`, gdzie `root` był pierwiastkiem równania `X^2 + X(D + Lu - Q) - Q * D = 0`, a `Q = depositA * newLiquidity / assetABalance` (lub udział aktywa B, gdy nie wpłacono aktywa A). Powodowało to dwa problemy:
 
-## Notatki operacyjne {#-notatki-operacyjne}
+1. `Q` jest oszacowaniem jednostronnym. Dla depozytu, który nie jest w bieżącej proporcji puli (co jest dozwolone i przesuwa cenę puli), wartość `Q` jest mniejsza od faktycznie dodanej płynności, przez co deponent otrzymywał mniej tokenów LP niż wniesiona przez niego płynność.
+2. Różnica `delta - X` nie była nigdzie księgowana. Zwiększała ona `Liquidity`, ale nie należała ani do posiadaczy LP, ani do Biatec, przez co nigdy nie mogła zostać wypłacona.
 
-- Jakakolwiek zmiana kontraktu wymaga recomputing artefaktów TEAL (`npm run compile-contract`) i regenerating klientów (`npm run generate-client` lub `npm run build`) przed publikowaniem pakietów.
-- Helpery off-chain lub symulacje, które polegały na surowej formule mint `newLiquidity - oldLiquidity` muszą być updated aby mirrorować rozwiązanie kwadratowe, aby uniknąć drift między estymatami client-side a wynikami on-chain.
-- Deployments pul muszą teraz używać zarejestrowanego ID aplikacji config dostawcy puli. Dostawca puli to wymusza on-chain, więc double-checknij klucz globalnego stanu `B` przed inicjowaniem deploy.
+Pokazuje to pula mainnetowa `3720188642` (Gold/GoldDAO, zakres 128–256, opłata LP 0,1%, udział Biatec 20%): po trzech depozytach, 238 swapach i umorzeniu 100% tokenów LP w puli pozostało `L = 57.3` (około 1.04 Gold i 61.6 GoldDAO), podczas gdy udział opłat Biatec wynosił zaledwie `Lb = 0.045`. Pełna historia jest odtwarzana w `__test__/pool/mainnet-replay-3720188642.test.ts` z pliku `__test__/test-data/mainnet-pool-3720188642.json`; po zastosowaniu poprawionego wzoru umorzenie zwraca całą pozycję, a w puli pozostaje wyłącznie `Lb`.
 
-## Następne kroki {#-nastepne-kroki}
+### Dalsze zmiany w wersji 01-06-05 {#-further-changes}
 
-- Rozszerzyć narzędzia matematyczne off-chain w `src/biatecClamm/` aby expose tego samego kalkulacji tokenów LP tak żeby podglądy front-end pozostały accurate.
-- Dodać testy regresji aby cover asymetryczne wpłaty i scenariusze z non-zero `LiquidityBiatecFromFees` aby ensure, że formula generalizuje.
+- Depozyt, który nie osiąga jednej mikrojednostki LP (`1e-6` LP), jest odrzucany z błędem `LP-ZERO-ERR`. Wcześniej był zaokrąglany w górę do jednego tokenu LP, co pozwalało wpłacającemu 1 jednostkę bazową wypłacić więcej niż wpłacił (audyt 2026-09-07, H-01).
+- Metoda `reconcileLiquidity` (tylko dla wykonawcy opłat) księguje płynność, którą starsze pule pozostawiły bez właściciela; zobacz [Naprawa działających pul](./live-pool-reconciliation).
+- Metody `removeLiquidity` oraz `removeLiquidityAdmin` współdzielą jedną procedurę wypłaty (`payOutLiquidity`); ich zachowanie nie uległo zmianie.
+
+## Oczekiwania dotyczące zaokrąglania {#-rounding-expectations}
+
+- Tokeny LP są zaokrąglane w dół do 6 miejsc dziesiętnych; reszta poniżej mikro-LP (`< 1e-6` LP na depozyt) pozostaje w puli jako zaokrąglenie na korzyść puli. Celowo nie jest ona księgowana jako przychód z opłat, dzięki czemu `liquidityUsersFromFees` pozostaje równe 0 aż do pierwszego swapu; metoda `reconcileLiquidity` może przekazać zakumulowane reszty zaokrągleń posiadaczom LP.
+- Metoda `removeLiquidity` nadal zaokrągla w dół wysyłane kwoty aktywów, więc wypłaty mogą być mniejsze od wpłat o kilka jednostek bazowych, które pozostają w puli.
+- Zestaw testów Jest weryfikuje, że saldo nowego uczestnika nigdy nie wzrasta i toleruje jedynie minimalny deficyt, a odtworzenie historii z mainnetu sprawdza niezmiennik po każdej operacji płynnościowej z tolerancją jednej mikrojednostki LP na operację.
+
+## Uwagi operacyjne {#-operational-notes}
+
+- Każda zmiana kontraktu wymaga ponownej kompilacji artefaktów TEAL (`npm run compile-contract`) i wygenerowania klientów (`npm run generate-client` lub `npm run build`) przed publikacją pakietów.
+- Funkcje pomocnicze off-chain lub symulacje szacujące liczbę mintowanych tokenów LP muszą używać wzoru `delta * D / (D + Lu)`, aby zachować zgodność z łańcuchem.
+- Pule wdrożone w wersji `BIATEC-CLAMM-01-06-04` lub wcześniejszej powinny zostać zaktualizowane; płynność osierocona wcześniej w takich pulach nie jest odzyskiwana automatycznie przez samą aktualizację.
+- Pełny wieloepokowy dowód matematyczny, konkretne przykłady liczbowe oraz pokrycie w zestawach testów dla wielu podmiotów (`__test__/pool/multi-party-fee-aggregation.test.ts`) znajdują się w dokumencie [Agregacja płynności wielu podmiotów i dowód uczciwości opłat](./multi-party-fee-aggregation).

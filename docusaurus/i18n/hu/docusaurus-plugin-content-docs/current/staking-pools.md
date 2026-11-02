@@ -12,7 +12,7 @@ Hozzon létre poolt, ahol az A és B eszköz egyaránt 0 (natív token). Ez B-AL
 
 ### 2. Eszköz staking (B-USDC, B-TOKEN stb.) {#-2-asset-staking-b-usdc-b-token-etc}
 
-Állítsa az A és B eszközt azonos ASA ID-re. Így jön létre a B-{TOKEN} token, amely stakelt tokeneket reprezentál. Hasznos például:
+Állítsa az A és B eszközt azonos ASA ID-re. Így jön létre a B-\{TOKEN\} token, amely stakelt tokeneket reprezentál. Hasznos például:
 
 - Hitelezési protokollokban, ahol a betétek kamatoznak
 - Bevételmegosztó mechanizmusokban
@@ -72,7 +72,7 @@ const txId = await clammAddLiquiditySender({
 });
 ```
 
-A felhasználók B-{TOKEN} LP tokeneket kapnak, amelyek a stakelt pozíciót jelölik.
+A felhasználók B-\{TOKEN\} LP tokeneket kapnak, amelyek a stakelt pozíciót jelölik.
 
 ### 3. Jutalmak szétosztása {#-3-distributing-rewards}
 
@@ -237,7 +237,7 @@ A staking poolok sajátosságai:
 
 - **Nincs impermanent loss**: Azonos eszközök miatt nincs árfolyam kockázat
 - **Nincs swap ár felfedezés**: A jutalmak külső forrásból érkeznek, nem kereskedésből
-  str>- **Egyszerű ár modell**: Mindig 1:1 az alapléptéken
+- **Egyszerű ár modell**: Mindig 1:1 az alapléptéken
 - **Jutalom ráta külső**: A hozam attól függ, miként osztja szét az executive cím
 - **Swap műveletek tiltva**: A szerződés „Swaps not allowed in staking pools” hibával blokkolja
 

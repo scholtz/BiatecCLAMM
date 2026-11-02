@@ -1,0 +1,18 @@
+{
+  "title": "Üdvözöljük a Biatec DEX oldalon",
+  "description": "Biatec DEX - Koncentrált likviditású DEX az Algorand blokkláncon",
+  "tagline": "Decentralizált tőzsde protokoll az Algorand számára",
+  "button": "Kezdje a dokumentációval",
+  "features.concentratedLiquidity.title": "Koncentrált Likviditás",
+  "features.concentratedLiquidity.description": "Tapasztalja meg a koncentrált likviditású AMM erejét az Algorandon. Biztosítson likviditást egyedi ársávokban a magasabb hozam és a hagyományos AMM-ekhez képest alacsonyabb impermanent loss érdekében.",
+  "features.algorandNative.title": "Algorand Natív",
+  "features.algorandNative.description": "Kifejezetten az Algorand blokkláncra építve, optimalizált okosszerződésekkel. Használja ki az Algorand sebességét, biztonságát és alacsony tranzakciós költségeit a hatékony decentralizált kereskedéshez.",
+  "features.stakingPools.title": "Staking Poolok",
+  "features.stakingPools.description": "Hozzon létre és kezeljen staking poolokat kamatozó tokenekhez. Támogatás azonos eszközű stakinghez (B-ALGO, B-USDC) és hagyományos eszközpárokhoz automatizált jutalomszétosztással.",
+  "features.identityCompliance.title": "Identitás és Megfelelés",
+  "features.identityCompliance.description": "Integrált személyazonosság-ellenőrzési rendszer konfigurálható verifikációs osztályokkal. Tegye lehetővé a KYC-kompatibilis kereskedést a decentralizáció és az adatvédelem megőrzése mellett.",
+  "features.flexibleFeeManagement.title": "Rugalmas Díjkezelés",
+  "features.flexibleFeeManagement.description": "Konfigurálható díjstruktúra Biatec díjmegosztással. A likviditásszolgáltatók a kereskedési díjakból részesülnek, miközben a protokoll fenntartható részesedést gyűjt az ökoszisztéma fejlesztésére.",
+  "features.developerSdk.title": "Fejlesztői SDK",
+  "features.developerSdk.description": "Átfogó TypeScript SDK tranzakció-összeállítókkal, küldő függvényekkel és segédeszközökkel. Könnyű integráció dAppokhoz, tárcákhoz és kereskedési felületekhez teljes típusbiztonsággal."
+}

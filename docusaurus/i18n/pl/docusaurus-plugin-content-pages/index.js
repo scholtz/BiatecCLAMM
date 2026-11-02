@@ -14,7 +14,7 @@ function HomepageHeader() {
       <div className="container">
         <h1 className="hero__title">{siteConfig.title}</h1>
         <p className="hero__subtitle">
-          <Translate id="tagline">Decentralized Exchange Protocol for Algorand</Translate>
+          <Translate id="tagline">Protokół zdecentralizowanej giełdy dla Algorand</Translate>
         </p>
         <div className={styles.buttons}>
           <Link className="button button--secondary button--lg" to="/docs/intro">
@@ -29,7 +29,7 @@ function HomepageHeader() {
 export default function Home() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <Layout title={translate({ id: 'title', message: `Witaj w ${siteConfig.title}` })} description={translate({ id: 'description', message: 'Decentralized Exchange Protocol for Algorand' })}>
+    <Layout title={translate({ id: 'title', message: `Witaj w ${siteConfig.title}` })} description={translate({ id: 'description', message: 'Protokół zdecentralizowanej giełdy dla Algorand' })}>
       <HomepageHeader />
       <main>
         <HomepageFeatures />

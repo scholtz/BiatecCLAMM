@@ -61,8 +61,11 @@ A Biatec CLAMM a koncentrált likviditás bevezetésével forradalmasítja a dec
 ## 📚 Dokumentációs áttekintés {#--documentation-overview}
 
 - **[Alap használati esetek](./basic-use-cases)**: Tipikus kereskedési és likviditási forgatókönyvek.
+- **[Tick-rendszer](./tick-system)**: Logaritmikus tickek árazáshoz, rácsra illesztéshez és ársáv-kiválasztáshoz.
+- **[GeckoTerminal DEX Adapter](./geckoterminal-integration)**: Nyilvános API, amely a Biatec DEX swapokat és likviditásváltozásokat publikálja a GeckoTerminal / CoinGecko felé.
 - **[Staking poolok](./staking-pools)**: Kamattermelő token funkciók.
 - **[Díjvédelem](./liquidity-fee-protection)**: Fejlett díjkezelés.
+- **[Több szereplős díjaggregáció és méltányossági bizonyítás](./multi-party-fee-aggregation)**: Matematikai bizonyítás és tesztellenőrzés arról, hogy az eltérő időpontokban történő több szereplős likviditás-aggregáció minden díjat méltányosan megőriz.
 - **[Likviditás kerekítése](./liquidity-rounding)**: Matematikai pontossági részletek.
 - **[Biztonsági auditok](https://github.com/scholtz/BiatecCLAMM/tree/main/audits)**: Független biztonsági értékelések.
 

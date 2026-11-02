@@ -17,7 +17,7 @@ Główny plik: `contracts/BiatecClammPool.algo.ts`
 
 ### Dlaczego się to dzieje {#-why-this-happens}
 
-Pula używa równania kwadratowego aby uwzględnić nagromadzone opłaty przy mintowaniu tokenów LP. Dodatni pierwiastek jest zaokrąglany w dół, aby zapewnić, że zaokrąglanie zawsze faworyzuje pulę przed indywidualnymi użytkownikami. To zapobiega atakującym ekstrakcji wartości poprzez powtarzane małe operacje.
+Podczas mintowania tokenów LP pula uwzględnia naliczone opłaty: depozyt płynności `delta` mintuje `delta * distributedLp / (distributedLp + usersFeeLiquidity)` tokenów LP, zaokrąglonych w dół do miejsc dziesiętnych tokenu LP (6). Część odpowiadająca rozwodnieniu opłat `delta - X` zostaje dopisana do dotychczasowych posiadaczy LP (`LiquidityUsersFromFees`); reszta z zaokrąglenia poniżej mikrojednostki LP pozostaje w puli, dzięki czemu zaokrąglenie zawsze działa na korzyść puli, a nie pojedynczego deponenta. Zapobiega to wyciąganiu wartości przez atakujących za pomocą powtarzanych drobnych operacji. Zobacz [Ochrona opłat płynności](./liquidity-fee-protection) po pełne wyprowadzenie.
 
 ### Strategie łagodzenia {#-mitigation-strategies}
 
@@ -108,51 +108,51 @@ W `contracts/BiatecClammPool.algo.ts` wprowadziłem funkcje pomocnicze i małe z
 ## Pliki i zmienione symbole (szybka referencja) {#-files--symbols-changed-quick-reference}
 
 - `contracts/BiatecClammPool.algo.ts`
-  - Pridané: `calculateCurrentLiquidity()`
-  - Pridané: `setCurrentLiquidityNonDecreasing(oldLiquidity: uint256): uint256`
-  - Pridané: `getLiquidityRoundingAllowance(): uint256`
-  - Nahradil priame použitia `setCurrentLiquidity()` v swap, pridanie likvidity a distribučných tokoch s `setCurrentLiquidityNonDecreasing`, kde je potrebná monotónnosť.
-  - Zachoval `setCurrentLiquidity()` ako pohodlie, ktoré zapisuje surovú vypočítanú likviditu (stále používané na niekoľkých ďalších miestach, kde nie je potrebná monotónna politika).
+  - Dodano: `calculateCurrentLiquidity()`
+  - Dodano: `setCurrentLiquidityNonDecreasing(oldLiquidity: uint256): uint256`
+  - Dodano: `getLiquidityRoundingAllowance(): uint256`
+  - Zastąpiono bezpośrednie wywołania `setCurrentLiquidity()` w przepływach swap, dodawania płynności oraz dystrybucji wywołaniem `setCurrentLiquidityNonDecreasing` tam, gdzie wymagana jest monotoniczność.
+  - Zachowano `setCurrentLiquidity()` jako funkcję pomocniczą zapisującą surową obliczoną płynność (nadal używaną w miejscach, gdzie polityka monotoniczności nie jest wymagana).
 
 ## Testy i weryfikacja {#-tests-and-verification}
 
-- Repozitár poskytuje Jest testy, ktoré cvičia AMM logiku a edge case s nulovým poplatkom. Spustenie cieleného testu sa vykonáva pomocou:
+- Repozytorium dostarcza testy Jest weryfikujące logikę AMM oraz przypadek brzegowy z zerową opłatą. Uruchomienie docelowego testu wykonuje się poleceniem:
 
 ```powershell
 npm run test:1:build
 ```
 
-- Poznámka: Test harness vyžaduje Algorand sandbox alebo nakonfigurované testovacie prostredie (KMD/localnet dispenser účet). V mojom prostredí test run zlyhal, keď miestny KMD dispenser nebol dostupný; to je problém nastavenia prostredia, nie chyba kontraktu.
+- Uwaga: zestaw testowy wymaga działającego i skonfigurowanego środowiska Algorand sandbox (konta dyspensera KMD/localnet). W moim środowisku uruchomienie testu nie powiodło się, gdy lokalny dyspenser KMD nie był dostępny; był to problem konfiguracji środowiska, a nie błąd kontraktu.
 
 ## Jak zreprodukować oryginalny zawodzący symptom {#-how-to-reproduce-the-original-failing-symptom}
 
-1. Zaistite, že Algorand sandbox (alebo prostredie odhaľujúce KMD dispenser účet očakávaný fixture) beží a je nakonfigurovaný.
-2. Z koreňa projektu (kde žije `package.json`):
+1. Upewnij się, że Algorand sandbox (lub środowisko udostępniające konto dyspensera KMD oczekiwane przez fixture) jest uruchomione i skonfigurowane.
+2. Z głównego katalogu projektu (gdzie znajduje się `package.json`):
 
 ```powershell
-# plná build + cielený test
+# pełne budowanie + docelowy test
 npm run test:1:build
 ```
 
-3. Pred opravou test swapu s nulovým poplatkom `Extreme-No-Fees - ASASR EURUSD - 0.9 - 1.1, LP fee 0, Biatec fee 0%` produkoval zlyhanie tvrdenia: `Liquidity must increase after swap`. Po tejto oprave uložená likvidita zostáva monotónna a test by mal prejsť, keď je prostredie dostupné.
+3. Przed poprawką test swapu z zerową opłatą `Extreme-No-Fees - ASASR EURUSD - 0.9 - 1.1, LP fee 0, Biatec fee 0%` kończył się błędem asercji: `Liquidity must increase after swap`. Po tej poprawce przechowywana płynność pozostaje monotoniczna i test przechodzi pomyślnie, gdy środowisko jest dostępne.
 
 ## Dziennik decyzji / kompromisy {#-decision-log--trade-offs}
 
-- Udržiavanie uloženej `Liquidity` striktne monotónnej vyhýba sa zlyhávaniu downstream invariantov a testovacích očakávaní kvôli numerickému šumu.
-- Kompromis je pridanie permisívneho obalu: malé zaokrúhľovacie poklesy sú maskované zachovaním predchádzajúcej hodnoty namiesto zápisu mierne menšej vypočítanej hodnoty. Toto je bezpečné, pretože maskované rozdiely sú v rámci deterministických hraníc a neekonomické. Väčšie poklesy stále vracajú späť nahlas.
-- Vzorec povolenia je konzervatívny a zámerne jednoduchý na lacné výpočítanie v TEALScript/TEALScript-generovanom kóde.
+- Utrzymywanie przechowywanej wartości `Liquidity` jako ściśle monotonicznej zapobiega błędom dalszych niezmienników oraz testów wywołanym szumem numerycznym.
+- Kompromisem jest dodanie dopuszczalnej obwiedni: drobne spadki wynikające z zaokrągleń są maskowane przez zachowanie poprzedniej wartości zamiast zapisania nieco mniejszej obliczonej wartości. Jest to bezpieczne, ponieważ maskowane różnice mieszczą się w deterministycznych granicach i nie mają charakteru ekonomicznego. Większe spadki nadal powodują wycofanie transakcji.
+- Wzór tolerancji jest konserwatywny i celowo prosty, aby jego obliczenie w kodzie TEALScript było tanie.
 
 ## Możliwe ulepszenia {#-possible-improvements}
 
-- Zúžiť povolenie: použiť (scaleA \* scaleB + scaleA + scaleB - 3) alebo vypočítať dynamické hranice odvodené z presne toho, ktoré delenia/odmocniny boli vykonané v aktuálnej ceste.
-- Použiť aritmetiku s vyššou presnosťou (ak podporované), takže intermediálne zaokrúhľovania sú menej škodlivé; toto môže vyžadovať viac opcode rozpočtu alebo širšie typy celých čísel.
-- Pridať unit testy, ktoré zámerne vytvárajú najhoršie scenáre zaokrúhľovania na potvrdenie, že povolenie je dostatočné a nie príliš permisívne.
+- Zawężenie tolerancji: użycie `(scaleA * scaleB + scaleA + scaleB - 3)` lub obliczenie dynamicznych granic wynikających dokładnie z tego, które dzielenia/pierwiastki zostały wykonane w bieżącej ścieżce.
+- Użycie arytmetyki pośredniej o wyższej precyzji (jeśli jest obsługiwana), aby pośrednie zaokrąglenia w dół były mniej dotkliwe; może to wymagać większego budżetu opcode lub szerszych typów całkowitych.
+- Dodanie testów jednostkowych celowo konstruujących najgorsze scenariusze zaokrąglania w celu potwierdzenia, że tolerancja jest wystarczająca i niezbyt permisywna.
 
 ## Sugerowane następne kroki {#-suggested-follow-ups}
 
-- Spustiť plnú Jest sadu v prostredí s Algorand sandbox/KMD správne nakonfigurovaným: `npm run test`.
-- Pridať vyhradený test, ktorý simuluje veľa swapnutých malých množstiev so zmesou desatinných miest aktív na cvičenie hraníc zaokrúhľovania.
-- Zvážiť následnú zmenu na vytvorenie povolenia dynamického na cestu, ak rozpočet gas/opcode umožňuje.
+- Uruchomić pełny zestaw testów Jest w środowisku z poprawnie skonfigurowanym Algorand sandbox/KMD: `npm run test`.
+- Dodać dedykowany test symulujący wiele swapów małych kwot przy różnych liczbach miejsc dziesiętnych aktywów w celu przetestowania granic zaokrąglania.
+- Rozważyć uzależnienie tolerancji dynamicznie od ścieżki wykonania, jeśli pozwala na to budżet opłat/opcode.
 
 ---
 
